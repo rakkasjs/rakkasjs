@@ -1,0 +1,25 @@
+{
+	"name": "@rakkasjs/core",
+	"description": "Rakkas.js core runtime",
+	"author": "Fatih Aygün <cyco130@gmail.com>",
+	"license": "MIT",
+	"scripts": {
+		"dev": "rollup --watch --config rollup.config.js"
+	},
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"dependencies": {
+		"@types/react": "^17.0.5",
+		"bare-routes": "^0.2.2"
+	},
+	"peerDependencies": {
+		"react": "^17"
+	},
+	"devDependencies": {
+		"@rollup/plugin-node-resolve": "^13.0.0",
+		"@wessberg/rollup-plugin-ts": "^1.3.14",
+		"react": "^17.0.2",
+		"rollup": "^2.47.0",
+		"rollup-plugin-terser": "^7.0.2"
+	}
+}
