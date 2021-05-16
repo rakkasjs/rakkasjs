@@ -66,7 +66,6 @@ export async function findAndRenderRoute({
 
 	const page: { default: ComponentType } = await node.$page();
 
-	console.log([...layoutStack, page]);
 	return [...layoutStack, page].reduceRight(
 		(prev, cur) => React.createElement(cur.default, {}, prev),
 		null as React.ReactNode,

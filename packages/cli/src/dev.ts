@@ -11,24 +11,13 @@ export default function devCommand() {
 	return new Command("dev")
 		.description("Start a development server")
 		.action(async () => {
-			const clientCode = await fs.readFile(
-				path.resolve(__dirname, "../runtime/client.tsx"),
-				{ encoding: "utf-8" },
-			);
-
-			const serverCode = await fs.readFile(
-				path.resolve(__dirname, "../runtime/server.tsx"),
-				{ encoding: "utf-8" },
-			);
-
-			const routesCode = await fs.readFile(
-				path.resolve(__dirname, "../runtime/routes.tsx"),
-				{ encoding: "utf-8" },
-			);
+			const runtimePath = path.resolve(__dirname, "../runtime/") + "/";
 
 			// Create vite server in middleware mode. This disables Vite's own HTML
 			// serving logic and let the parent server take control.
 			let viteServer: ViteDevServer;
+			const injectedFiles = ["client.tsx", "server.tsx", "routes.tsx"];
+			const generatedFiles = ["pages", "layouts"];
 
 			const vite = await createViteServer({
 				server: { middlewareMode: true },
@@ -42,50 +31,79 @@ export default function devCommand() {
 						},
 						resolveId(src) {
 							if (
-								src === "@rakkasjs:client.tsx" ||
-								src === "/@rakkasjs:client.tsx" ||
-								src === "@rakkasjs:server.tsx" ||
-								src === "@rakkasjs:routes.tsx" ||
-								src === "@rakkasjs:pages" ||
-								src === "@rakkasjs:layouts"
+								src.startsWith("@rakkasjs:") ||
+								src.startsWith("/@rakkasjs:")
 							) {
-								return src;
+								const filename = src.slice(src.indexOf(":") + 1);
+								if (
+									injectedFiles.includes(filename) ||
+									generatedFiles.includes(filename)
+								) {
+									return `@rakkasjs:${filename}`;
+								}
 							}
 						},
-						load(id, ssr) {
-							if (
-								id === "@rakkasjs:client.tsx" ||
-								id === "/@rakkasjs:client.tsx"
-							) {
-								return {
-									code: clientCode,
-								};
-							} else if (id === "@rakkasjs:server.tsx") {
-								return { code: serverCode };
-							} else if (id === "@rakkasjs:routes.tsx") {
-								return { code: routesCode };
+
+						async load(id) {
+							if (!id.startsWith("@rakkasjs:")) return;
+
+							const moduleName = id.slice(id.indexOf(":") + 1);
+							if (injectedFiles.includes(moduleName)) {
+								const fileName = path.resolve(runtimePath, moduleName);
+
+								const code = await fs.readFile(fileName, {
+									encoding: "utf-8",
+								});
+
+								this.addWatchFile(fileName);
+								viteServer.watcher.on("all", (e, path) => {
+									if (path === fileName) {
+										const mdl = viteServer.moduleGraph.getModuleById(
+											`@rakkasjs:${moduleName}`,
+										);
+										console.log("Invalidating");
+										viteServer.moduleGraph.invalidateModule(mdl);
+									}
+								});
+
+								return { code };
 							} else if (id === "@rakkasjs:pages") {
-								return glob("./src/pages/**/*.page.[jt]sx").then((paths) => {
-									return {
-										code: `export default [${paths.map(
-											(path) =>
-												"[" +
-												JSON.stringify(path.slice(12)) +
-												`, () => import(${JSON.stringify(path)})]`,
-										)}]`,
-									};
-								});
+								return glob("./src/pages/**/*.page.[[:alnum:]]+").then(
+									(paths) => {
+										return {
+											code: `export default [${paths.map(
+												(path) =>
+													"[" +
+													JSON.stringify(path.slice(12)) +
+													`, () => import(${JSON.stringify(path)})]`,
+											)}]`,
+										};
+									},
+								);
 							} else if (id === "@rakkasjs:layouts") {
-								return glob("./src/pages/**/*.layout.[jt]sx").then((paths) => {
-									return {
-										code: `export default [${paths.map(
-											(path) =>
-												"[" +
-												JSON.stringify(path.slice(12)) +
-												`, () => import(${JSON.stringify(path)})]`,
-										)}]`,
-									};
-								});
+								return glob("./src/pages/**/*.layout.[[:alnum:]]+").then(
+									(paths) => {
+										return {
+											code: `export default [${paths.map(
+												(path) =>
+													"[" +
+													JSON.stringify(path.slice(12)) +
+													`, () => import(${JSON.stringify(path)})]`,
+											)}]`,
+										};
+									},
+								);
+							}
+						},
+
+						handleHotUpdate(ctx) {
+							if (ctx.file.startsWith(runtimePath)) {
+								const moduleName =
+									"@rakkasjs:" + ctx.file.slice(runtimePath.length);
+								ctx.modules.push(
+									viteServer.moduleGraph.getModuleById(moduleName),
+								);
+								console.log("HOT", moduleName);
 							}
 						},
 					},

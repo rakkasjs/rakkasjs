@@ -23,11 +23,10 @@
   - User vite configuration
   - Page and layout module extensions (i.e. .md, .mdx etc.)
 - Project initializer
+- Documentation
 - Localized routing
 - Customized routing
 - Adapters for serverless environments
-- Documentation
-- Use the logo
 
 ## Credits and license
 - Initial concept and programming by [Fatih Aygün](https://github.com/cyco130)
