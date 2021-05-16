@@ -32,7 +32,6 @@ export default function devCommand() {
 
 			const vite = await createViteServer({
 				server: { middlewareMode: true },
-				root: "./src",
 				plugins: [
 					reactRefresh(),
 					{
@@ -137,6 +136,8 @@ const template = `<!DOCTYPE html>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+		<link rel="alternate icon" href="/favicon.ico">
 		<title>Rakkas App</title>
 	</head>
 	<body>

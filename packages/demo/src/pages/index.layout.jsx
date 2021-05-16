@@ -1,5 +1,7 @@
 import React from "react";
 import { NavLink, useRouter } from "@rakkasjs/core";
+import { Logomark } from "../lib/logomark";
+import { Logotype } from "../lib/logotype";
 
 export default ({ children }) => {
 	const { current } = useRouter();
@@ -11,7 +13,11 @@ export default ({ children }) => {
 	};
 
 	return (
-		<div className="app">
+		<div>
+			<div style={{ color: "#626", padding: "1em" }}>
+				<Logomark width={96} />
+				<Logotype height={96} />
+			</div>
 			<p>
 				This header is defined in the main layout. It's rendered in all pages.
 			</p>
