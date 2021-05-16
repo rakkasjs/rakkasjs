@@ -4,12 +4,12 @@ import type { RouteRenderArgs } from "@rakkasjs/core";
 import pages from "@rakkasjs:pages";
 import layouts from "@rakkasjs:layouts";
 
+console.log(pages);
+
 const trie: any = {};
 pages.forEach(([page, importer]) => {
-	let name = page.match(/^(.+)\.page\.[jt]sx?$/)![1];
-	if (name.endsWith("index")) {
-		name = name.slice(0, -5);
-	}
+	console.log("page", page);
+	let name = page.match(/^((.+)[\./])?page\.[a-zA-Z0-9]+$/)![2] || "";
 	const segments = name.split("/").filter(Boolean);
 
 	let node = trie;
@@ -24,10 +24,7 @@ pages.forEach(([page, importer]) => {
 });
 
 layouts.forEach(([layout, importer]) => {
-	let name = layout.match(/^(.+)\.layout\.[jt]sx?$/)![1];
-	if (name.endsWith("index")) {
-		name = name.slice(0, -5);
-	}
+	let name = layout.match(/^((.+)[\./])?layout\.[a-zA-Z0-9]+$/)![2] || "";
 	const segments = name.split("/").filter(Boolean);
 
 	let node = trie;

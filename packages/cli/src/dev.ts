@@ -61,14 +61,13 @@ export default function devCommand() {
 										const mdl = viteServer.moduleGraph.getModuleById(
 											`@rakkasjs:${moduleName}`,
 										);
-										console.log("Invalidating");
 										viteServer.moduleGraph.invalidateModule(mdl);
 									}
 								});
 
 								return { code };
 							} else if (id === "@rakkasjs:pages") {
-								return glob("./src/pages/**/*.page.[[:alnum:]]+").then(
+								return glob("./src/pages/**/(*.)?page.[[:alnum:]]+").then(
 									(paths) => {
 										return {
 											code: `export default [${paths.map(
@@ -81,7 +80,7 @@ export default function devCommand() {
 									},
 								);
 							} else if (id === "@rakkasjs:layouts") {
-								return glob("./src/pages/**/*.layout.[[:alnum:]]+").then(
+								return glob("./src/pages/**/(*.)?layout.[[:alnum:]]+").then(
 									(paths) => {
 										return {
 											code: `export default [${paths.map(
