@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useRouter } from "@rakkasjs/core";
+import { Link, NavLink, useRouter } from "@rakkasjs/core";
 import { Logomark } from "../lib/logomark";
 import { Logotype } from "../lib/logotype";
 
@@ -29,9 +29,17 @@ export default ({ children }) => {
 						</NavLink>
 					</li>
 					<li>
-						<NavLink href="/blog" currentRouteStyle={currentStyle}>
-							Blog
-						</NavLink>
+						<Link
+							href="/faq"
+							style={
+								current.pathname === "/faq" ||
+								current.pathname.startsWith("/faq/")
+									? currentStyle
+									: undefined
+							}
+						>
+							FAQ
+						</Link>
 					</li>
 					<li>
 						<NavLink href="/about" currentRouteStyle={currentStyle}>

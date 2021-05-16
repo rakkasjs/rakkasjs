@@ -28,6 +28,29 @@ export default function devCommand() {
 						enforce: "pre",
 						configureServer(server) {
 							viteServer = server;
+							viteServer.watcher.on("all", (e, fileName) => {
+								if (e === "change") return;
+								const pagesDir = path.resolve("./src/pages");
+								if (fileName.startsWith(pagesDir + "/")) {
+									fileName = fileName.slice(pagesDir.length + 1);
+									if (fileName.match(/^((.+)[\./])?page\.[a-zA-Z0-9]+$/)) {
+										const mdl =
+											viteServer.moduleGraph.getModuleById("@rakkasjs:pages");
+										if (mdl) {
+											viteServer.moduleGraph.invalidateModule(mdl);
+											viteServer.watcher.emit("change", "@rakkasjs:pages");
+										}
+									} else if (
+										fileName.match(/^((.+)[\./])?layout\.[a-zA-Z0-9]+$/)
+									) {
+										const mdl =
+											viteServer.moduleGraph.getModuleById("@rakkasjs:layouts");
+										if (mdl) {
+											viteServer.watcher.emit("change", "@rakkasjs:layouts");
+										}
+									}
+								}
+							});
 						},
 						resolveId(src) {
 							if (
@@ -61,7 +84,7 @@ export default function devCommand() {
 										const mdl = viteServer.moduleGraph.getModuleById(
 											`@rakkasjs:${moduleName}`,
 										);
-										viteServer.moduleGraph.invalidateModule(mdl);
+										if (mdl) viteServer.moduleGraph.invalidateModule(mdl);
 									}
 								});
 
@@ -102,7 +125,6 @@ export default function devCommand() {
 								ctx.modules.push(
 									viteServer.moduleGraph.getModuleById(moduleName),
 								);
-								console.log("HOT", moduleName);
 							}
 						},
 					},
