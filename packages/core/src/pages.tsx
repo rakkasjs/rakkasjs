@@ -1,5 +1,5 @@
-import React, { ComponentType } from "react";
-import type { RouteRenderArgs } from ".";
+import { ComponentType } from "react";
+import type { LoadArgs } from ".";
 
 import pages from "@rakkasjs:pages";
 import layouts from "@rakkasjs:layouts";
@@ -37,14 +37,14 @@ layouts.forEach(([layout, importer]) => {
 
 interface PageOrLayoutModule {
 	default: ComponentType;
-	load?({ url: URL, params: any }): Promise<any>;
+	load?(loadArgs: LoadArgs): Promise<any>;
 }
 
 export type PageOrLayoutImporter = () =>
 	| Promise<PageOrLayoutModule>
 	| PageOrLayoutModule;
 
-export function findRoute(
+export function findPage(
 	path: string,
 	notFound: PageOrLayoutImporter,
 ): { params: any; stack: PageOrLayoutImporter[] } {

@@ -11,7 +11,8 @@
 	"dependencies": {
 		"@types/react": "^17.0.6",
 		"bare-routes": "^0.2.6",
-		"devalue": "^2.0.1"
+		"devalue": "^2.0.1",
+		"node-fetch": "^2.6.1"
 	},
 	"peerDependencies": {
 		"react": "^17"

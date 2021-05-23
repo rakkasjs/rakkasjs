@@ -1,25 +1,20 @@
 import { NavLink } from "@rakkasjs/core";
 import React from "react";
+import css from "./faq.module.css";
 
-export default ({ children, posts }) => {
-	const currentStyle = {
-		background: "#333",
-		color: "#eee",
-	};
+export default ({ children, url, posts }) => (
+	<>
+		<h1>Frequently Asked Questions</h1>
+		{children}
 
-	return (
-		<>
-			<p>
-				This menu is defined in a nested layout. It's common to all /faq/*
-				pages.
-			</p>
+		<aside className={css.sidebar}>
 			<nav>
 				<ul>
-					{posts.map((post) => (
+					{posts?.map((post) => (
 						<li key={post.slug}>
 							<NavLink
 								href={`/faq/${post.slug}`}
-								currentRouteStyle={currentStyle}
+								currentRouteClass={css.active}
 							>
 								{post.title}
 							</NavLink>
@@ -27,28 +22,12 @@ export default ({ children, posts }) => {
 					))}
 				</ul>
 			</nav>
-			<hr />
-			<h1>Frequently Asked Questions</h1>
-			{children}
-		</>
-	);
-};
+		</aside>
+	</>
+);
 
-let cache;
-
-export function load() {
-	if (cache) return cache;
-	return loadAsync();
-}
-
-async function loadAsync() {
-	cache = {
-		props: {
-			posts: await (
-				await import("./data.json")
-			).default.map((post) => ({ slug: post.slug, title: post.title })),
-		},
+export async function load({ fetch }) {
+	return {
+		props: { posts: await fetch("/faq-api").then((r) => r.json()) },
 	};
-
-	return cache;
 }

@@ -136,6 +136,7 @@ export default function devCommand() {
 
 			const app = createServer({}, (req, res) => {
 				const url = req.url;
+
 				vite.middlewares(req, res, async () => {
 					let output = template;
 					let content: {
@@ -210,6 +211,6 @@ const template = `<!DOCTYPE html>
 	</head>
 	<body>
 		<div id="rakkas-app"><!-- rakkas-app-placeholder --></div>
-		<script type="module" src="/src/client.js"></script>
+		<script type="module" src="/src/client"></script>
 	</body>
 </html>`;

@@ -17,6 +17,7 @@ const options = [
 			"react",
 			"react-dom",
 			"react-dom/server",
+			"node-fetch",
 			"$app/App.jsx",
 			"@rakkasjs:pages",
 			"@rakkasjs:layouts",

@@ -61,7 +61,5 @@ export function findEndpoint(
 		}
 	}
 
-	console.log(node);
-
 	return node.$endpoint && { importer: node.$endpoint, params };
 }

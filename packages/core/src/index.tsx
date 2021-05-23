@@ -8,3 +8,9 @@ export {
 	Router,
 	RouterProps,
 } from "bare-routes";
+
+export interface LoadArgs {
+	url: URL;
+	params: Record<string, string>;
+	fetch: typeof window.fetch;
+}

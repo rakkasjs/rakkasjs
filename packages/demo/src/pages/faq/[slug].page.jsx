@@ -13,7 +13,6 @@ export default ({ post, params, reload }) => {
 			first.current = false;
 			return;
 		}
-		console.log("Reloading");
 
 		reload();
 	}, [params.slug]);
@@ -26,14 +25,10 @@ export default ({ post, params, reload }) => {
 	);
 };
 
-export async function load({ params }) {
-	console.log("Loading", params.slug);
-
+export async function load({ params, fetch }) {
 	return {
 		props: {
-			post: await (
-				await import("./data.json")
-			).default.find((post) => post.slug === params.slug),
+			post: await fetch(`/faq-api/${params.slug}`).then((r) => r.json()),
 		},
 	};
 }

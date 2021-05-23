@@ -1,11 +1,22 @@
 import React, { ComponentType } from "react";
 import { renderToString } from "react-dom/server";
-
-import { ServerRouter, RouteRenderArgs } from "bare-routes";
+import { ServerRouter } from "bare-routes";
 import devalue from "devalue";
 
-import { findRoute } from "./pages";
+import { findPage } from "./pages";
 import { findEndpoint } from "./endpoints";
+
+import nodeFetch, {
+	Response as NodeFetchResponse,
+	Request as NodeFetchRequest,
+	Headers as NodeFetchHeaders,
+	// @ts-ignore
+} from "node-fetch";
+
+globalThis.fetch = nodeFetch;
+globalThis.Response = NodeFetchResponse;
+globalThis.Request = NodeFetchRequest;
+globalThis.Headers = NodeFetchHeaders;
 
 const notFoundModuleImporter = () => ({
 	default: () => <p>Not found</p>,
@@ -17,14 +28,11 @@ export interface RawRequest {
 }
 
 export async function handleRequest(req: RawRequest) {
-	console.log("Server-side:", req.url.pathname);
+	const endpoint = findEndpoint(req);
 
-	const { importer: endpointImporter, params: endpointParams } =
-		findEndpoint(req);
-
-	if (endpointImporter) {
+	if (endpoint) {
+		const { importer: endpointImporter, params: endpointParams } = endpoint;
 		const mdl = await endpointImporter();
-		console.log("Module", mdl);
 		const handler = mdl[req.method.toLowerCase()];
 		if (handler) {
 			const response = await handler({
@@ -39,14 +47,39 @@ export async function handleRequest(req: RawRequest) {
 		}
 	}
 
-	const { params, stack } = findRoute(req.url.pathname, notFoundModuleImporter);
+	const { params, stack } = findPage(req.url.pathname, notFoundModuleImporter);
 
 	const modules = await Promise.all(stack.map((importer) => importer()));
 	const data: any[] = [];
 	const components: ComponentType[] = [];
 	for (const mdl of modules) {
 		components.push(mdl.default);
-		data.push((await mdl.load?.({ url: req.url, params }))?.props);
+		data.push(
+			(
+				await mdl.load?.({
+					url: req.url,
+					params,
+					fetch(
+						input: RequestInfo,
+						init?: RequestInit,
+					): Promise<NodeFetchResponse> {
+						const url = typeof input === "string" ? input : input.url;
+						const parsed = new URL(url, req.url);
+
+						if (parsed.origin === req.url.origin) {
+							// TODO: Handle internal fetch
+						}
+
+						return nodeFetch(
+							typeof input === "string"
+								? parsed.href
+								: { ...input, url: parsed.href },
+							init,
+						);
+					},
+				})
+			)?.props,
+		);
 	}
 
 	const content = components.reduceRight(

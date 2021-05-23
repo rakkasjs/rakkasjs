@@ -1,7 +1,7 @@
 import React, { ComponentType, FC, ReactNode, useRef, useState } from "react";
 import { hydrate } from "react-dom";
 import { Router } from ".";
-import { findRoute, PageOrLayoutImporter } from "./pages";
+import { findPage } from "./pages";
 
 const notFoundModuleImporter = () => ({
 	default: () => <p>Not found</p>,
@@ -10,7 +10,7 @@ const notFoundModuleImporter = () => ({
 export async function startClient() {
 	const url = new URL(window.location.href);
 
-	const { stack, params } = findRoute(url.pathname, notFoundModuleImporter);
+	const { stack, params } = findPage(url.pathname, notFoundModuleImporter);
 
 	const components = await (
 		await Promise.all(stack.map((importer) => importer()))
@@ -40,7 +40,7 @@ const App: FC<{
 	return (
 		<Router
 			render={async ({ url, rerender }) => {
-				const { stack, params } = findRoute(
+				const { stack, params } = findPage(
 					url.pathname,
 					notFoundModuleImporter,
 				);
@@ -61,7 +61,7 @@ const App: FC<{
 
 					if (different || !isDataValid.current[i]) {
 						lastData.current[i] =
-							(await mdl.load?.({ url, params }))?.props ?? {};
+							(await mdl.load?.({ url, params, fetch }))?.props ?? {};
 						isDataValid.current[i] = true;
 					}
 				}

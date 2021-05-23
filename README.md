@@ -30,13 +30,13 @@ useReload({
 })
 ```
 
-- Isomorphic fetch
 - Middleware
 - useReload hook
 - Set up ESLint, prettier etc.
 - Include react-helmet or equivalent functionality
 - Investigate [vite-plugin-virtual](https://github.com/patak-js/vite-plugin-virtual)
 - `rakkas build` command
+- Prefetching
 - Prepare packages for publication
 - Proper error handling
 - Configurability
