@@ -7,7 +7,7 @@ const isProd = process.env.NODE_ENV === "production";
 /** @type {import('rollup').RollupOptions[]} */
 const options = [
 	{
-		input: ["src/index.tsx", "src/client.tsx"],
+		input: ["src/index.tsx", "src/client.tsx", "src/server.tsx"],
 		output: {
 			dir: "dist",
 			format: "esm",
@@ -16,6 +16,7 @@ const options = [
 		external: [
 			"react",
 			"react-dom",
+			"react-dom/server",
 			"$app/App.jsx",
 			"@rakkasjs:pages",
 			"@rakkasjs:layouts",

@@ -16,7 +16,6 @@ export default function devCommand() {
 			// Create vite server in middleware mode. This disables Vite's own HTML
 			// serving logic and let the parent server take control.
 			let viteServer: ViteDevServer;
-			const injectedFiles = ["server.tsx", "routes.tsx"];
 			const generatedFiles = ["pages", "layouts"];
 
 			const vite = await createViteServer({
@@ -53,43 +52,16 @@ export default function devCommand() {
 							});
 						},
 						resolveId(src) {
-							if (
-								src.startsWith("@rakkasjs:") ||
-								src.startsWith("/@rakkasjs:")
-							) {
+							if (src.startsWith("@rakkasjs:")) {
 								const filename = src.slice(src.indexOf(":") + 1);
-								if (
-									injectedFiles.includes(filename) ||
-									generatedFiles.includes(filename)
-								) {
+								if (generatedFiles.includes(filename)) {
 									return `@rakkasjs:${filename}`;
 								}
 							}
 						},
 
 						async load(id) {
-							if (!id.startsWith("@rakkasjs:")) return;
-
-							const moduleName = id.slice(id.indexOf(":") + 1);
-							if (injectedFiles.includes(moduleName)) {
-								const fileName = path.resolve(runtimePath, moduleName);
-
-								const code = await fs.readFile(fileName, {
-									encoding: "utf-8",
-								});
-
-								this.addWatchFile(fileName);
-								viteServer.watcher.on("all", (e, path) => {
-									if (path === fileName) {
-										const mdl = viteServer.moduleGraph.getModuleById(
-											`@rakkasjs:${moduleName}`,
-										);
-										if (mdl) viteServer.moduleGraph.invalidateModule(mdl);
-									}
-								});
-
-								return { code };
-							} else if (id === "@rakkasjs:pages") {
+							if (id === "@rakkasjs:pages") {
 								return glob("./src/pages/**/(*.)?page.[[:alnum:]]+").then(
 									(paths) => {
 										return {
@@ -148,7 +120,7 @@ export default function devCommand() {
 
 					try {
 						const { renderServerSide } = await vite.ssrLoadModule(
-							"@rakkasjs:server.tsx",
+							"$rakkas/server",
 						);
 
 						output = await vite.transformIndexHtml(url, output);

@@ -30,8 +30,6 @@ useReload({
 })
 ```
 
-- Refactor libraries
-- load() function
 - Endpoints
 - Isomorphic fetch
 - reload() function
