@@ -10,4 +10,10 @@ declare module "@rakkasjs:layouts" {
 	export default layouts;
 }
 
+declare module "@rakkasjs:endpoints" {
+	import { ComponentType } from "react";
+	const endpoints: [string, () => Promise<any>][];
+	export default endpoints;
+}
+
 declare var __RAKKAS_INITIAL_DATA: any[];

@@ -1,7 +1,7 @@
 import React, { ComponentType, FC, ReactNode, useRef, useState } from "react";
 import { hydrate } from "react-dom";
 import { Router } from ".";
-import { findRoute, PageOrLayoutImporter } from "./routes";
+import { findRoute, PageOrLayoutImporter } from "./pages";
 
 const notFoundModuleImporter = () => ({
 	default: () => <p>Not found</p>,

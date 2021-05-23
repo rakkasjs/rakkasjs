@@ -20,6 +20,7 @@ const options = [
 			"$app/App.jsx",
 			"@rakkasjs:pages",
 			"@rakkasjs:layouts",
+			"@rakkasjs:endpoints",
 		],
 		plugins: [
 			ts({

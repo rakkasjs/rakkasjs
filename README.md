@@ -30,9 +30,8 @@ useReload({
 })
 ```
 
-- Endpoints
 - Isomorphic fetch
-- reload() function
+- Middleware
 - useReload hook
 - Set up ESLint, prettier etc.
 - Include react-helmet or equivalent functionality

@@ -16,7 +16,7 @@ export default function devCommand() {
 			// Create vite server in middleware mode. This disables Vite's own HTML
 			// serving logic and let the parent server take control.
 			let viteServer: ViteDevServer;
-			const generatedFiles = ["pages", "layouts"];
+			const generatedFiles = ["pages", "layouts", "endpoints"];
 
 			const vite = await createViteServer({
 				server: { middlewareMode: true },
@@ -29,7 +29,9 @@ export default function devCommand() {
 							viteServer = server;
 							viteServer.watcher.on("all", (e, fileName) => {
 								if (e === "change") return;
+
 								const pagesDir = path.resolve("./src/pages");
+
 								if (fileName.startsWith(pagesDir + "/")) {
 									fileName = fileName.slice(pagesDir.length + 1);
 									if (fileName.match(/^((.+)[\./])?page\.[a-zA-Z0-9]+$/)) {
@@ -47,10 +49,20 @@ export default function devCommand() {
 										if (mdl) {
 											viteServer.watcher.emit("change", "@rakkasjs:layouts");
 										}
+									} else if (
+										fileName.match(/^((.+)[\./])?endpoint\.[a-zA-Z0-9]+$/)
+									) {
+										const mdl = viteServer.moduleGraph.getModuleById(
+											"@rakkasjs:endpoints",
+										);
+										if (mdl) {
+											viteServer.watcher.emit("change", "@rakkasjs:endpoints");
+										}
 									}
 								}
 							});
 						},
+
 						resolveId(src) {
 							if (src.startsWith("@rakkasjs:")) {
 								const filename = src.slice(src.indexOf(":") + 1);
@@ -76,6 +88,19 @@ export default function devCommand() {
 								);
 							} else if (id === "@rakkasjs:layouts") {
 								return glob("./src/pages/**/(*.)?layout.[[:alnum:]]+").then(
+									(paths) => {
+										return {
+											code: `export default [${paths.map(
+												(path) =>
+													"[" +
+													JSON.stringify(path.slice(12)) +
+													`, () => import(${JSON.stringify(path)})]`,
+											)}]`,
+										};
+									},
+								);
+							} else if (id === "@rakkasjs:endpoints") {
+								return glob("./src/pages/**/(*.)?endpoint.[[:alnum:]]+").then(
 									(paths) => {
 										return {
 											code: `export default [${paths.map(
@@ -114,41 +139,57 @@ export default function devCommand() {
 				vite.middlewares(req, res, async () => {
 					let output = template;
 					let content: {
+						type: string;
 						data: string;
 						app: string;
 					};
 
 					try {
-						const { renderServerSide } = await vite.ssrLoadModule(
+						const { handleRequest } = await vite.ssrLoadModule(
 							"$rakkas/server",
 						);
 
 						output = await vite.transformIndexHtml(url, output);
-						content = await renderServerSide({
+						const response = await handleRequest({
 							// TODO: Get real host and port
 							url: new URL(url, "http://localhost:3000"),
+							method: req.method,
 						});
-						res.statusCode = 200;
+
+						if (response.type === "page") {
+							content = response;
+							res.statusCode = 200;
+						} else if (response.type === "endpoint") {
+							res.statusCode = response.status ?? 200;
+							Object.entries(
+								response.headers as Record<string, string>,
+							).forEach(([k, v]) => res.setHeader(k, v));
+
+							res.end(JSON.stringify(response.body ?? {}));
+						}
 					} catch (error) {
 						vite.ssrFixStacktrace(error);
 						content = {
+							type: "page",
 							data: "[]",
 							app: encode(error.stack ?? "Unknwon error"),
 						};
 						res.statusCode = 500;
 					}
 
-					res.setHeader("Content-Type", "text/html");
-					output = output.replace(
-						"<!-- rakkas-data-placeholder -->",
-						content.data,
-					);
-					output = output.replace(
-						"<!-- rakkas-app-placeholder -->",
-						content.app,
-					);
+					if (content.type === "page") {
+						res.setHeader("Content-Type", "text/html");
+						output = output.replace(
+							"<!-- rakkas-data-placeholder -->",
+							content.data,
+						);
+						output = output.replace(
+							"<!-- rakkas-app-placeholder -->",
+							content.app,
+						);
 
-					res.end(output);
+						res.end(output);
+					}
 				});
 			});
 
