@@ -12,9 +12,30 @@
 
 
 ## TODO
+
+```js
+useReload({
+	// Reload when one of the values in this array change
+	deps: [params.slug],
+	// Reload when window receives focus
+	focus: true,
+	// Reload when the internet connection is restored after a disconnection
+	reconnect: true,
+	// Set to true to reload immediately after hydration
+	hydrate: false,
+	// Set to i.e. 15_000 to reload every 15 seconds
+	interval: false,
+	// Set to true to reload even when the window has no focus
+	background: false,
+})
+```
+
+- Refactor libraries
 - load() function
 - Endpoints
 - Isomorphic fetch
+- reload() function
+- useReload hook
 - Set up ESLint, prettier etc.
 - Include react-helmet or equivalent functionality
 - Investigate [vite-plugin-virtual](https://github.com/patak-js/vite-plugin-virtual)

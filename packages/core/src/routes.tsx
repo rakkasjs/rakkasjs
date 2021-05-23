@@ -1,5 +1,5 @@
 import React, { ComponentType } from "react";
-import type { RouteRenderArgs } from "@rakkasjs/core";
+import type { RouteRenderArgs } from ".";
 
 import pages from "@rakkasjs:pages";
 import layouts from "@rakkasjs:layouts";
@@ -35,30 +35,23 @@ layouts.forEach(([layout, importer]) => {
 	node.$layout = importer;
 });
 
-console.log("Loaded routes", { pages, layouts });
-
 interface PageOrLayoutModule {
 	default: ComponentType;
 	load?({ url: URL, params: any }): Promise<any>;
 }
 
-export async function findAndRenderRoute(
-	{ url }: RouteRenderArgs,
-	initialData: any[],
-): Promise<{
-	params: any;
-	stack: Array<{
-		component: React.ComponentType<{}>;
-		props: any;
-	}>;
-}> {
-	const segments = url.pathname.split("/").filter(Boolean);
+export type PageOrLayoutImporter = () =>
+	| Promise<PageOrLayoutModule>
+	| PageOrLayoutModule;
 
+export function findRoute(
+	path: string,
+	notFound: PageOrLayoutImporter,
+): { params: any; stack: PageOrLayoutImporter[] } {
+	const segments = path.split("/").filter(Boolean);
 	let node = trie;
 	const params: any = {};
-	const layoutStack: PageOrLayoutModule[] = node.$layout
-		? [await node.$layout()]
-		: [];
+	const stack: PageOrLayoutImporter[] = node.$layout ? [node.$layout] : [];
 
 	for (const segment of segments) {
 		if (node[segment]) {
@@ -68,50 +61,21 @@ export async function findAndRenderRoute(
 				(k) => k.startsWith("[") && k.endsWith("]"),
 			);
 
-			if (!param)
-				return {
-					stack: [{ component: () => <p>Page not found</p>, props: {} }],
-					params: {},
-				};
+			if (!param) {
+				stack.push(notFound);
+				return { params, stack };
+			}
 
 			node = node[param];
 			params[param.slice(1, -1)] = segment;
 		}
 
 		if (node.$layout) {
-			layoutStack.push(await node.$layout());
+			stack.push(node.$layout);
 		}
 	}
 
-	if (!node.$page) {
-		return {
-			stack: [{ component: () => <p>Page not found</p>, props: {} }],
-			params: {},
-		};
-	}
+	stack.push(node.$page ?? notFound);
 
-	const page: PageOrLayoutModule = await node.$page();
-	const stack = [...layoutStack, page];
-	const props: any[] = [];
-
-	let rendered = 0;
-
-	while (rendered < stack.length) {
-		props.push(
-			initialData
-				? initialData[rendered]
-				: stack[rendered].load
-				? (await stack[rendered].load({ url, params })).props
-				: {},
-		);
-		rendered++;
-	}
-
-	return {
-		params,
-		stack: stack.map((mdl, i) => ({
-			component: mdl.default,
-			props: props[i],
-		})),
-	};
+	return { params, stack };
 }

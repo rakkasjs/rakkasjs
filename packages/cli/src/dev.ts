@@ -16,7 +16,7 @@ export default function devCommand() {
 			// Create vite server in middleware mode. This disables Vite's own HTML
 			// serving logic and let the parent server take control.
 			let viteServer: ViteDevServer;
-			const injectedFiles = ["client.tsx", "server.tsx", "routes.tsx"];
+			const injectedFiles = ["server.tsx", "routes.tsx"];
 			const generatedFiles = ["pages", "layouts"];
 
 			const vite = await createViteServer({
@@ -132,6 +132,7 @@ export default function devCommand() {
 				resolve: {
 					alias: {
 						"$app": "",
+						"$rakkas": "@rakkasjs/core/dist",
 					},
 				},
 			});
@@ -140,7 +141,10 @@ export default function devCommand() {
 				const url = req.url;
 				vite.middlewares(req, res, async () => {
 					let output = template;
-					let content: string;
+					let content: {
+						data: string;
+						app: string;
+					};
 
 					try {
 						const { renderServerSide } = await vite.ssrLoadModule(
@@ -155,12 +159,23 @@ export default function devCommand() {
 						res.statusCode = 200;
 					} catch (error) {
 						vite.ssrFixStacktrace(error);
-						content = encode(error.stack ?? "Unknwon error");
+						content = {
+							data: "[]",
+							app: encode(error.stack ?? "Unknwon error"),
+						};
 						res.statusCode = 500;
 					}
 
 					res.setHeader("Content-Type", "text/html");
-					output = output.replace("<!-- rakkas-app-placeholder -->", content);
+					output = output.replace(
+						"<!-- rakkas-data-placeholder -->",
+						content.data,
+					);
+					output = output.replace(
+						"<!-- rakkas-app-placeholder -->",
+						content.app,
+					);
+
 					res.end(output);
 				});
 			});
@@ -178,9 +193,10 @@ const template = `<!DOCTYPE html>
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 		<link rel="alternate icon" href="/favicon.ico">
 		<title>Rakkas App</title>
+		<script>__RAKKAS_INITIAL_DATA=<!-- rakkas-data-placeholder --></script>
 	</head>
 	<body>
 		<div id="rakkas-app"><!-- rakkas-app-placeholder --></div>
-		<script type="module" src="@rakkasjs:client.tsx"></script>
+		<script type="module" src="/src/client.js"></script>
 	</body>
 </html>`;

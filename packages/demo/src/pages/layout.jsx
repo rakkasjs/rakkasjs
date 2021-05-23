@@ -5,7 +5,6 @@ import { Logotype } from "../lib/logotype";
 
 export default ({ children }) => {
 	const { current } = useRouter();
-	console.log("Path:", current.pathname);
 
 	const currentStyle = {
 		background: "#333",
@@ -14,9 +13,14 @@ export default ({ children }) => {
 
 	return (
 		<div>
-			<div style={{ color: "#626", padding: "1em" }}>
-				<Logomark width={96} />
-				<Logotype height={96} />
+			<div
+				style={{
+					color: "#924",
+					padding: "1em",
+				}}
+			>
+				<Logomark height={"4em"} />
+				<Logotype height={"4em"} />
 			</div>
 			<p>
 				This header is defined in the main layout. It's rendered in all pages.

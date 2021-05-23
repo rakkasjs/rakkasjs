@@ -1,4 +1,4 @@
-import {
+export {
 	Link,
 	NavLink,
 	NavLinkProps,
@@ -10,14 +10,6 @@ import {
 	ServerRouter,
 } from "bare-routes";
 
-export {
-	Link,
-	NavLink,
-	NavLinkProps,
-	useRouter,
-	RouterInfo,
-	RouteRenderArgs,
-	Router,
-	RouterProps,
-	ServerRouter,
-};
+import originalDevalue from "devalue";
+
+export const devalue: (value: any) => string = originalDevalue;

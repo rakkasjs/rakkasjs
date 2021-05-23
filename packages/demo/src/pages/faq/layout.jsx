@@ -1,7 +1,7 @@
 import { NavLink } from "@rakkasjs/core";
 import React from "react";
 
-export default ({ children }) => {
+export default ({ children, posts }) => {
 	const currentStyle = {
 		background: "#333",
 		color: "#eee",
@@ -15,30 +15,16 @@ export default ({ children }) => {
 			</p>
 			<nav>
 				<ul>
-					<li>
-						<NavLink
-							href="/faq/what-is-rakkas"
-							currentRouteStyle={currentStyle}
-						>
-							What is Rakkas?
-						</NavLink>
-					</li>
-					<li>
-						<NavLink
-							href="/faq/why-another-react-framework"
-							currentRouteStyle={currentStyle}
-						>
-							Why another React framework?
-						</NavLink>
-					</li>
-					<li>
-						<NavLink
-							href="/faq/when-will-it-be-ready"
-							currentRouteStyle={currentStyle}
-						>
-							When will it be ready?
-						</NavLink>
-					</li>
+					{posts.map((post) => (
+						<li key={post.slug}>
+							<NavLink
+								href={`/faq/${post.slug}`}
+								currentRouteStyle={currentStyle}
+							>
+								{post.title}
+							</NavLink>
+						</li>
+					))}
 				</ul>
 			</nav>
 			<hr />
@@ -47,3 +33,22 @@ export default ({ children }) => {
 		</>
 	);
 };
+
+let cache;
+
+export function load() {
+	if (cache) return cache;
+	return loadAsync();
+}
+
+async function loadAsync() {
+	cache = {
+		props: {
+			posts: await (
+				await import("./data.json")
+			).default.map((post) => ({ slug: post.slug, title: post.title })),
+		},
+	};
+
+	return cache;
+}

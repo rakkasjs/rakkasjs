@@ -1,6 +1,6 @@
 declare module "@rakkasjs:routes.tsx" {
 	import { ComponentType } from "react";
-	import type { RouteRenderArgs } from "@rakkasjs/core";
+	import type { RouteRenderArgs } from "bare-routes";
 
 	function findAndRenderRoute(
 		{ url }: RouteRenderArgs,
