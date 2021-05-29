@@ -4,7 +4,10 @@
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"scripts": {
-		"dev": "rollup --watch --config rollup.config.js"
+		"dev": "rollup --watch --config rollup.config.js",
+		"precommit": "lint-staged",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"lint:ts": "eslint --max-warnings=0 src"
 	},
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -19,7 +22,16 @@
 	},
 	"devDependencies": {
 		"@rollup/plugin-node-resolve": "^13.0.0",
+		"@typescript-eslint/eslint-plugin": "^4.25.0",
+		"@typescript-eslint/parser": "^4.25.0",
 		"@wessberg/rollup-plugin-ts": "^1.3.14",
+		"eslint": "^7.27.0",
+		"eslint-plugin-import": "^2.23.3",
+		"eslint-plugin-only-warn": "^1.0.2",
+		"eslint-plugin-react": "^7.23.2",
+		"eslint-plugin-react-hooks": "^4.2.0",
+		"lint-staged": "^11.0.0",
+		"prettier": "^2.3.0",
 		"react": "^17.0.2",
 		"rollup": "^2.50.4",
 		"rollup-plugin-terser": "^7.0.2",

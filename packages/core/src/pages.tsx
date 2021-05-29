@@ -9,10 +9,12 @@ const layouts = import.meta.glob(
 	"/src/pages/**/(*.)?layout.[[:alnum:]]+",
 ) as Record<string, () => Promise<PageOrLayoutModule>>;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const trie: any = {};
+
 Object.entries(pages).forEach(([page, importer]) => {
-	let name =
-		page.match(/^\/src\/pages\/((.+)[\./])?page\.[a-zA-Z0-9]+$/)![2] || "";
+	const name =
+		page.match(/^\/src\/pages\/((.+)[./])?page\.[a-zA-Z0-9]+$/)![2] || "";
 	const segments = name.split("/").filter(Boolean);
 
 	let node = trie;
@@ -27,8 +29,8 @@ Object.entries(pages).forEach(([page, importer]) => {
 });
 
 Object.entries(layouts).forEach(([layout, importer]) => {
-	let name =
-		layout.match(/^\/src\/pages\/((.+)[\./])?layout\.[a-zA-Z0-9]+$/)![2] || "";
+	const name =
+		layout.match(/^\/src\/pages\/((.+)[./])?layout\.[a-zA-Z0-9]+$/)![2] || "";
 	const segments = name.split("/").filter(Boolean);
 
 	let node = trie;
@@ -44,7 +46,11 @@ Object.entries(layouts).forEach(([layout, importer]) => {
 
 interface PageOrLayoutModule {
 	default: ComponentType;
-	load?(loadArgs: LoadArgs): Promise<any>;
+	load?(loadArgs: LoadArgs): LoadReturn | Promise<LoadReturn>;
+}
+
+interface LoadReturn {
+	props: Record<string, unknown>;
 }
 
 export type PageOrLayoutImporter = () =>
@@ -54,17 +60,17 @@ export type PageOrLayoutImporter = () =>
 export function findPage(
 	path: string,
 	notFound: PageOrLayoutImporter,
-): { params: any; stack: PageOrLayoutImporter[] } {
+): { params: Record<string, string>; stack: PageOrLayoutImporter[] } {
 	const segments = path.split("/").filter(Boolean);
 	let node = trie;
-	const params: any = {};
+	const params: Record<string, string> = {};
 	const stack: PageOrLayoutImporter[] = node.$layout ? [node.$layout] : [];
 
 	for (const segment of segments) {
 		if (node[segment]) {
 			node = node[segment];
 		} else {
-			let param = Object.keys(node).find(
+			const param = Object.keys(node).find(
 				(k) => k.startsWith("[") && k.endsWith("]"),
 			);
 

@@ -1,4 +1,4 @@
-import React, { ComponentType } from "react";
+import React, { ComponentType, FC } from "react";
 import { renderToString } from "react-dom/server";
 import { ServerRouter } from "bare-routes";
 import devalue from "devalue";
@@ -10,7 +10,7 @@ import nodeFetch, {
 	Response as NodeFetchResponse,
 	Request as NodeFetchRequest,
 	Headers as NodeFetchHeaders,
-	// @ts-ignore
+	// @ts-expect-error: There's a problem with node-fetch typings
 } from "node-fetch";
 
 globalThis.fetch = nodeFetch;
@@ -18,8 +18,10 @@ globalThis.Response = NodeFetchResponse;
 globalThis.Request = NodeFetchRequest;
 globalThis.Headers = NodeFetchHeaders;
 
+const NotFound: FC = () => <p>Not found</p>;
+
 const notFoundModuleImporter = () => ({
-	default: () => <p>Not found</p>,
+	default: NotFound,
 });
 
 export interface RawRequest {
@@ -28,7 +30,7 @@ export interface RawRequest {
 	headers: Headers;
 }
 
-interface RakkasRequest {
+export interface RakkasRequest {
 	url: URL;
 	method: string;
 	headers: Headers;
@@ -59,7 +61,7 @@ export async function handleRequest(req: RawRequest) {
 	const { params, stack } = findPage(req.url.pathname, notFoundModuleImporter);
 
 	const modules = await Promise.all(stack.map((importer) => importer()));
-	const data: any[] = [];
+	const data: Record<string, unknown>[] = [];
 	const components: ComponentType[] = [];
 	for (const mdl of modules) {
 		components.push(mdl.default);
@@ -146,14 +148,19 @@ export async function handleRequest(req: RawRequest) {
 
 						return nodeFetch(parsed.href, fullInit);
 					},
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				})
-			)?.props,
+			)?.props ?? {},
 		);
 	}
 
 	const content = components.reduceRight(
 		(prev, cur, i) =>
-			React.createElement(cur, { ...data[i], params, url: req.url }, prev),
+			React.createElement<Record<string, unknown>>(
+				cur,
+				{ ...data[i], params, url: req.url },
+				prev,
+			),
 		null as React.ReactNode,
 	);
 

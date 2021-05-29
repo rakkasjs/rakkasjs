@@ -1,10 +1,12 @@
-import React, { ComponentType, FC, ReactNode, useRef, useState } from "react";
+import React, { ComponentType, FC, useRef } from "react";
 import { hydrate } from "react-dom";
 import { Router } from ".";
 import { findPage } from "./pages";
 
+const NotFound: FC = () => <p>Not found</p>;
+
 const notFoundModuleImporter = () => ({
-	default: () => <p>Not found</p>,
+	default: NotFound,
 });
 
 export async function startClient() {
@@ -27,8 +29,8 @@ export async function startClient() {
 }
 
 const App: FC<{
-	initialParams: any;
-	initialData: any[];
+	initialParams: Record<string, unknown>;
+	initialData: Record<string, unknown>[];
 	initialStack: ComponentType[];
 }> = ({ initialParams, initialData, initialStack }) => {
 	const lastStack = useRef(initialStack);
@@ -68,7 +70,7 @@ const App: FC<{
 
 				return lastStack.current.reduceRight(
 					(prev, cur, i) =>
-						React.createElement(
+						React.createElement<Record<string, unknown>>(
 							cur,
 							{
 								...lastData.current[i],
@@ -90,7 +92,7 @@ const App: FC<{
 		>
 			{lastStack.current.reduceRight(
 				(prev, cur, i) =>
-					React.createElement(
+					React.createElement<Record<string, unknown>>(
 						cur,
 						{
 							...__RAKKAS_INITIAL_DATA[i],

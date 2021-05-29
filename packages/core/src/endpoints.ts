@@ -4,10 +4,12 @@ const endpoints = import.meta.glob(
 
 import { RawRequest } from "./server";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const trie: any = {};
+
 Object.entries(endpoints).forEach(([page, importer]) => {
-	let name =
-		page.match(/^\/src\/pages\/((.+)[\./])?endpoint\.[a-zA-Z0-9]+$/)![2] || "";
+	const name =
+		page.match(/^\/src\/pages\/((.+)[./])?endpoint\.[a-zA-Z0-9]+$/)![2] || "";
 	const segments = name.split("/").filter(Boolean);
 
 	let node = trie;
@@ -22,13 +24,13 @@ Object.entries(endpoints).forEach(([page, importer]) => {
 });
 
 interface RakkasRequest {
-	params: Record<string, any>;
+	params: Record<string, unknown>;
 }
 
 interface RakkasResponse {
 	status?: number;
 	headers?: Record<string, string>;
-	body?: any;
+	body?: unknown;
 }
 
 interface EndpointModule {
@@ -44,13 +46,13 @@ export function findEndpoint(
 ): { importer: EndpointImporter; params: Record<string, string> } | undefined {
 	const segments = req.url.pathname.split("/").filter(Boolean);
 	let node = trie;
-	const params: any = {};
+	const params: Record<string, unknown> = {};
 
 	for (const segment of segments) {
 		if (node[segment]) {
 			node = node[segment];
 		} else {
-			let param = Object.keys(node).find(
+			const param = Object.keys(node).find(
 				(k) => k.startsWith("[") && k.endsWith("]"),
 			);
 
