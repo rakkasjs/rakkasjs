@@ -1,12 +1,18 @@
 import { ComponentType } from "react";
 import type { LoadArgs } from ".";
 
-import pages from "@rakkasjs:pages";
-import layouts from "@rakkasjs:layouts";
+const pages = import.meta.glob(
+	"/src/pages/**/(*.)?page.[[:alnum:]]+",
+) as Record<string, () => Promise<PageOrLayoutModule>>;
+
+const layouts = import.meta.glob(
+	"/src/pages/**/(*.)?layout.[[:alnum:]]+",
+) as Record<string, () => Promise<PageOrLayoutModule>>;
 
 const trie: any = {};
-pages.forEach(([page, importer]) => {
-	let name = page.match(/^((.+)[\./])?page\.[a-zA-Z0-9]+$/)![2] || "";
+Object.entries(pages).forEach(([page, importer]) => {
+	let name =
+		page.match(/^\/src\/pages\/((.+)[\./])?page\.[a-zA-Z0-9]+$/)![2] || "";
 	const segments = name.split("/").filter(Boolean);
 
 	let node = trie;
@@ -20,8 +26,9 @@ pages.forEach(([page, importer]) => {
 	node.$page = importer;
 });
 
-layouts.forEach(([layout, importer]) => {
-	let name = layout.match(/^((.+)[\./])?layout\.[a-zA-Z0-9]+$/)![2] || "";
+Object.entries(layouts).forEach(([layout, importer]) => {
+	let name =
+		layout.match(/^\/src\/pages\/((.+)[\./])?layout\.[a-zA-Z0-9]+$/)![2] || "";
 	const segments = name.split("/").filter(Boolean);
 
 	let node = trie;

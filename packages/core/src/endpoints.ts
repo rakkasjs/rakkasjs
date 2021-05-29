@@ -1,11 +1,13 @@
-import { ComponentType } from "react";
+const endpoints = import.meta.glob(
+	"/src/pages/**/(*.)?endpoint.[[:alnum:]]+",
+) as Record<string, () => Promise<EndpointModule>>;
 
-import endpoints from "@rakkasjs:endpoints";
 import { RawRequest } from "./server";
 
 const trie: any = {};
-endpoints.forEach(([page, importer]) => {
-	let name = page.match(/^((.+)[\./])?endpoint\.[a-zA-Z0-9]+$/)![2] || "";
+Object.entries(endpoints).forEach(([page, importer]) => {
+	let name =
+		page.match(/^\/src\/pages\/((.+)[\./])?endpoint\.[a-zA-Z0-9]+$/)![2] || "";
 	const segments = name.split("/").filter(Boolean);
 
 	let node = trie;

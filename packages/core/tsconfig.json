@@ -2,9 +2,12 @@
 	"compilerOptions": {
 		"strict": true,
 		"declaration": true,
+		"module": "ES2020",
+		"lib": ["ES2017"],
 		"esModuleInterop": true,
 		"jsx": "react",
 		"target": "es6",
-		"moduleResolution": "node"
+		"moduleResolution": "node",
+		"types": ["vite/client"]
 	}
 }
