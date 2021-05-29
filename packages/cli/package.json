@@ -5,7 +5,10 @@
 	"license": "MIT",
 	"scripts": {
 		"dev": "babel src --watch --out-dir dist --extensions '.ts,.js,.tsx,.jsx'",
-		"build": "babel src --out-dir dist --extensions '.ts,.js'"
+		"build": "babel src --out-dir dist --extensions '.ts,.js'",
+		"precommit": "lint-staged",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"lint:ts": "eslint --max-warnings=0 src"
 	},
 	"bin": {
 		"rakkas": "dist/index.js"
@@ -21,6 +24,13 @@
 		"@babel/preset-typescript": "^7.13.0",
 		"@rakkasjs/core": "workspace:*",
 		"@types/node": "^15.6.1",
+		"@typescript-eslint/eslint-plugin": "^4.25.0",
+		"@typescript-eslint/parser": "^4.25.0",
+		"eslint": "^7.27.0",
+		"eslint-plugin-import": "^2.23.3",
+		"eslint-plugin-only-warn": "^1.0.2",
+		"lint-staged": "^11.0.0",
+		"prettier": "^2.3.0",
 		"typescript": "^4.3.2"
 	},
 	"dependencies": {

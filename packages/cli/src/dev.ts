@@ -1,23 +1,13 @@
 import { Command } from "commander";
-import { createServer as createViteServer, ViteDevServer } from "vite";
+import { createServer as createViteServer } from "vite";
 import reactRefresh from "@vitejs/plugin-react-refresh";
 import { createServer } from "http";
 import { encode } from "html-entities";
-import glob from "fast-glob";
-import fs from "fs/promises";
-import path from "path";
 
 export default function devCommand() {
 	return new Command("dev")
 		.description("Start a development server")
 		.action(async () => {
-			const runtimePath = path.resolve(__dirname, "../runtime/") + "/";
-
-			// Create vite server in middleware mode. This disables Vite's own HTML
-			// serving logic and let the parent server take control.
-			let viteServer: ViteDevServer;
-			const generatedFiles = ["pages", "layouts", "endpoints"];
-
 			const vite = await createViteServer({
 				server: {
 					middlewareMode: true,
@@ -52,7 +42,7 @@ export default function devCommand() {
 							// TODO: Get real host and port
 							url: new URL(url, `http://${req.headers.host}`),
 							method: req.method,
-							headers: new Headers(req.headers as any),
+							headers: new Headers(req.headers as Record<string, string>),
 						});
 
 						if (response.type === "page") {

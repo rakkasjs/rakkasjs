@@ -2,7 +2,6 @@
 	"name": "rakkasjs",
 	"private": true,
 	"scripts": {
-		"precommit": "echo Root precommit not installed && exit 1",
 		"prepare": "husky install"
 	},
 	"devDependencies": {

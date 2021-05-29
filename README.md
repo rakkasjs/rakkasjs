@@ -13,37 +13,39 @@
 
 ## TODO
 
-```js
-useReload({
-	// Reload when one of the values in this array change
-	deps: [params.slug],
-	// Reload when window receives focus
-	focus: true,
-	// Reload when the internet connection is restored after a disconnection
-	reconnect: true,
-	// Set to true to reload immediately after hydration
-	hydrate: false,
-	// Set to i.e. 15_000 to reload every 15 seconds
-	interval: false,
-	// Set to true to reload even when the window has no focus
-	background: false,
-})
-```
-
+- Set up ESLint, prettier etc.
+- Set up testing
 - Middleware
 - useReload hook
-- Set up ESLint, prettier etc.
+	```js
+	useReload({
+		// Reload when one of the values in this array change
+		deps: [params.slug],
+		// Reload when window receives focus
+		focus: true,
+		// Reload when the internet connection is restored after a disconnection
+		reconnect: true,
+		// Set to true to reload immediately after hydration
+		hydrate: false,
+		// Set to i.e. 15_000 to reload every 15 seconds
+		interval: false,
+		// Set to true to reload even when the window has no focus
+		background: false,
+	})
+	```
 - Include react-helmet or equivalent functionality
-- Investigate [vite-plugin-virtual](https://github.com/patak-js/vite-plugin-virtual)
 - `rakkas build` command
-- Prefetching
 - Prepare packages for publication
-- Proper error handling
+- Error handling
+- Investigate renderToNodeStream
+- Auto-inject client
 - Configurability
   - User vite configuration
   - Page and layout module extensions (i.e. .md, .mdx etc.)
 - Project initializer
 - Documentation
+- Upstream todos in the router
+- Prefetching
 - Localized routing
 - Customized routing
 - Adapters for serverless environments
