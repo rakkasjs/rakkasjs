@@ -19,7 +19,9 @@ export default function devCommand() {
 			const generatedFiles = ["pages", "layouts", "endpoints"];
 
 			const vite = await createViteServer({
-				server: { middlewareMode: true },
+				server: {
+					middlewareMode: true,
+				},
 				plugins: [
 					reactRefresh(),
 					{
@@ -153,8 +155,9 @@ export default function devCommand() {
 						output = await vite.transformIndexHtml(url, output);
 						const response = await handleRequest({
 							// TODO: Get real host and port
-							url: new URL(url, "http://localhost:3000"),
+							url: new URL(url, `http://${req.headers.host}`),
 							method: req.method,
+							headers: new Headers(req.headers as any),
 						});
 
 						if (response.type === "page") {

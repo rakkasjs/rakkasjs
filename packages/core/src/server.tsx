@@ -25,6 +25,15 @@ const notFoundModuleImporter = () => ({
 export interface RawRequest {
 	url: URL;
 	method: string;
+	headers: Headers;
+}
+
+interface RakkasRequest {
+	url: URL;
+	method: string;
+	headers: Headers;
+	params: Record<string, string>;
+	rawBody: string | Uint8Array;
 }
 
 export async function handleRequest(req: RawRequest) {
@@ -63,19 +72,79 @@ export async function handleRequest(req: RawRequest) {
 						input: RequestInfo,
 						init?: RequestInit,
 					): Promise<NodeFetchResponse> {
-						const url = typeof input === "string" ? input : input.url;
+						let url: string;
+						let fullInit: Omit<RequestInit, "headers"> & { headers: Headers };
+						if (input instanceof Request) {
+							url = input.url;
+							fullInit = {
+								body: input.body,
+								cache: input.cache,
+								credentials: input.credentials,
+								integrity: input.integrity,
+								keepalive: input.keepalive,
+								method: input.method,
+								mode: input.mode,
+								redirect: input.redirect,
+								referrer: input.referrer,
+								referrerPolicy: input.referrerPolicy,
+								signal: input.signal,
+								...init,
+								headers: new Headers(init?.headers ?? input.headers),
+							};
+						} else {
+							url = input;
+							fullInit = {
+								...init,
+								headers: new Headers(init?.headers),
+							};
+						}
+
 						const parsed = new URL(url, req.url);
 
 						if (parsed.origin === req.url.origin) {
-							// TODO: Handle internal fetch
+							if (fullInit.credentials !== "omit") {
+								const cookie = req.headers.get("cookie");
+								if (cookie !== null) {
+									fullInit.headers.set("cookie", cookie);
+								}
+
+								const authorization = req.headers.get("authorization");
+								if (
+									!fullInit.headers.has("authorization") &&
+									authorization !== null
+								) {
+									fullInit.headers.set("authorization", authorization);
+								}
+							}
 						}
 
-						return nodeFetch(
-							typeof input === "string"
-								? parsed.href
-								: { ...input, url: parsed.href },
-							init,
-						);
+						[
+							"referer",
+							"x-forwarded-for",
+							"x-forwarded-host",
+							"x-forwarded-proto",
+							"x-forwarded-server",
+						].forEach((header) => {
+							if (req.headers.has(header)) {
+								fullInit.headers.set(header, req.headers.get(header)!);
+							}
+						});
+
+						if (req.headers.has("referer")) {
+							fullInit.headers.set("referer", req.headers.get("referer")!);
+						}
+
+						if (
+							!fullInit.headers.has("accept-language") &&
+							req.headers.has("accept-language")
+						) {
+							fullInit.headers.set(
+								"accept-language",
+								req.headers.get("accept-language")!,
+							);
+						}
+
+						return nodeFetch(parsed.href, fullInit);
 					},
 				})
 			)?.props,
