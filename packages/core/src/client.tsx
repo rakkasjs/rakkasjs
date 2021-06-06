@@ -50,7 +50,7 @@ const App: FC<{
 
 	return (
 		<Router
-			render={async ({ url, rerender }) => {
+			render={async ({ url, rerender, navigate }) => {
 				const stack = await makeComponentStack({
 					fetch,
 					reload(i) {
@@ -66,7 +66,8 @@ const App: FC<{
 				});
 
 				if ("location" in stack) {
-					throw new Error("Client-side redirection not implemented yet");
+					navigate(String(stack.location), { replace: true });
+					return null;
 				}
 
 				return stack.content;

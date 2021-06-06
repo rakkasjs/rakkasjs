@@ -1,4 +1,4 @@
-import ts from "@wessberg/rollup-plugin-ts";
+import ts from "rollup-plugin-ts";
 import { terser } from "rollup-plugin-terser";
 import nodeResolvePlugin from "@rollup/plugin-node-resolve";
 

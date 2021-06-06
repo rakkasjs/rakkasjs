@@ -66,10 +66,14 @@ export async function makeComponentStack({
 
 			if ("data" in loadResult) {
 				data.push(loadResult.data);
+				prevData[i] = loadResult.data;
+				isDataValid[i] = true;
 				if (loadResult.context) context = loadResult.context;
 				contexts.push(context);
 			} else if ("error" in loadResult) {
 				data.push({});
+				prevData[i] = {};
+				isDataValid[i] = true;
 				error = loadResult.error;
 				contexts.push(context);
 				break;

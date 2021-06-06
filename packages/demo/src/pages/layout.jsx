@@ -45,6 +45,11 @@ export default ({ children }) => {
 								About
 							</NavLink>
 						</li>
+						<li>
+							<NavLink href="/redirect" currentRouteClass={css.active}>
+								Redirect
+							</NavLink>
+						</li>
 					</ul>
 				</nav>
 			</header>
