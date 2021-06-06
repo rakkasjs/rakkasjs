@@ -1,13 +1,17 @@
-import { ComponentType } from "react";
-import type { LoadArgs } from ".";
+import {
+	LayoutImporter,
+	LayoutModule,
+	PageImporter,
+	PageModule,
+} from "./types";
 
 const pages = import.meta.glob(
 	"/src/pages/**/(*.)?page.[[:alnum:]]+",
-) as Record<string, () => Promise<PageOrLayoutModule>>;
+) as Record<string, () => Promise<PageModule>>;
 
 const layouts = import.meta.glob(
-	"/src/pages/**/(*.)?layout.[[:alnum:]]+",
-) as Record<string, () => Promise<PageOrLayoutModule>>;
+	"/src/pages/**/(*/)?layout.[[:alnum:]]+",
+) as Record<string, () => Promise<LayoutModule>>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const trie: any = {};
@@ -44,43 +48,40 @@ Object.entries(layouts).forEach(([layout, importer]) => {
 	node.$layout = importer;
 });
 
-interface PageOrLayoutModule {
-	default: ComponentType;
-	load?(loadArgs: LoadArgs): LoadReturn | Promise<LoadReturn>;
+interface PageModuleImporters {
+	params: Record<string, string>;
+	match?: string;
+	stack: Array<LayoutImporter | PageImporter>;
 }
 
-interface LoadReturn {
-	props: Record<string, unknown>;
-}
-
-export type PageOrLayoutImporter = () =>
-	| Promise<PageOrLayoutModule>
-	| PageOrLayoutModule;
-
-export function findPage(
-	path: string,
-	notFound: PageOrLayoutImporter,
-): { params: Record<string, string>; stack: PageOrLayoutImporter[] } {
+export function findPage(path: string): PageModuleImporters {
 	const segments = path.split("/").filter(Boolean);
 	let node = trie;
 	const params: Record<string, string> = {};
-	const stack: PageOrLayoutImporter[] = node.$layout ? [node.$layout] : [];
+	const stack: Array<LayoutImporter | PageImporter> = node.$layout
+		? [node.$layout]
+		: [];
+	const matchPath: string[] = [];
 
 	for (const segment of segments) {
 		if (node[segment]) {
 			node = node[segment];
+			matchPath.push(segment);
 		} else {
 			const param = Object.keys(node).find(
 				(k) => k.startsWith("[") && k.endsWith("]"),
 			);
 
 			if (!param) {
-				stack.push(notFound);
-				return { params, stack };
+				return {
+					params,
+					stack,
+				};
 			}
 
 			node = node[param];
 			params[param.slice(1, -1)] = segment;
+			matchPath.push(param);
 		}
 
 		if (node.$layout) {
@@ -88,7 +89,18 @@ export function findPage(
 		}
 	}
 
-	stack.push(node.$page ?? notFound);
+	if (!node.$page) {
+		return {
+			params,
+			stack,
+		};
+	}
 
-	return { params, stack };
+	stack.push(node.$page);
+
+	return {
+		params,
+		stack,
+		match: "/" + matchPath.join("/"),
+	};
 }

@@ -10,6 +10,21 @@
 
 **Rakkas** aims to be a [React](https://reactjs.org) framework powered by [Vite](https://vitejs.dev), with a developer experience inspired by [Next.js](https://nextjs.org) and [Svelte Kit](https://kit.svelte.dev).
 
+**Rakkas** [ɾɑkːˈɑs] is an old Turkish word borrowed from Arabic, meaning dancer. The now obsolete second meaning is pendulum.
+
+## Getting started
+To start a new project, type the following commands on the command line and then follow the prompts.
+
+```sh
+mkdir my-rakkas-project
+cd my-rakkas-project
+npm init @rakkasjs
+```
+
+If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and `@rakkajs/core`, `react` and `react-dom` as a dependency.
+
+
+
 
 ## TODO
 

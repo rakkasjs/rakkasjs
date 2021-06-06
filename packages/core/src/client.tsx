@@ -1,111 +1,79 @@
-import React, { ComponentType, FC, useRef } from "react";
+import React, { ComponentType, FC, useRef, ReactNode } from "react";
 import { hydrate } from "react-dom";
 import { Router } from ".";
-import { findPage } from "./pages";
-
-const NotFound: FC = () => <p>Not found</p>;
-
-const notFoundModuleImporter = () => ({
-	default: NotFound,
-});
+import { makeComponentStack } from "./makeComponentStack";
+import { ErrorHandlerProps } from "./types";
 
 export async function startClient() {
 	const url = new URL(window.location.href);
+	const isDataValid = __RAKKAS_INITIAL_DATA.map(() => true);
 
-	const { stack, params } = findPage(url.pathname, notFoundModuleImporter);
+	const stack = await makeComponentStack({
+		url,
+		fetch,
+		previousRender: {
+			data: __RAKKAS_INITIAL_DATA,
+			isDataValid,
+			components: [],
+		},
+		reload(i) {
+			isDataValid[i] = false;
+		},
+	});
 
-	const components = await (
-		await Promise.all(stack.map((importer) => importer()))
-	).map((m) => m.default);
+	// Redirection should not normally happen on initial render, but let's be safe
+	if ("location" in stack) {
+		window.location.href = String(stack.location);
+		return;
+	}
 
 	hydrate(
 		<App
-			initialStack={components}
-			initialParams={params}
-			initialData={__RAKKAS_INITIAL_DATA}
+			initialStack={stack.components}
+			initialData={stack.data}
+			initialContent={stack.content}
+			initialDataValidity={isDataValid}
 		/>,
 		document.getElementById("rakkas-app"),
 	);
 }
 
 const App: FC<{
-	initialParams: Record<string, unknown>;
-	initialData: Record<string, unknown>[];
-	initialStack: ComponentType[];
-}> = ({ initialParams, initialData, initialStack }) => {
+	initialContent: ReactNode;
+	initialData: unknown[];
+	initialStack: ComponentType<ErrorHandlerProps>[];
+	initialDataValidity: boolean[];
+}> = ({ initialContent, initialData, initialStack, initialDataValidity }) => {
 	const lastStack = useRef(initialStack);
 	const lastData = useRef(initialData);
-	const isDataValid = useRef(initialData.map(() => true));
-
-	const url = new URL(window.location.href);
+	const isDataValid = useRef(initialDataValidity);
 
 	return (
 		<Router
 			render={async ({ url, rerender }) => {
-				const { stack, params } = findPage(
-					url.pathname,
-					notFoundModuleImporter,
-				);
+				const stack = await makeComponentStack({
+					fetch,
+					reload(i) {
+						isDataValid.current[i] = false;
+						rerender();
+					},
+					url,
+					previousRender: {
+						components: lastStack.current,
+						data: lastData.current,
+						isDataValid: isDataValid.current,
+					},
+				});
 
-				let different = false;
-
-				const modules = await await Promise.all(
-					stack.map((importer) => importer()),
-				);
-
-				for (const [i, mdl] of modules.entries()) {
-					if (lastStack.current[i] !== mdl.default) {
-						different = true;
-						lastStack.current.length = i;
-						lastStack.current[i] = mdl.default;
-						lastData.current.length = i;
-					}
-
-					if (different || !isDataValid.current[i]) {
-						lastData.current[i] =
-							(await mdl.load?.({ url, params, fetch }))?.props ?? {};
-						isDataValid.current[i] = true;
-					}
+				if ("location" in stack) {
+					throw new Error("Client-side redirection not implemented yet");
 				}
 
-				return lastStack.current.reduceRight(
-					(prev, cur, i) =>
-						React.createElement<Record<string, unknown>>(
-							cur,
-							{
-								...lastData.current[i],
-								params,
-								url,
-								reload() {
-									if (isDataValid.current[i]) {
-										isDataValid.current[i] = false;
-										rerender();
-									}
-								},
-							},
-							prev,
-						),
-					null as React.ReactNode,
-				);
+				return stack.content;
 			}}
 			// skipInitialRender
 		>
-			{lastStack.current.reduceRight(
-				(prev, cur, i) =>
-					React.createElement<Record<string, unknown>>(
-						cur,
-						{
-							...__RAKKAS_INITIAL_DATA[i],
-							params: initialParams,
-							url,
-							reload() {
-								isDataValid.current[i] = false;
-							},
-						},
-						prev,
-					),
-				null as React.ReactNode,
-			)}
+			{initialContent}
 		</Router>
 	);
 };

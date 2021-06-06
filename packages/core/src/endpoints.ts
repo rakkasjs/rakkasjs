@@ -3,6 +3,7 @@ const endpoints = import.meta.glob(
 ) as Record<string, () => Promise<EndpointModule>>;
 
 import { RawRequest } from "./server";
+import { RakkasResponse } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const trie: any = {};
@@ -25,12 +26,6 @@ Object.entries(endpoints).forEach(([page, importer]) => {
 
 interface RakkasRequest {
 	params: Record<string, unknown>;
-}
-
-interface RakkasResponse {
-	status?: number;
-	headers?: Record<string, string>;
-	body?: unknown;
 }
 
 interface EndpointModule {

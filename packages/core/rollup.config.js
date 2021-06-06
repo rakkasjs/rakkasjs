@@ -19,9 +19,6 @@ const options = [
 			"react-dom/server",
 			"node-fetch",
 			"$app/App.jsx",
-			"@rakkasjs:pages",
-			"@rakkasjs:layouts",
-			"@rakkasjs:endpoints",
 		],
 		plugins: [
 			ts({

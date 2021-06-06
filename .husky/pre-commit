@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-pnpm run --parallel precommit --
+pnpm run -r --workspace-concurrency=1 precommit --

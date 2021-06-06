@@ -1,9 +1,8 @@
-import React, { ComponentType, FC } from "react";
+import React from "react";
 import { renderToString } from "react-dom/server";
 import { ServerRouter } from "bare-routes";
 import devalue from "devalue";
 
-import { findPage } from "./pages";
 import { findEndpoint } from "./endpoints";
 
 import nodeFetch, {
@@ -12,17 +11,13 @@ import nodeFetch, {
 	Headers as NodeFetchHeaders,
 	// @ts-expect-error: There's a problem with node-fetch typings
 } from "node-fetch";
+import { RakkasResponse } from "./types";
+import { makeComponentStack } from "./makeComponentStack";
 
 globalThis.fetch = nodeFetch;
 globalThis.Response = NodeFetchResponse;
 globalThis.Request = NodeFetchRequest;
 globalThis.Headers = NodeFetchHeaders;
-
-const NotFound: FC = () => <p>Not found</p>;
-
-const notFoundModuleImporter = () => ({
-	default: NotFound,
-});
 
 export interface RawRequest {
 	url: URL;
@@ -38,7 +33,10 @@ export interface RakkasRequest {
 	rawBody: string | Uint8Array;
 }
 
-export async function handleRequest(req: RawRequest) {
+export async function handleRequest(
+	req: RawRequest,
+	template: string,
+): Promise<RakkasResponse> {
 	const endpoint = findEndpoint(req);
 
 	if (endpoint) {
@@ -51,126 +49,124 @@ export async function handleRequest(req: RawRequest) {
 				params: endpointParams,
 			});
 
-			return {
-				type: "endpoint",
-				...response,
-			};
+			return response;
 		}
 	}
 
-	const { params, stack } = findPage(req.url.pathname, notFoundModuleImporter);
+	const stack = await makeComponentStack({
+		url: req.url,
+		previousRender: {
+			components: [],
+			isDataValid: [],
+			data: [],
+		},
 
-	const modules = await Promise.all(stack.map((importer) => importer()));
-	const data: Record<string, unknown>[] = [];
-	const components: ComponentType[] = [];
-	for (const mdl of modules) {
-		components.push(mdl.default);
-		data.push(
-			(
-				await mdl.load?.({
-					url: req.url,
-					params,
-					fetch(
-						input: RequestInfo,
-						init?: RequestInit,
-					): Promise<NodeFetchResponse> {
-						let url: string;
-						let fullInit: Omit<RequestInit, "headers"> & { headers: Headers };
-						if (input instanceof Request) {
-							url = input.url;
-							fullInit = {
-								body: input.body,
-								cache: input.cache,
-								credentials: input.credentials,
-								integrity: input.integrity,
-								keepalive: input.keepalive,
-								method: input.method,
-								mode: input.mode,
-								redirect: input.redirect,
-								referrer: input.referrer,
-								referrerPolicy: input.referrerPolicy,
-								signal: input.signal,
-								...init,
-								headers: new Headers(init?.headers ?? input.headers),
-							};
-						} else {
-							url = input;
-							fullInit = {
-								...init,
-								headers: new Headers(init?.headers),
-							};
-						}
+		reload() {
+			throw new Error("Don't call reload on server side");
+		},
 
-						const parsed = new URL(url, req.url);
+		fetch(input: RequestInfo, init?: RequestInit): Promise<NodeFetchResponse> {
+			let url: string;
+			let fullInit: Omit<RequestInit, "headers"> & { headers: Headers };
+			if (input instanceof Request) {
+				url = input.url;
+				fullInit = {
+					body: input.body,
+					cache: input.cache,
+					credentials: input.credentials,
+					integrity: input.integrity,
+					keepalive: input.keepalive,
+					method: input.method,
+					mode: input.mode,
+					redirect: input.redirect,
+					referrer: input.referrer,
+					referrerPolicy: input.referrerPolicy,
+					signal: input.signal,
+					...init,
+					headers: new Headers(init?.headers ?? input.headers),
+				};
+			} else {
+				url = input;
+				fullInit = {
+					...init,
+					headers: new Headers(init?.headers),
+				};
+			}
 
-						if (parsed.origin === req.url.origin) {
-							if (fullInit.credentials !== "omit") {
-								const cookie = req.headers.get("cookie");
-								if (cookie !== null) {
-									fullInit.headers.set("cookie", cookie);
-								}
+			const parsed = new URL(url, req.url);
 
-								const authorization = req.headers.get("authorization");
-								if (
-									!fullInit.headers.has("authorization") &&
-									authorization !== null
-								) {
-									fullInit.headers.set("authorization", authorization);
-								}
-							}
-						}
+			if (parsed.origin === req.url.origin) {
+				if (fullInit.credentials !== "omit") {
+					const cookie = req.headers.get("cookie");
+					if (cookie !== null) {
+						fullInit.headers.set("cookie", cookie);
+					}
 
-						[
-							"referer",
-							"x-forwarded-for",
-							"x-forwarded-host",
-							"x-forwarded-proto",
-							"x-forwarded-server",
-						].forEach((header) => {
-							if (req.headers.has(header)) {
-								fullInit.headers.set(header, req.headers.get(header)!);
-							}
-						});
+					const authorization = req.headers.get("authorization");
+					if (
+						!fullInit.headers.has("authorization") &&
+						authorization !== null
+					) {
+						fullInit.headers.set("authorization", authorization);
+					}
+				}
+			}
 
-						if (req.headers.has("referer")) {
-							fullInit.headers.set("referer", req.headers.get("referer")!);
-						}
+			[
+				"referer",
+				"x-forwarded-for",
+				"x-forwarded-host",
+				"x-forwarded-proto",
+				"x-forwarded-server",
+			].forEach((header) => {
+				if (req.headers.has(header)) {
+					fullInit.headers.set(header, req.headers.get(header)!);
+				}
+			});
 
-						if (
-							!fullInit.headers.has("accept-language") &&
-							req.headers.has("accept-language")
-						) {
-							fullInit.headers.set(
-								"accept-language",
-								req.headers.get("accept-language")!,
-							);
-						}
+			if (req.headers.has("referer")) {
+				fullInit.headers.set("referer", req.headers.get("referer")!);
+			}
 
-						return nodeFetch(parsed.href, fullInit);
-					},
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				})
-			)?.props ?? {},
-		);
+			if (
+				!fullInit.headers.has("accept-language") &&
+				req.headers.has("accept-language")
+			) {
+				fullInit.headers.set(
+					"accept-language",
+					req.headers.get("accept-language")!,
+				);
+			}
+
+			return nodeFetch(parsed.href, fullInit);
+		},
+	});
+
+	// Handle redirection
+	if ("location" in stack) {
+		return {
+			status: stack.status,
+			headers: {
+				location: String(stack.location),
+			},
+		};
 	}
 
-	const content = components.reduceRight(
-		(prev, cur, i) =>
-			React.createElement<Record<string, unknown>>(
-				cur,
-				{ ...data[i], params, url: req.url },
-				prev,
-			),
-		null as React.ReactNode,
+	const app = renderToString(
+		<ServerRouter url={req.url}>{stack.content}</ServerRouter>,
 	);
 
-	const app = renderToString(
-		<ServerRouter url={req.url}>{content}</ServerRouter>,
+	let body = template.replace(
+		"<!-- rakkas-data-placeholder -->",
+		devalue(stack.data),
 	);
+	body = body.replace("<!-- rakkas-app-placeholder -->", app);
 
 	return {
-		type: "page",
-		data: devalue(data),
-		app,
+		status: stack.status,
+		headers: {
+			"content-type": "text/html",
+		},
+		body,
 	};
 }

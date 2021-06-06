@@ -2,7 +2,7 @@ import React from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 
-export default ({ post, params, reload }) => {
+export default ({ data: { post }, params, reload }) => {
 	// The `load()` function is only called when the page or layout component is mounted. It means that when you navigate directly from `/faq/some-slug` to
 	// `/faq/some-other-slug`, load() will not be called. It is our reponsibility to refetch when params.slug changes. Rakkas provides a `reload()` function to
 	// solve this for simple cases without duplication of fetch logic.
@@ -26,9 +26,20 @@ export default ({ post, params, reload }) => {
 };
 
 export async function load({ params, fetch }) {
+	const response = await fetch(`/faq-api/${params.slug}`);
+
+	if (!response.ok) {
+		return {
+			status: response.status,
+			error: {
+				message: (await response.json()).error,
+			},
+		};
+	}
+
 	return {
-		props: {
-			post: await fetch(`/faq-api/${params.slug}`).then((r) => r.json()),
+		data: {
+			post: await response.json(),
 		},
 	};
 }

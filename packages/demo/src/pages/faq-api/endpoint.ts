@@ -5,6 +5,12 @@ export async function get(req) {
 		headers: {
 			"content-type": "application/json",
 		},
-		body: data.map((x) => ({ slug: x.slug, title: x.title })),
+		body: [
+			...data.map((x) => ({ slug: x.slug, title: x.title })),
+			{
+				slug: "not-here",
+				title: "Broken link",
+			},
+		],
 	};
 }

@@ -2,7 +2,6 @@ import { Command } from "commander";
 import { createServer as createViteServer } from "vite";
 import reactRefresh from "@vitejs/plugin-react-refresh";
 import { createServer } from "http";
-import { encode } from "html-entities";
 
 export default function devCommand() {
 	return new Command("dev")
@@ -25,59 +24,39 @@ export default function devCommand() {
 				const url = req.url;
 
 				vite.middlewares(req, res, async () => {
-					let output = template;
-					let content: {
-						type: string;
-						data: string;
-						app: string;
-					};
+					let html = template;
 
 					try {
-						const { handleRequest } = await vite.ssrLoadModule(
+						const { handleRequest } = (await vite.ssrLoadModule(
 							"$rakkas/server",
+						)) as typeof import("@rakkasjs/core/dist/server");
+
+						html = await vite.transformIndexHtml(url, html);
+						const response = await handleRequest(
+							{
+								// TODO: Get real host and port
+								url: new URL(url, `http://${req.headers.host}`),
+								method: req.method,
+								headers: new Headers(req.headers as Record<string, string>),
+							},
+							html,
 						);
 
-						output = await vite.transformIndexHtml(url, output);
-						const response = await handleRequest({
-							// TODO: Get real host and port
-							url: new URL(url, `http://${req.headers.host}`),
-							method: req.method,
-							headers: new Headers(req.headers as Record<string, string>),
-						});
+						res.statusCode = response.status ?? 200;
+						Object.entries(response.headers as Record<string, string>).forEach(
+							([k, v]) => res.setHeader(k, v),
+						);
 
-						if (response.type === "page") {
-							content = response;
-							res.statusCode = 200;
-						} else if (response.type === "endpoint") {
-							res.statusCode = response.status ?? 200;
-							Object.entries(
-								response.headers as Record<string, string>,
-							).forEach(([k, v]) => res.setHeader(k, v));
+						const body =
+							typeof response.body === "string"
+								? response.body
+								: JSON.stringify(response.body);
 
-							res.end(JSON.stringify(response.body ?? {}));
-						}
+						res.end(body);
 					} catch (error) {
 						vite.ssrFixStacktrace(error);
-						content = {
-							type: "page",
-							data: "[]",
-							app: encode(error.stack ?? "Unknwon error"),
-						};
 						res.statusCode = 500;
-					}
-
-					if (content.type === "page") {
-						res.setHeader("Content-Type", "text/html");
-						output = output.replace(
-							"<!-- rakkas-data-placeholder -->",
-							content.data,
-						);
-						output = output.replace(
-							"<!-- rakkas-app-placeholder -->",
-							content.app,
-						);
-
-						res.end(output);
+						res.end(error.stack ?? "Unknown error");
 					}
 				});
 			});
