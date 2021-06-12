@@ -5,9 +5,10 @@
 	"license": "MIT",
 	"scripts": {
 		"dev": "rollup --watch --config rollup.config.js",
-		"precommit": "lint-staged",
+		"precommit": "lint-staged --no-stash",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
-		"lint:ts": "eslint --max-warnings=0 src"
+		"lint:ts": "eslint --max-warnings=0 src",
+		"test": "jest --coverage"
 	},
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -21,7 +22,11 @@
 		"react": "^17"
 	},
 	"devDependencies": {
+		"@babel/preset-env": "^7.14.4",
+		"@babel/preset-react": "^7.13.13",
+		"@babel/preset-typescript": "^7.13.0",
 		"@rollup/plugin-node-resolve": "^13.0.0",
+		"@types/jest": "^26.0.23",
 		"@types/react-dom": "^17.0.6",
 		"@typescript-eslint/eslint-plugin": "^4.26.0",
 		"@typescript-eslint/parser": "^4.26.0",
@@ -30,6 +35,7 @@
 		"eslint-plugin-only-warn": "^1.0.2",
 		"eslint-plugin-react": "^7.24.0",
 		"eslint-plugin-react-hooks": "^4.2.0",
+		"jest": "^27.0.4",
 		"lint-staged": "^11.0.0",
 		"prettier": "^2.3.1",
 		"react": "^17.0.2",

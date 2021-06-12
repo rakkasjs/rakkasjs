@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "babel src --watch --out-dir dist --extensions '.ts,.js,.tsx,.jsx'",
 		"build": "babel src --out-dir dist --extensions '.ts,.js'",
-		"precommit": "lint-staged",
+		"precommit": "lint-staged --no-stash",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
 		"lint:ts": "eslint --max-warnings=0 src"
 	},

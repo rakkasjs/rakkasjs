@@ -86,7 +86,6 @@ export async function makeComponentStack({
 	}
 
 	if (error) {
-		console.log("Truncationg to", errorHandlerIndex);
 		components.length = errorHandlerIndex + 1;
 	}
 

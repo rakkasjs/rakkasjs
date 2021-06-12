@@ -7,6 +7,7 @@ export default ({ data: { post }, params, reload }) => {
 	// `/faq/some-other-slug`, load() will not be called. It is our reponsibility to refetch when params.slug changes. Rakkas provides a `reload()` function to
 	// solve this for simple cases without duplication of fetch logic.
 	const first = useRef(true);
+
 	useEffect(() => {
 		// Don't reload on initial render, we're happy with the server-side data.
 		if (first.current) {

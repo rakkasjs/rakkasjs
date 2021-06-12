@@ -4,13 +4,9 @@ import { Logomark } from "../lib/logomark";
 import { Logotype } from "../lib/logotype";
 import css from "./main.module.css";
 
-export default ({ children }) => {
+export default ({ error, children }) => {
 	const { current } = useRouter();
-
-	const currentStyle = {
-		background: "#333",
-		color: "#eee",
-	};
+	const content = error ? <p>{error.message}</p> : children;
 
 	return (
 		<>
@@ -50,11 +46,16 @@ export default ({ children }) => {
 								Redirect
 							</NavLink>
 						</li>
+						<li>
+							<NavLink href="/broken" currentRouteClass={css.active}>
+								Broken
+							</NavLink>
+						</li>
 					</ul>
 				</nav>
 			</header>
 
-			<div className={css.wrapper}>{children}</div>
+			<div className={css.wrapper}>{content}</div>
 		</>
 	);
 };

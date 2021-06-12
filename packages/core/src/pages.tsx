@@ -1,3 +1,4 @@
+import { sortRoutes } from "./sortRoutes";
 import {
 	LayoutImporter,
 	LayoutModule,
@@ -48,6 +49,48 @@ Object.entries(layouts).forEach(([layout, importer]) => {
 	node.$layout = importer;
 });
 
+const sortedLayouts = Object.entries(layouts)
+	.map(([k, l]) => {
+		const name =
+			"/" +
+			(k.match(/^\/src\/pages\/((.+)[./])?layout\.[a-zA-Z0-9]+$/)![2] || "");
+
+		return {
+			path: name,
+			segments: name.split("/").filter(Boolean),
+			importer: l,
+		};
+	})
+	.sort((a, b) => {
+		// First if more segments
+		const lenDif = b.segments.length - a.segments.length;
+		if (lenDif) return lenDif;
+
+		return a.path.localeCompare(b.path);
+	});
+
+const sorted = sortRoutes(
+	Object.entries(pages).map(([name, importer]) => {
+		const pattern =
+			"/" +
+			(name.match(/^\/src\/pages\/((.+)[./])?page\.[a-zA-Z0-9]+$/)![2] || "");
+
+		return {
+			pattern,
+			extra: {
+				name,
+				importer,
+				layouts: sortedLayouts.filter((l) => {
+					const res =
+						pattern === l.path ||
+						pattern.startsWith(l.path === "/" ? "/" : l.path + "/");
+					return res;
+				}),
+			},
+		};
+	}),
+);
+
 interface PageModuleImporters {
 	params: Record<string, string>;
 	match?: string;
@@ -55,52 +98,42 @@ interface PageModuleImporters {
 }
 
 export function findPage(path: string): PageModuleImporters {
-	const segments = path.split("/").filter(Boolean);
-	let node = trie;
-	const params: Record<string, string> = {};
-	const stack: Array<LayoutImporter | PageImporter> = node.$layout
-		? [node.$layout]
-		: [];
-	const matchPath: string[] = [];
+	let notFound = false;
 
-	for (const segment of segments) {
-		if (node[segment]) {
-			node = node[segment];
-			matchPath.push(segment);
-		} else {
-			const param = Object.keys(node).find(
-				(k) => k.startsWith("[") && k.endsWith("]"),
-			);
+	for (;;) {
+		for (const r of sorted) {
+			const match = path.match(r.regexp);
+			if (match) {
+				const params = Object.fromEntries(
+					match?.slice(1).map((m, i) => [r.paramNames[i], m]),
+				);
 
-			if (!param) {
+				if (notFound) {
+					return {
+						params,
+						stack: [...r.extra.layouts].reverse().map((x) => x.importer),
+					};
+				}
+
 				return {
 					params,
-					stack,
+					match: r.pattern,
+					stack: [r.extra, ...r.extra.layouts].reverse().map((x) => x.importer),
 				};
 			}
-
-			node = node[param];
-			params[param.slice(1, -1)] = segment;
-			matchPath.push(param);
 		}
 
-		if (node.$layout) {
-			stack.push(node.$layout);
+		notFound = true;
+		const slashIndex = path.lastIndexOf("/");
+		if (slashIndex < 0) {
+			return {
+				params: {},
+				stack: [],
+			};
 		}
+
+		path = path.slice(0, slashIndex) || "/";
 	}
 
-	if (!node.$page) {
-		return {
-			params,
-			stack,
-		};
-	}
-
-	stack.push(node.$page);
-
-	return {
-		params,
-		stack,
-		match: "/" + matchPath.join("/"),
-	};
+	// Not found. Let's try to find the most specific path
 }

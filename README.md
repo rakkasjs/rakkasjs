@@ -28,7 +28,6 @@ If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and
 
 ## TODO
 
-- Set up ESLint, prettier etc.
 - Set up testing
 - Middleware
 - useReload hook
