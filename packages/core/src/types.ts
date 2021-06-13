@@ -6,7 +6,9 @@ import { ComponentType } from "react";
 export interface RakkasComponentProps<
 	P extends Record<string, string> = Record<string, string>,
 	D = unknown,
-	C extends Record<string, unknown> = Record<string, unknown>,
+	C extends Readonly<Record<string, unknown>> = Readonly<
+		Record<string, unknown>
+	>,
 > {
 	/** Current URL */
 	url: URL;
@@ -20,6 +22,8 @@ export interface RakkasComponentProps<
 	context: C;
 	/** Reload function */
 	reload(): void;
+	/** Reload hook */
+	useReload(params: ReloadHookParams): void;
 }
 
 /**
@@ -66,7 +70,7 @@ export interface LayoutLoadSuccessResult<
 	// Data to be passed to the layout component
 	data: T;
 	// Context to be passed down to nested layouts and pages
-	context: C;
+	context?: C;
 }
 
 export interface LoadErrorResult {
@@ -85,7 +89,9 @@ export interface LoadRedirectResult {
 
 export interface LoadArgs<
 	P extends Record<string, string> = Record<string, string>,
-	C extends Record<string, unknown> = Record<string, unknown>,
+	C extends Readonly<Record<string, unknown>> = Readonly<
+		Record<string, unknown>
+	>,
 > {
 	// Current URL
 	url: URL;
@@ -122,4 +128,55 @@ export interface RakkasResponse {
 	status?: number;
 	headers?: Record<string, string>;
 	body?: unknown;
+}
+
+export interface ReloadHookParams {
+	/**
+	 * Reload when one of the values in this array change
+	 * @default []
+	 * */
+	deps?: ReadonlyArray<unknown>;
+	/**
+	 * Set to true to reload immediately after hydration
+	 * @default false
+	 * */
+	hydrate?: boolean;
+	/**
+	 * Reload when window receives focus
+	 * @default false
+	 * */
+	focus?: boolean;
+	/**
+	 * Reload when the internet connection is restored after a disconnection
+	 * @default true
+	 * */
+	reconnect?: boolean;
+	/**
+	 * Set to i.e. 15_000 to reload every 15 seconds
+	 * @default false
+	 * */
+	interval?: number | false;
+	/**
+	 * Set to true to reload on interval even when the window has no focus
+	 * @default false
+	 * */
+	background?: boolean;
+}
+
+export interface RawRequest {
+	url: URL;
+	method: string;
+	headers: Headers;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	body: Uint8Array | string | any;
+}
+
+export interface RakkasRequest {
+	url: URL;
+	method: string;
+	headers: Headers;
+	params: Record<string, string>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	body: Uint8Array | string | any;
+	context: Record<string, unknown>;
 }

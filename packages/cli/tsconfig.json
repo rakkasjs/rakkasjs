@@ -2,7 +2,8 @@
 	"compilerOptions": {
 		"esModuleInterop": true,
 		"module": "CommonJS",
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"moduleResolution": "Node"
 	},
 	"include": ["src"]
 }

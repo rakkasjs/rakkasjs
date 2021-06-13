@@ -17,6 +17,7 @@ const options = [
 			"react",
 			"react-dom",
 			"react-dom/server",
+			"react-helmet-async",
 			"node-fetch",
 			"$app/App.jsx",
 		],

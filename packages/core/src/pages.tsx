@@ -14,41 +14,6 @@ const layouts = import.meta.glob(
 	"/src/pages/**/(*/)?layout.[[:alnum:]]+",
 ) as Record<string, () => Promise<LayoutModule>>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const trie: any = {};
-
-Object.entries(pages).forEach(([page, importer]) => {
-	const name =
-		page.match(/^\/src\/pages\/((.+)[./])?page\.[a-zA-Z0-9]+$/)![2] || "";
-	const segments = name.split("/").filter(Boolean);
-
-	let node = trie;
-	for (const segment of segments) {
-		if (!node[segment]) {
-			node[segment] = {};
-		}
-		node = node[segment];
-	}
-
-	node.$page = importer;
-});
-
-Object.entries(layouts).forEach(([layout, importer]) => {
-	const name =
-		layout.match(/^\/src\/pages\/((.+)[./])?layout\.[a-zA-Z0-9]+$/)![2] || "";
-	const segments = name.split("/").filter(Boolean);
-
-	let node = trie;
-	for (const segment of segments) {
-		if (!node[segment]) {
-			node[segment] = {};
-		}
-		node = node[segment];
-	}
-
-	node.$layout = importer;
-});
-
 const sortedLayouts = Object.entries(layouts)
 	.map(([k, l]) => {
 		const name =
@@ -108,16 +73,9 @@ export function findPage(path: string): PageModuleImporters {
 					match?.slice(1).map((m, i) => [r.paramNames[i], m]),
 				);
 
-				if (notFound) {
-					return {
-						params,
-						stack: [...r.extra.layouts].reverse().map((x) => x.importer),
-					};
-				}
-
 				return {
 					params,
-					match: r.pattern,
+					match: notFound ? undefined : r.pattern,
 					stack: [r.extra, ...r.extra.layouts].reverse().map((x) => x.importer),
 				};
 			}
@@ -134,6 +92,4 @@ export function findPage(path: string): PageModuleImporters {
 
 		path = path.slice(0, slashIndex) || "/";
 	}
-
-	// Not found. Let's try to find the most specific path
 }

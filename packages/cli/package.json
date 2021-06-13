@@ -14,7 +14,9 @@
 		"rakkas": "dist/index.js"
 	},
 	"peerDependencies": {
-		"@rakkasjs/core": "workspace:*"
+		"@rakkasjs/core": "workspace:*",
+		"react": "^17",
+		"react-dom": "^17"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.14.3",

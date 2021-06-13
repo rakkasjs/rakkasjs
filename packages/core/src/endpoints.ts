@@ -1,64 +1,94 @@
+import { sortRoutes } from "./sortRoutes";
+import type { RakkasResponse, RakkasRequest, RawRequest } from "./types";
+
+export type RequestHandler = (
+	request: RakkasRequest,
+) => RakkasResponse | Promise<RakkasResponse>;
+
+type Middleware = (
+	request: RakkasRequest,
+	next: RequestHandler,
+) => RakkasResponse | Promise<RakkasResponse>;
+
+export interface EndpointModule {
+	[method: string]: RequestHandler | undefined;
+}
+
+export interface MiddlewareModule {
+	default: Middleware;
+}
+
 const endpoints = import.meta.glob(
 	"/src/pages/**/(*.)?endpoint.[[:alnum:]]+",
 ) as Record<string, () => Promise<EndpointModule>>;
 
-import { RawRequest } from "./server";
-import { RakkasResponse } from "./types";
+const middleware = import.meta.glob(
+	"/src/pages/**/(*/)?middleware.[[:alnum:]]+",
+) as Record<string, () => Promise<MiddlewareModule>>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const trie: any = {};
+const sortedMiddleware = Object.entries(middleware)
+	.map(([k, m]) => {
+		const name =
+			"/" +
+			(k.match(/^\/src\/pages\/((.+)[./])?middleware\.[a-zA-Z0-9]+$/)![2] ||
+				"");
 
-Object.entries(endpoints).forEach(([page, importer]) => {
-	const name =
-		page.match(/^\/src\/pages\/((.+)[./])?endpoint\.[a-zA-Z0-9]+$/)![2] || "";
-	const segments = name.split("/").filter(Boolean);
+		return {
+			path: name,
+			segments: name.split("/").filter(Boolean),
+			importer: m,
+		};
+	})
+	.sort((a, b) => {
+		// First if more segments
+		const lenDif = b.segments.length - a.segments.length;
+		if (lenDif) return lenDif;
 
-	let node = trie;
-	for (const segment of segments) {
-		if (!node[segment]) {
-			node[segment] = {};
-		}
-		node = node[segment];
-	}
+		return a.path.localeCompare(b.path);
+	});
 
-	node.$endpoint = importer;
-});
+const sorted = sortRoutes(
+	Object.entries(endpoints).map(([name, importer]) => {
+		const pattern =
+			"/" +
+			(name.match(/^\/src\/pages\/((.+)[./])?endpoint\.[a-zA-Z0-9]+$/)![2] ||
+				"");
 
-interface RakkasRequest {
-	params: Record<string, unknown>;
-}
+		return {
+			pattern,
+			extra: {
+				name,
+				importer,
+				middleware: sortedMiddleware.filter((m) => {
+					const res =
+						pattern === m.path ||
+						pattern.startsWith(m.path === "/" ? "/" : m.path + "/");
+					return res;
+				}),
+			},
+		};
+	}),
+);
 
-interface EndpointModule {
-	[method: string]: (
-		request: RakkasRequest,
-	) => RakkasResponse | Promise<RakkasResponse>;
-}
+export function findEndpoint(req: RawRequest) {
+	const path = req.url.pathname;
 
-export type EndpointImporter = () => Promise<EndpointModule> | EndpointModule;
-
-export function findEndpoint(
-	req: RawRequest,
-): { importer: EndpointImporter; params: Record<string, string> } | undefined {
-	const segments = req.url.pathname.split("/").filter(Boolean);
-	let node = trie;
-	const params: Record<string, unknown> = {};
-
-	for (const segment of segments) {
-		if (node[segment]) {
-			node = node[segment];
-		} else {
-			const param = Object.keys(node).find(
-				(k) => k.startsWith("[") && k.endsWith("]"),
+	for (const e of sorted) {
+		const match = path.match(e.regexp);
+		if (match) {
+			const params = Object.fromEntries(
+				match?.slice(1).map((m, i) => [e.paramNames[i], m]),
 			);
 
-			if (!param) {
-				return undefined;
-			}
-
-			node = node[param];
-			params[param.slice(1, -1)] = segment;
+			return {
+				params,
+				match: e.pattern,
+				stack: [e.extra, ...e.extra.middleware]
+					.reverse()
+					.map((x) => x.importer),
+			};
 		}
 	}
 
-	return node.$endpoint && { importer: node.$endpoint, params };
+	return undefined;
 }

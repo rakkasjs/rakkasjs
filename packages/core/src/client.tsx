@@ -13,8 +13,8 @@ export async function startClient() {
 		fetch,
 		previousRender: {
 			data: __RAKKAS_INITIAL_DATA,
+			contexts: __RAKKAS_INITIAL_CONTEXT,
 			isDataValid,
-			components: [],
 		},
 		reload(i) {
 			isDataValid[i] = false;
@@ -31,6 +31,7 @@ export async function startClient() {
 		<App
 			initialStack={stack.components}
 			initialData={stack.data}
+			initialContext={stack.contexts}
 			initialContent={stack.content}
 			initialDataValidity={isDataValid}
 		/>,
@@ -41,11 +42,19 @@ export async function startClient() {
 const App: FC<{
 	initialContent: ReactNode;
 	initialData: unknown[];
+	initialContext: Record<string, unknown>[];
 	initialStack: ComponentType<ErrorHandlerProps>[];
 	initialDataValidity: boolean[];
-}> = ({ initialContent, initialData, initialStack, initialDataValidity }) => {
+}> = ({
+	initialContent,
+	initialData,
+	initialContext,
+	initialStack,
+	initialDataValidity,
+}) => {
 	const lastStack = useRef(initialStack);
 	const lastData = useRef(initialData);
+	const lastContext = useRef(initialContext);
 	const isDataValid = useRef(initialDataValidity);
 
 	return (
@@ -61,6 +70,7 @@ const App: FC<{
 					previousRender: {
 						components: lastStack.current,
 						data: lastData.current,
+						contexts: lastContext.current,
 						isDataValid: isDataValid.current,
 					},
 				});
@@ -72,7 +82,7 @@ const App: FC<{
 
 				return stack.content;
 			}}
-			// skipInitialRender
+			// skipInitialRender={isDataValid.current.every(Boolean)}
 		>
 			{initialContent}
 		</Router>
