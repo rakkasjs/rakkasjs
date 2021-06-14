@@ -27,15 +27,20 @@ If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and
 
 
 ## TODO
-- Better type exports
 - `rakkas build` command
+- Real host name
+- Thematic grouping
 - Prepare packages for publication
 - Auto-inject client
 - Configurability
 - Documentation
 - Project initializer
+- Meta tags in head
+- New router
 - MVP!
+
 - Render error handling
+- Data and context caching and stale-while-revalidate
 - Investigate renderToNodeStream
 - Upstream todos in the router
 - Prefetching

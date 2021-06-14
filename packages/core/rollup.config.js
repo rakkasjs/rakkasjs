@@ -1,6 +1,6 @@
 import ts from "rollup-plugin-ts";
-import { terser } from "rollup-plugin-terser";
 import nodeResolvePlugin from "@rollup/plugin-node-resolve";
+// import { terser } from "rollup-plugin-terser";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -11,13 +11,17 @@ const options = [
 		output: {
 			dir: "dist",
 			format: "esm",
-			plugins: isProd ? [terser()] : [],
+			plugins: isProd
+				? [
+						// TODO: Investigate why terser breaks the build
+						// terser()
+				  ]
+				: [],
 		},
 		external: [
 			"react",
 			"react-dom",
 			"react-dom/server",
-			"react-helmet-async",
 			"node-fetch",
 			"$app/App.jsx",
 		],

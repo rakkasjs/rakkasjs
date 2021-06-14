@@ -4,7 +4,8 @@ import path from "path";
 import fs from "fs";
 import { program } from "commander";
 
-import devCommand from "./dev";
+import devCommand from "./commands/dev";
+import buildCommand from "./commands/build";
 
 async function main() {
 	const packageJson = await readPackageJson();
@@ -27,6 +28,7 @@ function parseCommandLineArguments(version: string) {
 	program.version(version);
 
 	program.addCommand(devCommand());
+	program.addCommand(buildCommand());
 
 	return program.parse();
 }

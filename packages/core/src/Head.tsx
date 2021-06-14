@@ -13,7 +13,7 @@ export const Head: FC<HeadProps> = ({ children }) => {
 				title = child.props.children;
 			}
 		} else {
-			console.log("UNKNOWN", child);
+			console.error("Unknown child in Head component");
 		}
 	});
 

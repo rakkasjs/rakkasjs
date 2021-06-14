@@ -2,30 +2,43 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { ServerRouter } from "bare-routes";
 import devalue from "devalue";
-import { RawRequest, RakkasRequest } from "./types";
-
-import {
-	EndpointModule,
-	findEndpoint,
-	MiddlewareModule,
-	RequestHandler,
-} from "./endpoints";
-
-import nodeFetch, {
-	Response as NodeFetchResponse,
-	Request as NodeFetchRequest,
-	Headers as NodeFetchHeaders,
-	// @ts-expect-error: There's a problem with node-fetch typings
-} from "node-fetch";
-import type { RakkasResponse } from "./types";
-import { makeComponentStack, StackResult } from "./makeComponentStack";
+import { EndpointModule, findEndpoint, MiddlewareModule } from "./endpoints";
+import { makeComponentStack } from "./makeComponentStack";
 import { HeadContext, HeadContent } from "./HeadContext";
 import { escapeHTML } from "./Head";
 
-globalThis.fetch = nodeFetch;
-globalThis.Response = NodeFetchResponse;
-globalThis.Request = NodeFetchRequest;
-globalThis.Headers = NodeFetchHeaders;
+export interface RakkasResponse {
+	status?: number;
+	headers?: Record<string, string>;
+	body?: unknown;
+}
+
+export interface RawRequest {
+	url: URL;
+	method: string;
+	headers: Headers;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	body: Uint8Array | string | any;
+}
+
+export interface RakkasRequest {
+	url: URL;
+	method: string;
+	headers: Headers;
+	params: Record<string, string>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	body: Uint8Array | string | any;
+	context: Record<string, unknown>;
+}
+
+export type RequestHandler = (
+	request: RakkasRequest,
+) => RakkasResponse | Promise<RakkasResponse>;
+
+export type Middleware = (
+	request: RakkasRequest,
+	next: RequestHandler,
+) => RakkasResponse | Promise<RakkasResponse>;
 
 export async function handleRequest(
 	req: RawRequest,
@@ -67,44 +80,7 @@ export async function handleRequest(
 		};
 	}
 
-	function renderPage(foundPage: StackResult) {
-		const headContent: HeadContent = {};
-
-		const app = renderToString(
-			<HeadContext.Provider value={headContent}>
-				<ServerRouter url={req.url}>{foundPage.content}</ServerRouter>
-			</HeadContext.Provider>,
-		);
-
-		let head = `<script>__RAKKAS_INITIAL_DATA=${devalue(
-			foundPage.data,
-		)}</script><script>__RAKKAS_INITIAL_CONTEXT=${devalue(
-			foundPage.contexts,
-		)}</script>`;
-
-		if (headContent.title) {
-			head += `<title data-rakkas-head>${escapeHTML(
-				headContent.title,
-			)}</title>`;
-		}
-
-		let body = template.replace("<!-- rakkas-head-placeholder -->", head);
-
-		body = body.replace("<!-- rakkas-app-placeholder -->", app);
-
-		return {
-			status: foundPage.status,
-			headers: {
-				"content-type": "text/html",
-			},
-			body,
-		};
-	}
-
-	function myFetch(
-		input: RequestInfo,
-		init?: RequestInit,
-	): Promise<NodeFetchResponse> {
+	function myFetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
 		let url: string;
 		let fullInit: Omit<RequestInit, "headers"> & { headers: Headers };
 		if (input instanceof Request) {
@@ -174,7 +150,7 @@ export async function handleRequest(
 			);
 		}
 
-		return nodeFetch(parsed.href, fullInit);
+		return fetch(parsed.href, fullInit);
 	}
 
 	const foundPage = await makeComponentStack({
@@ -203,5 +179,31 @@ export async function handleRequest(
 		};
 	}
 
-	return renderPage(foundPage);
+	const headContent: HeadContent = {};
+
+	const app = renderToString(
+		<HeadContext.Provider value={headContent}>
+			<ServerRouter url={req.url}>{foundPage.content}</ServerRouter>
+		</HeadContext.Provider>,
+	);
+
+	let head = `<script>__RAKKAS_INITIAL_DATA=${devalue(
+		foundPage.data,
+	)};__RAKKAS_INITIAL_CONTEXT=${devalue(foundPage.contexts)}</script>`;
+
+	if (headContent.title) {
+		head += `<title data-rakkas-head>${escapeHTML(headContent.title)}</title>`;
+	}
+
+	let body = template.replace("<!-- rakkas-head-placeholder -->", head);
+
+	body = body.replace("<!-- rakkas-app-placeholder -->", app);
+
+	return {
+		status: foundPage.status,
+		headers: {
+			"content-type": "text/html",
+		},
+		body,
+	};
 }

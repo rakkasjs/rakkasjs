@@ -1,8 +1,7 @@
 import React, { ComponentType, FC, useRef, ReactNode } from "react";
 import { hydrate } from "react-dom";
-import { Router } from ".";
+import { Router, ErrorHandlerProps } from ".";
 import { makeComponentStack } from "./makeComponentStack";
-import { ErrorHandlerProps } from "./types";
 
 export async function startClient() {
 	const url = new URL(window.location.href);

@@ -1,10 +1,5 @@
 import { sortRoutes } from "./sortRoutes";
-import {
-	LayoutImporter,
-	LayoutModule,
-	PageImporter,
-	PageModule,
-} from "./types";
+import { LayoutImporter, LayoutModule, PageImporter, PageModule } from ".";
 
 const pages = import.meta.glob(
 	"/src/pages/**/(*.)?page.[[:alnum:]]+",

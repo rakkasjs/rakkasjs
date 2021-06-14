@@ -3,12 +3,10 @@
 		"strict": true,
 		"declaration": true,
 		"module": "ES2020",
-		"lib": ["ES2020"],
 		"esModuleInterop": true,
 		"jsx": "react",
 		"target": "es6",
 		"moduleResolution": "node",
-		"types": ["vite/client", "jest", "node"],
 		"skipLibCheck": true
 	}
 }

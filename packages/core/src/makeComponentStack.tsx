@@ -7,7 +7,7 @@ import {
 	LayoutLoadResult,
 	LoadRedirectResult,
 	ReloadHookParams,
-} from "./types";
+} from ".";
 
 interface StackArgs {
 	url: URL;
@@ -122,6 +122,7 @@ export async function makeComponentStack({
 				data.push(prevData[i] ?? {});
 				returnedContext = prevContexts[i] ?? {};
 			}
+			isDataValid[i] = true;
 
 			context = { ...context, ...returnedContext };
 			prevContexts[i] = returnedContext;
@@ -182,7 +183,7 @@ function makeUseReload(reload: () => void, hydration: boolean) {
 			}
 
 			firstRender.current = false;
-		}, [...deps, hydrate, hydration]);
+		}, [...deps]);
 
 		// Reload on window focus
 		useEffect(() => {
@@ -219,7 +220,9 @@ function makeUseReload(reload: () => void, hydration: boolean) {
 			if (!interval) return;
 
 			const id = setInterval(() => {
-				if (background || document.visibilityState === "visible") reload();
+				if (background || document.visibilityState === "visible") {
+					reload();
+				}
 			}, interval);
 
 			return () => {

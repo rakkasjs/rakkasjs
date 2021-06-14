@@ -4,4 +4,4 @@ export interface HeadContent {
 	title?: string;
 }
 
-export const HeadContext = createContext<HeadContent>({});
+export const HeadContext = createContext<HeadContent>({ title: "Rakkas App" });

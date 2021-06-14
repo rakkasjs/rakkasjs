@@ -1,14 +1,5 @@
 import { sortRoutes } from "./sortRoutes";
-import type { RakkasResponse, RakkasRequest, RawRequest } from "./types";
-
-export type RequestHandler = (
-	request: RakkasRequest,
-) => RakkasResponse | Promise<RakkasResponse>;
-
-type Middleware = (
-	request: RakkasRequest,
-	next: RequestHandler,
-) => RakkasResponse | Promise<RakkasResponse>;
+import type { RawRequest, Middleware, RequestHandler } from "./server";
 
 export interface EndpointModule {
 	[method: string]: RequestHandler | undefined;

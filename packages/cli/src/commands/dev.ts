@@ -2,8 +2,16 @@ import { Command } from "commander";
 import { createServer as createViteServer } from "vite";
 import reactRefresh from "@vitejs/plugin-react-refresh";
 import { createServer } from "http";
-import { parseBody } from "./parse-body";
-import type { RawRequest, RakkasResponse } from "@rakkasjs/core";
+import nodeFetch, {
+	Response as NodeFetchResponse,
+	Request as NodeFetchRequest,
+	Headers as NodeFetchHeaders,
+} from "node-fetch";
+
+(globalThis.fetch as any) = nodeFetch;
+(globalThis.Response as any) = NodeFetchResponse;
+(globalThis.Request as any) = NodeFetchRequest;
+(globalThis.Headers as any) = NodeFetchHeaders;
 
 export default function devCommand() {
 	return new Command("dev")
@@ -11,7 +19,7 @@ export default function devCommand() {
 		.action(async () => {
 			const vite = await createViteServer({
 				server: {
-					middlewareMode: true,
+					middlewareMode: "ssr",
 				},
 				plugins: [reactRefresh()],
 				resolve: {
@@ -32,14 +40,13 @@ export default function devCommand() {
 					try {
 						const { handleRequest } = (await vite.ssrLoadModule(
 							"$rakkas/server",
-						)) as {
-							handleRequest(
-								req: RawRequest,
-								template: string,
-							): Promise<RakkasResponse>;
-						};
+						)) as typeof import("@rakkasjs/core/server");
 
 						html = await vite.transformIndexHtml(url, html);
+
+						const { parseBody } = (await vite.ssrLoadModule(
+							"@rakkasjs/runner-node/parse-body",
+						)) as typeof import("@rakkasjs/runner-node/parse-body");
 
 						const response = await handleRequest(
 							{
