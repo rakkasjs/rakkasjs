@@ -38,7 +38,6 @@ export default function buildCommand() {
 					outDir: "dist/server",
 					rollupOptions: {
 						input: ["@rakkasjs/runner-node"],
-						external: ["fs"],
 					},
 				},
 				resolve: {

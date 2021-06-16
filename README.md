@@ -27,17 +27,25 @@ If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and
 
 
 ## TODO
-- `rakkas build` command
+- Configurability
+  - [x] Find, build, and load config file
+  - [ ] Validate configuration
+  - [ ] Apply vite configuration
+  - [ ] Apply rakkas configuration
 - Real host name
-- Thematic grouping
+- Thematic grouping of routes
 - Prepare packages for publication
 - Auto-inject client
-- Configurability
 - Documentation
 - Project initializer
 - Meta tags in head
 - New router
 - MVP!
+
+- HTTPS mode for dev server
+- Separate API and pages dirs
+- Data caching
+- Page transition animations
 
 - Render error handling
 - Data and context caching and stale-while-revalidate

@@ -1,38 +1,6 @@
-#!/usr/bin/env node
+import type { Config } from "..";
 
-import path from "path";
-import fs from "fs";
-import { program } from "commander";
-
-import devCommand from "./commands/dev";
-import buildCommand from "./commands/build";
-
-async function main() {
-	const packageJson = await readPackageJson();
-	parseCommandLineArguments(packageJson.version);
+// Helper for defining type safe configs
+export function defineConfig(config: Config) {
+	return config;
 }
-
-async function readPackageJson() {
-	const packageJsonFileName = path.resolve(
-		path.dirname(process.argv[1]),
-		"../package.json",
-	);
-	const content = await fs.promises.readFile(packageJsonFileName, {
-		encoding: "utf-8",
-	});
-	return JSON.parse(content);
-}
-
-function parseCommandLineArguments(version: string) {
-	program.name("rakkas");
-	program.version(version);
-
-	program.addCommand(devCommand());
-	program.addCommand(buildCommand());
-
-	return program.parse();
-}
-
-main().catch((error) => {
-	console.error(error);
-});

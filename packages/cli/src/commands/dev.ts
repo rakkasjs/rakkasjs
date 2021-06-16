@@ -31,7 +31,7 @@ export default function devCommand() {
 			});
 
 			const app = createServer({}, (req, res) => {
-				const url = req.url;
+				const url = req.url || "/";
 
 				vite.middlewares(req, res, async () => {
 					console.log(req.method, req.url);
@@ -52,7 +52,7 @@ export default function devCommand() {
 							{
 								// TODO: Get real host and port
 								url: new URL(url, `http://${req.headers.host}`),
-								method: req.method,
+								method: req.method || "GET",
 								headers: new Headers(req.headers as Record<string, string>),
 								body: await parseBody(req),
 							},
@@ -73,6 +73,7 @@ export default function devCommand() {
 					} catch (error) {
 						vite.ssrFixStacktrace(error);
 						res.statusCode = 500;
+						console.error(error.stack ?? "Unknown error");
 						res.end(error.stack ?? "Unknown error");
 					}
 				});

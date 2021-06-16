@@ -3,7 +3,8 @@
 		"esModuleInterop": true,
 		"module": "CommonJS",
 		"skipLibCheck": true,
-		"moduleResolution": "Node"
+		"moduleResolution": "Node",
+		"strict": true
 	},
 	"include": ["src"]
 }
