@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"declaration": true,
+		"module": "ES2020",
+		"lib": ["ScriptHost", "DOM", "ES2020"],
+		"esModuleInterop": true,
+		"jsx": "react",
+		"target": "es6",
+		"moduleResolution": "node",
+		"types": ["jest"],
+		"skipLibCheck": true
+	}
+}

@@ -1,0 +1,39 @@
+{
+	"name": "@rakkasjs/website",
+	"private": true,
+	"version": "0.0.0",
+	"description": "Rakkas.js website",
+	"scripts": {
+		"start": "node dist/server/index.js",
+		"build": "rakkas build",
+		"dev": "rakkas dev",
+		"devdev": "node-dev node_modules/@rakkasjs/cli/dist/bin.js dev",
+		"test": "jest"
+	},
+	"author": "Fatih Aygün <cyco130@gmail.com>",
+	"license": "UNLICENSED",
+	"dependencies": {
+		"@rakkasjs/core": "workspace:*",
+		"@rakkasjs/runner-node": "workspace:*",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2"
+	},
+	"devDependencies": {
+		"@mdx-js/mdx": "^2.0.0-next.9",
+		"@mdx-js/react": "^1.6.22",
+		"@rakkasjs/cli": "workspace:*",
+		"@types/react": "^17.0.11",
+		"@types/react-dom": "^17.0.7",
+		"@typescript-eslint/eslint-plugin": "^4.27.0",
+		"@typescript-eslint/parser": "^4.27.0",
+		"eslint": "^7.28.0",
+		"eslint-plugin-import": "^2.23.4",
+		"eslint-plugin-only-warn": "^1.0.2",
+		"eslint-plugin-react": "^7.24.0",
+		"eslint-plugin-react-hooks": "^4.2.0",
+		"node-dev": "^7.0.0",
+		"prettier": "^2.3.1",
+		"typescript": "^4.3.3",
+		"vite-plugin-mdx": "^3.5.6"
+	}
+}

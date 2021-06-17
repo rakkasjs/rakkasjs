@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { ComponentType, useEffect, useRef } from "react";
+import React, { ComponentType, FC, useEffect, useRef } from "react";
 import { findPage } from "./pages";
 import {
 	ErrorDescription,
@@ -133,6 +133,9 @@ export async function makeComponentStack({
 
 	if (error) {
 		components.length = errorHandlerIndex + 1;
+		if (components.length === 0) {
+			components[0] = LastResort;
+		}
 	}
 
 	const content = components.reduceRight((prev, Component, i) => {
@@ -231,3 +234,13 @@ function makeUseReload(reload: () => void, hydration: boolean) {
 		}, [interval, background, hydration]);
 	};
 }
+
+const LastResort: FC<ErrorHandlerProps> = () =>
+	import.meta.env.DEV ? (
+		<p>
+			There is no root page or layout in your page directory. Create one to get
+			started.
+		</p>
+	) : (
+		<p>Not found.</p>
+	);

@@ -8,25 +8,32 @@ export interface ConfigConfig {
 	root?: string;
 }
 
-export async function loadConfig(configConfig: ConfigConfig = {}) {
+export async function loadConfig(configConfig: ConfigConfig = {}): Promise<{
+	config: FullConfig;
+	deps: string[];
+}> {
 	configConfig.root = configConfig.root ?? process.cwd();
 	const filename = findConfigFile(configConfig);
 	if (!filename) {
-		return withDefaults({});
+		return { config: withDefaults({}), deps: [] };
 	}
 
 	console.log("Loading config from", filename);
-	const built = await buildFile(filename, configConfig.root);
+	const { outfile, deps } = await buildFile(filename, configConfig.root);
 
+	delete require.cache[outfile];
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	let loaded = require(built);
+	let loaded = require(outfile);
 	if (loaded.default) loaded = loaded.default;
 
 	if (typeof loaded === "function") {
-		return await withDefaults(loaded());
+		loaded = await loaded();
 	}
 
-	return withDefaults(loaded);
+	return {
+		config: withDefaults(loaded),
+		deps,
+	};
 }
 
 function findConfigFile(configConfig: ConfigConfig) {
@@ -57,13 +64,14 @@ async function buildFile(filename: string, root: string) {
 		"rakkas.config.js",
 	);
 
-	await build({
+	const buildResult = await build({
 		entryPoints: [filename],
 		outfile,
 		bundle: true,
 		write: true,
 		platform: "node",
 		format: "cjs",
+		metafile: true,
 		plugins: [
 			{
 				name: "external-deps",
@@ -84,13 +92,18 @@ async function buildFile(filename: string, root: string) {
 		],
 	});
 
-	return outfile;
+	return {
+		outfile,
+		deps: Object.keys(buildResult.metafile!.inputs).map((fn) =>
+			path.resolve(fn),
+		),
+	};
 }
 
 function withDefaults(config: Config): FullConfig {
 	return {
+		vite: {},
 		...config,
-		viteConfig: {},
 	};
 }
 

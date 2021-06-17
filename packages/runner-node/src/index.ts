@@ -19,7 +19,7 @@ export async function startServer() {
 
 	const fileServer = sirv("dist/client", { etag: true, maxAge: 0 });
 
-	const app = createServer({}, (req, res) => {
+	const app = createServer((req, res) => {
 		async function handle() {
 			try {
 				const response = await handleRequest(
@@ -57,8 +57,11 @@ export async function startServer() {
 		}
 	});
 
-	app.listen(5000, () => {
-		console.log("Listening on 5000");
+	const host = process.env.HOST || "0.0.0.0";
+	const port = process.env.PORT || 3000;
+
+	app.listen({ port, host }, () => {
+		console.log(`Listening on ${host}:${port}`);
 	});
 }
 

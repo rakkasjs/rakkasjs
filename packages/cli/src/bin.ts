@@ -30,11 +30,12 @@ function parseCommandLineArguments(version: string) {
 
 	program.addCommand(devCommand());
 	program.addCommand(buildCommand());
+
 	program.addCommand(
 		new Command("print-config")
 			.description("Print configuration")
 			.action(async () => {
-				const config = await loadConfig();
+				const { config } = await loadConfig();
 				console.log(config);
 			}),
 	);

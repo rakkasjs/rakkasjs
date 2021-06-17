@@ -27,15 +27,9 @@ If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and
 
 
 ## TODO
-- Configurability
-  - [x] Find, build, and load config file
-  - [ ] Validate configuration
-  - [ ] Apply vite configuration
-  - [ ] Apply rakkas configuration
 - Real host name
 - Thematic grouping of routes
 - Prepare packages for publication
-- Auto-inject client
 - Documentation
 - Project initializer
 - Meta tags in head

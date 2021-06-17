@@ -1,0 +1,301 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 6,
+    "total": 6,
+    "workspacePrefix": "/home/cyco/Documents/github/rakkasjs"
+  },
+  "1 debug pnpm:package-manifest": {
+    "initial": {
+      "name": "rakkasjs",
+      "private": true,
+      "scripts": {
+        "prepare": "husky install"
+      },
+      "devDependencies": {
+        "husky": "^6.0.0",
+        "lint-staged": "^11.0.0"
+      }
+    },
+    "prefix": "/home/cyco/Documents/github/rakkasjs"
+  },
+  "2 debug pnpm:package-manifest": {
+    "initial": {
+      "name": "@rakkasjs/cli",
+      "description": "Development tools for Rakkas.js",
+      "author": "Fatih Aygün <cyco130@gmail.com>",
+      "license": "MIT",
+      "scripts": {
+        "dev": "babel src --watch --out-dir dist --extensions '.ts,.js,.tsx,.jsx'",
+        "build": "rimraf dist && babel src --out-dir dist --extensions '.ts,.js'",
+        "precommit": "lint-staged --no-stash",
+        "typecheck": "tsc -p tsconfig.json --noEmit",
+        "lint:ts": "eslint --max-warnings=0 src"
+      },
+      "bin": {
+        "rakkas": "dist/bin.js"
+      },
+      "module": "dist/index.js",
+      "peerDependencies": {
+        "@rakkasjs/core": "workspace:*",
+        "react": "^17",
+        "react-dom": "^17"
+      },
+      "devDependencies": {
+        "@babel/cli": "^7.14.5",
+        "@babel/core": "^7.14.5",
+        "@babel/preset-env": "^7.14.5",
+        "@babel/preset-react": "^7.14.5",
+        "@babel/preset-typescript": "^7.14.5",
+        "@rakkasjs/core": "workspace:*",
+        "@types/node": "^15.12.2",
+        "@typescript-eslint/eslint-plugin": "^4.26.1",
+        "@typescript-eslint/parser": "^4.26.1",
+        "esbuild": "^0.12.8",
+        "eslint": "^7.28.0",
+        "eslint-plugin-import": "^2.23.4",
+        "eslint-plugin-only-warn": "^1.0.2",
+        "lint-staged": "^11.0.0",
+        "prettier": "^2.3.1",
+        "rimraf": "^3.0.2",
+        "typescript": "^4.3.2"
+      },
+      "dependencies": {
+        "@rakkasjs/runner-node": "workspace:*",
+        "@vitejs/plugin-react-refresh": "^1.3.3",
+        "commander": "^7.2.0",
+        "fast-glob": "^3.2.5",
+        "html-entities": "^2.3.2",
+        "node-fetch": "^2.6.1",
+        "sirv": "^1.0.12",
+        "vite": "^2.3.7"
+      }
+    },
+    "prefix": "/home/cyco/Documents/github/rakkasjs/packages/cli"
+  },
+  "3 debug pnpm:package-manifest": {
+    "initial": {
+      "name": "@rakkasjs/core",
+      "description": "Rakkas.js core runtime",
+      "author": "Fatih Aygün <cyco130@gmail.com>",
+      "license": "MIT",
+      "scripts": {
+        "build": "rimraf dist && cross-env NODE_ENV=production rollup --config rollup.config.js",
+        "dev": "rollup --watch --config rollup.config.js",
+        "precommit": "lint-staged --no-stash",
+        "typecheck": "tsc -p tsconfig.json --noEmit",
+        "lint:ts": "eslint --max-warnings=0 src",
+        "test": "jest --coverage"
+      },
+      "dependencies": {
+        "@types/react": "^17.0.11",
+        "bare-routes": "^0.3.2",
+        "devalue": "^2.0.1"
+      },
+      "peerDependencies": {
+        "react": "^17",
+        "react-dom": "^17"
+      },
+      "devDependencies": {
+        "@babel/core": "^7.14.5",
+        "@babel/preset-env": "^7.14.5",
+        "@babel/preset-react": "^7.14.5",
+        "@babel/preset-typescript": "^7.14.5",
+        "@rollup/plugin-node-resolve": "^13.0.0",
+        "@types/express": "^4.17.12",
+        "@types/jest": "^26.0.23",
+        "@types/node": "^15.12.2",
+        "@types/react-dom": "^17.0.7",
+        "@typescript-eslint/eslint-plugin": "^4.26.1",
+        "@typescript-eslint/parser": "^4.26.1",
+        "cross-env": "^7.0.3",
+        "eslint": "^7.28.0",
+        "eslint-plugin-import": "^2.23.4",
+        "eslint-plugin-only-warn": "^1.0.2",
+        "eslint-plugin-react": "^7.24.0",
+        "eslint-plugin-react-hooks": "^4.2.0",
+        "jest": "^27.0.4",
+        "lint-staged": "^11.0.0",
+        "prettier": "^2.3.1",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "rimraf": "^3.0.2",
+        "rollup": "^2.51.2",
+        "rollup-plugin-terser": "^7.0.2",
+        "rollup-plugin-ts": "^1.4.0",
+        "vite": "^2.3.7"
+      }
+    },
+    "prefix": "/home/cyco/Documents/github/rakkasjs/packages/core"
+  },
+  "4 debug pnpm:package-manifest": {
+    "initial": {
+      "name": "rakkasjs-demo",
+      "private": true,
+      "scripts": {
+        "dev": "node-dev node_modules/@rakkasjs/cli/dist/index.js dev"
+      },
+      "dependencies": {
+        "@rakkasjs/core": "workspace:*",
+        "@rakkasjs/runner-node": "workspace:*",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+      },
+      "devDependencies": {
+        "@rakkasjs/cli": "workspace:*",
+        "node-dev": "^7.0.0"
+      }
+    },
+    "prefix": "/home/cyco/Documents/github/rakkasjs/packages/demo"
+  },
+  "5 debug pnpm:package-manifest": {
+    "initial": {
+      "name": "@rakkasjs/runner-node",
+      "description": "Rakkas.js core runtime",
+      "author": "Fatih Aygün <cyco130@gmail.com>",
+      "license": "MIT",
+      "types": "index.d.ts",
+      "module": "dist/index.js",
+      "scripts": {
+        "dev": "babel src --watch --out-dir dist --extensions '.ts,.js,.tsx,.jsx'",
+        "build": "rimraf dist && babel src --out-dir dist --extensions '.ts,.js'"
+      },
+      "devDependencies": {
+        "@babel/cli": "^7.14.5",
+        "@babel/core": "^7.14.5",
+        "@babel/preset-env": "^7.14.5",
+        "@babel/preset-typescript": "^7.14.5",
+        "@types/node-fetch": "^2.5.10",
+        "prettier": "^2.3.1",
+        "rimraf": "^3.0.2",
+        "typescript": "^4.3.2"
+      },
+      "dependencies": {
+        "@rakkasjs/core": "workspace:*",
+        "node-fetch": "^2.6.1",
+        "sirv": "^1.0.12",
+        "@types/node": "^15.12.2"
+      }
+    },
+    "prefix": "/home/cyco/Documents/github/rakkasjs/packages/runner-node"
+  },
+  "6 debug pnpm:package-manifest": {
+    "initial": {
+      "name": "@rakkasjs/website",
+      "private": true,
+      "version": "0.0.0",
+      "description": "Rakkas.js website",
+      "scripts": {
+        "start": "node dist/server/index.js",
+        "build": "rakkas build",
+        "dev": "rakkas dev",
+        "test": "jest"
+      },
+      "author": "Fatih Aygün <cyco130@gmail.com>",
+      "license": "UNLICENSED",
+      "dependencies": {
+        "@rakkasjs/core": "workspace:*",
+        "@rakkasjs/runner-node": "workspace:*",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+      },
+      "devDependencies": {
+        "@rakkasjs/dev": "workspace:*",
+        "@types/react": "^17.0.11",
+        "@types/react-dom": "^17.0.7",
+        "@typescript-eslint/eslint-plugin": "^4.26.1",
+        "@typescript-eslint/parser": "^4.26.1",
+        "eslint": "^7.28.0",
+        "eslint-plugin-import": "^2.23.4",
+        "eslint-plugin-only-warn": "^1.0.2",
+        "eslint-plugin-react": "^7.24.0",
+        "eslint-plugin-react-hooks": "^4.2.0",
+        "prettier": "^2.3.1",
+        "typescript": "^4.3.2"
+      }
+    },
+    "prefix": "/home/cyco/Documents/github/rakkasjs/packages/website"
+  },
+  "7 debug pnpm:context": {
+    "currentLockfileExists": true,
+    "storeDir": "/home/cyco/.pnpm-store/v3",
+    "virtualStoreDir": "/home/cyco/Documents/github/rakkasjs/node_modules/.pnpm"
+  },
+  "8 debug pnpm:stage": {
+    "prefix": "/home/cyco/Documents/github/rakkasjs",
+    "stage": "resolution_started"
+  },
+  "9 debug pnpm:_dependency_resolved": {
+    "resolution": "link:../core",
+    "wanted": {
+      "dependentId": "packages/cli",
+      "name": "@rakkasjs/core",
+      "rawSpec": "workspace:*"
+    }
+  },
+  "10 debug pnpm:_dependency_resolved": {
+    "resolution": "link:../runner-node",
+    "wanted": {
+      "dependentId": "packages/cli",
+      "name": "@rakkasjs/runner-node",
+      "rawSpec": "workspace:*"
+    }
+  },
+  "11 debug pnpm:_dependency_resolved": {
+    "resolution": "link:../cli",
+    "wanted": {
+      "dependentId": "packages/demo",
+      "name": "@rakkasjs/cli",
+      "rawSpec": "workspace:*"
+    }
+  },
+  "12 debug pnpm:_dependency_resolved": {
+    "resolution": "link:../core",
+    "wanted": {
+      "dependentId": "packages/demo",
+      "name": "@rakkasjs/core",
+      "rawSpec": "workspace:*"
+    }
+  },
+  "13 debug pnpm:_dependency_resolved": {
+    "resolution": "link:../runner-node",
+    "wanted": {
+      "dependentId": "packages/demo",
+      "name": "@rakkasjs/runner-node",
+      "rawSpec": "workspace:*"
+    }
+  },
+  "14 debug pnpm:_dependency_resolved": {
+    "resolution": "link:../core",
+    "wanted": {
+      "dependentId": "packages/runner-node",
+      "name": "@rakkasjs/core",
+      "rawSpec": "workspace:*"
+    }
+  },
+  "15 debug pnpm:_dependency_resolved": {
+    "resolution": "link:../core",
+    "wanted": {
+      "dependentId": "packages/website",
+      "name": "@rakkasjs/core",
+      "rawSpec": "workspace:*"
+    }
+  },
+  "16 debug pnpm:_dependency_resolved": {
+    "resolution": "link:../runner-node",
+    "wanted": {
+      "dependentId": "packages/website",
+      "name": "@rakkasjs/runner-node",
+      "rawSpec": "workspace:*"
+    }
+  },
+  "17 error pnpm": {
+    "code": "ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE",
+    "pkgsStack": [],
+    "err": {
+      "name": "Error",
+      "message": "In : No matching version found for @rakkasjs/dev@* inside the workspace",
+      "code": "ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE",
+      "stack": "Error: In : No matching version found for @rakkasjs/dev@* inside the workspace\n    at tryResolveFromWorkspace (/home/cyco/.npm-global/pnpm-global/5/node_modules/.pnpm/pnpm@6.7.6/node_modules/pnpm/dist/pnpm.cjs:79248:15)\n    at resolveNpm (/home/cyco/.npm-global/pnpm-global/5/node_modules/.pnpm/pnpm@6.7.6/node_modules/pnpm/dist/pnpm.cjs:79150:39)\n    at Object.resolve (/home/cyco/.npm-global/pnpm-global/5/node_modules/.pnpm/pnpm@6.7.6/node_modules/pnpm/dist/pnpm.cjs:79355:40)\n    at ctx.requestsQueue.add.priority (/home/cyco/.npm-global/pnpm-global/5/node_modules/.pnpm/pnpm@6.7.6/node_modules/pnpm/dist/pnpm.cjs:65682:75)\n    at run (/home/cyco/.npm-global/pnpm-global/5/node_modules/.pnpm/pnpm@6.7.6/node_modules/pnpm/dist/pnpm.cjs:65434:90)\n    at PQueue._tryToStartAnother (/home/cyco/.npm-global/pnpm-global/5/node_modules/.pnpm/pnpm@6.7.6/node_modules/pnpm/dist/pnpm.cjs:65388:13)\n    at /home/cyco/.npm-global/pnpm-global/5/node_modules/.pnpm/pnpm@6.7.6/node_modules/pnpm/dist/pnpm.cjs:65447:16\n    at new Promise (<anonymous>)\n    at PQueue.add (/home/cyco/.npm-global/pnpm-global/5/node_modules/.pnpm/pnpm@6.7.6/node_modules/pnpm/dist/pnpm.cjs:65429:16)\n    at resolveAndFetch (/home/cyco/.npm-global/pnpm-global/5/node_modules/.pnpm/pnpm@6.7.6/node_modules/pnpm/dist/pnpm.cjs:65682:55)"
+    }
+  }
+}

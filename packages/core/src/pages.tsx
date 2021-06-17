@@ -1,19 +1,12 @@
 import { sortRoutes } from "./sortRoutes";
-import { LayoutImporter, LayoutModule, PageImporter, PageModule } from ".";
+import { LayoutImporter, PageImporter } from ".";
 
-const pages = import.meta.glob(
-	"/src/pages/**/(*.)?page.[[:alnum:]]+",
-) as Record<string, () => Promise<PageModule>>;
-
-const layouts = import.meta.glob(
-	"/src/pages/**/(*/)?layout.[[:alnum:]]+",
-) as Record<string, () => Promise<LayoutModule>>;
+import { pages, layouts } from "@rakkasjs/pages-and-layouts";
 
 const sortedLayouts = Object.entries(layouts)
 	.map(([k, l]) => {
 		const name =
-			"/" +
-			(k.match(/^\/src\/pages\/((.+)[./])?layout\.[a-zA-Z0-9]+$/)![2] || "");
+			"/" + (k.match(/^\/pages\/((.+)[./])?layout\.[a-zA-Z0-9]+$/)![2] || "");
 
 		return {
 			path: name,
@@ -32,8 +25,7 @@ const sortedLayouts = Object.entries(layouts)
 const sorted = sortRoutes(
 	Object.entries(pages).map(([name, importer]) => {
 		const pattern =
-			"/" +
-			(name.match(/^\/src\/pages\/((.+)[./])?page\.[a-zA-Z0-9]+$/)![2] || "");
+			"/" + (name.match(/^\/pages\/((.+)[./])?page\.[a-zA-Z0-9]+$/)![2] || "");
 
 		return {
 			pattern,
@@ -85,6 +77,13 @@ export function findPage(path: string): PageModuleImporters {
 			};
 		}
 
+		if (path === "/") break;
+
 		path = path.slice(0, slashIndex) || "/";
 	}
+
+	return {
+		params: {},
+		stack: [],
+	};
 }

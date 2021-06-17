@@ -1,28 +1,13 @@
 import { sortRoutes } from "./sortRoutes";
-import type { RawRequest, Middleware, RequestHandler } from "./server";
+import type { RawRequest } from "./server";
 
-export interface EndpointModule {
-	[method: string]: RequestHandler | undefined;
-}
-
-export interface MiddlewareModule {
-	default: Middleware;
-}
-
-const endpoints = import.meta.glob(
-	"/src/pages/**/(*.)?endpoint.[[:alnum:]]+",
-) as Record<string, () => Promise<EndpointModule>>;
-
-const middleware = import.meta.glob(
-	"/src/pages/**/(*/)?middleware.[[:alnum:]]+",
-) as Record<string, () => Promise<MiddlewareModule>>;
+import { endpoints, middleware } from "@rakkasjs/endpoints-and-middleware";
 
 const sortedMiddleware = Object.entries(middleware)
 	.map(([k, m]) => {
 		const name =
 			"/" +
-			(k.match(/^\/src\/pages\/((.+)[./])?middleware\.[a-zA-Z0-9]+$/)![2] ||
-				"");
+			(k.match(/^\/pages\/((.+)[./])?middleware\.[a-zA-Z0-9]+$/)![2] || "");
 
 		return {
 			path: name,
@@ -42,8 +27,7 @@ const sorted = sortRoutes(
 	Object.entries(endpoints).map(([name, importer]) => {
 		const pattern =
 			"/" +
-			(name.match(/^\/src\/pages\/((.+)[./])?endpoint\.[a-zA-Z0-9]+$/)![2] ||
-				"");
+			(name.match(/^\/pages\/((.+)[./])?endpoint\.[a-zA-Z0-9]+$/)![2] || "");
 
 		return {
 			pattern,

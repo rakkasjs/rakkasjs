@@ -2,7 +2,7 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { ServerRouter } from "bare-routes";
 import devalue from "devalue";
-import { EndpointModule, findEndpoint, MiddlewareModule } from "./endpoints";
+import { findEndpoint } from "./endpoints";
 import { makeComponentStack } from "./makeComponentStack";
 import { HeadContext, HeadContent } from "./HeadContext";
 import { escapeHTML } from "./Head";
@@ -40,16 +40,23 @@ export type Middleware = (
 	next: RequestHandler,
 ) => RakkasResponse | Promise<RakkasResponse>;
 
+export interface EndpointModule {
+	[method: string]: RequestHandler | undefined;
+}
+
+export interface MiddlewareModule {
+	default: Middleware;
+}
+
 export async function handleRequest(
 	req: RawRequest,
 	template: string,
 ): Promise<RakkasResponse> {
 	const found = findEndpoint(req);
 
-	let method = req.method.toLowerCase();
-	if (method === "delete") method = "del";
-
 	if (found) {
+		let method = req.method.toLowerCase();
+		if (method === "delete") method = "del";
 		let handler: RequestHandler | undefined;
 
 		const endpointModule = (await found.stack[
@@ -179,7 +186,7 @@ export async function handleRequest(
 		};
 	}
 
-	const headContent: HeadContent = {};
+	const headContent: HeadContent = { title: "Rakkas App" };
 
 	const app = renderToString(
 		<HeadContext.Provider value={headContent}>

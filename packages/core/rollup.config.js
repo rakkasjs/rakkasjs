@@ -19,11 +19,12 @@ const options = [
 				: [],
 		},
 		external: [
+			"@rakkasjs/pages-and-layouts",
+			"@rakkasjs/endpoints-and-middleware",
 			"react",
 			"react-dom",
 			"react-dom/server",
 			"node-fetch",
-			"$app/App.jsx",
 		],
 		plugins: [
 			ts({
