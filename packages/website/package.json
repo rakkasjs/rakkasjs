@@ -16,7 +16,8 @@
 		"@rakkasjs/core": "workspace:*",
 		"@rakkasjs/runner-node": "workspace:*",
 		"react": "^17.0.2",
-		"react-dom": "^17.0.2"
+		"react-dom": "^17.0.2",
+		"sanitize.css": "^12.0.1"
 	},
 	"devDependencies": {
 		"@mdx-js/mdx": "^2.0.0-next.9",

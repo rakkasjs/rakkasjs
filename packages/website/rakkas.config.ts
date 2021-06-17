@@ -4,5 +4,10 @@ import mdx from "vite-plugin-mdx";
 export default defineConfig({
 	vite: {
 		plugins: [mdx()],
+		resolve: {
+			alias: {
+				"$lib": "/lib",
+			},
+		},
 	},
 });

@@ -1,0 +1,13 @@
+.main {
+	height: 4em;
+	padding: 1em;
+	border-bottom: solid 1px #eee;
+}
+
+.logo {
+	color: #924;
+}
+
+.logo:hover {
+	color: #b16;
+}

@@ -14,7 +14,8 @@
 	"dependencies": {
 		"@types/react": "^17.0.11",
 		"bare-routes": "^0.3.2",
-		"devalue": "^2.0.1"
+		"devalue": "^2.0.1",
+		"vite": "^2.3.7"
 	},
 	"peerDependencies": {
 		"react": "^17",
@@ -46,7 +47,6 @@
 		"rimraf": "^3.0.2",
 		"rollup": "^2.52.0",
 		"rollup-plugin-terser": "^7.0.2",
-		"rollup-plugin-ts": "^1.4.0",
-		"vite": "^2.3.7"
+		"rollup-plugin-ts": "^1.4.0"
 	}
 }

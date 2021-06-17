@@ -1,7 +1,6 @@
 {
 	"compilerOptions": {
 		"strict": true,
-		"declaration": true,
 		"module": "ES2020",
 		"lib": ["ScriptHost", "DOM", "ES2020"],
 		"esModuleInterop": true,
@@ -9,6 +8,10 @@
 		"target": "es6",
 		"moduleResolution": "node",
 		"types": ["@rakkasjs/core/vite-types"],
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"baseUrl": "./src",
+		"paths": {
+			"$lib/*": ["lib/*"]
+		}
 	}
 }

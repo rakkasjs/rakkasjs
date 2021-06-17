@@ -16,10 +16,6 @@ body {
 	align-items: flex-end;
 }
 
-.logo {
-	color: #924;
-}
-
 .nav ul {
 	display: flex;
 	margin: 0;

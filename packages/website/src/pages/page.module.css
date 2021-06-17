@@ -1,0 +1,74 @@
+.banner {
+	text-align: center;
+}
+
+.logo {
+	color: #924;
+}
+
+.logo > * {
+	display: block;
+	margin: auto;
+	margin-top: 1rem;
+}
+
+.tagLine {
+	font-variant: small-caps;
+	font-style: italic;
+	font-size: 125%;
+	margin-top: 1rem;
+}
+
+.cta {
+	display: inline-block;
+	margin-top: 2rem;
+	background: #924;
+	color: #fff;
+	padding: 0.5em 1em;
+	font-size: 150%;
+	border-radius: 0.25em;
+	text-decoration: none;
+}
+
+.cta:hover {
+	background: #b16;
+}
+
+.cards {
+	margin-top: 2rem;
+}
+
+.card {
+	margin-top: 1rem;
+	text-align: center;
+	padding: 1em 2em 2em 2em;
+}
+
+.card > h3 {
+	margin: 0;
+}
+
+.card > p {
+	margin: 0;
+	margin-top: 0.5em;
+}
+
+@media (min-width: 900px) {
+	.cards {
+		display: flex;
+		margin-top: 1rem;
+		margin-right: -2em;
+	}
+
+	.card {
+		width: 33.333333%;
+		margin-right: 2em;
+	}
+}
+
+.dict {
+	max-width: 18em;
+	text-align: center;
+	margin: auto;
+	margin-top: 2rem;
+}

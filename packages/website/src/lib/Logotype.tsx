@@ -2,7 +2,7 @@ import React, { FC, SVGProps } from "react";
 
 export const Logotype: FC<SVGProps<SVGSVGElement>> = (props) => (
 	<svg
-		fill="#924"
+		fill="currentColor"
 		viewBox="0 0 270.3 95.4"
 		xmlns="http://www.w3.org/2000/svg"
 		{...props}

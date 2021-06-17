@@ -17,6 +17,7 @@ export function makeViteConfig(
 	onConfigChange?: () => void,
 ): InlineConfig {
 	const srcDir = path.resolve("src");
+	const publicDir = path.resolve("public");
 
 	const isPage = picomatch(path.join(srcDir, PAGES));
 	const isLayout = picomatch(path.join(srcDir, LAYOUTS));
@@ -43,6 +44,7 @@ export function makeViteConfig(
 		...config.vite,
 		configFile: false,
 		root: srcDir,
+		publicDir,
 		server: {
 			...config.vite.server,
 			middlewareMode: "ssr",

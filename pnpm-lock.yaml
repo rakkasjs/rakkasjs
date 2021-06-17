@@ -107,6 +107,7 @@ importers:
       '@types/react': 17.0.11
       bare-routes: 0.3.2_react@17.0.2
       devalue: 2.0.1
+      vite: 2.3.7
     devDependencies:
       '@babel/core': 7.14.6
       '@babel/preset-env': 7.14.5_@babel+core@7.14.6
@@ -134,7 +135,6 @@ importers:
       rollup: 2.52.0
       rollup-plugin-terser: 7.0.2_rollup@2.52.0
       rollup-plugin-ts: 1.4.0_rollup@2.52.0
-      vite: 2.3.7
 
   packages/demo:
     specifiers:
@@ -202,6 +202,7 @@ importers:
       prettier: ^2.3.1
       react: ^17.0.2
       react-dom: ^17.0.2
+      sanitize.css: ^12.0.1
       typescript: ^4.3.3
       vite-plugin-mdx: ^3.5.6
     dependencies:
@@ -209,6 +210,7 @@ importers:
       '@rakkasjs/runner-node': link:../runner-node
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+      sanitize.css: 12.0.1
     devDependencies:
       '@mdx-js/mdx': 2.0.0-next.9
       '@mdx-js/react': 1.6.22_react@17.0.2
@@ -5467,6 +5469,7 @@ packages:
     resolution: {integrity: sha512-FiB0kzdP0FFVGDKlRLEQ1BgDzU87dy5NnzjeW9YZNt+/c3+q82EQDUwniSAUxp/F0gFNI1ZhKU1FqYsMuqZVnw==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+    dev: false
 
   /nanomatch/1.2.13:
     resolution: {integrity: sha512-fpoe2T0RbHwBTBUOftAfBPaDEi06ufaUai0mE6Yn1kacc3SnTErfb/h+X94VXzI64rKFHYImXSvdwGGCmwOqCA==}
@@ -5883,6 +5886,7 @@ packages:
       colorette: 1.2.2
       nanoid: 3.1.23
       source-map-js: 0.6.2
+    dev: false
 
   /prelude-ls/1.1.2:
     resolution: {integrity: sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=}
@@ -6316,6 +6320,10 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: true
 
+  /sanitize.css/12.0.1:
+    resolution: {integrity: sha512-QbusSBnWHaRBZeTxsJyknwI0q+q6m1NtLBmB76JfW/rdVN7Ws6Zz70w65+430/ouVcdNVT3qwrDgrM6PaYyRtw==}
+    dev: false
+
   /saxes/5.0.1:
     resolution: {integrity: sha512-5LBh1Tls8c9xgGjw3QrMwETmTMVk0oFgvrFSvWx62llR2hcEInrKNZ2GZCCuuy2lvWrdl5jhbpeqc5hRYKFOcw==}
     engines: {node: '>=10'}
@@ -6477,6 +6485,7 @@ packages:
   /source-map-js/0.6.2:
     resolution: {integrity: sha512-/3GptzWzu0+0MBQFrDKzw/DvvMTUORvgY6k6jd/VS6iCR4RDTKWH6v6WPwQoUO8667uQEf9Oe38DxAYWY5F/Ug==}
     engines: {node: '>=0.10.0'}
+    dev: false
 
   /source-map-resolve/0.5.3:
     resolution: {integrity: sha512-Htz+RnsXWk5+P2slx5Jh3Q66vhQj1Cllm0zvnaY98+NFx+Dv2CF/f5O/t8x+KaNdrdIAsruNzoh/KpialbqAnw==}
@@ -7145,6 +7154,7 @@ packages:
       rollup: 2.52.0
     optionalDependencies:
       fsevents: 2.3.2
+    dev: false
 
   /w3c-hr-time/1.0.2:
     resolution: {integrity: sha512-z8P5DvDNjKDoFIHK7q8r8lackT6l+jo/Ye3HOle7l9nICP9lf1Ci25fy9vHd0JOWewkIFzXIEig3TdKT7JQ5fQ==}

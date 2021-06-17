@@ -29,22 +29,18 @@ If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and
 ## TODO
 - Thematic grouping of routes
 - Prepare packages for publication
-- Documentation
 - Project initializer
+- Documentation
 - Meta tags in head
 - New router
+- Prefetching assets
 - MVP!
 
 - HTTPS mode for dev server
 - Separate API and pages dirs
 - Data caching
 - Page transition animations
-
-- Render error handling
-- Data and context caching and stale-while-revalidate
 - Investigate renderToNodeStream
-- Upstream todos in the router
-- Prefetching
 - Localized routing
 - Customized routing
 - Adapters for serverless environments
