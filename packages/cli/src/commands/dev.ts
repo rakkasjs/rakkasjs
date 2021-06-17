@@ -8,6 +8,7 @@ import nodeFetch, {
 } from "node-fetch";
 import { makeViteConfig } from "../lib/vite-config";
 import { loadConfig } from "../lib/config";
+import { encode } from "html-entities";
 
 (globalThis.fetch as any) = nodeFetch;
 (globalThis.Response as any) = NodeFetchResponse;
@@ -103,9 +104,18 @@ async function createServers(onReload: () => void) {
 				res.end(body);
 			} catch (error) {
 				vite.ssrFixStacktrace(error);
-				res.statusCode = 500;
 				console.error(error.stack ?? "Unknown error");
-				res.end(error.stack ?? "Unknown error");
+
+				res.setHeader("content-type", "text/html");
+				res.statusCode = 500;
+				res.end(
+					template.replace(
+						"<!-- rakkas-app-placeholder -->",
+						"<pre>A server-side render error has occured:\n\n" +
+							encode(error.stack || error.message || "Unknown error") +
+							"</pre>",
+					),
+				);
 			}
 		});
 	});

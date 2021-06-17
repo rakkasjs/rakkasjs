@@ -8,6 +8,7 @@ import {
 	LoadRedirectResult,
 	ReloadHookParams,
 } from ".";
+import { wrapInErrorBoundary } from "./ErrorBoundary";
 
 interface StackArgs {
 	url: URL;
@@ -74,7 +75,11 @@ export async function makeComponentStack({
 			}
 		}
 
-		components.push(module.default);
+		if (errorHandlerIndex === i) {
+			components.push(wrapInErrorBoundary(module.default));
+		} else {
+			components.push(module.default);
+		}
 
 		if (
 			module.load &&

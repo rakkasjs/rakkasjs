@@ -6,7 +6,7 @@ const MainLayout: FC<ErrorHandlerProps> = ({ error, children }) => (
 		<Head>
 			<title>Rakkas.js</title>
 		</Head>
-		{error ? error.message : children}
+		{error ? <pre>{error.stack || error.message}</pre> : children}
 	</>
 );
 

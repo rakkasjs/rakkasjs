@@ -27,7 +27,6 @@ If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and
 
 
 ## TODO
-- Real host name
 - Thematic grouping of routes
 - Prepare packages for publication
 - Documentation
