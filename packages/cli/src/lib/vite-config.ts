@@ -79,6 +79,7 @@ export function makeViteConfig(
 				},
 
 				buildStart() {
+					console.log("Build starting");
 					this.addWatchFile(path.join(srcDir, PAGES));
 					this.addWatchFile(path.join(srcDir, LAYOUTS));
 					this.addWatchFile(path.join(srcDir, ENDPOINTS));
@@ -95,17 +96,20 @@ export function makeViteConfig(
 
 					if (id === "/client" && !(await this.resolve(id, "@rakkasjs"))) {
 						return id;
+					} else if (id === path.resolve("src/index.html")) {
+						return id;
 					}
 				},
 
 				async load(id) {
 					if (id === "/client") {
-						return {
-							code: `import { startClient } from "@rakkasjs/core/client"; startClient();`,
-						};
+						return `import { startClient } from "@rakkasjs/core/client"; startClient();`;
+					} else if (id === path.resolve("src/index.html")) {
+						return template;
 					}
 				},
 			},
+
 			...(config.vite.plugins || []),
 		],
 		resolve: {
@@ -117,3 +121,17 @@ export function makeViteConfig(
 		},
 	};
 }
+
+const template = `<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<!-- rakkas-head-placeholder -->
+	</head>
+	<body>
+		<div id="rakkas-app"><!-- rakkas-app-placeholder --></div>
+		<script type="module" src="/client"></script>
+	</body>
+</html>`;

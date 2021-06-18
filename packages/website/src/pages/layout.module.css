@@ -1,9 +1,10 @@
 .main {
-	width: calc(100vw - 2em);
+	width: calc(100% - 2em);
 	max-width: 60em;
 	margin: auto;
+	margin-top: 1rem;
 	padding-bottom: 1em;
-	min-height: calc(100vh - 14rem);
+	min-height: calc(100vh - 12rem);
 }
 
 .footer {
@@ -11,5 +12,5 @@
 	text-align: center;
 	margin-top: 2rem;
 	padding: 1em;
-	border-top: solid 1px #eee;
+	border-top: solid 1px #eef;
 }

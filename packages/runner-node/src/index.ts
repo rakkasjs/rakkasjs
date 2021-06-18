@@ -15,7 +15,10 @@ import nodeFetch, {
 (globalThis.Headers as any) = NodeFetchHeaders;
 
 export async function startServer() {
-	const html = await fs.promises.readFile("./dist/client/index.html", "utf-8");
+	const template = await fs.promises.readFile(
+		"./dist/client/index.html",
+		"utf-8",
+	);
 
 	const fileServer = sirv("dist/client", { etag: true, maxAge: 0 });
 
@@ -30,7 +33,7 @@ export async function startServer() {
 						headers: new Headers(req.headers as Record<string, string>),
 						body: await parseBody(req),
 					},
-					html,
+					template,
 				);
 
 				res.statusCode = response.status ?? 200;

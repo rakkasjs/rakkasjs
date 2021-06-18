@@ -56,9 +56,13 @@ const App: FC<{
 	const lastContext = useRef(initialContext);
 	const isDataValid = useRef(initialDataValidity);
 
+	console.log("Rendering outer");
+
 	return (
 		<Router
 			render={async ({ url, rerender, navigate }) => {
+				console.log("Rendering inner");
+
 				const stack = await makeComponentStack({
 					fetch,
 					reload(i) {

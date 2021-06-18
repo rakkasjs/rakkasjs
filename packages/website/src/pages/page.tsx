@@ -20,7 +20,7 @@ const HomePage: FC = () => (
 		<div className={css.cards}>
 			<div className={css.card} style={{ background: "#eef" }}>
 				<h3>React</h3>
-				<p>Build upon the vast ecosystem of the popular framework.</p>
+				<p>Build upon the vast ecosystem of the most popular framework.</p>
 			</div>
 			<div className={css.card} style={{ background: "#ccd" }}>
 				<h3>Vite</h3>
@@ -28,17 +28,17 @@ const HomePage: FC = () => (
 			</div>
 			<div className={css.card} style={{ background: "#dde" }}>
 				<h3>Data fetching</h3>
-				<p>Start building with a simple but complete data fetching solution.</p>
+				<p>
+					Start building with a simple but effective data fetching solution.
+				</p>
 			</div>
 		</div>
 
 		<section className={css.dict}>
 			<i>Turkish</i> <b lang="tr">rakkas</b> [ɾɑkːˈɑs]{" "}
-			<small>
-				<i style={{ display: "inline-block" }}>
-					&lt; Arabic <span lang="ar">رقاص</span>
-				</i>
-			</small>{" "}
+			<span style={{ display: "inline-block" }}>
+				&lt; Arabic <span lang="ar">رقاص</span>
+			</span>{" "}
 			<div>1. (Male) dancer.</div>
 			<div>
 				<i>2. (obsolete)</i> Pendulum.

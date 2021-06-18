@@ -1,0 +1,110 @@
+import { Head, Link } from "@rakkasjs/core";
+
+# Rakkas Documentation
+
+## What is Rakkas?
+
+> _Elevator pitch: Next.js on Vite or Svelte Kit for React._
+
+**Rakkas** aims to be a [React](https://reactjs.org) framework powered by [Vite](https://vitejs.dev), with a developer experience inspired by [Next.js](https://nextjs.org) and [Svelte Kit](https://kit.svelte.dev). Pages of a Rakkas web applications are rendered on the server-side and hydrated on the client side.
+
+> **WARNING:** Rakkas is in early development. Do not use in production!
+
+Apart from all the awesomeness brought by React and Vite, it has some interesting features in its own right:
+
+- File system based routing
+- Nested layouts
+- API routes and middleware
+- Simple but effective data fetching model
+
+## Getting started
+
+The easiest way to try Rakkas out is to use it's project initializer:
+
+```sh
+npm init @rakkasjs
+```
+
+Just follow the prompts and it will scaffold a project in the current directory.
+
+If you prefer a manual setup, you can install `@rakkasjs/cli` as a dev dependency, and `@rakkasjs/core` and `@rakkasjs/runner-node` as production dependencies:
+
+```sh
+npm install --save-dev @rakkasjs/cli
+npm install --save @rakkasjs/core @rakkasjs/runner-node
+```
+
+Then you can start a development server on `localhost:3000` with `npx rakkas dev`.
+
+## Pages
+
+In Rakkas, each page is a module that default exports a React component. A page module resides in the `src/pages` directory and it's named `page.jsx` (or `.tsx`, or any other single-word extension). Alternatively, it can have any name that ends with `.page.jsx` (or any other single-word extension).
+
+Rakkas has a file system based router. The URL path that leads to your page is deduced from the page module's name. Here are some examples:
+
+| Module name                | URL path      |
+| -------------------------- | ------------- |
+| `src/pages/page.jsx`       | `/`           |
+| `src/pages/about.page.jsx` | `/about`      |
+| `src/pages/about/page.jsx` | also `/about` |
+
+A very simple page page module would look like this:
+
+```jsx
+import React from "react";
+
+const HelloWorld = () => <h1>Hello world</h1>;
+export default HelloWorld;
+```
+
+### Dynamic routes
+
+Sometimes you need to encode a parameter in the URL path. Let's say you're building an app where each user has a profile page with a path such as `/profile/foo` or `/profile/bar` where foo and bar are user names. If you name your page module `/src/pages/profile/[userName].page.jsx`, you can use the `params` prop to access the user name:
+
+```jsx
+import React from "react";
+
+const UserProfilePage = ({ params }) => <h1>Hello {params.userName}!</h1>;
+export default UserProfilePage;
+```
+
+You can use more than one dynamic parameter like `/user/[userName]/posts/[postId]`. You can even put multiple parameters in a single path segment if you delimit them with `-` or `.`, like `/[name]-[surname]/contact-info`.
+
+More specific routes have priority over more generic ones so you can have both `/products/[productId]` and `/products/list` for instance.
+
+### Basic page props
+
+Page components receive some useful props (TypeScript definitions are available as `RakkasComponentProps` in `@rakkasjs/core` package):
+
+| Prop     | Type                     | Description                               |
+| -------- | ------------------------ | ----------------------------------------- |
+| `url`    | `URL`                    | Current URL                               |
+| `match`  | `string`                 | Matching path, i.e. "/profile/[userName]" |
+| `params` | `Record<string, string>` | Path parameters for dynamic routes        |
+
+There are more that we'll cover later.
+
+### Navigation
+
+Rakkas provieds a `Link` component (in the `@rakkasjs/core` package) for client-side SPA-style navigation. It takes exactly the same props as the built-in `<a>` element but intercepts user's click to handle the navigation without reloading the page. `NavLink` component is similar but accepts `currentRouteClass` and `currentRouteStyle` that take effect when the `href` property matches the current URL. It is useful for styling the active item in a navigation menu.
+
+For programmatic navigation, use the `useRouter` custom hook from the `@rakkasjs/core` package:
+
+```js
+import { useRouter } from "@rakkasjs/core";
+
+// ...
+// In a function component
+const { navigate } = useRouter();
+navigate("/go/here");
+```
+
+### Page transitions
+
+The return value of `useRouter` also has a `current` property. It's a URL object that contains the URL of the currently rendered page. You should always use this property insteaf of `window.location` because, a) `window` is not available during server-side rendering, and b) you'll get the wrong URL during page transitions: When the user clicks on a `Link`, the URL in the location bar of the browser changes immediately but the old page is still shown while the new one is loaded. This is similar how most browsers handle URL transitions natively.
+
+The `next` property of the return value of `useRouter`, if present, contains the URL that the app is transitioning into. You can test for its presence to render an animated loading bar for example. Also, the `NavLink` component accepts `nextRouteClass` and `nextRouteStyle` props that take effect during a page transition if the `href` property matches the URL that the app is transitioning into.
+
+---
+
+[Try it out!](/examples/pokemon)

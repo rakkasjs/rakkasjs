@@ -16,23 +16,17 @@ import type { ComponentType } from "react";
 /**
  * Props passed to a page or layout component
  */
-export interface RakkasComponentProps<
-	P extends Record<string, string> = Record<string, string>,
-	D = unknown,
-	C extends Readonly<Record<string, unknown>> = Readonly<
-		Record<string, unknown>
-	>,
-> {
+interface RakkasComponentProps {
 	/** Current URL */
 	url: URL;
-	/** Matching path, i.e. "/aaa/[param]" */
+	/** Matching path, i.e. "/profile/[userName]" */
 	match?: string;
-	/** Current path parameters */
-	params: P;
+	/** Path parameters for dynamic routes */
+	params: Record<string, string>;
 	/** Data returned from the load function */
-	data: D;
+	data: any;
 	/** Context passed down from layout load functions */
-	context: C;
+	context: Record<string, any>;
 	/** Reload function */
 	reload(): void;
 	/** Reload hook */
@@ -42,13 +36,9 @@ export interface RakkasComponentProps<
 /**
  * Props passed to a page or layout component that is capable of handling errors
  */
-export interface ErrorHandlerProps<
-	P extends Record<string, string> = Record<string, string>,
-	D = unknown,
-	C extends Record<string, unknown> = Record<string, unknown>,
-> extends Omit<RakkasComponentProps<P, D, C>, "data"> {
+export interface ErrorHandlerProps extends Omit<RakkasComponentProps, "data"> {
 	/** Data returned from the load function. May not be present in case of error. */
-	data?: D;
+	data?: any;
 	/** Not present if there is no error */
 	error?: ErrorDescription;
 }
@@ -58,7 +48,6 @@ export interface ErrorDescription {
 	message: string;
 	status?: number;
 	stack?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	detail?: any;
 }
 

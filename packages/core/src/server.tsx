@@ -17,7 +17,6 @@ export interface RawRequest {
 	url: URL;
 	method: string;
 	headers: Headers;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	body: Uint8Array | string | any;
 }
 
@@ -26,7 +25,6 @@ export interface RakkasRequest {
 	method: string;
 	headers: Headers;
 	params: Record<string, string>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	body: Uint8Array | string | any;
 	context: Record<string, unknown>;
 }
@@ -47,6 +45,8 @@ export interface EndpointModule {
 export interface MiddlewareModule {
 	default: Middleware;
 }
+
+console.log("env", import.meta.env);
 
 export async function handleRequest(
 	req: RawRequest,

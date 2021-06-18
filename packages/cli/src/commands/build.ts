@@ -1,65 +1,35 @@
 import { Command } from "commander";
 import { build } from "vite";
-import path from "path";
+import { loadConfig } from "../lib/config";
+import { makeViteConfig } from "../lib/vite-config";
 
 export default function buildCommand() {
 	return new Command("build")
 		.description("Build for production")
 		.action(async () => {
+			const { config, deps } = await loadConfig();
+
 			await build({
+				...makeViteConfig(config, deps),
+
 				build: {
-					outDir: "dist/client",
+					outDir: "../dist/client",
+					emptyOutDir: true,
+					ssrManifest: true,
 				},
-				resolve: {
-					alias: {
-						"$app": "",
-						"$rakkas": "@rakkasjs/core/dist",
-					},
-				},
-				plugins: [
-					{
-						name: "rakkas-index-html",
-						enforce: "pre",
-						resolveId(id) {
-							if (id === path.resolve("index.html")) {
-								return id;
-							}
-						},
-						load(id) {
-							if (id === path.resolve("index.html")) return template;
-						},
-					},
-				],
 			});
 
 			await build({
+				...makeViteConfig(config, deps),
+
 				build: {
 					ssr: true,
-					outDir: "dist/server",
+					outDir: "../dist/server",
 					rollupOptions: {
 						input: ["@rakkasjs/runner-node"],
 					},
-				},
-				resolve: {
-					alias: {
-						"$app": "",
-						"$rakkas": "@rakkasjs/core",
-					},
+					emptyOutDir: true,
 				},
 			});
 		});
 }
-
-const template = `<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-		<!-- rakkas-head-placeholder -->
-	</head>
-	<body>
-		<div id="rakkas-app"><!-- rakkas-app-placeholder --></div>
-		<script type="module" src="/src/client"></script>
-	</body>
-</html>`;

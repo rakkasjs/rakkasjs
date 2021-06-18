@@ -1,23 +1,27 @@
-import { ErrorHandlerProps, Head } from "@rakkasjs/core";
+import { ErrorHandlerProps, Head, Link } from "@rakkasjs/core";
 import React, { FC } from "react";
 import "sanitize.css";
 import "./global.css";
 import { Header } from "$lib/Header";
 import css from "./layout.module.css";
+import { MDXProvider } from "@mdx-js/react";
 
 const MainLayout: FC<ErrorHandlerProps> = ({ error, children }) => (
 	<>
 		<Head>
-			<title>Rakkas.js</title>
+			<title>Rakkas</title>
 		</Head>
 		<Header />
 		<main className={css.main}>
-			{error ? <pre>{error.stack || error.message}</pre> : children}
+			{error ? (
+				<pre>{error.stack || error.message}</pre>
+			) : (
+				<MDXProvider components={{ a: Link }}>{children}</MDXProvider>
+			)}
 		</main>
 		<footer className={css.footer}>
 			<p>
-				Software and documentation: Copyright © 2021-present Fatih Aygün. MIT
-				License.
+				Software and documentation: Copyright 2021 Fatih Aygün. MIT License.
 			</p>
 
 			<p>

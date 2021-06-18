@@ -32,6 +32,8 @@
 
 .cta:hover {
 	background: #b16;
+	color: #fff;
+	text-decoration: none;
 }
 
 .cards {

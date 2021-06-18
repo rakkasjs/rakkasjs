@@ -26,9 +26,7 @@ export interface StackResult {
 	content: React.ReactNode;
 	data: unknown[];
 	contexts: Record<string, unknown>[];
-	components: React.ComponentType<
-		ErrorHandlerProps<Record<string, string>, unknown, Record<string, unknown>>
-	>[];
+	components: React.ComponentType<ErrorHandlerProps>[];
 	status: number;
 }
 
@@ -76,7 +74,13 @@ export async function makeComponentStack({
 		}
 
 		if (errorHandlerIndex === i) {
-			components.push(wrapInErrorBoundary(module.default));
+			// A trick to save the component instance between renders
+			components.push(
+				(module.default as any).$rakkas$wrappedInError ||
+					((module.default as any).$rakkas$wrappedInError = wrapInErrorBoundary(
+						module.default,
+					)),
+			);
 		} else {
 			components.push(module.default);
 		}
@@ -134,6 +138,8 @@ export async function makeComponentStack({
 			returnedContexts.push(returnedContext);
 			usedContexts.push(context);
 		}
+
+		if (prevComponents) prevComponents[i] = components[i];
 	}
 
 	if (error) {
@@ -176,10 +182,10 @@ function makeUseReload(reload: () => void, hydration: boolean) {
 		const {
 			deps = [],
 			hydrate = false,
-			focus = true,
+			focus = false,
 			interval = false,
 			background = false,
-			reconnect = true,
+			reconnect = false,
 		} = params;
 
 		const firstRender = useRef(true);
