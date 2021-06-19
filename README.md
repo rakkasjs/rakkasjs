@@ -27,13 +27,18 @@ If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and
 
 
 ## TODO
+- getCacheKey function
 - Thematic grouping of routes
+- Prefetching assets
+- getRootContext
+- Data caching and SWR
 - Prepare packages for publication
 - Project initializer
 - Documentation
-- Meta tags in head
+- Head
+  - meta
+  - link
 - New router
-- Prefetching assets
 - MVP!
 
 - HTTPS mode for dev server

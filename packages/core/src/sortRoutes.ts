@@ -68,6 +68,7 @@ function parseRouteIntoSegments<T>(route: Route<T>): ParsedRoute<T> {
 	const segments = route.pattern
 		.slice(1)
 		.split("/")
+		.filter((s) => s[0] !== "_")
 		.map((s) => {
 			function invalid() {
 				throw new Error(`Invalid route pattern "${s}" in ${route.pattern}`);
@@ -168,11 +169,11 @@ interface Route<T> {
 	extra: T;
 }
 
-interface RouteWithRegExp<T> {
+export interface RouteWithRegExp<T> {
 	pattern: string;
-	extra: T;
 	regexp: RegExp;
 	paramNames: string[];
+	extra: T;
 }
 
 interface ParsedRoute<T> {

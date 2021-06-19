@@ -4,14 +4,14 @@ import { LayoutImporter, PageImporter } from ".";
 import { pages, layouts } from "@rakkasjs/pages-and-layouts";
 
 const sortedLayouts = Object.entries(layouts)
-	.map(([k, l]) => {
-		const name =
-			"/" + (k.match(/^\/pages\/((.+)[./])?layout\.[a-zA-Z0-9]+$/)![2] || "");
+	.map(([key, importer]) => {
+		const id =
+			"/" + (key.match(/^\/pages\/((.+)[./])?layout\.[a-zA-Z0-9]+$/)![2] || "");
 
 		return {
-			path: name,
-			segments: name.split("/").filter(Boolean),
-			importer: l,
+			id,
+			segments: id.split("/").filter(Boolean),
+			importer,
 		};
 	})
 	.sort((a, b) => {
@@ -19,23 +19,22 @@ const sortedLayouts = Object.entries(layouts)
 		const lenDif = b.segments.length - a.segments.length;
 		if (lenDif) return lenDif;
 
-		return a.path.localeCompare(b.path);
+		return a.id.localeCompare(b.id);
 	});
 
 const sorted = sortRoutes(
-	Object.entries(pages).map(([name, importer]) => {
-		const pattern =
-			"/" + (name.match(/^\/pages\/((.+)[./])?page\.[a-zA-Z0-9]+$/)![2] || "");
+	Object.entries(pages).map(([key, importer]) => {
+		const id =
+			"/" + (key.match(/^\/pages\/((.+)[./])?page\.[a-zA-Z0-9]+$/)![2] || "");
 
 		return {
-			pattern,
+			pattern: id,
 			extra: {
-				name,
+				id,
 				importer,
 				layouts: sortedLayouts.filter((l) => {
 					const res =
-						pattern === l.path ||
-						pattern.startsWith(l.path === "/" ? "/" : l.path + "/");
+						id === l.id || id.startsWith(l.id === "/" ? "/" : l.id + "/");
 					return res;
 				}),
 			},
@@ -50,6 +49,7 @@ interface PageModuleImporters {
 }
 
 export function findPage(path: string): PageModuleImporters {
+	path = decodeURI(path);
 	let notFound = false;
 
 	for (;;) {
@@ -57,13 +57,15 @@ export function findPage(path: string): PageModuleImporters {
 			const match = path.match(r.regexp);
 			if (match) {
 				const params = Object.fromEntries(
-					match?.slice(1).map((m, i) => [r.paramNames[i], m]),
+					match
+						?.slice(1)
+						.map((m, i) => [r.paramNames[i], decodeURIComponent(m)]),
 				);
 
 				return {
 					params,
 					match: notFound ? undefined : r.pattern,
-					stack: [r.extra, ...r.extra.layouts].reverse().map((x) => x.importer),
+					stack: [r.extra, ...r.extra.layouts].map((x) => x.importer).reverse(),
 				};
 			}
 		}

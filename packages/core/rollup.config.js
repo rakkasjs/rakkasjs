@@ -1,5 +1,6 @@
 import ts from "rollup-plugin-ts";
 import nodeResolvePlugin from "@rollup/plugin-node-resolve";
+import cjs from "@rollup/plugin-commonjs";
 // import { terser } from "rollup-plugin-terser";
 
 const isProd = process.env.NODE_ENV === "production";
@@ -42,6 +43,7 @@ const options = [
 					"maintained node versions",
 				],
 			}),
+			cjs(),
 			nodeResolvePlugin(),
 		],
 	},

@@ -1,14 +1,14 @@
-import React, { Component, ComponentType } from "react";
-import { ErrorHandlerProps } from ".";
+import React, { Component } from "react";
+import { Layout, ErrorPage, LayoutProps, ErrorPageProps } from ".";
 import { ErrorDescription } from "../dist";
 import { toErrorDescription } from "./toErrorDescription";
 
-export function wrapInErrorBoundary(Wrapped: ComponentType<ErrorHandlerProps>) {
+export function wrapInErrorBoundary(Wrapped: Layout | ErrorPage) {
 	return class ErrorBoundary extends Component<
-		ErrorHandlerProps,
+		LayoutProps | ErrorPageProps,
 		{ caught: ErrorDescription | null }
 	> {
-		constructor(props: ErrorHandlerProps) {
+		constructor(props: LayoutProps) {
 			super(props);
 
 			this.state = {

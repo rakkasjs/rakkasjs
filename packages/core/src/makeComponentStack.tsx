@@ -1,55 +1,57 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { ComponentType, FC, useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { findPage } from "./pages";
 import {
 	ErrorDescription,
-	ErrorHandlerProps,
 	LayoutLoadResult,
 	LoadRedirectResult,
 	ReloadHookParams,
 } from ".";
 import { wrapInErrorBoundary } from "./ErrorBoundary";
+import {
+	ErrorPage,
+	GetCacheKeyFunc,
+	LayoutComponentModule,
+	Page,
+	PageComponentModule,
+	PageLoadResult,
+} from "./types";
+import { Layout, SimpleLayout } from "../dist";
+import { hash } from "./hash";
+import { toErrorDescription } from "./toErrorDescription";
+
+export interface RenderedStackItem {
+	Component?: Page | ErrorPage | Layout | SimpleLayout;
+	loaded: PageLoadResult | LayoutLoadResult;
+	cacheKey: string;
+}
 
 interface StackArgs {
 	url: URL;
 	fetch: typeof fetch;
-	previousRender: {
-		data: unknown[];
-		contexts: Record<string, unknown>[];
-		isDataValid: boolean[];
-		components?: ComponentType<ErrorHandlerProps>[];
-	};
+	previousRender?: RenderedStackItem[];
 	reload(i: number): void;
 }
 
 export interface StackResult {
-	content: React.ReactNode;
-	data: unknown[];
-	contexts: Record<string, unknown>[];
-	components: React.ComponentType<ErrorHandlerProps>[];
 	status: number;
+	content: React.ReactNode;
+	rendered: RenderedStackItem[];
 }
 
 export async function makeComponentStack({
 	url,
 	fetch,
-	previousRender: {
-		data: prevData,
-		contexts: prevContexts,
-		isDataValid,
-		components: prevComponents,
-	},
+	previousRender,
 	reload,
 }: StackArgs): Promise<LoadRedirectResult | StackResult> {
 	const { stack, params, match } = findPage(url.pathname);
 
-	const usedContexts: Array<Record<string, unknown>> = [];
-	const returnedContexts: Array<Record<string, unknown>> = [];
 	let error: ErrorDescription | undefined;
-	const components: ComponentType<ErrorHandlerProps>[] = [];
+	const thisRender: RenderedStackItem[] = [];
 	let context: Record<string, unknown> = {};
+	let status = 200;
 	let errorHandlerIndex = -1;
-	const data: unknown[] = [];
 
 	if (!match) {
 		error = {
@@ -60,108 +62,132 @@ export async function makeComponentStack({
 
 	for (const [i, importer] of stack.entries()) {
 		const module = await importer();
+		const isPage = i === stack.length - 1;
 
-		if (i === stack.length - 1) {
-			// Page
-			if (module.options?.canHandleErrors ?? false) {
-				errorHandlerIndex = i;
-			}
-		} else {
-			// Layout
-			if (module.options?.canHandleErrors ?? true) {
-				errorHandlerIndex = i;
-			}
+		const moduleExports =
+			typeof module.default === "object"
+				? {
+						Component: module.default.render || DefaultLayout,
+						load: module.default.load,
+						options: module.default.options,
+						getCacheKey:
+							module.default.getCacheKey ??
+							(isPage ? defaultPageGetCacheKey : defaultLayoutGetCacheKey),
+				  }
+				: {
+						Component:
+							(module as PageComponentModule | LayoutComponentModule).default ||
+							DefaultLayout,
+						load: (module as PageComponentModule | LayoutComponentModule).load,
+						options: isPage
+							? (module as PageComponentModule).pageOptions
+							: (module as LayoutComponentModule).layoutOptions,
+						getCacheKey:
+							(module as PageComponentModule | LayoutComponentModule)
+								.getCacheKey ??
+							(isPage ? defaultPageGetCacheKey : defaultLayoutGetCacheKey),
+				  };
+
+		const { load, options, getCacheKey } = moduleExports;
+		let Component = moduleExports.Component;
+
+		const canHandleErrors =
+			options?.canHandleErrors ?? (!isPage && !!Component);
+
+		if (canHandleErrors) {
+			errorHandlerIndex = i;
+			// A trick to preserve component identity between renders
+			Component =
+				(Component as any).$rakkas$wrappedInError ||
+				((Component as any).$rakkas$wrappedInError = wrapInErrorBoundary(
+					Component as any,
+				));
 		}
 
-		if (errorHandlerIndex === i) {
-			// A trick to save the component instance between renders
-			components.push(
-				(module.default as any).$rakkas$wrappedInError ||
-					((module.default as any).$rakkas$wrappedInError = wrapInErrorBoundary(
-						module.default,
-					)),
-			);
-		} else {
-			components.push(module.default);
-		}
+		const cacheKey = hash(getCacheKey({ url, params, match, context }));
+		let loaded: PageLoadResult | LayoutLoadResult;
 
 		if (
-			module.load &&
-			(!isDataValid[i] ||
-				(prevComponents && module.default !== prevComponents[i]))
+			// No previous render, we're in server side; should reload
+			!previousRender ||
+			// Different component; should reload
+			!previousRender[i] ||
+			(previousRender[i].Component &&
+				previousRender[i].Component !== Component) ||
+			// Cache key manually invalidated; should reload
+			!previousRender[i].cacheKey ||
+			// Cache key changed; should reload
+			previousRender[i].cacheKey !== cacheKey
 		) {
-			const loadResult = (await module.load({
-				url,
-				params,
-				context,
-				match,
-				fetch,
-			})) as LayoutLoadResult;
-
-			if ("data" in loadResult) {
-				data.push(loadResult.data);
-				prevData[i] = loadResult.data;
-				isDataValid[i] = true;
-				const returnedContext = loadResult.context || {};
-				prevContexts[i] = returnedContext;
-				returnedContexts.push(returnedContext);
-				context = { ...context, ...returnedContext };
-				usedContexts.push(context);
-			} else if ("error" in loadResult) {
-				data.push({});
-				prevData[i] = {};
-				isDataValid[i] = true;
-				error = loadResult.error;
-				prevContexts[i] = {};
-				returnedContexts.push({});
-				usedContexts.push(context);
-				break;
+			if (load) {
+				try {
+					loaded = await load({ url, params, match, context, fetch });
+				} catch (error) {
+					loaded = { status: 500, error: toErrorDescription(error) };
+				}
 			} else {
-				return loadResult;
+				loaded = {
+					data: 0,
+				};
 			}
 		} else {
-			let returnedContext: Record<string, unknown>;
-
-			if (prevComponents && module.default !== prevComponents[i]) {
-				// Component changed
-				data.push({});
-				returnedContext = {};
-			} else {
-				// Component unchanged
-				data.push(prevData[i] ?? {});
-				returnedContext = prevContexts[i] ?? {};
-			}
-			isDataValid[i] = true;
-
-			context = { ...context, ...returnedContext };
-			prevContexts[i] = returnedContext;
-			returnedContexts.push(returnedContext);
-			usedContexts.push(context);
+			loaded = previousRender[i].loaded;
 		}
 
-		if (prevComponents) prevComponents[i] = components[i];
+		if ("location" in loaded) {
+			return loaded;
+		}
+
+		thisRender.push({
+			Component,
+			loaded,
+			cacheKey,
+		});
+
+		status = loaded.status ?? status;
+
+		if ("error" in loaded) {
+			if (status < 400) status = 500;
+			error = loaded.error;
+			break;
+		}
+
+		if ("context" in loaded) {
+			context = {
+				...context,
+				...loaded.context,
+			};
+		}
 	}
 
 	if (error) {
-		components.length = errorHandlerIndex + 1;
-		if (components.length === 0) {
-			components[0] = LastResort;
-		}
+		thisRender.length = errorHandlerIndex + 1;
 	}
 
-	const content = components.reduceRight((prev, Component, i) => {
+	if (!thisRender.length) {
+		thisRender.push({
+			Component: LastResort,
+			cacheKey: "",
+			loaded: { data: 0 },
+		});
+	}
+
+	context = {};
+	const content = thisRender.reduceRight((prev, rendered, i) => {
 		const reloadThis = () => reload(i);
+		const Component = rendered.Component!;
+		context = { ...context, ...(rendered.loaded as any).context };
 
 		return (
 			<Component
-				context={usedContexts[i]}
-				data={data[i]}
-				params={params}
-				match={match}
 				url={url}
+				match={match}
+				params={params}
+				context={context}
+				data={(rendered.loaded as any).data}
 				error={errorHandlerIndex === i ? error : undefined}
 				reload={reloadThis}
-				useReload={makeUseReload(reloadThis, !prevComponents)}
+				useReload={makeUseReload(reloadThis)}
 			>
 				{prev}
 			</Component>
@@ -169,35 +195,20 @@ export async function makeComponentStack({
 	}, null as React.ReactNode);
 
 	return {
+		status,
 		content,
-		data,
-		contexts: returnedContexts,
-		components,
-		status: error?.status ?? 200,
+		rendered: thisRender,
 	};
 }
 
-function makeUseReload(reload: () => void, hydration: boolean) {
+function makeUseReload(reload: () => void) {
 	return function useReload(params: ReloadHookParams) {
 		const {
-			deps = [],
-			hydrate = false,
 			focus = false,
 			interval = false,
 			background = false,
 			reconnect = false,
 		} = params;
-
-		const firstRender = useRef(true);
-
-		// Reload after hydrate or when deps change
-		useEffect(() => {
-			if (hydrate || !firstRender.current) {
-				reload();
-			}
-
-			firstRender.current = false;
-		}, [...deps]);
 
 		// Reload on window focus
 		useEffect(() => {
@@ -212,7 +223,7 @@ function makeUseReload(reload: () => void, hydration: boolean) {
 			return () => {
 				window.removeEventListener("focus", handleFocus);
 			};
-		}, [focus, hydration]);
+		}, [focus]);
 
 		// Reload on reconnect
 		useEffect(() => {
@@ -227,7 +238,7 @@ function makeUseReload(reload: () => void, hydration: boolean) {
 			return () => {
 				window.removeEventListener("online", handleReconnect);
 			};
-		}, [reconnect, hydration]);
+		}, [reconnect]);
 
 		// Reload on interval
 		useEffect(() => {
@@ -242,11 +253,11 @@ function makeUseReload(reload: () => void, hydration: boolean) {
 			return () => {
 				clearInterval(id);
 			};
-		}, [interval, background, hydration]);
+		}, [interval, background]);
 	};
 }
 
-const LastResort: FC<ErrorHandlerProps> = () =>
+const LastResort: Layout = () =>
 	import.meta.env.DEV ? (
 		<p>
 			There is no root page or layout in your page directory. Create one to get
@@ -255,3 +266,13 @@ const LastResort: FC<ErrorHandlerProps> = () =>
 	) : (
 		<p>Not found.</p>
 	);
+
+const DefaultLayout: SimpleLayout = ({ children }) => <>{children}</>;
+
+const defaultPageGetCacheKey: GetCacheKeyFunc = ({ url, context, params }) => [
+	context,
+	params,
+	url.search,
+];
+
+const defaultLayoutGetCacheKey: GetCacheKeyFunc = ({ context }) => context;

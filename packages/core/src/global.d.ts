@@ -1,6 +1,4 @@
-/* eslint-disable import/no-duplicates */
-declare const __RAKKAS_INITIAL_DATA: Record<string, unknown>[];
-declare const __RAKKAS_INITIAL_CONTEXT: Record<string, unknown>[];
+declare const __RAKKAS_RENDERED: any;
 
 declare module "@rakkasjs/pages-and-layouts" {
 	import { PageModule, LayoutModule } from ".";

@@ -1,22 +1,23 @@
-import React, { ComponentType, FC, useRef, ReactNode } from "react";
+import React, { FC, useRef } from "react";
 import { hydrate } from "react-dom";
-import { Router, ErrorHandlerProps } from ".";
-import { makeComponentStack } from "./makeComponentStack";
+import { Router } from ".";
+import {
+	makeComponentStack,
+	RenderedStackItem,
+	StackResult,
+} from "./makeComponentStack";
+
+const lastRendered: RenderedStackItem[] = __RAKKAS_RENDERED;
 
 export async function startClient() {
 	const url = new URL(window.location.href);
-	const isDataValid = __RAKKAS_INITIAL_DATA.map(() => true);
 
 	const stack = await makeComponentStack({
 		url,
 		fetch,
-		previousRender: {
-			data: __RAKKAS_INITIAL_DATA,
-			contexts: __RAKKAS_INITIAL_CONTEXT,
-			isDataValid,
-		},
+		previousRender: lastRendered,
 		reload(i) {
-			isDataValid[i] = false;
+			lastRendered[i].cacheKey = "";
 		},
 	});
 
@@ -26,56 +27,25 @@ export async function startClient() {
 		return;
 	}
 
-	hydrate(
-		<App
-			initialStack={stack.components}
-			initialData={stack.data}
-			initialContext={stack.contexts}
-			initialContent={stack.content}
-			initialDataValidity={isDataValid}
-		/>,
-		document.getElementById("rakkas-app"),
-	);
+	hydrate(<App initialStack={stack} />, document.getElementById("rakkas-app"));
 }
 
 const App: FC<{
-	initialContent: ReactNode;
-	initialData: unknown[];
-	initialContext: Record<string, unknown>[];
-	initialStack: ComponentType<ErrorHandlerProps>[];
-	initialDataValidity: boolean[];
-}> = ({
-	initialContent,
-	initialData,
-	initialContext,
-	initialStack,
-	initialDataValidity,
-}) => {
+	initialStack: StackResult;
+}> = ({ initialStack }) => {
 	const lastStack = useRef(initialStack);
-	const lastData = useRef(initialData);
-	const lastContext = useRef(initialContext);
-	const isDataValid = useRef(initialDataValidity);
-
-	console.log("Rendering outer");
 
 	return (
 		<Router
 			render={async ({ url, rerender, navigate }) => {
-				console.log("Rendering inner");
-
 				const stack = await makeComponentStack({
+					url,
 					fetch,
 					reload(i) {
-						isDataValid.current[i] = false;
+						lastStack.current.rendered[i].cacheKey = "";
 						rerender();
 					},
-					url,
-					previousRender: {
-						components: lastStack.current,
-						data: lastData.current,
-						contexts: lastContext.current,
-						isDataValid: isDataValid.current,
-					},
+					previousRender: lastStack.current.rendered,
 				});
 
 				if ("location" in stack) {
@@ -83,11 +53,13 @@ const App: FC<{
 					return null;
 				}
 
+				lastStack.current = stack;
+
 				return stack.content;
 			}}
 			// skipInitialRender={isDataValid.current.every(Boolean)}
 		>
-			{initialContent}
+			{lastStack.current.content}
 		</Router>
 	);
 };

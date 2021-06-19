@@ -1,114 +1,101 @@
-import {
-	RakkasComponentProps,
-	PageLoadResult,
-	NavLink,
-	LoadArgs,
-} from "@rakkasjs/core";
+import { LayoutTypes, NavLink, defineLayout } from "@rakkasjs/core";
 import { PokemonList } from "pages/examples/pokemon/types";
-import React, { FC, useEffect } from "react";
+import React from "react";
 import css from "./index.module.css";
 
-interface PokemonListPageProps extends RakkasComponentProps {
-	data: { loadedPage: number; pokemons: PokemonList };
+interface Types extends LayoutTypes {
+	data: PokemonList;
 }
 
-const PokemonListPage: FC<PokemonListPageProps> = ({
-	children,
-	params,
-	data: { pokemons, loadedPage },
-	url,
-	useReload,
-}) => {
-	let page = Number(url.searchParams.get("p"));
-	if (!Number.isInteger(page) || page < 0) {
-		page = 0;
-	}
+export default defineLayout<Types>({
+	render({ children, data, params, url }) {
+		const page = parsePageNumber(url.searchParams);
 
-	useReload({ deps: [page] });
+		return (
+			<div className={css.main}>
+				<main className={css.content}>{children}</main>
+				<aside className={css.sidebar}>
+					<nav>
+						<ul className={css.pokemons}>
+							{data.results.map((p) => (
+								<li key={p.name}>
+									<NavLink
+										className={
+											css.nameLink +
+											(p.name === params.pokemon ? " " + css.activeLink : "")
+										}
+										nextRouteStyle={{ background: "#ccf" }}
+										href={`/examples/pokemon/${p.name}?p=${page}`}
+									>
+										{p.name}
+									</NavLink>
+								</li>
+							))}
+						</ul>
 
-	useEffect(() => {
-		console.log("Mounted");
+						<p>
+							{page * 10 + 1} - {page * 10 + data.results.length} of{" "}
+							{data.count}
+						</p>
 
-		return () => {
-			console.log("Unmounted");
-		};
-	}, []);
-
-	return (
-		<div className={css.main}>
-			<main className={css.content}>{children}</main>
-			<aside className={css.sidebar}>
-				<nav>
-					<ul className={css.pokemons}>
-						{pokemons.results.map((p) => (
-							<li key={p.name}>
+						<div className={css.pagination}>
+							{page > 0 ? (
 								<NavLink
-									className={
-										css.nameLink +
-										(p.name === params.pokemon ? " " + css.activeLink : "")
-									}
-									nextRouteStyle={{ background: "#ccf" }}
-									href={`/examples/pokemon/${p.name}?p=${loadedPage}`}
+									nextRouteStyle={{ background: "#dde" }}
+									href={`/examples/pokemon${
+										params.pokemon ? "/" + params.pokemon : ""
+									}?p=${page - 1}`}
 								>
-									{p.name}
+									&lt; Previous
 								</NavLink>
-							</li>
-						))}
-					</ul>
+							) : (
+								<span />
+							)}
+							{page * 10 + 10 < data.count && (
+								<NavLink
+									nextRouteStyle={{ background: "#dde" }}
+									href={`/examples/pokemon${
+										params.pokemon ? "/" + params.pokemon : ""
+									}?p=${page + 1}`}
+								>
+									Next &gt;
+								</NavLink>
+							)}
+						</div>
+					</nav>
+				</aside>
+			</div>
+		);
+	},
 
-					<p>
-						{loadedPage * 10 + 1} - {loadedPage * 10 + pokemons.results.length}{" "}
-						of {pokemons.count}
-					</p>
+	getCacheKey({ url }): unknown {
+		return parsePageNumber(url.searchParams);
+	},
 
-					<div className={css.pagination}>
-						{loadedPage > 0 ? (
-							<NavLink
-								nextRouteStyle={{ background: "#dde" }}
-								href={`/examples/pokemon${
-									params.pokemon ? "/" + params.pokemon : ""
-								}?p=${loadedPage - 1}`}
-							>
-								&lt; Previous
-							</NavLink>
-						) : (
-							<span />
-						)}
-						{loadedPage * 10 + 10 < pokemons.count && (
-							<NavLink
-								nextRouteStyle={{ background: "#dde" }}
-								href={`/examples/pokemon${
-									params.pokemon ? "/" + params.pokemon : ""
-								}?p=${loadedPage + 1}`}
-							>
-								Next &gt;
-							</NavLink>
-						)}
-					</div>
-				</nav>
-			</aside>
-		</div>
-	);
-};
+	async load({ url }) {
+		const page = parsePageNumber(url.searchParams);
 
-export default PokemonListPage;
+		console.log("Loading page", page);
 
-export async function load({ url }: LoadArgs): Promise<PageLoadResult> {
-	let page = Number(url.searchParams.get("p"));
+		const data = await fetch(
+			`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${page * 10}`,
+		).then((r) => r.json());
+
+		return {
+			data,
+		};
+	},
+
+	options: {
+		canHandleErrors: false,
+	},
+});
+
+function parsePageNumber(searchParams: URLSearchParams) {
+	let page = Number(searchParams.get("p"));
 	if (!Number.isInteger(page) || page < 0) {
 		page = 0;
 	}
 
-	console.log("Loading page", page);
-
-	const pokemons = await fetch(
-		`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${page * 10}`,
-	).then((r) => r.json());
-
-	return {
-		data: {
-			pokemons,
-			loadedPage: page,
-		},
-	};
+	return page;
 }

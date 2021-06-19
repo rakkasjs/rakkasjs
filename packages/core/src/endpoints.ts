@@ -1,18 +1,21 @@
 import { sortRoutes } from "./sortRoutes";
-import type { RawRequest } from "./server";
-
+import type {
+	EndpointImporter,
+	MiddlewareImporter,
+	RawRequest,
+} from "./server";
 import { endpoints, middleware } from "@rakkasjs/endpoints-and-middleware";
 
 const sortedMiddleware = Object.entries(middleware)
-	.map(([k, m]) => {
-		const name =
+	.map(([key, importer]) => {
+		const id =
 			"/" +
-			(k.match(/^\/pages\/((.+)[./])?middleware\.[a-zA-Z0-9]+$/)![2] || "");
+			(key.match(/^\/pages\/((.+)[./])?middleware\.[a-zA-Z0-9]+$/)![2] || "");
 
 		return {
-			path: name,
-			segments: name.split("/").filter(Boolean),
-			importer: m,
+			id,
+			segments: id.split("/").filter(Boolean),
+			importer: importer,
 		};
 	})
 	.sort((a, b) => {
@@ -20,24 +23,24 @@ const sortedMiddleware = Object.entries(middleware)
 		const lenDif = b.segments.length - a.segments.length;
 		if (lenDif) return lenDif;
 
-		return a.path.localeCompare(b.path);
+		// Otherwise alphabetical
+		return a.id.localeCompare(b.id);
 	});
 
 const sorted = sortRoutes(
-	Object.entries(endpoints).map(([name, importer]) => {
-		const pattern =
+	Object.entries(endpoints).map(([key, importer]) => {
+		const id =
 			"/" +
-			(name.match(/^\/pages\/((.+)[./])?endpoint\.[a-zA-Z0-9]+$/)![2] || "");
+			(key.match(/^\/pages\/((.+)[./])?endpoint\.[a-zA-Z0-9]+$/)![2] || "");
 
 		return {
-			pattern,
+			pattern: id,
 			extra: {
-				name,
+				id,
 				importer,
 				middleware: sortedMiddleware.filter((m) => {
 					const res =
-						pattern === m.path ||
-						pattern.startsWith(m.path === "/" ? "/" : m.path + "/");
+						id === m.id || id.startsWith(m.id === "/" ? "/" : m.id + "/");
 					return res;
 				}),
 			},
@@ -45,22 +48,28 @@ const sorted = sortRoutes(
 	}),
 );
 
-export function findEndpoint(req: RawRequest) {
-	const path = req.url.pathname;
+export function findEndpoint(req: RawRequest):
+	| {
+			params: Record<string, string>;
+			match: string;
+			stack: Array<EndpointImporter | MiddlewareImporter>;
+	  }
+	| undefined {
+	const path = decodeURI(req.url.pathname);
 
 	for (const e of sorted) {
 		const match = path.match(e.regexp);
 		if (match) {
 			const params = Object.fromEntries(
-				match?.slice(1).map((m, i) => [e.paramNames[i], m]),
+				match?.slice(1).map((m, i) => [e.paramNames[i], decodeURIComponent(m)]),
 			);
 
 			return {
 				params,
 				match: e.pattern,
 				stack: [e.extra, ...e.extra.middleware]
-					.reverse()
-					.map((x) => x.importer),
+					.map((x) => x.importer)
+					.reverse(),
 			};
 		}
 	}

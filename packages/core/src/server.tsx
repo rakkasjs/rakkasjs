@@ -7,12 +7,6 @@ import { makeComponentStack } from "./makeComponentStack";
 import { HeadContext, HeadContent } from "./HeadContext";
 import { escapeHTML } from "./Head";
 
-export interface RakkasResponse {
-	status?: number;
-	headers?: Record<string, string>;
-	body?: unknown;
-}
-
 export interface RawRequest {
 	url: URL;
 	method: string;
@@ -29,11 +23,17 @@ export interface RakkasRequest {
 	context: Record<string, unknown>;
 }
 
+export interface RakkasResponse {
+	status?: number;
+	headers?: Record<string, string>;
+	body?: unknown;
+}
+
 export type RequestHandler = (
 	request: RakkasRequest,
 ) => RakkasResponse | Promise<RakkasResponse>;
 
-export type Middleware = (
+export type RakkasMiddleware = (
 	request: RakkasRequest,
 	next: RequestHandler,
 ) => RakkasResponse | Promise<RakkasResponse>;
@@ -43,10 +43,13 @@ export interface EndpointModule {
 }
 
 export interface MiddlewareModule {
-	default: Middleware;
+	default: RakkasMiddleware;
 }
 
-console.log("env", import.meta.env);
+export type EndpointImporter = () => EndpointModule | Promise<EndpointModule>;
+export type MiddlewareImporter = () =>
+	| MiddlewareModule
+	| Promise<MiddlewareModule>;
 
 export async function handleRequest(
 	req: RawRequest,
@@ -59,16 +62,13 @@ export async function handleRequest(
 		if (method === "delete") method = "del";
 		let handler: RequestHandler | undefined;
 
-		const endpointModule = (await found.stack[
-			found.stack.length - 1
-		]()) as EndpointModule;
+		const importer = found.stack[found.stack.length - 1] as EndpointImporter;
+		const mdl = await importer();
 
-		const leaf = endpointModule[method] || endpointModule.default;
+		const leaf = mdl[method] || mdl.default;
 
 		if (leaf) {
-			const middleware = found.stack.slice(0, -1) as Array<
-				() => Promise<MiddlewareModule>
-			>;
+			const middleware = found.stack.slice(0, -1) as MiddlewareImporter[];
 
 			handler = middleware.reduceRight((prev, cur) => {
 				return async (req: RakkasRequest) => {
@@ -87,7 +87,10 @@ export async function handleRequest(
 		};
 	}
 
-	function myFetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
+	function internalFetch(
+		input: RequestInfo,
+		init?: RequestInit,
+	): Promise<Response> {
 		let url: string;
 		let fullInit: Omit<RequestInit, "headers"> & { headers: Headers };
 		if (input instanceof Request) {
@@ -162,18 +165,12 @@ export async function handleRequest(
 
 	const foundPage = await makeComponentStack({
 		url: req.url,
-		previousRender: {
-			components: [],
-			isDataValid: [],
-			data: [],
-			contexts: [],
-		},
 
 		reload() {
 			throw new Error("Don't call reload on server side");
 		},
 
-		fetch: myFetch,
+		fetch: internalFetch,
 	});
 
 	// Handle redirection
@@ -194,9 +191,12 @@ export async function handleRequest(
 		</HeadContext.Provider>,
 	);
 
-	let head = `<script>__RAKKAS_INITIAL_DATA=${devalue(
-		foundPage.data,
-	)};__RAKKAS_INITIAL_CONTEXT=${devalue(foundPage.contexts)}</script>`;
+	let head = `<script>__RAKKAS_RENDERED=(0,eval)(${devalue(
+		foundPage.rendered.map((x) => {
+			delete x.Component;
+			return x;
+		}),
+	)})</script>`;
 
 	if (headContent.title) {
 		head += `<title data-rakkas-head>${escapeHTML(headContent.title)}</title>`;
