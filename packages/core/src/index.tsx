@@ -9,8 +9,6 @@ export {
 	RouterProps,
 } from "bare-routes";
 
-export * from "./Head";
-
 export * from "./types";
 
 import {

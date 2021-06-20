@@ -8,7 +8,12 @@ const isProd = process.env.NODE_ENV === "production";
 /** @type {import('rollup').RollupOptions[]} */
 const options = [
 	{
-		input: ["src/index.tsx", "src/client.tsx", "src/server.tsx"],
+		input: [
+			"src/index.tsx",
+			"src/client.tsx",
+			"src/server.tsx",
+			"src/helmet.ts",
+		],
 		output: {
 			dir: "dist",
 			format: "esm",

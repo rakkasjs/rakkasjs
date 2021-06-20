@@ -16,6 +16,7 @@
 		"bare-routes": "^0.3.2",
 		"devalue": "^2.0.1",
 		"md5": "^2.3.0",
+		"react-helmet-async": "^1.0.9",
 		"vite": "^2.3.7"
 	},
 	"peerDependencies": {

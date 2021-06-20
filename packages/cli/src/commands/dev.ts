@@ -124,14 +124,14 @@ async function createServers(onReload: () => void) {
 }
 
 const template = `<!DOCTYPE html>
-<html lang="en">
+<html><!-- rakkas-html-attributes-placeholder -->
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<!-- rakkas-head-placeholder -->
 	</head>
-	<body>
+	<body><!-- rakkas-body-attributes-placeholder -->
 		<div id="rakkas-app"><!-- rakkas-app-placeholder --></div>
 		<script type="module" src="/client"></script>
 	</body>

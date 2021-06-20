@@ -1,11 +1,11 @@
-import { Head } from "@rakkasjs/core";
+import { Helmet } from "@rakkasjs/core/helmet";
 import React, { FC } from "react";
 
 const DocLayout: FC = ({ children }) => (
 	<>
-		<Head>
+		<Helmet>
 			<title>Docs | Rakkas</title>
-		</Head>
+		</Helmet>
 		{children}
 	</>
 );

@@ -4,8 +4,7 @@ import { ServerRouter } from "bare-routes";
 import devalue from "devalue";
 import { findEndpoint } from "./endpoints";
 import { makeComponentStack } from "./makeComponentStack";
-import { HeadContext, HeadContent } from "./HeadContext";
-import { escapeHTML } from "./Head";
+import { HelmetProvider, FilledContext } from "react-helmet-async";
 
 export interface RawRequest {
 	url: URL;
@@ -183,13 +182,15 @@ export async function handleRequest(
 		};
 	}
 
-	const headContent: HeadContent = { title: "Rakkas App" };
+	const helmetContext = {};
 
 	const app = renderToString(
-		<HeadContext.Provider value={headContent}>
+		<HelmetProvider context={helmetContext}>
 			<ServerRouter url={req.url}>{foundPage.content}</ServerRouter>
-		</HeadContext.Provider>,
+		</HelmetProvider>,
 	);
+
+	const { helmet } = helmetContext as FilledContext;
 
 	let head = `<script>__RAKKAS_RENDERED=(0,eval)(${devalue(
 		foundPage.rendered.map((x) => {
@@ -198,11 +199,28 @@ export async function handleRequest(
 		}),
 	)})</script>`;
 
-	if (headContent.title) {
-		head += `<title data-rakkas-head>${escapeHTML(headContent.title)}</title>`;
-	}
+	head +=
+		helmet.base.toString() +
+		helmet.link.toString() +
+		helmet.meta.toString() +
+		helmet.noscript.toString() +
+		helmet.script.toString() +
+		helmet.style.toString() +
+		helmet.title.toString();
 
 	let body = template.replace("<!-- rakkas-head-placeholder -->", head);
+
+	const htmlAttributes = helmet.htmlAttributes.toString();
+	body = body.replace(
+		"><!-- rakkas-html-attributes-placeholder -->",
+		htmlAttributes ? " " + htmlAttributes + ">" : ">",
+	);
+
+	const bodyAttributes = helmet.bodyAttributes.toString();
+	body = body.replace(
+		"><!-- rakkas-body-attributes-placeholder -->",
+		bodyAttributes ? " " + bodyAttributes + ">" : ">",
+	);
 
 	body = body.replace("<!-- rakkas-app-placeholder -->", app);
 

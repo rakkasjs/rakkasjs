@@ -1,5 +1,6 @@
 import React from "react";
-import { Head, Layout, Link } from "@rakkasjs/core";
+import { Layout, Link } from "@rakkasjs/core";
+import { Helmet } from "@rakkasjs/core/helmet";
 import "sanitize.css";
 import "./global.css";
 import { Header } from "$lib/Header";
@@ -8,9 +9,10 @@ import { MDXProvider } from "@mdx-js/react";
 
 const MainLayout: Layout = ({ error, children }) => (
 	<>
-		<Head>
-			<title>Rakkas</title>
-		</Head>
+		<Helmet>
+			<html lang="en" />
+			<title id="im-title">Rakkas</title>
+		</Helmet>
 		<Header />
 		<main className={css.main}>
 			{error ? (
