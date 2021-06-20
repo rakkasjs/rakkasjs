@@ -11,8 +11,6 @@ import { loadConfig } from "../lib/config";
 import { encode } from "html-entities";
 import { parseBody } from "@rakkasjs/runner-node/parse-body";
 
-console.log("parseBody", parseBody);
-
 (globalThis as any).fetch = nodeFetch;
 (globalThis as any).Response = NodeFetchResponse;
 (globalThis as any).Request = NodeFetchRequest;

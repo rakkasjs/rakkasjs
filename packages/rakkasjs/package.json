@@ -1,16 +1,30 @@
 {
 	"name": "rakkasjs",
 	"description": "Rakkas.js core runtime",
+	"version": "0.0.1",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
+	"repository": "https://github.com/rakkasjs/rakkasjs",
+	"homepage": "https://rakkas.cyco130.com",
+	"keywords": [
+		"react",
+		"vite",
+		"ssr"
+	],
 	"scripts": {
 		"build": "rimraf dist && cross-env NODE_ENV=production rollup --config rollup.config.js",
 		"dev": "rollup --watch --config rollup.config.js",
 		"precommit": "lint-staged --no-stash",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
 		"lint:ts": "eslint --max-warnings=0 src",
-		"test": "jest --coverage"
+		"test": "jest --coverage",
+		"prepublishOnly": "pnpm run build"
 	},
+	"files": [
+		"dist/**/*",
+		"*.js",
+		"*.d.ts"
+	],
 	"dependencies": {
 		"@types/react": "^17.0.11",
 		"bare-routes": "^0.3.2",

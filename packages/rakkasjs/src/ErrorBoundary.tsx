@@ -1,6 +1,11 @@
 import React, { Component } from "react";
-import { Layout, ErrorPage, LayoutProps, ErrorPageProps } from ".";
-import { ErrorDescription } from "../dist";
+import {
+	Layout,
+	ErrorPage,
+	LayoutProps,
+	ErrorPageProps,
+	ErrorDescription,
+} from "./types";
 import { toErrorDescription } from "./toErrorDescription";
 
 export function wrapInErrorBoundary(Wrapped: Layout | ErrorPage) {

@@ -15,8 +15,9 @@ import {
 	Page,
 	PageComponentModule,
 	PageLoadResult,
+	Layout,
+	SimpleLayout,
 } from "./types";
-import { Layout, SimpleLayout } from "../dist";
 import { hash } from "./hash";
 import { toErrorDescription } from "./toErrorDescription";
 

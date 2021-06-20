@@ -1,19 +1,31 @@
 {
 	"name": "@rakkasjs/cli",
 	"description": "Development tools for Rakkas.js",
+	"version": "0.0.1",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
+	"repository": "https://github.com/rakkasjs/rakkasjs",
+	"homepage": "https://rakkas.cyco130.com",
+	"keywords": [
+		"react",
+		"vite",
+		"ssr"
+	],
 	"scripts": {
 		"dev": "babel src --watch --out-dir dist --extensions '.ts,.js,.tsx,.jsx'",
 		"build": "rimraf dist && babel src --out-dir dist --extensions '.ts,.js'",
 		"precommit": "lint-staged --no-stash",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
-		"lint:ts": "eslint --max-warnings=0 src"
+		"lint:ts": "eslint --max-warnings=0 src",
+		"prepublishOnly": "pnpm run build"
 	},
 	"bin": {
 		"rakkas": "dist/bin.js"
 	},
 	"module": "dist/index.js",
+	"files": [
+		"dist/**/*"
+	],
 	"peerDependencies": {
 		"rakkasjs": "workspace:*",
 		"react": "^17",

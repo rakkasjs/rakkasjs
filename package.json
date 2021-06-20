@@ -1,6 +1,15 @@
 {
-	"name": "rakkasjs",
-	"private": true,
+	"name": "rakkasjs-root-workspace",
+	"version": "0.0.1",
+	"author": "Fatih Aygün <cyco130@gmail.com>",
+	"license": "MIT",
+	"repository": "https://github.com/rakkasjs/rakkasjs",
+	"homepage": "https://rakkas.cyco130.com",
+	"keywords": [
+		"react",
+		"vite",
+		"ssr"
+	],
 	"scripts": {
 		"prepare": "husky install"
 	},

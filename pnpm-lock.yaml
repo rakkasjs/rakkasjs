@@ -73,23 +73,6 @@ importers:
       rimraf: 3.0.2
       typescript: 4.3.4
 
-  packages/demo:
-    specifiers:
-      '@rakkasjs/cli': workspace:*
-      '@rakkasjs/runner-node': workspace:*
-      node-dev: ^7.0.0
-      rakkasjs: workspace:*
-      react: ^17.0.2
-      react-dom: ^17.0.2
-    dependencies:
-      '@rakkasjs/runner-node': link:../runner-node
-      rakkasjs: link:../rakkasjs
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-    devDependencies:
-      '@rakkasjs/cli': link:../cli
-      node-dev: 7.0.0
-
   packages/rakkasjs:
     specifiers:
       '@babel/core': ^7.14.6
@@ -199,6 +182,9 @@ importers:
       prettier: 2.3.1
       rimraf: 3.0.2
       typescript: 4.3.4
+
+  packages/starter-js:
+    specifiers: {}
 
   packages/website:
     specifiers:

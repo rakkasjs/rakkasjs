@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { RouterInfo } from "../dist/Router-59e42d88";
+import { RouterInfo } from "./router/Router";
 
 export interface PageTypes {
 	params: Record<string, string>;

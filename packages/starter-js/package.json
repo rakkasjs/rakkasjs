@@ -1,0 +1,11 @@
+{
+	"name": "-TODO-",
+	"private": true,
+	"version": "0.0.1",
+	"description": "Rakkas vanilla JS starter project",
+	"scripts": {
+		"dev": "rakkasjs dev",
+		"build": "rakkasjs build",
+		"start": "rakkas-node"
+	}
+}

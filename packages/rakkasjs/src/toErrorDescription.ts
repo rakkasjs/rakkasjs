@@ -1,4 +1,4 @@
-import { ErrorDescription } from "../dist";
+import { ErrorDescription } from "./types";
 
 export function toErrorDescription(error: any): ErrorDescription {
 	const { message, status, stack, detail } = error ?? {};

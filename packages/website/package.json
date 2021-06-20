@@ -1,8 +1,16 @@
 {
 	"name": "@rakkasjs/website",
 	"private": true,
-	"version": "0.0.0",
-	"description": "Rakkas.js website",
+	"version": "0.0.1",
+	"author": "Fatih Aygün <cyco130@gmail.com>",
+	"license": "MIT",
+	"repository": "https://github.com/rakkasjs/rakkasjs",
+	"homepage": "https://rakkas.cyco130.com",
+	"keywords": [
+		"react",
+		"vite",
+		"ssr"
+	],
 	"scripts": {
 		"start": "rakkas-node",
 		"build": "rakkas build",
@@ -10,8 +18,6 @@
 		"devdev": "node-dev node_modules/@rakkasjs/cli/dist/bin.js dev",
 		"test": "jest"
 	},
-	"author": "Fatih Aygün <cyco130@gmail.com>",
-	"license": "UNLICENSED",
 	"dependencies": {
 		"rakkasjs": "workspace:*",
 		"@rakkasjs/runner-node": "workspace:*",
