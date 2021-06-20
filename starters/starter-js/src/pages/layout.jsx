@@ -13,7 +13,6 @@ export default ({ error, children }) => (
 		{/* See their documentation: https://github.com/staylor/react-helmet-async#readme */}
 		<Helmet>
 			<title>Rakkas Demo App</title>
-			<script src="https://polyfill.io/v3/polyfill.min.js?features=Object.fromEntries" />
 		</Helmet>
 		<header className={css.header}>
 			{/* <Link /> is like <a /> but it provides client-side navigation without full page reload. */}
@@ -24,7 +23,7 @@ export default ({ error, children }) => (
 			<nav className={css.nav}>
 				<ul>
 					<li>
-						{/* NavLink is like Link but it can be styled based on the current route which is useful for navigation links. */}
+						{/* <NavLink /> is like <Link /> but it can be styled based on the current route w(hich is useful for navigation links). */}
 						<NavLink href="/" currentRouteClass={css.activeLink}>
 							Home
 						</NavLink>
@@ -45,12 +44,15 @@ export default ({ error, children }) => (
 
 		<section className={css.main}>
 			{/** Normally layout components are responsible for rendering errors, so we should check if there's an error first */}
-			{(error && (
+			{error ? (
+				// Report the error
 				<main>
 					<h1>{error.message}</h1>
 				</main>
-			)) ||
-				children}
+			) : (
+				// Render the page
+				children
+			)}
 		</section>
 
 		<footer className={css.footer}>

@@ -1,6 +1,6 @@
 import { startClient } from "rakkasjs/client";
 
-// You can do whatever preparation work needed on the client-side before calling startClient.
-// If you don't need any preparation you may delete this file.
+// You can do initialization work on the client-side before calling startClient.
+// If you don't need any initialization you may delete this file.
 
 startClient();

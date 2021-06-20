@@ -1,6 +1,6 @@
-// Edit this file to change default configuration options
+// Edit this file to change default configuration options.
+// You may delete this file if you're happy with the default config options.
 
-/** @type {import("@rakkasjs/cli").Config} */
 export default {
 	//
 	// File extensions for pages and layouts

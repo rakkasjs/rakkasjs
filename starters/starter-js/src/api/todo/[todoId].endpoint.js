@@ -2,7 +2,7 @@ import { deleteTodo, updateTodo } from "./crud";
 
 // Delete a todo item
 export function del({ params }) {
-	// In a real app you would validate the body to make sure it contains a valid todo item
+	// In a real app you should validate all user input
 	deleteTodo(Number(params.todoId));
 
 	return {
@@ -12,7 +12,7 @@ export function del({ params }) {
 
 // Update a todo item
 export function patch({ params, body }) {
-	// In a real app you would validate the body to make sure it contains a valid todo item
+	// In a real app you should validate all user input
 	const updated = updateTodo(Number(params.todoId), body);
 
 	if (!updated) {

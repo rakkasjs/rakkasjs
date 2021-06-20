@@ -2,11 +2,36 @@ import React, { useState } from "react";
 import { Todo } from "./Todo";
 import css from "./todo.module.css";
 
+// load() will be called before rendering the component and its returnValue.data will be passed to the
+// component as props.data. It may be called both on the server and on the client.
+export async function load({ fetch }) {
+	// Use the passed fetch function to make requests with credentials.
+	return await fetch("/api/todo").then(async (r) => {
+		if (!r.ok) {
+			return {
+				status: r.status,
+				error: {
+					message: "Failed to fetch todos",
+				},
+			};
+		}
+
+		return { data: await r.json() };
+	});
+}
+
 export default function TodoPage({ data, reload, useReload }) {
-	// This custom hook will force a reload when the user switches to another tab and back.
-	// Try opening the app in two separate tabs, make some changes in one tab and observe how
-	// they are reflected on the other tab as soon as you switch.
-	useReload({ focus: true });
+	// This custom hook is useful for automatically reloading the page under certain conditions
+	useReload({
+		// Reload when the tab is activated
+		focus: true,
+		// Reload when the internet connection is restored
+		reconnect: true,
+		// Set to i.e. 15_000 to reload every 15 seconds
+		// interval: false,
+		// Set to true to reload on interval even when the window has no focus
+		// background: false,
+	});
 
 	const [text, setText] = useState("");
 
@@ -48,19 +73,4 @@ export default function TodoPage({ data, reload, useReload }) {
 			</p>
 		</main>
 	);
-}
-
-export async function load({ fetch }) {
-	return await fetch("/api/todo").then(async (r) => {
-		if (!r.ok) {
-			return {
-				status: r.status,
-				error: {
-					message: "Failed to fetch todos",
-				},
-			};
-		}
-
-		return { data: await r.json() };
-	});
 }
