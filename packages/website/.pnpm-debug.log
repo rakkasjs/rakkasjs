@@ -36,7 +36,7 @@
       },
       "module": "dist/index.js",
       "peerDependencies": {
-        "@rakkasjs/core": "workspace:*",
+        "rakkasjs": "workspace:*",
         "react": "^17",
         "react-dom": "^17"
       },
@@ -46,7 +46,7 @@
         "@babel/preset-env": "^7.14.5",
         "@babel/preset-react": "^7.14.5",
         "@babel/preset-typescript": "^7.14.5",
-        "@rakkasjs/core": "workspace:*",
+        "rakkasjs": "workspace:*",
         "@types/node": "^15.12.2",
         "@typescript-eslint/eslint-plugin": "^4.26.1",
         "@typescript-eslint/parser": "^4.26.1",
@@ -74,7 +74,7 @@
   },
   "3 debug pnpm:package-manifest": {
     "initial": {
-      "name": "@rakkasjs/core",
+      "name": "rakkasjs",
       "description": "Rakkas.js core runtime",
       "author": "Fatih Aygün <cyco130@gmail.com>",
       "license": "MIT",
@@ -135,7 +135,7 @@
         "dev": "node-dev node_modules/@rakkasjs/cli/dist/index.js dev"
       },
       "dependencies": {
-        "@rakkasjs/core": "workspace:*",
+        "rakkasjs": "workspace:*",
         "@rakkasjs/runner-node": "workspace:*",
         "react": "^17.0.2",
         "react-dom": "^17.0.2"
@@ -170,7 +170,7 @@
         "typescript": "^4.3.2"
       },
       "dependencies": {
-        "@rakkasjs/core": "workspace:*",
+        "rakkasjs": "workspace:*",
         "node-fetch": "^2.6.1",
         "sirv": "^1.0.12",
         "@types/node": "^15.12.2"
@@ -193,7 +193,7 @@
       "author": "Fatih Aygün <cyco130@gmail.com>",
       "license": "UNLICENSED",
       "dependencies": {
-        "@rakkasjs/core": "workspace:*",
+        "rakkasjs": "workspace:*",
         "@rakkasjs/runner-node": "workspace:*",
         "react": "^17.0.2",
         "react-dom": "^17.0.2"
@@ -228,7 +228,7 @@
     "resolution": "link:../core",
     "wanted": {
       "dependentId": "packages/cli",
-      "name": "@rakkasjs/core",
+      "name": "rakkasjs",
       "rawSpec": "workspace:*"
     }
   },
@@ -252,7 +252,7 @@
     "resolution": "link:../core",
     "wanted": {
       "dependentId": "packages/demo",
-      "name": "@rakkasjs/core",
+      "name": "rakkasjs",
       "rawSpec": "workspace:*"
     }
   },
@@ -268,7 +268,7 @@
     "resolution": "link:../core",
     "wanted": {
       "dependentId": "packages/runner-node",
-      "name": "@rakkasjs/core",
+      "name": "rakkasjs",
       "rawSpec": "workspace:*"
     }
   },
@@ -276,7 +276,7 @@
     "resolution": "link:../core",
     "wanted": {
       "dependentId": "packages/website",
-      "name": "@rakkasjs/core",
+      "name": "rakkasjs",
       "rawSpec": "workspace:*"
     }
   },

@@ -1,6 +1,6 @@
 import React from "react";
-import { Layout, Link } from "@rakkasjs/core";
-import { Helmet } from "@rakkasjs/core/helmet";
+import { Layout, Link } from "rakkasjs";
+import { Helmet } from "rakkasjs/helmet";
 import "sanitize.css";
 import "./global.css";
 import { Header } from "$lib/Header";

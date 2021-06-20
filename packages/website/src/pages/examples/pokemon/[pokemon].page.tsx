@@ -1,5 +1,5 @@
 import React from "react";
-import { definePage, PageTypes } from "@rakkasjs/core";
+import { definePage, PageTypes } from "rakkasjs";
 import css from "./[pokemon].module.css";
 import { Pokemon } from "pages/examples/pokemon/types";
 

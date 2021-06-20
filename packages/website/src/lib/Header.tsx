@@ -1,6 +1,6 @@
 import { Logomark } from "$lib/Logomark";
 import { Logotype } from "$lib/Logotype";
-import { Link } from "@rakkasjs/core";
+import { Link } from "rakkasjs";
 import React, { FC } from "react";
 import css from "./Header.module.css";
 

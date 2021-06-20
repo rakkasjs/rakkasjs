@@ -1,3 +1,3 @@
-import { startClient } from "@rakkasjs/core/client";
+import { startClient } from "rakkasjs/client";
 
 startClient();

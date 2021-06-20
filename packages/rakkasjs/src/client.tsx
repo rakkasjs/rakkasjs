@@ -1,5 +1,6 @@
 import React, { FC, useRef } from "react";
 import { hydrate } from "react-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { Router } from ".";
 import {
 	makeComponentStack,
@@ -27,7 +28,12 @@ export async function startClient() {
 		return;
 	}
 
-	hydrate(<App initialStack={stack} />, document.getElementById("rakkas-app"));
+	hydrate(
+		<HelmetProvider>
+			<App initialStack={stack} />
+		</HelmetProvider>,
+		document.getElementById("rakkas-app"),
+	);
 }
 
 const App: FC<{

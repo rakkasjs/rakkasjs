@@ -1,4 +1,4 @@
-import { Helmet } from "@rakkasjs/core/helmet";
+import { Helmet } from "rakkasjs/helmet";
 import React, { FC } from "react";
 
 const DocLayout: FC = ({ children }) => (

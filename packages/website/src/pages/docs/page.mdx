@@ -1,4 +1,4 @@
-import { Head, Link } from "@rakkasjs/core";
+import { Link } from "rakkasjs";
 
 # Rakkas Documentation
 
@@ -27,11 +27,11 @@ npm init @rakkasjs
 
 Just follow the prompts and it will scaffold a project in the current directory.
 
-If you prefer a manual setup, you can install `@rakkasjs/cli` as a dev dependency, and `@rakkasjs/core` and `@rakkasjs/runner-node` as production dependencies:
+If you prefer a manual setup, you can install `@rakkasjs/cli` as a dev dependency, and `rakkasjs` and `@rakkasjs/runner-node` as production dependencies:
 
 ```sh
 npm install --save-dev @rakkasjs/cli
-npm install --save @rakkasjs/core @rakkasjs/runner-node
+npm install --save rakkasjs @rakkasjs/runner-node
 ```
 
 Then you can start a development server on `localhost:3000` with `npx rakkas dev`.
@@ -74,7 +74,7 @@ More specific routes have priority over more generic ones so you can have both `
 
 ### Basic page props
 
-Page components receive some useful props (TypeScript definitions are available as `RakkasComponentProps` in `@rakkasjs/core` package):
+Page components receive some useful props (TypeScript definitions are available as `RakkasComponentProps` in `rakkasjs` package):
 
 | Prop     | Type                     | Description                               |
 | -------- | ------------------------ | ----------------------------------------- |
@@ -86,12 +86,12 @@ There are more that we'll cover later.
 
 ### Navigation
 
-Rakkas provieds a `Link` component (in the `@rakkasjs/core` package) for client-side SPA-style navigation. It takes exactly the same props as the built-in `<a>` element but intercepts user's click to handle the navigation without reloading the page. `NavLink` component is similar but accepts `currentRouteClass` and `currentRouteStyle` that take effect when the `href` property matches the current URL. It is useful for styling the active item in a navigation menu.
+Rakkas provieds a `Link` component (in the `rakkasjs` package) for client-side SPA-style navigation. It takes exactly the same props as the built-in `<a>` element but intercepts user's click to handle the navigation without reloading the page. `NavLink` component is similar but accepts `currentRouteClass` and `currentRouteStyle` that take effect when the `href` property matches the current URL. It is useful for styling the active item in a navigation menu.
 
-For programmatic navigation, use the `useRouter` custom hook from the `@rakkasjs/core` package:
+For programmatic navigation, use the `useRouter` custom hook from the `rakkasjs` package:
 
 ```js
-import { useRouter } from "@rakkasjs/core";
+import { useRouter } from "rakkasjs";
 
 // ...
 // In a function component

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, NavLink, useRouter } from "@rakkasjs/core";
+import { Link, NavLink, useRouter } from "rakkasjs";
 import { Logomark } from "../lib/logomark";
 import { Logotype } from "../lib/logotype";
 import css from "./main.module.css";

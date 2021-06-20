@@ -1,4 +1,4 @@
-import { NavLink } from "@rakkasjs/core";
+import { NavLink } from "rakkasjs";
 import React from "react";
 import css from "./faq.module.css";
 

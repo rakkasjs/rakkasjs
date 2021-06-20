@@ -1,4 +1,4 @@
-import { LayoutTypes, NavLink, defineLayout } from "@rakkasjs/core";
+import { LayoutTypes, NavLink, defineLayout } from "rakkasjs";
 import { PokemonList } from "pages/examples/pokemon/types";
 import React from "react";
 import css from "./index.module.css";

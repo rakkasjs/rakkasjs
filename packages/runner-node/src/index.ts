@@ -1,7 +1,7 @@
 import { createServer } from "http";
 import fs from "fs";
 import sirv from "sirv";
-import { handleRequest } from "@rakkasjs/core/server";
+import { handleRequest } from "rakkasjs/server";
 import { parseBody } from "./parse-body";
 import nodeFetch, {
 	Response as NodeFetchResponse,

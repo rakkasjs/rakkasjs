@@ -71,8 +71,8 @@ async function createServers(onReload: () => void) {
 
 			try {
 				const { handleRequest } = (await vite.ssrLoadModule(
-					"@rakkasjs/core/server",
-				)) as typeof import("@rakkasjs/core/server");
+					"rakkasjs/server",
+				)) as typeof import("rakkasjs/server");
 
 				html = await vite.transformIndexHtml(url, html);
 
