@@ -1,12 +1,12 @@
-import { ErrorHandlerProps, Head, Link } from "@rakkasjs/core";
-import React, { FC } from "react";
+import React from "react";
+import { Head, Layout, Link } from "@rakkasjs/core";
 import "sanitize.css";
 import "./global.css";
 import { Header } from "$lib/Header";
 import css from "./layout.module.css";
 import { MDXProvider } from "@mdx-js/react";
 
-const MainLayout: FC<ErrorHandlerProps> = ({ error, children }) => (
+const MainLayout: Layout = ({ error, children }) => (
 	<>
 		<Head>
 			<title>Rakkas</title>

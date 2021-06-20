@@ -1,4 +1,16 @@
-import { sortRoutes } from "./sortRoutes";
+import { splitIntoSubSegments, sortRoutes } from "./sortRoutes";
+
+describe("Parses subsegments", () => {
+	it("splits subsegment correctly", () => {
+		expect(splitIntoSubSegments("[xyz]")).toStrictEqual(["[xyz]"]);
+		expect(splitIntoSubSegments("[xyz].abc")).toStrictEqual(["[xyz]", ".abc"]);
+		expect(splitIntoSubSegments("[xyz]-[abc]")).toStrictEqual([
+			"[xyz]",
+			"-",
+			"[abc]",
+		]);
+	});
+});
 
 describe("Sorts routes", () => {
 	it("orders parametric after specific", () => {

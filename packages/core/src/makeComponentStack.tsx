@@ -127,6 +127,7 @@ export async function makeComponentStack({
 				}
 			} else {
 				loaded = {
+					// Smallest serialized size
 					data: 0,
 				};
 			}

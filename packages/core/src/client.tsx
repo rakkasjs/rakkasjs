@@ -21,7 +21,7 @@ export async function startClient() {
 		},
 	});
 
-	// Redirection should not normally happen on initial render, but let's be safe
+	// Redirection should not happen on initial render, but let's keep ts compiler happy
 	if ("location" in stack) {
 		window.location.href = String(stack.location);
 		return;

@@ -76,7 +76,8 @@ function parseRouteIntoSegments<T>(route: Route<T>): ParsedRoute<T> {
 
 			if (s.includes("[")) {
 				// Split right before "[" and right after "]"
-				const subsegments = s.split(/(?=\[)|(?<=\])/).map((sub, i, subs) => {
+				// The original clever idea was: split(/(?=\[)|(?<=\])/) but lookbehind support is still lacking in browsers
+				const subsegments = splitIntoSubSegments(s).map((sub, i, subs) => {
 					if (sub[0] === "[") {
 						if (!sub.endsWith("]") || sub.slice(1, -1).match(/\]/)) invalid();
 					} else {
@@ -149,6 +150,43 @@ function parseRouteIntoSegments<T>(route: Route<T>): ParsedRoute<T> {
 
 function escapeRegExp(s: string) {
 	return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+}
+
+export function splitIntoSubSegments(s: string): string[] {
+	const result: string[] = [];
+	let pos = 0;
+
+	while (pos < s.length) {
+		const start = s.indexOf("[", pos);
+		if (start < 0) {
+			result.push(s.slice(pos));
+			return result;
+		}
+
+		if (
+			start &&
+			(s[start - 1] === "." ||
+				s[start - 1] === "-" ||
+				s[start - 1] === undefined)
+		) {
+			result.push(s.slice(pos, start));
+		}
+
+		const end = s.indexOf("]", start);
+
+		if (end < 0) {
+			result.push(s.slice(pos));
+			return result;
+		}
+
+		if (s[end + 1] === "." || s[end + 1] === "-" || s[end + 1] === undefined) {
+			result.push(s.slice(start, end + 1));
+		}
+
+		pos = end + 1;
+	}
+
+	return result;
 }
 
 type RouteSegment = SimpleSegment | PlaceholderSegment;
