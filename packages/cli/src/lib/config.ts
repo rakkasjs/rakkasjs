@@ -101,10 +101,17 @@ async function buildFile(filename: string, root: string) {
 }
 
 function withDefaults(config: Config): FullConfig {
-	return {
+	const out = {
 		vite: {},
+		pagesDir: "pages",
+		pageExtensions: ["jsx", "tsx"],
+		apiDir: "api",
+		apiRoot: "/api",
+		endpointExtensions: ["js", "ts"],
 		...config,
 	};
+
+	return out;
 }
 
 const CONFIG_BASE_NAME = "rakkas.config";

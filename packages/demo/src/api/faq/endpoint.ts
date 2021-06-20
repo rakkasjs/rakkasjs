@@ -1,5 +1,5 @@
-export async function get(req) {
-	const data = await (await import("./data.json")).default;
+export async function get() {
+	const data = (await import("./data.json")).default;
 
 	return {
 		headers: {

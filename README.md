@@ -27,7 +27,6 @@ If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and
 
 
 ## TODO
-- Page/layout and endpoint/middleware extensions
 - getRootContext
 - Documentation
 - Prepare packages for publication

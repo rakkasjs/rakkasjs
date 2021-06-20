@@ -27,7 +27,7 @@ export default ({ data: { post }, params, reload }) => {
 };
 
 export async function load({ params, fetch }) {
-	const response = await fetch(`/faq-api/${params.slug}`);
+	const response = await fetch(`/api/faq/${params.slug}`);
 
 	if (!response.ok) {
 		return {

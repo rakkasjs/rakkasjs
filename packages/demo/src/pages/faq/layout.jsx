@@ -33,6 +33,6 @@ export default ({ children, data: { posts }, error }) => {
 
 export async function load({ fetch }) {
 	return {
-		data: { posts: await fetch("/faq-api").then((r) => r.json()) },
+		data: { posts: await fetch("/api/faq").then((r) => r.json()) },
 	};
 }

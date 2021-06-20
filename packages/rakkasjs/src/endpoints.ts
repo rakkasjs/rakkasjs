@@ -6,11 +6,16 @@ import type {
 } from "./server";
 import { endpoints, middleware } from "@rakkasjs/endpoints-and-middleware";
 
+const MIDDLEWARE_REGEXP = new RegExp(
+	`^\\/${__RAKKAS_CONFIG.apiDir}\\/((.+)[./])?middleware\\.`,
+);
+const ENDPOINT_REGEXP = new RegExp(
+	`^\\/${__RAKKAS_CONFIG.apiDir}\\/((.+)[./])?endpoint\\.`,
+);
+
 const sortedMiddleware = Object.entries(middleware)
 	.map(([key, importer]) => {
-		const id =
-			"/" +
-			(key.match(/^\/pages\/((.+)[./])?middleware\.[a-zA-Z0-9]+$/)![2] || "");
+		const id = "/" + (key.match(MIDDLEWARE_REGEXP)![2] || "");
 
 		return {
 			id,
@@ -29,12 +34,10 @@ const sortedMiddleware = Object.entries(middleware)
 
 const sorted = sortRoutes(
 	Object.entries(endpoints).map(([key, importer]) => {
-		const id =
-			"/" +
-			(key.match(/^\/pages\/((.+)[./])?endpoint\.[a-zA-Z0-9]+$/)![2] || "");
+		const id = "/" + (key.match(ENDPOINT_REGEXP)![2] || "");
 
 		return {
-			pattern: id,
+			pattern: `/${__RAKKAS_CONFIG.apiDir}${id}`,
 			extra: {
 				id,
 				importer,

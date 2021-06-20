@@ -22,7 +22,7 @@
 .cta {
 	display: inline-block;
 	margin-top: 2rem;
-	background: #924;
+	background: #429;
 	color: #fff;
 	padding: 0.5em 1em;
 	font-size: 150%;
@@ -31,7 +31,7 @@
 }
 
 .cta:hover {
-	background: #b16;
+	background: #61b;
 	color: #fff;
 	text-decoration: none;
 }

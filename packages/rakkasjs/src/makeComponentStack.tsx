@@ -73,7 +73,11 @@ export async function makeComponentStack({
 						options: module.default.options,
 						getCacheKey:
 							module.default.getCacheKey ??
-							(isPage ? defaultPageGetCacheKey : defaultLayoutGetCacheKey),
+							(isPage
+								? defaultPageGetCacheKey
+								: makeDefaultLayoutGetCacheKey(
+										names[i].split("/").filter((s) => s && s[0] !== "_"),
+								  )),
 				  }
 				: {
 						Component:
@@ -86,7 +90,11 @@ export async function makeComponentStack({
 						getCacheKey:
 							(module as PageComponentModule | LayoutComponentModule)
 								.getCacheKey ??
-							(isPage ? defaultPageGetCacheKey : defaultLayoutGetCacheKey),
+							(isPage
+								? defaultPageGetCacheKey
+								: makeDefaultLayoutGetCacheKey(
+										names[i].split("/").filter((s) => s && s[0] !== "_"),
+								  )),
 				  };
 
 		const { load, options, getCacheKey } = moduleExports;
@@ -122,7 +130,9 @@ export async function makeComponentStack({
 		) {
 			if (load) {
 				try {
+					console.log("Loading...");
 					loaded = await load({ url, params, match, context, fetch });
+					console.log("Loaded", loaded);
 				} catch (error) {
 					loaded = { status: 500, error: toErrorDescription(error) };
 				}
@@ -278,4 +288,10 @@ const defaultPageGetCacheKey: GetCacheKeyFunc = ({ url, context, params }) => [
 	url.search,
 ];
 
-const defaultLayoutGetCacheKey: GetCacheKeyFunc = ({ context }) => context;
+function makeDefaultLayoutGetCacheKey(segments: string[]): GetCacheKeyFunc {
+	const keys = segments
+		.map((seg) => [...seg.matchAll(/\[([^\]]+)\]/g)].map((m) => m[1]))
+		.flat();
+
+	return ({ context, params }) => [context, ...keys.map((k) => params[k])];
+}

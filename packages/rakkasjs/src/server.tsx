@@ -58,6 +58,7 @@ export async function handleRequest(
 	const found = findEndpoint(req);
 
 	if (found) {
+		console.log("Found", found);
 		let method = req.method.toLowerCase();
 		if (method === "delete") method = "del";
 		let handler: RequestHandler | undefined;

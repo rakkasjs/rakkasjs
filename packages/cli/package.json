@@ -27,7 +27,6 @@
 		"@babel/preset-typescript": "^7.14.5",
 		"@types/micromatch": "^4.0.1",
 		"@types/node": "^15.12.4",
-		"@types/picomatch": "^2.2.4",
 		"@typescript-eslint/eslint-plugin": "^4.27.0",
 		"@typescript-eslint/parser": "^4.27.0",
 		"esbuild": "^0.12.9",
@@ -49,7 +48,6 @@
 		"html-entities": "^2.3.2",
 		"micromatch": "^4.0.4",
 		"node-fetch": "^2.6.1",
-		"picomatch": "^2.3.0",
 		"sirv": "^1.0.12",
 		"vite": "^2.3.8",
 		"vite-plugin-virtual": "^0.1.1"

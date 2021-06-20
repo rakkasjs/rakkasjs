@@ -16,7 +16,6 @@ import nodeFetch, {
 
 export async function startServer() {
 	const rootDir = process.cwd();
-	console.log(rootDir);
 
 	const { handleRequest } = require(path.resolve(
 		rootDir,

@@ -9,6 +9,9 @@ import nodeFetch, {
 import { makeViteConfig } from "../lib/vite-config";
 import { loadConfig } from "../lib/config";
 import { encode } from "html-entities";
+import { parseBody } from "@rakkasjs/runner-node/parse-body";
+
+console.log("parseBody", parseBody);
 
 (globalThis as any).fetch = nodeFetch;
 (globalThis as any).Response = NodeFetchResponse;
@@ -75,10 +78,6 @@ async function createServers(onReload: () => void) {
 				)) as typeof import("rakkasjs/server");
 
 				html = await vite.transformIndexHtml(url, html);
-
-				const { parseBody } = (await vite.ssrLoadModule(
-					"@rakkasjs/runner-node/parse-body",
-				)) as typeof import("@rakkasjs/runner-node/parse-body");
 
 				const response = await handleRequest(
 					{

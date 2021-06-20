@@ -1,15 +1,9 @@
 import reactRefresh from "@vitejs/plugin-react-refresh";
 import path from "path";
 import virtual, { invalidateVirtualModule } from "vite-plugin-virtual";
-import picomatch from "picomatch";
+import micromatch from "micromatch";
 import type { InlineConfig } from "vite";
 import { FullConfig } from "../..";
-
-const PAGES = "/pages/**/(*.)?page.[[:alnum:]]+";
-const LAYOUTS = "/pages/**/(*/)?layout.[[:alnum:]]+";
-
-const ENDPOINTS = "/pages/**/(*.)?endpoint.[[:alnum:]]+";
-const MIDDLEWARE = "/pages/**/(*/)?middleware.[[:alnum:]]+";
 
 export function makeViteConfig(
 	config: FullConfig,
@@ -19,11 +13,19 @@ export function makeViteConfig(
 	const srcDir = path.resolve("src");
 	const publicDir = path.resolve("public");
 
-	const isPage = picomatch(path.join(srcDir, PAGES));
-	const isLayout = picomatch(path.join(srcDir, LAYOUTS));
+	const componentExtensions = config.pageExtensions.join("|");
+	const PAGES = `/${config.pagesDir}/**/(*.)?page.(${componentExtensions})`;
+	const LAYOUTS = `/${config.pagesDir}/**/(*/)?layout.(${componentExtensions})`;
 
-	const isEndpoint = picomatch(path.join(srcDir, ENDPOINTS));
-	const isMiddleware = picomatch(path.join(srcDir, MIDDLEWARE));
+	const apiExtensions = config.endpointExtensions.join("|");
+	const ENDPOINTS = `/${config.apiDir}/**/(*.)?endpoint.(${apiExtensions})`;
+	const MIDDLEWARE = `/${config.apiDir}/**/(*/)?middleware.(${apiExtensions})`;
+
+	const isPage = micromatch.matcher(path.join(srcDir, PAGES));
+	const isLayout = micromatch.matcher(path.join(srcDir, LAYOUTS));
+
+	const isEndpoint = micromatch.matcher(path.join(srcDir, ENDPOINTS));
+	const isMiddleware = micromatch.matcher(path.join(srcDir, MIDDLEWARE));
 
 	const pagesAndLayouts =
 		`export const pages = import.meta.glob(${JSON.stringify(PAGES)});` +
@@ -45,6 +47,13 @@ export function makeViteConfig(
 		configFile: false,
 		root: srcDir,
 		publicDir,
+		define: {
+			__RAKKAS_CONFIG: {
+				pagesDir: config.pagesDir,
+				apiDir: config.apiDir,
+				apiRoot: config.apiRoot,
+			},
+		},
 		server: {
 			...config.vite.server,
 			middlewareMode: "ssr",
@@ -112,13 +121,6 @@ export function makeViteConfig(
 
 			...(config.vite.plugins || []),
 		],
-		resolve: {
-			...config.vite.resolve,
-			alias: {
-				"$app": srcDir,
-				...config.vite.resolve?.alias,
-			},
-		},
 	};
 }
 

@@ -1,1 +1,3 @@
-export * from "./dist/parse-body";
+const { parseBody } = require("./dist/parse-body");
+
+exports.parseBody = parseBody;

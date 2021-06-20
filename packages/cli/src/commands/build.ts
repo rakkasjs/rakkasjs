@@ -53,10 +53,15 @@ export default function buildCommand() {
 				),
 			);
 
-			const pagesDir = path.resolve("./src/pages");
+			const pagesDir = path.resolve(`./src/${config.pagesDir}`);
+			const pageExtensions = config.pageExtensions.join("|");
 
-			const pageMatcher = micromatch.matcher("**/(*.)?page.[[:alnum:]]+");
-			const layoutMatcher = micromatch.matcher("**/(*/)?layout.[[:alnum:]]+");
+			const pageMatcher = micromatch.matcher(
+				`**/(*.)?page.(${pageExtensions})`,
+			);
+			const layoutMatcher = micromatch.matcher(
+				`**/(*/)?layout.(${pageExtensions})`,
+			);
 			const manifest = Object.fromEntries(
 				Object.entries(rawManifest)
 					.map(([name, value]) => {
@@ -67,7 +72,7 @@ export default function buildCommand() {
 							!path.isAbsolute(relative) &&
 							(pageMatcher(relative) || layoutMatcher(relative))
 						) {
-							return [path.join("/pages", relative), value];
+							return [path.join("/", config.pagesDir, relative), value];
 						}
 					})
 					.filter(Boolean) as Array<[string, string[]]>,

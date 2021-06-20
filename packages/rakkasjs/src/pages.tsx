@@ -3,10 +3,16 @@ import { LayoutImporter, PageImporter } from ".";
 
 import { pages, layouts } from "@rakkasjs/pages-and-layouts";
 
+const LAYOUT_REGEXP = new RegExp(
+	`^\\/${__RAKKAS_CONFIG.pagesDir}\\/((.+)[./])?layout\\.`,
+);
+const PAGE_REGEXP = new RegExp(
+	`^\\/${__RAKKAS_CONFIG.pagesDir}\\/((.+)[./])?page\\.`,
+);
+
 const sortedLayouts = Object.entries(layouts)
 	.map(([key, importer]) => {
-		const id =
-			"/" + (key.match(/^\/pages\/((.+)[./])?layout\.[a-zA-Z0-9]+$/)![2] || "");
+		const id = "/" + (key.match(LAYOUT_REGEXP)![2] || "");
 
 		return {
 			id,
@@ -25,8 +31,7 @@ const sortedLayouts = Object.entries(layouts)
 
 const sorted = sortRoutes(
 	Object.entries(pages).map(([key, importer]) => {
-		const id =
-			"/" + (key.match(/^\/pages\/((.+)[./])?page\.[a-zA-Z0-9]+$/)![2] || "");
+		const id = "/" + (key.match(PAGE_REGEXP)![2] || "");
 
 		return {
 			pattern: id,
