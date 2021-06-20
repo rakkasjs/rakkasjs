@@ -27,20 +27,19 @@ If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and
 
 
 ## TODO
-- Router and useRakkas
+- Router useRakkas
 - Documentation
 - Prepare packages for publication
 - Project initializer
 - MVP!
 
-- Data caching and SWR
+- Navigation blocking
 - HTTPS mode for dev server
-- Separate API and pages dirs
-- Data caching
+- Data caching and SWR
 - Page transition animations
-- Investigate renderToNodeStream
+- renderToNodeStream
 - Localized routing
-- Customized routing
+- Custom routing
 - Adapters for serverless environments
 
 ## Credits and license

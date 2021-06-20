@@ -1,6 +1,6 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
-import { ServerRouter } from "bare-routes";
+import { ServerRouter } from "./router/Router";
 import devalue from "devalue";
 import { findEndpoint } from "./endpoints";
 import { makeComponentStack } from "./makeComponentStack";

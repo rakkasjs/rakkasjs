@@ -1,15 +1,10 @@
-export {
-	Link,
-	NavLink,
-	NavLinkProps,
-	useRouter,
-	RouterInfo,
-	RouteRenderArgs,
-	Router,
-	RouterProps,
-} from "bare-routes";
-
 export * from "./types";
+
+export { Router, ServerRouter, useRouter } from "./router/Router";
+
+export { Link } from "./router/Link";
+
+export { NavLink } from "./router/NavLink";
 
 import {
 	PageTypes,

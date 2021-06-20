@@ -1,7 +1,7 @@
 import React, { FC, useRef } from "react";
 import { hydrate } from "react-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { Router } from ".";
+import { Router } from "./router/Router";
 import {
 	makeComponentStack,
 	RenderedStackItem,
