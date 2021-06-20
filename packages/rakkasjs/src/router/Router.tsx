@@ -231,28 +231,6 @@ export const Router: FC<RouterProps> = ({
 	);
 };
 
-export interface ServerRouterProps {
-	url: URL;
-}
-
-export const ServerRouter: FC<ServerRouterProps> = ({ children, url }) => {
-	const contextValue = useMemo<RouterInfo>(
-		() => ({
-			current: url,
-			navigate() {
-				throw new Error("navigate() cannot be used on server side");
-			},
-		}),
-		[url],
-	);
-
-	return (
-		<RouterContext.Provider value={contextValue}>
-			{children}
-		</RouterContext.Provider>
-	);
-};
-
 export interface RouterInfo {
 	/** Route that is currently viewed */
 	current: URL;

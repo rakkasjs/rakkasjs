@@ -1,10 +1,10 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
-import { ServerRouter } from "./router/Router";
 import devalue from "devalue";
 import { findEndpoint } from "./endpoints";
 import { makeComponentStack } from "./makeComponentStack";
 import { HelmetProvider, FilledContext } from "react-helmet-async";
+import { RakkasContext } from "./useRakkas";
 
 // @ts-expect-error: Yes
 // eslint-disable-next-line import/no-unresolved
@@ -194,9 +194,22 @@ export async function handleRequest(
 	const helmetContext = {};
 
 	const app = renderToString(
-		<HelmetProvider context={helmetContext}>
-			<ServerRouter url={req.url}>{foundPage.content}</ServerRouter>
-		</HelmetProvider>,
+		<RakkasContext.Provider
+			value={{
+				current: req.url,
+				navigate() {
+					throw new Error("navigate() cannot be used on server side");
+				},
+				params: foundPage.params,
+				setRootContext() {
+					throw new Error("setRootContext() cannot be used on server side");
+				},
+			}}
+		>
+			<HelmetProvider context={helmetContext}>
+				{foundPage.content}
+			</HelmetProvider>
+		</RakkasContext.Provider>,
 	);
 
 	const { helmet } = helmetContext as FilledContext;

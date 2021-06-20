@@ -36,6 +36,7 @@ interface StackArgs {
 }
 
 export interface StackResult {
+	params: Record<string, string>;
 	status: number;
 	content: React.ReactNode;
 	rendered: RenderedStackItem[];
@@ -70,7 +71,7 @@ export async function makeComponentStack({
 		const moduleExports =
 			typeof module.default === "object"
 				? {
-						Component: module.default.render || DefaultLayout,
+						Component: module.default.Component || DefaultLayout,
 						load: module.default.load,
 						options: module.default.options,
 						getCacheKey:
@@ -211,6 +212,7 @@ export async function makeComponentStack({
 		status,
 		content,
 		rendered: thisRender,
+		params,
 	};
 }
 

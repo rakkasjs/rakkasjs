@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { RouterInfo } from "../dist/Router-59e42d88";
 
 export interface PageTypes {
 	params: Record<string, string>;
@@ -110,7 +111,7 @@ export interface PageComponentModule {
 }
 
 export interface PageDefinition {
-	render: Page | ErrorPage;
+	Component: Page | ErrorPage;
 	load?: PageLoadFunc;
 	getCacheKey?: GetCacheKeyFunc;
 	options?: {
@@ -132,7 +133,7 @@ export interface LayoutComponentModule {
 }
 
 export interface LayoutDefinition {
-	render: Layout | SimpleLayout;
+	Component: Layout | SimpleLayout;
 	load?: LayoutLoadFunc;
 	getCacheKey?: GetCacheKeyFunc;
 	options?: {
@@ -222,4 +223,14 @@ export interface LoadRedirectResult {
 	status: number;
 	// Location to redirect to
 	location: string | URL;
+}
+
+// Return value of useRakkas custom hook
+export interface RakkasInfo extends RouterInfo {
+	params: Record<string, string>;
+	setRootContext(
+		value:
+			| Record<string, unknown>
+			| ((old: Record<string, unknown>) => Record<string, unknown>),
+	): void;
 }

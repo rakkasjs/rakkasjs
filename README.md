@@ -27,13 +27,13 @@ If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and
 
 
 ## TODO
-- Router useRakkas
 - Documentation
 - Prepare packages for publication
 - Project initializer
 - MVP!
 
 - Navigation blocking
+- Spread path parameters
 - HTTPS mode for dev server
 - Data caching and SWR
 - Page transition animations

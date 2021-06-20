@@ -1,4 +1,4 @@
-import { LayoutTypes, NavLink, defineLayout } from "rakkasjs";
+import { LayoutTypes, NavLink, defineLayout, useRakkas } from "rakkasjs";
 import { PokemonList } from "pages/examples/pokemon/types";
 import React from "react";
 import css from "./index.module.css";
@@ -8,8 +8,10 @@ interface Types extends LayoutTypes {
 }
 
 export default defineLayout<Types>({
-	render({ children, data, params, url }) {
+	Component({ children, data, params, url }) {
 		const page = parsePageNumber(url.searchParams);
+
+		const { setRootContext } = useRakkas();
 
 		return (
 			<div className={css.main}>
@@ -63,13 +65,23 @@ export default defineLayout<Types>({
 							)}
 						</div>
 					</nav>
+					<button
+						onClick={() =>
+							setRootContext((old) => ({
+								...old,
+								random: Math.floor(100 * Math.random()),
+							}))
+						}
+					>
+						Set context
+					</button>
 				</aside>
 			</div>
 		);
 	},
 
-	getCacheKey({ url }): unknown {
-		return parsePageNumber(url.searchParams);
+	getCacheKey({ context, url }): unknown {
+		return [context, parsePageNumber(url.searchParams)];
 	},
 
 	async load({ context, url }) {

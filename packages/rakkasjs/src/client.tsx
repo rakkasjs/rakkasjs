@@ -1,7 +1,8 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useRef, useState } from "react";
 import { hydrate } from "react-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { Router } from "./router/Router";
+import { Router, useRouter } from "./router/Router";
+import { RakkasContext } from "./useRakkas";
 import {
 	makeComponentStack,
 	RenderedStackItem,
@@ -41,6 +42,7 @@ const App: FC<{
 	initialStack: StackResult;
 }> = ({ initialStack }) => {
 	const lastStack = useRef(initialStack);
+	const [rootContext, setRootContext] = useState(__RAKKAS_ROOT_CONTEXT);
 
 	return (
 		<Router
@@ -53,7 +55,7 @@ const App: FC<{
 						rerender();
 					},
 					previousRender: lastStack.current.rendered,
-					rootContext: __RAKKAS_ROOT_CONTEXT,
+					rootContext,
 				});
 
 				if ("location" in stack) {
@@ -63,11 +65,40 @@ const App: FC<{
 
 				lastStack.current = stack;
 
-				return stack.content;
+				return (
+					<Wrapper
+						params={stack.params}
+						setRootContext={(arg) => {
+							setRootContext(arg);
+							rerender();
+						}}
+					>
+						{stack.content}
+					</Wrapper>
+				);
 			}}
 			// skipInitialRender={isDataValid.current.every(Boolean)}
 		>
-			{lastStack.current.content}
+			<Wrapper params={initialStack.params} setRootContext={setRootContext}>
+				{lastStack.current.content}
+			</Wrapper>
 		</Router>
+	);
+};
+
+const Wrapper: FC<{
+	params: Record<string, string>;
+	setRootContext(
+		value:
+			| Record<string, unknown>
+			| ((old: Record<string, unknown>) => Record<string, unknown>),
+	): void;
+}> = ({ params, setRootContext, children }) => {
+	const router = useRouter();
+
+	return (
+		<RakkasContext.Provider value={{ ...router, params, setRootContext }}>
+			{children}
+		</RakkasContext.Provider>
 	);
 };

@@ -1,10 +1,10 @@
 export * from "./types";
 
-export { Router, ServerRouter, useRouter } from "./router/Router";
-
+export { Router } from "./router/Router";
 export { Link } from "./router/Link";
-
 export { NavLink } from "./router/NavLink";
+
+export { useRakkas } from "./useRakkas";
 
 import {
 	PageTypes,
@@ -22,14 +22,14 @@ import {
 export function definePage<T extends PageTypes = PageTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
-	render: Page<T>;
+	Component: Page<T>;
 	options?: {
 		canHandleErrors?: boolean;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
-	render: Page<T>;
+	Component: Page<T>;
 	options?: {
 		canHandleErrors?: false;
 	};
@@ -39,14 +39,14 @@ export function definePage<T extends PageTypes = PageTypes>(def: {
 export function definePage<T extends PageTypes = PageTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
-	render: ErrorPage<T>;
+	Component: ErrorPage<T>;
 	options?: {
 		canHandleErrors?: boolean;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
-	render: ErrorPage<T>;
+	Component: ErrorPage<T>;
 	options: {
 		canHandleErrors: true;
 	};
@@ -56,14 +56,14 @@ export function definePage<T extends PageTypes = PageTypes>(def: {
 export function definePage<T extends PageTypes = PageTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
-	render: ErrorPage<T> | Page<T>;
+	Component: ErrorPage<T> | Page<T>;
 	options?: {
 		canHandleErrors?: boolean;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
-	render: ErrorPage<T> | Page<T>;
+	Component: ErrorPage<T> | Page<T>;
 	options?: {
 		canHandleErrors?: boolean;
 	};
@@ -75,14 +75,14 @@ export function definePage<T extends PageTypes = PageTypes>(def: {
 export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
-	render: Layout<T>;
+	Component: Layout<T>;
 	options?: {
 		canHandleErrors?: true;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
-	render: Layout<T>;
+	Component: Layout<T>;
 	options?: {
 		canHandleErrors?: false;
 	};
@@ -92,7 +92,7 @@ export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
 export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
-	render?: never;
+	Component?: never;
 	options?: {
 		canHandleErrors?: false;
 	};
@@ -108,14 +108,14 @@ export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
 export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
-	render: SimpleLayout<T>;
+	Component: SimpleLayout<T>;
 	options?: {
 		canHandleErrors?: boolean;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
-	render: SimpleLayout<T>;
+	Component: SimpleLayout<T>;
 	options: {
 		canHandleErrors: false;
 	};
@@ -125,14 +125,14 @@ export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
 export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
-	render?: Layout<T> | SimpleLayout<T>;
+	Component?: Layout<T> | SimpleLayout<T>;
 	options?: {
 		canHandleErrors?: boolean;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
-	render?: Layout<T> | SimpleLayout<T>;
+	Component?: Layout<T> | SimpleLayout<T>;
 	options?: {
 		canHandleErrors?: boolean;
 	};
