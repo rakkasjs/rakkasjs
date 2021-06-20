@@ -105,6 +105,10 @@ export function makeViteConfig(
 
 					if (id === "/client" && !(await this.resolve(id, "@rakkasjs"))) {
 						return id;
+					} else if (id === "@rakkasjs/server") {
+						const result = (await this.resolve("/server", "@rakkasjs")) || id;
+						console.log(result);
+						return result;
 					} else if (id === path.resolve("src/index.html")) {
 						return id;
 					}
@@ -113,6 +117,8 @@ export function makeViteConfig(
 				async load(id) {
 					if (id === "/client") {
 						return `import { startClient } from "rakkasjs/client"; startClient();`;
+					} else if (id === "@rakkasjs/server") {
+						return `export getRootContext:()=>({})`;
 					} else if (id === path.resolve("src/index.html")) {
 						return template;
 					}

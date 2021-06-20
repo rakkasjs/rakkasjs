@@ -32,6 +32,7 @@ interface StackArgs {
 	fetch: typeof fetch;
 	previousRender?: RenderedStackItem[];
 	reload(i: number): void;
+	rootContext: Record<string, unknown>;
 }
 
 export interface StackResult {
@@ -45,12 +46,13 @@ export async function makeComponentStack({
 	fetch,
 	previousRender,
 	reload,
+	rootContext = {},
 }: StackArgs): Promise<LoadRedirectResult | StackResult> {
 	const { stack, params, match, names } = findPage(url.pathname);
 
 	let error: ErrorDescription | undefined;
 	const thisRender: RenderedStackItem[] = [];
-	let context: Record<string, unknown> = {};
+	let context: Record<string, unknown> = { ...rootContext };
 	let status = 200;
 	let errorHandlerIndex = -1;
 
@@ -130,9 +132,7 @@ export async function makeComponentStack({
 		) {
 			if (load) {
 				try {
-					console.log("Loading...");
 					loaded = await load({ url, params, match, context, fetch });
-					console.log("Loaded", loaded);
 				} catch (error) {
 					loaded = { status: 500, error: toErrorDescription(error) };
 				}
@@ -185,7 +185,7 @@ export async function makeComponentStack({
 		});
 	}
 
-	context = {};
+	context = { ...rootContext };
 	const content = thisRender.reduceRight((prev, rendered, i) => {
 		const reloadThis = () => reload(i);
 		const Component = rendered.Component!;

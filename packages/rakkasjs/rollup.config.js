@@ -27,6 +27,7 @@ const options = [
 		external: [
 			"@rakkasjs/pages-and-layouts",
 			"@rakkasjs/endpoints-and-middleware",
+			"@rakkasjs/server",
 			"react",
 			"react-dom",
 			"react-dom/server",

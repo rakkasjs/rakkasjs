@@ -20,6 +20,7 @@ export async function startClient() {
 		reload(i) {
 			lastRendered[i].cacheKey = "";
 		},
+		rootContext: __RAKKAS_ROOT_CONTEXT,
 	});
 
 	// Redirection should not happen on initial render, but let's keep ts compiler happy
@@ -52,6 +53,7 @@ const App: FC<{
 						rerender();
 					},
 					previousRender: lastStack.current.rendered,
+					rootContext: __RAKKAS_ROOT_CONTEXT,
 				});
 
 				if ("location" in stack) {

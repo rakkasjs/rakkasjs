@@ -72,7 +72,9 @@ export default defineLayout<Types>({
 		return parsePageNumber(url.searchParams);
 	},
 
-	async load({ url }) {
+	async load({ context, url }) {
+		console.log("Context is", context);
+
 		const page = parsePageNumber(url.searchParams);
 
 		console.log("Loading page", page);

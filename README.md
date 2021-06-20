@@ -27,11 +27,10 @@ If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and
 
 
 ## TODO
-- getRootContext
+- Router and useRakkas
 - Documentation
 - Prepare packages for publication
 - Project initializer
-- Router
 - MVP!
 
 - Data caching and SWR

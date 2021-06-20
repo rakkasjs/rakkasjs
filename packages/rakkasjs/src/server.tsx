@@ -6,6 +6,10 @@ import { findEndpoint } from "./endpoints";
 import { makeComponentStack } from "./makeComponentStack";
 import { HelmetProvider, FilledContext } from "react-helmet-async";
 
+// @ts-expect-error: Yes
+// eslint-disable-next-line import/no-unresolved
+import { getRootContext } from "@rakkasjs/server";
+
 export interface RawRequest {
 	url: URL;
 	method: string;
@@ -58,7 +62,6 @@ export async function handleRequest(
 	const found = findEndpoint(req);
 
 	if (found) {
-		console.log("Found", found);
 		let method = req.method.toLowerCase();
 		if (method === "delete") method = "del";
 		let handler: RequestHandler | undefined;
@@ -164,6 +167,8 @@ export async function handleRequest(
 		return fetch(parsed.href, fullInit);
 	}
 
+	const rootContext = (await (getRootContext && getRootContext())) || {};
+
 	const foundPage = await makeComponentStack({
 		url: req.url,
 
@@ -172,6 +177,8 @@ export async function handleRequest(
 		},
 
 		fetch: internalFetch,
+
+		rootContext,
 	});
 
 	// Handle redirection
@@ -194,7 +201,11 @@ export async function handleRequest(
 
 	const { helmet } = helmetContext as FilledContext;
 
-	let head = `<script>__RAKKAS_RENDERED=(0,eval)(${devalue(
+	let head = `<script>__RAKKAS_ROOT_CONTEXT=(0,eval)(${devalue(
+		rootContext,
+	)})</script>`;
+
+	head += `<script>__RAKKAS_RENDERED=(0,eval)(${devalue(
 		foundPage.rendered.map((x) => {
 			delete x.Component;
 			return x;
