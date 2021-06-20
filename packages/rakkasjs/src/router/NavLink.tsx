@@ -1,6 +1,6 @@
 import React, { AnchorHTMLAttributes, CSSProperties, forwardRef } from "react";
 import { BaseLink } from "./BaseLink";
-import { useRouter } from "./Router";
+import { useRakkas } from "../useRakkas";
 
 export interface NavLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 	currentRouteClass?: string;
@@ -25,7 +25,7 @@ export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
 		},
 		ref,
 	) => {
-		const { navigate, current, next } = useRouter();
+		const { navigate, current, next } = useRakkas();
 
 		const classNames = className ? [className] : [];
 

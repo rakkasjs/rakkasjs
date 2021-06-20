@@ -34,6 +34,7 @@ interface StackArgs {
 	previousRender?: RenderedStackItem[];
 	reload(i: number): void;
 	rootContext: Record<string, unknown>;
+	isInitialRender?: boolean;
 }
 
 export interface StackResult {
@@ -48,6 +49,7 @@ export async function makeComponentStack({
 	fetch,
 	previousRender,
 	reload,
+	isInitialRender,
 	rootContext = {},
 }: StackArgs): Promise<LoadRedirectResult | StackResult> {
 	const { stack, params, match, names } = findPage(url.pathname);
@@ -202,7 +204,7 @@ export async function makeComponentStack({
 				data={(rendered.loaded as any).data}
 				error={errorHandlerIndex === i ? error : undefined}
 				reload={reloadThis}
-				useReload={makeUseReload(reloadThis)}
+				useReload={makeUseReload(reloadThis, isInitialRender)}
 			>
 				{prev}
 			</Component>
@@ -217,7 +219,7 @@ export async function makeComponentStack({
 	};
 }
 
-function makeUseReload(reload: () => void) {
+function makeUseReload(reload: () => void, isInitialRender?: boolean) {
 	return function useReload(params: ReloadHookParams) {
 		const {
 			focus = false,
@@ -230,16 +232,19 @@ function makeUseReload(reload: () => void) {
 		useEffect(() => {
 			if (!focus) return;
 
-			function handleFocus() {
-				reload();
+			function handleVisibilityChange() {
+				if (document.visibilityState === "visible") reload();
 			}
 
-			window.addEventListener("focus", handleFocus);
+			document.addEventListener("visibilitychange", handleVisibilityChange);
 
 			return () => {
-				window.removeEventListener("focus", handleFocus);
+				document.removeEventListener(
+					"visibilitychange",
+					handleVisibilityChange,
+				);
 			};
-		}, [focus]);
+		}, [focus, isInitialRender]);
 
 		// Reload on reconnect
 		useEffect(() => {
@@ -254,7 +259,7 @@ function makeUseReload(reload: () => void) {
 			return () => {
 				window.removeEventListener("online", handleReconnect);
 			};
-		}, [reconnect]);
+		}, [reconnect, isInitialRender]);
 
 		// Reload on interval
 		useEffect(() => {
@@ -269,7 +274,7 @@ function makeUseReload(reload: () => void) {
 			return () => {
 				clearInterval(id);
 			};
-		}, [interval, background]);
+		}, [interval, background, isInitialRender]);
 	};
 }
 

@@ -1,6 +1,6 @@
 {
 	"name": "rakkasjs-root-workspace",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
@@ -11,7 +11,9 @@
 		"ssr"
 	],
 	"scripts": {
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"set-version": "pnpm -r exec -- npm version --no-git-tag-version",
+		"publish-all": "pnpm -r --filter=./packages exec -- pnpm publish"
 	},
 	"devDependencies": {
 		"husky": "^6.0.0",

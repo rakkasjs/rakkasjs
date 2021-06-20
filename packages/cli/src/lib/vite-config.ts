@@ -58,6 +58,31 @@ export function makeViteConfig(
 			...config.vite.server,
 			middlewareMode: "ssr",
 		},
+		optimizeDeps: {
+			...config.vite.optimizeDeps,
+			exclude: [
+				...(config.vite.optimizeDeps?.exclude || []),
+				"rakkasjs",
+				"rakkasjs/client",
+				"rakkasjs/server",
+				"rakkasjs/helmet",
+			],
+			include: [
+				...(config.vite.optimizeDeps?.include || []),
+				"react",
+				"react-dom",
+				"react-dom/server",
+			],
+		},
+		resolve: {
+			...config.vite.resolve,
+			dedupe: [
+				...(config.vite.resolve?.dedupe || []),
+				"react",
+				"react-dom",
+				"react-dom/server",
+			],
+		},
 		plugins: [
 			reactRefresh(),
 			virtualModules,
@@ -88,7 +113,6 @@ export function makeViteConfig(
 				},
 
 				buildStart() {
-					console.log("Build starting");
 					this.addWatchFile(path.join(srcDir, PAGES));
 					this.addWatchFile(path.join(srcDir, LAYOUTS));
 					this.addWatchFile(path.join(srcDir, ENDPOINTS));
@@ -107,7 +131,6 @@ export function makeViteConfig(
 						return id;
 					} else if (id === "@rakkasjs/server") {
 						const result = (await this.resolve("/server", "@rakkasjs")) || id;
-						console.log(result);
 						return result;
 					} else if (id === path.resolve("src/index.html")) {
 						return id;
@@ -118,7 +141,7 @@ export function makeViteConfig(
 					if (id === "/client") {
 						return `import { startClient } from "rakkasjs/client"; startClient();`;
 					} else if (id === "@rakkasjs/server") {
-						return `export getRootContext:()=>({})`;
+						return "";
 					} else if (id === path.resolve("src/index.html")) {
 						return template;
 					}

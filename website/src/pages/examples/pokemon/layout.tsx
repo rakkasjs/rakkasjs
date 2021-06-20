@@ -84,12 +84,8 @@ export default defineLayout<Types>({
 		return [context, parsePageNumber(url.searchParams)];
 	},
 
-	async load({ context, url }) {
-		console.log("Context is", context);
-
+	async load({ url }) {
 		const page = parsePageNumber(url.searchParams);
-
-		console.log("Loading page", page);
 
 		const data = await fetch(
 			`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${page * 10}`,

@@ -6,10 +6,6 @@ import { makeComponentStack } from "./makeComponentStack";
 import { HelmetProvider, FilledContext } from "react-helmet-async";
 import { RakkasContext } from "./useRakkas";
 
-// @ts-expect-error: Yes
-// eslint-disable-next-line import/no-unresolved
-import { getRootContext } from "@rakkasjs/server";
-
 export interface RawRequest {
 	url: URL;
 	method: string;
@@ -166,6 +162,10 @@ export async function handleRequest(
 
 		return fetch(parsed.href, fullInit);
 	}
+
+	// @ts-expect-error: No typings for this module yet
+	// eslint-disable-next-line import/no-unresolved
+	const { getRootContext } = await import("@rakkasjs/server");
 
 	const rootContext = (await (getRootContext && getRootContext())) || {};
 

@@ -22,6 +22,7 @@ export async function startClient() {
 			lastRendered[i].cacheKey = "";
 		},
 		rootContext: __RAKKAS_ROOT_CONTEXT,
+		isInitialRender: true,
 	});
 
 	// Redirection should not happen on initial render, but let's keep ts compiler happy

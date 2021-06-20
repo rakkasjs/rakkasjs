@@ -183,7 +183,6 @@ export const Router: FC<RouterProps> = ({
 						);
 					}
 				} else {
-					console.log("current.hash", current.hash);
 					window.scrollTo(scrollHistory.current[index] || { left: 0, top: 0 });
 				}
 			});

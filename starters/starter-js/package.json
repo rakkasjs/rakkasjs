@@ -9,10 +9,10 @@
 		"start": "rakkas-node"
 	},
 	"dependencies": {
-		"@rakkasjs/runner-node": "^0.0.1",
-		"rakkasjs": "^0.0.1"
-	},
-	"devDependencies": {
-		"@rakkasjs/cli": "^0.0.1"
+		"@rakkasjs/cli": "file:../../packages/cli/rakkasjs-cli-0.0.2.tgz",
+		"@rakkasjs/runner-node": "file:../../packages/runner-node/rakkasjs-runner-node-0.0.2.tgz",
+		"rakkasjs": "file:../../packages/rakkasjs/rakkasjs-0.0.2.tgz",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2"
 	}
 }

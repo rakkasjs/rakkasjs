@@ -71,7 +71,7 @@ function parseRouteIntoSegments<T>(route: Route<T>): ParsedRoute<T> {
 		.filter((s) => s[0] !== "_")
 		.map((s) => {
 			function invalid() {
-				throw new Error(`Invalid route pattern "${s}" in ${route.pattern}`);
+				throw new Error(`Invalid route segment "${s}" in ${route.pattern}`);
 			}
 
 			if (s.includes("[")) {
@@ -112,6 +112,32 @@ function parseRouteIntoSegments<T>(route: Route<T>): ParsedRoute<T> {
 			}
 		});
 
+	let regexp =
+		"^\\/" +
+		segments
+			.map((seg) => {
+				if (seg.hasPattern) {
+					return seg.subsegments
+						.map((sub) => {
+							if (sub[0] === "[") {
+								return "([^\\/]+)";
+							} else {
+								return escapeRegExp(sub);
+							}
+						})
+						.join("");
+				} else {
+					return escapeRegExp(seg.content);
+				}
+			})
+			.join("\\/");
+
+	if (!regexp.endsWith("\\/")) {
+		regexp += "\\/";
+	}
+
+	regexp += "?$";
+
 	return {
 		route,
 		segments,
@@ -124,27 +150,7 @@ function parseRouteIntoSegments<T>(route: Route<T>): ParsedRoute<T> {
 					.map((sub) => sub.slice(1, -1)),
 			)
 			.flat(),
-		regexp: new RegExp(
-			"^\\/" +
-				segments
-					.map((seg) => {
-						if (seg.hasPattern) {
-							return seg.subsegments
-								.map((sub) => {
-									if (sub[0] === "[") {
-										return "([^\\/]+)";
-									} else {
-										return escapeRegExp(sub);
-									}
-								})
-								.join("");
-						} else {
-							return escapeRegExp(seg.content);
-						}
-					})
-					.join("\\/") +
-				"$",
-		),
+		regexp: new RegExp(regexp),
 	};
 }
 

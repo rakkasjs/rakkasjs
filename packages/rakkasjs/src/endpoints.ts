@@ -37,7 +37,7 @@ const sorted = sortRoutes(
 		const id = "/" + (key.match(ENDPOINT_REGEXP)![2] || "");
 
 		return {
-			pattern: `/${__RAKKAS_CONFIG.apiDir}${id}`,
+			pattern: `${__RAKKAS_CONFIG.apiRoot}${id}`,
 			extra: {
 				id,
 				importer,

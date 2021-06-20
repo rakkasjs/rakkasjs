@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { createServer } from "http";
 import fs from "fs";
 import path from "path";

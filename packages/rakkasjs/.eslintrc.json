@@ -21,10 +21,10 @@
 	},
 	"plugins": [
 		"@typescript-eslint",
-		"only-warn",
 		"import",
 		"react",
-		"react-hooks"
+		"react-hooks",
+		"only-warn"
 	],
 	"settings": {
 		"react": {
