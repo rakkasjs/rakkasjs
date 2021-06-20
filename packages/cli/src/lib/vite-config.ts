@@ -103,7 +103,7 @@ export function makeViteConfig(
 
 				async load(id) {
 					if (id === "/client") {
-						return `import { startClient } from "@rakkasjs/core/client"; startClient();`;
+						return `import { startClient } from "rakkasjs/client"; startClient();`;
 					} else if (id === path.resolve("src/index.html")) {
 						return template;
 					}

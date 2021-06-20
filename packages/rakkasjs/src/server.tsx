@@ -53,6 +53,7 @@ export type MiddlewareImporter = () =>
 export async function handleRequest(
 	req: RawRequest,
 	template: string,
+	manifest?: Record<string, string[] | undefined>,
 ): Promise<RakkasResponse> {
 	const found = findEndpoint(req);
 
@@ -207,6 +208,25 @@ export async function handleRequest(
 		helmet.script.toString() +
 		helmet.style.toString() +
 		helmet.title.toString();
+
+	if (manifest) {
+		for (const { name } of foundPage.rendered) {
+			if (!name) continue;
+
+			const assets = manifest[name];
+			if (!assets) continue;
+
+			for (const asset of assets) {
+				if (asset.endsWith(".js")) {
+					head += `\n<link rel="modulepreload" href=${JSON.stringify(asset)}>`;
+				} else if (asset.endsWith(".css")) {
+					head += `\n<link rel="stylesheet" href=${JSON.stringify(asset)}>`;
+				} else {
+					head += `\n<link rel="preload" href=${JSON.stringify(asset)}>`;
+				}
+			}
+		}
+	}
 
 	let body = template.replace("<!-- rakkas-head-placeholder -->", head);
 

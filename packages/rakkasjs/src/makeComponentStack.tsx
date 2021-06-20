@@ -24,6 +24,7 @@ export interface RenderedStackItem {
 	Component?: Page | ErrorPage | Layout | SimpleLayout;
 	loaded: PageLoadResult | LayoutLoadResult;
 	cacheKey: string;
+	name?: string;
 }
 
 interface StackArgs {
@@ -45,7 +46,7 @@ export async function makeComponentStack({
 	previousRender,
 	reload,
 }: StackArgs): Promise<LoadRedirectResult | StackResult> {
-	const { stack, params, match } = findPage(url.pathname);
+	const { stack, params, match, names } = findPage(url.pathname);
 
 	let error: ErrorDescription | undefined;
 	const thisRender: RenderedStackItem[] = [];
@@ -143,6 +144,7 @@ export async function makeComponentStack({
 			Component,
 			loaded,
 			cacheKey,
+			name: names[i],
 		});
 
 		status = loaded.status ?? status;

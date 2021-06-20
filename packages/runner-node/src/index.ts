@@ -1,7 +1,7 @@
 import { createServer } from "http";
 import fs from "fs";
+import path from "path";
 import sirv from "sirv";
-import { handleRequest } from "rakkasjs/server";
 import { parseBody } from "./parse-body";
 import nodeFetch, {
 	Response as NodeFetchResponse,
@@ -9,16 +9,25 @@ import nodeFetch, {
 	Headers as NodeFetchHeaders,
 } from "node-fetch";
 
-(globalThis.fetch as any) = nodeFetch;
-(globalThis.Response as any) = NodeFetchResponse;
-(globalThis.Request as any) = NodeFetchRequest;
-(globalThis.Headers as any) = NodeFetchHeaders;
+(globalThis as any).fetch = nodeFetch;
+(globalThis as any).Response = NodeFetchResponse;
+(globalThis as any).Request = NodeFetchRequest;
+(globalThis as any).Headers = NodeFetchHeaders;
 
 export async function startServer() {
-	const template = await fs.promises.readFile(
-		"./dist/client/index.html",
-		"utf-8",
+	const rootDir = process.cwd();
+	console.log(rootDir);
+
+	const { handleRequest } = require(path.resolve(
+		rootDir,
+		"./dist/server/server.js",
+	)) as typeof import("rakkasjs/server");
+
+	const manifest: Record<string, string[]> = JSON.parse(
+		await fs.promises.readFile("./dist/rakkas-manifest.json", "utf-8"),
 	);
+
+	const template = await fs.promises.readFile("./dist/index.html", "utf-8");
 
 	const fileServer = sirv("dist/client", { etag: true, maxAge: 0 });
 
@@ -34,6 +43,7 @@ export async function startServer() {
 						body: await parseBody(req),
 					},
 					template,
+					manifest,
 				);
 
 				res.statusCode = response.status ?? 200;
@@ -60,7 +70,7 @@ export async function startServer() {
 		}
 	});
 
-	const host = process.env.HOST || "0.0.0.0";
+	const host = process.env.HOST || "localhost";
 	const port = process.env.PORT || 3000;
 
 	app.listen({ port, host }, () => {

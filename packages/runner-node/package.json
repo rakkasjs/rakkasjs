@@ -4,7 +4,10 @@
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"types": "index.d.ts",
-	"module": "dist/index.js",
+	"main": "dist/index.js",
+	"bin": {
+		"rakkas-node": "dist/index.js"
+	},
 	"scripts": {
 		"dev": "babel src --watch --out-dir dist --extensions '.ts,.js,.tsx,.jsx'",
 		"build": "rimraf dist && babel src --out-dir dist --extensions '.ts,.js'"

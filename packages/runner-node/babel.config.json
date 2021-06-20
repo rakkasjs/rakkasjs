@@ -5,7 +5,7 @@
 			"@babel/preset-env",
 			{
 				"targets": "maintained node versions",
-				"modules": false
+				"modules": "commonjs"
 			}
 		]
 	]

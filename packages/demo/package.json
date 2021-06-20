@@ -2,7 +2,10 @@
 	"name": "rakkasjs-demo",
 	"private": true,
 	"scripts": {
-		"dev": "node-dev node_modules/@rakkasjs/cli/dist/bin.js dev"
+		"start": "node dist/server/index.js",
+		"dev": "rakkas dev",
+		"devdev": "node-dev node_modules/@rakkasjs/cli/dist/bin.js dev",
+		"build": "rakkas build"
 	},
 	"dependencies": {
 		"rakkasjs": "workspace:*",

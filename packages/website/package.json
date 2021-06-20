@@ -4,7 +4,7 @@
 	"version": "0.0.0",
 	"description": "Rakkas.js website",
 	"scripts": {
-		"start": "node dist/server/index.js",
+		"start": "rakkas-node",
 		"build": "rakkas build",
 		"dev": "rakkas dev",
 		"devdev": "node-dev node_modules/@rakkasjs/cli/dist/bin.js dev",

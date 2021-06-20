@@ -10,15 +10,15 @@ import { makeViteConfig } from "../lib/vite-config";
 import { loadConfig } from "../lib/config";
 import { encode } from "html-entities";
 
-(globalThis.fetch as any) = nodeFetch;
-(globalThis.Response as any) = NodeFetchResponse;
-(globalThis.Request as any) = NodeFetchRequest;
-(globalThis.Headers as any) = NodeFetchHeaders;
+(globalThis as any).fetch = nodeFetch;
+(globalThis as any).Response = NodeFetchResponse;
+(globalThis as any).Request = NodeFetchRequest;
+(globalThis as any).Headers = NodeFetchHeaders;
 
 export default function devCommand() {
 	return new Command("dev")
 		.option("-p, --port <port>", "development server port number", "3000")
-		.option("-H, --host <host>", "development server host", "0.0.0.0")
+		.option("-H, --host <host>", "development server host", "localhost")
 		.description("Start a development server")
 		.action(startServer);
 }

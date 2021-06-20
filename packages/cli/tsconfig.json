@@ -4,7 +4,8 @@
 		"module": "CommonJS",
 		"skipLibCheck": true,
 		"moduleResolution": "Node",
-		"strict": true
+		"strict": true,
+		"lib": ["ScriptHost", "DOM", "ES2019"]
 	},
 	"include": ["src"]
 }

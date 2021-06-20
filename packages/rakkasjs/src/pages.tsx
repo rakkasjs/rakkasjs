@@ -10,6 +10,7 @@ const sortedLayouts = Object.entries(layouts)
 
 		return {
 			id,
+			key,
 			segments: id.split("/").filter(Boolean),
 			importer,
 		};
@@ -31,6 +32,7 @@ const sorted = sortRoutes(
 			pattern: id,
 			extra: {
 				id,
+				key,
 				importer,
 				layouts: sortedLayouts.filter((l) => {
 					const res =
@@ -46,6 +48,7 @@ interface PageModuleImporters {
 	params: Record<string, string>;
 	match?: string;
 	stack: Array<LayoutImporter | PageImporter>;
+	names: string[];
 }
 
 export function findPage(path: string): PageModuleImporters {
@@ -66,6 +69,7 @@ export function findPage(path: string): PageModuleImporters {
 					params,
 					match: notFound ? undefined : r.pattern,
 					stack: [r.extra, ...r.extra.layouts].map((x) => x.importer).reverse(),
+					names: [r.extra, ...r.extra.layouts].map((x) => x.key).reverse(),
 				};
 			}
 		}
@@ -76,6 +80,7 @@ export function findPage(path: string): PageModuleImporters {
 			return {
 				params: {},
 				stack: [],
+				names: [],
 			};
 		}
 
@@ -87,5 +92,6 @@ export function findPage(path: string): PageModuleImporters {
 	return {
 		params: {},
 		stack: [],
+		names: [],
 	};
 }
