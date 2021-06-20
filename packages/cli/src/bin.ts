@@ -14,10 +14,7 @@ async function main() {
 }
 
 async function readPackageJson() {
-	const packageJsonFileName = path.resolve(
-		path.dirname(process.argv[1]),
-		"../package.json",
-	);
+	const packageJsonFileName = path.resolve(__dirname, "../package.json");
 	const content = await fs.promises.readFile(packageJsonFileName, {
 		encoding: "utf-8",
 	});

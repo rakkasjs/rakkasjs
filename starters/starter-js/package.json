@@ -1,0 +1,18 @@
+{
+	"name": "-TODO-",
+	"private": true,
+	"version": "0.0.1",
+	"description": "Rakkas vanilla JS starter project",
+	"scripts": {
+		"dev": "rakkas dev",
+		"build": "rakkas build",
+		"start": "rakkas-node"
+	},
+	"dependencies": {
+		"@rakkasjs/runner-node": "^0.0.1",
+		"rakkasjs": "^0.0.1"
+	},
+	"devDependencies": {
+		"@rakkasjs/cli": "^0.0.1"
+	}
+}
