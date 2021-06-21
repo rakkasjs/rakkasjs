@@ -3,7 +3,7 @@
 		"strict": true,
 		"declaration": true,
 		"module": "ES2020",
-		"lib": ["ES2020"],
+		"lib": ["ES2018", "ES2019.Object", "ES2019.Array", "ES2020.String"],
 		"esModuleInterop": true,
 		"jsx": "react",
 		"target": "es6",

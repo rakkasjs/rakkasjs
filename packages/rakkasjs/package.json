@@ -1,7 +1,7 @@
 {
 	"name": "rakkasjs",
 	"description": "Rakkas.js core runtime",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
@@ -28,6 +28,7 @@
 	"dependencies": {
 		"@types/react": "^17.0.11",
 		"bare-routes": "^0.3.2",
+		"core-js": "^3.15.0",
 		"devalue": "^2.0.1",
 		"history": "^5.0.0",
 		"md5": "^2.3.0",
@@ -69,6 +70,7 @@
 		"rimraf": "^3.0.2",
 		"rollup": "^2.52.1",
 		"rollup-plugin-terser": "^7.0.2",
-		"rollup-plugin-ts": "^1.4.0"
+		"rollup-plugin-ts": "^1.4.0",
+		"typescript": "^4.3.4"
 	}
 }

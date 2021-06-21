@@ -7,6 +7,14 @@
 	min-height: calc(100vh - 12rem);
 }
 
+.tableWrapper {
+	overflow-x: auto;
+}
+
+.tableWrapper > table {
+	white-space: nowrap;
+}
+
 .footer {
 	font-size: small;
 	text-align: center;

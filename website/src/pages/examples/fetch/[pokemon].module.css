@@ -1,5 +1,22 @@
+.wrapper {
+	max-width: 40em;
+	margin: auto;
+}
+
 .title {
 	text-align: center;
+}
+
+.links > *:not(:first-child) {
+	margin-left: 1em;
+}
+
+.activeLink {
+	font-weight: bold;
+}
+
+.image {
+	zoom: 2;
 }
 
 .stats {

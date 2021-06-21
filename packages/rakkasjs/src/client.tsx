@@ -1,3 +1,7 @@
+import "core-js/features/array/flat";
+import "core-js/features/object/from-entries";
+import "core-js/features/string/match-all";
+
 import React, { FC, useRef, useState } from "react";
 import { hydrate } from "react-dom";
 import { HelmetProvider } from "react-helmet-async";

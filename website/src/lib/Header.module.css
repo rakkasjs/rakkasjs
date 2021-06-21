@@ -2,12 +2,33 @@
 	height: 4em;
 	padding: 1em;
 	border-bottom: solid 1px #eef;
+	display: flex;
+	justify-content: space-between;
 }
 
 .logo {
 	color: #924;
 }
 
-.logo:hover {
-	color: #b16;
+@media (hover: hover) {
+	.logo:hover {
+		color: #b16;
+	}
+}
+
+.nav ul {
+	display: flex;
+}
+
+.nav li {
+	margin-left: 1em;
+}
+
+.nav a {
+	width: 3em;
+}
+
+.activeLink {
+	color: #429;
+	font-weight: bold;
 }

@@ -3,9 +3,14 @@ import { Logotype } from "$lib/Logotype";
 import React, { FC } from "react";
 import css from "./page.module.css";
 import { Link } from "rakkasjs";
+import { Helmet } from "rakkasjs/helmet";
 
 const HomePage: FC = () => (
 	<>
+		<Helmet>
+			<title>Rakkas</title>
+		</Helmet>
+
 		<div className={css.banner}>
 			<div className={css.logo}>
 				<Logomark height="100px" />
@@ -24,7 +29,7 @@ const HomePage: FC = () => (
 			</div>
 			<div className={css.card} style={{ background: "#ccd" }}>
 				<h3>Vite</h3>
-				<p>Enjoy the lightning fast development tooling.</p>
+				<p>Enjoy the lightning fast development server.</p>
 			</div>
 			<div className={css.card} style={{ background: "#dde" }}>
 				<h3>Data fetching</h3>

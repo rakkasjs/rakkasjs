@@ -2,7 +2,7 @@ import reactRefresh from "@vitejs/plugin-react-refresh";
 import path from "path";
 import virtual, { invalidateVirtualModule } from "vite-plugin-virtual";
 import micromatch from "micromatch";
-import type { InlineConfig } from "vite";
+import { InlineConfig, normalizePath } from "vite";
 import { FullConfig } from "../..";
 
 export function makeViteConfig(
@@ -10,22 +10,24 @@ export function makeViteConfig(
 	configDeps: string[],
 	onConfigChange?: () => void,
 ): InlineConfig {
-	const srcDir = path.resolve("src");
-	const publicDir = path.resolve("public");
+	const srcDir = normalizePath(path.resolve("src"));
+	const publicDir = normalizePath(path.resolve("public"));
+	const pagesDir = normalizePath(config.pagesDir);
+	const apiDir = normalizePath(config.apiDir);
 
 	const componentExtensions = config.pageExtensions.join("|");
-	const PAGES = `/${config.pagesDir}/**/(*.)?page.(${componentExtensions})`;
-	const LAYOUTS = `/${config.pagesDir}/**/(*/)?layout.(${componentExtensions})`;
+	const PAGES = `/${pagesDir}/**/(*.)?page.(${componentExtensions})`;
+	const LAYOUTS = `/${pagesDir}/**/(*/)?layout.(${componentExtensions})`;
 
 	const apiExtensions = config.endpointExtensions.join("|");
-	const ENDPOINTS = `/${config.apiDir}/**/(*.)?endpoint.(${apiExtensions})`;
-	const MIDDLEWARE = `/${config.apiDir}/**/(*/)?middleware.(${apiExtensions})`;
+	const ENDPOINTS = `/${apiDir}/**/(*.)?endpoint.(${apiExtensions})`;
+	const MIDDLEWARE = `/${apiDir}/**/(*/)?middleware.(${apiExtensions})`;
 
-	const isPage = micromatch.matcher(path.join(srcDir, PAGES));
-	const isLayout = micromatch.matcher(path.join(srcDir, LAYOUTS));
+	const isPage = micromatch.matcher(srcDir + PAGES);
+	const isLayout = micromatch.matcher(srcDir + LAYOUTS);
 
-	const isEndpoint = micromatch.matcher(path.join(srcDir, ENDPOINTS));
-	const isMiddleware = micromatch.matcher(path.join(srcDir, MIDDLEWARE));
+	const isEndpoint = micromatch.matcher(srcDir + ENDPOINTS);
+	const isMiddleware = micromatch.matcher(srcDir + MIDDLEWARE);
 
 	const pagesAndLayouts =
 		`export const pages = import.meta.glob(${JSON.stringify(PAGES)});` +
@@ -113,10 +115,10 @@ export function makeViteConfig(
 				},
 
 				buildStart() {
-					this.addWatchFile(path.join(srcDir, PAGES));
-					this.addWatchFile(path.join(srcDir, LAYOUTS));
-					this.addWatchFile(path.join(srcDir, ENDPOINTS));
-					this.addWatchFile(path.join(srcDir, MIDDLEWARE));
+					this.addWatchFile(srcDir + PAGES);
+					this.addWatchFile(srcDir + LAYOUTS);
+					this.addWatchFile(srcDir + ENDPOINTS);
+					this.addWatchFile(srcDir + MIDDLEWARE);
 
 					if (onConfigChange) {
 						configDeps.forEach((dep) => this.addWatchFile(dep));
@@ -132,7 +134,7 @@ export function makeViteConfig(
 					} else if (id === "@rakkasjs/server") {
 						const result = (await this.resolve("/server", "@rakkasjs")) || id;
 						return result;
-					} else if (id === path.resolve("src/index.html")) {
+					} else if (id === normalizePath(path.resolve("src/index.html"))) {
 						return id;
 					}
 				},
@@ -142,7 +144,7 @@ export function makeViteConfig(
 						return `import { startClient } from "rakkasjs/client"; startClient();`;
 					} else if (id === "@rakkasjs/server") {
 						return "";
-					} else if (id === path.resolve("src/index.html")) {
+					} else if (id === normalizePath(path.resolve("src/index.html"))) {
 						return template;
 					}
 				},
