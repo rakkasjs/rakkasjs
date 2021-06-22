@@ -14,7 +14,7 @@ import { Helmet } from "rakkasjs/helmet";
 
 > **WARNING:** Rakkas is in early development. Do not use in production!
 
-Rakkas is built on the shoulders of giants: React and Vite. They bring the following to the table:
+Rakkas stands on the shoulders of giants: React and Vite. They bring the following to the table:
 
 - React:
   - Declarative coding style
@@ -137,7 +137,7 @@ The `next` property of the return value of `useRakkas`, if present, contains the
 
 If you export a `load()` function from your page module, Rakkas will call this function before rendering your component. The `data` prop of the return value will be passed to the component as `props.data`. `load()` may be called on the server or on the client:
 
-- It will be called during server-side rendering and its return value will be serialized (using [degit](https://github.com/Rich-Harris/degit)) and sent to the client. Therefore you should only use serializable values.
+- It will be called during server-side rendering and its return value will be serialized (using [devalue](https://github.com/Rich-Harris/devalue)) and sent to the client. Therefore you should only use serializable values.
 -
 
 By default, Rakkas calls this function again when the URL params or the query string changes. You can force a reload by calling the `reload` prop:

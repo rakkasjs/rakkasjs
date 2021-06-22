@@ -11,6 +11,7 @@
 		"vite",
 		"ssr"
 	],
+	"type": "module",
 	"scripts": {
 		"dev": "babel src --watch --out-dir dist --extensions '.ts,.js,.tsx,.jsx'",
 		"build": "rimraf dist && babel src --out-dir dist --extensions '.ts,.js'",
@@ -42,6 +43,7 @@
 		"@types/node": "^15.12.4",
 		"@typescript-eslint/eslint-plugin": "^4.27.0",
 		"@typescript-eslint/parser": "^4.27.0",
+		"babel-plugin-add-import-extension": "^1.5.1",
 		"esbuild": "^0.12.9",
 		"eslint": "^7.29.0",
 		"eslint-plugin-import": "^2.23.4",

@@ -3,7 +3,7 @@ import { createServer } from "http";
 import fs from "fs";
 import path from "path";
 import sirv from "sirv";
-import { parseBody } from "./parse-body";
+import { parseBody } from "./parse-body.js";
 import nodeFetch, {
 	Response as NodeFetchResponse,
 	Request as NodeFetchRequest,
@@ -18,9 +18,8 @@ import nodeFetch, {
 export async function startServer() {
 	const rootDir = process.cwd();
 
-	const { handleRequest } = require(path.resolve(
-		rootDir,
-		"./dist/server/server.js",
+	const { handleRequest } = (await import(
+		path.resolve(rootDir, "./dist/server/server.js")
 	)) as typeof import("rakkasjs/server");
 
 	const manifest: Record<string, string[]> = JSON.parse(

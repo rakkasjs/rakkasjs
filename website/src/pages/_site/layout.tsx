@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout, Link } from "rakkasjs";
 import { Helmet } from "rakkasjs/helmet";
-import { Header } from "$lib/Header";
+import { Header } from "../../lib/Header";
 import css from "./layout.module.css";
 import { MDXProvider } from "@mdx-js/react";
 import "prism-themes/themes/prism-xonokai.css";

@@ -1,5 +1,5 @@
-import { Logomark } from "$lib/Logomark";
-import { Logotype } from "$lib/Logotype";
+import { Logomark } from "../../lib/Logomark";
+import { Logotype } from "../../lib/Logotype";
 import React, { FC } from "react";
 import css from "./page.module.css";
 import { Link } from "rakkasjs";

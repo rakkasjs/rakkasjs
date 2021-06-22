@@ -5,9 +5,9 @@ import fs from "fs";
 // @ts-expect-error: No typings
 import { highlight, loadLanguages } from "reprism";
 // @ts-expect-error: No typings
-import tsx from "reprism/languages/typescript";
+import tsx from "reprism/languages/typescript.js";
 // @ts-expect-error: No typings
-import bash from "reprism/languages/bash";
+import bash from "reprism/languages/bash.js";
 
 loadLanguages(tsx, bash);
 

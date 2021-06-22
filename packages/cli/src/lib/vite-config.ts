@@ -1,9 +1,14 @@
 import reactRefresh from "@vitejs/plugin-react-refresh";
 import path from "path";
-import virtual, { invalidateVirtualModule } from "vite-plugin-virtual";
+import * as vitePluginVirtual from "vite-plugin-virtual";
 import micromatch from "micromatch";
 import { InlineConfig, normalizePath } from "vite";
 import { FullConfig } from "../..";
+
+// vite-plugin-virtual doesn't play nicely with native modules for some reason.
+const { default: virtual, invalidateVirtualModule } = (
+	vitePluginVirtual as any as { default: typeof import("vite-plugin-virtual") }
+).default;
 
 export function makeViteConfig(
 	config: FullConfig,
@@ -33,6 +38,8 @@ export function makeViteConfig(
 		`export const pages = import.meta.glob(${JSON.stringify(PAGES)});` +
 		`export const layouts = import.meta.glob(${JSON.stringify(LAYOUTS)});`;
 
+	console.log("pagesAndLayouts", pagesAndLayouts);
+
 	const endpointsAndMiddleware =
 		`export const endpoints = import.meta.glob(${JSON.stringify(ENDPOINTS)});` +
 		`export const middleware = import.meta.glob(${JSON.stringify(
@@ -43,6 +50,9 @@ export function makeViteConfig(
 		"@rakkasjs/pages-and-layouts": pagesAndLayouts,
 		"@rakkasjs/endpoints-and-middleware": endpointsAndMiddleware,
 	});
+
+	const indexHtmlPath = path.resolve("src", "index.html");
+	const normalizedIndexHtmlPath = normalizePath(indexHtmlPath);
 
 	return {
 		...config.vite,
@@ -64,13 +74,16 @@ export function makeViteConfig(
 			...config.vite.optimizeDeps,
 			exclude: [
 				...(config.vite.optimizeDeps?.exclude || []),
-				"rakkasjs",
-				"rakkasjs/client",
 				"rakkasjs/server",
-				"rakkasjs/helmet",
+				"@rakkasjs/pages-and-layouts",
+				"@rakkasjs/endpoints-and-middleware",
 			],
 			include: [
 				...(config.vite.optimizeDeps?.include || []),
+				"rakkasjs",
+				"rakkasjs/client",
+				"rakkasjs/helmet",
+
 				"react",
 				"react-dom",
 				"react-dom/server",
@@ -134,8 +147,8 @@ export function makeViteConfig(
 					} else if (id === "@rakkasjs/server") {
 						const result = (await this.resolve("/server", "@rakkasjs")) || id;
 						return result;
-					} else if (id === normalizePath(path.resolve("src/index.html"))) {
-						return id;
+					} else if (id === indexHtmlPath) {
+						return normalizedIndexHtmlPath;
 					}
 				},
 
@@ -144,7 +157,7 @@ export function makeViteConfig(
 						return `import { startClient } from "rakkasjs/client"; startClient();`;
 					} else if (id === "@rakkasjs/server") {
 						return "";
-					} else if (id === normalizePath(path.resolve("src/index.html"))) {
+					} else if (id === normalizedIndexHtmlPath) {
 						return template;
 					}
 				},

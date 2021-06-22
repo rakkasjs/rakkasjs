@@ -3,6 +3,7 @@
 import path from "path";
 import fs from "fs";
 import { program, Command } from "commander";
+import { fileURLToPath } from "url";
 
 import devCommand from "./commands/dev";
 import buildCommand from "./commands/build";
@@ -14,7 +15,10 @@ async function main() {
 }
 
 async function readPackageJson() {
-	const packageJsonFileName = path.resolve(__dirname, "../package.json");
+	const packageJsonFileName = path.resolve(
+		path.dirname(fileURLToPath(import.meta.url)),
+		"../package.json",
+	);
 	const content = await fs.promises.readFile(packageJsonFileName, {
 		encoding: "utf-8",
 	});

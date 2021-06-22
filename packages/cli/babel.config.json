@@ -5,8 +5,10 @@
 		[
 			"@babel/preset-env",
 			{
-				"targets": "maintained node versions"
+				"targets": "maintained node versions",
+				"modules": false
 			}
 		]
-	]
+	],
+	"plugins": [["babel-plugin-add-import-extension", { "replace": true }]]
 }

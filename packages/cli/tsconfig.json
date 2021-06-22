@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"esModuleInterop": true,
-		"module": "CommonJS",
+		"module": "es2020",
 		"skipLibCheck": true,
 		"moduleResolution": "Node",
 		"strict": true,

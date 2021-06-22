@@ -8,6 +8,8 @@ export interface ConfigConfig {
 	root?: string;
 }
 
+let query = 0;
+
 export async function loadConfig(configConfig: ConfigConfig = {}): Promise<{
 	config: FullConfig;
 	deps: string[];
@@ -21,10 +23,11 @@ export async function loadConfig(configConfig: ConfigConfig = {}): Promise<{
 	console.log("Loading config from", filename);
 	const { outfile, deps } = await buildFile(filename, configConfig.root);
 
-	delete require.cache[outfile];
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	let loaded = require(outfile);
-	if (loaded.default) loaded = loaded.default;
+	console.log(outfile + `?${query++}`);
+	let loaded = await import(outfile + `?${query++}`);
+
+	// Poor man's esModuleInterop
+	while (loaded.default) loaded = loaded.default;
 
 	if (typeof loaded === "function") {
 		loaded = await loaded();
@@ -61,7 +64,7 @@ async function buildFile(filename: string, root: string) {
 	const outfile = path.resolve(
 		root,
 		"node_modules/.rakkas",
-		"rakkas.config.js",
+		"rakkas.config.cjs",
 	);
 
 	const buildResult = await build({

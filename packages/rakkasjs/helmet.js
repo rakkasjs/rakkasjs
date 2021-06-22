@@ -1,1 +1,1 @@
-export * from "./dist/helmet";
+export * from "./dist/helmet.js";
