@@ -1,10 +1,10 @@
-export * from "./types";
+export * from "./lib/types";
 
-export { Router } from "./router/Router";
-export { Link } from "./router/Link";
-export { NavLink } from "./router/NavLink";
+export { Router } from "./lib/router/Router";
+export { Link } from "./lib/router/Link";
+export { NavLink } from "./lib/router/NavLink";
 
-export { useRakkas } from "./useRakkas";
+export { useRakkas } from "./lib/useRakkas";
 
 import {
 	PageTypes,
@@ -16,7 +16,7 @@ import {
 	ErrorPage,
 	Layout,
 	SimpleLayout,
-} from "./types";
+} from "./lib/types";
 
 // canHandleErrors missing or false => normal page
 export function definePage<T extends PageTypes = PageTypes>(def: {

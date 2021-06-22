@@ -1,5 +1,5 @@
 import { sortRoutes } from "./sortRoutes";
-import { LayoutImporter, PageImporter } from ".";
+import { LayoutImporter, PageImporter } from "..";
 
 import { pages, layouts } from "@rakkasjs/pages-and-layouts";
 

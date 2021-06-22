@@ -6,7 +6,7 @@ import {
 	LayoutLoadResult,
 	LoadRedirectResult,
 	ReloadHookParams,
-} from ".";
+} from "..";
 import { wrapInErrorBoundary } from "./ErrorBoundary";
 import {
 	ErrorPage,

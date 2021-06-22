@@ -72,16 +72,15 @@ export function makeViteConfig(
 			...config.vite.optimizeDeps,
 			exclude: [
 				...(config.vite.optimizeDeps?.exclude || []),
-				"rakkasjs/server",
 				"@rakkasjs/pages-and-layouts",
 				"@rakkasjs/endpoints-and-middleware",
-			],
-			include: [
-				...(config.vite.optimizeDeps?.include || []),
 				"rakkasjs",
 				"rakkasjs/client",
 				"rakkasjs/helmet",
-
+				"@rakkasjs/server",
+			],
+			include: [
+				...(config.vite.optimizeDeps?.include || []),
 				"react",
 				"react-dom",
 				"react-dom/server",

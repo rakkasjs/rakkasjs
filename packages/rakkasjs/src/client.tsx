@@ -5,13 +5,13 @@ import "core-js/features/string/match-all";
 import React, { FC, useRef, useState } from "react";
 import { hydrate } from "react-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { Router, useRouter } from "./router/Router";
-import { RakkasContext } from "./useRakkas";
+import { Router, useRouter } from "./lib/router/Router";
+import { RakkasContext } from "./lib/useRakkas";
 import {
 	makeComponentStack,
 	RenderedStackItem,
 	StackResult,
-} from "./makeComponentStack";
+} from "./lib/makeComponentStack";
 
 const lastRendered: RenderedStackItem[] = __RAKKAS_RENDERED;
 

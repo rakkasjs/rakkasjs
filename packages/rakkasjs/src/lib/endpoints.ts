@@ -3,7 +3,7 @@ import type {
 	EndpointImporter,
 	MiddlewareImporter,
 	RawRequest,
-} from "./server";
+} from "../server";
 import { endpoints, middleware } from "@rakkasjs/endpoints-and-middleware";
 
 const MIDDLEWARE_REGEXP = new RegExp(

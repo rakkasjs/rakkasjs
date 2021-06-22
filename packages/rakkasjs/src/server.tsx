@@ -1,10 +1,10 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
 import devalue from "devalue";
-import { findEndpoint } from "./endpoints";
-import { makeComponentStack } from "./makeComponentStack";
+import { findEndpoint } from "./lib/endpoints";
+import { makeComponentStack } from "./lib/makeComponentStack";
 import { HelmetProvider, FilledContext } from "react-helmet-async";
-import { RakkasContext } from "./useRakkas";
+import { RakkasContext } from "./lib/useRakkas";
 
 export interface RawRequest {
 	url: URL;

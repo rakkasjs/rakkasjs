@@ -5,9 +5,10 @@
 		[
 			"@babel/preset-env",
 			{
-				"modules": false
+				"targets": {
+					"node": "current"
+				}
 			}
 		]
-	],
-	"plugins": [["babel-plugin-add-import-extension", { "replace": true }]]
+	]
 }

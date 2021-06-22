@@ -22,7 +22,9 @@ export const SampleViewer: FC<SampleViewerProps> = ({
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		if (!iframeRef.current) return;
-		const title = iframeRef.current.contentDocument?.title;
+		const title =
+			iframeRef.current.contentDocument &&
+			iframeRef.current.contentDocument.title;
 		if (title !== pageTitle) setPageTitle(title || DEFAULT_TITLE);
 	});
 

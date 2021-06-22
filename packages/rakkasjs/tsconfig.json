@@ -11,5 +11,5 @@
 		"types": ["vite/client", "jest", "node", "@testing-library/jest-dom"],
 		"skipLibCheck": true
 	},
-	"exclude": ["dist"]
+	"include": ["src"]
 }

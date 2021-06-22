@@ -14,16 +14,29 @@ const options = [
 			"src/server.tsx",
 			"src/helmet.ts",
 		],
-		output: {
-			dir: "dist",
-			format: "esm",
-			plugins: isProd
-				? [
-						// TODO: Investigate why terser breaks the build
-						// terser()
-				  ]
-				: [],
-		},
+		output: [
+			{
+				dir: ".",
+				chunkFileNames: "chunks/[name]-[hash].js",
+				format: "commonjs",
+				plugins: isProd
+					? [
+							// TODO: Investigate why terser breaks the build
+							// terser()
+					  ]
+					: [],
+			},
+			{
+				dir: "esm",
+				format: "esm",
+				plugins: isProd
+					? [
+							// TODO: Investigate why terser breaks the build
+							// terser()
+					  ]
+					: [],
+			},
+		],
 		external: [
 			"@rakkasjs/pages-and-layouts",
 			"@rakkasjs/endpoints-and-middleware",

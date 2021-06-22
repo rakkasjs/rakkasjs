@@ -21,11 +21,32 @@
 		"prepublishOnly": "pnpm run build"
 	},
 	"files": [
-		"dist/**/*",
-		"*.js",
+		"esm/**/*",
+		"chunks/**/*",
+		"client.js",
+		"helmet.js",
+		"index.js",
+		"server.js",
 		"*.d.ts"
 	],
-	"type": "module",
+	"exports": {
+		".": {
+			"require": "./index.js",
+			"import": "./esm/index.js"
+		},
+		"./client": {
+			"require": "./client.js",
+			"import": "./esm/client.js"
+		},
+		"./helmet": {
+			"require": "./helmet.js",
+			"import": "./esm/helmet.js"
+		},
+		"./server": {
+			"require": "./server.js",
+			"import": "./esm/server.js"
+		}
+	},
 	"dependencies": {
 		"@types/react": "^17.0.11",
 		"bare-routes": "^0.3.2",
@@ -57,7 +78,6 @@
 		"@types/testing-library__jest-dom": "^5.14.0",
 		"@typescript-eslint/eslint-plugin": "^4.28.0",
 		"@typescript-eslint/parser": "^4.28.0",
-		"babel-plugin-add-import-extension": "^1.5.1",
 		"cross-env": "^7.0.3",
 		"eslint": "^7.29.0",
 		"eslint-plugin-import": "^2.23.4",

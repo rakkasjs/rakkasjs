@@ -91,6 +91,7 @@ export default function buildCommand() {
 
 				build: {
 					ssr: true,
+					target: "modules",
 					outDir: "../dist/server",
 					rollupOptions: {
 						input: ["rakkasjs/server"],
