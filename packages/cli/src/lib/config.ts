@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { build } from "esbuild";
 import type { Config, FullConfig } from "../..";
+import { pathToFileURL } from "url";
 
 export interface ConfigConfig {
 	filename?: string;
@@ -20,11 +21,11 @@ export async function loadConfig(configConfig: ConfigConfig = {}): Promise<{
 		return { config: withDefaults({}), deps: [] };
 	}
 
+	// eslint-disable-next-line no-console
 	console.log("Loading config from", filename);
 	const { outfile, deps } = await buildFile(filename, configConfig.root);
 
-	console.log(outfile + `?${query++}`);
-	let loaded = await import(outfile + `?${query++}`);
+	let loaded = await import(pathToFileURL(outfile) + `?${query++}`);
 
 	// Poor man's esModuleInterop
 	while (loaded.default) loaded = loaded.default;

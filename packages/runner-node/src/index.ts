@@ -9,6 +9,7 @@ import nodeFetch, {
 	Request as NodeFetchRequest,
 	Headers as NodeFetchHeaders,
 } from "node-fetch";
+import { pathToFileURL } from "url";
 
 (globalThis as any).fetch = nodeFetch;
 (globalThis as any).Response = NodeFetchResponse;
@@ -19,7 +20,7 @@ export async function startServer() {
 	const rootDir = process.cwd();
 
 	const { handleRequest } = (await import(
-		path.resolve(rootDir, "./dist/server/server.js")
+		pathToFileURL(path.resolve(rootDir, "./dist/server/server.js")).href
 	)) as typeof import("rakkasjs/server");
 
 	const manifest: Record<string, string[]> = JSON.parse(
@@ -57,6 +58,7 @@ export async function startServer() {
 
 				res.end(body);
 			} catch (error) {
+				console.error(error);
 				res.statusCode = 500;
 				res.end("Server error");
 			}

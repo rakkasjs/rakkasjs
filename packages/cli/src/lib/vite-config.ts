@@ -38,8 +38,6 @@ export function makeViteConfig(
 		`export const pages = import.meta.glob(${JSON.stringify(PAGES)});` +
 		`export const layouts = import.meta.glob(${JSON.stringify(LAYOUTS)});`;
 
-	console.log("pagesAndLayouts", pagesAndLayouts);
-
 	const endpointsAndMiddleware =
 		`export const endpoints = import.meta.glob(${JSON.stringify(ENDPOINTS)});` +
 		`export const middleware = import.meta.glob(${JSON.stringify(
@@ -121,6 +119,7 @@ export function makeViteConfig(
 								"@rakkasjs/endpoints-and-middleware",
 							);
 						} else if (configDeps.includes(fn) && onConfigChange) {
+							// eslint-disable-next-line no-console
 							console.log("Config file dependency", fn, "changed");
 							onConfigChange();
 						}

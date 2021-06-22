@@ -47,6 +47,7 @@
 		"react-hooks/rules-of-hooks": "error",
 		"react-hooks/exhaustive-deps": "error",
 		"react/prop-types": "off",
+		"no-console": "error",
 		"no-mixed-spaces-and-tabs": "off"
 	}
 }

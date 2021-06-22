@@ -41,7 +41,10 @@ const PokemonStatPage: Page = ({ data }) => {
 				</nav>
 
 				<p style={{ minHeight: "182px" }}>
-					<img src={data.sprites?.front_default} className={css.image} />
+					<img
+						src={data.sprites && data.sprites.front_default}
+						className={css.image}
+					/>
 				</p>
 			</div>
 

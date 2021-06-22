@@ -42,6 +42,7 @@ async function startServer(opts: { port: string; host: string }) {
 			vite = newServers.vite;
 			http = newServers.http;
 			http.listen(3000).on("listening", () => {
+				// eslint-disable-next-line no-console
 				console.log(`Server restarted`);
 			});
 		});
@@ -52,6 +53,7 @@ async function startServer(opts: { port: string; host: string }) {
 	let { vite, http } = await createServers(reload);
 
 	http.listen({ port, host }).on("listening", () => {
+		// eslint-disable-next-line no-console
 		console.log(`Server listening on http://${host}:${port}`);
 	});
 }
@@ -67,6 +69,7 @@ async function createServers(onReload: () => void) {
 		const url = req.url || "/";
 
 		vite.middlewares(req, res, async () => {
+			// eslint-disable-next-line no-console
 			console.log(req.method, req.url);
 			let html = template;
 
@@ -101,6 +104,7 @@ async function createServers(onReload: () => void) {
 				res.end(body);
 			} catch (error) {
 				vite.ssrFixStacktrace(error);
+				// eslint-disable-next-line no-console
 				console.error(error.stack ?? "Unknown error");
 
 				res.setHeader("content-type", "text/html");
