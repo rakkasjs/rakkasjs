@@ -1,6 +1,6 @@
 {
 	"name": "rakkasjs-root-workspace",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"type": "module",
