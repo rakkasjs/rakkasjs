@@ -95,7 +95,11 @@ export default function buildCommand() {
 					target: "modules",
 					outDir: "../dist/server",
 					rollupOptions: {
-						input: ["@rakkasjs/process-request"],
+						input: [
+							"@rakkasjs/page-routes",
+							"@rakkasjs/api-routes",
+							"rakkasjs/server",
+						],
 					},
 					emptyOutDir: true,
 				},

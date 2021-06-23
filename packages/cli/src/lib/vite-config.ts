@@ -45,6 +45,18 @@ export async function makeViteConfig(
 			rootUrl: "/",
 		}),
 
+		"@rakkasjs/page-imports": `
+			const pages = import.meta.glob(${JSON.stringify(PAGES)});
+			const layouts = import.meta.glob(${JSON.stringify(LAYOUTS)});
+			export default Object.assign(pages, layouts);
+		`,
+
+		"@rakkasjs/api-imports": `
+			const endpoints = import.meta.glob(${JSON.stringify(ENDPOINTS)});
+			const middleware = import.meta.glob(${JSON.stringify(MIDDLEWARE)});
+			export default Object.assign(endpoints, middleware);
+		`,
+
 		"@rakkasjs/api-routes": await makeRouteManifest({
 			srcDir,
 			routesDir: apiDir,

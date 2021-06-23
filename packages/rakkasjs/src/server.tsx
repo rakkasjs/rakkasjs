@@ -7,6 +7,8 @@ import devalue from "devalue";
 import { makeComponentStack } from "./lib/makeComponentStack";
 import { findRoute, Route } from "./lib/find-route";
 
+import importers from "@rakkasjs/api-imports";
+
 export interface RawRequest {
 	url: URL;
 	method: string;
@@ -58,10 +60,12 @@ export async function handleRequest(
 		request,
 		template,
 		manifest,
+		pages,
 	}: {
 		request: RawRequest;
 		template: string;
 		manifest?: Record<string, string[] | undefined>;
+		pages?: Array<[RegExp, string, string]>;
 	},
 ): Promise<RakkasResponse> {
 	const path = decodeURI(request.url.pathname);
@@ -73,22 +77,22 @@ export async function handleRequest(
 		if (method === "delete") method = "del";
 		let handler: RequestHandler | undefined;
 
-		const importer = found.stack[found.stack.length - 1] as EndpointImporter;
-		const mdl = await importer();
+		const moduleId = found.stack[found.stack.length - 1];
+		const mdl = await importers[moduleId]();
 
 		const leaf = mdl[method] || mdl.default;
 
 		if (leaf) {
-			const middleware = found.stack.slice(0, -1) as MiddlewareImporter[];
+			const middleware = found.stack.slice(0, -1);
 
 			handler = middleware.reduceRight((prev, cur) => {
 				return async (req: RakkasRequest) => {
-					const mdl = await cur();
+					const mdl = await importers[cur]();
 					return mdl.default(req, prev);
 				};
 			}, leaf);
 
-			return handler({ ...request, params: found.params, context: {} });
+			return handler!({ ...request, params: found.params, context: {} });
 		}
 	}
 
@@ -236,6 +240,10 @@ export async function handleRequest(
 			return x;
 		}),
 	)})</script>`;
+
+	if (pages) {
+		head += `<script>__RAKKAS_ROUTES=(0,eval)(${devalue(pages)})</script>`;
+	}
 
 	head +=
 		helmet.base.toString() +

@@ -19,9 +19,20 @@ import { pathToFileURL } from "url";
 export async function startServer() {
 	const rootDir = process.cwd();
 
-	const { processRequest } = (await import(
-		pathToFileURL(path.resolve(rootDir, "./dist/server/process-request.js"))
-			.href
+	const apiRoutes = (
+		await import(
+			pathToFileURL(path.resolve(rootDir, "./dist/server/api-routes.js")).href
+		)
+	).default.default;
+
+	const pageRoutes = (
+		await import(
+			pathToFileURL(path.resolve(rootDir, "./dist/server/page-routes.js")).href
+		)
+	).default.default;
+
+	const { handleRequest } = (await import(
+		pathToFileURL(path.resolve(rootDir, "./dist/server/server.js")).href
 	)) as any;
 
 	const manifest: Record<string, string[]> = JSON.parse(
@@ -35,7 +46,7 @@ export async function startServer() {
 	const app = createServer((req, res) => {
 		async function handle() {
 			try {
-				const response = await processRequest({
+				const response = await handleRequest(apiRoutes, pageRoutes, {
 					request: {
 						// TODO: Get real host and port
 						url: new URL(req.url || "/", `http://${req.headers.host}`),
@@ -45,12 +56,13 @@ export async function startServer() {
 					},
 					template,
 					manifest,
+					pages: pageRoutes,
 				});
 
 				res.statusCode = response.status ?? 200;
-				Object.entries(response.headers ?? {}).forEach(([k, v]) =>
-					res.setHeader(k, v),
-				);
+				Object.entries(
+					(response.headers as Record<string, string>) ?? {},
+				).forEach(([k, v]) => res.setHeader(k, v));
 
 				const body =
 					typeof response.body === "string"

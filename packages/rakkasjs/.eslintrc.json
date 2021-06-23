@@ -35,6 +35,12 @@
 		"@typescript-eslint/no-explicit-any": "off",
 		"@typescript-eslint/no-non-null-assertion": "off",
 		"@typescript-eslint/explicit-module-boundary-types": "off",
+		"import/no-unresolved": [
+			"error",
+			{
+				"ignore": ["@rakkasjs/page-imports", "@rakkasjs/api-imports"]
+			}
+		],
 		"react-hooks/rules-of-hooks": "error",
 		"react-hooks/exhaustive-deps": "error",
 		"react/prop-types": "off",

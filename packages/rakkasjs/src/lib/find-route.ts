@@ -1,8 +1,4 @@
-export type Route = [
-	regexp: RegExp,
-	pattern: string,
-	importers: Array<() => Promise<any>>,
-];
+export type Route = [regexp: RegExp, pattern: string, ids: string[]];
 
 export function findRoute(
 	path: string,
@@ -12,14 +8,14 @@ export function findRoute(
 	| {
 			params: Record<string, string>;
 			match?: string;
-			stack: Array<() => Promise<any>>;
+			stack: string[];
 	  }
 	| undefined {
 	let notFound = false;
 
 	for (;;) {
 		for (const route of routes) {
-			const [regep, pattern, importers] = route;
+			const [regep, pattern, moduleIds] = route;
 			const match = path.match(regep);
 
 			if (match) {
@@ -32,7 +28,7 @@ export function findRoute(
 				return {
 					params,
 					match: notFound ? undefined : pattern,
-					stack: importers,
+					stack: moduleIds,
 				};
 			}
 		}

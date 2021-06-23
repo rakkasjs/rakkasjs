@@ -17,8 +17,10 @@ import { Route } from "./lib/find-route";
 
 const lastRendered: RenderedStackItem[] = __RAKKAS_RENDERED;
 
-export async function startClient(routes: Route[]) {
+export async function startClient(routes?: Route[]) {
 	const url = new URL(window.location.href);
+
+	routes = routes! || __RAKKAS_ROUTES!;
 
 	const stack = await makeComponentStack({
 		routes,

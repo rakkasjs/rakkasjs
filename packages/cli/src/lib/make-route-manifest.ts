@@ -77,7 +77,7 @@ export async function makeRouteManifest({
 	let result = "";
 
 	for (const [i, wrapper] of wrappers.entries()) {
-		result += `const w${i}=()=>import(${JSON.stringify(wrapper)})\n`;
+		result += `const w${i}=${JSON.stringify(wrapper)}\n`;
 	}
 
 	result += `export default [`;
@@ -88,7 +88,7 @@ export async function makeRouteManifest({
 		)},[${wrapperNames
 			.map((w) => `w${wrappers.indexOf(w)},`)
 			.reverse()
-			.join("")}()=>import(${JSON.stringify(leafName)})]],`;
+			.join("")}${JSON.stringify(leafName)}]],`;
 	}
 
 	return result + "]";

@@ -11,15 +11,6 @@
 		"vite",
 		"ssr"
 	],
-	"scripts": {
-		"build": "rimraf esm chunks && cross-env NODE_ENV=production rollup --config rollup.config.js",
-		"dev": "rollup --watch --config rollup.config.js",
-		"precommit": "lint-staged --no-stash",
-		"typecheck": "tsc -p tsconfig.json --noEmit",
-		"lint:ts": "eslint --max-warnings=0 src",
-		"test": "jest --coverage",
-		"prepublishOnly": "pnpm run build"
-	},
 	"files": [
 		"dist/**/*",
 		"*.d.ts"
@@ -72,5 +63,13 @@
 		"rollup-plugin-terser": "^7.0.2",
 		"rollup-plugin-ts": "^1.4.0",
 		"typescript": "^4.3.4"
+	},
+	"scripts": {
+		"build": "rimraf esm chunks && cross-env NODE_ENV=production rollup --config rollup.config.js",
+		"dev": "rollup --watch --config rollup.config.js",
+		"precommit": "lint-staged --no-stash",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"lint:ts": "eslint --max-warnings=0 src",
+		"test": "jest --coverage"
 	}
 }

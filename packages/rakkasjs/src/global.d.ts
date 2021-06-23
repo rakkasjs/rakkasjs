@@ -7,3 +7,15 @@ declare const __RAKKAS_CONFIG: {
 	apiDir: string;
 	apiRoot: string;
 };
+
+declare const __RAKKAS_ROUTES: any;
+
+declare module "@rakkasjs/page-imports" {
+	const importer: Record<string, () => Promise<any>>;
+	export default importer;
+}
+
+declare module "@rakkasjs/api-imports" {
+	const importer: Record<string, () => Promise<any>>;
+	export default importer;
+}

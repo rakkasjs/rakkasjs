@@ -21,6 +21,8 @@ import { hash } from "./hash";
 import { toErrorDescription } from "./toErrorDescription";
 import { findRoute, Route } from "./find-route";
 
+import importers from "@rakkasjs/page-imports";
+
 export interface RenderedStackItem {
 	Component?: Page | ErrorPage | Layout | SimpleLayout;
 	loaded: PageLoadResult | LayoutLoadResult;
@@ -77,8 +79,9 @@ export async function makeComponentStack({
 		};
 	}
 
-	for (const [i, importer] of stack.entries()) {
-		const module = await importer();
+	for (const [i, moduleId] of stack.entries()) {
+		const module = await importers[moduleId]();
+
 		const isPage = i === stack.length - 1;
 
 		const moduleExports =
@@ -159,6 +162,7 @@ export async function makeComponentStack({
 			Component,
 			loaded,
 			cacheKey,
+			name: moduleId,
 		});
 
 		status = loaded.status ?? status;
