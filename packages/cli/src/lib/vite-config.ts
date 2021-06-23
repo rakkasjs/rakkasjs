@@ -180,6 +180,24 @@ export async function makeViteConfig(
 						importer === normalizedIndexHtmlPath
 					) {
 						return id;
+					} else if (id === "@rakkasjs/client-hooks") {
+						const userVersion = await this.resolve(
+							path.resolve(srcDir, "client"),
+							importer,
+							{
+								skipSelf: true,
+							},
+						);
+						return userVersion || id;
+					} else if (id === "@rakkasjs/server-hooks") {
+						const userVersion = await this.resolve(
+							path.resolve(srcDir, "server"),
+							importer,
+							{
+								skipSelf: true,
+							},
+						);
+						return userVersion || id;
 					} else if (id === "rakkasjs" || id.startsWith("rakkasjs/")) {
 						if (id === "rakkasjs") {
 							id += "/index";
@@ -208,6 +226,11 @@ export async function makeViteConfig(
 							import routes from "@rakkasjs/page-routes";
 							startClient(routes);
 						`;
+					} else if (
+						id === "@rakkasjs/client-hooks" ||
+						id === "@rakkasjs/server-hooks"
+					) {
+						return "";
 					}
 				},
 			},
@@ -218,15 +241,15 @@ export async function makeViteConfig(
 }
 
 const template = `<!DOCTYPE html>
-<html lang="en">
+<html><!-- rakkas-html-attributes-placeholder -->
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<!-- rakkas-head-placeholder -->
 	</head>
-	<body>
+	<body><!-- rakkas-body-attributes-placeholder -->
 		<div id="rakkas-app"><!-- rakkas-app-placeholder --></div>
-		<script type="module" src="/client"></script>
+		<script type="module" src="/__rakkas-start-client.js"></script>
 	</body>
 </html>`;

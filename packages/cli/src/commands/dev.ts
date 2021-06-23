@@ -97,12 +97,16 @@ async function createServers(onReload: () => void) {
 					(response.headers ?? {}) as Record<string, string>,
 				).forEach(([k, v]) => res.setHeader(k, v));
 
-				const body =
+				if (
+					response.body === null ||
+					response.body === undefined ||
+					response.body instanceof Uint8Array ||
 					typeof response.body === "string"
-						? response.body
-						: JSON.stringify(response.body);
-
-				res.end(body);
+				) {
+					res.end(response.body);
+				} else {
+					res.end(JSON.stringify(response.body));
+				}
 			} catch (error) {
 				vite.ssrFixStacktrace(error);
 				// eslint-disable-next-line no-console

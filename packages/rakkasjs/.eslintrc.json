@@ -38,7 +38,12 @@
 		"import/no-unresolved": [
 			"error",
 			{
-				"ignore": ["@rakkasjs/page-imports", "@rakkasjs/api-imports"]
+				"ignore": [
+					"@rakkasjs/page-imports",
+					"@rakkasjs/api-imports",
+					"@rakkasjs/server-hooks",
+					"@rakkasjs/client-hooks"
+				]
 			}
 		],
 		"react-hooks/rules-of-hooks": "error",

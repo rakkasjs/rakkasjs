@@ -213,6 +213,7 @@ importers:
       eslint-plugin-only-warn: ^1.0.2
       eslint-plugin-react: ^7.24.0
       eslint-plugin-react-hooks: ^4.2.0
+      install: ^0.13.0
       node-dev: ^7.0.0
       prettier: ^2.3.1
       prism: ^4.1.2
@@ -248,6 +249,7 @@ importers:
       eslint-plugin-only-warn: 1.0.2
       eslint-plugin-react: 7.24.0_eslint@7.29.0
       eslint-plugin-react-hooks: 4.2.0_eslint@7.29.0
+      install: 0.13.0
       node-dev: 7.0.0
       prettier: 2.3.1
       reprism: 0.0.11
@@ -4391,6 +4393,11 @@ packages:
 
   /inline-style-parser/0.1.1:
     resolution: {integrity: sha512-7NXolsK4CAS5+xvdj5OMMbI962hU/wvwoxk+LWR9Ek9bVtyuuYScDN6eS0rUm6TxApFpw7CX1o4uJzcd4AyD3Q==}
+    dev: true
+
+  /install/0.13.0:
+    resolution: {integrity: sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA==}
+    engines: {node: '>= 0.10'}
     dev: true
 
   /internal-slot/1.0.3:

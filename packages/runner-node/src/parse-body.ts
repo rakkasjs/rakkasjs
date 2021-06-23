@@ -4,7 +4,7 @@ export async function parseBody(req: IncomingMessage) {
 	const type = req.headers["content-type"] ?? "";
 
 	if (
-		type === "text/plain" ||
+		type === "text/*" ||
 		type === "application/json" ||
 		type.endsWith("+json")
 	) {

@@ -1,0 +1,232 @@
+import { Link } from "rakkasjs";
+import { SampleViewer } from "./SampleViewer";
+import { Helmet } from "react-helmet-async";
+
+<Helmet title="Guide - Rakkas" />
+
+# Rakkas Documentation
+
+## What is Rakkas?
+
+> Elevator pitch: Rakkas is Next.js on Vite or Svelte Kit for React.
+
+**Rakkas** aims to be a [React](https://reactjs.org) framework powered by [Vite](https://vitejs.dev), with a developer experience inspired by [Next.js](https://nextjs.org) and [Svelte Kit](https://kit.svelte.dev).
+
+> **WARNING:** Rakkas is in early development. Do not use in production!
+
+Rakkas stands on the shoulder of React and Vite. They bring the following to the table:
+
+- React:
+  - Declarative coding style
+  - Component-based architecture
+  - Vast ecosystem and learning resources
+- Vite:
+  - Lightning fast development environment with Fast Refresh support
+  - Automatic code splitting (including CSS)
+  - Support for CSS modules and preprocessors
+
+On top of all this awesomeness, Rakkas comes bundled with its own features:
+
+- [x] Hassle free server-side rendering
+- [x] Intuitive file system-based routing
+  - [x] Dynamic routes
+  - [x] Nested layouts
+  - [x] Thematic grouping
+- [x] SPA-style client-side router
+- [x] Simple but effective data fetching system
+  - [ ] Soon: Optional caching and "stale while revalidate" strategy
+- [x] API routes to build API endpoints and middleware
+- [ ] Soon: Support for serverless environments
+
+## Getting started
+
+The easiest way to try Rakkas out is to clone the TypeScript demo app:
+
+```sh
+# Create the project directory
+mkdir my-app && cd my-app
+# Clone the TypeScript demo app
+npx degit rakkasjs/rakkasjs/starters/starter
+# Install dependencies
+npm install
+```
+
+Now `npm run dev` will start a development server, `npm run build` will build for production, and `npm start` will start the production server. You can clone `rakkasjs/rakkasjs/starters/starter-js` if you don't like TypeScript and prefer vanilla JavaScript but type definitions are self-documenting so it is easier to learn with the TypeScript demo.
+
+> If you prefer a manual setup, you can install `rakkasjs`, `@rakkasjs/runner-node`, `react`, `react-dom`, and `react-helmet-async` as production dependencies, and `@rakkasjs/cli` as a dev dependency:
+
+```sh
+npm install --save rakkasjs @rakkasjs/runner-node react react-dom react-helmet-async
+npm install --save-dev @rakkasjs/cli
+```
+
+Then you can start a development server on `localhost:3000` with `npx rakkas dev`, build with `npx rakkas build`, and launch with `npx @rakkasjs/runner-node`.
+
+## Pages
+
+In Rakkas, a page is a React component default exported from a module in the `src/pages` directory, named `page.jsx` or anything that matches `*.page.jsx` (or `tsx`, or any other extension included in the `pageExtensions` configuration option).
+
+Rakkas has a file system-based router. The file name determines the URL path. The rules are easy:
+
+| Module name                | URL path      |
+| -------------------------- | ------------- |
+| `src/pages/page.jsx`       | `/`           |
+| `src/pages/about.page.jsx` | `/about`      |
+| `src/pages/about/page.jsx` | also `/about` |
+
+This specific naming convention (`(name.)?page.{extension}`) allows you to have your helper libraries and components next to your page components without resorting to prepending an underscore to prevent name collisions.
+
+A very simple Rakkas page would look like this:
+
+import helloExample from "$examples/hello/page.tsx?sample";
+
+<SampleViewer url="/examples/hello" code={helloExample} />
+
+As you can see Rakkas relies on [`react-helmet-async`](https://github.com/staylor/react-helmet-async#readme) for managing head tags (`title`, `base`, `meta`, `link`, `script`, `noscript`, and `style`) and attributes for `body`, `html`, and `title` tags.
+
+### Dynamic routes
+
+Sometimes you need to encode parameters in the URL path like `/post/1`, `/post/2` etc. Dynamic routes like this are handled using `[square brackets]`. If you have a file named `/src/pages/profile/[userName].page.jsx`, for instance, and you visit `/profile/fatih`, your page component will receive `{ userName: "fatih"}` in `props.params` like in the example below (you can click on the links, they won't take you away from this page):
+
+import paramsExample from "$examples/params/[userName].page.tsx?sample";
+
+<SampleViewer url="/examples/params/Fatih" code={paramsExample} />
+
+You can use more than one dynamic parameter like `/user/[userName]/posts/[postId]`. You can even put multiple parameters in a single path segment if you delimit them with `-` or `.`, like `/user-[name]-[surname]/contact-info` (matches `/user-fatih-aygun/contact-info` for instance).
+
+More specific routes have priority over more generic ones, so you can have both `/products/list` for a specific match and `/products/[productId]` as a catch-all route.
+
+### Client-side navigation
+
+Rakkas provieds a `Link` component (in the `rakkasjs` package) for client-side SPA-style navigation. It takes exactly the same props as the built-in `<a>` element but intercepts user's click to handle the navigation without reloading the page. `NavLink` component is similar but accepts `currentRouteClass` and `currentRouteStyle` to style them differently when the `href` property matches the current URL. It is useful for marking the active item in a navigation menu, for example.
+
+Let's add client-side navigation to the previous example by replacing the `<a>` elements with `NavLink` and adding some inline styling for the active link. Notice how the page refreshes without a full reloadnow:
+
+import navlinkExample from "$examples/navlink/[userName].page.tsx?sample";
+
+<SampleViewer url="/examples/navlink/Fatih" code={navlinkExample} />
+
+For programmatic navigation, use the `navigate` function returned by the `useRakkas` custom hook from the `rakkasjs` package:
+
+import navigateExample from "$examples/navigate/[userName].page.tsx?sample";
+
+<SampleViewer url="/examples/navigate/Fatih" code={navigateExample} />
+
+### Page transitions
+
+The return value of `useRakkas` also has a `current` property. It's a URL object that contains the URL of the currently rendered page. You should always use this property insteaf of `window.location` because, a) `window` is not available during server-side rendering, and b) you'll get the wrong URL during page transitions: When the user clicks on a `Link`, the URL in the location bar of the browser changes immediately but the old page is still shown while the new one is being loaded.
+
+The `next` property of the return value of `useRakkas`, if present, contains the URL that the app is transitioning into. You can test for its presence to render an animated loading bar for example. Also, the `NavLink` component accepts `nextRouteClass` and `nextRouteStyle` props that take effect during a page transition if the `href` property matches the URL that the app is transitioning into.
+
+## Data loading
+
+If you export a `load()` function from your page module, Rakkas will call this function before rendering your component and the `data` prop of the return value will be passed to the component as `props.data`.
+
+By default, Rakkas only calls this function again (we'll call it **"reloadin"**) when the URL path or the query string changes. You can force a reload by calling the `reload` prop:
+
+import reloadExample from "$examples/reload/page.tsx?sample";
+
+<SampleViewer url="/examples/reload" code={reloadExample} />
+
+`load()` may run either on the server or on the client: When the page is first loaded, the page will be rendered server-side so it will be called on the server. During and its return value will be serialized and sent to the client. But during client-side navigation, it will be called on the client-side during client-side navigation without hitting the server.
+
+This means that there are some rules you have to follow:
+
+- The code in `load()` must be able to run both on the server and the browser; you should not call Node-only or browser-only APIs. `window` and `document` are not available in particular.
+- The returned `data` property must be serializable using [devalue](https://github.com/Rich-Harris/devalue). Check their documentation to see what's allowed.
+
+### fetch() function
+
+Since `load()` is intended for data fetching, it can return a promise. To make HTTP requests that includes credentials, it is passed a fetch function that can be used both on the server and the client. Here's a simple example that uses the free Pokéapi:
+
+import fetchExample from "$examples/fetch/[pokemon].page.tsx?sample";
+
+<SampleViewer url="/examples/fetch/pikachu" code={fetchExample} height="35em" />
+
+### `useReload` hook and `getCacheKey`
+
+By default, a page is only reloaded when the URL params or the query string changes. You can customize this by exporting a `getCacheKey` function from your page module. Its return value can be anything that can be serialized into JSON. Then it is compared to the value returned on the previous load cycle to decide whether to reload the page (i.e. call `load()`). For example if you want to reload on URL path changes but not query string changes, you can use `export const getCacheKey({url}) => url.pathname`.
+
+Used together, `getCacheKey()`, `load()`, `fetch()`, `reload()`, and the `useReload()` custom hook (see the sample code below), provide a simple but effective data fetching solution.
+
+import useReloadExample from "$examples/reload/use-reload.page.tsx?sample";
+
+<SampleViewer url="/examples/reload/use-reload" code={useReloadExample} />
+
+## Layouts
+
+Not many web sites consist of completely independent pages. This site (which was made with Rakkas, of course - so meta!), for instance, has a header and footer that is common to the home page and the guide. Rakkas provides a nested layout system to handle this use case and more. If you create a file named `layout.jsx` (or `tsx`, or any other extension included in the `pageExtensions` configuration option) that default exports a React component, pages in the same directory and pages or nested layouts in its subdirectories will be wrapped by the layout. Layout components are also responsible of handling errors:
+
+import layoutExampleLayout from "$examples/layout/layout.tsx?sample";
+import layoutExampleHome from "$examples/layout/page.tsx?sample";
+import layoutExampleAbout from "$examples/layout/about.page.tsx?sample";
+
+<SampleViewer filename="pages/layout.tsx" code={layoutExampleLayout} />
+<SampleViewer filename="pages/page.tsx" code={layoutExampleHome} />
+<SampleViewer
+	filename="pages/about.page.tsx"
+	code={layoutExampleAbout}
+	url="/examples/layout"
+	height="12em"
+/>
+
+### Layout context
+
+Layouts are more than simple wrapper components, they're also data fetching middlewares. Like a page, a layout may export a `load()` function and the `data` prop of the return value is passed to the layout component as `props.data`. But, unlike a page, it can also return a `context` object which will be passed down to lower level layouts and pages. Both the `load()` functions and the React components receive this as a prop. `context` objects returned from nested layouts are shallowly merged with the parent one. All context values must be serializable by devalue.
+
+The context passed to the outermost page or layout can be initialized **on the server-side** by the `getInitialContext` function that you may export from the optional `src/server.js` (or `ts`) file. This can be useful for sending session data for example.
+
+Otherwise its value will be `{}`. You can update it on the client by calling the `setRootContext` returned by `useRakkas` custom hook. Please note that the value is not persisted to the server.
+
+You can even have renderless layouts that don't export a component but still export `load()`.
+
+By default, layouts are never reloaded. You should implement `getCacheKey` or use `reload` or `useReload` to force a reload.
+
+### Thematic grouping
+
+Sometimes you want pages that don't share a common URL prefix to share a layout. For this purpose you can use directory names that start with an underscore that will not be part of the URL path. For example if you have a directory structure like this:
+
+- `pages/`
+  - `layout.jsx` (the root layout, common to all pages)
+  - `_app/` (thematic group for most pages)
+    - `layout.jsx` (common layout for most pages)
+    - `page.jsx` (path: `/`)
+    - `about.page.jsx` (path: `/about`)
+    - `blog.page.jsx` (path: `/blog`)
+  - `_admin` (thematic group for admin pages)
+    - `layout.jsx` (common layout for admin pages)
+    - `admin-page-1.page.tsx` (path: `admin-page-1`)
+    - `admin-page-2.page.tsx` (path: `admin-page-2`)
+
+## Endpoints and middlewares
+
+You can build your API with Rakkas using endpoints and middlewares, that are analogous to pages and layouts respectively. A server-side `fetch` implementation is globally available to both.
+
+In most Node.js frameworks (like Express) where you manipulate request and response objects. These are not available in every serverless environment and Rakkas aims to support them. So it has a simpler model: You get a plain object that represents the request, and you return a plain object that represents the response.
+
+### Endpoints
+
+An endpoint is a module in `src/api` directory, named `endpoint.js` or anything that matches `*.endpoint.js` (or `ts`, or any other extension included in the `apiExtensions` configuration option). It exports method handlers, functions that correspond to HTTP methods like `get`, `post`, `put` etc. `DELETE` method is handled by the `del` function because `delete` is a reserved word in JavaScript.
+
+A method handler is passed a `RakkasReqıest` object that as the following props:
+
+| Name    | Type                          | Description     |
+| ------- | ----------------------------- | --------------- |
+| url     | `URL`                         | Request URL     |
+| method  | `string`                      | HTTP method     |
+| headers | `Headers`                     | HTTP headers    |
+| params  | `Record<string, string>`      | Path parameters |
+| context | `Record<string, any>`         | See below       |
+| body    | `Uint8Array \| string \| any` | Request body    |
+
+The request body is parsed into a binary `Uint8Array` unless the content type is `text/plain` or `application/json`, in which case it is parsed as a string or JSON respectively.
+
+The return value is an object (or a promise thereof) which with a `status`, `headers`, and `body`, all optional. The body is sent as is if it is a `Uint8Array`, `string`, `null`, or `undefined`; otherwise it's JSON stringified.
+
+As an alternative, or in addition to exporting individual method handlers you can default export a function to handle all methods. Specific method handlers have priority
+
+### Middlewares
+
+If you create a file named `middleware.js` (or `ts`, or any other extension included in the `apiExtensions` configuration option) in the `src/api` directory that default exports a function, it will be called before any endpoints in that directory or its subdirectories. Like layouts, middlewares can be nested and thematically grouped. A middleware function receives a the same request parameter as an endpoint and is expected to return a response just like an endpoint. It receives a second parameter, a `next()` function which calls do next middleware or endpoint in the hierarchy. You can pass `next()` a modified request and return a modified response. You don't even have to call the next handler if you wish.
+
+The `context` property is intended for passing data to the next handler but Rakkas will happily pass anything to next handler so you can use your own custom interface if you wish.

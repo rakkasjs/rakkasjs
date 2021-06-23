@@ -9,9 +9,19 @@ export const RakkasProvider: FC<{ value: RakkasInfo | null }> = (props) => {
 
 /** Custom hook for tracking navigation status and programmatic navigation */
 export function useRakkas(): RakkasInfo {
-	const context = useContext(RakkasContext);
+	let context = useContext(RakkasContext);
 
-	if (!context) throw new Error("useRakkas called outside of render tree");
+	if (!context) {
+		// eslint-disable-next-line no-console
+		console.error("useRakkas called outside of render tree");
+
+		context = {
+			current: new URL(location.href),
+			navigate: () => false,
+			params: {},
+			setRootContext: () => undefined,
+		};
+	}
 
 	return context;
 }

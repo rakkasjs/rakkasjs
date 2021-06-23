@@ -10,6 +10,7 @@ const MainLayout: Layout = ({ error, children }) => (
 	<>
 		<Helmet>
 			<html lang="en" />
+			<title>Rakkas</title>
 		</Helmet>
 
 		<Header />

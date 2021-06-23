@@ -178,10 +178,11 @@ export async function handleRequest(
 		return fetch(parsed.href, fullInit);
 	}
 
-	// eslint-disable-next-line import/no-unresolved
-	// const { getRootContext } = await import("@rakkasjs/server");
+	const serverHooks = await import("@rakkasjs/server-hooks");
 
-	const rootContext = {}; // (await (getRootContext && getRootContext())) || {};
+	const { getRootContext } = serverHooks;
+
+	const rootContext = (await (getRootContext && getRootContext())) || {};
 
 	const foundPage = await makeComponentStack({
 		routes: pageRoutes,

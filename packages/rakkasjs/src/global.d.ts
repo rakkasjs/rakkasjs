@@ -19,3 +19,11 @@ declare module "@rakkasjs/api-imports" {
 	const importer: Record<string, () => Promise<any>>;
 	export default importer;
 }
+
+declare module "@rakkasjs/server-hooks" {
+	const getRootContext: (() => Promise<Record<string, unknown>>) | undefined;
+}
+
+declare module "@rakkasjs/client-hooks" {
+	const beforeStartClient: (() => Promise<void>) | undefined;
+}

@@ -43,6 +43,7 @@ export default defineConfig({
 				},
 			},
 		],
+
 		resolve: {
 			alias: {
 				"$lib": "/lib",

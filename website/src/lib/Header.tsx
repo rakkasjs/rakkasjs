@@ -3,6 +3,7 @@ import { Logotype } from "./Logotype";
 import { Link, NavLink } from "rakkasjs";
 import React, { FC } from "react";
 import css from "./Header.module.css";
+import { GithubLogo } from "$lib/GithubLogo";
 
 export const Header: FC = () => (
 	<header className={css.main}>
@@ -18,14 +19,24 @@ export const Header: FC = () => (
 					</NavLink>
 				</li>
 				<li>
-					<NavLink href="/docs" currentRouteClass={css.activeLink}>
-						Docs
+					<NavLink href="/guide" currentRouteClass={css.activeLink}>
+						Guide
 					</NavLink>
 				</li>
 				<li>
 					<NavLink href="/roadmap" currentRouteClass={css.activeLink}>
 						Roadmap
 					</NavLink>
+				</li>
+				<li>
+					<a
+						href="https://github.com/rakkasjs/rakkasjs"
+						target="_blank"
+						rel="noreferrer"
+						title="Github"
+					>
+						<GithubLogo />
+					</a>
 				</li>
 			</ul>
 		</nav>

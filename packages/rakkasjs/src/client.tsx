@@ -18,6 +18,14 @@ import { Route } from "./lib/find-route";
 const lastRendered: RenderedStackItem[] = __RAKKAS_RENDERED;
 
 export async function startClient(routes?: Route[]) {
+	const clientHooks = await import("@rakkasjs/client-hooks");
+
+	const { beforeStartClient } = clientHooks;
+
+	if (beforeStartClient) {
+		await beforeStartClient();
+	}
+
 	const url = new URL(window.location.href);
 
 	routes = routes! || __RAKKAS_ROUTES!;

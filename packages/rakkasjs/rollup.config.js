@@ -22,6 +22,9 @@ const options = [
 			},
 		],
 		external: [
+			"@rakkasjs/server-hooks",
+			"@rakkasjs/client-hooks",
+
 			"@rakkasjs/page-imports",
 			"@rakkasjs/api-imports",
 

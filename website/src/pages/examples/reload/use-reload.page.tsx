@@ -1,5 +1,6 @@
 import React from "react";
 import { Page, PageLoadFunc } from "rakkasjs";
+import { Helmet } from "react-helmet-async";
 
 export const load: PageLoadFunc = () => {
 	return {
@@ -13,14 +14,15 @@ const UseReloadDataPage: Page = ({ data, reload, useReload }) => {
 		focus: true,
 		// Reload when the internet connection is restored after a disconnection
 		reconnect: true,
-		// Reload every five seconds
-		interval: 5_000,
+		// Reload every two seconds
+		interval: 2_000,
 		// But only if the window is in the foreground
 		background: false,
 	});
 
 	return (
 		<div>
+			<Helmet title="useReload Example - Rakkas" />
 			<p>
 				Data is: <b>{data}</b>.
 			</p>

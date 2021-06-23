@@ -1,6 +1,7 @@
 import React from "react";
 import { Page, PageLoadFunc, NavLink } from "rakkasjs";
 import css from "./[pokemon].module.css";
+import { Helmet } from "react-helmet-async";
 
 export const load: PageLoadFunc = async ({ params, fetch }) => {
 	// Fetch a pokemon from the Pokéapi
@@ -16,6 +17,7 @@ export const load: PageLoadFunc = async ({ params, fetch }) => {
 const PokemonStatPage: Page = ({ data }) => {
 	return (
 		<div className={css.wrapper}>
+			<Helmet title="fetch Example - Rakkas" />
 			<div className={css.title}>
 				<nav>
 					<ul className={css.links}>

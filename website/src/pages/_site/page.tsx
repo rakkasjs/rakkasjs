@@ -17,8 +17,8 @@ const HomePage: FC = () => (
 				<Logotype height="100px" />
 			</div>
 			<div className={css.tagLine}>The Dancing Web Framework</div>
-			<Link href="/docs" className={css.cta}>
-				Read the docs
+			<Link href="/guide" className={css.cta}>
+				Read the guide
 			</Link>
 		</div>
 
