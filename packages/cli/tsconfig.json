@@ -5,7 +5,8 @@
 		"skipLibCheck": true,
 		"moduleResolution": "Node",
 		"strict": true,
-		"lib": ["ScriptHost", "DOM", "ES2019"]
+		"lib": ["ScriptHost", "DOM", "ES2019"],
+		"target": "ES2019"
 	},
 	"include": ["src"]
 }

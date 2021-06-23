@@ -37,6 +37,7 @@ function parseCommandLineArguments(version: string) {
 			.description("Print configuration")
 			.action(async () => {
 				const { config } = await loadConfig();
+				// eslint-disable-next-line no-console
 				console.log(config);
 			}),
 	);
@@ -45,5 +46,6 @@ function parseCommandLineArguments(version: string) {
 }
 
 main().catch((error) => {
+	// eslint-disable-next-line no-console
 	console.error(error);
 });

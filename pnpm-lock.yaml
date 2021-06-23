@@ -18,6 +18,7 @@ importers:
       '@babel/preset-react': ^7.14.5
       '@babel/preset-typescript': ^7.14.5
       '@rakkasjs/runner-node': workspace:*
+      '@types/jest': ^26.0.23
       '@types/micromatch': ^4.0.1
       '@types/node': ^15.12.4
       '@typescript-eslint/eslint-plugin': ^4.28.0
@@ -32,6 +33,7 @@ importers:
       eslint-plugin-only-warn: ^1.0.2
       fast-glob: ^3.2.5
       html-entities: ^2.3.2
+      jest: ^27.0.5
       lint-staged: ^11.0.0
       micromatch: ^4.0.4
       node-fetch: ^2.6.1
@@ -60,6 +62,7 @@ importers:
       '@babel/preset-env': 7.14.7_@babel+core@7.14.6
       '@babel/preset-react': 7.14.5_@babel+core@7.14.6
       '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
+      '@types/jest': 26.0.23
       '@types/micromatch': 4.0.1
       '@types/node': 15.12.4
       '@typescript-eslint/eslint-plugin': 4.28.0_4ec1e0eca7c6e4115e1e7a13008fdec2
@@ -69,6 +72,7 @@ importers:
       eslint: 7.29.0
       eslint-plugin-import: 2.23.4_eslint@7.29.0
       eslint-plugin-only-warn: 1.0.2
+      jest: 27.0.5
       lint-staged: 11.0.0
       prettier: 2.3.1
       rakkasjs: link:../rakkasjs
@@ -124,7 +128,6 @@ importers:
       devalue: 2.0.1
       history: 5.0.0
       md5: 2.3.0
-      react-helmet-async: 1.0.9_react-dom@17.0.2+react@17.0.2
       vite: 2.3.8
     devDependencies:
       '@babel/core': 7.14.6
@@ -154,6 +157,7 @@ importers:
       prettier: 2.3.1
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+      react-helmet-async: 1.0.9_react-dom@17.0.2+react@17.0.2
       rimraf: 3.0.2
       rollup: 2.52.2
       rollup-plugin-terser: 7.0.2_rollup@2.52.2
@@ -216,6 +220,7 @@ importers:
       rakkasjs: workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
+      react-helmet-async: ^1.0.9
       reprism: ^0.0.11
       sanitize.css: ^12.0.1
       typescript: ^4.3.4
@@ -227,6 +232,7 @@ importers:
       rakkasjs: link:../packages/rakkasjs
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+      react-helmet-async: 1.0.9_react-dom@17.0.2+react@17.0.2
       sanitize.css: 12.0.1
     devDependencies:
       '@mdx-js/mdx': 1.6.22
@@ -3337,8 +3343,8 @@ packages:
     dependencies:
       ms: 2.1.2
 
-  /decimal.js/10.2.1:
-    resolution: {integrity: sha512-KaL7+6Fw6i5A2XSnsbhm/6B+NuEA7TZ4vqxnd5tXz9sbKtrN9Srj8ab4vKVdK8YAqZO9P1kg45Y6YLoduPf+kw==}
+  /decimal.js/10.3.0:
+    resolution: {integrity: sha512-MrQRs2gyD//7NeHi9TtsfClkf+cFAewDz+PZHR8ILKglLmBMyVX3ymQ+oeznE3tjrS7beTN+6JXb2C3JDHm7ug==}
     dev: true
 
   /decode-uri-component/0.2.0:
@@ -4400,7 +4406,6 @@ packages:
     resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /is-accessor-descriptor/0.1.6:
     resolution: {integrity: sha1-qeEss66Nh2cn7u84Q/igiXtcmNY=}
@@ -5293,7 +5298,7 @@ packages:
       cssom: 0.4.4
       cssstyle: 2.3.0
       data-urls: 2.0.0
-      decimal.js: 10.2.1
+      decimal.js: 10.3.0
       domexception: 2.0.1
       escodegen: 2.0.0
       form-data: 3.0.1
@@ -6291,7 +6296,6 @@ packages:
 
   /react-fast-compare/3.2.0:
     resolution: {integrity: sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==}
-    dev: false
 
   /react-helmet-async/1.0.9_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha512-N+iUlo9WR3/u9qGMmP4jiYfaD6pe9IvDTapZLFJz2D3xlTlCM1Bzy4Ab3g72Nbajo/0ZyW+W9hdz8Hbe4l97pQ==}
@@ -6306,7 +6310,6 @@ packages:
       react-dom: 17.0.2_react@17.0.2
       react-fast-compare: 3.2.0
       shallowequal: 1.1.0
-    dev: false
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -6745,7 +6748,6 @@ packages:
 
   /shallowequal/1.1.0:
     resolution: {integrity: sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==}
-    dev: false
 
   /shebang-command/2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}

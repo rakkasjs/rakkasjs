@@ -1,10 +1,11 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
-import devalue from "devalue";
-import { findEndpoint } from "./lib/endpoints";
-import { makeComponentStack } from "./lib/makeComponentStack";
+import { RakkasProvider } from ".";
 import { HelmetProvider, FilledContext } from "react-helmet-async";
-import { RakkasContext } from "./lib/useRakkas";
+import devalue from "devalue";
+
+import { makeComponentStack } from "./lib/makeComponentStack";
+import { findRoute, Route } from "./lib/find-route";
 
 export interface RawRequest {
 	url: URL;
@@ -51,14 +52,24 @@ export type MiddlewareImporter = () =>
 	| Promise<MiddlewareModule>;
 
 export async function handleRequest(
-	req: RawRequest,
-	template: string,
-	manifest?: Record<string, string[] | undefined>,
+	apiRoutes: Route[],
+	pageRoutes: Route[],
+	{
+		request,
+		template,
+		manifest,
+	}: {
+		request: RawRequest;
+		template: string;
+		manifest?: Record<string, string[] | undefined>;
+	},
 ): Promise<RakkasResponse> {
-	const found = findEndpoint(req);
+	const path = decodeURI(request.url.pathname);
+
+	const found = findRoute(path, apiRoutes);
 
 	if (found) {
-		let method = req.method.toLowerCase();
+		let method = request.method.toLowerCase();
 		if (method === "delete") method = "del";
 		let handler: RequestHandler | undefined;
 
@@ -77,11 +88,11 @@ export async function handleRequest(
 				};
 			}, leaf);
 
-			return handler({ ...req, params: found.params, context: {} });
+			return handler({ ...request, params: found.params, context: {} });
 		}
 	}
 
-	if (req.method !== "GET") {
+	if (request.method !== "GET") {
 		return {
 			status: 404,
 		};
@@ -118,16 +129,16 @@ export async function handleRequest(
 			};
 		}
 
-		const parsed = new URL(url, req.url);
+		const parsed = new URL(url, request.url);
 
-		if (parsed.origin === req.url.origin) {
+		if (parsed.origin === request.url.origin) {
 			if (fullInit.credentials !== "omit") {
-				const cookie = req.headers.get("cookie");
+				const cookie = request.headers.get("cookie");
 				if (cookie !== null) {
 					fullInit.headers.set("cookie", cookie);
 				}
 
-				const authorization = req.headers.get("authorization");
+				const authorization = request.headers.get("authorization");
 				if (!fullInit.headers.has("authorization") && authorization !== null) {
 					fullInit.headers.set("authorization", authorization);
 				}
@@ -141,36 +152,37 @@ export async function handleRequest(
 			"x-forwarded-proto",
 			"x-forwarded-server",
 		].forEach((header) => {
-			if (req.headers.has(header)) {
-				fullInit.headers.set(header, req.headers.get(header)!);
+			if (request.headers.has(header)) {
+				fullInit.headers.set(header, request.headers.get(header)!);
 			}
 		});
 
-		if (req.headers.has("referer")) {
-			fullInit.headers.set("referer", req.headers.get("referer")!);
+		if (request.headers.has("referer")) {
+			fullInit.headers.set("referer", request.headers.get("referer")!);
 		}
 
 		if (
 			!fullInit.headers.has("accept-language") &&
-			req.headers.has("accept-language")
+			request.headers.has("accept-language")
 		) {
 			fullInit.headers.set(
 				"accept-language",
-				req.headers.get("accept-language")!,
+				request.headers.get("accept-language")!,
 			);
 		}
 
 		return fetch(parsed.href, fullInit);
 	}
 
-	// @ts-expect-error: No typings for this module yet
 	// eslint-disable-next-line import/no-unresolved
-	const { getRootContext } = await import("@rakkasjs/server");
+	// const { getRootContext } = await import("@rakkasjs/server");
 
-	const rootContext = (await (getRootContext && getRootContext())) || {};
+	const rootContext = {}; // (await (getRootContext && getRootContext())) || {};
 
 	const foundPage = await makeComponentStack({
-		url: req.url,
+		routes: pageRoutes,
+
+		url: request.url,
 
 		reload() {
 			throw new Error("Don't call reload on server side");
@@ -194,9 +206,9 @@ export async function handleRequest(
 	const helmetContext = {};
 
 	const app = renderToString(
-		<RakkasContext.Provider
+		<RakkasProvider
 			value={{
-				current: req.url,
+				current: request.url,
 				navigate() {
 					throw new Error("navigate() cannot be used on server side");
 				},
@@ -209,7 +221,7 @@ export async function handleRequest(
 			<HelmetProvider context={helmetContext}>
 				{foundPage.content}
 			</HelmetProvider>
-		</RakkasContext.Provider>,
+		</RakkasProvider>,
 	);
 
 	const { helmet } = helmetContext as FilledContext;

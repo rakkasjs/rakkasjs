@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
-import { findPage } from "./pages";
 import {
 	ErrorDescription,
 	LayoutLoadResult,
@@ -20,6 +19,7 @@ import {
 } from "./types";
 import { hash } from "./hash";
 import { toErrorDescription } from "./toErrorDescription";
+import { findRoute, Route } from "./find-route";
 
 export interface RenderedStackItem {
 	Component?: Page | ErrorPage | Layout | SimpleLayout;
@@ -29,6 +29,7 @@ export interface RenderedStackItem {
 }
 
 interface StackArgs {
+	routes: Route[];
 	url: URL;
 	fetch: typeof fetch;
 	previousRender?: RenderedStackItem[];
@@ -45,6 +46,7 @@ export interface StackResult {
 }
 
 export async function makeComponentStack({
+	routes,
 	url,
 	fetch,
 	previousRender,
@@ -52,7 +54,15 @@ export async function makeComponentStack({
 	isInitialRender,
 	rootContext = {},
 }: StackArgs): Promise<LoadRedirectResult | StackResult> {
-	const { stack, params, match, names } = findPage(url.pathname);
+	const found = findRoute(decodeURI(url.pathname), routes, true) || {
+		stack: [],
+		params: {},
+		match: undefined,
+	};
+
+	if (!found) throw new Error("404");
+
+	const { stack, params, match } = found;
 
 	let error: ErrorDescription | undefined;
 	const thisRender: RenderedStackItem[] = [];
@@ -78,12 +88,8 @@ export async function makeComponentStack({
 						load: module.default.load,
 						options: module.default.options,
 						getCacheKey:
-							module.default.getCacheKey ??
-							(isPage
-								? defaultPageGetCacheKey
-								: makeDefaultLayoutGetCacheKey(
-										names[i].split("/").filter((s) => s && s[0] !== "_"),
-								  )),
+							module.default.getCacheKey ||
+							(isPage ? defaultPageGetCacheKey : () => ""),
 				  }
 				: {
 						Component:
@@ -95,12 +101,7 @@ export async function makeComponentStack({
 							: (module as LayoutComponentModule).layoutOptions,
 						getCacheKey:
 							(module as PageComponentModule | LayoutComponentModule)
-								.getCacheKey ??
-							(isPage
-								? defaultPageGetCacheKey
-								: makeDefaultLayoutGetCacheKey(
-										names[i].split("/").filter((s) => s && s[0] !== "_"),
-								  )),
+								.getCacheKey || (isPage ? defaultPageGetCacheKey : () => ""),
 				  };
 
 		const { load, options, getCacheKey } = moduleExports;
@@ -158,7 +159,6 @@ export async function makeComponentStack({
 			Component,
 			loaded,
 			cacheKey,
-			name: names[i],
 		});
 
 		status = loaded.status ?? status;
@@ -295,11 +295,3 @@ const defaultPageGetCacheKey: GetCacheKeyFunc = ({ url, context, params }) => [
 	params,
 	url.search,
 ];
-
-function makeDefaultLayoutGetCacheKey(segments: string[]): GetCacheKeyFunc {
-	const keys = segments
-		.map((seg) => [...seg.matchAll(/\[([^\]]+)\]/g)].map((m) => m[1]))
-		.flat();
-
-	return ({ context, params }) => [context, ...keys.map((k) => params[k])];
-}

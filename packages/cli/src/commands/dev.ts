@@ -62,7 +62,7 @@ async function createServers(onReload: () => void) {
 	const { config, deps: configDeps } = await loadConfig();
 
 	const vite = await createViteServer(
-		makeViteConfig(config, configDeps, onReload),
+		await makeViteConfig(config, configDeps, onReload),
 	);
 
 	const http = createHttpServer({}, (req, res) => {
@@ -71,25 +71,26 @@ async function createServers(onReload: () => void) {
 		vite.middlewares(req, res, async () => {
 			// eslint-disable-next-line no-console
 			console.log(req.method, req.url);
+
 			let html = template;
 
 			try {
-				const { handleRequest } = (await vite.ssrLoadModule(
-					"rakkasjs/server",
-				)) as typeof import("rakkasjs/server");
+				const { processRequest } = await vite.ssrLoadModule(
+					"@rakkasjs/process-request",
+				);
 
 				html = await vite.transformIndexHtml(url, html);
 
-				const response = await handleRequest(
-					{
+				const response = await processRequest({
+					request: {
 						// TODO: Get real host and port
 						url: new URL(url, `http://${req.headers.host}`),
 						method: req.method || "GET",
 						headers: new Headers(req.headers as Record<string, string>),
 						body: await parseBody(req),
 					},
-					html,
-				);
+					template: html,
+				});
 
 				res.statusCode = response.status ?? 200;
 				Object.entries(
@@ -134,6 +135,6 @@ const template = `<!DOCTYPE html>
 	</head>
 	<body><!-- rakkas-body-attributes-placeholder -->
 		<div id="rakkas-app"><!-- rakkas-app-placeholder --></div>
-		<script type="module" src="/client"></script>
+		<script type="module" src="/__rakkas-start-client.js"></script>
 	</body>
 </html>`;

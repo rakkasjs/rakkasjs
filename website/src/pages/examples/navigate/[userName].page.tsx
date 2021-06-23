@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "rakkasjs/helmet";
+import { Helmet } from "react-helmet-async";
 import { Page, useRakkas } from "rakkasjs";
 
 const UserProfilePage: Page = ({ params }) => {

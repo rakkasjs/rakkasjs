@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "rakkasjs/helmet";
+import { Helmet } from "react-helmet-async";
 
 // This is component props type definition
 import { Page } from "rakkasjs";

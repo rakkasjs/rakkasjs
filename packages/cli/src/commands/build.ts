@@ -12,9 +12,10 @@ export default function buildCommand() {
 		.description("Build for production")
 		.action(async () => {
 			const { config, deps } = await loadConfig();
+			const viteConfig = await makeViteConfig(config, deps);
 
 			await build({
-				...makeViteConfig(config, deps),
+				...viteConfig,
 
 				build: {
 					outDir: "../dist/client",
@@ -87,14 +88,14 @@ export default function buildCommand() {
 
 			// Build server
 			await build({
-				...makeViteConfig(config, deps),
+				...viteConfig,
 
 				build: {
 					ssr: true,
 					target: "modules",
 					outDir: "../dist/server",
 					rollupOptions: {
-						input: ["rakkasjs/server"],
+						input: ["@rakkasjs/process-request"],
 					},
 					emptyOutDir: true,
 				},

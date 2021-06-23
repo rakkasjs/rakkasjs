@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Link, NavLink } from "rakkasjs";
-import { Helmet } from "rakkasjs/helmet";
+import { Helmet } from "react-helmet-async";
 
 // Vite supports CSS modules out of the box!
 import css from "./layout.module.css";

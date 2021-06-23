@@ -1,34 +1,18 @@
 import ts from "rollup-plugin-ts";
-import nodeResolvePlugin from "@rollup/plugin-node-resolve";
+import nodeResole from "@rollup/plugin-node-resolve";
 import cjs from "@rollup/plugin-commonjs";
-// import { terser } from "rollup-plugin-terser";
 
 const isProd = process.env.NODE_ENV === "production";
 
 /** @type {import('rollup').RollupOptions[]} */
 const options = [
 	{
-		input: [
-			"src/index.tsx",
-			"src/client.tsx",
-			"src/server.tsx",
-			"src/helmet.ts",
-		],
+		input: ["src/index.tsx", "src/server.tsx", "src/client.tsx"],
 		output: [
 			{
-				dir: ".",
-				chunkFileNames: "chunks/[name]-[hash].js",
-				format: "commonjs",
-				plugins: isProd
-					? [
-							// TODO: Investigate why terser breaks the build
-							// terser()
-					  ]
-					: [],
-			},
-			{
-				dir: "esm",
+				dir: "dist",
 				format: "esm",
+				chunkFileNames: "chunks/[name]-[hash].js",
 				plugins: isProd
 					? [
 							// TODO: Investigate why terser breaks the build
@@ -38,15 +22,15 @@ const options = [
 			},
 		],
 		external: [
-			"@rakkasjs/pages-and-layouts",
-			"@rakkasjs/endpoints-and-middleware",
-			"@rakkasjs/server",
 			"react",
 			"react-dom",
 			"react-dom/server",
+			"react-helmet-async",
 			"node-fetch",
 		],
 		plugins: [
+			nodeResole(),
+			cjs(),
 			ts({
 				transpiler: "babel",
 				browserslist: [
@@ -62,8 +46,6 @@ const options = [
 					"maintained node versions",
 				],
 			}),
-			cjs(),
-			nodeResolvePlugin(),
 		],
 	},
 ];

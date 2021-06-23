@@ -1,10 +1,16 @@
 export * from "./lib/types";
 
-export { Router } from "./lib/router/Router";
+export { Router, useRouter } from "./lib/router/Router";
 export { Link } from "./lib/router/Link";
 export { NavLink } from "./lib/router/NavLink";
 
-export { useRakkas } from "./lib/useRakkas";
+export { useRakkas, RakkasProvider } from "./lib/useRakkas";
+
+export {
+	makeComponentStack,
+	RenderedStackItem,
+	StackResult,
+} from "./lib/makeComponentStack";
 
 import {
 	PageTypes,

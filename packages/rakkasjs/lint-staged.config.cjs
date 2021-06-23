@@ -1,7 +1,7 @@
 module.exports = {
 	"**/*.ts?(x)": [
 		() => "tsc -p tsconfig.json --noEmit",
-		"jest --coverage --findRelatedTests",
+		"jest --findRelatedTests",
 		"eslint --max-warnings=0",
 		"prettier --write",
 	],

@@ -1,7 +1,11 @@
-import { createContext, useContext } from "react";
+import React, { createContext, FC, useContext } from "react";
 import { RakkasInfo } from "./types";
 
-export const RakkasContext = createContext<RakkasInfo | null>(null);
+const RakkasContext = createContext<RakkasInfo | null>(null);
+
+export const RakkasProvider: FC<{ value: RakkasInfo | null }> = (props) => {
+	return <RakkasContext.Provider {...props} />;
+};
 
 /** Custom hook for tracking navigation status and programmatic navigation */
 export function useRakkas(): RakkasInfo {

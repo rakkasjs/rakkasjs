@@ -19,9 +19,10 @@ import { pathToFileURL } from "url";
 export async function startServer() {
 	const rootDir = process.cwd();
 
-	const { handleRequest } = (await import(
-		pathToFileURL(path.resolve(rootDir, "./dist/server/server.js")).href
-	)) as typeof import("rakkasjs/server");
+	const { processRequest } = (await import(
+		pathToFileURL(path.resolve(rootDir, "./dist/server/process-request.js"))
+			.href
+	)) as any;
 
 	const manifest: Record<string, string[]> = JSON.parse(
 		await fs.promises.readFile("./dist/rakkas-manifest.json", "utf-8"),
@@ -34,8 +35,8 @@ export async function startServer() {
 	const app = createServer((req, res) => {
 		async function handle() {
 			try {
-				const response = await handleRequest(
-					{
+				const response = await processRequest({
+					request: {
 						// TODO: Get real host and port
 						url: new URL(req.url || "/", `http://${req.headers.host}`),
 						method: req.method || "GET",
@@ -44,7 +45,7 @@ export async function startServer() {
 					},
 					template,
 					manifest,
-				);
+				});
 
 				res.statusCode = response.status ?? 200;
 				Object.entries(response.headers ?? {}).forEach(([k, v]) =>

@@ -3,7 +3,7 @@ import { Logotype } from "../../lib/Logotype";
 import React, { FC } from "react";
 import css from "./page.module.css";
 import { Link } from "rakkasjs";
-import { Helmet } from "rakkasjs/helmet";
+import { Helmet } from "react-helmet-async";
 
 const HomePage: FC = () => (
 	<>

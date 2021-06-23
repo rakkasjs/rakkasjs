@@ -9,7 +9,8 @@
 		"target": "es6",
 		"moduleResolution": "node",
 		"types": ["vite/client", "jest", "node", "@testing-library/jest-dom"],
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"noEmitOnError": false
 	},
 	"include": ["src"]
 }

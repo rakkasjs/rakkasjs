@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Link } from "rakkasjs";
-import { Helmet } from "rakkasjs/helmet";
+import { Helmet } from "react-helmet-async";
 import { Header } from "../../lib/Header";
 import css from "./layout.module.css";
 import { MDXProvider } from "@mdx-js/react";

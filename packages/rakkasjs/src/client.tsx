@@ -5,20 +5,23 @@ import "core-js/features/string/match-all";
 import React, { FC, useRef, useState } from "react";
 import { hydrate } from "react-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { Router, useRouter } from "./lib/router/Router";
-import { RakkasContext } from "./lib/useRakkas";
 import {
+	RakkasProvider,
+	Router,
+	useRouter,
 	makeComponentStack,
 	RenderedStackItem,
 	StackResult,
-} from "./lib/makeComponentStack";
+} from ".";
+import { Route } from "./lib/find-route";
 
 const lastRendered: RenderedStackItem[] = __RAKKAS_RENDERED;
 
-export async function startClient() {
+export async function startClient(routes: Route[]) {
 	const url = new URL(window.location.href);
 
 	const stack = await makeComponentStack({
+		routes,
 		url,
 		fetch,
 		previousRender: lastRendered,
@@ -37,7 +40,7 @@ export async function startClient() {
 
 	hydrate(
 		<HelmetProvider>
-			<App initialStack={stack} />
+			<App initialStack={stack} routes={routes} />
 		</HelmetProvider>,
 		document.getElementById("rakkas-app"),
 	);
@@ -45,7 +48,8 @@ export async function startClient() {
 
 const App: FC<{
 	initialStack: StackResult;
-}> = ({ initialStack }) => {
+	routes: Route[];
+}> = ({ initialStack, routes }) => {
 	const lastStack = useRef(initialStack);
 	const [rootContext, setRootContext] = useState(__RAKKAS_ROOT_CONTEXT);
 
@@ -53,6 +57,7 @@ const App: FC<{
 		<Router
 			render={async ({ url, rerender, navigate }) => {
 				const stack = await makeComponentStack({
+					routes,
 					url,
 					fetch,
 					reload(i) {
@@ -102,8 +107,8 @@ const Wrapper: FC<{
 	const router = useRouter();
 
 	return (
-		<RakkasContext.Provider value={{ ...router, params, setRootContext }}>
+		<RakkasProvider value={{ ...router, params, setRootContext }}>
 			{children}
-		</RakkasContext.Provider>
+		</RakkasProvider>
 	);
 };
