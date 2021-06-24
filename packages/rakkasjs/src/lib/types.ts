@@ -234,3 +234,27 @@ export interface RakkasInfo extends RouterInfo {
 			| ((old: Record<string, unknown>) => Record<string, unknown>),
 	): void;
 }
+
+export interface RakkasRequest {
+	url: URL;
+	method: string;
+	headers: Headers;
+	params: Record<string, string>;
+	body: Uint8Array | string | any;
+	context: Record<string, unknown>;
+}
+
+export interface RakkasResponse {
+	status?: number;
+	headers?: Record<string, string>;
+	body?: unknown;
+}
+
+export type RequestHandler = (
+	request: RakkasRequest,
+) => RakkasResponse | Promise<RakkasResponse>;
+
+export type RakkasMiddleware = (
+	request: RakkasRequest,
+	next: RequestHandler,
+) => RakkasResponse | Promise<RakkasResponse>;

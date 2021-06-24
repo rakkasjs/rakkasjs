@@ -1,6 +1,12 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
-import { RakkasProvider } from ".";
+import {
+	RakkasMiddleware,
+	RakkasProvider,
+	RakkasRequest,
+	RakkasResponse,
+	RequestHandler,
+} from ".";
 import { HelmetProvider, FilledContext } from "react-helmet-async";
 import devalue from "devalue";
 
@@ -15,30 +21,6 @@ export interface RawRequest {
 	headers: Headers;
 	body: Uint8Array | string | any;
 }
-
-export interface RakkasRequest {
-	url: URL;
-	method: string;
-	headers: Headers;
-	params: Record<string, string>;
-	body: Uint8Array | string | any;
-	context: Record<string, unknown>;
-}
-
-export interface RakkasResponse {
-	status?: number;
-	headers?: Record<string, string>;
-	body?: unknown;
-}
-
-export type RequestHandler = (
-	request: RakkasRequest,
-) => RakkasResponse | Promise<RakkasResponse>;
-
-export type RakkasMiddleware = (
-	request: RakkasRequest,
-	next: RequestHandler,
-) => RakkasResponse | Promise<RakkasResponse>;
 
 export interface EndpointModule {
 	[method: string]: RequestHandler | undefined;
@@ -84,7 +66,6 @@ export async function handleRequest(
 
 		if (leaf) {
 			const middleware = found.stack.slice(0, -1);
-
 			handler = middleware.reduceRight((prev, cur) => {
 				return async (req: RakkasRequest) => {
 					const mdl = await importers[cur]();

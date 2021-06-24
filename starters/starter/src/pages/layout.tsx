@@ -1,13 +1,13 @@
 // This is the main layout of our app. It renders the header and the footer.
 
 import React from "react";
-import { Link, NavLink } from "rakkasjs";
+import { Link, NavLink, Layout } from "rakkasjs";
 import { Helmet } from "react-helmet-async";
 
 // Vite supports CSS modules out of the box!
 import css from "./layout.module.css";
 
-export default ({ error, children }) => (
+const MainLayout: Layout = ({ error, children }) => (
 	<>
 		{/* Rakkas relies on ract-helmet-async for managing the document head */}
 		{/* See their documentation: https://github.com/staylor/react-helmet-async#readme */}
@@ -74,3 +74,5 @@ export default ({ error, children }) => (
 		</footer>
 	</>
 );
+
+export default MainLayout;

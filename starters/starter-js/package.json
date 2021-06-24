@@ -2,18 +2,20 @@
 	"name": "-TODO-",
 	"private": true,
 	"version": "0.0.1",
-	"description": "Rakkas vanilla JS starter project",
+	"description": "Rakkas vanilla JS demo project",
 	"scripts": {
 		"dev": "rakkas dev",
 		"build": "rakkas build",
 		"start": "rakkas-node"
 	},
 	"dependencies": {
-		"@rakkasjs/cli": "^0.1.0",
-		"@rakkasjs/runner-node": "^0.1.0",
-		"rakkasjs": "^0.1.0",
+		"@rakkasjs/runner-node": "0.1.1",
+		"rakkasjs": "0.1.1",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-helmet-async": "^1.0.9"
+	},
+	"devDependencies": {
+		"@rakkasjs/cli": "0.1.1"
 	}
 }

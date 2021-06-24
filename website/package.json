@@ -1,11 +1,14 @@
 {
 	"name": "@rakkasjs/website",
 	"private": true,
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
 	"homepage": "https://rakkas.cyco130.com",
+	"files": [
+		"dist/**/*"
+	],
 	"keywords": [
 		"react",
 		"vite",
@@ -20,6 +23,7 @@
 	},
 	"dependencies": {
 		"@rakkasjs/runner-node": "workspace:*",
+		"@mdx-js/react": "^1.6.22",
 		"prism": "^4.1.2",
 		"prism-themes": "^1.7.0",
 		"rakkasjs": "workspace:*",
@@ -30,7 +34,6 @@
 	},
 	"devDependencies": {
 		"@mdx-js/mdx": "^1.6.22",
-		"@mdx-js/react": "^1.6.22",
 		"@rakkasjs/cli": "workspace:*",
 		"@types/mdx-js__react": "^1.5.3",
 		"@types/react": "^17.0.11",

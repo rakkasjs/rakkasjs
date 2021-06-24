@@ -4,7 +4,10 @@ import css from "./todo.module.css";
 
 // load() will be called before rendering the component and its returnValue.data will be passed to the
 // component as props.data. It may be called both on the server and on the client.
-export async function load({ fetch }) {
+export async function load({ fetch, context }) {
+	// Initialized in getRootContext() at src/server.js
+	console.log("Session:", context.session);
+
 	// Use the passed fetch function to make requests with credentials.
 	return await fetch("/api/todo").then(async (r) => {
 		if (!r.ok) {

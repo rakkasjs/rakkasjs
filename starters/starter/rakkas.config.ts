@@ -1,9 +1,13 @@
+import { defineConfig } from "@rakkasjs/cli";
+
 // Edit this file to change default configuration options.
 // You may delete it if you're happy with the default config options.
 
-// Rakkas bundles this file with esbuild before loading, so you can use modern JS or TypeScript (if you rename it as rakkas.config.ts).
+// Rakkas bundles this file with esbuild before loading, so you can TypeScript.
 
-export default {
+// defineConfig is a helper to ensure IDE code-completion.
+
+export default defineConfig({
 	//
 	// File extensions for pages and layouts
 	// pageExtensions: ["jsx", "tsx"],
@@ -22,4 +26,4 @@ export default {
 	//
 	// Vite configuration (not all options are supported)
 	// vite: {},
-};
+});

@@ -1,0 +1,24 @@
+{
+	"name": "-TODO-",
+	"private": true,
+	"version": "0.0.1",
+	"description": "Rakkas TypeScript demo project",
+	"scripts": {
+		"dev": "rakkas dev",
+		"build": "rakkas build",
+		"start": "rakkas-node"
+	},
+	"dependencies": {
+		"@rakkasjs/runner-node": "file:../../packages/runner-node/rakkasjs-runner-node-0.1.1.tgz",
+		"rakkasjs": "file:../../packages/rakkasjs/rakkasjs-0.1.1.tgz",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-helmet-async": "^1.0.9"
+	},
+	"devDependencies": {
+		"@rakkasjs/cli": "file:../../packages/cli/rakkasjs-cli-0.1.1.tgz",
+		"@types/react": "^17.0.11",
+		"@types/react-dom": "^17.0.8",
+		"typescript": "^4.3.4"
+	}
+}

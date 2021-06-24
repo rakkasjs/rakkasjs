@@ -1,7 +1,7 @@
 {
 	"name": "@rakkasjs/cli",
 	"description": "Development tools for Rakkas.js",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
@@ -12,15 +12,6 @@
 		"ssr"
 	],
 	"type": "module",
-	"scripts": {
-		"dev": "babel src --watch --out-dir dist --extensions '.ts,.js' --env-name=production",
-		"build": "rimraf dist && babel src --out-dir dist --extensions '.ts,.js' --env-name=production",
-		"precommit": "lint-staged --no-stash",
-		"typecheck": "tsc -p tsconfig.json --noEmit",
-		"lint:ts": "eslint --max-warnings=0 src",
-		"test": "jest",
-		"prepublishOnly": "pnpm run build"
-	},
 	"bin": {
 		"rakkas": "dist/bin.js"
 	},
@@ -30,7 +21,7 @@
 		"*.d.ts"
 	],
 	"peerDependencies": {
-		"rakkasjs": "workspace:*",
+		"rakkasjs": "0.1.1",
 		"react": "^17",
 		"react-dom": "^17"
 	},
@@ -53,12 +44,12 @@
 		"jest": "^27.0.5",
 		"lint-staged": "^11.0.0",
 		"prettier": "^2.3.1",
-		"rakkasjs": "workspace:*",
+		"rakkasjs": "0.1.1",
 		"rimraf": "^3.0.2",
 		"typescript": "^4.3.4"
 	},
 	"dependencies": {
-		"@rakkasjs/runner-node": "workspace:*",
+		"@rakkasjs/runner-node": "0.1.1",
 		"@vitejs/plugin-react-refresh": "^1.3.3",
 		"cheerio": "^1.0.0-rc.10",
 		"commander": "^7.2.0",
@@ -69,5 +60,13 @@
 		"sirv": "^1.0.12",
 		"vite": "^2.3.8",
 		"vite-plugin-virtual": "^0.1.1"
+	},
+	"scripts": {
+		"dev": "babel src --watch --out-dir dist --extensions '.ts,.js' --env-name=production",
+		"build": "rimraf dist && babel src --out-dir dist --extensions '.ts,.js' --env-name=production",
+		"precommit": "lint-staged --no-stash",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"lint:ts": "eslint --max-warnings=0 src",
+		"test": "jest"
 	}
 }

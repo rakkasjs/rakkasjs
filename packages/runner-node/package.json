@@ -1,7 +1,7 @@
 {
 	"name": "@rakkasjs/runner-node",
 	"description": "Rakkas.js core runtime",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
@@ -19,11 +19,6 @@
 	"exports": {
 		".": "./dist/index.js",
 		"./parse-body": "./dist/parse-body.js"
-	},
-	"scripts": {
-		"dev": "babel src --watch --out-dir dist --extensions '.ts,.js,.tsx,.jsx'",
-		"build": "rimraf dist && babel src --out-dir dist --extensions '.ts,.js'",
-		"prepublishOnly": "pnpm run build"
 	},
 	"files": [
 		"dist/**/*",
@@ -45,7 +40,11 @@
 	"dependencies": {
 		"@types/node": "^15.12.4",
 		"node-fetch": "^2.6.1",
-		"rakkasjs": "workspace:*",
+		"rakkasjs": "0.1.1",
 		"sirv": "^1.0.12"
+	},
+	"scripts": {
+		"dev": "babel src --watch --out-dir dist --extensions '.ts,.js,.tsx,.jsx'",
+		"build": "rimraf dist && babel src --out-dir dist --extensions '.ts,.js'"
 	}
 }
