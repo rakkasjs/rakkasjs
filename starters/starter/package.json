@@ -9,14 +9,14 @@
 		"start": "rakkas-node"
 	},
 	"dependencies": {
-		"@rakkasjs/runner-node": "0.1.2",
-		"rakkasjs": "0.1.2",
+		"@rakkasjs/runner-node": "0.1.3",
+		"rakkasjs": "0.1.3",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-helmet-async": "^1.0.9"
 	},
 	"devDependencies": {
-		"@rakkasjs/cli": "0.1.2",
+		"@rakkasjs/cli": "0.1.3",
 		"@types/react": "^17.0.11",
 		"@types/react-dom": "^17.0.8",
 		"typescript": "^4.3.4"
