@@ -8,40 +8,63 @@
 
 ![](shared-assets/logo.png)
 
+## What is Rakkas?
+
+> Elevator pitch: Rakkas is Next.js on Vite or Svelte Kit for React.
+
+[READ THE GUIDE!](https://rakkas.cyco130.com)
+
 **Rakkas** aims to be a [React](https://reactjs.org) framework powered by [Vite](https://vitejs.dev), with a developer experience inspired by [Next.js](https://nextjs.org) and [Svelte Kit](https://kit.svelte.dev).
 
-**Rakkas** [ɾɑkːˈɑs] is an old Turkish word borrowed from Arabic, meaning dancer. The now obsolete second meaning is pendulum.
+> **WARNING:** Rakkas is in early development. Do not use in production!
+
+Rakkas stands on the shoulders of React and Vite. They bring the following to the table:
+
+- React:
+  - Declarative coding style
+  - Component-based architecture
+  - Vast ecosystem and learning resources
+- Vite:
+  - Lightning fast development environment with Fast Refresh support
+  - Automatic code splitting (including CSS)
+  - Support for CSS modules and preprocessors
+
+On top of all this awesomeness, Rakkas comes bundled with its own features:
+
+- [x] Hassle free server-side rendering
+- [x] Intuitive file system-based routing
+  - [x] Dynamic routes
+  - [x] Nested layouts
+  - [x] Thematic grouping
+- [x] SPA-style client-side router
+- [x] Simple but effective data fetching system
+  - [ ] Soon: Optional caching and "stale while revalidate" strategy
+- [x] API routes to build API endpoints and middleware
+- [ ] Soon: Support for serverless environments
 
 ## Getting started
-To start a new project, type the following commands on the command line and then follow the prompts.
+
+The easiest way to try Rakkas out is to clone the TypeScript demo app:
 
 ```sh
-mkdir my-rakkas-project
-cd my-rakkas-project
-npm init @rakkasjs
+# Create the project directory
+mkdir my-app && cd my-app
+# Clone the TypeScript demo app
+npx degit rakkasjs/rakkasjs/starters/starter
+# Install dependencies
+npm install
 ```
 
-If you prefer to start from scratch, add `@rakkasjs/cli` as a dev dependency and `@rakkajs/core`, `react` and `react-dom` as a dependency.
+Now `npm run dev` will start a development server, `npm run build` will build for production, and `npm start` will start the production server. You can clone `rakkasjs/rakkasjs/starters/starter-js` if you don't like TypeScript and prefer vanilla JavaScript but type definitions are self-documenting so it is easier to learn with the TypeScript demo.
 
+Demo projects' source code come with plenty of comments, you may not need this guide!
 
+> If you prefer a manual setup, you can install `rakkasjs`, `@rakkasjs/runner-node`, `react`, `react-dom`, and `react-helmet-async` as production dependencies, and `@rakkasjs/cli` as a dev dependency:
 
+```sh
+npm install --save rakkasjs @rakkasjs/runner-node react react-dom react-helmet-async
+npm install --save-dev @rakkasjs/cli
+```
 
-## TODO
-- Documentation
-- Prepare packages for publication
-- Project initializer
-- MVP!
+Then you can start a development server on `localhost:3000` with `npx rakkas dev`, build with `npx rakkas build`, and launch with `npx @rakkasjs/runner-node`.
 
-- Navigation blocking
-- Spread path parameters
-- HTTPS mode for dev server
-- Data caching and SWR
-- Page transition animations
-- renderToNodeStream
-- Localized routing
-- Custom routing
-- Adapters for serverless environments
-
-## Credits and license
-- Initial concept and programming by [Fatih Aygün](https://github.com/cyco130)
-- Logomark: “Flamenco” by [gzz from Noun Project](https://thenounproject.com/term/flamenco/111303/) (not affiliated). Used under [Creative Commons Attribution Generic license (CCBY)](https://creativecommons.org/licenses/by/2.0/).

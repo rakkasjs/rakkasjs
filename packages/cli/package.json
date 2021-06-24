@@ -1,7 +1,7 @@
 {
 	"name": "@rakkasjs/cli",
 	"description": "Development tools for Rakkas.js",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
