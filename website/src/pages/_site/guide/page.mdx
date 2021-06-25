@@ -88,13 +88,13 @@ As you can see Rakkas relies on [`react-helmet-async`](https://github.com/staylo
 
 ### Dynamic routes
 
-Sometimes you need to encode parameters in the URL path like `/post/1`, `/post/2` etc. Dynamic routes like this are handled using `[square brackets]`. If you have a file named `/src/pages/profile/[userName].page.jsx`, for instance, and you visit `/profile/fatih`, your page component will receive `{ userName: "fatih"}` in `props.params` like in the example below (you can click on the links, they won't take you away from this page):
+Sometimes you need to encode parameters in the URL path like `/post/1`, `/post/2` etc. Dynamic routes like this are handled using `[square brackets]`. If you have a file named `/src/pages/profile/[userName].page.jsx`, for instance, and you visit `/profile/fatih`, your page component will receive `{ userName: "fatih" }` in `props.params` like in the example below (you can click on the links, they won't take you away from this page):
 
 import paramsExample from "$examples/params/[userName].page.tsx?sample";
 
 <SampleViewer url="/examples/params/Fatih" code={paramsExample} />
 
-You can use more than one dynamic parameter like `/user/[userName]/posts/[postId]`. You can even put multiple parameters in a single path segment if you delimit them with `-` or `.`, like `/user-[name]-[surname]/contact-info` (matches `/user-fatih-aygun/contact-info` for instance).
+You can use more than one dynamic parameter like `/user/[userName]/posts/[postId]`. You can even put multiple parameters in a single path segment if you delimit them with `-` or `.`, like `/user-[name]-[surname]/contact-info` (matches `/user-fatih-aygun/contact-info` with `params: { name: "fatih", surname: "aygun" }` for instance).
 
 More specific routes have priority over more generic ones, so you can have both `/products/list` for a specific match and `/products/[productId]` as a catch-all route.
 
@@ -124,7 +124,7 @@ The `next` property of the return value of `useRakkas`, if present, contains the
 
 If you export a `load()` function from your page module, Rakkas will call this function before rendering your component and the `data` prop of the return value will be passed to the component as `props.data`.
 
-By default, Rakkas only calls this function again (we'll call it **"reloadin"**) when the URL path or the query string changes. You can force a reload by calling the `reload` prop:
+By default, Rakkas only calls this function again (we'll call it **"reloading"**) when the URL path or the query string changes. You can force a reload by calling the `reload` prop:
 
 import reloadExample from "$examples/reload/page.tsx?sample";
 
