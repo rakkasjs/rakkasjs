@@ -2,7 +2,7 @@ import reactRefresh from "@vitejs/plugin-react-refresh";
 import path from "path";
 import * as vitePluginVirtual from "vite-plugin-virtual";
 import micromatch from "micromatch";
-import { InlineConfig, normalizePath } from "vite";
+import { InlineConfig, normalizePath, SSROptions } from "vite";
 import { FullConfig } from "../..";
 import { makeRouteManifest } from "./make-route-manifest";
 
@@ -80,7 +80,7 @@ export async function makeViteConfig(
 	const indexHtmlPath = path.resolve("src", "index.html");
 	const normalizedIndexHtmlPath = normalizePath(indexHtmlPath);
 
-	return {
+	const result: InlineConfig = {
 		...config.vite,
 		configFile: false,
 		root: srcDir,
@@ -92,7 +92,12 @@ export async function makeViteConfig(
 		},
 		optimizeDeps: {
 			...config.vite.optimizeDeps,
-			exclude: [...(config.vite.optimizeDeps?.exclude || [])],
+			exclude: [
+				...(config.vite.optimizeDeps?.exclude || [
+					"rakkasjs",
+					"rakkasjs/server",
+				]),
+			],
 			include: [
 				...(config.vite.optimizeDeps?.include || []),
 				"react",
@@ -198,22 +203,6 @@ export async function makeViteConfig(
 							},
 						);
 						return userVersion || id;
-					} else if (id === "rakkasjs" || id.startsWith("rakkasjs/")) {
-						if (id === "rakkasjs") {
-							id += "/index";
-						}
-						id += ".js";
-
-						const resolved = path.resolve(
-							path.resolve(
-								"node_modules",
-								"rakkasjs",
-								"dist",
-								id.slice("rakkasjs/".length),
-							),
-						);
-
-						return resolved;
 					}
 				},
 
@@ -238,6 +227,15 @@ export async function makeViteConfig(
 			...(config.vite.plugins || []),
 		],
 	};
+
+	const ssrOptions: SSROptions = {
+		noExternal: ["rakkasjs", "rakkasjs/server"],
+	};
+
+	// @ts-expect-error: SSR options are not in the type definitions yet
+	result.ssr = ssrOptions;
+
+	return result;
 }
 
 const template = `<!DOCTYPE html>

@@ -18,6 +18,7 @@
 	"module": "dist/index.js",
 	"files": [
 		"dist/**/*",
+		"server-entry.js",
 		"*.d.ts"
 	],
 	"peerDependencies": {

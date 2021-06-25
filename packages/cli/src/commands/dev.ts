@@ -75,6 +75,10 @@ async function createServers(onReload: () => void) {
 			let html = template;
 
 			try {
+				// Force them into module cache. Otherwise symlinks confuse vite.
+				await vite.ssrLoadModule("rakkasjs");
+				await vite.ssrLoadModule("rakkasjs/server");
+
 				const { processRequest } = await vite.ssrLoadModule(
 					"@rakkasjs/process-request",
 				);

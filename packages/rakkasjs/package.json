@@ -15,6 +15,11 @@
 		"dist/**/*",
 		"*.d.ts"
 	],
+	"exports": {
+		".": "./dist/index.js",
+		"./server": "./dist/server.js",
+		"./client": "./dist/client.js"
+	},
 	"dependencies": {
 		"@types/react": "^17.0.11",
 		"bare-routes": "^0.3.2",
