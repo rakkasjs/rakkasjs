@@ -1,6 +1,10 @@
 declare const __RAKKAS_RENDERED: any;
-
 declare const __RAKKAS_ROOT_CONTEXT: any;
+
+interface Window {
+	__RAKKAS_RAKKAS_CONTEXT: any;
+	__RAKKAS_ROUTER_CONTEXT: any;
+}
 
 declare const __RAKKAS_CONFIG: {
 	pagesDir: string;

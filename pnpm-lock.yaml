@@ -98,6 +98,7 @@ importers:
       '@types/testing-library__jest-dom': ^5.14.0
       '@typescript-eslint/eslint-plugin': ^4.28.0
       '@typescript-eslint/parser': ^4.28.0
+      babel-plugin-transform-vite-meta-env: ^1.0.3
       bare-routes: ^0.3.2
       core-js: ^3.15.0
       cross-env: ^7.0.3
@@ -146,6 +147,7 @@ importers:
       '@types/testing-library__jest-dom': 5.14.0
       '@typescript-eslint/eslint-plugin': 4.28.0_4ec1e0eca7c6e4115e1e7a13008fdec2
       '@typescript-eslint/parser': 4.28.0_eslint@7.29.0+typescript@4.3.4
+      babel-plugin-transform-vite-meta-env: 1.0.3
       cross-env: 7.0.3
       eslint: 7.29.0
       eslint-plugin-import: 2.23.4_eslint@7.29.0
@@ -2741,6 +2743,13 @@ packages:
       '@babel/helper-define-polyfill-provider': 0.2.3_@babel+core@7.14.6
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /babel-plugin-transform-vite-meta-env/1.0.3:
+    resolution: {integrity: sha512-eyfuDEXrMu667TQpmctHeTlJrZA6jXYHyEJFjcM0yEa60LS/LXlOg2PBbMb8DVS+V9CnTj/j9itdlDVMcY2zEg==}
+    dependencies:
+      '@babel/runtime': 7.14.6
+      '@types/babel__core': 7.1.14
     dev: true
 
   /babel-preset-current-node-syntax/1.0.1_@babel+core@7.14.6:

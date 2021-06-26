@@ -1,9 +1,20 @@
-import React, { createContext, FC, useContext } from "react";
+import React, { createContext, FC, useContext, Context } from "react";
 import { RakkasInfo } from "./types";
 
-const RakkasContext = createContext<RakkasInfo | null>(null);
+// Make the context persist between hot reloads
+let RakkasContext: Context<RakkasInfo>;
 
-export const RakkasProvider: FC<{ value: RakkasInfo | null }> = (props) => {
+if (!import.meta.env.SSR && window.__RAKKAS_RAKKAS_CONTEXT) {
+	RakkasContext = window.__RAKKAS_RAKKAS_CONTEXT;
+} else {
+	RakkasContext = createContext<RakkasInfo>(undefined as any);
+
+	if (!import.meta.env.SSR) {
+		window.__RAKKAS_RAKKAS_CONTEXT = RakkasContext;
+	}
+}
+
+export const RakkasProvider: FC<{ value: RakkasInfo }> = (props) => {
 	return <RakkasContext.Provider {...props} />;
 };
 

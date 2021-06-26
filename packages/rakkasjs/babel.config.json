@@ -10,5 +10,10 @@
 				}
 			}
 		]
-	]
+	],
+	"env": {
+		"test": {
+			"plugins": ["babel-plugin-transform-vite-meta-env"]
+		}
+	}
 }

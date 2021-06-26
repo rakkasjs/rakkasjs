@@ -51,6 +51,7 @@
 		"@types/testing-library__jest-dom": "^5.14.0",
 		"@typescript-eslint/eslint-plugin": "^4.28.0",
 		"@typescript-eslint/parser": "^4.28.0",
+		"babel-plugin-transform-vite-meta-env": "^1.0.3",
 		"cross-env": "^7.0.3",
 		"eslint": "^7.29.0",
 		"eslint-plugin-import": "^2.23.4",
