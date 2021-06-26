@@ -177,7 +177,7 @@ export async function makeViteConfig(
 					}
 				},
 
-				async resolveId(id, importer) {
+				async resolveId(id, importer, options) {
 					if (id === indexHtmlPath) {
 						return normalizedIndexHtmlPath;
 					} else if (
@@ -190,6 +190,7 @@ export async function makeViteConfig(
 							path.resolve(srcDir, "client"),
 							importer,
 							{
+								...options,
 								skipSelf: true,
 							},
 						);
@@ -199,6 +200,7 @@ export async function makeViteConfig(
 							path.resolve(srcDir, "server"),
 							importer,
 							{
+								...options,
 								skipSelf: true,
 							},
 						);
