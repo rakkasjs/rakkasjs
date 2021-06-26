@@ -50,6 +50,10 @@
 		"react-hooks/exhaustive-deps": "error",
 		"react/prop-types": "off",
 		"no-console": "error",
-		"no-mixed-spaces-and-tabs": "off"
+		"no-mixed-spaces-and-tabs": "off",
+		"no-warning-comments": [
+			"error",
+			{ "terms": ["fixme"], "location": "anywhere" }
+		]
 	}
 }
