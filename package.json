@@ -1,6 +1,6 @@
 {
 	"name": "rakkasjs-root-workspace",
-	"version": "0.1.3",
+	"version": "0.1.4-canary.2",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"type": "module",
@@ -14,6 +14,8 @@
 	"scripts": {
 		"prepare": "husky install",
 		"set-version": "pnpm -r exec -- npm version --no-git-tag-version",
+		"canary": "pnpm -r exec -- npm version --no-git-tag-version prerelease --preid=canary && pnpm -r --filter=./packages exec -- pnpm publish --tag canary --no-git-checks --access=public",
+		"publish": "pnpm -r exec -- npm version minor && git push && git push --tags && pnpm -r --filter=./packages exec -- pnpm publish",
 		"publish-all": "pnpm -r --filter=./packages exec -- pnpm publish"
 	},
 	"devDependencies": {

@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"module": "es2020",
+		"skipLibCheck": true,
+		"moduleResolution": "Node",
+		"strict": true,
+		"lib": ["ScriptHost", "DOM", "ES2019"],
+		"target": "ES2019",
+		"jsx": "react",
+		"resolveJsonModule": true
+	},
+	"include": ["src"]
+}

@@ -1,5 +1,4 @@
 import { render, screen, act } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
 import { Router } from "./Router";
 import React, { ReactNode } from "react";
 

@@ -16,5 +16,4 @@ Commands:
   help [command]  display help for command
 ```
 
-
-See the [documentation](https://rakkas.cyco130.com/docs) for details.
+See the [website](https://rakkas.cyco130.com) for details.
