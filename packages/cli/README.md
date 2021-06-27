@@ -1,4 +1,4 @@
-This is the development CLI package for [Rakkas.JS](https://rakkas.cyco130.com).
+This is the development CLI package for [Rakkas.JS](https://rakkasjs.org).
 
 ```
 Usage: rakkas [options] [command]
@@ -16,4 +16,4 @@ Commands:
   help [command]  display help for command
 ```
 
-See the [website](https://rakkas.cyco130.com) for details.
+See the [website](https://rakkasjs.org) for details.

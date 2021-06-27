@@ -1,4 +1,4 @@
-This is the vanilla JavaScript starter project of Rakkas.
+This is the vanilla JavaScript starter project of [Rakkas](https://rakkasjs.org).
 
 ```sh
 # Start development server on localhost:3000

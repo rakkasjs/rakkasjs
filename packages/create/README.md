@@ -1,4 +1,4 @@
-This is the project initializer package for [Rakkas.JS](https://rakkas.cyco130.com).
+This is the project initializer package for [Rakkas.JS](https://rakkasjs.org).
 
 ```
 Usage: npm init @rakkasjs [options]
@@ -23,4 +23,4 @@ Options:
   -h, --help                              display help for command
 ```
 
-See the [website](https://rakkas.cyco130.com) for details.
+See the [website](https://rakkasjs.org) for details.

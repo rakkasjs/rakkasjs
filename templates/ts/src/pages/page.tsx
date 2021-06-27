@@ -9,7 +9,7 @@ const HomePage: Page = function HomePage() {
 			<p>
 				Try editing <code>src/pages/page.jsx</code> or{" "}
 				<code>src/pages/layout.jsx</code> to get started or go to the{" "}
-				<a href="https://rakkas.cyco130.com" target="_blank" rel="noreferrer">
+				<a href="https://rakkasjs.org" target="_blank" rel="noreferrer">
 					website
 				</a>
 				.

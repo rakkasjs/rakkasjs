@@ -65,6 +65,7 @@ export const Generator: FC<FormValue> = (opts) => {
 					try {
 						// Update package.json
 						const pkg: {
+							name: string;
 							version: string;
 							scripts: Record<string, string>;
 							dependencies: Record<string, string>;
@@ -74,6 +75,7 @@ export const Generator: FC<FormValue> = (opts) => {
 						);
 
 						// Update package JSON
+						pkg.name = "--TODO--";
 						pkg.version = "0.0.1";
 
 						for (const [k, v] of Object.entries(pkg.dependencies || {})) {

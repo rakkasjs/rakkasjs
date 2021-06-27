@@ -12,7 +12,7 @@
 
 > Elevator pitch: Rakkas is Next.js on Vite or Svelte Kit for React.
 
-[READ THE GUIDE!](https://rakkas.cyco130.com)
+[READ THE GUIDE!](https://rakkasjs.org)
 
 **Rakkas** aims to be a [React](https://reactjs.org) framework powered by [Vite](https://vitejs.dev), with a developer experience inspired by [Next.js](https://nextjs.org) and [Svelte Kit](https://kit.svelte.dev).
 

@@ -5,7 +5,7 @@
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
-	"homepage": "https://rakkas.cyco130.com",
+	"homepage": "https://rakkasjs.org",
 	"files": [
 		"dist/**/*"
 	],

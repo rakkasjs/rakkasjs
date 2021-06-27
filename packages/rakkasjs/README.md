@@ -1,3 +1,3 @@
-This is the core library package for [Rakkas.JS](https://rakkas.cyco130.com).
+This is the core library package for [Rakkas.JS](https://rakkasjs.org).
 
-See the [website](https://rakkas.cyco130.com) for details.
+See the [website](https://rakkasjs.org) for details.

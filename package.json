@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"type": "module",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
-	"homepage": "https://rakkas.cyco130.com",
+	"homepage": "https://rakkasjs.org",
 	"keywords": [
 		"react",
 		"vite",
