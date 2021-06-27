@@ -15,7 +15,6 @@
 		"create-rakkas-app": "create-rakkas-app.js"
 	},
 	"files": [
-		"dist/**/*",
 		"templates/**/*"
 	],
 	"devDependencies": {

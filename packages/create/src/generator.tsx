@@ -31,7 +31,6 @@ export const Generator: FC<FormValue> = (opts) => {
 
 						switch (name) {
 							case "jest.config.json":
-							case "babel.config.json":
 							case "src/jest-setup.js":
 							case "src/jest-setup.ts":
 								return opts.features.jest;
@@ -87,7 +86,7 @@ export const Generator: FC<FormValue> = (opts) => {
 							if (!opts.features.jest) {
 								if (
 									k.includes("jest") ||
-									k.includes("babel") ||
+									k.includes("esbuild") ||
 									k.includes("testing-library")
 								) {
 									delete pkg.devDependencies![k];

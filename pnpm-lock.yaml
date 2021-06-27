@@ -249,14 +249,12 @@ importers:
 
   templates/js:
     specifiers:
-      '@babel/core': ^7.14.6
-      '@babel/preset-env': ^7.14.7
-      '@babel/preset-react': ^7.14.5
       '@rakkasjs/cli': workspace:*
       '@rakkasjs/runner-node': workspace:*
       '@testing-library/jest-dom': ^5.14.1
       '@testing-library/react': ^12.0.0
-      babel-plugin-transform-vite-meta-env: ^1.0.3
+      esbuild: ^0.12.9
+      esbuild-jest: ^0.5.0
       eslint: ^7.29.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-import: ^2.23.4
@@ -281,13 +279,11 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       react-helmet-async: 1.0.9_react-dom@17.0.2+react@17.0.2
     devDependencies:
-      '@babel/core': 7.14.6
-      '@babel/preset-env': 7.14.7_@babel+core@7.14.6
-      '@babel/preset-react': 7.14.5_@babel+core@7.14.6
       '@rakkasjs/cli': link:../../packages/cli
       '@testing-library/jest-dom': 5.14.1
       '@testing-library/react': 12.0.0_react-dom@17.0.2+react@17.0.2
-      babel-plugin-transform-vite-meta-env: 1.0.3
+      esbuild: 0.12.9
+      esbuild-jest: 0.5.0_esbuild@0.12.9
       eslint: 7.29.0
       eslint-config-prettier: 8.3.0_eslint@7.29.0
       eslint-plugin-import: 2.23.4_eslint@7.29.0
@@ -304,10 +300,6 @@ importers:
 
   templates/ts:
     specifiers:
-      '@babel/core': ^7.14.6
-      '@babel/preset-env': ^7.14.7
-      '@babel/preset-react': ^7.14.5
-      '@babel/preset-typescript': ^7.14.5
       '@rakkasjs/cli': workspace:*
       '@rakkasjs/runner-node': workspace:*
       '@testing-library/jest-dom': ^5.14.1
@@ -318,7 +310,8 @@ importers:
       '@types/testing-library__jest-dom': ^5.14.0
       '@typescript-eslint/eslint-plugin': ^4.28.0
       '@typescript-eslint/parser': ^4.28.0
-      babel-plugin-transform-vite-meta-env: ^1.0.3
+      esbuild: ^0.12.9
+      esbuild-jest: ^0.5.0
       eslint: ^7.29.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-import: ^2.23.4
@@ -344,10 +337,6 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       react-helmet-async: 1.0.9_react-dom@17.0.2+react@17.0.2
     devDependencies:
-      '@babel/core': 7.14.6
-      '@babel/preset-env': 7.14.7_@babel+core@7.14.6
-      '@babel/preset-react': 7.14.5_@babel+core@7.14.6
-      '@babel/preset-typescript': 7.14.5_@babel+core@7.14.6
       '@rakkasjs/cli': link:../../packages/cli
       '@testing-library/jest-dom': 5.14.1
       '@testing-library/react': 11.2.7_react-dom@17.0.2+react@17.0.2
@@ -357,7 +346,8 @@ importers:
       '@types/testing-library__jest-dom': 5.14.0
       '@typescript-eslint/eslint-plugin': 4.28.0_4ec1e0eca7c6e4115e1e7a13008fdec2
       '@typescript-eslint/parser': 4.28.0_eslint@7.29.0+typescript@4.3.4
-      babel-plugin-transform-vite-meta-env: 1.0.3
+      esbuild: 0.12.9
+      esbuild-jest: 0.5.0_esbuild@0.12.9
       eslint: 7.29.0
       eslint-config-prettier: 8.3.0_eslint@7.29.0
       eslint-plugin-import: 2.23.4_eslint@7.29.0
@@ -4214,6 +4204,19 @@ packages:
       is-callable: 1.2.3
       is-date-object: 1.0.4
       is-symbol: 1.0.4
+    dev: true
+
+  /esbuild-jest/0.5.0_esbuild@0.12.9:
+    resolution: {integrity: sha512-AMZZCdEpXfNVOIDvURlqYyHwC8qC1/BFjgsrOiSL1eyiIArVtHL8YAC83Shhn16cYYoAWEW17yZn0W/RJKJKHQ==}
+    peerDependencies:
+      esbuild: '>=0.8.50'
+    dependencies:
+      '@babel/core': 7.14.6
+      '@babel/plugin-transform-modules-commonjs': 7.14.5_@babel+core@7.14.6
+      babel-jest: 26.6.3_@babel+core@7.14.6
+      esbuild: 0.12.9
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /esbuild/0.12.9:

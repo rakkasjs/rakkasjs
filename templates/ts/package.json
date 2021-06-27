@@ -1,5 +1,5 @@
 {
-	"name": "-TODO-",
+	"name": "-TODO-TS-",
 	"private": true,
 	"version": "0.1.4-canary.2",
 	"description": "Rakkas TypeScript demo project",
@@ -21,10 +21,6 @@
 		"react-helmet-async": "^1.0.9"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.14.6",
-		"@babel/preset-env": "^7.14.7",
-		"@babel/preset-react": "^7.14.5",
-		"@babel/preset-typescript": "^7.14.5",
 		"@rakkasjs/cli": "workspace:*",
 		"@testing-library/jest-dom": "^5.14.1",
 		"@testing-library/react": "^11.2.7",
@@ -34,7 +30,8 @@
 		"@types/testing-library__jest-dom": "^5.14.0",
 		"@typescript-eslint/eslint-plugin": "^4.28.0",
 		"@typescript-eslint/parser": "^4.28.0",
-		"babel-plugin-transform-vite-meta-env": "^1.0.3",
+		"esbuild": "^0.12.9",
+		"esbuild-jest": "^0.5.0",
 		"eslint": "^7.29.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-import": "^2.23.4",
