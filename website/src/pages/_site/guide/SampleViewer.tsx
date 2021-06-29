@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useState } from "react";
 import css from "./SampleViewer.module.css";
 
 export interface SampleViewerProps {
@@ -16,17 +16,7 @@ export const SampleViewer: FC<SampleViewerProps> = ({
 	url,
 	height,
 }) => {
-	const iframeRef = useRef<HTMLIFrameElement | null>(null);
 	const [pageTitle, setPageTitle] = useState(DEFAULT_TITLE);
-
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	useEffect(() => {
-		if (!iframeRef.current) return;
-		const title =
-			iframeRef.current.contentDocument &&
-			iframeRef.current.contentDocument.title;
-		if (title !== pageTitle) setPageTitle(title || DEFAULT_TITLE);
-	});
 
 	return (
 		<div className={css.wrapper}>
@@ -48,7 +38,13 @@ export const SampleViewer: FC<SampleViewerProps> = ({
 						src={url}
 						className={css.iframe}
 						style={{ height }}
-						ref={iframeRef}
+						onLoad={(e) => {
+							setPageTitle(
+								(e.currentTarget.contentDocument &&
+									e.currentTarget.contentDocument.title) ||
+									DEFAULT_TITLE,
+							);
+						}}
 					/>
 
 					<p className={css.newTabLink}>
