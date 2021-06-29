@@ -12,6 +12,7 @@
 		"ssr"
 	],
 	"scripts": {
+		"precommit": "lint-staged",
 		"prepare": "husky install",
 		"set-version": "pnpm -r exec -- npm version --no-git-tag-version",
 		"canary": "pnpm -r exec -- npm version --no-git-tag-version prerelease --preid=canary && pnpm -r --filter=./packages exec -- pnpm publish --tag canary --no-git-checks --access=public",
