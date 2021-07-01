@@ -6,6 +6,8 @@ interface Window {
 	__RAKKAS_ROUTER_CONTEXT: any;
 }
 
+declare let $reloader$: Record<string, (m: any) => void>;
+
 declare const __RAKKAS_CONFIG: {
 	pagesDir: string;
 	apiDir: string;

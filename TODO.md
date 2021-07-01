@@ -1,27 +1,44 @@
 # TODO
 
 ## For 0.2.0
-- [ ] Fix unnecessary reloading when a page module updates
-- [ ] Remove md5 dependency
-- [x] Implement create package
-	- [ ] Make create work even when the raw mode is not available
-- [ ] Move unnecessary dependencies to devDependencies
-- [ ] Refetch on window focus
+- [x] Implement HMR for pages and layouts
+- [x] Implement the `create` package
+	- [ ] Make `create` work even when the raw mode is not available
+	- [ ] Warn when directory not empty
+- [ ] Make `useReload` refetch on window focus (if requested)
+- [ ] Add config options to trust forwarded host name
+- [ ] Implement more robust body parsing
 - [ ] Update website
+  - [x] Launch rakkasjs.org
   - [ ] Update documentation
-  - [x] Move website to rakkasjs.org
-  - [ ] Open graph preview
-- [ ] Migrate to esbuild
+  - [ ] Add open graph preview
+- [ ] Improve performance and package size
+  - [ ] Remove md5 dependency
+  - [ ] Move bundled dependencies to devDependencies
+  - [ ] Migrate to esbuild
+- [x] Fix React context mismatch bugs in HMR
 
-## For later
-- [ ] Link prefetching
-- [ ] Spread dynamic route parameters
-- [ ] Static site generation
-- [ ] Serverless support
-- [ ] Data caching
-	- [ ] Optimistic updates
-	- [ ] Stale while revalidate
-- [ ] Set up cypress
-  - [ ] For rakkasjs itself
-  - [ ] For demo templates
-- [ ] PR to `awesome-react` (not before )
+## For 1.0.0
+- Features
+  - [ ] Add a way to add cache-related HTTP headers on pages
+  - [ ] Service workers
+  - [ ] Link prefetching
+  - [ ] HTTPS in dev server
+  - [ ] Spread dynamic route parameters
+  - [ ] Static site generation
+  - [ ] Localizable and customizable router
+  - [ ] Serverless platforms
+  - [ ] Data caching
+  	- [ ] Optimistic updates
+  	- [ ] Stale while revalidate strategy
+- Chores
+  - [ ] Set up Cypress
+    - [ ] for Rakkas itself
+    - [ ] for demo templates
+  - [ ] Contribution guidelines
+  - [ ] Send PR to `awesome-react`
+  - [ ] Create integration examples with popular tools
+    - [ ] Redux
+    - [ ] Apollo
+    - [ ] Styled components
+    - [ ] Tailwind CSS

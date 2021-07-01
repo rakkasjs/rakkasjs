@@ -1,3 +1,3 @@
 module.exports = {
-	"**/*": [() => "pnpm run -r --parallel precommit --"],
+	"**/*": () => "pnpm run -r --parallel precommit --",
 };

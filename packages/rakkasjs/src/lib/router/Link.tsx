@@ -1,6 +1,6 @@
 import React, { AnchorHTMLAttributes, forwardRef } from "react";
 import { BaseLink } from "./BaseLink";
-import { useRouter } from "./Router";
+import { useRouter } from "./useRouter";
 
 export const Link = forwardRef<
 	HTMLAnchorElement,

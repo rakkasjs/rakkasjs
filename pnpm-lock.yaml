@@ -164,6 +164,7 @@ importers:
       react: ^17.0.2
       react-dom: ^17.0.2
       react-helmet-async: ^1.0.9
+      react-refresh: ^0.10.0
       rimraf: ^3.0.2
       rollup: ^2.52.2
       rollup-plugin-terser: ^7.0.2
@@ -208,6 +209,7 @@ importers:
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-helmet-async: 1.0.9_react-dom@17.0.2+react@17.0.2
+      react-refresh: 0.10.0
       rimraf: 3.0.2
       rollup: 2.52.2
       rollup-plugin-terser: 7.0.2_rollup@2.52.2
@@ -7894,6 +7896,11 @@ packages:
       prop-types: 15.7.2
       react: 17.0.2
       scheduler: 0.18.0
+    dev: true
+
+  /react-refresh/0.10.0:
+    resolution: {integrity: sha512-PgidR3wST3dDYKr6b4pJoqQFpPGNKDSCDx4cZoshjXipw3LzO7mG1My2pwEzz2JVkF+inx3xRpDeQLFQGH/hsQ==}
+    engines: {node: '>=0.10.0'}
     dev: true
 
   /react-refresh/0.9.0:

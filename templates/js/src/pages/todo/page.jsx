@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Todo } from "./Todo";
-import css from "./todo.module.css";
+import css from "./page.module.css";
 
 // load() will be called before rendering the component and its returnValue.data will be passed to the
 // component as props.data. It may be called both on the server and on the client.
@@ -23,7 +23,7 @@ export async function load({ fetch, context }) {
 	});
 }
 
-export default function TodoPage({ data, reload, useReload }) {
+function TodoPage({ data, reload, useReload }) {
 	// This custom hook is useful for automatically reloading the page under certain conditions
 	useReload({
 		// Reload when the tab is activated
@@ -77,3 +77,5 @@ export default function TodoPage({ data, reload, useReload }) {
 		</main>
 	);
 }
+
+export default TodoPage;

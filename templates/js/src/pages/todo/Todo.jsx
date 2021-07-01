@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import css from "./todo.module.css";
+import css from "./Todo.module.css";
 
 export function Todo({ todo, reload }) {
 	const [state, setState] = useState({ text: todo.text, editing: false });

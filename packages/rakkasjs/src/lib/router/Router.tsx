@@ -5,12 +5,10 @@ import React, {
 	useEffect,
 	useMemo,
 	useState,
-	createContext,
-	useContext,
 	useRef,
 	useLayoutEffect,
-	Context,
 } from "react";
+import { RouterContext } from "./useRouter";
 
 export interface RouterProps {
 	/** Callback for rendering the view for a given URL */
@@ -119,7 +117,9 @@ export const Router: FC<RouterProps> = ({
 				abortController.abort();
 			},
 			rerender() {
-				setState((old) => ({ ...old, next: old.current }));
+				setState((old) => {
+					return { ...old, next: old.current };
+				});
 			},
 		});
 
@@ -145,7 +145,7 @@ export const Router: FC<RouterProps> = ({
 		return () => {
 			abortController.abort();
 		};
-	}, [render, next, navigate]);
+	}, [navigate, next, render]);
 
 	useEffect(() => {
 		function handleScroll() {
@@ -252,29 +252,6 @@ export interface RouterInfo {
 			scroll?: boolean;
 		},
 	): boolean;
-}
-
-// Make the context persist between hot reloads
-let RouterContext: Context<RouterInfo>;
-
-if (!import.meta.env.SSR && window.__RAKKAS_ROUTER_CONTEXT) {
-	RouterContext = window.__RAKKAS_ROUTER_CONTEXT;
-} else {
-	RouterContext = createContext<RouterInfo>({
-		current: new URL("https://example.com"),
-		navigate() {
-			throw new Error("navigate() called outside of <Router />");
-		},
-	});
-
-	if (!import.meta.env.SSR) {
-		window.__RAKKAS_ROUTER_CONTEXT = RouterContext;
-	}
-}
-
-/** Custom hook for tracking navigation status and programmatic navigation */
-export function useRouter(): RouterInfo {
-	return useContext(RouterContext);
 }
 
 function isPromise(value: unknown): value is Promise<unknown> {

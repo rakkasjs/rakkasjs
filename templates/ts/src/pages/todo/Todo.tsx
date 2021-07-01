@@ -1,5 +1,5 @@
 import React, { useState, FC } from "react";
-import css from "./todo.module.css";
+import css from "./Todo.module.css";
 
 import type { TodoItem } from "../../api/todo/crud";
 
@@ -101,3 +101,5 @@ export const Todo: FC<TodoProps> = ({ todo, reload }) => {
 		</li>
 	);
 };
+
+console.log("Reavaluating Todo.tsx");

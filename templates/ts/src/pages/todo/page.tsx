@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { definePage, PageTypes } from "rakkasjs";
 import { Todo } from "./Todo";
-import css from "./todo.module.css";
+import css from "./page.module.css";
 
 import type { TodoItem } from "../../api/todo/crud";
 

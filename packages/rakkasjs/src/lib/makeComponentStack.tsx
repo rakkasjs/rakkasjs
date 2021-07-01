@@ -23,6 +23,9 @@ import { findRoute, Route } from "./find-route";
 
 import importers from "@rakkasjs/page-imports";
 
+const moduleCache: Record<string, any> = {};
+const errorBoundaryCache: Record<string, any> = {};
+
 export interface RenderedStackItem {
 	Component?: Page | ErrorPage | Layout | SimpleLayout;
 	loaded: PageLoadResult | LayoutLoadResult;
@@ -80,7 +83,10 @@ export async function makeComponentStack({
 	}
 
 	for (const [i, moduleId] of stack.entries()) {
-		const module = await importers[moduleId]();
+		let module = moduleCache[moduleId];
+		if (!module) {
+			moduleCache[moduleId] = module = await importers[moduleId]();
+		}
 
 		const isPage = i === stack.length - 1;
 
@@ -117,10 +123,8 @@ export async function makeComponentStack({
 			errorHandlerIndex = i;
 			// A trick to preserve component identity between renders
 			Component =
-				(Component as any).$rakkas$wrappedInError ||
-				((Component as any).$rakkas$wrappedInError = wrapInErrorBoundary(
-					Component as any,
-				));
+				errorBoundaryCache[moduleId] ||
+				(errorBoundaryCache[moduleId] = wrapInErrorBoundary(Component as any));
 		}
 
 		const cacheKey = hash(getCacheKey({ url, params, match, context }));
@@ -131,8 +135,7 @@ export async function makeComponentStack({
 			!previousRender ||
 			// Different component; should reload
 			!previousRender[i] ||
-			(previousRender[i].Component &&
-				previousRender[i].Component !== Component) ||
+			(previousRender[i].name && previousRender[i].name !== moduleId) ||
 			// Cache key manually invalidated; should reload
 			!previousRender[i].cacheKey ||
 			// Cache key changed; should reload
@@ -199,26 +202,31 @@ export async function makeComponentStack({
 		const Component = rendered.Component!;
 		context = { ...context, ...(rendered.loaded as any).context };
 
-		return (
-			<Component
-				url={url}
-				match={match}
-				params={params}
-				context={context}
-				data={(rendered.loaded as any).data}
-				error={errorHandlerIndex === i ? error : undefined}
-				reload={reloadThis}
-				useReload={makeUseReload(reloadThis, isInitialRender)}
-			>
-				{prev}
-			</Component>
-		);
+		if (import.meta.hot) {
+			$reloader$[rendered.name || ""] = (newModule) => {
+				moduleCache[rendered.name || ""] = newModule;
+				reloadThis();
+			};
+		}
+
+		const props = {
+			url: url,
+			match: match,
+			params: params,
+			context: context,
+			data: (rendered.loaded as any).data,
+			error: errorHandlerIndex === i ? error : undefined,
+			reload: reloadThis,
+			useReload: makeUseReload(reloadThis, isInitialRender),
+		};
+
+		return <Component {...props}>{prev}</Component>;
 	}, null as React.ReactNode);
 
 	return {
 		status,
 		content,
-		rendered: thisRender,
+		rendered: thisRender.map(({ ...rest }) => rest),
 		params,
 	};
 }
@@ -299,3 +307,7 @@ const defaultPageGetCacheKey: GetCacheKeyFunc = ({ url, context, params }) => [
 	params,
 	url.search,
 ];
+
+if (import.meta.hot && !(window as any).$reloader$) {
+	(window as any).$reloader$ = {};
+}
