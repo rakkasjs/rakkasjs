@@ -48,5 +48,9 @@
 		"precommit": "lint-staged --no-stash",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
 		"lint:ts": "eslint --max-warnings=0 src"
+	},
+	"dependencies": {
+		"enquirer": "^2.3.6",
+		"ink-text-input": "^4.0.1"
 	}
 }
