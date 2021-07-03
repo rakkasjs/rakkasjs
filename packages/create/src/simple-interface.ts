@@ -50,14 +50,18 @@ export async function getOptions({
 		availablePackageManagers.map((p, i) => `${i + 1}. ${p}\n`).join(""),
 	);
 
-	let pm = (await ask("Preferred package manager", packageManager, (answer) => {
-		if ((availablePackageManagers as string[]).includes(answer)) return;
+	let pm = packageManager;
 
-		const n = Number(answer);
-		if (n > 0 && n <= availablePackageManagers.length) return;
+	if (availablePackageManagers.length > 1) {
+		pm = (await ask("Package manager", packageManager, (answer) => {
+			if ((availablePackageManagers as string[]).includes(answer)) return;
 
-		return "Please enter a valid choice";
-	})) as typeof packageManager;
+			const n = Number(answer);
+			if (n > 0 && n <= availablePackageManagers.length) return;
+
+			return "Please enter a valid choice";
+		})) as typeof packageManager;
+	}
 
 	if (!availablePackageManagers.includes(pm)) {
 		pm = availablePackageManagers[Number(pm) - 1];
@@ -123,5 +127,10 @@ export async function runGenerate(opts: Options, version: string) {
 		process.stderr.write("\nProject generation failed: " + message + "\n");
 		process.exit(1);
 	}
-	process.stdout.write("Done\n");
+	process.stdout.write("Done! Try following commands to start:\n");
+	process.stdout.write(
+		`${opts.packageManager} run dev   # Start a development server\n` +
+			`${opts.packageManager} run build # Build for production\n` +
+			`${opts.packageManager} start     # Start the production server\n`,
+	);
 }

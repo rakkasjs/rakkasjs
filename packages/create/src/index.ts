@@ -13,10 +13,16 @@ async function main() {
 }
 
 function parseCommandLineArguments() {
-	const pnpmAvailable = !!which.sync("pnpm", { nothrow: true });
-	const yarnAvailable = !!which.sync("yarn", { nothrow: true });
 	const ttyin = process.stdin.isTTY;
 	const ttyout = process.stdout.isTTY;
+
+	const pnpmAvailable = !!which.sync("pnpm", { nothrow: true });
+	const yarnAvailable = !!which.sync("yarn", { nothrow: true });
+	const availablePackageManagers = [
+		"npm",
+		yarnAvailable && "yarn",
+		pnpmAvailable && "pnpm",
+	].filter(Boolean) as Array<"npm" | "yarn" | "pnpm">;
 
 	program
 		.name("npm init @rakkasjs")
@@ -26,7 +32,7 @@ function parseCommandLineArguments() {
 			new Option(
 				"-P, --package-manager <packageManager>",
 				"package manager to use",
-			).choices(["npm", "yarn", "pnpm"]),
+			).choices(availablePackageManagers),
 		)
 		.option("-t, --typescript", "enable TypeScript support")
 		.option("--no-typescript", "disable TypeScript support")
@@ -74,33 +80,12 @@ function parseCommandLineArguments() {
 				yes?: boolean;
 				no?: boolean;
 			}) => {
-				const availablePackageManagers = [
-					"npm",
-					yarnAvailable && "yarn",
-					pnpmAvailable && "pnpm",
-				].filter(Boolean) as Array<"npm" | "yarn" | "pnpm">;
-
-				let unavailable: string | undefined;
-				if (
-					packageManager &&
-					!availablePackageManagers.includes(packageManager)
-				) {
-					unavailable = packageManager;
-					packageManager = undefined;
-				}
-
 				packageManager =
 					packageManager || pnpmAvailable
 						? "pnpm"
 						: yarnAvailable
 						? "yarn"
 						: "npm";
-
-				if (unavailable) {
-					process.stderr.write(
-						`Requested package manager ${unavailable} is not available on the path. Defaulting to ${packageManager}\n`,
-					);
-				}
 
 				interactiveInput = !!(interactiveInput || ttyin);
 				colorOutput = !!(colorOutput || ttyout);

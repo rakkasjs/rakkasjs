@@ -179,7 +179,7 @@ export async function generate(opts: Options, info: GenerationInfo) {
 		);
 	}
 
-	info.startStep("Installing dependencies");
+	info.startStep("Installing dependencies (this may take a while)");
 
 	const pmExitCode = await info.runCommand(opts.packageManager + " install");
 

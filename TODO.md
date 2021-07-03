@@ -17,6 +17,7 @@
   - [ ] Move bundled dependencies to devDependencies
   - [ ] Migrate to esbuild
 - [x] Fix React context mismatch bugs in HMR
+- [ ] Add command to unpublish all canary releases
 
 ## For 1.0.0
 - Features

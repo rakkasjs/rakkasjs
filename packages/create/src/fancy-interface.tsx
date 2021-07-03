@@ -10,12 +10,7 @@ export async function getOptions({
 	availablePackageManagers,
 	defaults: { packageManager, features },
 }: Defaults): Promise<Options> {
-	const answers: {
-		packageManager: "npm" | "yarn" | "pnpm";
-		features: Array<
-			"typescript" | "jest" | "eslint" | "stylelint" | "prettier"
-		>;
-	} = await prompt([
+	const questions = [
 		{
 			name: "packageManager",
 			message: "Package manager",
@@ -41,9 +36,19 @@ export async function getOptions({
 				(k) => features[k as keyof typeof features],
 			) as any,
 		},
-	]);
+	];
+
+	if (availablePackageManagers.length < 2) questions.splice(0, 1);
+
+	const answers: {
+		packageManager?: "npm" | "yarn" | "pnpm";
+		features: Array<
+			"typescript" | "jest" | "eslint" | "stylelint" | "prettier"
+		>;
+	} = await prompt(questions);
 
 	const result = {
+		packageManager: availablePackageManagers[0],
 		...answers,
 		features: {
 			typescript: false,
@@ -77,7 +82,7 @@ const Generator: FC<{ opts: Options; version: string }> = ({
 	}
 
 	const [steps, setSteps] = useState<Step[]>([]);
-	const [done] = useState(false);
+	const [done, setDone] = useState(false);
 	const [error, setError] = useState<string | undefined>(undefined);
 
 	useEffect(() => {
@@ -170,10 +175,12 @@ const Generator: FC<{ opts: Options; version: string }> = ({
 					});
 				});
 			},
-		}).catch((err) => {
-			const message = err instanceof Error ? err.message : "Unknown error";
-			setError(message);
-		});
+		})
+			.then(() => setDone(true))
+			.catch((err) => {
+				const message = err instanceof Error ? err.message : "Unknown error";
+				setError(message);
+			});
 	}, []);
 
 	return (
@@ -183,10 +190,7 @@ const Generator: FC<{ opts: Options; version: string }> = ({
 
 				return (
 					<Fragment key={i}>
-						<Text
-							color={isLastStep && !done ? "whiteBright" : undefined}
-							bold={isLastStep}
-						>
+						<Text bold={isLastStep && !done}>
 							{isLastStep && !done && !error ? (
 								<Text color="yellow">
 									<Spinner />
@@ -217,6 +221,25 @@ const Generator: FC<{ opts: Options; version: string }> = ({
 
 			{error && (
 				<Text color="redBright">Project generation failed: {error}</Text>
+			)}
+
+			{done && (
+				<Text color="white">
+					{"\n"}
+					<Text color="greenBright">Done!</Text> Try following commands to
+					start:{"\n"}
+					<Text bold>{opts.packageManager} run dev</Text>
+					{"   "}
+					<Text color="white"># Start a development server</Text>
+					{"\n"}
+					<Text bold>{opts.packageManager} run build</Text>{" "}
+					<Text color="white"># Build for production</Text>
+					{"\n"}
+					<Text bold>{opts.packageManager} start</Text>
+					{"     "}
+					<Text color="white"># Run production server</Text>
+					{"\n"}
+				</Text>
 			)}
 		</>
 	);
