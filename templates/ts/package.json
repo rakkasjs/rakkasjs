@@ -1,7 +1,7 @@
 {
 	"name": "rakkas-demo-ts",
 	"private": true,
-	"version": "0.1.4-canary.4",
+	"version": "0.1.4-canary.6",
 	"description": "Rakkas TypeScript demo project",
 	"scripts": {
 		"dev": "rakkas dev",

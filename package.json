@@ -1,6 +1,6 @@
 {
 	"name": "rakkasjs-root-workspace",
-	"version": "0.1.4-canary.4",
+	"version": "0.1.4-canary.6",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"type": "module",
