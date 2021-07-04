@@ -2,7 +2,7 @@
 
 ## For 0.2.0
 - [x] Implement HMR for pages and layouts
-- [x] Implement the `create` package
+- [x] Implement the `rakkas-create-app` package
 	- [x] Make `create` work even when the raw mode is not available
 	- [x] Warn when directory not empty
 - [ ] Make `useReload` refetch on window focus (if requested)

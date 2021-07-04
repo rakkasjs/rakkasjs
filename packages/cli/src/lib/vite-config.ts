@@ -228,28 +228,28 @@ export async function makeViteConfig(
 					if (ssr) return;
 
 					if (isPage(id) || isLayout(id)) {
-						const idstr = JSON.stringify(id);
+						const idstr = JSON.stringify(id.slice(srcDir.length));
 						return (
 							code +
 							// The following comment is used to fool the React refreh plugin
 							`\n// $RefreshReg$()
 
-						if (import.meta.hot) {
-							import.meta.hot.accept((m) => {
-								function reload() {
-									if (window.__vite_plugin_react_timeout) {
-										requestAnimationFrame(reload);
-									} else {
-										requestAnimationFrame(() => {
-											window.$reloader$[${idstr}] && window.$reloader$[${idstr}](m);
-										});
+							if (import.meta.hot) {
+								import.meta.hot.accept((m) => {
+									function reload() {
+										if (window.__vite_plugin_react_timeout) {
+											requestAnimationFrame(reload);
+										} else {
+											requestAnimationFrame(() => {
+												window.$reloader$[${idstr}] && window.$reloader$[${idstr}](m);
+											});
+										}
 									}
-								}
-								console.log("Reloading", ${idstr});
-								reload();
-							});
-						}
-						`
+									console.log("Reloading", ${idstr});
+									reload();
+								});
+							}
+							`
 						);
 					}
 

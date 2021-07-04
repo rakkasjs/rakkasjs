@@ -101,5 +101,3 @@ export const Todo: FC<TodoProps> = ({ todo, reload }) => {
 		</li>
 	);
 };
-
-console.log("Reavaluating Todo.tsx");

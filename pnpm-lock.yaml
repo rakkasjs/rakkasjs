@@ -79,7 +79,7 @@ importers:
       rimraf: 3.0.2
       typescript: 4.3.4
 
-  packages/create:
+  packages/create-rakkas-app:
     specifiers:
       '@types/node': ^15.12.4
       '@types/react': ^17.0.11
@@ -109,7 +109,7 @@ importers:
       enquirer: 2.3.6
       ink-text-input: 4.0.1_ink@3.0.8+react@17.0.2
     devDependencies:
-      '@types/node': 15.12.4
+      '@types/node': 15.12.5
       '@types/react': 17.0.11
       '@types/which': 2.0.0
       '@typescript-eslint/eslint-plugin': 4.28.0_4ec1e0eca7c6e4115e1e7a13008fdec2
@@ -126,7 +126,7 @@ importers:
       ink-spinner: 4.0.2_ink@3.0.8+react@17.0.2
       jest: 27.0.5
       lint-staged: 11.0.0
-      prettier: 2.3.1
+      prettier: 2.3.2
       react: 17.0.2
       rimraf: 3.0.2
       typescript: 4.3.4
