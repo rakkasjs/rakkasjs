@@ -43,13 +43,24 @@ export async function startServer() {
 
 	const fileServer = sirv("dist/client", { etag: true, maxAge: 0 });
 
+	const trustForwardedOrigin = !!process.env.TRUST_FORWARDED_ORIGIN || false;
+	const host = process.env.HOST || "localhost";
+	const port = process.env.PORT || 3000;
+
 	const app = createServer((req, res) => {
+		const proto =
+			(trustForwardedOrigin && req.headers["x-forwarded-proto"]) || "http";
+		const host =
+			(trustForwardedOrigin && req.headers["x-forwarded-host"]) ||
+			req.headers.host ||
+			"localhost";
+
 		async function handle() {
 			try {
 				const response = await handleRequest(apiRoutes, pageRoutes, {
 					request: {
 						// TODO: Get real host and port
-						url: new URL(req.url || "/", `http://${req.headers.host}`),
+						url: new URL(req.url || "/", `${proto}://${host}`),
 						method: req.method || "GET",
 						headers: new Headers(req.headers as Record<string, string>),
 						body: await parseBody(req),
@@ -87,9 +98,6 @@ export async function startServer() {
 			fileServer(req, res, handle);
 		}
 	});
-
-	const host = process.env.HOST || "localhost";
-	const port = process.env.PORT || 3000;
 
 	app.listen({ port, host }, () => {
 		console.log(`Listening on ${host}:${port}`);

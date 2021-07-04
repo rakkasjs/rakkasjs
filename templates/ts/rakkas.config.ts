@@ -24,6 +24,11 @@ export default defineConfig({
 	// Base URL for endpoints
 	// apiRoot: "/api",
 	//
+	// Trust the x-forwarded-host and x-forwarded-proto headers in dev server.
+	// This is useful behind a reverse proxy. Set env variable TRUST_FORWARDED_ORIGIN to
+	// a non-empty string if you want the same in production.
+	// trustForwardedOrigin: false,
+	//
 	// Vite configuration (not all options are supported)
 	// vite: {},
 });

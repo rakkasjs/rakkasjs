@@ -85,10 +85,18 @@ async function createServers(onReload: () => void) {
 
 				html = await vite.transformIndexHtml(url, html);
 
+				const proto =
+					(config.trustForwardedOrigin && req.headers["x-forwarded-proto"]) ||
+					"http";
+				const host =
+					(config.trustForwardedOrigin && req.headers["x-forwarded-host"]) ||
+					req.headers.host ||
+					"localhost";
+
 				const response = await processRequest({
 					request: {
 						// TODO: Get real host and port
-						url: new URL(url, `http://${req.headers.host}`),
+						url: new URL(url, `${proto}://${host}`),
 						method: req.method || "GET",
 						headers: new Headers(req.headers as Record<string, string>),
 						body: await parseBody(req),

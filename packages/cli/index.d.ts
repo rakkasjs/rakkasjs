@@ -3,7 +3,8 @@ import { UserConfig } from "vite";
 export function defineConfig(config: Config);
 
 export interface FullConfig {
-	/** File extensions for pages and layouts @default ["jsx", "tsx"] */
+	/**
+	 * File extensions for pages and layouts @default ["jsx", "tsx"] */
 	pageExtensions: string[];
 	/** Directory that contains pages and layouts @default "pages" */
 	pagesDir: string;
@@ -13,7 +14,13 @@ export interface FullConfig {
 	apiDir: string;
 	/** Base URL for endpoints @default "/api" */
 	apiRoot: string;
-	/** Vite configuration (not all options are supported)*/
+	/** Trust the x-forwarded-host and x-forwarded-proto headers in dev server.
+	 * This is useful behind a reverse proxy. Set env variable TRUST_FORWARDED_ORIGIN to
+	 * a non-empty string if you want the same in production.
+	 * @default false */
+	trustForwardedOrigin: boolean;
+
+	/** Vite configuration (not all options are supported) */
 	vite: UserConfig;
 }
 

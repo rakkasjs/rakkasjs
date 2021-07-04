@@ -105,13 +105,14 @@ async function buildFile(filename: string, root: string) {
 }
 
 function withDefaults(config: Config): FullConfig {
-	const out = {
+	const out: FullConfig = {
 		vite: {},
 		pagesDir: "pages",
 		pageExtensions: ["jsx", "tsx"],
 		apiDir: "api",
 		apiRoot: "/api",
 		endpointExtensions: ["js", "ts"],
+		trustForwardedOrigin: false,
 		...config,
 	};
 
