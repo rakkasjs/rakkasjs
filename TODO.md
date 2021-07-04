@@ -5,7 +5,7 @@
 - [x] Implement the `rakkas-create-app` package
 	- [x] Make `create` work even when the raw mode is not available
 	- [x] Warn when directory not empty
-- [ ] Make `useReload` refetch on window focus (if requested)
+- [x] Make `useReload` refetch on window focus (if requested)
 - [ ] Add config options to trust forwarded host name
 - [ ] Implement more robust body parsing
 - [ ] Update website

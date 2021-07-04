@@ -249,12 +249,14 @@ function makeUseReload(reload: () => void, isInitialRender?: boolean) {
 			}
 
 			document.addEventListener("visibilitychange", handleVisibilityChange);
+			window.addEventListener("focus", handleVisibilityChange);
 
 			return () => {
 				document.removeEventListener(
 					"visibilitychange",
 					handleVisibilityChange,
 				);
+				window.removeEventListener("focus", handleVisibilityChange);
 			};
 		}, [focus, isInitialRender]);
 
