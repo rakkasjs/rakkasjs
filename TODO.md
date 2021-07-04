@@ -3,8 +3,8 @@
 ## For 0.2.0
 - [x] Implement HMR for pages and layouts
 - [x] Implement the `create` package
-	- [ ] Make `create` work even when the raw mode is not available
-	- [ ] Warn when directory not empty
+	- [x] Make `create` work even when the raw mode is not available
+	- [x] Warn when directory not empty
 - [ ] Make `useReload` refetch on window focus (if requested)
 - [ ] Add config options to trust forwarded host name
 - [ ] Implement more robust body parsing

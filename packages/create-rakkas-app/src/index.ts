@@ -1,12 +1,21 @@
 #!/usr/bin/env node
 import { program, Option } from "commander";
 import which from "which";
+import fs from "fs";
 import * as fancy from "./fancy-interface";
 import * as simple from "./simple-interface";
 
 export let version = "";
 
 async function main() {
+	const files = await fs.promises.readdir(".");
+	if (files.length) {
+		process.stderr.write(
+			"Refusing to generate project: Directory not empty.\n",
+		);
+		process.exit(1);
+	}
+
 	const packageJson = await import("../package.json");
 	version = packageJson.version;
 	parseCommandLineArguments();
@@ -109,16 +118,19 @@ function parseCommandLineArguments() {
 					defaults: options,
 				};
 
-				if (!yes && !no) {
-					options = await (interactiveInput
-						? fancy.getOptions(defaults)
-						: simple.getOptions(defaults));
+				try {
+					if (!yes && !no) {
+						options = await (interactiveInput
+							? fancy.getOptions(defaults)
+							: simple.getOptions(defaults));
+					}
+
+					await (colorOutput
+						? fancy.runGenerate(options, version)
+						: simple.runGenerate(options, version));
+				} catch {
+					// Probably just Ctrl+C
 				}
-
-				await (colorOutput
-					? fancy.runGenerate(options, version)
-					: simple.runGenerate(options, version));
-
 				return;
 			},
 		);
