@@ -8,6 +8,7 @@
 		"target": "es6",
 		"moduleResolution": "node",
 		"skipLibCheck": true,
-		"lib": ["DOM", "ES2019"]
+		"lib": ["DOM", "ES2019"],
+		"types": ["node"]
 	}
 }

@@ -15,8 +15,8 @@ export function findRoute(
 
 	for (;;) {
 		for (const route of routes) {
-			const [regep, pattern, moduleIds] = route;
-			const match = path.match(regep);
+			const [regexp, pattern, moduleIds] = route;
+			const match = path.match(regexp);
 
 			if (match) {
 				const names = [...pattern.matchAll(/\[([^\]]+)\]/g)].map((x) => x[1]);

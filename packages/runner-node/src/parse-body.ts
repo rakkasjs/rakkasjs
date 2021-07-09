@@ -1,34 +1,52 @@
 import type { IncomingMessage } from "http";
 
 export async function parseBody(req: IncomingMessage) {
-	const type = req.headers["content-type"] ?? "";
-
-	if (
-		type === "text/*" ||
-		type === "application/json" ||
-		type.endsWith("+json")
-	) {
-		let text = "";
-		req.setEncoding("utf-8");
-
-		return new Promise<unknown>((resolve, reject) => {
-			req.on("data", (chunk) => (text += chunk));
-			req.on("end", () => {
-				if (type === "text/plain") {
-					resolve(text);
-				} else {
-					resolve(JSON.parse(text));
-				}
-			});
-			req.on("error", (error) => reject(error));
-		});
-	} else {
+	const bodyBuffer = await new Promise<Buffer>((resolve, reject) => {
+		const limit = 1048576; // 1 MB
 		const chunks: Buffer[] = [];
+		let totalLength = 0;
 
-		return new Promise<Uint8Array>((resolve, reject) => {
-			req.on("data", (chunk) => chunks.push(Buffer.from(chunk, "binary")));
-			req.on("end", () => resolve(Uint8Array.from(Buffer.concat(chunks))));
-			req.on("error", (error) => reject(error));
+		req.on("data", (chunk) => {
+			const len = Buffer.byteLength(chunk);
+			totalLength += len;
+			if (totalLength > limit) {
+				const error = new Error("Body length limit exceeded");
+				(error as any).status = 413;
+				reject(error);
+			}
+
+			chunks.push(Buffer.from(chunk, "binary"));
 		});
+
+		req.on("end", () => resolve(Buffer.concat(chunks)));
+
+		req.on("error", (error) => reject(error));
+	});
+
+	const [type, ...directives] = (req.headers["content-type"] || "").split(";");
+	const isJson = type === "application/json" || type.endsWith("+json");
+	const isUrlEncoded = type === "application/x-www-form-urlencoded";
+
+	if (type.startsWith("text/") || isJson || isUrlEncoded) {
+		const dirs = Object.fromEntries(
+			directives.map((dir) => dir.split("=").map((x) => x.trim())),
+		);
+
+		const text = bodyBuffer.toString(dirs.charset || "utf-8");
+
+		if (isJson) {
+			try {
+				return JSON.parse(text);
+			} catch (error) {
+				(error as any).status = 400;
+				throw error;
+			}
+		} else if (isUrlEncoded) {
+			return new URLSearchParams(text);
+		}
+
+		return text;
 	}
+
+	return new Uint8Array(bodyBuffer);
 }
