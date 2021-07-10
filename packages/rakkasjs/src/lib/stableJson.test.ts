@@ -1,4 +1,4 @@
-import { hash } from "./hash";
+import { stableJson } from "./stable-json";
 
 describe("Stable serialize", () => {
 	const original = {
@@ -25,9 +25,9 @@ describe("Stable serialize", () => {
 		},
 	};
 
-	it("hashes in a stable way", () => {
-		const s1 = hash(original);
-		const s2 = hash(mixed);
+	it("serializes in a stable way", () => {
+		const s1 = stableJson(original);
+		const s2 = stableJson(mixed);
 		expect(s1).toBe(s2);
 	});
 });

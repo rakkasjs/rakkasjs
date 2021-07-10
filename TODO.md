@@ -23,12 +23,12 @@
 
 ## For 1.0.0
 - Features
+  - [ ] Static site generation
   - [ ] Add a way to add cache-related HTTP headers on pages
   - [ ] Service workers
   - [ ] Link prefetching
   - [ ] HTTPS in dev server
   - [ ] Spread dynamic route parameters
-  - [ ] Static site generation
   - [ ] Localizable and customizable router
   - [ ] Serverless platforms
   - [ ] Data caching

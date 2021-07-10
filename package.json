@@ -20,7 +20,7 @@
 		"publish-all": "pnpm -r --filter=./packages exec -- pnpm publish"
 	},
 	"devDependencies": {
-		"husky": "^6.0.0",
+		"husky": "^7.0.0",
 		"lint-staged": "^11.0.0"
 	}
 }

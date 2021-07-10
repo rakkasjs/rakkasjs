@@ -17,7 +17,7 @@ import {
 	Layout,
 	SimpleLayout,
 } from "./types";
-import { hash } from "./hash";
+import { stableJson } from "./stable-json";
 import { toErrorDescription } from "./toErrorDescription";
 import { findRoute, Route } from "./find-route";
 
@@ -127,7 +127,7 @@ export async function makeComponentStack({
 				(errorBoundaryCache[moduleId] = wrapInErrorBoundary(Component as any));
 		}
 
-		const cacheKey = hash(getCacheKey({ url, params, match, context }));
+		const cacheKey = stableJson(getCacheKey({ url, params, match, context }));
 		let loaded: PageLoadResult | LayoutLoadResult;
 
 		if (

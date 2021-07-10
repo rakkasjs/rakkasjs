@@ -1,7 +1,7 @@
 import React from "react";
 import { Todo } from "./Todo";
 import { render, screen } from "@testing-library/react";
-import css from "./todo.module.css";
+import css from "./Todo.module.css";
 
 describe("Todo", () => {
 	const noop = () => {
