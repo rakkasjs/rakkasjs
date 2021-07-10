@@ -100,7 +100,7 @@ export async function startServer() {
 	});
 
 	app.listen({ port, host }, () => {
-		console.log(`Listening on ${host}:${port}`);
+		console.log(`Listening on http://${host}:${port}`);
 	});
 }
 

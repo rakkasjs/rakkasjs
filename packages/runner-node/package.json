@@ -29,26 +29,21 @@
 		"rakkasjs": "workspace:*"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.14.5",
-		"@babel/core": "^7.14.6",
-		"@babel/preset-env": "^7.14.7",
-		"@babel/preset-typescript": "^7.14.5",
 		"@types/node-fetch": "^2.5.11",
-		"babel-plugin-add-import-extension": "^1.6.0",
 		"esbuild": "^0.12.15",
 		"prettier": "^2.3.2",
 		"rakkasjs": "workspace:*",
 		"rimraf": "^3.0.2",
-		"typescript": "^4.3.5"
+		"typescript": "^4.3.5",
+		"@types/node": "^16.3.1"
 	},
 	"dependencies": {
-		"@types/node": "^16.3.1",
 		"node-fetch": "^2.6.1",
 		"sirv": "^1.0.12"
 	},
 	"scripts": {
 		"prepublishOnly": "pnpm build",
-		"dev": "babel src --watch --out-dir dist --extensions '.ts,.js,.tsx,.jsx'",
-		"build": "rimraf dist && babel src --out-dir dist --extensions '.ts,.js'"
+		"dev": "esbuild src/index.ts src/parse-body.ts --outdir=dist --watch",
+		"build": "esbuild src/index.ts src/parse-body.ts --outdir=dist"
 	}
 }
