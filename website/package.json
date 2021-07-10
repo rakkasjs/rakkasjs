@@ -1,7 +1,7 @@
 {
 	"name": "@rakkasjs/website",
 	"private": true,
-	"version": "0.1.4-canary.7",
+	"version": "0.2.0",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
