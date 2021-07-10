@@ -66,7 +66,7 @@ export default function buildCommand() {
 			const manifest = Object.fromEntries(
 				Object.entries(rawManifest)
 					.map(([name, value]) => {
-						const relative = path.relative(pagesDir, name);
+						const relative = path.relative(pagesDir, path.resolve("src", name));
 						if (
 							relative &&
 							!relative.startsWith("..") &&

@@ -14,8 +14,8 @@
   - [x] Remove md5 dependency
   - [x] Move bundled dependencies to devDependencies
   - [x] Migrate to esbuild
-- [ ] Fix 404 handling for non-page paths
-- [ ] Fix CSS handling when JavaScript is disabled
+- [x] Fix 404 handling for non-page paths
+- [x] Fix CSS handling when JavaScript is disabled
 - [ ] Update website
   - [x] Launch rakkasjs.org
   - [ ] Update documentation
