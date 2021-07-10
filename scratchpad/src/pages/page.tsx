@@ -1,12 +1,22 @@
 import React from "react";
-import { Page } from "rakkasjs";
+import { definePage } from "rakkasjs";
 
-const HomePage: Page = function HomePage() {
-	return (
-		<main>
-			<h1>Hello world!</h1>
-		</main>
-	);
-};
+export default definePage({
+	options: { canHandleErrors: true },
 
-export default HomePage;
+	Component: function MainPage({ error }) {
+		if (error) {
+			return (
+				<main>
+					<p>{error.message}</p>
+				</main>
+			);
+		}
+
+		return (
+			<main>
+				<h1>Hello world!</h1>
+			</main>
+		);
+	},
+});

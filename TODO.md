@@ -10,10 +10,10 @@
 - [x] Add config options to trust forwarded host name
 - [x] Implement more robust body parsing
   - [x] Parse urlencoded request bodies
-- [ ] Improve performance and package size
+- [x] Improve performance and package size
   - [x] Remove md5 dependency
   - [x] Move bundled dependencies to devDependencies
-  - [ ] Migrate to esbuild
+  - [x] Migrate to esbuild
 - [ ] Fix 404 handling for non-page paths
 - [ ] Fix CSS handling when JavaScript is disabled
 - [ ] Update website

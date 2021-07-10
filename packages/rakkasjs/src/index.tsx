@@ -30,7 +30,7 @@ export function definePage<T extends PageTypes = PageTypes>(def: {
 	load?: PageLoadFunc<T>;
 	Component: Page<T>;
 	options?: {
-		canHandleErrors?: boolean;
+		canHandleErrors?: false;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
@@ -46,8 +46,8 @@ export function definePage<T extends PageTypes = PageTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
 	Component: ErrorPage<T>;
-	options?: {
-		canHandleErrors?: boolean;
+	options: {
+		canHandleErrors: true;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;

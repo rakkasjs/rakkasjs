@@ -76,9 +76,10 @@ export async function makeComponentStack({
 	let errorHandlerIndex = -1;
 
 	if (!match) {
+		status = 404;
 		error = {
 			message: "Page not found",
-			status: 404,
+			status,
 		};
 	}
 

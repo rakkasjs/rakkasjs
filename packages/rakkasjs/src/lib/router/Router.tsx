@@ -44,13 +44,14 @@ export const Router: FC<RouterProps> = ({
 		next?: URL;
 		shouldScroll?: boolean;
 		content: ReactNode;
+		hardReload?: string;
 	}
 
 	const scrollHistory = useRef<
 		Array<{ left: number; top: number } | undefined>
 	>([]);
 
-	const [{ current, next, shouldScroll, content }, setState] =
+	const [{ current, next, shouldScroll, content, hardReload }, setState] =
 		useState<RouterState>({
 			current: new URL(window.location.href),
 			next: skipInitialRender ? undefined : new URL(window.location.href),
@@ -105,6 +106,11 @@ export const Router: FC<RouterProps> = ({
 	);
 
 	useEffect(() => {
+		if (hardReload) {
+			window.location.href = hardReload;
+			return;
+		}
+
 		if (!next) return;
 
 		const abortController = new AbortController();
@@ -126,26 +132,37 @@ export const Router: FC<RouterProps> = ({
 		if (isPromise(renderResult)) {
 			renderResult.then((result) => {
 				if (abortController.signal.aborted) return;
+
+				if (result === null) {
+					window.history.back();
+				}
+
 				setState((old) => ({
 					...old,
 					current: next,
 					next: undefined,
 					content: result,
+					hardReload: result === null ? window.location.href : undefined,
 				}));
 			});
 		} else {
+			if (renderResult === null) {
+				window.history.back();
+			}
+
 			setState((old) => ({
 				...old,
 				current: next,
 				next: undefined,
 				content: renderResult,
+				hardReload: renderResult === null ? window.location.href : undefined,
 			}));
 		}
 
 		return () => {
 			abortController.abort();
 		};
-	}, [navigate, next, render]);
+	}, [navigate, next, render, hardReload]);
 
 	useEffect(() => {
 		function handleScroll() {

@@ -7,6 +7,7 @@ export const App: FC<{
 	initialStack: StackResult;
 	routes: Route[];
 }> = ({ initialStack, routes }) => {
+	const initialRender = useRef(true);
 	const lastStack = useRef(initialStack);
 	const [rootContext, setRootContext] = useState(__RAKKAS_ROOT_CONTEXT);
 
@@ -29,6 +30,12 @@ export const App: FC<{
 					navigate(String(stack.location), { replace: true });
 					return null;
 				}
+
+				if (stack.status === 404 && !initialRender.current) {
+					return null;
+				}
+
+				initialRender.current = false;
 
 				lastStack.current = stack;
 
