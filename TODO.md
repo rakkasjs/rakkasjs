@@ -21,6 +21,8 @@
   - [ ] Update documentation
   - [ ] Add open graph preview
 - [ ] Add command to unpublish all canary releases
+- [ ] Investigate Vite fs.allow warning: https://vitejs.dev/config/#server-fs-allow
+- [ ] Investigate the circular dependency warning
 
 ## For 1.0.0
 - Features

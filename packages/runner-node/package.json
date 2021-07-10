@@ -11,7 +11,6 @@
 		"vite",
 		"ssr"
 	],
-	"type": "module",
 	"types": "index.d.ts",
 	"bin": {
 		"rakkas-node": "dist/index.js"
@@ -43,7 +42,7 @@
 	},
 	"scripts": {
 		"prepublishOnly": "pnpm build",
-		"dev": "esbuild src/index.ts src/parse-body.ts --outdir=dist --watch",
-		"build": "esbuild src/index.ts src/parse-body.ts --outdir=dist"
+		"dev": "esbuild src/index.ts src/parse-body.ts --bundle --platform=node --outdir=dist --watch",
+		"build": "esbuild src/index.ts src/parse-body.ts --bundle --platform=node --outdir=dist"
 	}
 }

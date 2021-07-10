@@ -2,14 +2,11 @@ import fs from "fs";
 import path from "path";
 import { build } from "esbuild";
 import type { Config, FullConfig } from "../..";
-import { pathToFileURL } from "url";
 
 export interface ConfigConfig {
 	filename?: string;
 	root?: string;
 }
-
-let query = 0;
 
 export async function loadConfig(configConfig: ConfigConfig = {}): Promise<{
 	config: FullConfig;
@@ -25,7 +22,9 @@ export async function loadConfig(configConfig: ConfigConfig = {}): Promise<{
 	console.log("Loading config from", filename);
 	const { outfile, deps } = await buildFile(filename, configConfig.root);
 
-	let loaded = await import(pathToFileURL(outfile) + `?${query++}`);
+	delete require.cache[require.resolve(outfile)];
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	let loaded = require(outfile);
 
 	// Poor man's esModuleInterop
 	while (loaded.default) loaded = loaded.default;

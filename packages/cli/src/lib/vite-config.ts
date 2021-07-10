@@ -1,15 +1,10 @@
 import reactRefresh from "@vitejs/plugin-react-refresh";
 import path from "path";
-import * as vitePluginVirtual from "vite-plugin-virtual";
+import virtual, { updateVirtualModule } from "vite-plugin-virtual";
 import micromatch from "micromatch";
 import { InlineConfig, normalizePath, SSROptions } from "vite";
 import { FullConfig } from "../..";
 import { makeRouteManifest } from "./make-route-manifest";
-
-// vite-plugin-virtual doesn't play nicely with native modules for some reason.
-const { default: virtual, updateVirtualModule } = (
-	vitePluginVirtual as any as { default: typeof import("vite-plugin-virtual") }
-).default;
 
 export async function makeViteConfig(
 	config: FullConfig,
