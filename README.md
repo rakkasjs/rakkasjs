@@ -10,11 +10,9 @@
 
 ## What is Rakkas?
 
-> Elevator pitch: Rakkas is Next.js on Vite or Svelte Kit for React.
-
 [READ THE GUIDE!](https://rakkasjs.org)
 
-**Rakkas** aims to be a [React](https://reactjs.org) framework powered by [Vite](https://vitejs.dev), with a developer experience inspired by [Next.js](https://nextjs.org) and [Svelte Kit](https://kit.svelte.dev).
+**Rakkas** is a [React](https://reactjs.org) framework powered by [Vite](https://vitejs.dev) that aims to have a developer experience inspired by [Next.js](https://nextjs.org) and [Svelte Kit](https://kit.svelte.dev).
 
 > **WARNING:** Rakkas is in early development. Do not use in production!
 
@@ -27,7 +25,7 @@ Rakkas stands on the shoulders of React and Vite. They bring the following to th
 - Vite:
   - Lightning fast development environment with Fast Refresh support
   - Automatic code splitting (including CSS)
-  - Support for CSS modules and preprocessors
+  - Built-in support for TypeScript, CSS modules, and CSS preprocessors
 
 On top of all this awesomeness, Rakkas comes bundled with its own features:
 
@@ -44,27 +42,22 @@ On top of all this awesomeness, Rakkas comes bundled with its own features:
 
 ## Getting started
 
-The easiest way to try Rakkas out is to clone the TypeScript demo app:
+The easiest way to try Rakkas out is to use the project initializer:
 
 ```sh
 # Create the project directory
 mkdir my-app && cd my-app
-# Clone the TypeScript demo app
-npx degit rakkasjs/rakkasjs/starters/starter
-# Install dependencies
-npm install
+# Scaffold the demo app: Follow the prompts for the rest
+npm init rakkas-app
 ```
 
-Now `npm run dev` will start a development server, `npm run build` will build for production, and `npm start` will start the production server. You can clone `rakkasjs/rakkasjs/starters/starter-js` if you don't like TypeScript and prefer vanilla JavaScript but type definitions are self-documenting so it is easier to learn with the TypeScript demo.
+`create-rakkas-app` project initializer comes with many features, all off which are optional but we strongly recommend enabling TypeScript on your first project because self-documenting type definitions allow for a smoother learning curve.
 
-Demo projects' source code come with plenty of comments, you may not need this guide!
+Demo project's source code comes with plenty of comments, you may not need this guide!
 
-> If you prefer a manual setup, you can install `rakkasjs`, `@rakkasjs/runner-node`, `react`, `react-dom`, and `react-helmet-async` as production dependencies, and `@rakkasjs/cli` as a dev dependency:
-
+If you prefer a manual setup, you can install `rakkasjs`, `@rakkasjs/runner-node`, `react`, `react-dom`, and `react-helmet-async` as production dependencies, and `@rakkasjs/cli` as a dev dependency:
 ```sh
 npm install --save rakkasjs @rakkasjs/runner-node react react-dom react-helmet-async
 npm install --save-dev @rakkasjs/cli
 ```
-
 Then you can start a development server on `localhost:3000` with `npx rakkas dev`, build with `npx rakkas build`, and launch with `npx @rakkasjs/runner-node`.
-

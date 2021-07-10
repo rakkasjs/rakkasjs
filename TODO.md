@@ -18,11 +18,9 @@
 - [x] Fix CSS handling when JavaScript is disabled
 - [ ] Update website
   - [x] Launch rakkasjs.org
-  - [ ] Update documentation
-  - [ ] Add open graph preview
+  - [x] Update documentation
+  - [x] Add open graph preview
 - [ ] Add command to unpublish all canary releases
-- [ ] Investigate Vite fs.allow warning: https://vitejs.dev/config/#server-fs-allow
-- [ ] Investigate the circular dependency warning
 
 ## For 1.0.0
 - Features
@@ -48,3 +46,5 @@
     - [ ] Apollo
     - [ ] Styled components
     - [ ] Tailwind CSS
+  - [x] Investigate Vite fs.allow warning: https://vitejs.dev/config/#server-fs-allow
+  - [ ] Investigate the circular dependency warning
