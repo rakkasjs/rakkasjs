@@ -113,6 +113,7 @@ export async function makeViteConfig(
 			],
 		},
 		plugins: [
+			...(config.vite.plugins || []),
 			virtualModules,
 			{
 				name: "rakkas-resolve",
@@ -218,7 +219,9 @@ export async function makeViteConfig(
 						return "";
 					}
 				},
-
+			},
+			{
+				name: "rakkas-refresh-page",
 				async transform(code, id, ssr) {
 					if (ssr) return;
 
@@ -252,8 +255,6 @@ export async function makeViteConfig(
 				},
 			},
 			reactRefresh(),
-
-			...(config.vite.plugins || []),
 		],
 	};
 
