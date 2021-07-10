@@ -9,7 +9,6 @@ const options = [
 	{
 		input: [
 			"src/index.tsx",
-			"src/index.tsx",
 			"src/server.tsx",
 			"src/client.tsx",
 		],
