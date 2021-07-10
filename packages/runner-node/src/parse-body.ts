@@ -32,7 +32,13 @@ export async function parseBody(req: IncomingMessage) {
 			directives.map((dir) => dir.split("=").map((x) => x.trim())),
 		);
 
-		const text = bodyBuffer.toString(dirs.charset || "utf-8");
+		let text: string;
+		try {
+			text = bodyBuffer.toString(dirs.charset || "utf-8");
+		} catch (error) {
+			(error as any).status = 400;
+			throw error;
+		}
 
 		if (isJson) {
 			try {
