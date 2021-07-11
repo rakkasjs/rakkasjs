@@ -1,7 +1,7 @@
 {
 	"name": "create-rakkas-app",
 	"description": "Development tools for Rakkas.js",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
