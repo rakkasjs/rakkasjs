@@ -7,7 +7,7 @@ import { hydrate } from "react-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { makeComponentStack, RenderedStackItem } from ".";
 import { App } from "./app";
-import { Route } from "./lib/find-route";
+import { findRoute, Route } from "./lib/find-route";
 
 const lastRendered: RenderedStackItem[] = __RAKKAS_RENDERED;
 
@@ -24,8 +24,14 @@ export async function startClient(routes?: Route[]) {
 
 	routes = routes! || __RAKKAS_ROUTES!;
 
+	const found = findRoute(decodeURI(url.pathname), routes, true) || {
+		stack: [],
+		params: {},
+		match: undefined,
+	};
+
 	const stack = await makeComponentStack({
-		routes,
+		found,
 		url,
 		fetch,
 		previousRender: lastRendered,

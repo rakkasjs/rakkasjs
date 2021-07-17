@@ -19,7 +19,6 @@ import {
 } from "./types";
 import { stableJson } from "./stable-json";
 import { toErrorDescription } from "./toErrorDescription";
-import { findRoute, Route } from "./find-route";
 
 import importers from "@rakkasjs/page-imports";
 
@@ -34,7 +33,11 @@ export interface RenderedStackItem {
 }
 
 interface StackArgs {
-	routes: Route[];
+	found: {
+		params: Record<string, string>;
+		match?: string | undefined;
+		stack: string[];
+	};
 	url: URL;
 	fetch: typeof fetch;
 	previousRender?: RenderedStackItem[];
@@ -51,7 +54,7 @@ export interface StackResult {
 }
 
 export async function makeComponentStack({
-	routes,
+	found,
 	url,
 	fetch,
 	previousRender,
@@ -59,14 +62,6 @@ export async function makeComponentStack({
 	isInitialRender,
 	rootContext = {},
 }: StackArgs): Promise<LoadRedirectResult | StackResult> {
-	const found = findRoute(decodeURI(url.pathname), routes, true) || {
-		stack: [],
-		params: {},
-		match: undefined,
-	};
-
-	if (!found) throw new Error("404");
-
 	const { stack, params, match } = found;
 
 	let error: ErrorDescription | undefined;

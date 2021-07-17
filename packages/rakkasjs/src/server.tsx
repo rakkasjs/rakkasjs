@@ -14,13 +14,7 @@ import { makeComponentStack } from "./lib/makeComponentStack";
 import { findRoute, Route } from "./lib/find-route";
 
 import importers from "@rakkasjs/api-imports";
-
-export interface RawRequest {
-	url: URL;
-	method: string;
-	headers: Headers;
-	body: Uint8Array | string | any;
-}
+import { RawRequest } from "./lib/types";
 
 export interface EndpointModule {
 	[method: string]: RequestHandler | undefined;
@@ -159,123 +153,132 @@ export async function handleRequest(
 		return fetch(parsed.href, fullInit);
 	}
 
+	const foundPage = findRoute(
+		decodeURI(request.url.pathname),
+		pageRoutes,
+		true,
+	) || {
+		stack: [],
+		params: {},
+		match: undefined,
+	};
+
 	const serverHooks = await import("@rakkasjs/server-hooks");
+	const { servePage = (req, render) => render(req, {}) } = serverHooks;
 
-	const { getRootContext } = serverHooks;
+	return servePage(request, async (req, rootContext) => {
+		const stack = await makeComponentStack({
+			found: foundPage,
 
-	const rootContext = (await (getRootContext && getRootContext())) || {};
+			url: request.url,
 
-	const foundPage = await makeComponentStack({
-		routes: pageRoutes,
-
-		url: request.url,
-
-		reload() {
-			throw new Error("Don't call reload on server side");
-		},
-
-		fetch: internalFetch,
-
-		rootContext,
-	});
-
-	// Handle redirection
-	if ("location" in foundPage) {
-		return {
-			status: foundPage.status,
-			headers: {
-				location: String(foundPage.location),
+			reload() {
+				throw new Error("Don't call reload on server side");
 			},
-		};
-	}
 
-	const helmetContext = {};
+			fetch: internalFetch,
 
-	const app = renderToString(
-		<RakkasProvider
-			value={{
-				current: request.url,
-				navigate() {
-					throw new Error("navigate() cannot be used on server side");
+			rootContext,
+		});
+
+		// Handle redirection
+		if ("location" in stack) {
+			return {
+				status: stack.status,
+				headers: {
+					location: String(stack.location),
 				},
-				params: foundPage.params,
-				setRootContext() {
-					throw new Error("setRootContext() cannot be used on server side");
-				},
-			}}
-		>
-			<HelmetProvider context={helmetContext}>
-				{foundPage.content}
-			</HelmetProvider>
-		</RakkasProvider>,
-	);
+			};
+		}
 
-	const { helmet } = helmetContext as FilledContext;
+		const helmetContext = {};
 
-	let head = `<script>__RAKKAS_ROOT_CONTEXT=(0,eval)(${devalue(
-		rootContext,
-	)})</script>`;
+		const app = renderToString(
+			<RakkasProvider
+				value={{
+					current: request.url,
+					navigate() {
+						throw new Error("navigate() cannot be used on server side");
+					},
+					params: stack.params,
+					setRootContext() {
+						throw new Error("setRootContext() cannot be used on server side");
+					},
+				}}
+			>
+				<HelmetProvider context={helmetContext}>{stack.content}</HelmetProvider>
+			</RakkasProvider>,
+		);
 
-	head += `<script>__RAKKAS_RENDERED=(0,eval)(${devalue(
-		foundPage.rendered.map((x) => {
-			delete x.Component;
-			return x;
-		}),
-	)})</script>`;
+		const { helmet } = helmetContext as FilledContext;
 
-	if (pages) {
-		head += `<script>__RAKKAS_ROUTES=(0,eval)(${devalue(pages)})</script>`;
-	}
+		let head = `<script>__RAKKAS_ROOT_CONTEXT=(0,eval)(${devalue(
+			rootContext,
+		)})</script>`;
 
-	head +=
-		helmet.base.toString() +
-		helmet.link.toString() +
-		helmet.meta.toString() +
-		helmet.noscript.toString() +
-		helmet.script.toString() +
-		helmet.style.toString() +
-		helmet.title.toString();
+		head += `<script>__RAKKAS_RENDERED=(0,eval)(${devalue(
+			stack.rendered.map((x) => {
+				delete x.Component;
+				return x;
+			}),
+		)})</script>`;
 
-	if (manifest) {
-		for (const { name } of foundPage.rendered) {
-			if (!name) continue;
+		if (pages) {
+			head += `<script>__RAKKAS_ROUTES=(0,eval)(${devalue(pages)})</script>`;
+		}
 
-			const assets = manifest[name];
-			if (!assets) continue;
+		head +=
+			helmet.base.toString() +
+			helmet.link.toString() +
+			helmet.meta.toString() +
+			helmet.noscript.toString() +
+			helmet.script.toString() +
+			helmet.style.toString() +
+			helmet.title.toString();
 
-			for (const asset of assets) {
-				if (asset.endsWith(".js")) {
-					head += `\n<link rel="modulepreload" href=${JSON.stringify(asset)}>`;
-				} else if (asset.endsWith(".css")) {
-					head += `\n<link rel="stylesheet" href=${JSON.stringify(asset)}>`;
-				} else {
-					head += `\n<link rel="preload" href=${JSON.stringify(asset)}>`;
+		if (manifest) {
+			for (const { name } of stack.rendered) {
+				if (!name) continue;
+
+				const assets = manifest[name];
+				if (!assets) continue;
+
+				for (const asset of assets) {
+					if (asset.endsWith(".js")) {
+						head += `\n<link rel="modulepreload" href=${JSON.stringify(
+							asset,
+						)}>`;
+					} else if (asset.endsWith(".css")) {
+						head += `\n<link rel="stylesheet" href=${JSON.stringify(asset)}>`;
+					} else {
+						head += `\n<link rel="preload" href=${JSON.stringify(asset)}>`;
+					}
 				}
 			}
 		}
-	}
 
-	let body = template.replace("<!-- rakkas-head-placeholder -->", head);
+		let body = template.replace("<!-- rakkas-head-placeholder -->", head);
 
-	const htmlAttributes = helmet.htmlAttributes.toString();
-	body = body.replace(
-		"><!-- rakkas-html-attributes-placeholder -->",
-		htmlAttributes ? " " + htmlAttributes + ">" : ">",
-	);
+		const htmlAttributes = helmet.htmlAttributes.toString();
+		body = body.replace(
+			"><!-- rakkas-html-attributes-placeholder -->",
+			htmlAttributes ? " " + htmlAttributes + ">" : ">",
+		);
 
-	const bodyAttributes = helmet.bodyAttributes.toString();
-	body = body.replace(
-		"><!-- rakkas-body-attributes-placeholder -->",
-		bodyAttributes ? " " + bodyAttributes + ">" : ">",
-	);
+		const bodyAttributes = helmet.bodyAttributes.toString();
+		body = body.replace(
+			"><!-- rakkas-body-attributes-placeholder -->",
+			bodyAttributes ? " " + bodyAttributes + ">" : ">",
+		);
 
-	body = body.replace("<!-- rakkas-app-placeholder -->", app);
+		body = body.replace("<!-- rakkas-app-placeholder -->", app);
 
-	return {
-		status: foundPage.status,
-		headers: {
-			"content-type": "text/html",
-		},
-		body,
-	};
+		return {
+			status: stack.status,
+			headers: {
+				"content-type": "text/html",
+			},
+			body,
+		};
+	});
 }

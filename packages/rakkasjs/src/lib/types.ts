@@ -235,18 +235,25 @@ export interface RakkasInfo extends RouterInfo {
 	): void;
 }
 
+export interface RawRequest {
+	url: URL;
+	method: string;
+	headers: Headers;
+	body: Uint8Array | string | any;
+}
+
 export interface RakkasRequest {
 	url: URL;
 	method: string;
 	headers: Headers;
-	params: Record<string, string>;
 	body: Uint8Array | string | any;
+	params: Record<string, string>;
 	context: Record<string, unknown>;
 }
 
 export interface RakkasResponse {
 	status?: number;
-	headers?: Record<string, string>;
+	headers?: Record<string, string | undefined>;
 	body?: unknown;
 }
 
