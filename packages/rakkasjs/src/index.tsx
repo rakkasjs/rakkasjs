@@ -1,6 +1,6 @@
 export * from "./lib/types";
 
-export { Router } from "./lib/router/Router";
+export { navigate, Router } from "./lib/router/Router";
 export { Link } from "./lib/router/Link";
 export { NavLink } from "./lib/router/NavLink";
 

@@ -197,9 +197,6 @@ export async function handleRequest(
 			<RakkasProvider
 				value={{
 					current: request.url,
-					navigate() {
-						throw new Error("navigate() cannot be used on server side");
-					},
 					params: stack.params,
 					setRootContext() {
 						throw new Error("setRootContext() cannot be used on server side");

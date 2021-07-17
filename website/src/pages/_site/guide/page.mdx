@@ -104,7 +104,7 @@ import navlinkExample from "$examples/navlink/[userName].page.tsx?sample";
 
 <SampleViewer url="/examples/navlink/Fatih" code={navlinkExample} />
 
-For programmatic navigation, use the `navigate` function returned by the `useRakkas` custom hook from the `rakkasjs` package:
+For programmatic navigation, use the `navigate` function exported from the `rakkasjs` package:
 
 import navigateExample from "$examples/navigate/[userName].page.tsx?sample";
 
@@ -112,7 +112,7 @@ import navigateExample from "$examples/navigate/[userName].page.tsx?sample";
 
 ### Page transitions
 
-The return value of `useRakkas` also has a `current` property. It's a URL object that contains the URL of the currently rendered page. You should always use this property insteaf of `window.location` because, a) `window` is not available during server-side rendering, and b) you'll get the wrong URL during page transitions: When the user clicks on a `Link`, the URL in the location bar of the browser changes immediately but the old page is still shown while the new one is being loaded.
+Th `useRakkas` custom hook from the `rakkasjs` package has a `current` property. It's a URL object that contains the URL of the currently rendered page. You should always use this property insteaf of `window.location` because, a) `window` is not available during server-side rendering, and b) you'll get the wrong URL during page transitions: When the user clicks on a `Link`, the URL in the location bar of the browser changes immediately but the old page is still shown while the new one is being loaded.
 
 The `next` property of the return value of `useRakkas`, if present, contains the URL that the app is transitioning into. You can test for its presence to render an animated loading bar for example. Also, the `NavLink` component accepts `nextRouteClass` and `nextRouteStyle` props that take effect during a page transition if the `href` property matches the URL that the app is transitioning into.
 

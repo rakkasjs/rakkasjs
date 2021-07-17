@@ -2,6 +2,7 @@ import React, { FC, useRef, useState } from "react";
 import { RakkasProvider, Router, makeComponentStack, StackResult } from ".";
 import { useRouter } from "./lib/router/useRouter";
 import { findRoute, Route } from "./lib/find-route";
+import { navigate } from "./lib/router/Router";
 
 export const App: FC<{
 	initialStack: StackResult;
@@ -13,7 +14,7 @@ export const App: FC<{
 
 	return (
 		<Router
-			render={async ({ url, rerender, navigate }) => {
+			render={async ({ url, rerender }) => {
 				const found = findRoute(decodeURI(url.pathname), routes, true) || {
 					stack: [],
 					params: {},

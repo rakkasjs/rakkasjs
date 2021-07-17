@@ -28,7 +28,6 @@ export function useRakkas(): RakkasInfo {
 
 		context = {
 			current: new URL(location.href),
-			navigate: () => false,
 			params: {},
 			setRootContext: () => undefined,
 		};

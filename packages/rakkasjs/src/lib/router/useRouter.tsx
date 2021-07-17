@@ -9,9 +9,6 @@ if (!import.meta.env.SSR && window.__RAKKAS_ROUTER_CONTEXT) {
 } else {
 	RouterContext = createContext<RouterInfo>({
 		current: new URL("https://example.com"),
-		navigate() {
-			throw new Error("navigate() called outside of <Router />");
-		},
 	});
 
 	if (!import.meta.env.SSR) {

@@ -10,6 +10,20 @@ import React, {
 } from "react";
 import { RouterContext } from "./useRouter";
 
+/**
+ * Navigate programmatically
+ * @param to URL to go to or an integer (-1 means back one page, 1 means forward one page)
+ * @returns true if client-side navigation could be achieved
+ */
+export let navigate = (
+	to: string | number,
+	options?: { replace?: boolean; scroll?: boolean },
+): boolean => {
+	void to;
+	void options;
+	throw new Error("Don't call navigate outside of the router");
+};
+
 export interface RouterProps {
 	/** Callback for rendering the view for a given URL */
 	render(renderArgs: RouteRenderArgs): ReactNode | Promise<ReactNode>;
@@ -22,14 +36,6 @@ export interface RouteRenderArgs {
 	url: URL;
 	/** This is for signaling when the route transition is aborted */
 	abortSignal: AbortSignal;
-	/** Navigate */
-	navigate(
-		to: string,
-		options?: {
-			replace?: boolean;
-			scroll?: boolean;
-		},
-	): void;
 	/** Force a rerender */
 	rerender(): void;
 }
@@ -58,7 +64,7 @@ export const Router: FC<RouterProps> = ({
 			content: children,
 		});
 
-	const navigate = useCallback(
+	navigate = useCallback(
 		function navigate(
 			to: string | number,
 			options?: { replace?: boolean; scroll?: boolean },
@@ -118,13 +124,13 @@ export const Router: FC<RouterProps> = ({
 		const renderResult = render({
 			url: next,
 			abortSignal: abortController.signal,
-			navigate(to, options) {
-				navigate(to, options);
-				abortController.abort();
-			},
 			rerender() {
 				setState((old) => {
-					return { ...old, next: old.current };
+					return {
+						...old,
+						// Preserve any pending navigation
+						next: old.next ?? old.current,
+					};
 				});
 			},
 		});
@@ -162,7 +168,7 @@ export const Router: FC<RouterProps> = ({
 		return () => {
 			abortController.abort();
 		};
-	}, [navigate, next, render, hardReload]);
+	}, [next, render, hardReload]);
 
 	useEffect(() => {
 		function handleScroll() {
@@ -255,20 +261,6 @@ export interface RouterInfo {
 	current: URL;
 	/** Route to which a transition is underway */
 	next?: URL;
-	/**
-	 * Navigate programmatically
-	 * @param to URL to go to or an integer (-1 means back one page, 1 means forward one page)
-	 * @returns true if client-side navigation could be achieved
-	 */
-	navigate(
-		to: string | number,
-		options?: {
-			/** Replace current history entry instead of pushing a new one @default false */
-			replace?: boolean;
-			/** Restore scroll position for scroll to the top/URL hash @default true */
-			scroll?: boolean;
-		},
-	): boolean;
 }
 
 function isPromise(value: unknown): value is Promise<unknown> {
