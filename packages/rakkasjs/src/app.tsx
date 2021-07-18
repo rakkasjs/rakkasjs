@@ -1,8 +1,8 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useRef, useState, useCallback } from "react";
 import { RakkasProvider, Router, makeComponentStack, StackResult } from ".";
 import { useRouter } from "./lib/router/useRouter";
 import { findRoute, Route } from "./lib/find-route";
-import { navigate } from "./lib/router/Router";
+import { navigate, RouteRenderArgs } from "./lib/router/Router";
 
 export const App: FC<{
 	initialStack: StackResult;
@@ -12,52 +12,57 @@ export const App: FC<{
 	const lastStack = useRef(initialStack);
 	const [rootContext, setRootContext] = useState(__RAKKAS_ROOT_CONTEXT);
 
+	const render = useCallback(
+		async ({ url, rerender }: RouteRenderArgs) => {
+			const found = findRoute(decodeURI(url.pathname), routes, true) || {
+				stack: [],
+				params: {},
+				match: undefined,
+			};
+
+			const stack = await makeComponentStack({
+				found,
+				url,
+				fetch,
+				reload(i) {
+					lastStack.current.rendered[i].cacheKey = "";
+					rerender();
+				},
+				previousRender: lastStack.current.rendered,
+				rootContext,
+			});
+
+			if ("location" in stack) {
+				navigate(String(stack.location), { replace: true });
+				return null;
+			}
+
+			if (stack.status === 404 && !initialRender.current) {
+				return null;
+			}
+
+			initialRender.current = false;
+
+			lastStack.current = stack;
+
+			return (
+				<Wrapper
+					params={stack.params}
+					setRootContext={(arg) => {
+						setRootContext(arg);
+						rerender();
+					}}
+				>
+					{stack.content}
+				</Wrapper>
+			);
+		},
+		[rootContext, routes],
+	);
+
 	return (
 		<Router
-			render={async ({ url, rerender }) => {
-				const found = findRoute(decodeURI(url.pathname), routes, true) || {
-					stack: [],
-					params: {},
-					match: undefined,
-				};
-
-				const stack = await makeComponentStack({
-					found,
-					url,
-					fetch,
-					reload(i) {
-						lastStack.current.rendered[i].cacheKey = "";
-						rerender();
-					},
-					previousRender: lastStack.current.rendered,
-					rootContext,
-				});
-
-				if ("location" in stack) {
-					navigate(String(stack.location), { replace: true });
-					return null;
-				}
-
-				if (stack.status === 404 && !initialRender.current) {
-					return null;
-				}
-
-				initialRender.current = false;
-
-				lastStack.current = stack;
-
-				return (
-					<Wrapper
-						params={stack.params}
-						setRootContext={(arg) => {
-							setRootContext(arg);
-							rerender();
-						}}
-					>
-						{stack.content}
-					</Wrapper>
-				);
-			}}
+			render={render}
 			// skipInitialRender={isDataValid.current.every(Boolean)}
 		>
 			<Wrapper params={initialStack.params} setRootContext={setRootContext}>

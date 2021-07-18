@@ -8,6 +8,6 @@ export async function servePage(
 	) => Promise<RakkasResponse>,
 ): Promise<RakkasResponse> {
 	return await renderPage(req, {
-		session: "Initial session value",
+		session: { user: null },
 	});
 }

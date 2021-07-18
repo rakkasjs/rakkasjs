@@ -40,9 +40,9 @@ describe("Link", () => {
 
 		expect(screen.getByTestId("content")).toHaveTextContent("Loading");
 		act(() => screen.getByText("Go").click());
-		expect(screen.getByTestId("content")).toHaveTextContent(
-			"Loaded: http://localhost/go",
-		);
+		expect(
+			await screen.findByText("Loaded: http://localhost/go"),
+		).toHaveTextContent("Loaded: http://localhost/go");
 		expect(window.scrollTo).toHaveBeenCalledWith({ left: 0, top: 0 });
 	});
 
@@ -77,7 +77,6 @@ describe("Link", () => {
 
 			expect(screen.getByTestId("content")).toHaveTextContent("Loading");
 			act(() => screen.getByText("Go").click());
-			expect(screen.getByTestId("content")).toHaveTextContent("Loading");
 			expect(window.location.assign).toHaveBeenCalledWith(
 				"http://example.com/go",
 			);
@@ -101,7 +100,6 @@ describe("Link", () => {
 
 		expect(screen.getByTestId("content")).toHaveTextContent("Loading");
 		act(() => screen.getByText("Go").click());
-		expect(screen.getByTestId("content")).toHaveTextContent("Loading");
 		expect(window.location.href).toBe("http://localhost/#go");
 	});
 
@@ -123,7 +121,9 @@ describe("Link", () => {
 		expect(screen.getByTestId("content")).toHaveTextContent("Loading");
 		act(() => screen.getByText("Go").click());
 
-		const span = screen.getByTestId("content");
+		const span = await screen.findByText(
+			"Loaded: http://localhost/deep#deep-linked",
+		);
 		expect(span).toHaveTextContent("Loaded: http://localhost/deep#deep-linked");
 		expect(HTMLElement.prototype.scrollIntoView).toHaveBeenCalled();
 		// @ts-expect-error: Mock types are not available

@@ -19,17 +19,7 @@ describe("Router", () => {
 		expect(screen.getByTestId("content")).toHaveTextContent("Loading");
 	});
 
-	it("renders sync content", () => {
-		render(
-			<Router render={() => <span data-testid="content">Loaded</span>}>
-				<span data-testid="content">Loading</span>
-			</Router>,
-		);
-
-		expect(screen.getByTestId("content")).toHaveTextContent("Loaded");
-	});
-
-	it("renders async content", async () => {
+	it("renders content", async () => {
 		let resolvePromise: undefined | ((content: ReactNode) => void);
 
 		const promise = new Promise((resolve) => {
@@ -85,9 +75,9 @@ describe("Router", () => {
 			</Router>,
 		);
 
-		expect(screen.getByTestId("content")).toHaveTextContent("1");
+		expect(await screen.findByText("1")).toHaveTextContent("1");
 		counter++;
 		act(() => callRerender!());
-		expect(screen.getByTestId("content")).toHaveTextContent("2");
+		expect(await screen.findByText("2")).toHaveTextContent("2");
 	});
 });
