@@ -1,6 +1,9 @@
 import type { IncomingMessage } from "http";
+import type { RakkasRequestBodyAndType } from "rakkasjs";
 
-export async function parseBody(req: IncomingMessage) {
+export async function parseBody(
+	req: IncomingMessage,
+): Promise<RakkasRequestBodyAndType> {
 	const bodyBuffer = await new Promise<Buffer>((resolve, reject) => {
 		const limit = 1048576; // 1 MB
 		const chunks: Buffer[] = [];
@@ -23,6 +26,10 @@ export async function parseBody(req: IncomingMessage) {
 		req.on("error", (error) => reject(error));
 	});
 
+	if (bodyBuffer.length === 0) {
+		return { type: "empty" };
+	}
+
 	const [type, ...directives] = (req.headers["content-type"] || "").split(";");
 	const isJson = type === "application/json" || type.endsWith("+json");
 	const isUrlEncoded = type === "application/x-www-form-urlencoded";
@@ -42,17 +49,20 @@ export async function parseBody(req: IncomingMessage) {
 
 		if (isJson) {
 			try {
-				return JSON.parse(text);
+				return { type: "json", body: JSON.parse(text) };
 			} catch (error) {
 				(error as any).status = 400;
 				throw error;
 			}
 		} else if (isUrlEncoded) {
-			return new URLSearchParams(text);
+			return {
+				type: "form-data",
+				body: new URLSearchParams(text),
+			};
 		}
 
-		return text;
+		return { type: "text", body: text };
 	}
 
-	return new Uint8Array(bodyBuffer);
+	return { type: "binary", body: new Uint8Array(bodyBuffer) };
 }

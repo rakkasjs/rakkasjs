@@ -27,18 +27,8 @@ declare module "@rakkasjs/api-imports" {
 }
 
 declare module "@rakkasjs/server-hooks" {
-	interface RawRequest {
-		url: URL;
-		method: string;
-		headers: Headers;
-		body: Uint8Array | string | any;
-	}
-
-	interface RakkasResponse {
-		status?: number;
-		headers?: Record<string, string | undefined>;
-		body?: unknown;
-	}
+	// eslint-disable-next-line import/no-unresolved
+	import type { RawRequest, RakkasResponse } from "$lib/types";
 
 	const servePage:
 		| ((

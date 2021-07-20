@@ -235,25 +235,57 @@ export interface RakkasInfo extends RouterInfo {
 	): void;
 }
 
-export interface RawRequest {
+interface RawRequestBase {
 	url: URL;
 	method: string;
 	headers: Headers;
-	body: Uint8Array | string | any;
 }
 
-export interface RakkasRequest {
-	url: URL;
-	method: string;
-	headers: Headers;
-	body: Uint8Array | string | any;
+interface RakkasRequestBase extends RawRequestBase {
 	params: Record<string, string>;
 	context: Record<string, unknown>;
 }
 
+interface EmptyBody {
+	type: "empty";
+	body?: undefined;
+}
+
+interface BinaryBody {
+	type: "binary";
+	body: Uint8Array;
+}
+
+interface TextBody {
+	type: "text";
+	body: string;
+}
+
+interface FormDataBody {
+	type: "form-data";
+	body: URLSearchParams;
+}
+
+interface JsonBody {
+	type: "json";
+	body: any;
+}
+
+export type RakkasRequestBodyAndType =
+	| EmptyBody
+	| TextBody
+	| BinaryBody
+	| FormDataBody
+	| JsonBody;
+
+export type RawRequest = RawRequestBase & RakkasRequestBodyAndType;
+export type RakkasRequest = RakkasRequestBase & RakkasRequestBodyAndType;
+
 export interface RakkasResponse {
 	status?: number;
-	headers?: Record<string, string | undefined>;
+	headers?:
+		| Record<string, string | string[] | undefined>
+		| Array<[string, string | string[] | undefined]>;
 	body?: unknown;
 }
 
@@ -263,5 +295,5 @@ export type RequestHandler = (
 
 export type RakkasMiddleware = (
 	request: RakkasRequest,
-	next: RequestHandler,
+	next: (request: RakkasRequest) => Promise<RakkasResponse>,
 ) => RakkasResponse | Promise<RakkasResponse>;

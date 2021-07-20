@@ -10,6 +10,7 @@ import { makeViteConfig } from "../lib/vite-config";
 import { loadConfig } from "../lib/config";
 import { encode } from "html-entities";
 import { parseBody } from "@rakkasjs/runner-node/parse-body";
+import { RakkasResponse } from "../../../rakkasjs";
 
 (globalThis as any).fetch = nodeFetch;
 (globalThis as any).Response = NodeFetchResponse;
@@ -93,21 +94,30 @@ async function createServers(onReload: () => void) {
 					req.headers.host ||
 					"localhost";
 
-				const response = await processRequest({
+				const { body, type } = await parseBody(req);
+
+				const response: RakkasResponse = await processRequest({
 					request: {
 						// TODO: Get real host and port
 						url: new URL(url, `${proto}://${host}`),
 						method: req.method || "GET",
 						headers: new Headers(req.headers as Record<string, string>),
-						body: await parseBody(req),
+						type,
+						body,
 					},
 					template: html,
 				});
 
 				res.statusCode = response.status ?? 200;
-				Object.entries(
-					(response.headers ?? {}) as Record<string, string>,
-				).forEach(([k, v]) => res.setHeader(k, v));
+
+				let headers = response.headers;
+				if (!headers) headers = [];
+				if (!Array.isArray(headers)) headers = Object.entries(headers);
+
+				headers.forEach(([name, value]) => {
+					if (value === undefined) return;
+					res.setHeader(name, value);
+				});
 
 				if (
 					response.body === null ||

@@ -14,17 +14,29 @@ export const Header: FC = () => (
 		<nav className={css.nav}>
 			<ul>
 				<li>
-					<NavLink href="/" currentRouteClass={css.activeLink}>
+					<NavLink
+						href="/"
+						currentRouteClass={css.activeLink}
+						nextRouteClass={css.nextLink}
+					>
 						Home
 					</NavLink>
 				</li>
 				<li>
-					<NavLink href="/guide" currentRouteClass={css.activeLink}>
+					<NavLink
+						href="/guide"
+						currentRouteClass={css.activeLink}
+						nextRouteClass={css.nextLink}
+					>
 						Guide
 					</NavLink>
 				</li>
 				<li>
-					<NavLink href="/roadmap" currentRouteClass={css.activeLink}>
+					<NavLink
+						href="/roadmap"
+						currentRouteClass={css.activeLink}
+						nextRouteClass={css.nextLink}
+					>
 						Roadmap
 					</NavLink>
 				</li>

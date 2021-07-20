@@ -10,6 +10,7 @@ import nodeFetch, {
 	Headers as NodeFetchHeaders,
 } from "node-fetch";
 import { pathToFileURL } from "url";
+import { RakkasResponse } from "rakkasjs";
 
 (globalThis as any).fetch = nodeFetch;
 (globalThis as any).Response = NodeFetchResponse;
@@ -57,23 +58,36 @@ export async function startServer() {
 
 		async function handle() {
 			try {
-				const response = await handleRequest(apiRoutes, pageRoutes, {
-					request: {
-						// TODO: Get real host and port
-						url: new URL(req.url || "/", `${proto}://${host}`),
-						method: req.method || "GET",
-						headers: new Headers(req.headers as Record<string, string>),
-						body: await parseBody(req),
+				const { body, type } = await parseBody(req);
+
+				const response: RakkasResponse = await handleRequest(
+					apiRoutes,
+					pageRoutes,
+					{
+						request: {
+							// TODO: Get real host and port
+							url: new URL(req.url || "/", `${proto}://${host}`),
+							method: req.method || "GET",
+							headers: new Headers(req.headers as Record<string, string>),
+							type,
+							body,
+						},
+						template,
+						manifest,
+						pages: pageRoutes,
 					},
-					template,
-					manifest,
-					pages: pageRoutes,
-				});
+				);
 
 				res.statusCode = response.status ?? 200;
-				Object.entries(
-					(response.headers as Record<string, string>) ?? {},
-				).forEach(([k, v]) => res.setHeader(k, v));
+
+				let headers = response.headers;
+				if (!headers) headers = [];
+				if (!Array.isArray(headers)) headers = Object.entries(headers);
+
+				headers.forEach(([name, value]) => {
+					if (value === undefined) return;
+					res.setHeader(name, value);
+				});
 
 				if (
 					response.body === null ||

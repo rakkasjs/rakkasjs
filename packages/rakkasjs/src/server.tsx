@@ -166,7 +166,10 @@ export async function handleRequest(
 	const serverHooks = await import("@rakkasjs/server-hooks");
 	const { servePage = (req, render) => render(req, {}) } = serverHooks;
 
-	return servePage(request, async (req, rootContext) => {
+	async function render(
+		request: RawRequest,
+		context: Record<string, unknown>,
+	): Promise<RakkasResponse> {
 		const stack = await makeComponentStack({
 			found: foundPage,
 
@@ -178,16 +181,14 @@ export async function handleRequest(
 
 			fetch: internalFetch,
 
-			rootContext,
+			rootContext: context,
 		});
 
 		// Handle redirection
 		if ("location" in stack) {
 			return {
 				status: stack.status,
-				headers: {
-					location: String(stack.location),
-				},
+				headers: { location: String(stack.location) },
 			};
 		}
 
@@ -210,7 +211,7 @@ export async function handleRequest(
 		const { helmet } = helmetContext as FilledContext;
 
 		let head = `<script>__RAKKAS_ROOT_CONTEXT=(0,eval)(${devalue(
-			rootContext,
+			context,
 		)})</script>`;
 
 		head += `<script>__RAKKAS_RENDERED=(0,eval)(${devalue(
@@ -272,10 +273,10 @@ export async function handleRequest(
 
 		return {
 			status: stack.status,
-			headers: {
-				"content-type": "text/html",
-			},
+			headers: { "content-type": "text/html" },
 			body,
 		};
-	});
+	}
+
+	return servePage(request, render);
 }
