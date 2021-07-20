@@ -2,8 +2,9 @@
 
 ## For 0.3.0
 - [ ] Create a full-stack [realworld](https://github.com/gothinkster/realworld) implementation
-- [ ] Fix hot reloading issues
-  - [ ] A newly created page or layout doesn't take effect without restart
+- [x] Fix hot reloading issues
+  - [x] Newly created pages and layouts work correctly
+  - [x] Layout hot updates are reflected correctly
 - [x] Remove `getRootContext` in favor of `servePage`
   - [ ] Update examples
 - [ ] Fix vite client types reexport

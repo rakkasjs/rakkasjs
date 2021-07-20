@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { definePage } from "rakkasjs";
 
 export default definePage({
-	Component: function HomePage() {
-		return <p>HMR test page</p>;
+	Component: function HmrPage() {
+		const [hydrated, setHydrated] = useState(false);
+
+		useEffect(() => {
+			setHydrated(true);
+		}, []);
+
+		return (
+			<>
+				<p id="page-p">HMR test page - ORIGINAL</p>
+				{hydrated && <p id="hydrated">Hydrated</p>}
+			</>
+		);
 	},
 });

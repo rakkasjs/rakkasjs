@@ -1,16 +1,51 @@
-describe("Hot module reloading", () => {
-	beforeEach(() => {
-		cy.request("DELETE", "/api/hmr");
-	});
+if (process.env.DEV_TEST) {
+	describe("Hot module reloading", () => {
+		before(() => {
+			cy.request({
+				method: "POST",
+				url: "/api/hmr/page",
+				body: "revert",
+				headers: { "content-type": "text/plain" },
+			});
 
-	afterEach(() => {
-		cy.request("DELETE", "/api/hmr");
-	});
+			cy.request({
+				method: "POST",
+				url: "/api/hmr/layout",
+				body: "revert",
+				headers: { "content-type": "text/plain" },
+			});
+		});
 
-	it("reloads when a new file is created", () => {
-		cy.visit("/hmr/non-existent", { failOnStatusCode: false });
-		cy.get("#page-content").should("contain", "Page not found");
-		cy.request("POST", "/api/hmr");
-		cy.get("#page-content").should("contain", "Now you see me!");
+		after(() => {
+			cy.request({
+				method: "POST",
+				url: "/api/hmr/page",
+				body: "revert",
+				headers: { "content-type": "text/plain" },
+			});
+
+			cy.request({
+				method: "POST",
+				url: "/api/hmr/layout",
+				body: "revert",
+				headers: { "content-type": "text/plain" },
+			});
+		});
+
+		it("hot reloads a page", () => {
+			cy.visit("/hmr");
+			cy.get("#hydrated").should("contain", "Hydrated");
+			cy.get("#page-p").should("contain", "HMR test page - ORIGINAL");
+			cy.request("POST", "/api/hmr/page");
+			cy.get("#page-p").should("contain", "HMR test page - UPDATED");
+		});
+
+		it("hot reloads a layout", () => {
+			cy.visit("/hmr");
+			cy.get("#hydrated").should("contain", "Hydrated");
+			cy.get("#layout-p").should("contain", "HMR test layout - ORIGINAL");
+			cy.request("POST", "/api/hmr/layout");
+			cy.get("#layout-p").should("contain", "HMR test layout - UPDATED");
+		});
 	});
-});
+}

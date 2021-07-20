@@ -25,7 +25,7 @@ describe("404 handling", () => {
 		cy.get("body").should("contain.text", "This is not a page.");
 
 		cy.go("back");
-		cy.url().should("equal", "http://localhost:4000/404");
+		cy.url().should("equal", "http://localhost:3000/404");
 		cy.get("p").should("contain", "Mounted");
 	});
 });

@@ -199,14 +199,17 @@ export async function makeComponentStack({
 	}
 
 	context = { ...rootContext };
+
 	const content = thisRender.reduceRight((prev, rendered, i) => {
 		const reloadThis = () => reload(i);
+
 		const Component = rendered.Component!;
 		context = { ...context, ...(rendered.loaded as any).context };
 
 		if (import.meta.hot) {
 			$reloader$[rendered.name || ""] = (newModule) => {
 				moduleCache[rendered.name || ""] = newModule;
+				delete errorBoundaryCache[rendered.name || ""];
 				reloadThis();
 			};
 		}

@@ -17,7 +17,7 @@ export const post: RequestHandler = async () => {
 	return {};
 };
 
-const FILE_NAME = "src/pages/hmr/non-existent.page.tsx";
+const FILE_NAME = "src/pages/fs-watch/non-existent.page.tsx";
 
 const FILE_CONTENT = `import React from "react";
 import { definePage } from "rakkasjs";
