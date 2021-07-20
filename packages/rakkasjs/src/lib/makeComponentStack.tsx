@@ -81,7 +81,13 @@ export async function makeComponentStack({
 	for (const [i, moduleId] of stack.entries()) {
 		let module = moduleCache[moduleId];
 		if (!module) {
-			moduleCache[moduleId] = module = await importers[moduleId]();
+			if (import.meta.env.DEV) {
+				moduleCache[moduleId] = module = await import(
+					/* @vite-ignore */ moduleId
+				);
+			} else {
+				moduleCache[moduleId] = module = await importers[moduleId]();
+			}
 		}
 
 		const isPage = i === stack.length - 1;

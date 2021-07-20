@@ -54,15 +54,19 @@ export async function handleRequest(
 		let handler: RequestHandler | undefined;
 
 		const moduleId = found.stack[found.stack.length - 1];
-		const mdl = await importers[moduleId]();
+		const module = await (import.meta.env.DEV
+			? import(/* @vite-ignore */ moduleId)
+			: importers[moduleId]());
 
-		const leaf = mdl[method] || mdl.default;
+		const leaf = module[method] || module.default;
 
 		if (leaf) {
 			const middleware = found.stack.slice(0, -1);
 			handler = middleware.reduceRight((prev, cur) => {
 				return async (req: RakkasRequest) => {
-					const mdl = await importers[cur]();
+					const mdl = await (import.meta.env.DEV
+						? import(/* @vite-ignore */ cur)
+						: importers[cur]());
 					return mdl.default(req, prev);
 				};
 			}, leaf);
