@@ -28,7 +28,7 @@ export function findRoute(
 				return {
 					params,
 					match: notFound ? undefined : pattern,
-					stack: moduleIds,
+					stack: notFound ? moduleIds.slice(0, -1) : moduleIds,
 				};
 			}
 		}

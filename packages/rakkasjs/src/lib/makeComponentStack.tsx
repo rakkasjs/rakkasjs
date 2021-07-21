@@ -90,7 +90,7 @@ export async function makeComponentStack({
 			}
 		}
 
-		const isPage = i === stack.length - 1;
+		const isPage = match && i === stack.length - 1;
 
 		const moduleExports =
 			typeof module.default === "object"

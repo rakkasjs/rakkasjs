@@ -9,6 +9,7 @@
 - [ ] Investigate Cannot set property 'isSelfAccepting' of undefined
 - [x] Remove `getRootContext` in favor of `servePage`
   - [ ] Update examples
+- [x] Fix extraneous loading on 404
 - [x] Fix scroll restoration
 - [x] Manage focus after navigation
 - [x] Fix hot reloading issues
