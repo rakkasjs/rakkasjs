@@ -5,7 +5,7 @@ import { Link } from "./Link";
 import React from "react";
 
 describe("Link", () => {
-	const originalScroolTo = window.scrollTo;
+	const originalScrollTo = window.scrollTo;
 	const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
 
 	let renderNumber = 0;
@@ -21,7 +21,7 @@ describe("Link", () => {
 	});
 
 	afterEach(() => {
-		window.scrollTo = originalScroolTo;
+		window.scrollTo = originalScrollTo;
 		HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
 	});
 
