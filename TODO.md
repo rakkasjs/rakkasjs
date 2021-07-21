@@ -2,16 +2,17 @@
 
 ## For 0.3.0
 - [ ] Create a full-stack [realworld](https://github.com/gothinkster/realworld) implementation
-- [x] Fix hot reloading issues
-  - [x] Newly created pages and layouts work correctly
-  - [x] Layout hot updates are reflected correctly
-- [x] Remove `getRootContext` in favor of `servePage`
-  - [ ] Update examples
 - [ ] Fix vite client types reexport
 - [ ] Add command to unpublish all canary releases
 - [ ] Investigate Vite fs.allow warning: https://vitejs.dev/config/#server-fs-allow
 - [ ] Investigate the circular dependency warning
 - [ ] Investigate Cannot set property 'isSelfAccepting' of undefined
+- [x] Remove `getRootContext` in favor of `servePage`
+  - [ ] Update examples
+- [x] Manage focus after navigation
+- [x] Fix hot reloading issues
+  - [x] Newly created pages and layouts work correctly
+  - [x] Layout hot updates are reflected correctly
 - [x] Make navigate() globally accessible
 - [x] Fix bug caused by rerender overwriting the next URL
 

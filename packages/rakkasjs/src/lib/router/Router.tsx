@@ -10,8 +10,8 @@ import React, {
 import { RouterContext } from "./useRouter";
 
 const scrollHistory: Array<{ left: number; top: number } | undefined> = [];
-let notify = (shouldScroll: boolean) => {
-	void shouldScroll;
+let notify = (options?: { scroll?: boolean; focus?: boolean }) => {
+	void options;
 };
 
 /**
@@ -21,7 +21,7 @@ let notify = (shouldScroll: boolean) => {
  */
 export function navigate(
 	to: string | number,
-	options?: { replace?: boolean; scroll?: boolean },
+	options?: { replace?: boolean; scroll?: boolean; focus?: boolean },
 ) {
 	if (typeof to === "number") {
 		window.history.go(to);
@@ -50,7 +50,7 @@ export function navigate(
 			window.history.pushState(undefined, "", to);
 		}
 
-		notify(options?.scroll ?? true);
+		notify(options || { scroll: true, focus: true });
 	}
 
 	return true;
@@ -93,13 +93,16 @@ export const Router: FC<RouterProps> = ({
 		setUpdateCounter((old) => (old + 1) & 0xfffffff);
 	}, []);
 
-	const [shouldScroll, setShouldScroll] = useState(false);
+	const [navigateOptions, setNavigateOptions] = useState({
+		scroll: false,
+		focus: false,
+	});
 
 	useEffect(() => {
 		const saved = notify;
 
-		notify = (shouldScroll) => {
-			setShouldScroll(shouldScroll);
+		notify = ({ scroll = true, focus = true } = {}) => {
+			setNavigateOptions({ scroll, focus });
 			forceUpdate();
 		};
 
@@ -184,29 +187,44 @@ export const Router: FC<RouterProps> = ({
 			window.history.replaceState({ index: window.history.length - 1 }, "");
 		}
 
-		if (shouldScroll) {
-			const index = window.history.state?.index ?? window.history.length - 1;
-
+		if (navigateOptions.scroll || navigateOptions.focus) {
 			requestAnimationFrame(() => {
-				if (unmounted) return;
+				if (navigateOptions.scroll) {
+					const index =
+						window.history.state?.index ?? window.history.length - 1;
 
-				if (current.hash && current.hash !== "#") {
-					const element = document.getElementById(current.hash.slice(1));
-					if (element) {
-						element.scrollIntoView();
+					if (unmounted) return;
+
+					if (current.hash && current.hash !== "#") {
+						const element = document.getElementById(current.hash.slice(1));
+						if (element) {
+							element.scrollIntoView();
+						} else {
+							window.scrollTo(scrollHistory[index] || { left: 0, top: 0 });
+						}
 					} else {
 						window.scrollTo(scrollHistory[index] || { left: 0, top: 0 });
 					}
-				} else {
-					window.scrollTo(scrollHistory[index] || { left: 0, top: 0 });
+				}
+
+				if (navigateOptions.focus) {
+					const focusTarget = document.querySelector(
+						'button[autofocus], a[autofocus], input[autofocus]:not([type="hidden"]), select[autofocus], textarea[autofocus], [tabindex][autofocus]:not([tabindex="-1"])',
+					) as HTMLElement | null;
+
+					if (focusTarget) {
+						focusTarget.focus();
+					} else {
+						(document.activeElement as HTMLElement | null)?.blur();
+					}
 				}
 			});
-
-			return () => {
-				unmounted = true;
-			};
 		}
-	}, [current, shouldScroll, href]);
+
+		return () => {
+			unmounted = true;
+		};
+	}, [current, navigateOptions.focus, navigateOptions.scroll, href]);
 
 	useEffect(() => {
 		function handlePopState() {
@@ -214,7 +232,7 @@ export const Router: FC<RouterProps> = ({
 				window.history.replaceState({ index: window.history.length }, "");
 			}
 
-			setShouldScroll(true);
+			setNavigateOptions({ scroll: true, focus: true });
 			forceUpdate();
 		}
 
