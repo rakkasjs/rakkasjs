@@ -20,13 +20,19 @@ export const App: FC<{
 				match: undefined,
 			};
 
+			let reloadPending = false;
+
 			const stack = await makeComponentStack({
 				found,
 				url,
 				fetch,
 				reload(i) {
 					lastStack.current.rendered[i].cacheKey = "";
-					rerender();
+					if (!reloadPending) {
+						reloadPending = true;
+						rerender();
+						requestAnimationFrame(() => (reloadPending = false));
+					}
 				},
 				previousRender: lastStack.current.rendered,
 				rootContext,
