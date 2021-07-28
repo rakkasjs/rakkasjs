@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { navigate, Page, useRakkas } from "rakkasjs";
+import { navigate, Page, setRootContext } from "rakkasjs";
 
 const LoginPage: Page = function HomePage() {
-	const { setRootContext } = useRakkas();
 	const [disabled, setDisabled] = useState(true);
 
 	useEffect(() => {

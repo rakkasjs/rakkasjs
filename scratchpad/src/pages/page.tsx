@@ -6,11 +6,7 @@ export default definePage({
 
 	Component: function MainPage({ error }) {
 		if (error) {
-			return (
-				<main>
-					<p>{error.message}</p>
-				</main>
-			);
+			return <>{error.message}</>;
 		}
 
 		return (

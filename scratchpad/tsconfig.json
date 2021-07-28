@@ -20,5 +20,6 @@
 			"@testing-library/jest-dom"
 		],
 		"skipLibCheck": true
-	}
+	},
+	"exclude": ["cypress"]
 }

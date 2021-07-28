@@ -112,9 +112,9 @@ import navigateExample from "$examples/navigate/[userName].page.tsx?sample";
 
 ### Page transitions
 
-Th `useRakkas` custom hook from the `rakkasjs` package has a `current` property. It's a URL object that contains the URL of the currently rendered page. You should always use this property insteaf of `window.location` because, a) `window` is not available during server-side rendering, and b) you'll get the wrong URL during page transitions: When the user clicks on a `Link`, the URL in the location bar of the browser changes immediately but the old page is still shown while the new one is being loaded.
+Th `useRouter` custom hook from the `rakkasjs` package has a `current` property. It's a URL object that contains the URL of the currently rendered page. You should always use this property insteaf of `window.location` because, a) `window` is not available during server-side rendering, and b) you'll get the wrong URL during page transitions: When the user clicks on a `Link`, the URL in the location bar of the browser changes immediately but the old page is still shown while the new one is being loaded.
 
-The `next` property of the return value of `useRakkas`, if present, contains the URL that the app is transitioning into. You can test for its presence to render an animated loading bar for example. Also, the `NavLink` component accepts `nextRouteClass` and `nextRouteStyle` props that take effect during a page transition if the `href` property matches the URL that the app is transitioning into.
+The `next` property of the return value of `useRouter`, if present, contains the URL that the app is transitioning into. You can test for its presence to render an animated loading bar for example. Also, the `NavLink` component accepts `nextRouteClass` and `nextRouteStyle` props that take effect during a page transition if the `href` property matches the URL that the app is transitioning into.
 
 ## Data loading
 
@@ -174,7 +174,7 @@ Layouts are more than simple wrapper components, they're also data fetching midd
 
 The context passed to the outermost page or layout can be initialized **on the server-side** by the `getInitialContext` function that you may export from the optional `src/server.js` (or `ts`) file. This can be useful for sending session data for example.
 
-Otherwise its value will be `{}`. You can update it on the client by calling the `setRootContext` returned by `useRakkas` custom hook. Please note that the value is not persisted to the server.
+Otherwise its value will be `{}`. You can update it on the client by calling the `setRootContext` returned by `useRouter` custom hook. Please note that the value is not persisted to the server.
 
 You can even have renderless layouts that don't export a component but still export `load()`.
 

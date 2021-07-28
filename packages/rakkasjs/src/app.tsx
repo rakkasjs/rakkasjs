@@ -1,4 +1,11 @@
-import React, { FC, useRef, useState, useCallback, Dispatch } from "react";
+import React, {
+	FC,
+	useRef,
+	useState,
+	useCallback,
+	Dispatch,
+	SetStateAction,
+} from "react";
 import { useBaseRouter } from "./lib/router/useBaseRouter";
 import { findRoute, Route } from "./lib/find-route";
 import { navigate, Router, RouteRenderArgs } from "./lib/router/Router";
@@ -6,12 +13,11 @@ import { initClientGlobal, setGlobal } from "./lib/init-global";
 import { RouterProvider } from "./lib/useRouter";
 import { StackResult, makeComponentStack } from "./lib/makeComponentStack";
 
-export let setRootContext = initClientGlobal<Dispatch<Record<string, any>>>(
-	"rootContext",
-	() => {
-		throw new Error("setRootContext called outside of the render tree");
-	},
-);
+export let setRootContext = initClientGlobal<
+	Dispatch<SetStateAction<Record<string, any>>>
+>("rootContext", () => {
+	throw new Error("setRootContext called outside of the render tree");
+});
 
 export const App: FC<{
 	initialStack: StackResult;
