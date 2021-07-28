@@ -2,7 +2,6 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import {
 	RakkasMiddleware,
-	RakkasProvider,
 	RakkasRequest,
 	RakkasResponse,
 	RequestHandler,
@@ -15,6 +14,7 @@ import { findRoute, Route } from "./lib/find-route";
 
 import importers from "@rakkasjs/api-imports";
 import { RawRequest } from "./lib/types";
+import { RouterProvider } from "./lib/useRouter";
 
 export interface EndpointModule {
 	[method: string]: RequestHandler | undefined;
@@ -199,26 +199,23 @@ export async function handleRequest(
 		const helmetContext = {};
 
 		const app = renderToString(
-			<RakkasProvider
+			<RouterProvider
 				value={{
 					current: request.url,
 					params: stack.params,
-					setRootContext() {
-						throw new Error("setRootContext() cannot be used on server side");
-					},
 				}}
 			>
 				<HelmetProvider context={helmetContext}>{stack.content}</HelmetProvider>
-			</RakkasProvider>,
+			</RouterProvider>,
 		);
 
 		const { helmet } = helmetContext as FilledContext;
 
-		let head = `<script>__RAKKAS_ROOT_CONTEXT=(0,eval)(${devalue(
+		let head = `<script>$rakkas$rootContext=(0,eval)(${devalue(
 			context,
 		)})</script>`;
 
-		head += `<script>__RAKKAS_RENDERED=(0,eval)(${devalue(
+		head += `<script>$rakkas$rendered=(0,eval)(${devalue(
 			stack.rendered.map((x) => {
 				delete x.Component;
 				return x;
@@ -226,7 +223,7 @@ export async function handleRequest(
 		)})</script>`;
 
 		if (pages) {
-			head += `<script>__RAKKAS_ROUTES=(0,eval)(${devalue(pages)})</script>`;
+			head += `<script>$rakkas$routes=(0,eval)(${devalue(pages)})</script>`;
 		}
 
 		head +=

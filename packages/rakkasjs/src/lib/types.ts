@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { RouterInfo } from "./router/Router";
+import { BaseRouterInfo } from "./router/Router";
 
 export interface PageTypes {
 	params: Record<string, string>;
@@ -225,14 +225,9 @@ export interface LoadRedirectResult {
 	location: string | URL;
 }
 
-// Return value of useRakkas custom hook
-export interface RakkasInfo extends RouterInfo {
+// Return value of useRouter custom hook
+export interface RouterInfo extends BaseRouterInfo {
 	params: Record<string, string>;
-	setRootContext(
-		value:
-			| Record<string, unknown>
-			| ((old: Record<string, unknown>) => Record<string, unknown>),
-	): void;
 }
 
 interface RawRequestBase {

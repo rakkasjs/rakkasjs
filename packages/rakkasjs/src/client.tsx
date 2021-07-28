@@ -5,11 +5,14 @@ import "core-js/features/string/match-all";
 import React from "react";
 import { hydrate } from "react-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { makeComponentStack, RenderedStackItem } from ".";
+import {
+	makeComponentStack,
+	RenderedStackItem,
+} from "./lib/makeComponentStack";
 import { App } from "./app";
 import { findRoute, Route } from "./lib/find-route";
 
-const lastRendered: RenderedStackItem[] = __RAKKAS_RENDERED;
+const lastRendered: RenderedStackItem[] = $rakkas$rendered;
 
 export async function startClient(routes?: Route[]) {
 	const clientHooks = await import("@rakkasjs/client-hooks");
@@ -22,7 +25,7 @@ export async function startClient(routes?: Route[]) {
 
 	const url = new URL(window.location.href);
 
-	routes = routes! || __RAKKAS_ROUTES!;
+	routes = routes! || $rakkas$routes!;
 
 	const found = findRoute(decodeURI(url.pathname), routes, true) || {
 		stack: [],
@@ -38,7 +41,7 @@ export async function startClient(routes?: Route[]) {
 		reload(i) {
 			lastRendered[i].cacheKey = "";
 		},
-		rootContext: __RAKKAS_ROOT_CONTEXT,
+		rootContext: $rakkas$rootContext,
 		isInitialRender: true,
 	});
 

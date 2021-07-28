@@ -1,17 +1,9 @@
 export * from "./lib/types";
 
-export { navigate, Router } from "./lib/router/Router";
+export { navigate } from "./lib/router/Router";
 export { Link } from "./lib/router/Link";
 export { NavLink } from "./lib/router/NavLink";
-
-export { useRakkas, RakkasProvider } from "./lib/useRakkas";
-
-export {
-	makeComponentStack,
-	RenderedStackItem,
-	StackResult,
-} from "./lib/makeComponentStack";
-
+export { useRouter } from "./lib/useRouter";
 import {
 	PageTypes,
 	LayoutTypes,
@@ -23,6 +15,8 @@ import {
 	Layout,
 	SimpleLayout,
 } from "./lib/types";
+
+export { setRootContext } from "./app";
 
 // canHandleErrors missing or false => normal page
 export function definePage<T extends PageTypes = PageTypes>(def: {

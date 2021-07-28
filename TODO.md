@@ -2,13 +2,14 @@
 
 ## For 0.3.0
 - [ ] Create a full-stack [realworld](https://github.com/gothinkster/realworld) implementation
+- [ ] Update examples and documentation
+- [ ] Design a way to wrap the rendered application in custom providers
 - [ ] Fix vite client types reexport
 - [ ] Add command to unpublish all canary releases
 - [ ] Investigate Vite fs.allow warning: https://vitejs.dev/config/#server-fs-allow
 - [ ] Investigate the circular dependency warning
 - [ ] Investigate Cannot set property 'isSelfAccepting' of undefined
 - [x] Remove `getRootContext` in favor of `servePage`
-  - [ ] Update examples
 - [x] Fix extraneous loading on 404
 - [x] Fix scroll restoration
 - [x] Manage focus after navigation
@@ -16,6 +17,8 @@
   - [x] Newly created pages and layouts work correctly
   - [x] Layout hot updates are reflected correctly
 - [x] Make navigate() globally accessible
+- [x] Make setRootContext globally accessible
+- [x] Rename useRakkas to useRouter
 - [x] Fix bug caused by rerender overwriting the next URL
 
 ## For 1.0.0

@@ -207,7 +207,7 @@ export async function makeComponentStack({
 		context = { ...context, ...(rendered.loaded as any).context };
 
 		if (import.meta.hot) {
-			$reloader$[rendered.name || ""] = (newModule) => {
+			$rakkas$reloader[rendered.name || ""] = (newModule) => {
 				moduleCache[rendered.name || ""] = newModule;
 				delete errorBoundaryCache[rendered.name || ""];
 				reloadThis();
@@ -315,6 +315,6 @@ const defaultPageGetCacheKey: GetCacheKeyFunc = ({ url, context, params }) => [
 	url.search,
 ];
 
-if (import.meta.hot && !(window as any).$reloader$) {
-	(window as any).$reloader$ = {};
+if (import.meta.hot && !(window as any).$rakkas$reloader) {
+	(window as any).$rakkas$reloader = {};
 }

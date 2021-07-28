@@ -1,8 +1,17 @@
-import React, { FC, useRef, useState, useCallback } from "react";
-import { RakkasProvider, Router, makeComponentStack, StackResult } from ".";
-import { useRouter } from "./lib/router/useRouter";
+import React, { FC, useRef, useState, useCallback, Dispatch } from "react";
+import { useBaseRouter } from "./lib/router/useBaseRouter";
 import { findRoute, Route } from "./lib/find-route";
-import { navigate, RouteRenderArgs } from "./lib/router/Router";
+import { navigate, Router, RouteRenderArgs } from "./lib/router/Router";
+import { initClientGlobal, setGlobal } from "./lib/init-global";
+import { RouterProvider } from "./lib/useRouter";
+import { StackResult, makeComponentStack } from "./lib/makeComponentStack";
+
+export let setRootContext = initClientGlobal<Dispatch<Record<string, any>>>(
+	"rootContext",
+	() => {
+		throw new Error("setRootContext called outside of the render tree");
+	},
+);
 
 export const App: FC<{
 	initialStack: StackResult;
@@ -10,7 +19,8 @@ export const App: FC<{
 }> = ({ initialStack, routes }) => {
 	const initialRender = useRef(true);
 	const lastStack = useRef(initialStack);
-	const [rootContext, setRootContext] = useState(__RAKKAS_ROOT_CONTEXT);
+	const [rootContextState, setRootContextState] = useState($rakkas$rootContext);
+	setRootContext = setGlobal("rootContext", setRootContextState);
 
 	const render = useCallback(
 		async ({ url, rerender }: RouteRenderArgs) => {
@@ -35,7 +45,7 @@ export const App: FC<{
 					}
 				},
 				previousRender: lastStack.current.rendered,
-				rootContext,
+				rootContext: rootContextState,
 			});
 
 			if ("location" in stack) {
@@ -51,19 +61,9 @@ export const App: FC<{
 
 			lastStack.current = stack;
 
-			return (
-				<Wrapper
-					params={stack.params}
-					setRootContext={(arg) => {
-						setRootContext(arg);
-						rerender();
-					}}
-				>
-					{stack.content}
-				</Wrapper>
-			);
+			return <Wrapper params={stack.params}>{stack.content}</Wrapper>;
 		},
-		[rootContext, routes],
+		[rootContextState, routes],
 	);
 
 	return (
@@ -71,7 +71,7 @@ export const App: FC<{
 			render={render}
 			// skipInitialRender={isDataValid.current.every(Boolean)}
 		>
-			<Wrapper params={initialStack.params} setRootContext={setRootContext}>
+			<Wrapper params={initialStack.params}>
 				{lastStack.current.content}
 			</Wrapper>
 		</Router>
@@ -80,17 +80,10 @@ export const App: FC<{
 
 const Wrapper: FC<{
 	params: Record<string, string>;
-	setRootContext(
-		value:
-			| Record<string, unknown>
-			| ((old: Record<string, unknown>) => Record<string, unknown>),
-	): void;
-}> = ({ params, setRootContext, children }) => {
-	const router = useRouter();
+}> = ({ params, children }) => {
+	const router = useBaseRouter();
 
 	return (
-		<RakkasProvider value={{ ...router, params, setRootContext }}>
-			{children}
-		</RakkasProvider>
+		<RouterProvider value={{ ...router, params }}>{children}</RouterProvider>
 	);
 };

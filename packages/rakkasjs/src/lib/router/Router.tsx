@@ -8,13 +8,20 @@ import React, {
 	useState,
 	useLayoutEffect,
 } from "react";
-import { RouterContext } from "./useRouter";
+import { initClientGlobal, setGlobal } from "../init-global";
+import { BaseRouterContext } from "./useBaseRouter";
 
-const scrollHistory: Record<string, { left: number; top: number } | undefined> =
-	{};
-let notify = (options?: { scroll?: boolean; focus?: boolean }) => {
-	void options;
-};
+const scrollHistory = initClientGlobal<
+	Record<string, { left: number; top: number } | undefined>
+>("scrollHistory", {}, {});
+
+let notify = initClientGlobal(
+	"notifyRouter",
+	(options?: { scroll?: boolean; focus?: boolean }): void => {
+		void options;
+		throw new Error("navigate called outside of the render tree");
+	},
+);
 
 let nextKey = 1;
 
@@ -105,14 +112,17 @@ export const Router: FC<RouterProps> = ({
 	useEffect(() => {
 		const saved = notify;
 
-		notify = ({ scroll = true, focus = true } = {}) => {
-			navigateOpts.current.scroll = scroll;
-			navigateOpts.current.focus = focus;
-			forceUpdate();
-		};
+		notify = setGlobal(
+			"notifyRouter",
+			({ scroll = true, focus = true } = {}) => {
+				navigateOpts.current.scroll = scroll;
+				navigateOpts.current.focus = focus;
+				forceUpdate();
+			},
+		);
 
 		return () => {
-			notify = saved;
+			notify = setGlobal("notifyRouter", saved);
 		};
 	}, [forceUpdate]);
 
@@ -243,7 +253,7 @@ export const Router: FC<RouterProps> = ({
 		};
 	}, [forceUpdate]);
 
-	const contextValue = useMemo<RouterInfo>(() => {
+	const contextValue = useMemo<BaseRouterInfo>(() => {
 		return {
 			current,
 			next: current.href !== href ? new URL(href) : undefined,
@@ -254,13 +264,13 @@ export const Router: FC<RouterProps> = ({
 	}, [current.href, href, navigate]);
 
 	return (
-		<RouterContext.Provider value={contextValue}>
+		<BaseRouterContext.Provider value={contextValue}>
 			{content}
-		</RouterContext.Provider>
+		</BaseRouterContext.Provider>
 	);
 };
 
-export interface RouterInfo {
+export interface BaseRouterInfo {
 	/** Route that is currently viewed */
 	current: URL;
 	/** Route to which a transition is underway */

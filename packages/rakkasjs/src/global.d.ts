@@ -1,20 +1,9 @@
-declare const __RAKKAS_RENDERED: any;
-declare const __RAKKAS_ROOT_CONTEXT: any;
+declare const $rakkas$rendered: any;
+declare const $rakkas$rootContext: Record<string, any>;
 
-interface Window {
-	__RAKKAS_RAKKAS_CONTEXT: any;
-	__RAKKAS_ROUTER_CONTEXT: any;
-}
+declare let $rakkas$reloader: Record<string, (m: any) => void>;
 
-declare let $reloader$: Record<string, (m: any) => void>;
-
-declare const __RAKKAS_CONFIG: {
-	pagesDir: string;
-	apiDir: string;
-	apiRoot: string;
-};
-
-declare const __RAKKAS_ROUTES: any;
+declare const $rakkas$routes: any;
 
 declare module "@rakkasjs/page-imports" {
 	const importer: Record<string, () => Promise<any>>;
