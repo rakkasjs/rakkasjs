@@ -36,7 +36,7 @@ export async function makeRouteManifest({
 
 	const sortedWrappers = wrappers
 		.map((id) => {
-			const name = "/" + (id.match(rapperRegexp)![2] || "");
+			const name = id.match(rapperRegexp)![2] || "";
 
 			return {
 				id,
@@ -55,17 +55,15 @@ export async function makeRouteManifest({
 	// Sort leaves (i.e. pages or endpoints)
 	const sortedLeaves = sortRoutes(
 		leaves.map((id) => {
-			const name = rootUrl + (id.match(leafRegexp)![2] || "");
+			const name = id.match(leafRegexp)![2] || "";
 
 			return {
-				pattern: name,
+				pattern: rootUrl + name,
 				content: [
 					id,
 					...sortedWrappers
 						.filter((w) => {
-							const res =
-								name === w.name ||
-								name.startsWith(w.name === "/" ? "/" : w.name + "/");
+							const res = name === w.name || name.startsWith(w.name);
 							return res;
 						})
 						.map((x) => x.id),

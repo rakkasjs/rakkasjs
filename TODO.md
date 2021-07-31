@@ -9,9 +9,12 @@
 - [ ] Investigate Vite fs.allow warning: https://vitejs.dev/config/#server-fs-allow
 - [ ] Investigate the circular dependency warning
 - [ ] Investigate Cannot set property 'isSelfAccepting' of undefined
+- [ ] Add option to create-rakkas-app to add Cypress integration
+- [ ] Add option to create-rakkas-app to skip sample application
 - [x] Remove `getRootContext` in favor of `servePage`
 - [x] Fix extraneous loading on 404
 - [x] Fix scroll restoration
+- [x] Fix API prefix bug
 - [x] Manage focus after navigation
 - [x] Fix hot reloading issues
   - [x] Newly created pages and layouts work correctly
@@ -36,7 +39,7 @@
   	- [ ] Stale while revalidate strategy
 - Chores
   - [ ] Set up Cypress
-    - [ ] for Rakkas itself
+    - [x] for Rakkas itself
     - [ ] for demo templates
   - [ ] Contribution guidelines
   - [ ] Send PR to `awesome-react`
