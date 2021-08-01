@@ -14,6 +14,7 @@
 - [x] Remove `getRootContext` in favor of `servePage`
 - [x] Fix extraneous loading on 404
 - [x] Fix scroll restoration
+- [x] Fix redirection causing a hard reload
 - [x] Fix API prefix bug
 - [x] Manage focus after navigation
 - [x] Fix hot reloading issues

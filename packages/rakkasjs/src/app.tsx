@@ -12,9 +12,10 @@ import { navigate, Router, RouteRenderArgs } from "./lib/router/Router";
 import { initClientGlobal, setGlobal } from "./lib/init-global";
 import { RouterProvider } from "./lib/useRouter";
 import { StackResult, makeComponentStack } from "./lib/makeComponentStack";
+import { RootContext } from "./lib/types";
 
 export let setRootContext = initClientGlobal<
-	Dispatch<SetStateAction<Record<string, any>>>
+	Dispatch<SetStateAction<RootContext>>
 >("rootContext", () => {
 	throw new Error("setRootContext called outside of the render tree");
 });
@@ -56,7 +57,7 @@ export const App: FC<{
 
 			if ("location" in stack) {
 				navigate(String(stack.location), { replace: true });
-				return null;
+				return <></>;
 			}
 
 			if (stack.status === 404 && !initialRender.current) {
