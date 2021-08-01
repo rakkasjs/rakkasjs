@@ -238,7 +238,7 @@ export async function makeViteConfig(
 										if (window.__vite_plugin_react_timeout) {
 											requestAnimationFrame(reload);
 										} else {
-											window.$reloader$[${idstr}] && window.$reloader$[${idstr}](m);
+											window.$rakkas$reloader[${idstr}] && window.$rakkas$reloader[${idstr}](m);
 										}
 									}
 									console.log("Reloading", ${idstr});

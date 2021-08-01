@@ -25,7 +25,7 @@ export async function startClient(routes?: Route[]) {
 
 	const url = new URL(window.location.href);
 
-	routes = routes! || $rakkas$routes!;
+	routes = routes! || window.$rakkas$routes!;
 
 	const found = findRoute(decodeURI(url.pathname), routes, true) || {
 		stack: [],

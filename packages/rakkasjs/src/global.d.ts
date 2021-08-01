@@ -1,9 +1,10 @@
 declare const $rakkas$rendered: any;
 declare const $rakkas$rootContext: Record<string, any>;
 
-declare let $rakkas$reloader: Record<string, (m: any) => void>;
-
-declare const $rakkas$routes: any;
+declare interface Window {
+	$rakkas$reloader: Record<string, (m: any) => void>;
+	readonly $rakkas$routes: any;
+}
 
 declare module "@rakkasjs/page-imports" {
 	const importer: Record<string, () => Promise<any>>;
