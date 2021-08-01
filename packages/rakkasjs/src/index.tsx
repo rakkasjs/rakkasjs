@@ -6,7 +6,9 @@ export { NavLink } from "./lib/router/NavLink";
 export { useRouter } from "./lib/useRouter";
 import {
 	PageTypes,
+	DefaultPageTypes,
 	LayoutTypes,
+	DefaultLayoutTypes,
 	GetCacheKeyFunc,
 	PageLoadFunc,
 	LayoutLoadFunc,
@@ -19,7 +21,7 @@ import {
 export { setRootContext } from "./app";
 
 // canHandleErrors missing or false => normal page
-export function definePage<T extends PageTypes = PageTypes>(def: {
+export function definePage<T extends PageTypes = DefaultPageTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
 	Component: Page<T>;
@@ -36,7 +38,7 @@ export function definePage<T extends PageTypes = PageTypes>(def: {
 };
 
 // canHandleErrors true => error handling page
-export function definePage<T extends PageTypes = PageTypes>(def: {
+export function definePage<T extends PageTypes = DefaultPageTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
 	Component: ErrorPage<T>;
@@ -53,7 +55,7 @@ export function definePage<T extends PageTypes = PageTypes>(def: {
 };
 
 // Implementation
-export function definePage<T extends PageTypes = PageTypes>(def: {
+export function definePage<T extends PageTypes = DefaultPageTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
 	Component: ErrorPage<T> | Page<T>;
@@ -72,7 +74,7 @@ export function definePage<T extends PageTypes = PageTypes>(def: {
 }
 
 // canHandleErrors missing or true && render function present => normal layout
-export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
+export function defineLayout<T extends LayoutTypes = DefaultLayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
 	Component: Layout<T>;
@@ -89,7 +91,7 @@ export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
 };
 
 // render missing => candHandleErrors cannot be true
-export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
+export function defineLayout<T extends LayoutTypes = DefaultLayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
 	Component?: never;
@@ -105,7 +107,7 @@ export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
 };
 
 // canHandleErrors = false => simple layout
-export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
+export function defineLayout<T extends LayoutTypes = DefaultLayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
 	Component: SimpleLayout<T>;
@@ -122,7 +124,7 @@ export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
 };
 
 // Implementation
-export function defineLayout<T extends LayoutTypes = LayoutTypes>(def: {
+export function defineLayout<T extends LayoutTypes = DefaultLayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
 	Component?: Layout<T> | SimpleLayout<T>;

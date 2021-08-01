@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
+/* eslint-disable @typescript-eslint/ban-types */
 import { FC } from "react";
 import { BaseRouterInfo } from "./router/Router";
 
@@ -7,11 +9,42 @@ export interface PageTypes {
 	data: any;
 }
 
+export type DefinePageTypes<T extends Partial<PageTypes>> = {
+	params: T extends { params: any } ? T["params"] : never;
+	parentContext: T extends { parentContext: any }
+		? T["parentContext"]
+		: RootContext;
+	data: T extends { data: any } ? T["data"] : undefined;
+};
+
+export type DefaultPageTypes = DefinePageTypes<{
+	params: never;
+	parentContext: RootContext;
+	data: undefined;
+}>;
+
 export interface LayoutTypes extends PageTypes {
 	contextOverrides: Record<string, any>;
 }
 
-export interface GetCacheKeyArgs<T extends PageTypes = PageTypes> {
+export type DefaultLayoutTypes = DefineLayoutTypes<{
+	params: never;
+	parentContext: RootContext;
+	data: undefined;
+}>;
+
+export type DefineLayoutTypes<T extends Partial<LayoutTypes>> = {
+	params: T extends { params: any } ? T["params"] : never;
+	parentContext: T extends { parentContext: any }
+		? T["parentContext"]
+		: RootContext;
+	data: T extends { data: any } ? T["data"] : undefined;
+	contextOverrides: T extends { contextOverrides: any }
+		? T["contextOverrides"]
+		: Record<string, never>;
+};
+
+export interface GetCacheKeyArgs<T extends PageTypes = DefaultPageTypes> {
 	// Current URL
 	url: URL;
 	// Matching path, i.e. "/aaa/[param]"
@@ -22,21 +55,21 @@ export interface GetCacheKeyArgs<T extends PageTypes = PageTypes> {
 	context: T["parentContext"];
 }
 
-export type GetCacheKeyFunc<T extends PageTypes = PageTypes> = (
+export type GetCacheKeyFunc<T extends PageTypes = DefaultPageTypes> = (
 	args: GetCacheKeyArgs<T>,
 ) => any;
 
-export interface LoadArgs<T extends PageTypes = PageTypes>
+export interface LoadArgs<T extends PageTypes = DefaultPageTypes>
 	extends GetCacheKeyArgs<T> {
 	// Fetch function to make requests that includes credentials on both the client and the server
 	fetch: typeof fetch;
 }
 
-export type PageLoadFunc<T extends PageTypes = PageTypes> = (
+export type PageLoadFunc<T extends PageTypes = DefaultPageTypes> = (
 	args: LoadArgs<T>,
 ) => PageLoadResult<T["data"]> | Promise<PageLoadResult<T["data"]>>;
 
-export type LayoutLoadFunc<T extends LayoutTypes = LayoutTypes> = (
+export type LayoutLoadFunc<T extends LayoutTypes = DefaultLayoutTypes> = (
 	args: LoadArgs<T>,
 ) =>
 	| LayoutLoadResult<T["data"], T["contextOverrides"]>
@@ -45,7 +78,7 @@ export type LayoutLoadFunc<T extends LayoutTypes = LayoutTypes> = (
 /**
  * Props passed to a page component
  */
-export interface PageProps<T extends PageTypes = PageTypes>
+export interface PageProps<T extends PageTypes = DefaultPageTypes>
 	extends GetCacheKeyArgs<T> {
 	/** Data returned from the load function */
 	data: T["data"];
@@ -55,8 +88,8 @@ export interface PageProps<T extends PageTypes = PageTypes>
 	useReload(params: ReloadHookParams): void;
 }
 
-export interface ErrorPageProps<T extends PageTypes = PageTypes>
-	extends Omit<PageProps, "data"> {
+export interface ErrorPageProps<T extends PageTypes = DefaultPageTypes>
+	extends Omit<PageProps<T>, "data"> {
 	/** Error returned from the load function */
 	error?: ErrorDescription;
 	/** Data returned from the load function */
@@ -66,7 +99,7 @@ export interface ErrorPageProps<T extends PageTypes = PageTypes>
 /**
  * Props passed to a layout component
  */
-export interface SimpleLayoutProps<T extends LayoutTypes = LayoutTypes>
+export interface SimpleLayoutProps<T extends LayoutTypes = DefaultLayoutTypes>
 	extends Omit<GetCacheKeyArgs<T>, "context"> {
 	/** Context as returned from the load function */
 	context: Merge<T["parentContext"], T["contextOverrides"]>;
@@ -78,28 +111,38 @@ export interface SimpleLayoutProps<T extends LayoutTypes = LayoutTypes>
 	useReload(params: ReloadHookParams): void;
 }
 
-export interface LayoutProps<T extends LayoutTypes = LayoutTypes>
-	extends Omit<SimpleLayoutProps, "data"> {
+export interface LayoutProps<T extends LayoutTypes = DefaultLayoutTypes>
+	extends Omit<SimpleLayoutProps<T>, "data"> {
 	/** Error returned from the load function */
 	error?: ErrorDescription;
 	/** Data returned from the load function. May be unefined if an error has occured. */
 	data?: T["data"];
 }
 
-export type Page<T extends PageTypes = PageTypes> = FC<PageProps<T>>;
+export type Page<T extends PageTypes = DefaultPageTypes> = FC<PageProps<T>>;
 
-export type ErrorPage<T extends PageTypes = PageTypes> = FC<ErrorPageProps<T>>;
+export type ErrorPage<T extends PageTypes = DefaultPageTypes> = FC<
+	ErrorPageProps<T>
+>;
 
-export type SimpleLayout<T extends LayoutTypes = LayoutTypes> = FC<
+export type SimpleLayout<T extends LayoutTypes = DefaultLayoutTypes> = FC<
 	SimpleLayoutProps<T>
 >;
 
-export type Layout<T extends LayoutTypes = LayoutTypes> = FC<LayoutProps<T>>;
+export type Layout<T extends LayoutTypes = DefaultLayoutTypes> = FC<
+	LayoutProps<T>
+>;
 
-type Merge<A, B> = {
-	[key in keyof A]: key extends keyof B ? any : A[key];
-} &
-	B;
+type Merge<A, B> = Flatten<
+	B extends Record<string, never>
+		? A
+		: {
+				[key in keyof A]: key extends keyof B ? any : A[key];
+		  } &
+				B
+>;
+
+type Flatten<T> = { [key in keyof T]: T[key] };
 
 export interface PageComponentModule {
 	default: Page | ErrorPage;
@@ -291,4 +334,14 @@ export type RequestHandler = (
 export type RakkasMiddleware = (
 	request: RakkasRequest,
 	next: (request: RakkasRequest) => Promise<RakkasResponse>,
+) => RakkasResponse | Promise<RakkasResponse>;
+
+export interface RootContext {}
+
+export type ServePageHook = (
+	request: RawRequest,
+	renderPage: (
+		request: RawRequest,
+		context: RootContext,
+	) => Promise<RakkasResponse>,
 ) => RakkasResponse | Promise<RakkasResponse>;

@@ -16,6 +16,7 @@
 - [x] Fix scroll restoration
 - [x] Fix redirection causing a hard reload
 - [x] Fix API prefix bug
+- [x] Fix page and layout types and make them stricter
 - [x] Manage focus after navigation
 - [x] Fix hot reloading issues
   - [x] Newly created pages and layouts work correctly

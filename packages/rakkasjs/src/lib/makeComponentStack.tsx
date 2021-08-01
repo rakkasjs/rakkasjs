@@ -16,6 +16,8 @@ import {
 	PageLoadResult,
 	Layout,
 	SimpleLayout,
+	PageTypes,
+	LayoutTypes,
 } from "./types";
 import { stableJson } from "./stable-json";
 import { toErrorDescription } from "./toErrorDescription";
@@ -26,7 +28,11 @@ const moduleCache: Record<string, any> = {};
 const errorBoundaryCache: Record<string, any> = {};
 
 export interface RenderedStackItem {
-	Component?: Page | ErrorPage | Layout | SimpleLayout;
+	Component?:
+		| Page<PageTypes>
+		| ErrorPage<PageTypes>
+		| Layout<LayoutTypes>
+		| SimpleLayout<LayoutTypes>;
 	loaded: PageLoadResult | LayoutLoadResult;
 	cacheKey: string;
 	name?: string;
@@ -297,7 +303,7 @@ function makeUseReload(reload: () => void, isInitialRender?: boolean) {
 	};
 }
 
-const LastResort: Layout = () =>
+const LastResort: Layout<LayoutTypes> = () =>
 	import.meta.env.DEV ? (
 		<p>
 			There is no root page or layout in your page directory. Create one to get
