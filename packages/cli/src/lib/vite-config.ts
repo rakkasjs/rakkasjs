@@ -222,37 +222,20 @@ export async function makeViteConfig(
 			},
 			{
 				name: "rakkas-refresh-page",
+				enforce: "pre",
 				async transform(code, id, ssr) {
 					if (ssr) return;
 
 					if (isPage(id) || isLayout(id)) {
 						const idstr = JSON.stringify(id.slice(srcDir.length));
-						return (
-							code +
-							// The following comment is used to fool the React refreh plugin
-							`\n// $RefreshReg$()
-
-							if (import.meta.hot) {
-								import.meta.hot.accept((m) => {
-									function reload() {
-										if (window.__vite_plugin_react_timeout) {
-											requestAnimationFrame(reload);
-										} else {
-											window.$rakkas$reloader[${idstr}] && window.$rakkas$reloader[${idstr}](m);
-										}
-									}
-									console.log("Reloading", ${idstr});
-									reload();
-								});
-							}
-							`
-						);
+						// return refreshHeader(idstr) + code + refreshFooter(idstr);
+						return code + refreshFooter(idstr);
 					}
 
 					return code;
 				},
 			},
-			reactRefresh(),
+			reactRefresh({ exclude: [PAGES, LAYOUTS] }),
 		],
 	};
 
@@ -279,3 +262,30 @@ const template = `<!DOCTYPE html>
 		<script type="module" src="/__rakkas-start-client.js"></script>
 	</body>
 </html>`;
+
+const refreshFooter = (id: string) => `// $RefreshReg$()
+	if (import.meta.hot) {
+		import.meta.hot.accept((m) => {
+			function reload() {
+				if (window.__vite_plugin_react_timeout) {
+					requestAnimationFrame(reload);
+				} else {
+					window.$rakkas$reloader[${id}] && window.$rakkas$reloader[${id}](m);
+				}
+			}
+			console.log("Reloading", ${id});
+			reload();
+		});
+
+		// window.$RefreshReg$ = prevRefreshReg;
+		// window.$RefreshSig$ = prevRefreshSig;
+		// console.log("Uninstalled", import.meta.url, prevRefreshSig);
+		// import.meta.hot.accept();
+		// if (!window.__vite_plugin_react_timeout) {
+		// 	window.__vite_plugin_react_timeout = setTimeout(() => {
+		// 		window.__vite_plugin_react_timeout = 0;
+		// 		RefreshRuntime.performReactRefresh();
+		// 	}, 30);
+		// }
+	}
+`;

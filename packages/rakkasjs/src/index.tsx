@@ -70,6 +70,10 @@ export function definePage<T extends PageTypes = DefaultPageTypes>(def: {
 		canHandleErrors?: boolean;
 	};
 } {
+	if (import.meta.hot && !import.meta.env.SSR) {
+		// Register for React refresh
+		(window as any).$RefreshReg$(def.Component, def.Component.name);
+	}
 	return def;
 }
 
@@ -139,5 +143,10 @@ export function defineLayout<T extends LayoutTypes = DefaultLayoutTypes>(def: {
 		canHandleErrors?: boolean;
 	};
 } {
+	if (import.meta.hot && !import.meta.env.SSR && def.Component) {
+		// Register for React refresh
+		(window as any).$RefreshReg$(def.Component, def.Component.name);
+	}
+
 	return def;
 }
