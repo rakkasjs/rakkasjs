@@ -70,9 +70,6 @@ async function createServers(onReload: () => void) {
 		const url = req.url || "/";
 
 		vite.middlewares(req, res, async () => {
-			// eslint-disable-next-line no-console
-			console.log(req.method, req.url);
-
 			let html = template;
 
 			try {
@@ -109,6 +106,8 @@ async function createServers(onReload: () => void) {
 				});
 
 				res.statusCode = response.status ?? 200;
+				// eslint-disable-next-line no-console
+				console.log(res.statusCode, req.method, req.url);
 
 				let headers = response.headers;
 				if (!headers) headers = [];
@@ -135,7 +134,11 @@ async function createServers(onReload: () => void) {
 				console.error(error.stack ?? "Unknown error");
 
 				res.setHeader("content-type", "text/html");
-				res.statusCode = 500;
+				res.statusCode = error.status || 500;
+
+				// eslint-disable-next-line no-console
+				console.log(res.statusCode, req.method, req.url);
+
 				res.end(
 					template.replace(
 						"<!-- rakkas-app-placeholder -->",

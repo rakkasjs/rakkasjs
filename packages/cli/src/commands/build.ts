@@ -52,7 +52,14 @@ export default function buildCommand() {
 					path.resolve("./dist/client", "ssr-manifest.json"),
 					"utf-8",
 				),
-			);
+			) as Record<string, string[]>;
+
+			const importManifest = JSON.parse(
+				await fs.promises.readFile(
+					path.resolve("./dist/client", "import-manifest.json"),
+					"utf-8",
+				),
+			) as Record<string, string[]>;
 
 			const pagesDir = path.resolve(`./src/${config.pagesDir}`);
 			const pageExtensions = config.pageExtensions.join("|");
@@ -73,7 +80,16 @@ export default function buildCommand() {
 							!path.isAbsolute(relative) &&
 							(pageMatcher(relative) || layoutMatcher(relative))
 						) {
-							return [path.join("/", config.pagesDir, relative), value];
+							const fullName = path.join(config.pagesDir, relative);
+							const assetSet = new Set<string>(value);
+							const deps = importManifest[fullName] || [];
+							for (const dep of deps) {
+								const assets = rawManifest[dep];
+								if (!assets) continue;
+								assets.forEach((x) => assetSet.add(x));
+							}
+
+							return [path.join("/", config.pagesDir, relative), [...assetSet]];
 						}
 					})
 					.filter(Boolean) as Array<[string, string[]]>,
@@ -85,6 +101,7 @@ export default function buildCommand() {
 				"utf8",
 			);
 			fs.promises.unlink(path.resolve("./dist/client", "ssr-manifest.json"));
+			fs.promises.unlink(path.resolve("./dist/client", "import-manifest.json"));
 
 			// Build server
 			await build({

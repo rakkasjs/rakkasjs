@@ -236,6 +236,9 @@ export async function handleRequest(
 			helmet.title.toString();
 
 		if (manifest) {
+			const jsAssets = new Set<string>();
+			const cssAssets = new Set<string>();
+
 			for (const { name } of stack.rendered) {
 				if (!name) continue;
 
@@ -244,16 +247,23 @@ export async function handleRequest(
 
 				for (const asset of assets) {
 					if (asset.endsWith(".js")) {
-						head += `\n<link rel="modulepreload" href=${JSON.stringify(
-							asset,
-						)}>`;
+						jsAssets.add(asset);
 					} else if (asset.endsWith(".css")) {
-						head += `\n<link rel="stylesheet" href=${JSON.stringify(asset)}>`;
-					} else {
-						head += `\n<link rel="preload" href=${JSON.stringify(asset)}>`;
+						cssAssets.add(asset);
 					}
 				}
 			}
+
+			jsAssets.forEach(
+				(asset) =>
+					(head += `\n<link rel="modulepreload" href=${JSON.stringify(
+						asset,
+					)}>`),
+			);
+			cssAssets.forEach(
+				(asset) =>
+					(head += `\n<link rel="stylesheet" href=${JSON.stringify(asset)}>`),
+			);
 		}
 
 		let body = template.replace("<!-- rakkas-head-placeholder -->", head);

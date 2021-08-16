@@ -11,6 +11,10 @@
 - [ ] Investigate Cannot set property 'isSelfAccepting' of undefined
 - [ ] Add option to create-rakkas-app to add Cypress integration
 - [ ] Add option to create-rakkas-app to skip sample application
+- [ ] Integrate eslint-import-resolver-typescript
+- [ ] Reload loses focus
+- [ ] Design a setData API
+- [ ] Investigate debugging and sourcemaps
 - [x] Remove `getRootContext` in favor of `servePage`
 - [x] Fix extraneous loading on 404
 - [x] Fix scroll restoration

@@ -75,6 +75,8 @@ export async function makeViteConfig(
 	const indexHtmlPath = path.resolve("src", "index.html");
 	const normalizedIndexHtmlPath = normalizePath(indexHtmlPath);
 
+	let ssr: boolean;
+
 	const result: InlineConfig = {
 		...config.vite,
 		configFile: false,
@@ -118,6 +120,11 @@ export async function makeViteConfig(
 			{
 				name: "rakkas-resolve",
 				enforce: "pre",
+
+				configResolved(config) {
+					ssr = !!config?.build?.ssr;
+					// config.mode
+				},
 
 				configureServer(server) {
 					server.watcher.addListener("all", async (e: string, fn: string) => {
@@ -218,6 +225,65 @@ export async function makeViteConfig(
 					) {
 						return "";
 					}
+				},
+
+				async generateBundle() {
+					if (ssr) return;
+
+					// TODO: This is pretty stupid, we should just pass the import manifest to the caller using some other technique
+
+					const modules: Record<string, string[]> = {};
+					for (const id of this.getModuleIds()) {
+						const module = this.getModuleInfo(id);
+						if (!module) continue;
+
+						for (const importer of module.importers) {
+							modules[importer] = modules[importer] || [];
+							modules[importer].push(id);
+						}
+					}
+
+					const pageDeps: Record<string, string[]> = {};
+					for (const [id, deps] of Object.entries(modules)) {
+						if (!isPage(id) && !isLayout(id)) continue;
+
+						const depSet = new Set<string>();
+
+						// eslint-disable-next-line no-inner-declarations
+						function addDeps(deps: string[]) {
+							if (!deps.length) return;
+
+							const newDeps = new Set<string>();
+
+							for (const dep of deps) {
+								const imports = modules[dep];
+								if (!imports) continue;
+
+								imports.forEach((x) => {
+									if (!depSet.has(x)) {
+										depSet.add(x);
+										newDeps.add(x);
+									}
+								});
+							}
+
+							addDeps([...newDeps]);
+						}
+
+						const initialDeps = deps.map((x) => x);
+
+						addDeps(initialDeps);
+
+						pageDeps[normalizePath(path.relative(srcDir, id))] = [
+							...depSet,
+						].map((x) => normalizePath(path.relative(srcDir, x)));
+					}
+
+					await this.emitFile({
+						type: "asset",
+						fileName: "import-manifest.json",
+						source: JSON.stringify(pageDeps),
+					});
 				},
 			},
 			{
