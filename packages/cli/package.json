@@ -54,6 +54,7 @@
 		"html-entities": "^2.3.2",
 		"micromatch": "^4.0.4",
 		"node-fetch": "^2.6.1",
+		"open": "^8.2.1",
 		"vite": "^2.4.1",
 		"vite-plugin-virtual": "^0.1.1"
 	},

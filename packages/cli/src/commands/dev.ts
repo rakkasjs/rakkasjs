@@ -10,7 +10,8 @@ import { makeViteConfig } from "../lib/vite-config";
 import { loadConfig } from "../lib/config";
 import { encode } from "html-entities";
 import { parseBody } from "@rakkasjs/runner-node/parse-body";
-import { RakkasResponse } from "../../../rakkasjs";
+import { RakkasResponse } from "rakkasjs";
+import open from "open";
 
 (globalThis as any).fetch = nodeFetch;
 (globalThis as any).Response = NodeFetchResponse;
@@ -21,11 +22,12 @@ export default function devCommand() {
 	return new Command("dev")
 		.option("-p, --port <port>", "development server port number", "3000")
 		.option("-H, --host <host>", "development server host", "localhost")
+		.option("-o, --open", "open in browser")
 		.description("Start a development server")
 		.action(startServer);
 }
 
-async function startServer(opts: { port: string; host: string }) {
+async function startServer(opts: { port: string; host: string; open?: true }) {
 	const port = Number(opts.port);
 	if (!Number.isInteger(port)) {
 		throw new Error(`Invalid port number ${opts.port}`);
@@ -53,9 +55,14 @@ async function startServer(opts: { port: string; host: string }) {
 
 	let { vite, http } = await createServers(reload);
 
-	http.listen({ port, host }).on("listening", () => {
+	http.listen({ port, host }).on("listening", async () => {
 		// eslint-disable-next-line no-console
 		console.log(`Server listening on http://${host}:${port}`);
+		if (opts.open) {
+			// eslint-disable-next-line no-console
+			console.log("Launching the browser");
+			await open(`http://${host}:${port}`);
+		}
 	});
 }
 
