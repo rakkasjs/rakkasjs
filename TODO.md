@@ -4,7 +4,6 @@
 - [ ] Create a full-stack [realworld](https://github.com/gothinkster/realworld) implementation
 - [ ] Update examples and documentation
 - [ ] Design a way to wrap the rendered application in custom providers
-- [ ] Fix vite client types reexport
 - [ ] Add command to unpublish all canary releases
 - [ ] Investigate Vite fs.allow warning: https://vitejs.dev/config/#server-fs-allow
 - [ ] Investigate the circular dependency warning
@@ -15,6 +14,7 @@
 - [ ] Reload loses focus
 - [ ] Design a setData API
 - [ ] Investigate debugging and sourcemaps
+- [x] Fix vite client types reexport
 - [x] Remove `getRootContext` in favor of `servePage`
 - [x] Fix extraneous loading on 404
 - [x] Fix scroll restoration
