@@ -20,8 +20,16 @@ import open from "open";
 
 export default function devCommand() {
 	return new Command("dev")
-		.option("-p, --port <port>", "development server port number", "3000")
-		.option("-H, --host <host>", "development server host", "localhost")
+		.option(
+			"-p, --port <port>",
+			"development server port number",
+			process.env.PORT || "3000",
+		)
+		.option(
+			"-H, --host <host>",
+			"development server host",
+			process.env.HOST || "localhost",
+		)
 		.option("-o, --open", "open in browser")
 		.description("Start a development server")
 		.action(startServer);
