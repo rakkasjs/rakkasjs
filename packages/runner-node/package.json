@@ -1,7 +1,7 @@
 {
 	"name": "@rakkasjs/runner-node",
 	"description": "Rakkas.js core runtime",
-	"version": "0.3.0",
+	"version": "0.3.0-canary.0",
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
@@ -28,9 +28,9 @@
 		"rakkasjs": "workspace:*"
 	},
 	"devDependencies": {
-		"@types/node": "^16.3.1",
-		"@types/node-fetch": "^2.5.11",
-		"esbuild": "^0.12.15",
+		"@types/node": "^16.7.1",
+		"@types/node-fetch": "^2.5.12",
+		"esbuild": "^0.12.22",
 		"prettier": "^2.3.2",
 		"rakkasjs": "workspace:*",
 		"rimraf": "^3.0.2",
@@ -38,7 +38,7 @@
 	},
 	"dependencies": {
 		"node-fetch": "^2.6.1",
-		"sirv": "^1.0.12"
+		"sirv": "^1.0.14"
 	},
 	"scripts": {
 		"prepublishOnly": "pnpm build",
