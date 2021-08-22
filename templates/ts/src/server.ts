@@ -1,9 +1,11 @@
 // Server-side customization hooks
+// You may delete this file if you don't need to customize anything
 
-// The return value will be used as the context parameter to the load function
-// of the outermost page or layout. You can use it to initalize session data
-// that will be exposed to the client. You can, and probably will need to,
-// return a promise. You may delete this file if you don't need a root context.
-export function getRootContext(): { session: string } {
-	return { session: "Nothing yet" };
-}
+import { ServePageHook } from "rakkasjs";
+
+// This hook allows you to intercept page requests and their responses
+// It is useful, in particular, for initializing the root context with session data
+export const servePage: ServePageHook = (request, renderPage) => {
+	const rootContext = { session: "Nothing yet" };
+	return renderPage(request, rootContext);
+};

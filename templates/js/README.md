@@ -2,7 +2,10 @@ This is the vanilla JavaScript starter project of [Rakkas](https://rakkasjs.org)
 
 ```sh
 # Start development server on localhost:3000
-npm run dev --host=localhost --port=3000
+npm run dev
+
+# Start a development server on port 4000 and make it externally accessible
+npm run dev -- --host=0.0.0.0 --port=4000
 
 # Build for production
 npm run build
@@ -11,7 +14,7 @@ npm run build
 HOST=0.0.0.0. PORT=3000 npm start
 ```
 
-The most important files and directories are:
+Important files and directories are:
 
 | Path               | Description                                   |
 | ------------------ | --------------------------------------------- |

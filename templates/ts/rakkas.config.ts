@@ -6,7 +6,6 @@ import { defineConfig } from "@rakkasjs/cli";
 // Rakkas bundles this file with esbuild before loading, so you can TypeScript.
 
 // defineConfig is a helper to ensure IDE code-completion.
-
 export default defineConfig({
 	//
 	// File extensions for pages and layouts
