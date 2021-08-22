@@ -1,38 +1,20 @@
 # TODO
 
-## For 0.3.0
-- [ ] Create a full-stack [realworld](https://github.com/gothinkster/realworld) implementation
-- [ ] Update examples and documentation
+## For 0.4.0
+- [ ] Static site generation
 - [ ] Design a way to wrap the rendered application in custom providers
 - [ ] Add command to unpublish all canary releases
 - [ ] Investigate Vite fs.allow warning: https://vitejs.dev/config/#server-fs-allow
 - [ ] Investigate the circular dependency warning
-- [ ] Investigate Cannot set property 'isSelfAccepting' of undefined
 - [ ] Add option to create-rakkas-app to add Cypress integration
 - [ ] Add option to create-rakkas-app to skip sample application
 - [ ] Integrate eslint-import-resolver-typescript
 - [ ] Reload loses focus
 - [ ] Design a setData API
 - [ ] Investigate debugging and sourcemaps
-- [x] Fix vite client types reexport
-- [x] Remove `getRootContext` in favor of `servePage`
-- [x] Fix extraneous loading on 404
-- [x] Fix scroll restoration
-- [x] Fix redirection causing a hard reload
-- [x] Fix API prefix bug
-- [x] Fix page and layout types and make them stricter
-- [x] Manage focus after navigation
-- [x] Fix hot reloading issues
-  - [x] Newly created pages and layouts work correctly
-  - [x] Layout hot updates are reflected correctly
-- [x] Make navigate() globally accessible
-- [x] Make setRootContext globally accessible
-- [x] Rename useRakkas to useRouter
-- [x] Fix bug caused by rerender overwriting the next URL
 
 ## For 1.0.0
 - Features
-  - [ ] Static site generation
   - [ ] Add a way to add cache-related HTTP headers on pages
   - [ ] Service workers
   - [ ] Link prefetching
@@ -44,11 +26,7 @@
   	- [ ] Optimistic updates
   	- [ ] Stale while revalidate strategy
 - Chores
-  - [ ] Set up Cypress
-    - [x] for Rakkas itself
-    - [ ] for demo templates
   - [ ] Contribution guidelines
-  - [ ] Send PR to `awesome-react`
   - [ ] Create integration examples with popular tools
     - [ ] Redux
     - [ ] Apollo
