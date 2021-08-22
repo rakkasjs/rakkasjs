@@ -1,7 +1,7 @@
 {
 	"name": "rakkas-scratchpad",
 	"private": true,
-	"version": "0.3.0-canary.0",
+	"version": "0.3.0",
 	"description": "Rakkas TypeScript demo project",
 	"scripts": {
 		"dev": "rakkas dev --port=3000",
