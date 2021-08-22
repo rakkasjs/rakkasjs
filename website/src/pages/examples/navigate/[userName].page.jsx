@@ -1,8 +1,8 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { Page, navigate } from "rakkasjs";
+import { navigate } from "rakkasjs";
 
-const UserProfilePage: Page = ({ params }) => {
+const UserProfilePage = ({ params }) => {
 	return (
 		<div>
 			<Helmet title={`Programmatic Navigation Example - Rakkas`} />

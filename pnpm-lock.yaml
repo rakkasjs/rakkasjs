@@ -419,11 +419,13 @@ importers:
       '@mdx-js/react': ^1.6.22
       '@rakkasjs/cli': workspace:*
       '@rakkasjs/runner-node': workspace:*
+      '@types/cookie': ^0.4.1
       '@types/mdx-js__react': ^1.5.4
       '@types/react': ^17.0.19
       '@types/react-dom': ^17.0.9
       '@typescript-eslint/eslint-plugin': ^4.29.2
       '@typescript-eslint/parser': ^4.29.2
+      cookie: ^0.4.1
       eslint: ^7.32.0
       eslint-plugin-import: ^2.24.1
       eslint-plugin-only-warn: ^1.0.3
@@ -445,6 +447,7 @@ importers:
     dependencies:
       '@mdx-js/react': 1.6.22_react@17.0.2
       '@rakkasjs/runner-node': link:../packages/runner-node
+      cookie: 0.4.1
       prism: 4.1.2_react@17.0.2
       prism-themes: 1.8.0
       rakkasjs: link:../packages/rakkasjs
@@ -455,6 +458,7 @@ importers:
     devDependencies:
       '@mdx-js/mdx': 1.6.22
       '@rakkasjs/cli': link:../packages/cli
+      '@types/cookie': 0.4.1
       '@types/mdx-js__react': 1.5.4
       '@types/react': 17.0.19
       '@types/react-dom': 17.0.9
@@ -3406,6 +3410,10 @@ packages:
       '@types/node': 16.3.1
     dev: true
 
+  /@types/cookie/0.4.1:
+    resolution: {integrity: sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==}
+    dev: true
+
   /@types/estree/0.0.39:
     resolution: {integrity: sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==}
     dev: true
@@ -4796,6 +4804,11 @@ packages:
     resolution: {integrity: sha1-fj5Iu+bZl7FBfdyihoIEtNPYVxU=}
     engines: {node: '>= 4'}
     dev: true
+
+  /cookie/0.4.1:
+    resolution: {integrity: sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==}
+    engines: {node: '>= 0.6'}
+    dev: false
 
   /copy-descriptor/0.1.1:
     resolution: {integrity: sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=}

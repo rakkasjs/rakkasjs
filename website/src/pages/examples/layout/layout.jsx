@@ -1,7 +1,7 @@
 import React from "react";
-import { Layout, NavLink } from "rakkasjs";
+import { NavLink } from "rakkasjs";
 
-const MainLayout: Layout = ({ children }) => (
+const MainLayout = ({ children }) => (
 	<div>
 		<header>Shared header</header>
 		<nav>

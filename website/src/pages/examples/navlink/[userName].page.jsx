@@ -1,8 +1,8 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { Page, NavLink } from "rakkasjs";
+import { NavLink } from "rakkasjs";
 
-const UserProfilePage: Page = ({ params }) => (
+const UserProfilePage = ({ params }) => (
 	<div>
 		<Helmet title={`NavLink Example - Rakkas`} />
 		<p>

@@ -1,10 +1,12 @@
 import React from "react";
-import { Page, PageLoadFunc, NavLink } from "rakkasjs";
+import { NavLink } from "rakkasjs";
 import css from "./[pokemon].module.css";
 import { Helmet } from "react-helmet-async";
 
-export const load: PageLoadFunc = async ({ params, fetch }) => {
+export const load = async ({ params, fetch }) => {
 	// Fetch a pokemon from the Pokéapi
+	// Notice that we're using the fetch function that was passed down to the load function
+	// and not the global one!
 	const data = await fetch(
 		`https://pokeapi.co/api/v2/pokemon/${params.pokemon}`,
 	).then((r) => r.json());
@@ -14,7 +16,7 @@ export const load: PageLoadFunc = async ({ params, fetch }) => {
 	};
 };
 
-const PokemonStatPage: Page = ({ data }) => {
+const PokemonStatPage = ({ data }) => {
 	return (
 		<div className={css.wrapper}>
 			<Helmet title="fetch Example - Rakkas" />
@@ -22,19 +24,19 @@ const PokemonStatPage: Page = ({ data }) => {
 				<nav>
 					<ul className={css.links}>
 						<NavLink
-							href="/examples/fetch/pikachu"
+							href="/examples/fetch-define-page/pikachu"
 							currentRouteClass={css.activeLink}
 						>
 							Pikachu
 						</NavLink>
 						<NavLink
-							href="/examples/fetch/charizard"
+							href="/examples/fetch-define-page/charizard"
 							currentRouteClass={css.activeLink}
 						>
 							Charizard
 						</NavLink>
 						<NavLink
-							href="/examples/fetch/onix"
+							href="/examples/fetch-define-page/onix"
 							currentRouteClass={css.activeLink}
 						>
 							Onix
@@ -52,7 +54,7 @@ const PokemonStatPage: Page = ({ data }) => {
 
 			<h3>Stats</h3>
 			<ul className={css.stats}>
-				{data.stats.map((s: any) => (
+				{data.stats.map((s) => (
 					<li className={css.stat} key={s.stat.name}>
 						<h4>{s.stat.name}</h4>
 						Base: {s.base_stat}

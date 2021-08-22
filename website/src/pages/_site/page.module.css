@@ -1,5 +1,7 @@
 .banner {
 	text-align: center;
+	max-width: 32em;
+	margin: auto;
 }
 
 .logo {
@@ -7,7 +9,7 @@
 }
 
 .logo > * {
-	display: block;
+	display: inline-block;
 	margin: auto;
 	margin-top: 1rem;
 }
@@ -21,7 +23,6 @@
 
 .cta {
 	display: inline-block;
-	margin-top: 2rem;
 	background: #429;
 	color: #fff;
 	padding: 0.5em 1em;
@@ -46,6 +47,7 @@
 	margin-top: 1rem;
 	text-align: center;
 	padding: 1em 2em 2em 2em;
+	background-color: #eee;
 }
 
 .card > h3 {
@@ -60,13 +62,15 @@
 @media (min-width: 900px) {
 	.cards {
 		display: flex;
+		flex-wrap: wrap;
 		margin-top: 1rem;
-		margin-right: -2em;
+		margin-right: -1rem;
 	}
 
 	.card {
-		width: 33.333333%;
-		margin-right: 2em;
+		flex-shrink: 1;
+		width: calc(33.333333% - 1rem);
+		margin-right: 1rem;
 	}
 }
 
@@ -74,5 +78,17 @@
 	max-width: 18em;
 	text-align: center;
 	margin: auto;
-	margin-top: 2rem;
+	margin-top: 1rem;
+}
+
+.banner hr {
+	margin: 2em 0;
+}
+
+.banner ul {
+	text-align: center;
+	list-style-type: none;
+	margin: auto;
+	margin-top: 1em;
+	padding: 0;
 }

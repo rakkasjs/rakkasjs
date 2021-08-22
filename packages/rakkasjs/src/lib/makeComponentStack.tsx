@@ -84,6 +84,8 @@ export async function makeComponentStack({
 		};
 	}
 
+	const usedContexts: Record<string, unknown>[] = [];
+
 	for (const [i, moduleId] of stack.entries()) {
 		let module = moduleCache[moduleId];
 		if (!module) {
@@ -190,6 +192,8 @@ export async function makeComponentStack({
 				...loaded.context,
 			};
 		}
+
+		usedContexts.push(context);
 	}
 
 	if (error) {
@@ -204,13 +208,10 @@ export async function makeComponentStack({
 		});
 	}
 
-	context = { ...rootContext };
-
 	const content = thisRender.reduceRight((prev, rendered, i) => {
 		const reloadThis = () => reload(i);
 
 		const Component = rendered.Component!;
-		context = { ...context, ...(rendered.loaded as any).context };
 
 		if (import.meta.hot) {
 			window.$rakkas$reloader[rendered.name || ""] = (newModule) => {
@@ -224,7 +225,7 @@ export async function makeComponentStack({
 			url: url,
 			match: match,
 			params: params,
-			context: context,
+			context: usedContexts[i],
 			data: (rendered.loaded as any).data,
 			error: errorHandlerIndex === i ? error : undefined,
 			reload: reloadThis,

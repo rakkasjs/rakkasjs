@@ -45,13 +45,13 @@ export type DefineLayoutTypes<T extends Partial<LayoutTypes>> = {
 };
 
 export interface GetCacheKeyArgs<T extends PageTypes = DefaultPageTypes> {
-	// Current URL
+	/** Current URL  */
 	url: URL;
-	// Matching path, i.e. "/aaa/[param]"
+	/** Matching path, i.e. "/aaa/[param]"  */
 	match?: string;
-	// Current path parameters
+	/** Current path parameters  */
 	params: T["params"];
-	// Context passed down from parent layout load functions
+	/** Context passed down from parent layout load functions  */
 	context: T["parentContext"];
 }
 
@@ -61,7 +61,7 @@ export type GetCacheKeyFunc<T extends PageTypes = DefaultPageTypes> = (
 
 export interface LoadArgs<T extends PageTypes = DefaultPageTypes>
 	extends GetCacheKeyArgs<T> {
-	// Fetch function to make requests that includes credentials on both the client and the server
+	/** Fetch function to make requests that includes credentials on both the client and the server  */
 	fetch: typeof fetch;
 }
 
@@ -96,13 +96,19 @@ export interface ErrorPageProps<T extends PageTypes = DefaultPageTypes>
 	data?: T["data"];
 }
 
+/** Utility type to extract the outgoing context type */
+export type LayoutContext<T extends LayoutTypes> = Merge<
+	T["parentContext"],
+	T["contextOverrides"]
+>;
+
 /**
  * Props passed to a layout component
  */
 export interface SimpleLayoutProps<T extends LayoutTypes = DefaultLayoutTypes>
 	extends Omit<GetCacheKeyArgs<T>, "context"> {
 	/** Context as returned from the load function */
-	context: Merge<T["parentContext"], T["contextOverrides"]>;
+	context: LayoutContext<T>;
 	/** Data returned from the load function */
 	data: T["data"];
 	/** Reload function to invalidate current data and reload the page */

@@ -17,25 +17,58 @@ const HomePage: FC = () => (
 				<Logotype height="100px" />
 			</div>
 			<div className={css.tagLine}>The Dancing Web Framework</div>
-			<Link href="/guide" className={css.cta}>
-				Read the guide
-			</Link>
+
+			<p>
+				<Link href="/guide" className={css.cta}>
+					Learn more
+				</Link>
+			</p>
+
+			<p>
+				<a
+					href="https://stackblitz.com/edit/rakkas-app?file=src%2Fpages%2Fpage.tsx"
+					target="_blank"
+					rel="noreferrer"
+				>
+					Try it in your browser!
+				</a>
+			</p>
 		</div>
 
 		<div className={css.cards}>
-			<div className={css.card} style={{ background: "#eef" }}>
-				<h3>React</h3>
-				<p>Build upon the vast ecosystem of the most popular framework.</p>
-			</div>
-			<div className={css.card} style={{ background: "#ccd" }}>
-				<h3>Vite</h3>
-				<p>Enjoy the lightning fast development server.</p>
-			</div>
-			<div className={css.card} style={{ background: "#dde" }}>
-				<h3>Data fetching</h3>
+			<div className={css.card}>
+				<h4>⚡&nbsp; Lightning fast development</h4>
 				<p>
-					Start building with a simple but effective data fetching solution.
+					Build fast with{" "}
+					<a href="https://vitejs.dev/" target="_blank" rel="noreferrer">
+						Vite
+					</a>
+					&apos;s instant server restart and hot module reloading with fast
+					refresh
 				</p>
+			</div>
+			<div className={css.card}>
+				<h4>🖥️&nbsp; Server-side rendering</h4>
+				<p>Render the initial page on the sever-side for excellent SEO</p>
+			</div>
+			<div className={css.card}>
+				<h4>☸️&nbsp; SPA-style navigation</h4>
+				<p>Hydrate on the client for fast app-like page transitions</p>
+			</div>
+			<div className={css.card}>
+				<h4>📁&nbsp; File system-based routing</h4>
+				<p>Organize your pages and layouts in an intuitive manner</p>
+			</div>
+			<div className={css.card}>
+				<h4>⬇️&nbsp; Easy data fetching</h4>
+				<p>
+					Use the same code on the server and on the client when fecthing your
+					data
+				</p>
+			</div>
+			<div className={css.card}>
+				<h4>⚙️&nbsp; API routes</h4>
+				<p>Build and organize your backend the same way you build your pages</p>
 			</div>
 		</div>
 

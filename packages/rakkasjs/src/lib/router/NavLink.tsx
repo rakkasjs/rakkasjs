@@ -4,13 +4,29 @@ import { useRouter } from "../useRouter";
 import { navigate } from "./Router";
 
 export interface NavLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+	/** Class to be added if `href` matches the current URL */
 	currentRouteClass?: string;
+	/** Style to be added if `href` matches the current URL */
 	currentRouteStyle?: CSSProperties;
+
+	/** Class to be added if `href` matches the next URL, that is, the URL that is loading */
 	nextRouteClass?: string;
+	/** Style to be added if `href` matches the current URL, that is, the URL that is loading */
 	nextRouteStyle?: CSSProperties;
-	onCompareUrls?(a: URL, b: URL): boolean;
+
+	/**
+	 * Custom comparison function for checking if two URLs match
+	 * @param url  URL to be compared to `href`
+	 * @param href Value of `href` property, passed for convenience
+	 *
+	 * @returns true if the URL matches `href`
+	 */
+	onCompareUrls?(url: URL, href: URL): boolean;
 }
 
+/**
+ * Like {@link Link} but allows adding classes and/or styles based on whether this is the active URL.
+ */
 export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
 	(
 		{
