@@ -2,18 +2,35 @@
 
 ## For 0.4.0
 - [ ] Static site generation
+  1. Build the frontend but:
+     1. Strip the load functions
+     2. Use different client code:
+        1. Load data from from prerendered data files instead of calling load functions
+        2. Make `reload` and `useReload` noops
+  2. Start a backend development server in feigned production mode
+  3. Visit the roots (defaulting to `["/"]`)
+  4. Save the rendered data to a data file
+  5. Save HTML files with script tags to load the prerendered data
+  6. Add all newly encountered internal URLs to the roots
 - [ ] Design a way to wrap the rendered application in custom providers
 - [ ] Add command to unpublish all canary releases
-- [ ] Investigate Vite fs.allow warning: https://vitejs.dev/config/#server-fs-allow
-- [ ] Investigate the circular dependency warning
-- [ ] Add option to create-rakkas-app to add Cypress integration
-- [ ] Add option to create-rakkas-app to skip sample application
-- [ ] Integrate eslint-import-resolver-typescript
-- [ ] Reload loses focus
+- [ ] Investigate Vite warnings:
+  - [ ] fs.allow warning: https://vitejs.dev/config/#server-fs-allow
+  - [ ] Circular dependency warning
+- [ ] Project initializer enhancements:
+  - [ ] Add option to skip generating the sample application
+  - [ ] Add Cypress integration
+  - [ ] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
+- [ ] ⚠️ BUG: Reload loses focus
+- [ ] ⚠️ BUG: Vite plugin ordering when using mdx
+- [ ] Test the layout context API
 - [ ] Design a setData API
-- [ ] Investigate debugging and sourcemaps
+- [ ] Handle HEAD requests
+- [ ] Serialize the routes into a smaller string in an external file
+- [ ] Consider using [vite-react-jsx](https://github.com/alloc/vite-react-jsx) for the automatic JSX runtime support
 
 ## For 1.0.0
+- [ ] Investigate debugging and sourcemaps
 - Features
   - [ ] Add a way to add cache-related HTTP headers on pages
   - [ ] Service workers
