@@ -76,6 +76,7 @@ export async function makeViteConfig(
 	const normalizedIndexHtmlPath = normalizePath(indexHtmlPath);
 
 	let ssr: boolean;
+	let mode: string;
 
 	const result: InlineConfig = {
 		...config.vite,
@@ -123,7 +124,7 @@ export async function makeViteConfig(
 
 				configResolved(config) {
 					ssr = !!config?.build?.ssr;
-					// config.mode
+					mode = config.mode;
 				},
 
 				configureServer(server) {
@@ -290,7 +291,7 @@ export async function makeViteConfig(
 				name: "rakkas-refresh-page",
 				enforce: "pre",
 				async transform(code, id, ssr) {
-					if (ssr) return;
+					if (ssr || mode === "production") return;
 
 					if (isPage(id) || isLayout(id)) {
 						const idstr = JSON.stringify(id.slice(srcDir.length));
