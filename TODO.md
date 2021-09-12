@@ -13,6 +13,9 @@
   5. Save HTML files with script tags to load the prerendered data
   6. Add all newly encountered internal URLs to the roots
 - [ ] Design a way to wrap the rendered application in custom providers
+- [ ] Define page/layout types depending on the parent layout type
+- [ ] Design an API to inject helpers to load functions
+- [ ] Allow custom error serializers
 - [ ] Add command to unpublish all canary releases
 - [ ] Investigate Vite warnings:
   - [ ] fs.allow warning: https://vitejs.dev/config/#server-fs-allow
@@ -23,11 +26,11 @@
   - [ ] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
 - [ ] ⚠️ BUG: Reload loses focus
 - [ ] ⚠️ BUG: Vite plugin ordering when using mdx
-- [ ] Test the layout context API
 - [ ] Design a setData API
 - [ ] Handle HEAD requests
 - [ ] Serialize the routes into a smaller string in an external file
 - [ ] Consider using [vite-react-jsx](https://github.com/alloc/vite-react-jsx) for the automatic JSX runtime support
+- [x] Test the layout context API
 
 ## For 1.0.0
 - [ ] Investigate debugging and sourcemaps
