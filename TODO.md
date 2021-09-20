@@ -5,7 +5,7 @@
   1. Build the frontend but:
      1. Strip the load functions
      2. Use different client code:
-        1. Load data from from prerendered data files instead of calling load functions
+        1. Load data from prerendered data files instead of calling load functions
         2. Make `reload` and `useReload` noops
   2. Start a backend development server in feigned production mode
   3. Visit the roots (defaulting to `["/"]`)
@@ -30,11 +30,17 @@
 - [ ] Handle HEAD requests
 - [ ] Serialize the routes into a smaller string in an external file
 - [ ] Consider using [vite-react-jsx](https://github.com/alloc/vite-react-jsx) for the automatic JSX runtime support
+- [ ] Expose `request.ip`
+- [ ] chore: Add `engines` to `package.json` files
+- [ ] Split documentation into multiple pages
 - [x] Test the layout context API
 
 ## For 1.0.0
 - [ ] Investigate debugging and sourcemaps
 - Features
+  - [ ] Add support for React 18 features (streaming SSR, Suspense, startTransition, server components etc.)
+  - [ ] Add support for multipart/form-data
+ 	- [ ] Make server limits (maximum request body size etc.) configurable
   - [ ] Add a way to add cache-related HTTP headers on pages
   - [ ] Service workers
   - [ ] Link prefetching
@@ -42,9 +48,15 @@
   - [ ] Spread dynamic route parameters
   - [ ] Localizable and customizable router
   - [ ] Serverless platforms
+    - [ ] Vercel
+    - [ ] AWS Lambda (Begin / Architect)
+    - [ ] Cloudflare Workers
+    - [ ] Netlify
+  - [ ] A way to trigger reloads from the reload function itself
   - [ ] Data caching
   	- [ ] Optimistic updates
   	- [ ] Stale while revalidate strategy
+	- [ ] RPC plugin
 - Chores
   - [ ] Contribution guidelines
   - [ ] Create integration examples with popular tools
