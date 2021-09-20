@@ -6,6 +6,8 @@ declare interface Window {
 	readonly $rakkas$routes: any;
 }
 
+declare const RAKKAS_BUILD_MODE: "ssr" | "static";
+
 declare module "@rakkasjs/page-imports" {
 	const importer: Record<string, () => Promise<any>>;
 	export default importer;

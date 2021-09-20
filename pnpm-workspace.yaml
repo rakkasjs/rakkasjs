@@ -2,4 +2,4 @@ packages:
   - "packages/*"
   - "website"
   - "templates/*"
-  - "scratchpad"
+  - "playgrounds/*"

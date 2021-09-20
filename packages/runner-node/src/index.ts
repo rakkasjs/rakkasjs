@@ -114,7 +114,7 @@ export async function startServer() {
 	});
 
 	app.listen({ port, host }, () => {
-		console.log(`Listening on http://${host}:${port}`);
+		console.log(`Rakkas app listening on http://${host}:${port}`);
 	});
 }
 

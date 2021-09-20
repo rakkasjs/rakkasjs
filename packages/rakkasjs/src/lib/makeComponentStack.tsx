@@ -140,6 +140,10 @@ export async function makeComponentStack({
 		const cacheKey = stableJson(getCacheKey({ url, params, match, context }));
 		let loaded: PageLoadResult | LayoutLoadResult;
 
+		if (RAKKAS_BUILD_MODE === "static" && !import.meta.env.SSR) {
+			previousRender = await loadDataScript(url.pathname);
+		}
+
 		if (
 			// No previous render, we're in server side; should reload
 			!previousRender ||
@@ -209,7 +213,7 @@ export async function makeComponentStack({
 	}
 
 	const content = thisRender.reduceRight((prev, rendered, i) => {
-		const reloadThis = () => reload(i);
+		const reloadThis = RAKKAS_BUILD_MODE === "ssr" ? () => reload(i) : noop;
 
 		const Component = rendered.Component!;
 
@@ -229,7 +233,10 @@ export async function makeComponentStack({
 			data: (rendered.loaded as any).data,
 			error: errorHandlerIndex === i ? error : undefined,
 			reload: reloadThis,
-			useReload: makeUseReload(reloadThis, isInitialRender),
+			useReload:
+				RAKKAS_BUILD_MODE === "ssr"
+					? makeUseReload(reloadThis, isInitialRender)
+					: noop,
 		};
 
 		return <Component {...props}>{prev}</Component>;
@@ -321,6 +328,45 @@ const defaultPageGetCacheKey: GetCacheKeyFunc = ({ url, context, params }) => [
 	params,
 	url.search,
 ];
+
+async function loadDataScript(path: string) {
+	return new Promise<any>((resolve, reject) => {
+		if (path === "/") path = "";
+		const src = `/__data${path}/index.js`;
+
+		const oldScript = document.getElementById(
+			"rakkas-data-script",
+		) as HTMLScriptElement;
+		if (new URL(oldScript.src).pathname === src) {
+			return resolve($rakkas$rendered);
+		}
+
+		oldScript.remove();
+
+		const script = document.createElement("script");
+		script.id = "rakkas-data-script";
+
+		function handleLoad() {
+			script.removeEventListener("load", handleLoad);
+			resolve($rakkas$rendered);
+		}
+
+		function handleError() {
+			script.removeEventListener("error", handleError);
+			reject(new Error(`Failed to load script ${src}`));
+		}
+
+		script.addEventListener("error", handleError);
+		script.addEventListener("load", handleLoad);
+
+		script.src = src;
+		document.head.appendChild(script);
+	});
+}
+
+function noop() {
+	// Do nothing
+}
 
 if (import.meta.hot && !window.$rakkas$reloader) {
 	window.$rakkas$reloader = {};

@@ -1,9 +1,10 @@
 import reactRefresh from "@vitejs/plugin-react-refresh";
-import micromatch from ".pnpm/@types+micromatch@4.0.2/node_modules/@types/micromatch";
+import micromatch from "micromatch";
 import { PluginOption, normalizePath } from "vite";
 import virtual, { updateVirtualModule } from "vite-plugin-virtual";
 import { makeRouteManifest } from "./make-route-manifest";
 import path from "path";
+import { htmlTemplate } from "./html-template";
 
 export interface RakkasVitePluginConfig {
 	srcDir: string;
@@ -12,7 +13,7 @@ export interface RakkasVitePluginConfig {
 	pageExtensions: string[];
 	endpointExtensions: string[];
 	apiRoot: string;
-	configDeps: string[];
+	configDeps?: string[];
 	onConfigChange?: () => void;
 }
 
@@ -90,7 +91,7 @@ export async function rakkasVitePlugin(
 	});
 
 	let ssr: boolean;
-	let mode: "build" | "serve";
+	let command: "build" | "serve";
 
 	return [
 		virtualModules,
@@ -99,9 +100,8 @@ export async function rakkasVitePlugin(
 			enforce: "pre",
 
 			configResolved(config) {
-				config.command;
-				ssr = !!config?.build?.ssr;
-				mode = config.command;
+				ssr = !!config.build.ssr;
+				command = config.command;
 			},
 
 			configureServer(server) {
@@ -135,7 +135,7 @@ export async function rakkasVitePlugin(
 								rootUrl: config.apiRoot + "/",
 							}),
 						);
-					} else if (configDeps.includes(fn) && onConfigChange) {
+					} else if (configDeps && configDeps.includes(fn) && onConfigChange) {
 						// eslint-disable-next-line no-console
 						console.log("Config file dependency", fn, "changed");
 						onConfigChange();
@@ -144,14 +144,14 @@ export async function rakkasVitePlugin(
 			},
 
 			buildStart() {
-				if (mode === "build") return;
+				if (command === "build") return;
 
 				this.addWatchFile(srcDir + PAGES);
 				this.addWatchFile(srcDir + LAYOUTS);
 				this.addWatchFile(srcDir + ENDPOINTS);
 				this.addWatchFile(srcDir + MIDDLEWARE);
 
-				if (onConfigChange) {
+				if (onConfigChange && configDeps) {
 					configDeps.forEach((dep) => this.addWatchFile(dep));
 				}
 			},
@@ -189,7 +189,7 @@ export async function rakkasVitePlugin(
 
 			async load(id) {
 				if (id === normalizedIndexHtmlPath) {
-					return template;
+					return htmlTemplate;
 				} else if (id === "/__rakkas-start-client.js") {
 					return `
 					import {startClient} from "rakkasjs/client";
@@ -205,7 +205,7 @@ export async function rakkasVitePlugin(
 			},
 
 			async transform(code, id, ssr) {
-				if (ssr || mode === "build") return;
+				if (ssr || command === "build") return;
 
 				if (isPage(id) || isLayout(id)) {
 					const idstr = JSON.stringify(id.slice(srcDir.length));
@@ -279,20 +279,6 @@ export async function rakkasVitePlugin(
 	];
 }
 
-const template = `<!DOCTYPE html>
-<html><!-- rakkas-html-attributes-placeholder -->
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-		<!-- rakkas-head-placeholder -->
-	</head>
-	<body><!-- rakkas-body-attributes-placeholder -->
-		<div id="rakkas-app"><!-- rakkas-app-placeholder --></div>
-		<script type="module" src="/__rakkas-start-client.js"></script>
-	</body>
-</html>`;
-
 const refreshFooter = (id: string) => `// $RefreshReg$()
 	if (import.meta.hot) {
 		import.meta.hot.accept((m) => {
@@ -306,16 +292,5 @@ const refreshFooter = (id: string) => `// $RefreshReg$()
 			console.log("Reloading", ${id});
 			reload();
 		});
-
-		// window.$RefreshReg$ = prevRefreshReg;
-		// window.$RefreshSig$ = prevRefreshSig;
-		// console.log("Uninstalled", import.meta.url, prevRefreshSig);
-		// import.meta.hot.accept();
-		// if (!window.__vite_plugin_react_timeout) {
-		// 	window.__vite_plugin_react_timeout = setTimeout(() => {
-		// 		window.__vite_plugin_react_timeout = 0;
-		// 		RefreshRuntime.performReactRefresh();
-		// 	}, 30);
-		// }
 	}
 `;

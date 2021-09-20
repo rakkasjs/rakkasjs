@@ -1,17 +1,9 @@
 # TODO
 
 ## For 0.4.0
-- [ ] Static site generation
-  1. Build the frontend but:
-     1. Strip the load functions
-     2. Use different client code:
-        1. Load data from prerendered data files instead of calling load functions
-        2. Make `reload` and `useReload` noops
-  2. Start a backend development server in feigned production mode
-  3. Visit the roots (defaulting to `["/"]`)
-  4. Save the rendered data to a data file
-  5. Save HTML files with script tags to load the prerendered data
-  6. Add all newly encountered internal URLs to the roots
+- [x] Static site generation
+- [ ] Strip the load functions and similar when exporting static site
+- [ ] Tidy up static site output
 - [ ] Design a way to wrap the rendered application in custom providers
 - [ ] Define page/layout types depending on the parent layout type
 - [ ] Design an API to inject helpers to load functions

@@ -7,11 +7,7 @@ const isProd = process.env.NODE_ENV === "production";
 /** @type {import('rollup').RollupOptions[]} */
 const options = [
 	{
-		input: [
-			"src/index.tsx",
-			"src/server.tsx",
-			"src/client.tsx",
-		],
+		input: ["src/index.tsx", "src/server.tsx", "src/client.tsx"],
 		output: [
 			{
 				dir: "dist",
@@ -37,6 +33,7 @@ const options = [
 			"react-dom/server",
 			"react-helmet-async",
 			"node-fetch",
+			"mkdirp",
 		],
 		plugins: [
 			nodeResole(),

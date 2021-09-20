@@ -16,6 +16,9 @@ import importers from "@rakkasjs/api-imports";
 import { RawRequest } from "./lib/types";
 import { RouterProvider } from "./lib/useRouter";
 
+import fs from "fs";
+import mkdirp from "mkdirp";
+
 export interface EndpointModule {
 	[method: string]: RequestHandler | undefined;
 }
@@ -211,16 +214,30 @@ export async function handleRequest(
 
 		const { helmet } = helmetContext as FilledContext;
 
-		let head = `<script>$rakkas$rootContext=(0,eval)(${devalue(
+		const dataScript = `$rakkas$rootContext=(0,eval)(${devalue(
 			context,
-		)})</script>`;
-
-		head += `<script>$rakkas$rendered=(0,eval)(${devalue(
+		)});$rakkas$rendered=(0,eval)(${devalue(
 			stack.rendered.map((x) => {
 				delete x.Component;
 				return x;
 			}),
-		)})</script>`;
+		)})`;
+
+		let head: string;
+
+		if (RAKKAS_BUILD_MODE === "ssr") {
+			head = `<script>${dataScript}</script>`;
+		} else {
+			let path = request.url.pathname;
+			if (path === "/") path = "";
+			await mkdirp(`dist/client/__data${path}`);
+			await fs.promises.writeFile(
+				`dist/client/__data${path}/index.js`,
+				dataScript,
+			);
+
+			head = `<script id="rakkas-data-script" src="/__data${path}/index.js"></script>`;
+		}
 
 		if (pages) {
 			head += `<script>$rakkas$routes=(0,eval)(${devalue(pages)})</script>`;

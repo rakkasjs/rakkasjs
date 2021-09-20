@@ -3,10 +3,15 @@ import { InlineConfig, normalizePath, SSROptions } from "vite";
 import { FullConfig } from "../..";
 import { rakkasVitePlugin } from "./vite-plugin";
 
+export interface ConfigFlavorOptions {
+	configDeps?: string[];
+	onConfigChange?: () => void;
+	buildMode?: "ssr" | "static";
+}
+
 export async function makeViteConfig(
 	config: FullConfig,
-	configDeps: string[],
-	onConfigChange?: () => void,
+	{ configDeps, onConfigChange, buildMode = "ssr" }: ConfigFlavorOptions = {},
 ): Promise<InlineConfig> {
 	const srcDir = normalizePath(path.resolve("src"));
 	const publicDir = normalizePath(path.resolve("public"));
@@ -23,6 +28,7 @@ export async function makeViteConfig(
 			...config.vite.server,
 			middlewareMode: "ssr",
 		},
+
 		optimizeDeps: {
 			...config.vite.optimizeDeps,
 			exclude: [
@@ -63,6 +69,10 @@ export async function makeViteConfig(
 				onConfigChange,
 			}),
 		],
+		define: {
+			...config.vite.define,
+			RAKKAS_BUILD_MODE: JSON.stringify(buildMode),
+		},
 	};
 
 	const ssrOptions: SSROptions = {
