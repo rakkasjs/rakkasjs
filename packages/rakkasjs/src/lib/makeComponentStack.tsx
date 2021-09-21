@@ -21,11 +21,15 @@ import {
 } from "./types";
 import { stableJson } from "./stable-json";
 import { toErrorDescription } from "./toErrorDescription";
+import { initGlobal } from "./init-global";
 
 import importers from "@rakkasjs/page-imports";
 
-const moduleCache: Record<string, any> = {};
-const errorBoundaryCache: Record<string, any> = {};
+const moduleCache: Record<string, any> = initGlobal("moduleCache", {});
+const errorBoundaryCache: Record<string, any> = initGlobal(
+	"errorBoundaryCache",
+	{},
+);
 
 export interface RenderedStackItem {
 	Component?:

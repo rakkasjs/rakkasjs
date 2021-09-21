@@ -1,4 +1,4 @@
-import reactRefresh from "@vitejs/plugin-react-refresh";
+import reactPlugin from "@vitejs/plugin-react";
 import micromatch from "micromatch";
 import { PluginOption, normalizePath } from "vite";
 import virtual, { updateVirtualModule } from "vite-plugin-virtual";
@@ -275,7 +275,8 @@ export async function rakkasVitePlugin(
 				});
 			},
 		},
-		reactRefresh({ exclude: [PAGES, LAYOUTS] }),
+
+		...reactPlugin({ exclude: [PAGES.slice(1), LAYOUTS.slice(1)] }),
 	];
 }
 
