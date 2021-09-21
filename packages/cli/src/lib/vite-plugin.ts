@@ -5,6 +5,7 @@ import virtual, { updateVirtualModule } from "vite-plugin-virtual";
 import { makeRouteManifest } from "./make-route-manifest";
 import path from "path";
 import { htmlTemplate } from "./html-template";
+import { babelPluginStripLoadFunction } from "./babelPluginStripLoadFunction";
 
 export interface RakkasVitePluginConfig {
 	srcDir: string;
@@ -14,6 +15,7 @@ export interface RakkasVitePluginConfig {
 	endpointExtensions: string[];
 	apiRoot: string;
 	configDeps?: string[];
+	stripLoadFunctions?: boolean;
 	onConfigChange?: () => void;
 }
 
@@ -28,6 +30,7 @@ export async function rakkasVitePlugin(
 		endpointExtensions,
 		apiRoot,
 		configDeps,
+		stripLoadFunctions = false,
 		onConfigChange,
 	} = config;
 
@@ -276,7 +279,14 @@ export async function rakkasVitePlugin(
 			},
 		},
 
-		...reactPlugin({ exclude: [PAGES.slice(1), LAYOUTS.slice(1)] }),
+		...reactPlugin({
+			exclude: [PAGES.slice(1), LAYOUTS.slice(1)],
+			babel: stripLoadFunctions
+				? {
+						plugins: [babelPluginStripLoadFunction()],
+				  }
+				: undefined,
+		}),
 	];
 }
 

@@ -1,8 +1,10 @@
 # TODO
 
 ## For 0.4.0
+- [x] Test the layout context API
 - [x] Static site generation
-- [ ] Strip the load functions and similar when exporting static site
+- [x] Migrate to `@vitejs/plugin-react`
+- [x] Strip the load functions and similar when exporting static site
 - [ ] Tidy up static site output
 - [ ] Design a way to wrap the rendered application in custom providers
 - [ ] Define page/layout types depending on the parent layout type
@@ -21,11 +23,9 @@
 - [ ] Design a setData API
 - [ ] Handle HEAD requests
 - [ ] Serialize the routes into a smaller string in an external file
-- [ ] Consider using [vite-react-jsx](https://github.com/alloc/vite-react-jsx) for the automatic JSX runtime support
 - [ ] Expose `request.ip`
 - [ ] chore: Add `engines` to `package.json` files
 - [ ] Split documentation into multiple pages
-- [x] Test the layout context API
 
 ## For 1.0.0
 - [ ] Investigate debugging and sourcemaps

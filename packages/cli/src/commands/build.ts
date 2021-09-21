@@ -22,7 +22,10 @@ export interface BuildOptions {
 export async function build(options: BuildOptions = {}) {
 	const { buildMode = "ssr" } = options;
 	const { config } = await loadConfig();
-	const viteConfig = await makeViteConfig(config, { buildMode });
+	let viteConfig = await makeViteConfig(config, {
+		buildMode,
+		stripLoadFunctions: buildMode === "static",
+	});
 
 	await viteBuild({
 		...viteConfig,
@@ -33,6 +36,8 @@ export async function build(options: BuildOptions = {}) {
 			ssrManifest: true,
 		},
 	});
+
+	viteConfig = await makeViteConfig(config, { buildMode });
 
 	// Fix index.html
 	const template = await fs.promises.readFile(

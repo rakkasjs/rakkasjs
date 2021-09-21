@@ -149,15 +149,17 @@ export async function makeComponentStack({
 		}
 
 		if (
+			// Never reload on the client if static
+			(RAKKAS_BUILD_MODE !== "static" || import.meta.env.SSR) &&
 			// No previous render, we're in server side; should reload
-			!previousRender ||
-			// Different component; should reload
-			!previousRender[i] ||
-			(previousRender[i].name && previousRender[i].name !== moduleId) ||
-			// Cache key manually invalidated; should reload
-			!previousRender[i].cacheKey ||
-			// Cache key changed; should reload
-			previousRender[i].cacheKey !== cacheKey
+			(!previousRender ||
+				// Different component; should reload
+				!previousRender[i] ||
+				(previousRender[i].name && previousRender[i].name !== moduleId) ||
+				// Cache key manually invalidated; should reload
+				!previousRender[i].cacheKey ||
+				// Cache key changed; should reload
+				previousRender[i].cacheKey !== cacheKey)
 		) {
 			if (load) {
 				try {
@@ -172,7 +174,7 @@ export async function makeComponentStack({
 				};
 			}
 		} else {
-			loaded = previousRender[i].loaded;
+			loaded = previousRender![i].loaded;
 		}
 
 		if ("location" in loaded) {

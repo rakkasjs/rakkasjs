@@ -7,11 +7,17 @@ export interface ConfigFlavorOptions {
 	configDeps?: string[];
 	onConfigChange?: () => void;
 	buildMode?: "ssr" | "static";
+	stripLoadFunctions?: boolean;
 }
 
 export async function makeViteConfig(
 	config: FullConfig,
-	{ configDeps, onConfigChange, buildMode = "ssr" }: ConfigFlavorOptions = {},
+	{
+		configDeps,
+		onConfigChange,
+		buildMode = "ssr",
+		stripLoadFunctions = false,
+	}: ConfigFlavorOptions = {},
 ): Promise<InlineConfig> {
 	const srcDir = normalizePath(path.resolve("src"));
 	const publicDir = normalizePath(path.resolve("public"));
@@ -66,6 +72,7 @@ export async function makeViteConfig(
 				endpointExtensions: config.endpointExtensions,
 				apiRoot: config.apiRoot,
 				configDeps,
+				stripLoadFunctions,
 				onConfigChange,
 			}),
 		],
