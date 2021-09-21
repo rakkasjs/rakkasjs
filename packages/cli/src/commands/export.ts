@@ -7,20 +7,35 @@ import mkdirp from "mkdirp";
 import { build } from "./build";
 import { spawn } from "child_process";
 import fetch, { FetchError } from "node-fetch";
+import rimraf from "rimraf";
+import os from "os";
 
 export default function exportCommand() {
 	return new Command("export")
 		.description("Export a static site")
 		.action(async () => {
-			await build({ buildMode: "static" });
+			const buildDir = path.join(
+				await fs.promises.mkdtemp(
+					path.join(os.tmpdir(), "rakkas-export-static-"),
+				),
+				"dist",
+			);
+
+			path.resolve("static-build");
+
+			await build({
+				buildMode: "static",
+				outDir: buildDir,
+			});
 
 			const host = "localhost";
 			const port = await getPort();
 
-			const server = spawn("rakkas-node", {
+			const server = spawn("rakkas-node " + buildDir, {
 				shell: true,
 				env: { ...process.env, HOST: host, PORT: String(port) },
 				stdio: "inherit",
+				cwd: path.resolve(buildDir, ".."),
 			});
 
 			// Wait until server starts
@@ -40,11 +55,11 @@ export default function exportCommand() {
 
 			const roots = new Set(["/"]);
 			for (const root of roots) {
-				const htmlDir = path.join("dist/client/", root);
+				const htmlDir = path.join(buildDir, "client", root);
 				const htmlFile = path.join(htmlDir, "index.html");
 
 				// eslint-disable-next-line no-console
-				console.log(`Exporting ${htmlFile}`);
+				console.log(`Exporting ${root}`);
 
 				const fetched = await fetch(`http://${host}:${port}${root}`).then(
 					(r) => {
@@ -71,6 +86,30 @@ export default function exportCommand() {
 					}
 				});
 			}
+
+			await mkdirp("dist");
+
+			await new Promise<void>((resolve, reject) =>
+				rimraf("dist/static", (error) => {
+					if (error) {
+						reject(error);
+					} else {
+						resolve();
+					}
+				}),
+			);
+
+			await fs.promises.rename(path.join(buildDir, "client"), "dist/static");
+
+			await new Promise<void>((resolve, reject) =>
+				rimraf(buildDir, (error) => {
+					if (error) {
+						reject(error);
+					} else {
+						resolve();
+					}
+				}),
+			);
 
 			server.kill("SIGTERM");
 		});

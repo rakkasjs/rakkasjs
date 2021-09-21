@@ -17,10 +17,11 @@ export default function buildCommand() {
 
 export interface BuildOptions {
 	buildMode?: "ssr" | "static";
+	outDir?: string;
 }
 
 export async function build(options: BuildOptions = {}) {
-	const { buildMode = "ssr" } = options;
+	const { buildMode = "ssr", outDir = path.resolve("dist") } = options;
 	const { config } = await loadConfig();
 	let viteConfig = await makeViteConfig(config, {
 		buildMode,
@@ -31,7 +32,7 @@ export async function build(options: BuildOptions = {}) {
 		...viteConfig,
 
 		build: {
-			outDir: "../dist/client",
+			outDir: path.join(outDir, "client"),
 			emptyOutDir: true,
 			ssrManifest: true,
 		},
@@ -41,7 +42,7 @@ export async function build(options: BuildOptions = {}) {
 
 	// Fix index.html
 	const template = await fs.promises.readFile(
-		path.resolve("./dist/client", "index.html"),
+		path.join(outDir, "client", "index.html"),
 	);
 
 	const dom = cheerio.load(template);
@@ -54,24 +55,20 @@ export async function build(options: BuildOptions = {}) {
 	Object.keys(body.attr()).forEach((a) => body.removeAttr(a));
 	body.prepend("<!-- rakkas-body-attributes-placeholder -->");
 
-	fs.promises.writeFile(
-		path.resolve("./dist", "index.html"),
-		dom.html(),
-		"utf8",
-	);
-	fs.promises.unlink(path.resolve("./dist/client", "index.html"));
+	fs.promises.writeFile(path.join(outDir, "index.html"), dom.html(), "utf8");
+	fs.promises.unlink(path.join(outDir, "client", "index.html"));
 
 	// Fix manifest
 	const rawManifest = JSON.parse(
 		await fs.promises.readFile(
-			path.resolve("./dist/client", "ssr-manifest.json"),
+			path.join(outDir, "client", "ssr-manifest.json"),
 			"utf-8",
 		),
 	) as Record<string, string[]>;
 
 	const importManifest = JSON.parse(
 		await fs.promises.readFile(
-			path.resolve("./dist/client", "import-manifest.json"),
+			path.join(outDir, "client", "import-manifest.json"),
 			"utf-8",
 		),
 	) as Record<string, string[]>;
@@ -109,12 +106,12 @@ export async function build(options: BuildOptions = {}) {
 	);
 
 	fs.promises.writeFile(
-		path.resolve("./dist", "rakkas-manifest.json"),
+		path.join(outDir, "rakkas-manifest.json"),
 		JSON.stringify(manifest),
 		"utf8",
 	);
-	fs.promises.unlink(path.resolve("./dist/client", "ssr-manifest.json"));
-	fs.promises.unlink(path.resolve("./dist/client", "import-manifest.json"));
+	fs.promises.unlink(path.join(outDir, "client", "ssr-manifest.json"));
+	fs.promises.unlink(path.join(outDir, "client", "import-manifest.json"));
 
 	// Build server
 	await viteBuild({
@@ -123,7 +120,7 @@ export async function build(options: BuildOptions = {}) {
 		build: {
 			ssr: true,
 			target: "modules",
-			outDir: "../dist/server",
+			outDir: path.join(outDir, "server"),
 			rollupOptions: {
 				input: [
 					"@rakkasjs/page-routes",

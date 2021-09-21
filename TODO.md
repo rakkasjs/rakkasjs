@@ -5,7 +5,8 @@
 - [x] Static site generation
 - [x] Migrate to `@vitejs/plugin-react`
 - [x] Strip the load functions and similar when exporting static site
-- [ ] Tidy up static site output
+- [x] Tidy up static site output
+- [ ] Improve build logging
 - [ ] Design a way to wrap the rendered application in custom providers
 - [ ] Define page/layout types depending on the parent layout type
 - [ ] Design an API to inject helpers to load functions
@@ -18,6 +19,7 @@
   - [ ] Add option to skip generating the sample application
   - [ ] Add Cypress integration
   - [ ] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
+- [ ] ⚠️ BUG: Missing favicon causes error 500
 - [ ] ⚠️ BUG: Reload loses focus
 - [ ] ⚠️ BUG: Vite plugin ordering when using mdx
 - [ ] Design a setData API
