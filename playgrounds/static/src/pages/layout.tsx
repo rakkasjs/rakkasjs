@@ -52,7 +52,7 @@ export default defineLayout<MainLayoutTypes>({
 								{data?.people.map((p) => (
 									<li key={p.id}>
 										<NavLink
-											href={`/${p.id}`}
+											href={`/profile/${p.id}`}
 											currentRouteStyle={{ fontWeight: "bold" }}
 										>
 											{p.fullName}

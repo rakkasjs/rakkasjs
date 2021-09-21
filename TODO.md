@@ -19,7 +19,6 @@
   - [ ] Add option to skip generating the sample application
   - [ ] Add Cypress integration
   - [ ] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
-- [ ] ⚠️ BUG: Missing favicon causes error 500
 - [ ] ⚠️ BUG: Reload loses focus
 - [ ] ⚠️ BUG: Vite plugin ordering when using mdx
 - [ ] Design a setData API

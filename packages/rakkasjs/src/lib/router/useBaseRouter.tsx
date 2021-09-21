@@ -1,9 +1,9 @@
 import type { BaseRouterInfo } from "./Router";
 import { createContext, useContext } from "react";
-import { initClientGlobal } from "../init-global";
+import { initGlobal } from "../init-global";
 
 // Make the context persist between hot reloads
-export const BaseRouterContext = initClientGlobal(
+export const BaseRouterContext = initGlobal(
 	"RouterContext",
 	createContext<BaseRouterInfo>({
 		current: new URL("https://example.com"),

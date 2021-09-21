@@ -1,9 +1,9 @@
 import React, { createContext, FC, useContext } from "react";
-import { initClientGlobal } from "./init-global";
+import { initGlobal } from "./init-global";
 import { RouterInfo } from "./types";
 
 // Make the context persist between hot reloads
-const RakkasContext = initClientGlobal(
+const RakkasContext = initGlobal(
 	"RakkasContext",
 	createContext<RouterInfo>(undefined as any),
 );
