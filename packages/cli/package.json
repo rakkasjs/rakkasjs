@@ -22,10 +22,11 @@
 		"ssr"
 	],
 	"bin": {
-		"rakkas": "dist/bin.js"
+		"rakkas": "rakkas.js"
 	},
 	"module": "dist/index.js",
 	"files": [
+		"rakkas.js",
 		"dist/**/*",
 		"server-entry.js",
 		"*.d.ts"

@@ -18,13 +18,14 @@
 	],
 	"types": "index.d.ts",
 	"bin": {
-		"rakkas-node": "dist/index.js"
+		"rakkas-node": "rakkas-node.js"
 	},
 	"exports": {
 		".": "./dist/index.js",
 		"./parse-body": "./dist/parse-body.js"
 	},
 	"files": [
+		"rakkas-node.js",
 		"dist/**/*",
 		"*.js",
 		"*.d.ts"

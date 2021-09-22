@@ -4,8 +4,8 @@
 	"description": "Development tools for Rakkas.js",
 	"scripts": {
 		"prepublishOnly": "pnpm build && bash copy-templates.sh",
-		"dev": "esbuild --bundle src/index.ts --outfile=create-rakkas-app.js --platform=node --watch",
-		"build": "esbuild --bundle src/index.ts --outfile=create-rakkas-app.js --platform=node",
+		"dev": "esbuild --bundle src/index.ts --outfile=bin.js --platform=node --watch",
+		"build": "esbuild --bundle src/index.ts --outfile=bin.js --platform=node",
 		"precommit": "lint-staged --no-stash",
 		"check": "run-p typecheck lint:ts",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
@@ -24,6 +24,7 @@
 		"create-rakkas-app": "create-rakkas-app.js"
 	},
 	"files": [
+		"create-rakkas-app.js",
 		"templates/**/*"
 	],
 	"devDependencies": {
