@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"lib": [
+			"ES2018",
+			"ES2019.Object",
+			"ES2019.Array",
+			"ES2020.String",
+			"DOM.Iterable"
+		],
+		"module": "ES2020",
+		"esModuleInterop": true,
+		"jsx": "react",
+		"target": "es6",
+		"moduleResolution": "node",
+		"types": [
+			"rakkasjs/vite-types",
+			"node",
+			"jest",
+			"@testing-library/jest-dom"
+		],
+		"skipLibCheck": true
+	},
+	"exclude": ["cypress"]
+}

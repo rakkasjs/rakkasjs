@@ -345,8 +345,10 @@ importers:
       eslint-plugin-import: ^2.24.1
       eslint-plugin-react: ^7.24.0
       eslint-plugin-react-hooks: ^4.2.0
+      get-port: ^5.1.1
       jest: ^27.0.6
       jest-css-modules-transform: ^4.3.0
+      npm-run-all: ^4.1.5
       prettier: ^2.3.2
       rakkasjs: workspace:*
       react: ^17.0.2
@@ -384,8 +386,10 @@ importers:
       eslint-plugin-import: 2.24.1_eslint@7.32.0
       eslint-plugin-react: 7.24.0_eslint@7.32.0
       eslint-plugin-react-hooks: 4.2.0_eslint@7.32.0
+      get-port: 5.1.1
       jest: 27.0.6
       jest-css-modules-transform: 4.3.0
+      npm-run-all: 4.1.5
       prettier: 2.3.2
       sirv-cli: 1.0.14
       start-server-and-test: 1.13.1
