@@ -6,7 +6,7 @@ import path from "path";
 import mkdirp from "mkdirp";
 import { build } from "./build";
 import { spawn } from "child_process";
-import fetch, { FetchError } from "node-fetch";
+import fetch, { FetchError, Response } from "node-fetch";
 import rimraf from "rimraf";
 import os from "os";
 
@@ -38,10 +38,14 @@ export default function exportCommand() {
 				cwd: path.resolve(buildDir, ".."),
 			});
 
+			let firstResponse: Response | undefined;
+
 			// Wait until server starts
 			for (;;) {
 				try {
-					await fetch(`http://${host}:${port}`);
+					firstResponse = await fetch(`http://${host}:${port}`, {
+						headers: { "x-rakkas-export": "static" },
+					});
 				} catch (err) {
 					if (err instanceof FetchError) {
 						await new Promise((resolve) => setTimeout(resolve, 100));
@@ -55,27 +59,30 @@ export default function exportCommand() {
 
 			const roots = new Set(["/"]);
 			for (const root of roots) {
-				const htmlDir = path.join(buildDir, "client", root);
-				const htmlFile = path.join(htmlDir, "index.html");
+				const response =
+					firstResponse ||
+					(await fetch(`http://${host}:${port}${root}`, {
+						headers: { "x-rakkas-export": "static" },
+					}));
+
+				firstResponse = undefined;
+
+				if (!response.ok) {
+					throw new Error(
+						`Request to ${root} returned status ${response.status}`,
+					);
+				}
+
+				if (response.headers.get("x-rakkas-export") !== "static") continue;
 
 				// eslint-disable-next-line no-console
-				console.log(`Exporting ${root}`);
+				console.log("Export", root);
 
-				const fetched = await fetch(`http://${host}:${port}${root}`).then(
-					(r) => {
-						if (!r.ok) {
-							throw new Error(`Request to ${root} returned status ${r.status}`);
-						}
-
-						return r.text();
-					},
-				);
+				const fetched = await response.text();
 
 				const dom = new JSDOM(fetched, {
 					url: `http://${host}:${port}${root}`,
 				});
-				await mkdirp(htmlDir);
-				await fs.promises.writeFile(htmlFile, fetched);
 
 				dom.window.document.querySelectorAll("a[href]").forEach((el) => {
 					const a = el as HTMLAnchorElement;

@@ -45,16 +45,16 @@ export default definePage<ProfilePageTypes>({
 					<dt>Family name:</dt>
 					<dd>{profile.familyName}</dd>
 
-					<dt>Dob:</dt>
-					<dd>{profile.dob}</dd>
+					<dt>Date of birth:</dt>
+					<dd>{new Date(profile.dob + " 00:00:00").toDateString()}</dd>
 
-					<dt>Pob:</dt>
+					<dt>Place of birth:</dt>
 					<dd>{profile.pob}</dd>
 
 					<dt>Profession:</dt>
 					<dd>{profile.profession}</dd>
 
-					<dt>Email:</dt>
+					<dt>E-mail:</dt>
 					<dd>{profile.email}</dd>
 				</dl>
 			</div>

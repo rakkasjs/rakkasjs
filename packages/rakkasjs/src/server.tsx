@@ -225,18 +225,13 @@ export async function handleRequest(
 
 		let head: string;
 
-		if (RAKKAS_BUILD_MODE === "ssr") {
-			head = `<script>${dataScript}</script>`;
-		} else {
-			let path = request.url.pathname;
-			if (path === "/") path = "";
-			await mkdirp(`dist/client/__data${path}`);
-			await fs.promises.writeFile(
-				`dist/client/__data${path}/index.js`,
-				dataScript,
-			);
+		let path = request.url.pathname;
+		if (path === "/") path = "";
 
+		if (RAKKAS_BUILD_MODE === "static") {
 			head = `<script id="rakkas-data-script" src="/__data${path}/index.js"></script>`;
+		} else {
+			head = `<script>${dataScript}</script>`;
 		}
 
 		if (pages) {
@@ -299,9 +294,27 @@ export async function handleRequest(
 
 		body = body.replace("<!-- rakkas-app-placeholder -->", app);
 
+		const headers: Record<string, string> = { "content-type": "text/html" };
+
+		if (
+			RAKKAS_BUILD_MODE === "static" &&
+			request.headers.get("x-rakkas-export") === "static"
+		) {
+			await mkdirp(`dist/client${path}`);
+			await fs.promises.writeFile(`dist/client${path}/index.html`, body);
+
+			await mkdirp(`dist/client/__data${path}`);
+			await fs.promises.writeFile(
+				`dist/client/__data${path}/index.js`,
+				dataScript,
+			);
+
+			headers["x-rakkas-export"] = "static";
+		}
+
 		return {
 			status: stack.status,
-			headers: { "content-type": "text/html" },
+			headers,
 			body,
 		};
 	}
