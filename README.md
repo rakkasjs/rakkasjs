@@ -1,6 +1,12 @@
-# Rakkas
+# ![Rakkas](shared-assets/logo.png)
 
-![](shared-assets/logo.png)
+![](https://app.travis-ci.com/rakkasjs/rakkasjs.svg?branch=main)
+![npm type definitions](https://img.shields.io/npm/types/rakkasjs)
+![NPM](https://img.shields.io/npm/l/rakkasjs)
+![React](https://badges.aleen42.com/src/react.svg)
+![Vite](https://badges.aleen42.com/src/vitejs.svg)
+![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs)
+
 
 [Read the guide to learn more!](https://rakkasjs.org/guide)
 
@@ -14,8 +20,9 @@
 - 📁&nbsp; Intuitive file system-based routing
 - ⬇️&nbsp; Simple but effective data fetching system
 - ⚙️&nbsp; API routes to build and organize your backend
+- 📄&nbsp; Static site generation
 
-We're also aiming to support **static site generation** and **deploying to serverless environments** before we hit 1.0.
+We're also aiming to support **deploying to serverless environments** before we hit 1.0.
 
 > ### Is Rakkas right for you?
 >
