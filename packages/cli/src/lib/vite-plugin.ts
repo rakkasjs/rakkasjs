@@ -6,6 +6,7 @@ import { makeRouteManifest } from "./make-route-manifest";
 import path from "path";
 import { htmlTemplate } from "./html-template";
 import { babelPluginStripLoadFunction } from "./babelPluginStripLoadFunction";
+import chalk from "chalk";
 
 export interface RakkasVitePluginConfig {
 	srcDir: string;
@@ -140,7 +141,7 @@ export async function rakkasVitePlugin(
 						);
 					} else if (configDeps && configDeps.includes(fn) && onConfigChange) {
 						// eslint-disable-next-line no-console
-						console.log("Config file dependency", fn, "changed");
+						console.log("Config file dependency", chalk.blue(fn), "changed");
 						onConfigChange();
 					}
 				});
@@ -203,7 +204,8 @@ export async function rakkasVitePlugin(
 					id === "@rakkasjs/client-hooks" ||
 					id === "@rakkasjs/server-hooks"
 				) {
-					return "";
+					// This bogus export is for silencing the "Generated an empty chunk" warning
+					return "export const nothing = 1";
 				}
 			},
 

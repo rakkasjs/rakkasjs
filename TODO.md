@@ -7,7 +7,7 @@
 - [x] Strip the load functions and similar when exporting static site
 - [x] Tidy up static site output
 - [x] Add command to unpublish canary releases
-- [ ] Improve build logging
+- [x] Improve logging
 - [ ] Design a way to wrap the rendered application in custom providers
 - [ ] Define page/layout types depending on the parent layout type
 - [ ] Design an API to inject helpers to load functions

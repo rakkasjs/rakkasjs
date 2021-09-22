@@ -6,6 +6,7 @@ import { parseBody } from "@rakkasjs/runner-node/parse-body";
 import { RakkasResponse } from "rakkasjs";
 import { htmlTemplate } from "../lib/html-template";
 import { FullConfig } from "../..";
+import chalk from "chalk";
 
 export interface ServersConfig {
 	config: FullConfig;
@@ -27,6 +28,39 @@ export async function createServers({
 
 		vite.middlewares(req, res, async () => {
 			let html = htmlTemplate;
+			function logResponse() {
+				const statusType = Math.floor(res.statusCode / 100);
+
+				const statusColorMap: Record<number, chalk.Chalk | undefined> = {
+					2: chalk.green,
+					3: chalk.blue,
+					4: chalk.yellow,
+					5: chalk.redBright,
+				};
+
+				const statusColor = statusColorMap[statusType] || chalk.magenta;
+
+				const methodColorMap: Record<string, chalk.Chalk | undefined> = {
+					GET: chalk.white,
+					HEAD: chalk.gray,
+					POST: chalk.green,
+					PUT: chalk.yellowBright,
+					DELETE: chalk.red,
+					CONNECT: chalk.blue,
+					OPTIONS: chalk.magentaBright,
+					TRACE: chalk.blueBright,
+					PATCH: chalk.yellow,
+				};
+
+				const methodColor = methodColorMap[req.method || ""] || chalk.magenta;
+
+				// eslint-disable-next-line no-console
+				console.log(
+					statusColor(res.statusCode),
+					methodColor((req.method || "").padEnd(8)),
+					req.url,
+				);
+			}
 
 			try {
 				// Force them into module cache. Otherwise symlinks confuse vite.
@@ -62,8 +96,8 @@ export async function createServers({
 				});
 
 				res.statusCode = response.status ?? 200;
-				// eslint-disable-next-line no-console
-				console.log(res.statusCode, req.method, req.url);
+
+				logResponse();
 
 				let headers = response.headers;
 				if (!headers) headers = [];
@@ -92,8 +126,7 @@ export async function createServers({
 				res.setHeader("content-type", "text/html");
 				res.statusCode = error.status || 500;
 
-				// eslint-disable-next-line no-console
-				console.log(res.statusCode, req.method, req.url);
+				logResponse();
 
 				res.end(
 					htmlTemplate.replace(

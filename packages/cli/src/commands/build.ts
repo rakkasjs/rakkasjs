@@ -6,12 +6,24 @@ import cheerio from "cheerio";
 import fs from "fs";
 import path from "path";
 import micromatch from "micromatch";
+import chalk from "chalk";
 
 export default function buildCommand() {
 	return new Command("build")
 		.description("Build for production")
 		.action(async () => {
-			return build();
+			// eslint-disable-next-line no-console
+			console.log(chalk.whiteBright("Building for production"));
+
+			const result = await build();
+
+			// eslint-disable-next-line no-console
+			console.log(
+				chalk.whiteBright("Production application built into the directory"),
+				chalk.green("dist"),
+			);
+
+			return result;
 		});
 }
 
@@ -28,6 +40,11 @@ export async function build(options: BuildOptions = {}) {
 		stripLoadFunctions: buildMode === "static",
 	});
 
+	viteConfig.logLevel = "warn";
+
+	// eslint-disable-next-line no-console
+	console.log(chalk.gray("Building client"));
+
 	await viteBuild({
 		...viteConfig,
 
@@ -39,6 +56,7 @@ export async function build(options: BuildOptions = {}) {
 	});
 
 	viteConfig = await makeViteConfig(config, { buildMode });
+	viteConfig.logLevel = "warn";
 
 	// Fix index.html
 	const template = await fs.promises.readFile(
@@ -113,6 +131,8 @@ export async function build(options: BuildOptions = {}) {
 	fs.promises.unlink(path.join(outDir, "client", "ssr-manifest.json"));
 	fs.promises.unlink(path.join(outDir, "client", "import-manifest.json"));
 
+	// eslint-disable-next-line no-console
+	console.log(chalk.gray("Building server"));
 	// Build server
 	await viteBuild({
 		...viteConfig,

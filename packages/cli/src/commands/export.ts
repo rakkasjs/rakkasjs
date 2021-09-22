@@ -9,19 +9,21 @@ import { spawn } from "child_process";
 import fetch, { FetchError, Response } from "node-fetch";
 import rimraf from "rimraf";
 import os from "os";
+import chalk from "chalk";
 
 export default function exportCommand() {
 	return new Command("export")
 		.description("Export a static site")
 		.action(async () => {
+			// eslint-disable-next-line no-console
+			console.log(chalk.whiteBright("Building static application"));
+
 			const buildDir = path.join(
 				await fs.promises.mkdtemp(
 					path.join(os.tmpdir(), "rakkas-export-static-"),
 				),
 				"dist",
 			);
-
-			path.resolve("static-build");
 
 			await build({
 				buildMode: "static",
@@ -31,7 +33,10 @@ export default function exportCommand() {
 			const host = "localhost";
 			const port = await getPort();
 
-			const server = spawn("rakkas-node " + buildDir, {
+			// eslint-disable-next-line no-console
+			console.log(chalk.whiteBright("Launching server"));
+
+			const server = spawn("rakkas-node --quiet", {
 				shell: true,
 				env: { ...process.env, HOST: host, PORT: String(port) },
 				stdio: "inherit",
@@ -40,7 +45,8 @@ export default function exportCommand() {
 
 			let firstResponse: Response | undefined;
 
-			// Wait until server starts
+			// eslint-disable-next-line no-console
+			console.log(chalk.gray("Waiting for server to respond"));
 			for (;;) {
 				try {
 					firstResponse = await fetch(`http://${host}:${port}`, {
@@ -57,6 +63,8 @@ export default function exportCommand() {
 				break;
 			}
 
+			// eslint-disable-next-line no-console
+			console.log(chalk.whiteBright("Crawling the application"));
 			const roots = new Set(["/"]);
 			for (const root of roots) {
 				const response =
@@ -76,7 +84,7 @@ export default function exportCommand() {
 				if (response.headers.get("x-rakkas-export") !== "static") continue;
 
 				// eslint-disable-next-line no-console
-				console.log("Export", root);
+				console.log(chalk.gray("Exported page"), chalk.blue(root));
 
 				const fetched = await response.text();
 
@@ -117,5 +125,11 @@ export default function exportCommand() {
 			);
 
 			server.kill("SIGTERM");
+
+			// eslint-disable-next-line no-console
+			console.log(
+				chalk.whiteBright("Static application exported into the directory"),
+				chalk.green("dist/static"),
+			);
 		});
 }

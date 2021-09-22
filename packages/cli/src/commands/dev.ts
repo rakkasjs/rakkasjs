@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { Command } from "commander";
 import open from "open";
 import { loadConfig } from "../lib/config";
@@ -48,7 +49,7 @@ async function startServer(opts: { port: string; host: string; open?: true }) {
 			http = newServers.http;
 			http.listen(3000).on("listening", () => {
 				// eslint-disable-next-line no-console
-				console.log(`Server restarted`);
+				console.log(chalk.whiteBright("Server restarted"));
 			});
 		});
 
@@ -63,10 +64,14 @@ async function startServer(opts: { port: string; host: string; open?: true }) {
 
 	http.listen({ port, host }).on("listening", async () => {
 		// eslint-disable-next-line no-console
-		console.log(`Server listening on http://${host}:${port}`);
+		console.log(
+			chalk.green("Server listening on"),
+			chalk.whiteBright(`http://${host}:${port}`),
+		);
+
 		if (opts.open) {
 			// eslint-disable-next-line no-console
-			console.log("Launching the browser");
+			console.log(chalk.blue("Launching the browser"));
 			await open(`http://${host}:${port}`);
 		}
 	});

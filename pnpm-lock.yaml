@@ -23,6 +23,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^4.29.2
       '@typescript-eslint/parser': ^4.29.2
       '@vitejs/plugin-react': ^1.0.0-beta.0
+      chalk: ^4.1.2
       cheerio: ^1.0.0-rc.10
       commander: ^8.1.0
       esbuild: ^0.12.22
@@ -49,6 +50,7 @@ importers:
     dependencies:
       '@babel/core': 7.15.5
       '@vitejs/plugin-react': 1.0.0-beta.0
+      chalk: 4.1.2
       cheerio: 1.0.0-rc.10
       commander: 8.1.0
       esbuild: 0.12.22
@@ -4904,7 +4906,6 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
-    dev: true
 
   /change-emitter/0.1.6:
     resolution: {integrity: sha1-6LL+PX8at9aaMhma/5HqaTFAlRU=}

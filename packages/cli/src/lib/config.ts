@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { build } from "esbuild";
 import type { Config, FullConfig } from "../..";
+import chalk from "chalk";
 
 export interface ConfigConfig {
 	filename?: string;
@@ -20,7 +21,7 @@ export async function loadConfig(configConfig: ConfigConfig = {}): Promise<{
 	}
 
 	// eslint-disable-next-line no-console
-	console.log("Loading config from", filename);
+	console.log(chalk.blue("Loading config from"), filename);
 	const { outfile, deps } = await buildFile(
 		filename,
 		configConfig.root,
