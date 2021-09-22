@@ -39,7 +39,7 @@ export default function exportCommand() {
 			const server = spawn("rakkas-node --quiet", {
 				shell: true,
 				env: { ...process.env, HOST: host, PORT: String(port) },
-				stdio: "inherit",
+				stdio: "ignore",
 				cwd: path.resolve(buildDir, ".."),
 			});
 
@@ -124,7 +124,7 @@ export default function exportCommand() {
 				}),
 			);
 
-			server.kill("SIGTERM");
+			server.kill();
 
 			// eslint-disable-next-line no-console
 			console.log(
