@@ -6,12 +6,12 @@
 - [x] Migrate to `@vitejs/plugin-react`
 - [x] Strip the load functions and similar when exporting static site
 - [x] Tidy up static site output
+- [x] Add command to unpublish canary releases
 - [ ] Improve build logging
 - [ ] Design a way to wrap the rendered application in custom providers
 - [ ] Define page/layout types depending on the parent layout type
 - [ ] Design an API to inject helpers to load functions
 - [ ] Allow custom error serializers
-- [ ] Add command to unpublish all canary releases
 - [ ] Investigate Vite warnings:
   - [ ] fs.allow warning: https://vitejs.dev/config/#server-fs-allow
   - [ ] Circular dependency warning
