@@ -1,7 +1,16 @@
 {
 	"name": "create-rakkas-app",
-	"description": "Development tools for Rakkas.js",
 	"version": "0.3.0",
+	"description": "Development tools for Rakkas.js",
+	"scripts": {
+		"prepublishOnly": "pnpm build && bash copy-templates.sh",
+		"dev": "esbuild --bundle src/index.ts --outfile=create-rakkas-app.js --platform=node --watch",
+		"build": "esbuild --bundle src/index.ts --outfile=create-rakkas-app.js --platform=node",
+		"precommit": "lint-staged --no-stash",
+		"check": "run-p typecheck lint:ts",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"lint:ts": "eslint --max-warnings=0 src"
+	},
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
@@ -35,19 +44,12 @@
 		"ink-spinner": "^4.0.2",
 		"jest": "^27.0.6",
 		"lint-staged": "^11.1.2",
+		"npm-run-all": "^4.1.5",
 		"prettier": "^2.3.2",
 		"react": "^17.0.2",
 		"rimraf": "^3.0.2",
 		"typescript": "^4.3.5",
 		"which": "^2.0.2"
-	},
-	"scripts": {
-		"prepublishOnly": "pnpm build && bash copy-templates.sh",
-		"dev": "esbuild --bundle src/index.ts --outfile=create-rakkas-app.js --platform=node --watch",
-		"build": "esbuild --bundle src/index.ts --outfile=create-rakkas-app.js --platform=node",
-		"precommit": "lint-staged --no-stash",
-		"typecheck": "tsc -p tsconfig.json --noEmit",
-		"lint:ts": "eslint --max-warnings=0 src"
 	},
 	"dependencies": {
 		"enquirer": "^2.3.6",

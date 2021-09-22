@@ -5,8 +5,8 @@
 	"description": "Rakkas static site generation project",
 	"scripts": {
 		"dev": "rakkas dev --port=3000",
-		"build": "rakkas build",
-		"start": "PORT=3000 rakkas-node",
+		"build": "rakkas export",
+		"start": "sirv -p 3000 dist/static",
 		"e2e": "pnpm e2e:dev && pnpm e2e:prod",
 		"e2e:dev": "start-server-and-test 'pnpm dev' :3000/api/ping 'DEV_TEST=1 cypress run'",
 		"e2e:prod": "start-server-and-test 'pnpm start' :3000/api/ping 'cypress run'",
@@ -43,6 +43,7 @@
 		"jest": "^27.0.6",
 		"jest-css-modules-transform": "^4.3.0",
 		"prettier": "^2.3.2",
+		"sirv-cli": "^1.0.14",
 		"start-server-and-test": "^1.13.1",
 		"stylelint": "^13.13.1",
 		"stylelint-config-css-modules": "^2.2.0",

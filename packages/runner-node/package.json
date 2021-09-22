@@ -1,7 +1,12 @@
 {
 	"name": "@rakkasjs/runner-node",
-	"description": "Rakkas.js core runtime",
 	"version": "0.3.0",
+	"description": "Rakkas.js core runtime",
+	"scripts": {
+		"prepublishOnly": "pnpm build",
+		"dev": "esbuild src/index.ts src/parse-body.ts --bundle --platform=node --outdir=dist --watch",
+		"build": "esbuild src/index.ts src/parse-body.ts --bundle --platform=node --outdir=dist"
+	},
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
@@ -39,10 +44,5 @@
 	"dependencies": {
 		"node-fetch": "^2.6.1",
 		"sirv": "^1.0.14"
-	},
-	"scripts": {
-		"prepublishOnly": "pnpm build",
-		"dev": "esbuild src/index.ts src/parse-body.ts --bundle --platform=node --outdir=dist --watch",
-		"build": "esbuild src/index.ts src/parse-body.ts --bundle --platform=node --outdir=dist"
 	}
 }

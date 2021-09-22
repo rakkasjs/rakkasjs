@@ -13,6 +13,7 @@
 		"ssr"
 	],
 	"scripts": {
+		"check": "pnpm run -r --parallel check",
 		"dev": "pnpm run -r --filter=./packages '--filter=!create-rakkas-app' --parallel dev",
 		"precommit": "lint-staged",
 		"prepare": "husky install",
