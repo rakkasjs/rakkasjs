@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import getPort from "get-port";
-import { JSDOM } from "jsdom";
+import cheerio from "cheerio";
 import fs from "fs";
 import path from "path";
 import mkdirp from "mkdirp";
@@ -80,15 +80,13 @@ export default function exportCommand() {
 
 				const fetched = await response.text();
 
-				const dom = new JSDOM(fetched, {
-					url: `http://${host}:${port}${root}`,
-				});
+				const dom = cheerio.load(fetched);
 
-				dom.window.document.querySelectorAll("a[href]").forEach((el) => {
-					const a = el as HTMLAnchorElement;
-					if (a.origin === `http://${host}:${port}`) {
-						if (!roots.has(a.pathname)) {
-							roots.add(a.pathname);
+				dom("a[href]").each((i, el) => {
+					const url = new URL(el.attribs.href, `http://${host}:${port}`);
+					if (url.origin === `http://${host}:${port}`) {
+						if (!roots.has(url.pathname)) {
+							roots.add(url.pathname);
 						}
 					}
 				});
