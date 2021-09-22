@@ -1,9 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-// This is component props type definition
-import { Page } from "rakkasjs";
-
 const UserProfilePage = ({ params }) => (
 	<div>
 		<Helmet title={`Params Example - Rakkas`} />
