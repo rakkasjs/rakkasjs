@@ -4,12 +4,12 @@
 
 Lightning fast [Next.js](https://nextjs.org) alternative powered by [Vite](https://vitejs.dev)
 
-![travis build](https://app.travis-ci.com/rakkasjs/rakkasjs.svg?branch=main)
+[![Build Status](https://app.travis-ci.com/rakkasjs/rakkasjs.svg?branch=main)](https://app.travis-ci.com/rakkasjs/rakkasjs)
 ![npm type definitions](https://img.shields.io/npm/types/rakkasjs)
-![MIT license](https://img.shields.io/npm/l/rakkasjs)
-![React](https://badges.aleen42.com/src/react.svg)
-![Vite](https://badges.aleen42.com/src/vitejs.svg)
-![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs)
+[![MIT license](https://img.shields.io/npm/l/rakkasjs)](https://github.com/rakkasjs/rakkasjs/blob/main/LICENSE)
+[![React](https://badges.aleen42.com/src/react.svg)](https://reactjs.org)
+[![Vite](https://badges.aleen42.com/src/vitejs.svg)](https://vitejs.dev)
+[![Tweet about Rakkas](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs)](https://twitter.com/intent/tweet?text=I%20gave%20%23RakkasJS%20a%20try!&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs)
 
 [Read the guide](https://rakkasjs.org/guide) | [Try it in the browser](https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx)
 
