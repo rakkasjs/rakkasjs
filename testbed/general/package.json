@@ -52,7 +52,6 @@
 		"stylelint-config-css-modules": "^2.2.0",
 		"stylelint-config-prettier": "^8.0.2",
 		"stylelint-config-standard": "^22.0.0",
-		"stylelint-prettier": "^1.2.0",
 		"typescript": "^4.3.5"
 	}
 }

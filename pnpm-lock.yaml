@@ -277,7 +277,6 @@ importers:
       stylelint-config-css-modules: ^2.2.0
       stylelint-config-prettier: ^8.0.2
       stylelint-config-standard: ^22.0.0
-      stylelint-prettier: ^1.2.0
     dependencies:
       '@rakkasjs/runner-node': link:../../packages/runner-node
       rakkasjs: link:../../packages/rakkasjs
@@ -303,7 +302,6 @@ importers:
       stylelint-config-css-modules: 2.2.0_stylelint@13.13.1
       stylelint-config-prettier: 8.0.2_stylelint@13.13.1
       stylelint-config-standard: 22.0.0_stylelint@13.13.1
-      stylelint-prettier: 1.2.0_prettier@2.3.2+stylelint@13.13.1
 
   templates/ts:
     specifiers:
@@ -336,7 +334,6 @@ importers:
       stylelint-config-css-modules: ^2.2.0
       stylelint-config-prettier: ^8.0.2
       stylelint-config-standard: ^22.0.0
-      stylelint-prettier: ^1.2.0
       typescript: ^4.3.5
     dependencies:
       '@rakkasjs/runner-node': link:../../packages/runner-node
@@ -369,7 +366,6 @@ importers:
       stylelint-config-css-modules: 2.2.0_stylelint@13.13.1
       stylelint-config-prettier: 8.0.2_stylelint@13.13.1
       stylelint-config-standard: 22.0.0_stylelint@13.13.1
-      stylelint-prettier: 1.2.0_prettier@2.3.2+stylelint@13.13.1
       typescript: 4.3.5
 
   testbed/general:
@@ -406,7 +402,6 @@ importers:
       stylelint-config-css-modules: ^2.2.0
       stylelint-config-prettier: ^8.0.2
       stylelint-config-standard: ^22.0.0
-      stylelint-prettier: ^1.2.0
       typescript: ^4.3.5
     dependencies:
       '@rakkasjs/runner-node': link:../../packages/runner-node
@@ -442,7 +437,6 @@ importers:
       stylelint-config-css-modules: 2.2.0_stylelint@13.13.1
       stylelint-config-prettier: 8.0.2_stylelint@13.13.1
       stylelint-config-standard: 22.0.0_stylelint@13.13.1
-      stylelint-prettier: 1.2.0_prettier@2.3.2+stylelint@13.13.1
       typescript: 4.3.5
 
   testbed/static:
@@ -480,7 +474,6 @@ importers:
       stylelint-config-css-modules: ^2.2.0
       stylelint-config-prettier: ^8.0.2
       stylelint-config-standard: ^22.0.0
-      stylelint-prettier: ^1.2.0
       typescript: ^4.3.5
     dependencies:
       '@rakkasjs/runner-node': link:../../packages/runner-node
@@ -517,7 +510,6 @@ importers:
       stylelint-config-css-modules: 2.2.0_stylelint@13.13.1
       stylelint-config-prettier: 8.0.2_stylelint@13.13.1
       stylelint-config-standard: 22.0.0_stylelint@13.13.1
-      stylelint-prettier: 1.2.0_prettier@2.3.2+stylelint@13.13.1
       typescript: 4.3.5
 
   website:
@@ -6170,10 +6162,6 @@ packages:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
     dev: true
 
-  /fast-diff/1.2.0:
-    resolution: {integrity: sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==}
-    dev: true
-
   /fast-glob/3.2.7:
     resolution: {integrity: sha512-rYGMRwip6lUMvYD3BTScMwT1HtAs2d71SMv66Vrxs0IekGZEjhM0pcMfjQPnknBt2zeCwQMEupiN02ZP4DiT1Q==}
     engines: {node: '>=8'}
@@ -9144,13 +9132,6 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier-linter-helpers/1.0.0:
-    resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
-    engines: {node: '>=6.0.0'}
-    dependencies:
-      fast-diff: 1.2.0
-    dev: true
-
   /prettier/2.3.2:
     resolution: {integrity: sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==}
     engines: {node: '>=10.13.0'}
@@ -10282,18 +10263,6 @@ packages:
     dependencies:
       stylelint: 13.13.1
       stylelint-config-recommended: 5.0.0_stylelint@13.13.1
-    dev: true
-
-  /stylelint-prettier/1.2.0_prettier@2.3.2+stylelint@13.13.1:
-    resolution: {integrity: sha512-/MYz6W2CNgKHblPzPtk7cybu8H5dGG3c2GevL64RButERj1uJg4SdBIIat1hMfDOmN6QQpldc6tCc//ZAWh9WQ==}
-    engines: {node: '>=6'}
-    peerDependencies:
-      prettier: '>= 0.11.0'
-      stylelint: '>= 9.2.1'
-    dependencies:
-      prettier: 2.3.2
-      prettier-linter-helpers: 1.0.0
-      stylelint: 13.13.1
     dev: true
 
   /stylelint/13.13.1:
