@@ -1,14 +1,21 @@
 # ![Rakkas](shared-assets/logo.png)
 
-![](https://app.travis-ci.com/rakkasjs/rakkasjs.svg?branch=main)
+<div align="center">
+
+Lightning fast [Next.js](https://nextjs.org) alternative powered by [Vite](https://vitejs.dev)
+
+![travis build](https://app.travis-ci.com/rakkasjs/rakkasjs.svg?branch=main)
 ![npm type definitions](https://img.shields.io/npm/types/rakkasjs)
-![NPM](https://img.shields.io/npm/l/rakkasjs)
+![MIT license](https://img.shields.io/npm/l/rakkasjs)
 ![React](https://badges.aleen42.com/src/react.svg)
 ![Vite](https://badges.aleen42.com/src/vitejs.svg)
 ![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs)
 
+[Read the guide](https://rakkasjs.org/guide) | [Try it in the browser](https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx)
 
-[Read the guide to learn more!](https://rakkasjs.org/guide)
+</div>
+
+---
 
 ## What is Rakkas?
 
@@ -22,7 +29,7 @@
 - ⚙️&nbsp; API routes to build and organize your backend
 - 📄&nbsp; Static site generation
 
-We're also aiming to support **deploying to serverless environments** before we hit 1.0.
+We're also aiming to support **deploying to serverless environments** and **localizable routes** before we hit 1.0.
 
 > ### Is Rakkas right for you?
 >

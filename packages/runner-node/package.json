@@ -1,7 +1,7 @@
 {
 	"name": "@rakkasjs/runner-node",
 	"version": "0.3.0",
-	"description": "Rakkas.js core runtime",
+	"description": "Rakkas.js Node runner",
 	"scripts": {
 		"prepublishOnly": "pnpm build",
 		"dev": "esbuild src/index.ts src/parse-body.ts --bundle --platform=node --outdir=dist --watch",
@@ -14,6 +14,7 @@
 	"keywords": [
 		"react",
 		"vite",
+		"nextjs",
 		"ssr"
 	],
 	"types": "index.d.ts",

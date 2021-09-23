@@ -2,7 +2,7 @@
 	"private": true,
 	"name": "rakkas-demo-ts",
 	"version": "0.3.0",
-	"description": "Rakkas TypeScript demo project",
+	"description": "Rakkas.js TypeScript demo project",
 	"scripts": {
 		"dev": "rakkas dev --open",
 		"build": "rakkas build",

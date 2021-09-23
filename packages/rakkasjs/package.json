@@ -1,7 +1,7 @@
 {
 	"name": "rakkasjs",
 	"version": "0.3.0",
-	"description": "Rakkas.js core runtime",
+	"description": "Lightning fast Next.js alternative powered by Vite",
 	"scripts": {
 		"prepublishOnly": "pnpm build",
 		"build": "rimraf dist && cross-env NODE_ENV=production rollup --config rollup.config.js",
@@ -19,6 +19,7 @@
 	"keywords": [
 		"react",
 		"vite",
+		"nextjs",
 		"ssr"
 	],
 	"files": [

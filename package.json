@@ -1,17 +1,8 @@
 {
-	"name": "rakkasjs-root-workspace",
 	"private": true,
+	"name": "rakkasjs-root-workspace",
 	"version": "0.3.0",
-	"author": "Fatih Aygün <cyco130@gmail.com>",
-	"license": "MIT",
-	"type": "module",
-	"repository": "https://github.com/rakkasjs/rakkasjs",
-	"homepage": "https://rakkasjs.org",
-	"keywords": [
-		"react",
-		"vite",
-		"ssr"
-	],
+	"description": "Rakkas.js workspace root",
 	"scripts": {
 		"check": "pnpm run -r --parallel check",
 		"dev": "pnpm run -r --filter=./packages '--filter=!create-rakkas-app' --parallel dev",
@@ -23,6 +14,11 @@
 		"publish-all": "pnpm -r --filter=./packages exec -- pnpm publish",
 		"unpublish-canary-releases": "node unpublish-canary-releases.cjs"
 	},
+	"author": "Fatih Aygün <cyco130@gmail.com>",
+	"license": "MIT",
+	"type": "module",
+	"repository": "https://github.com/rakkasjs/rakkasjs",
+	"homepage": "https://rakkasjs.org",
 	"devDependencies": {
 		"husky": "^7.0.1",
 		"lint-staged": "^11.1.2"
