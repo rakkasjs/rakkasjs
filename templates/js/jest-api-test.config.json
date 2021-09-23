@@ -1,0 +1,6 @@
+{
+	"rootDir": "api-test",
+	"transform": {
+		"^.+\\.(js|jsx|ts|tsx)$": ["esbuild-jest", { "sourceMap": true }]
+	}
+}

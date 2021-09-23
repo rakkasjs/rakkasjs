@@ -20,17 +20,23 @@ export async function getOptions({
 		},
 		{
 			name: "features",
-			message: "Optional features",
+			message: "Optional features (toggle with SPACE, accept with ENTER)",
 			type: "multiselect",
 			choices: [
+				{ message: "Demo app", name: "demo" },
 				{ message: "TypeScript", name: "typescript" },
-				{ message: "Jest for testing", name: "jest" },
+				{ message: "Unit testing with Jest", name: "jest" },
+				{ message: "End-to-end API testing with Jest", name: "api" },
 				{
-					message: "ESLint for linting JavaScript/TypeScript",
+					message: "End-to-end browser testing with Cypress",
+					name: "cypress",
+				},
+				{
+					message: "JavaScript/TypeScript linting with ESLint",
 					name: "eslint",
 				},
-				{ message: "Stylelint for linting CSS", name: "stylelint" },
-				{ message: "Prettier for code formatting", name: "prettier" },
+				{ message: "CSS linting with Stylelint ", name: "stylelint" },
+				{ message: "Code formatting with Prettier", name: "prettier" },
 			],
 			initial: Object.keys(features).filter(
 				(k) => features[k as keyof typeof features],
@@ -51,8 +57,11 @@ export async function getOptions({
 		packageManager: availablePackageManagers[0],
 		...answers,
 		features: {
+			demo: false,
 			typescript: false,
 			jest: false,
+			api: false,
+			cypress: false,
 			eslint: false,
 			stylelint: false,
 			prettier: false,

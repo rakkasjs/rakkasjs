@@ -8,14 +8,6 @@ import * as simple from "./simple-interface";
 export let version = "";
 
 async function main() {
-	const files = await fs.promises.readdir(".");
-	if (files.length) {
-		process.stderr.write(
-			"Refusing to generate project: Directory not empty.\n",
-		);
-		process.exit(1);
-	}
-
 	const packageJson = await import("../package.json");
 	version = packageJson.version;
 	parseCommandLineArguments();
@@ -34,7 +26,7 @@ function parseCommandLineArguments() {
 	].filter(Boolean) as Array<"npm" | "yarn" | "pnpm">;
 
 	program
-		.name("npm init @rakkasjs")
+		.name("create-rakkas-app")
 		.version(version)
 		.description("Generate a Rakkas project")
 		.addOption(
@@ -45,20 +37,24 @@ function parseCommandLineArguments() {
 		)
 		.option("-t, --typescript", "enable TypeScript support")
 		.option("--no-typescript", "disable TypeScript support")
-		.option("-j, --jest", "enable Jest support")
-		.option("--no-jest", "disable Jest support")
-		.option("-e, --eslint", "enable ESLint support")
-		.option("--no-eslint", "disable ESLint support")
-		.option("-s, --stylelint", "enable Stylelint support")
-		.option("--no-stylelint", "disable Stylelint support")
-		.option("-p, --prettier", "enable Prettier support")
-		.option("--no-prettier", "disable Prettier support")
+		.option("-j, --jest", "enable unit testing with Jest")
+		.option("--no-jest", "disable unit testing with Jest")
+		.option("-a, --api", "enable end-to-end API testing with Jest")
+		.option("--no-api", "disable end-to-end API testing with Jest")
+		.option("-c, --cypress", "enable end-to-end browser testing with Cypress")
+		.option("--no-cypress", "disable end-to-end browser testing with Cypress")
+		.option("-e, --eslint", "enable JavaScript/TypeScript linting with ESLint")
+		.option("--no-eslint", "disable JavaScript/TypeScript linting with ESLint")
+		.option("-s, --stylelint", "enable CSS linting with Stylelint")
+		.option("--no-stylelint", "disable CSS linting with Stylelint")
+		.option("-p, --prettier", "enable code formatting with Prettier")
+		.option("--no-prettier", "disable code formatting with Prettier")
 		.option(
 			"-i, --interactive-input",
 			"enable interactive input even when stdin is redirected",
 		)
 		.option(
-			"-c, --color-output",
+			"--color-output",
 			"enable color output even when stdout is redirected",
 		)
 		.option(
@@ -89,19 +85,31 @@ function parseCommandLineArguments() {
 				yes?: boolean;
 				no?: boolean;
 			}) => {
-				packageManager =
-					packageManager || pnpmAvailable
-						? "pnpm"
-						: yarnAvailable
-						? "yarn"
-						: "npm";
+				const files = await fs.promises.readdir(".");
+				if (files.length) {
+					process.stderr.write(
+						"Refusing to generate project: Directory not empty.\n",
+					);
+					process.exit(1);
+				}
+
+				packageManager = getPackageManager();
+
+				if (
+					(packageManager === "pnpm" && !pnpmAvailable) ||
+					(packageManager === "yarn" && !yarnAvailable)
+				)
+					packageManager = "npm";
 
 				interactiveInput = !!(interactiveInput || ttyin);
 				colorOutput = !!(colorOutput || ttyout);
 
 				const completeFeatures = {
+					demo: !no,
 					typescript: !no,
 					jest: !no,
+					api: !no,
+					cypress: !no,
 					eslint: !no,
 					stylelint: !no,
 					prettier: !no,
@@ -136,6 +144,35 @@ function parseCommandLineArguments() {
 		);
 
 	return program.parse();
+}
+
+function getPackageManager() {
+	// This environment variable is set by npm and yarn but pnpm seems less consistent
+	const agent = process.env.npm_config_user_agent;
+
+	if (!agent) {
+		// This environment variable is set on Linux but I'm not sure about other OSes.
+		const parent = process.env._;
+
+		if (!parent) {
+			// No luck, assume npm
+			return "npm";
+		}
+
+		if (parent.endsWith("pnpx") || parent.endsWith("pnpm")) return "pnpm";
+		if (parent.endsWith("yarn")) return "yarn";
+
+		// Assume npm for anything else
+		return "npm";
+	}
+
+	const [program] = agent.split("/");
+
+	if (program === "yarn") return "yarn";
+	if (program === "pnpm") return "pnpm";
+
+	// Assume npm
+	return "npm";
 }
 
 main().catch((error) => {

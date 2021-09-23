@@ -11,10 +11,13 @@ export interface GenerationInfo {
 }
 
 export async function generate(opts: Options, info: GenerationInfo) {
-	const template = opts.features.typescript ? "ts" : "js";
+	const ft = opts.features;
+
+	const template = ft.typescript ? "ts" : "js";
 	const templateDir = path.resolve(__dirname, "templates", template);
 
 	info.startStep("Copying files");
+
 	await new Promise<void>((resolve, reject) => {
 		cpr(
 			templateDir,
@@ -24,32 +27,75 @@ export async function generate(opts: Options, info: GenerationInfo) {
 					const name = fullname.slice(templateDir.length + 1);
 
 					switch (name) {
+						case "src/server.js":
+						case "src/server.ts":
+						case "src/client.js":
+						case "src/client.ts":
+							return ft.demo;
+
 						case "jest.config.json":
 						case "src/jest-setup.js":
 						case "src/jest-setup.ts":
-							return opts.features.jest;
+							return ft.jest;
+
+						case "jest-api-test.config.json":
+							return ft.api;
 
 						case ".eslintrc.json":
-							return opts.features.eslint;
+							return ft.eslint;
 
 						case ".stylelintrc.json":
-							return opts.features.stylelint;
+							return ft.stylelint;
 
 						case ".prettierignore":
-							return opts.features.prettier;
+							return ft.prettier;
 					}
 
-					if (!opts.features.jest && name.includes(".test.")) return false;
+					if (!ft.demo) {
+						if (
+							name.startsWith("src/pages/") ||
+							name.startsWith("src/api/") ||
+							name === "src/api"
+						) {
+							return (
+								name === "src/pages/no-demo-page.tsx" ||
+								name === "src/pages/no-demo-page.jsx"
+							);
+						}
+					}
+
+					if (
+						ft.demo &&
+						(name === "src/pages/no-demo-page.tsx" ||
+							name === "src/pages/no-demo-page.jsx")
+					)
+						return false;
+
+					if (!ft.jest && name.startsWith("src/") && name.includes(".test."))
+						return false;
+
+					if (!ft.api && name.startsWith("api-test/")) return false;
+
+					if (!ft.cypress && name.includes("cypress")) return false;
 
 					return true;
 				},
 			},
+
 			(error) => {
 				if (error) reject(error);
 				resolve();
 			},
 		);
 	});
+
+	if (!ft.demo) {
+		const ext = ft.typescript ? ".tsx" : ".jsx";
+
+		const demoPage = "src/pages/no-demo-page" + ext;
+
+		await fs.promises.rename(demoPage, "src/pages/page" + ext);
+	}
 
 	info.startStep("Updating files");
 	// Update package.json
@@ -71,10 +117,24 @@ export async function generate(opts: Options, info: GenerationInfo) {
 		if (v.startsWith("workspace:")) pkg.dependencies![k] = info.version;
 	}
 
+	if (!ft.jest) {
+		delete pkg.devDependencies["@testing-library/jest-dom"];
+		delete pkg.devDependencies["@types/testing-library__jest-dom"];
+		delete pkg.devDependencies["jest-css-modules-transform"];
+	}
+
+	if (!ft.cypress) {
+		delete pkg.devDependencies["cypress"];
+	}
+
+	if (!ft.api && !ft.cypress) {
+		delete pkg.devDependencies["start-server-and-test"];
+	}
+
 	for (const [k, v] of Object.entries(pkg.devDependencies || {})) {
 		if (v.startsWith("workspace:")) pkg.devDependencies![k] = info.version;
 
-		if (!opts.features.jest) {
+		if (!ft.jest && !ft.api) {
 			if (
 				k.includes("jest") ||
 				k.includes("esbuild") ||
@@ -84,33 +144,70 @@ export async function generate(opts: Options, info: GenerationInfo) {
 			}
 		}
 
-		if (k.includes("eslint") && !opts.features.eslint) {
+		if (!ft.api && k.includes("node-fetch")) {
 			delete pkg.devDependencies![k];
 		}
 
-		if (k.includes("stylelint") && !opts.features.stylelint) {
+		if (k.includes("eslint") && !ft.eslint) {
 			delete pkg.devDependencies![k];
 		}
 
-		if (k.includes("eslint") && !opts.features.prettier) {
+		if (k.includes("stylelint") && !ft.stylelint) {
+			delete pkg.devDependencies![k];
+		}
+
+		if (k.includes("eslint") && !ft.prettier) {
 			delete pkg.devDependencies![k];
 		}
 	}
 
-	if (!opts.features.jest) {
+	const checks = [
+		(ft.eslint || ft.stylelint) && "'lint:*'",
+		ft.typescript && "typecheck",
+		(ft.jest || ft.api || ft.cypress) && "'test:*'",
+	].filter(Boolean) as string[];
+
+	if (!checks.length) {
+		delete pkg.scripts.check;
+		delete pkg.devDependencies["npm-run-all"];
+	} else {
+		pkg.scripts.check = "run-p " + checks.join(" ");
+	}
+
+	if (!ft.jest && !ft.api && !ft.api) {
 		delete pkg.scripts.test;
 	}
 
-	if (!opts.features.eslint) {
+	if (!ft.jest) {
+		delete pkg.scripts["test:unit"];
+	}
+
+	if (!ft.api && !ft.cypress) {
+		delete pkg.scripts["test:e2e"];
+	}
+
+	if (!ft.api) {
+		delete pkg.scripts["test:e2e:api"];
+	}
+
+	if (!ft.cypress) {
+		delete pkg.scripts["test:e2e:browser"];
+	}
+
+	if (!ft.eslint && !ft.stylelint) {
+		delete pkg.scripts["lint"];
+	}
+
+	if (!ft.eslint) {
 		delete pkg.scripts["lint:ts"];
 		delete pkg.scripts["lint:js"];
 	}
 
-	if (!opts.features.stylelint) {
+	if (!ft.stylelint) {
 		delete pkg.scripts["lint:css"];
 	}
 
-	if (!opts.features.prettier) {
+	if (!ft.prettier) {
 		delete pkg.scripts.format;
 	}
 
@@ -119,10 +216,10 @@ export async function generate(opts: Options, info: GenerationInfo) {
 		JSON.stringify(pkg, undefined, 2),
 	);
 
-	if (!opts.features.prettier) {
+	if (!ft.prettier) {
 		// Remove prettier from lint config related files
 
-		if (opts.features.eslint) {
+		if (ft.eslint) {
 			const cfg: {
 				extends: string[];
 			} = JSON.parse(
@@ -139,7 +236,7 @@ export async function generate(opts: Options, info: GenerationInfo) {
 			);
 		}
 
-		if (opts.features.eslint) {
+		if (ft.eslint) {
 			const cfg: {
 				extends: string[];
 			} = JSON.parse(
@@ -157,21 +254,26 @@ export async function generate(opts: Options, info: GenerationInfo) {
 		}
 	}
 
-	if (opts.features.typescript && !opts.features.jest) {
+	if (ft.typescript && (!ft.jest || !ft.api)) {
 		// Remove jest typings
 		const cfg: {
 			compilerOptions: {
 				types: string[];
 			};
+			include?: string[];
 		} = JSON.parse(
 			await fs.promises.readFile("tsconfig.json", {
 				encoding: "utf8",
 			}),
 		);
 
-		cfg.compilerOptions.types = cfg.compilerOptions.types.filter(
-			(x) => x !== "jest" && x !== "@testing-library/jest-dom",
-		);
+		if (!ft.jest) {
+			const filter = ft.api
+				? (x: string) => x !== "@testing-library/jest-dom"
+				: (x: string) => x !== "jest" && x !== "@testing-library/jest-dom";
+
+			cfg.compilerOptions.types = cfg.compilerOptions.types.filter(filter);
+		}
 
 		await fs.promises.writeFile(
 			"tsconfig.json",
@@ -189,7 +291,7 @@ export async function generate(opts: Options, info: GenerationInfo) {
 		);
 	}
 
-	if (opts.features.prettier) {
+	if (ft.prettier) {
 		// Create a prettier config file
 		const { exitCode, stdout } = await runCommandAndCollectOutput(
 			path.join("node_modules", ".bin", "/prettier") + " --find-config-path .",

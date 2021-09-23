@@ -3,7 +3,7 @@
 	"version": "0.3.0",
 	"description": "Project initializer for Rakkas.js",
 	"scripts": {
-		"prepublishOnly": "pnpm build && bash copy-templates.sh",
+		"prepublishOnly": "pnpm build && sh copy-templates.sh",
 		"dev": "esbuild --bundle src/index.ts --outfile=bin.js --platform=node --watch",
 		"build": "esbuild --bundle src/index.ts --outfile=bin.js --platform=node",
 		"precommit": "lint-staged --no-stash",

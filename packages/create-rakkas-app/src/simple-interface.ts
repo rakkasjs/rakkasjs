@@ -68,8 +68,14 @@ export async function getOptions({
 	}
 
 	const featurePrompts = [
+		{ message: "Demo app", name: "demo" },
 		{ message: "TypeScript", name: "typescript" },
-		{ message: "Jest for testing", name: "jest" },
+		{ message: "Unit testing with jest", name: "jest" },
+		{ message: "End-to-end API testing with jest", name: "api" },
+		{
+			message: "End-to-end browser testing with cypress",
+			name: "cypress",
+		},
 		{
 			message: "ESLint for linting JavaScript/TypeScript",
 			name: "eslint",
