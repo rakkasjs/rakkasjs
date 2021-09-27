@@ -4,7 +4,7 @@
 	"version": "0.3.0",
 	"description": "Rakkas.js workspace root",
 	"scripts": {
-		"check": "pnpm run -r --parallel check",
+		"check": "pnpm run -r --parallel --filter=!rakkas-demo-js --filter=!rakkas-demo-ts check",
 		"dev": "pnpm run -r --filter=./packages '--filter=!create-rakkas-app' --parallel dev",
 		"precommit": "lint-staged",
 		"prepare": "husky install",
