@@ -4,8 +4,9 @@
 	"version": "0.3.0",
 	"description": "Rakkas.js workspace root",
 	"scripts": {
-		"check": "pnpm run -r --parallel --filter=!rakkas-demo-js --filter=!rakkas-demo-ts check",
+		"check": "pnpm run -r --parallel --filter=!rakkas-demo-js --filter=!rakkas-demo-ts check && pnpm run check --filter=rakkas-demo-ts && pnpm run check --filter=rakkas-demo-js",
 		"dev": "pnpm run -r --filter=./packages '--filter=!create-rakkas-app' --parallel dev",
+		"build": "pnpm run -r build",
 		"precommit": "lint-staged",
 		"prepare": "husky install",
 		"set-version": "pnpm -r exec -- npm version --no-git-tag-version",
@@ -20,7 +21,7 @@
 	"repository": "https://github.com/rakkasjs/rakkasjs",
 	"homepage": "https://rakkasjs.org",
 	"devDependencies": {
-		"husky": "^7.0.1",
+		"husky": "^7.0.2",
 		"lint-staged": "^11.1.2"
 	}
 }

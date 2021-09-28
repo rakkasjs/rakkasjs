@@ -118,7 +118,7 @@ export async function createServers({
 				} else {
 					res.end(JSON.stringify(response.body));
 				}
-			} catch (error) {
+			} catch (error: any) {
 				vite.ssrFixStacktrace(error);
 				// eslint-disable-next-line no-console
 				console.error(error.stack ?? "Unknown error");
