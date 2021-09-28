@@ -8,6 +8,7 @@
 - [x] Tidy up static site output
 - [x] Add command to unpublish canary releases
 - [x] Improve logging
+- [x] ⚠️ BUG: Vite plugin ordering when using mdx
 - [ ] Design a way to wrap the rendered application in custom providers
 - [ ] Define page/layout types depending on the parent layout type
 - [ ] Design an API to inject helpers to load functions
@@ -20,7 +21,6 @@
   - [ ] Add Cypress integration
   - [ ] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
 - [ ] ⚠️ BUG: Reload loses focus
-- [ ] ⚠️ BUG: Vite plugin ordering when using mdx
 - [ ] Design a setData API
 - [ ] Handle HEAD requests
 - [ ] Serialize the routes into a smaller string in an external file

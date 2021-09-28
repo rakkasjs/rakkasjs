@@ -15,7 +15,7 @@ export default defineConfig({
 	pageExtensions: ["jsx", "tsx", "mdx"],
 	vite: {
 		plugins: [
-			mdx(),
+			...mdx().map((x) => ({ ...x, enforce: "pre" } as const)),
 			{
 				name: "code-sample-loader",
 
