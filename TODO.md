@@ -9,17 +9,22 @@
 - [x] Add command to unpublish canary releases
 - [x] Improve logging
 - [x] ⚠️ BUG: Vite plugin ordering when using mdx
-- [ ] Design a way to wrap the rendered application in custom providers
+- [x] Design a way to wrap the rendered application in custom providers
+- [x] Project initializer enhancements:
+  - [x] Add option to skip generating the sample application
+  - [x] Add Cypress integration
+  - [ ] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
+- [ ] Create integration tests with popular tools
+  - [x] Styled components
+  - [ ] Redux
+  - [ ] Apollo
+  - [ ] Tailwind CSS
 - [ ] Define page/layout types depending on the parent layout type
 - [ ] Design an API to inject helpers to load functions
 - [ ] Allow custom error serializers
 - [ ] Investigate Vite warnings:
   - [ ] fs.allow warning: https://vitejs.dev/config/#server-fs-allow
   - [ ] Circular dependency warning
-- [ ] Project initializer enhancements:
-  - [ ] Add option to skip generating the sample application
-  - [ ] Add Cypress integration
-  - [ ] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
 - [ ] ⚠️ BUG: Reload loses focus
 - [ ] Design a setData API
 - [ ] Handle HEAD requests
@@ -27,6 +32,7 @@
 - [ ] Expose `request.ip`
 - [ ] chore: Add `engines` to `package.json` files
 - [ ] Split documentation into multiple pages
+- [ ] Document integrations with popular tools
 
 ## For 1.0.0
 - [ ] Investigate debugging and sourcemaps
@@ -52,8 +58,3 @@
 	- [ ] RPC plugin
 - Chores
   - [ ] Contribution guidelines
-  - [ ] Create integration examples with popular tools
-    - [ ] Redux
-    - [ ] Apollo
-    - [ ] Styled components
-    - [ ] Tailwind CSS

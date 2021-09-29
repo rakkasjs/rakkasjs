@@ -13,7 +13,7 @@ import { makeComponentStack } from "./lib/makeComponentStack";
 import { findRoute, Route } from "./lib/find-route";
 
 import importers from "@rakkasjs/api-imports";
-import { RawRequest } from "./lib/types";
+import { RawRequest, PageRenderOptions } from "./lib/types";
 import { RouterProvider } from "./lib/useRouter";
 
 import fs from "fs";
@@ -171,11 +171,12 @@ export async function handleRequest(
 	};
 
 	const serverHooks = await import("@rakkasjs/server-hooks");
-	const { servePage = (req, render) => render(req, {}) } = serverHooks;
+	const { servePage = (req, render) => render(req) } = serverHooks;
 
 	async function render(
 		request: RawRequest,
-		context: Record<string, unknown>,
+		context: Record<string, unknown> = {},
+		options: PageRenderOptions = {},
 	): Promise<RakkasResponse> {
 		const stack = await makeComponentStack({
 			found: foundPage,
@@ -201,7 +202,7 @@ export async function handleRequest(
 
 		const helmetContext = {};
 
-		const app = renderToString(
+		let rendered = (
 			<RouterProvider
 				value={{
 					current: request.url,
@@ -209,8 +210,12 @@ export async function handleRequest(
 				}}
 			>
 				<HelmetProvider context={helmetContext}>{stack.content}</HelmetProvider>
-			</RouterProvider>,
+			</RouterProvider>
 		);
+
+		if (options.wrap) rendered = options.wrap(rendered);
+
+		const app = renderToString(rendered);
 
 		const { helmet } = helmetContext as FilledContext;
 
@@ -277,6 +282,8 @@ export async function handleRequest(
 					(head += `\n<link rel="stylesheet" href=${JSON.stringify(asset)}>`),
 			);
 		}
+
+		if (options.getHeadHtml) head += options.getHeadHtml();
 
 		let body = template.replace("<!-- rakkas-head-placeholder -->", head);
 

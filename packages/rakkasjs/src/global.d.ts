@@ -19,15 +19,20 @@ declare module "@rakkasjs/api-imports" {
 }
 
 declare module "@rakkasjs/server-hooks" {
-	// eslint-disable-next-line import/no-unresolved
-	import type { RawRequest, RakkasResponse } from "$lib/types";
+	import type {
+		RawRequest,
+		RakkasResponse,
+		PageRenderOptions,
+		// eslint-disable-next-line import/no-unresolved
+	} from "$lib/types";
 
 	const servePage:
 		| ((
 				request: RawRequest,
 				renderPage: (
 					request: RawRequest,
-					context: Record<string, unknown>,
+					context?: Record<string, unknown>,
+					options?: PageRenderOptions,
 				) => Promise<RakkasResponse>,
 		  ) => Promise<RakkasResponse>)
 		| undefined;

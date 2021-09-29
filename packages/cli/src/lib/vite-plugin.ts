@@ -7,6 +7,7 @@ import path from "path";
 import { htmlTemplate } from "./html-template";
 import { babelPluginStripLoadFunction } from "./babelPluginStripLoadFunction";
 import chalk from "chalk";
+import { TransformOptions } from "@babel/core";
 
 export interface RakkasVitePluginConfig {
 	srcDir: string;
@@ -17,6 +18,7 @@ export interface RakkasVitePluginConfig {
 	apiRoot: string;
 	configDeps?: string[];
 	stripLoadFunctions?: boolean;
+	babel?: TransformOptions;
 	onConfigChange?: () => void;
 }
 
@@ -32,6 +34,7 @@ export async function rakkasVitePlugin(
 		apiRoot,
 		configDeps,
 		stripLoadFunctions = false,
+		babel = {},
 		onConfigChange,
 	} = config;
 
@@ -285,9 +288,10 @@ export async function rakkasVitePlugin(
 			exclude: [PAGES.slice(1), LAYOUTS.slice(1)],
 			babel: stripLoadFunctions
 				? {
-						plugins: [babelPluginStripLoadFunction()],
+						...babel,
+						plugins: [...(babel.plugins || []), babelPluginStripLoadFunction()],
 				  }
-				: undefined,
+				: babel,
 		}),
 	];
 }

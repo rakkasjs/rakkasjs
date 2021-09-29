@@ -118,6 +118,7 @@ function withDefaults(config: Config): FullConfig {
 		apiRoot: "/api",
 		endpointExtensions: ["js", "ts"],
 		trustForwardedOrigin: false,
+		babel: {},
 		...config,
 	};
 

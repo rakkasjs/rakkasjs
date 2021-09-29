@@ -22,12 +22,13 @@ export default function exportCommand() {
 				await fs.promises.mkdtemp(
 					path.join(os.tmpdir(), "rakkas-export-static-"),
 				),
-				"dist",
 			);
+
+			const distDir = path.join(buildDir, "dist");
 
 			await build({
 				buildMode: "static",
-				outDir: buildDir,
+				outDir: distDir,
 			});
 
 			const host = "localhost";
@@ -40,7 +41,7 @@ export default function exportCommand() {
 				shell: true,
 				env: { ...process.env, HOST: host, PORT: String(port) },
 				stdio: "ignore",
-				cwd: path.resolve(buildDir, ".."),
+				cwd: path.resolve(distDir, ".."),
 			});
 
 			let firstResponse: Response | undefined;
@@ -112,7 +113,12 @@ export default function exportCommand() {
 				}),
 			);
 
-			await fs.promises.rename(path.join(buildDir, "client"), "dist/static");
+			await fs.promises.rename(path.join(distDir, "client"), "dist/static");
+
+			await new Promise((resolve) => {
+				server.on("exit", resolve);
+				server.kill();
+			});
 
 			await new Promise<void>((resolve, reject) =>
 				rimraf(buildDir, (error) => {
@@ -123,8 +129,6 @@ export default function exportCommand() {
 					}
 				}),
 			);
-
-			server.kill();
 
 			// eslint-disable-next-line no-console
 			console.log(

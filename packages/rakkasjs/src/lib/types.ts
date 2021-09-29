@@ -144,8 +144,7 @@ type Merge<A, B> = Flatten<
 		? A
 		: {
 				[key in keyof A]: key extends keyof B ? any : A[key];
-		  } &
-				B
+		  } & B
 >;
 
 type Flatten<T> = { [key in keyof T]: T[key] };
@@ -348,6 +347,14 @@ export type ServePageHook = (
 	request: RawRequest,
 	renderPage: (
 		request: RawRequest,
-		context: RootContext,
+		context?: RootContext,
+		options?: PageRenderOptions,
 	) => Promise<RakkasResponse>,
 ) => RakkasResponse | Promise<RakkasResponse>;
+
+export interface PageRenderOptions {
+	/** Wrap the rendered page in server-side providers */
+	wrap?(page: JSX.Element): JSX.Element;
+	/** Get extra HTML to be emitted to the head */
+	getHeadHtml?(): string;
+}

@@ -73,6 +73,7 @@ export async function makeViteConfig(
 				apiRoot: config.apiRoot,
 				configDeps,
 				stripLoadFunctions,
+				babel: config.babel,
 				onConfigChange,
 			}),
 		],
