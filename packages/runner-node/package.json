@@ -36,7 +36,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^16.10.1",
-		"@types/node-fetch": "2",
+		"@types/node-fetch": "2.5.12",
 		"esbuild": "^0.13.3",
 		"prettier": "^2.4.1",
 		"rakkasjs": "workspace:*",

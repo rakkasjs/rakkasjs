@@ -1,0 +1,41 @@
+{
+	"name": "@rakkasjs/apollo-server",
+	"version": "0.3.0",
+	"description": "Rakkas.js Apollo server graphql runner",
+	"scripts": {
+		"prepublishOnly": "pnpm build",
+		"dev": "node build.mjs --watch",
+		"build": "rimraf dist && node build.mjs"
+	},
+	"author": "Fatih Aygün <cyco130@gmail.com>",
+	"license": "MIT",
+	"repository": "https://github.com/rakkasjs/rakkasjs",
+	"homepage": "https://rakkasjs.org",
+	"keywords": [
+		"react",
+		"vite",
+		"nextjs",
+		"ssr",
+		"apollo-server"
+	],
+	"main": "./dist/index.js",
+	"types": "index.d.ts",
+	"files": [
+		"dist/**/*"
+	],
+	"peerDependencies": {
+		"graphql": "^15.3.0",
+		"rakkasjs": "workspace:*"
+	},
+	"devDependencies": {
+		"esbuild": "^0.13.3",
+		"esbuild-node-externals": "^1.3.0",
+		"prettier": "^2.4.1",
+		"rakkasjs": "workspace:*",
+		"rimraf": "^3.0.2",
+		"typescript": "^4.4.3"
+	},
+	"dependencies": {
+		"apollo-server-core": "^3.3.0"
+	}
+}

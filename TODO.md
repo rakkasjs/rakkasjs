@@ -17,8 +17,9 @@
   - [ ] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
 - [ ] Create integration tests with popular tools
   - [x] Styled components
+  - [x] Apollo server
+  - [ ] Apollo client
   - [ ] Redux
-  - [ ] Apollo
   - [ ] Tailwind CSS
 - [ ] Define page/layout types depending on the parent layout type
 - [ ] Design an API to inject helpers to load functions

@@ -84,6 +84,7 @@ export async function makeViteConfig(
 	};
 
 	const ssrOptions: SSROptions = {
+		external: ["@rakkasjs/apollo-server"],
 		noExternal: ["rakkasjs", "rakkasjs/server"],
 	};
 
