@@ -36,7 +36,7 @@
 		"@typescript-eslint/parser": "^4.32.0",
 		"commander": "^8.2.0",
 		"cpr": "^3.0.1",
-		"esbuild": "^0.13.2",
+		"esbuild": "^0.13.3",
 		"eslint": "^7.32.0",
 		"eslint-plugin-import": "^2.24.2",
 		"eslint-plugin-only-warn": "^1.0.3",

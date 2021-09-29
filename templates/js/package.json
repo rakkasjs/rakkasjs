@@ -30,7 +30,7 @@
 		"@testing-library/jest-dom": "^5.14.1",
 		"@testing-library/react": "^12.1.1",
 		"cypress": "^8.5.0",
-		"esbuild": "^0.13.2",
+		"esbuild": "^0.13.3",
 		"esbuild-jest": "^0.5.0",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
