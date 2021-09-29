@@ -10,6 +10,7 @@
 - [x] Improve logging
 - [x] ⚠️ BUG: Vite plugin ordering when using mdx
 - [x] Design a way to wrap the rendered application in custom providers
+- [x] Simplify testing with `rakkas with-port` command
 - [x] Project initializer enhancements:
   - [x] Add option to skip generating the sample application
   - [x] Add Cypress integration

@@ -10,7 +10,7 @@
 		"check": "run-p 'lint:*' 'test:*'",
 		"test": "run-p 'test:*'",
 		"test:unit": "jest",
-		"test:e2e": "start-server-and-test 'npm start' http-get://localhost:3000 'run-s 'test:e2e:*''",
+		"test:e2e": "rakkas with-port \"start-server-and-test 'npm start' http-get://\\$HOST:\\$PORT 'run-s 'test:e2e:*''\"",
 		"test:e2e:api": "jest --config jest-api-test.config.json --maxWorkers=1 api-test",
 		"test:e2e:browser": "cypress run",
 		"lint": "run-p 'lint:*'",

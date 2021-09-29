@@ -8,8 +8,7 @@
 		"build": "rakkas build",
 		"start": "rakkas-node",
 		"check": "run-p test typecheck",
-		"test": "PORT=$(node -e 'require(\"get-port\")().then(x=>console.log(x))') pnpm test:e2e",
-		"test:e2e": "CYPRESS_BASE_URL=http://localhost:$PORT start-server-and-test 'pnpm start' http-get://localhost:$PORT 'cypress run'",
+		"test": "rakkas with-port \"start-server-and-test 'pnpm start' http-get://\\$HOST:\\$PORT 'cypress run'\"",
 		"typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"dependencies": {

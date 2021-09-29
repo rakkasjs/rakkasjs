@@ -4,7 +4,7 @@
 	"version": "0.3.0",
 	"description": "Rakkas.js workspace root",
 	"scripts": {
-		"check": "pnpm run -r --parallel --filter=!rakkas-demo-js --filter=!rakkas-demo-ts check && pnpm run check --filter=rakkas-demo-ts && pnpm run check --filter=rakkas-demo-js",
+		"check": "pnpm run -r --parallel --workspace-concurrency=0 check",
 		"dev": "pnpm run -r --filter=./packages '--filter=!create-rakkas-app' --parallel dev",
 		"build": "pnpm run -r build",
 		"precommit": "lint-staged",
