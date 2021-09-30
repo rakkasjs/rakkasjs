@@ -5,4 +5,5 @@ declare module "*.module.css" {
 
 interface Document {
 	rakkasHydrate(): void;
+	reloadFocusLayout(value: string): void;
 }

@@ -4,4 +4,5 @@ declare const process: {
 
 interface Document {
 	rakkasHydrate(): void;
+	reloadFocusLayout(value: string): void;
 }

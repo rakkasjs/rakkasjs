@@ -13,6 +13,7 @@
 - [x] Simplify testing with `rakkas with-port` command
 - [x] Design an API to inject helpers to load functions
 - [x] ⚠️ BUG: SSR doesn't hot reload layouts
+- [x] ⚠️ BUG: Reload loses focus (CNR, fixed?)
 - [ ] Project initializer enhancements:
   - [x] Add option to skip generating the sample application
   - [x] Add Cypress integration
@@ -23,7 +24,6 @@
   - [x] Apollo client
   - [ ] Redux
   - [ ] Tailwind CSS
-- [ ] ⚠️ BUG: Reload loses focus
 - [ ] Define page/layout types depending on the parent layout type
 - [ ] Allow custom error serializers
 - [ ] Investigate Vite warnings:
