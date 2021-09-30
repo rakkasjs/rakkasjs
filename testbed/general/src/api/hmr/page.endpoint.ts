@@ -9,8 +9,6 @@ export const post: RequestHandler = async (req) => {
 		[from, to] = [to, from];
 	}
 
-	console.log("Updating");
-
 	let content = await fs.promises.readFile(FILE_NAME, { encoding: "utf-8" });
 	content = content.replace(from, to);
 	await fs.promises.writeFile(FILE_NAME, content);

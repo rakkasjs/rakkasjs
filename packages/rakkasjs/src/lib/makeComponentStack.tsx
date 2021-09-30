@@ -94,7 +94,8 @@ export async function makeComponentStack({
 	const usedContexts: Record<string, unknown>[] = [];
 
 	for (const [i, moduleId] of stack.entries()) {
-		let module = moduleCache[moduleId];
+		let module = import.meta.env.SSR ? undefined : moduleCache[moduleId];
+
 		if (!module) {
 			if (import.meta.env.DEV) {
 				moduleCache[moduleId] = module = await import(
@@ -136,7 +137,7 @@ export async function makeComponentStack({
 		const canHandleErrors =
 			options?.canHandleErrors ?? (!isPage && !!Component);
 
-		if (canHandleErrors) {
+		if (canHandleErrors && !import.meta.env.SSR) {
 			errorHandlerIndex = i;
 			// A trick to preserve component identity between renders
 			Component =

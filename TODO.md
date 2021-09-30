@@ -11,7 +11,9 @@
 - [x] ⚠️ BUG: Vite plugin ordering when using mdx
 - [x] Design a way to wrap the rendered application in custom providers
 - [x] Simplify testing with `rakkas with-port` command
-- [x] Project initializer enhancements:
+- [x] Design an API to inject helpers to load functions
+- [x] ⚠️ BUG: SSR doesn't hot reload layouts
+- [ ] Project initializer enhancements:
   - [x] Add option to skip generating the sample application
   - [x] Add Cypress integration
   - [ ] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
@@ -21,21 +23,22 @@
   - [x] Apollo client
   - [ ] Redux
   - [ ] Tailwind CSS
-- [ ] ⚠️ BUG: SSR doesn't hot reload layouts and client hooks
+- [ ] ⚠️ BUG: Reload loses focus
 - [ ] Define page/layout types depending on the parent layout type
-- [ ] Design an API to inject helpers to load functions
 - [ ] Allow custom error serializers
 - [ ] Investigate Vite warnings:
   - [ ] fs.allow warning: https://vitejs.dev/config/#server-fs-allow
   - [ ] Circular dependency warning
-- [ ] ⚠️ BUG: Reload loses focus
-- [ ] Design a setData API
 - [ ] Handle HEAD requests
-- [ ] Serialize the routes into a smaller string in an external file
 - [ ] Expose `request.ip`
 - [ ] chore: Add `engines` to `package.json` files
-- [ ] Split documentation into multiple pages
-- [ ] Document integrations with popular tools
+- [ ] Investigate [vite-jest](https://github.com/sodatea/vite-jest)
+- [ ] Update documentation
+  - [ ] Split documentation into multiple pages
+  - [ ] Document integrations with popular tools
+- [ ] Design a setData API
+  - [ ] Design a navigate with data API
+- [ ] Serialize the routes into a smaller string in an external file
 
 ## For 1.0.0
 - [ ] Investigate debugging and sourcemaps

@@ -1,4 +1,4 @@
-if (process.env.DEV_TEST) {
+if (Cypress.env("DEV_TEST")) {
 	describe("Filesystem watcher", () => {
 		beforeEach(() => {
 			cy.request("DELETE", "/api/fs-watch");

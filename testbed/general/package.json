@@ -9,7 +9,7 @@
 		"start": "rakkas-node",
 		"check": "run-p e2e test typecheck lint:ts",
 		"e2e": "rakkas with-port run-s 'e2e:\\*'",
-		"e2e:dev": "start-server-and-test 'pnpm dev' :$PORT/api/ping 'DEV_TEST=1 cypress run'",
+		"e2e:dev": "start-server-and-test 'pnpm dev' :$PORT/api/ping 'CYPRESS_DEV_TEST=1 cypress run'",
 		"e2e:prod": "start-server-and-test 'pnpm start' :$PORT/api/ping 'cypress run'",
 		"test": "jest --passWithNoTests",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
