@@ -21,7 +21,7 @@
 	},
 	"devDependencies": {
 		"@rakkasjs/cli": "workspace:*",
-		"@types/react": "^17.0.24",
+		"@types/react": "^17.0.26",
 		"@types/react-dom": "^17.0.9",
 		"@types/styled-components": "^5.1.14",
 		"babel-plugin-styled-components": "^1.13.2",

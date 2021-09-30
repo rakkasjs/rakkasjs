@@ -24,7 +24,7 @@
 		"dist/**/*"
 	],
 	"peerDependencies": {
-		"graphql": "^15.3.0",
+		"graphql": "^15.6.0",
 		"rakkasjs": "workspace:*"
 	},
 	"devDependencies": {
