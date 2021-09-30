@@ -5,7 +5,7 @@ import styled from "styled-components";
 const HomePage: Page = function HomePage() {
 	useEffect(() => {
 		document.body.classList.add("hydrated");
-	});
+	}, []);
 
 	return (
 		<main>

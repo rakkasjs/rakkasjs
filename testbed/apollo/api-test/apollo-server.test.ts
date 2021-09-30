@@ -9,10 +9,12 @@ describe("Apollo server", () => {
 		const response = await fetch(`http://${host}:${port}/api/graphql`, {
 			method: "POST",
 			headers: { "content-type": "application/json" },
-			body: JSON.stringify({ query: "{hello}" }),
+			body: JSON.stringify({ query: "{data1}" }),
 		});
 
 		expect(response.ok).toBe(true);
-		expect(await response.json()).toMatchObject({ data: { hello: "world" } });
+		expect(await response.json()).toMatchObject({
+			data: { data1: "data1 response" },
+		});
 	});
 });

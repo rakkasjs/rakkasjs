@@ -18,9 +18,10 @@
 - [ ] Create integration tests with popular tools
   - [x] Styled components
   - [x] Apollo server
-  - [ ] Apollo client
+  - [x] Apollo client
   - [ ] Redux
   - [ ] Tailwind CSS
+- [ ] ⚠️ BUG: SSR doesn't hot reload layouts and client hooks
 - [ ] Define page/layout types depending on the parent layout type
 - [ ] Design an API to inject helpers to load functions
 - [ ] Allow custom error serializers

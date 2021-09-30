@@ -17,11 +17,13 @@ const lastRendered: RenderedStackItem[] = $rakkas$rendered;
 export async function startClient(routes?: Route[]) {
 	const clientHooks = await import("@rakkasjs/client-hooks");
 
-	const { beforeStartClient } = clientHooks;
+	const { beforeStartClient, wrap, createLoadHelpers } = clientHooks;
 
 	if (beforeStartClient) {
 		await beforeStartClient();
 	}
+
+	const helpers = createLoadHelpers ? await createLoadHelpers(fetch) : {};
 
 	const url = new URL(window.location.href);
 
@@ -43,6 +45,7 @@ export async function startClient(routes?: Route[]) {
 		},
 		rootContext: $rakkas$rootContext,
 		isInitialRender: true,
+		helpers,
 	});
 
 	// Redirection should not happen on initial render, but let's keep ts compiler happy
@@ -51,10 +54,13 @@ export async function startClient(routes?: Route[]) {
 		return;
 	}
 
-	hydrate(
+	let rendered = (
 		<HelmetProvider>
-			<App initialStack={stack} routes={routes} />
-		</HelmetProvider>,
-		document.getElementById("rakkas-app"),
+			<App initialStack={stack} routes={routes} helpers={helpers} />
+		</HelmetProvider>
 	);
+
+	if (wrap) rendered = wrap(rendered);
+
+	hydrate(rendered, document.getElementById("rakkas-app"));
 }

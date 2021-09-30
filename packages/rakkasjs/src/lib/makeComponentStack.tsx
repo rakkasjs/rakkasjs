@@ -18,6 +18,7 @@ import {
 	SimpleLayout,
 	PageTypes,
 	LayoutTypes,
+	LoadHelpers,
 } from "./types";
 import { stableJson } from "./stable-json";
 import { toErrorDescription } from "./toErrorDescription";
@@ -54,6 +55,7 @@ interface StackArgs {
 	reload(i: number): void;
 	rootContext: Record<string, unknown>;
 	isInitialRender?: boolean;
+	helpers: LoadHelpers;
 }
 
 export interface StackResult {
@@ -71,6 +73,7 @@ export async function makeComponentStack({
 	reload,
 	isInitialRender,
 	rootContext = {},
+	helpers,
 }: StackArgs): Promise<LoadRedirectResult | StackResult> {
 	const { stack, params, match } = found;
 
@@ -163,7 +166,7 @@ export async function makeComponentStack({
 		) {
 			if (load) {
 				try {
-					loaded = await load({ url, params, match, context, fetch });
+					loaded = await load({ url, params, match, context, fetch, helpers });
 				} catch (error) {
 					loaded = { status: 500, error: toErrorDescription(error) };
 				}

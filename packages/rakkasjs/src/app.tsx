@@ -12,7 +12,7 @@ import { navigate, Router, RouteRenderArgs } from "./lib/router/Router";
 import { initClientGlobal, setGlobal } from "./lib/init-global";
 import { RouterProvider } from "./lib/useRouter";
 import { StackResult, makeComponentStack } from "./lib/makeComponentStack";
-import { RootContext } from "./lib/types";
+import { LoadHelpers, RootContext } from "./lib/types";
 
 export let setRootContext = initClientGlobal<
 	Dispatch<SetStateAction<RootContext>>
@@ -23,7 +23,8 @@ export let setRootContext = initClientGlobal<
 export const App: FC<{
 	initialStack: StackResult;
 	routes: Route[];
-}> = ({ initialStack, routes }) => {
+	helpers: LoadHelpers;
+}> = ({ initialStack, routes, helpers }) => {
 	const initialRender = useRef(true);
 	const lastStack = useRef(initialStack);
 	const [rootContextState, setRootContextState] = useState($rakkas$rootContext);
@@ -53,6 +54,7 @@ export const App: FC<{
 				},
 				previousRender: lastStack.current.rendered,
 				rootContext: rootContextState,
+				helpers,
 			});
 
 			if ("location" in stack) {
@@ -70,7 +72,7 @@ export const App: FC<{
 
 			return <Wrapper params={stack.params}>{stack.content}</Wrapper>;
 		},
-		[rootContextState, routes],
+		[rootContextState, routes, helpers],
 	);
 
 	return (

@@ -1,18 +1,8 @@
-import { ApolloServer, gql } from "@rakkasjs/apollo-server";
+import { ApolloServer } from "@rakkasjs/apollo-server";
+import { schema } from "../schema";
 
 const server = new ApolloServer({
-	typeDefs: gql`
-		type Query {
-			hello: String
-		}
-	`,
-	resolvers: {
-		Query: {
-			hello: (parent, args, context, info) => {
-				return "world";
-			},
-		},
-	},
+	schema,
 	context: (request) => request,
 });
 

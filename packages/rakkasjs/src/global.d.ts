@@ -23,7 +23,7 @@ declare module "@rakkasjs/server-hooks" {
 		RawRequest,
 		RakkasResponse,
 		PageRenderOptions,
-		// eslint-disable-next-line import/no-unresolved
+		// eslint-disable-next-line import/no-unresolved, import/no-duplicates
 	} from "$lib/types";
 
 	const servePage:
@@ -39,5 +39,24 @@ declare module "@rakkasjs/server-hooks" {
 }
 
 declare module "@rakkasjs/client-hooks" {
+	import type {
+		LoadHelpers,
+		// eslint-disable-next-line import/no-unresolved, import/no-duplicates
+	} from "$lib/types";
 	const beforeStartClient: (() => Promise<void>) | undefined;
+	const wrap: undefined | ((page: JSX.Element) => JSX.Element);
+	const createLoadHelpers:
+		| undefined
+		| ((fetch: typeof global.fetch) => LoadHelpers | Promise<LoadHelpers>);
+}
+
+declare module "@rakkasjs/common-hooks" {
+	import type {
+		LoadHelpers,
+		// eslint-disable-next-line import/no-unresolved, import/no-duplicates
+	} from "$lib/types";
+
+	export const createLoadHelpers:
+		| undefined
+		| ((fetch: typeof global.fetch) => LoadHelpers | Promise<LoadHelpers>);
 }

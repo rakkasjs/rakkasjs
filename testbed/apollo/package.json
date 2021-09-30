@@ -15,8 +15,12 @@
 		"typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"dependencies": {
-		"@rakkasjs/runner-node": "workspace:*",
+		"@apollo/client": "^3.4.15",
+		"@graphql-tools/schema": "^8.2.0",
+		"@graphql-tools/utils": "^8.2.3",
 		"@rakkasjs/apollo-server": "workspace:*",
+		"@rakkasjs/runner-node": "workspace:*",
+		"devalue": "^2.0.1",
 		"graphql": "^15.6.0",
 		"rakkasjs": "workspace:*",
 		"react": "^17.0.2",

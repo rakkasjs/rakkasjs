@@ -61,9 +61,13 @@ export type GetCacheKeyFunc<T extends PageTypes = DefaultPageTypes> = (
 
 export interface LoadArgs<T extends PageTypes = DefaultPageTypes>
 	extends GetCacheKeyArgs<T> {
-	/** Fetch function to make requests that includes credentials on both the client and the server  */
+	/** Fetch function to make requests that includes credentials on both the client and the server */
 	fetch: typeof fetch;
+	/** Data loading helpers */
+	helpers: LoadHelpers;
 }
+
+export interface LoadHelpers {}
 
 export type PageLoadFunc<T extends PageTypes = DefaultPageTypes> = (
 	args: LoadArgs<T>,
@@ -357,4 +361,10 @@ export interface PageRenderOptions {
 	wrap?(page: JSX.Element): JSX.Element;
 	/** Get extra HTML to be emitted to the head */
 	getHeadHtml?(): string;
+	/** Create the helpers object to be passed to load functions */
+	createLoadHelpers?(
+		fetch: typeof global.fetch,
+	): LoadHelpers | Promise<LoadHelpers>;
+	/** Custom rendering */
+	renderToString?(app: JSX.Element): string | Promise<string>;
 }

@@ -190,6 +190,10 @@ export async function handleRequest(
 			fetch: internalFetch,
 
 			rootContext: context,
+
+			helpers: options.createLoadHelpers
+				? await options.createLoadHelpers(internalFetch)
+				: {},
 		});
 
 		// Handle redirection
@@ -202,7 +206,7 @@ export async function handleRequest(
 
 		const helmetContext = {};
 
-		let rendered = (
+		let app = (
 			<RouterProvider
 				value={{
 					current: request.url,
@@ -213,9 +217,11 @@ export async function handleRequest(
 			</RouterProvider>
 		);
 
-		if (options.wrap) rendered = options.wrap(rendered);
+		if (options.wrap) app = options.wrap(app);
 
-		const app = renderToString(rendered);
+		const rendered = options.renderToString
+			? await options.renderToString(app)
+			: renderToString(app);
 
 		const { helmet } = helmetContext as FilledContext;
 
@@ -299,7 +305,7 @@ export async function handleRequest(
 			bodyAttributes ? " " + bodyAttributes + ">" : ">",
 		);
 
-		body = body.replace("<!-- rakkas-app-placeholder -->", app);
+		body = body.replace("<!-- rakkas-app-placeholder -->", rendered);
 
 		const headers: Record<string, string> = { "content-type": "text/html" };
 
