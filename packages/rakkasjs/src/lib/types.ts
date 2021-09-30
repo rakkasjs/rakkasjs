@@ -17,6 +17,15 @@ export type DefinePageTypes<T extends Partial<PageTypes>> = {
 	data: T extends { data: any } ? T["data"] : undefined;
 };
 
+export type DefinePageTypesUnder<
+	P extends LayoutTypes,
+	T extends Partial<PageTypes & { parentContext: never }> = {},
+> = {
+	params: T extends { params: any } ? T["params"] : never;
+	parentContext: LayoutContext<P>;
+	data: T extends { data: any } ? T["data"] : undefined;
+};
+
 export type DefaultPageTypes = DefinePageTypes<{
 	params: never;
 	parentContext: RootContext;
@@ -38,6 +47,18 @@ export type DefineLayoutTypes<T extends Partial<LayoutTypes>> = {
 	parentContext: T extends { parentContext: any }
 		? T["parentContext"]
 		: RootContext;
+	data: T extends { data: any } ? T["data"] : undefined;
+	contextOverrides: T extends { contextOverrides: any }
+		? T["contextOverrides"]
+		: Record<string, never>;
+};
+
+export type DefineLayoutTypesUnder<
+	P extends LayoutTypes,
+	T extends Partial<LayoutTypes & { parentContext: never }> = {},
+> = {
+	params: T extends { params: any } ? T["params"] : never;
+	parentContext: LayoutContext<P>;
 	data: T extends { data: any } ? T["data"] : undefined;
 	contextOverrides: T extends { contextOverrides: any }
 		? T["contextOverrides"]

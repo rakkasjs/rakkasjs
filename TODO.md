@@ -14,6 +14,7 @@
 - [x] Design an API to inject helpers to load functions
 - [x] ⚠️ BUG: SSR doesn't hot reload layouts
 - [x] ⚠️ BUG: Reload loses focus (CNR, fixed?)
+- [x] Define page/layout types depending on the parent layout type
 - [ ] Project initializer enhancements:
   - [x] Add option to skip generating the sample application
   - [x] Add Cypress integration
@@ -24,7 +25,6 @@
   - [x] Apollo client
   - [ ] Redux
   - [ ] Tailwind CSS
-- [ ] Define page/layout types depending on the parent layout type
 - [ ] Allow custom error serializers
 - [ ] Investigate Vite warnings:
   - [ ] fs.allow warning: https://vitejs.dev/config/#server-fs-allow
@@ -36,6 +36,7 @@
 - [ ] Update documentation
   - [ ] Split documentation into multiple pages
   - [ ] Document integrations with popular tools
+  - [ ] Document rakkasjs types
 - [ ] Design a setData API
   - [ ] Design a navigate with data API
 - [ ] Serialize the routes into a smaller string in an external file

@@ -1,12 +1,13 @@
 import React from "react";
-import { definePage, DefinePageTypes, LayoutContext, Link } from "rakkasjs";
+import { definePage, DefinePageTypesUnder, Link } from "rakkasjs";
 import { WidgetLayoutTypes } from "./layout";
 
-type WidgetViewPageTypes = DefinePageTypes<{
-	params: { widgetId: string };
-	// Extract the outgoing context of the widget layout
-	parentContext: LayoutContext<WidgetLayoutTypes>;
-}>;
+type WidgetViewPageTypes = DefinePageTypesUnder<
+	WidgetLayoutTypes,
+	{
+		params: { widgetId: string };
+	}
+>;
 
 export default definePage<WidgetViewPageTypes>({
 	Component: function WidgetViewPage({ context: { widget } }) {

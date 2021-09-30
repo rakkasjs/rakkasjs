@@ -1,10 +1,12 @@
-import { defineLayout, DefineLayoutTypes, LayoutContext } from "rakkasjs";
+import { defineLayout, DefineLayoutTypesUnder } from "rakkasjs";
 import { OuterLayoutTypes } from "../layout";
 
-export type InnerALayoutTypes = DefineLayoutTypes<{
-	parentContext: LayoutContext<OuterLayoutTypes>;
-	contextOverrides: { inner: string };
-}>;
+export type InnerALayoutTypes = DefineLayoutTypesUnder<
+	OuterLayoutTypes,
+	{
+		contextOverrides: { inner: string };
+	}
+>;
 
 export default defineLayout<InnerALayoutTypes>({
 	load() {

@@ -1,10 +1,8 @@
 import React from "react";
-import { definePage, DefinePageTypes, LayoutContext } from "rakkasjs";
+import { definePage, DefinePageTypesUnder } from "rakkasjs";
 import { InnerBLayoutTypes } from "./layout";
 
-type ContextTestPageTypes = DefinePageTypes<{
-	parentContext: LayoutContext<InnerBLayoutTypes>;
-}>;
+type ContextTestPageTypes = DefinePageTypesUnder<InnerBLayoutTypes>;
 
 export default definePage<ContextTestPageTypes>({
 	Component: function ContextTestPage({ context }) {
