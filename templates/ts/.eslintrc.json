@@ -9,6 +9,8 @@
 		"plugin:import/recommended",
 		"plugin:import/typescript",
 		"plugin:react/recommended",
+		"plugin:ssr-friendly/recommended",
+		"plugin:css-modules/recommended",
 		"prettier"
 	],
 	"parser": "@typescript-eslint/parser",
@@ -19,15 +21,33 @@
 		"ecmaVersion": 12,
 		"sourceType": "module"
 	},
-	"plugins": ["@typescript-eslint", "import", "react", "react-hooks"],
+	"plugins": [
+		"@typescript-eslint",
+		"import",
+		"react",
+		"react-hooks",
+		"ssr-friendly",
+		"css-modules",
+		"no-only-tests"
+	],
 	"settings": {
 		"react": {
 			"version": "16.8"
+		},
+		"import/parsers": {
+			"@typescript-eslint/parser": [".ts", ".tsx"]
+		},
+		"import/resolver": {
+			"typescript": {
+				"alwaysTryTypes": true,
+				"project": ["tsconfig.json", "cypress/tsconfig.json"]
+			}
 		}
 	},
 	"rules": {
 		"react/prop-types": "off",
 		"react-hooks/rules-of-hooks": "error",
-		"react-hooks/exhaustive-deps": "error"
+		"react-hooks/exhaustive-deps": "error",
+		"no-only-tests/no-only-tests": "error"
 	}
 }

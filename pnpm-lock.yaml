@@ -284,9 +284,12 @@ importers:
       esbuild-jest: ^0.5.0
       eslint: ^7.32.0
       eslint-config-prettier: ^8.3.0
+      eslint-plugin-css-modules: ^2.11.0
       eslint-plugin-import: ^2.24.2
+      eslint-plugin-no-only-tests: ^2.6.0
       eslint-plugin-react: ^7.26.0
       eslint-plugin-react-hooks: ^4.2.0
+      eslint-plugin-ssr-friendly: ^1.0.5
       jest: ^27.2.3
       jest-css-modules-transform: ^4.3.0
       node-fetch: ^2.6.5
@@ -316,9 +319,12 @@ importers:
       esbuild-jest: 0.5.0_esbuild@0.13.3
       eslint: 7.32.0
       eslint-config-prettier: 8.3.0_eslint@7.32.0
+      eslint-plugin-css-modules: 2.11.0_eslint@7.32.0
       eslint-plugin-import: 2.24.2_eslint@7.32.0
+      eslint-plugin-no-only-tests: 2.6.0
       eslint-plugin-react: 7.26.0_eslint@7.32.0
       eslint-plugin-react-hooks: 4.2.0_eslint@7.32.0
+      eslint-plugin-ssr-friendly: 1.0.5_eslint@7.32.0
       jest: 27.2.3
       jest-css-modules-transform: 4.3.0
       node-fetch: 2.6.5
@@ -348,9 +354,13 @@ importers:
       esbuild-jest: ^0.5.0
       eslint: ^7.32.0
       eslint-config-prettier: ^8.3.0
+      eslint-import-resolver-typescript: ^2.5.0
+      eslint-plugin-css-modules: ^2.11.0
       eslint-plugin-import: ^2.24.2
+      eslint-plugin-no-only-tests: ^2.6.0
       eslint-plugin-react: ^7.26.0
       eslint-plugin-react-hooks: ^4.2.0
+      eslint-plugin-ssr-friendly: ^1.0.5
       jest: ^27.2.3
       jest-css-modules-transform: ^4.3.0
       node-fetch: ^2.6.5
@@ -388,9 +398,13 @@ importers:
       esbuild-jest: 0.5.0_esbuild@0.13.3
       eslint: 7.32.0
       eslint-config-prettier: 8.3.0_eslint@7.32.0
+      eslint-import-resolver-typescript: 2.5.0_b7a4de75e7d0094cbe979e30a9a325ab
+      eslint-plugin-css-modules: 2.11.0_eslint@7.32.0
       eslint-plugin-import: 2.24.2_eslint@7.32.0
+      eslint-plugin-no-only-tests: 2.6.0
       eslint-plugin-react: 7.26.0_eslint@7.32.0
       eslint-plugin-react-hooks: 4.2.0_eslint@7.32.0
+      eslint-plugin-ssr-friendly: 1.0.5_eslint@7.32.0
       jest: 27.2.3
       jest-css-modules-transform: 4.3.0
       node-fetch: 2.6.5
@@ -5677,12 +5691,41 @@ packages:
       resolve: 1.20.0
     dev: true
 
+  /eslint-import-resolver-typescript/2.5.0_b7a4de75e7d0094cbe979e30a9a325ab:
+    resolution: {integrity: sha512-qZ6e5CFr+I7K4VVhQu3M/9xGv9/YmwsEXrsm3nimw8vWaVHRDrQRp26BgCypTxBp3vUp4o5aVEJRiy0F2DFddQ==}
+    engines: {node: '>=4'}
+    peerDependencies:
+      eslint: '*'
+      eslint-plugin-import: '*'
+    dependencies:
+      debug: 4.3.2
+      eslint: 7.32.0
+      eslint-plugin-import: 2.24.2_eslint@7.32.0
+      glob: 7.1.7
+      is-glob: 4.0.1
+      resolve: 1.20.0
+      tsconfig-paths: 3.11.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /eslint-module-utils/2.6.2:
     resolution: {integrity: sha512-QG8pcgThYOuqxupd06oYTZoNOGaUdTY1PqK+oS6ElF6vs4pBdk/aYxFVQQXzcrAqp9m7cl7lb2ubazX+g16k2Q==}
     engines: {node: '>=4'}
     dependencies:
       debug: 3.2.7
       pkg-dir: 2.0.0
+    dev: true
+
+  /eslint-plugin-css-modules/2.11.0_eslint@7.32.0:
+    resolution: {integrity: sha512-CLvQvJOMlCywZzaI4HVu7QH/ltgNXvCg7giJGiE+sA9wh5zQ+AqTgftAzrERV22wHe1p688wrU/Zwxt1Ry922w==}
+    engines: {node: '>=4.0.0'}
+    peerDependencies:
+      eslint: '>=2.0.0'
+    dependencies:
+      eslint: 7.32.0
+      gonzales-pe: 4.3.0
+      lodash: 4.17.21
     dev: true
 
   /eslint-plugin-import/2.24.2_eslint@7.32.0:
@@ -5707,6 +5750,11 @@ packages:
       read-pkg-up: 3.0.0
       resolve: 1.20.0
       tsconfig-paths: 3.11.0
+    dev: true
+
+  /eslint-plugin-no-only-tests/2.6.0:
+    resolution: {integrity: sha512-T9SmE/g6UV1uZo1oHAqOvL86XWl7Pl2EpRpnLI8g/bkJu+h7XBCB+1LnubRZ2CUQXj805vh4/CYZdnqtVaEo2Q==}
+    engines: {node: '>=4.0.0'}
     dev: true
 
   /eslint-plugin-only-warn/1.0.3:
@@ -5744,6 +5792,15 @@ packages:
       resolve: 2.0.0-next.3
       semver: 6.3.0
       string.prototype.matchall: 4.0.5
+    dev: true
+
+  /eslint-plugin-ssr-friendly/1.0.5_eslint@7.32.0:
+    resolution: {integrity: sha512-F1vKfzhOnrIXhcx91Y3r1x8vjJAoCex25PUgYErOe6q95T4KuCTz6+LgGQ4TTvhBdCfNqu1U0krAHe3UNuEOqg==}
+    peerDependencies:
+      eslint: '>=0.8.0'
+    dependencies:
+      eslint: 7.32.0
+      globals: 13.10.0
     dev: true
 
   /eslint-scope/5.1.1:

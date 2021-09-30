@@ -15,10 +15,10 @@
 - [x] ⚠️ BUG: SSR doesn't hot reload layouts
 - [x] ⚠️ BUG: Reload loses focus (CNR, fixed?)
 - [x] Define page/layout types depending on the parent layout type
-- [ ] Project initializer enhancements:
+- [x] Project initializer enhancements:
   - [x] Add option to skip generating the sample application
   - [x] Add Cypress integration
-  - [ ] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
+  - [x] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
 - [ ] Create integration tests with popular tools
   - [x] Styled components
   - [x] Apollo server

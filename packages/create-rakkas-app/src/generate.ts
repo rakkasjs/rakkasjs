@@ -131,6 +131,10 @@ export async function generate(opts: Options, info: GenerationInfo) {
 		delete pkg.devDependencies["start-server-and-test"];
 	}
 
+	if (!ft.jest && !ft.api && !ft.cypress) {
+		delete pkg.devDependencies["eslint-plugin-no-only-tests"];
+	}
+
 	for (const [k, v] of Object.entries(pkg.devDependencies || {})) {
 		if (v.startsWith("workspace:")) pkg.devDependencies![k] = info.version;
 
@@ -216,42 +220,37 @@ export async function generate(opts: Options, info: GenerationInfo) {
 		JSON.stringify(pkg, undefined, 2),
 	);
 
-	if (!ft.prettier) {
-		// Remove prettier from lint config related files
+	if (ft.eslint) {
+		const cfg: {
+			extends: string[];
+			plugins: string[];
+			rules: Record<string, any>;
+			settings: {
+				"import/resolver": { typescript: { project: string | string[] } };
+			};
+		} = JSON.parse(
+			await fs.promises.readFile(".eslintrc.json", {
+				encoding: "utf8",
+			}),
+		);
 
-		if (ft.eslint) {
-			const cfg: {
-				extends: string[];
-			} = JSON.parse(
-				await fs.promises.readFile(".eslintrc.json", {
-					encoding: "utf8",
-				}),
-			);
-
+		if (!ft.prettier) {
 			cfg.extends = cfg.extends.filter((x) => x !== "prettier");
-
-			await fs.promises.writeFile(
-				".eslintrc.json",
-				JSON.stringify(cfg, undefined, "\t"),
-			);
 		}
 
-		if (ft.eslint) {
-			const cfg: {
-				extends: string[];
-			} = JSON.parse(
-				await fs.promises.readFile(".stylelintrc.json", {
-					encoding: "utf8",
-				}),
-			);
-
-			cfg.extends = cfg.extends.filter((x) => x !== "prettier");
-
-			await fs.promises.writeFile(
-				".stylelintrc.json",
-				JSON.stringify(cfg, undefined, "\t"),
-			);
+		if (!ft.jest && !ft.api && !ft.cypress) {
+			cfg.plugins = cfg.plugins.filter((x) => x !== "no-only-tests");
+			delete cfg.rules["no-only-tests/no-only-tests"];
 		}
+
+		if (ft.typescript && !ft.cypress) {
+			cfg.settings["import/resolver"].typescript.project = "tsconfig.json";
+		}
+
+		await fs.promises.writeFile(
+			".eslintrc.json",
+			JSON.stringify(cfg, undefined, "\t"),
+		);
 	}
 
 	if (ft.typescript && (!ft.jest || !ft.api)) {

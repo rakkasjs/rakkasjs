@@ -7,6 +7,8 @@
 		"eslint:recommended",
 		"plugin:import/recommended",
 		"plugin:react/recommended",
+		"plugin:ssr-friendly/recommended",
+		"plugin:css-modules/recommended",
 		"prettier"
 	],
 	"parserOptions": {
@@ -16,7 +18,14 @@
 		"ecmaVersion": 12,
 		"sourceType": "module"
 	},
-	"plugins": ["import", "react", "react-hooks"],
+	"plugins": [
+		"import",
+		"react",
+		"react-hooks",
+		"ssr-friendly",
+		"css-modules",
+		"no-only-tests"
+	],
 	"settings": {
 		"react": {
 			"version": "16.8"
@@ -25,6 +34,7 @@
 	"rules": {
 		"react/prop-types": "off",
 		"react-hooks/rules-of-hooks": "error",
-		"react-hooks/exhaustive-deps": "error"
+		"react-hooks/exhaustive-deps": "error",
+		"no-only-tests/no-only-tests": "error"
 	}
 }
