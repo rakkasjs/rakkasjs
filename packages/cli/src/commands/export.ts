@@ -77,8 +77,11 @@ export default function exportCommand() {
 				firstResponse = undefined;
 
 				if (!response.ok) {
-					throw new Error(
-						`Request to ${root} returned status ${response.status}`,
+					// eslint-disable-next-line no-console
+					console.log(
+						chalk.yellowBright(
+							`Request to ${root} returned status ${response.status}.`,
+						),
 					);
 				}
 
