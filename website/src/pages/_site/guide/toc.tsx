@@ -13,11 +13,10 @@ const titles = [
 	"Refetching data",
 	"Error handling",
 	"API routes",
+	"Load helpers",
+	"Customization hooks",
+	"Configuration options",
 	"Environment variables",
-	// "Customization hooks",
-	// "Connecting backend and frontend",
-	// "Deployment",
-	// "Testing",
 	"Roadmap",
 ];
 

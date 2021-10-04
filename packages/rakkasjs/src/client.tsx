@@ -23,7 +23,7 @@ export async function startClient(routes?: Route[]) {
 		await beforeStartClient();
 	}
 
-	const helpers = createLoadHelpers ? await createLoadHelpers(fetch) : {};
+	const helpers = createLoadHelpers ? await createLoadHelpers() : {};
 
 	const url = new URL(window.location.href);
 

@@ -191,16 +191,16 @@ export async function rakkasVitePlugin(
 						},
 					);
 					return userVersion || id;
-				} else if (id === "@rakkasjs/common-hooks") {
-					const userVersion = await this.resolve(
-						path.resolve(srcDir, "common"),
-						importer,
-						{
-							...options,
-							skipSelf: true,
-						},
-					);
-					return userVersion || id;
+					// } else if (id === "@rakkasjs/common-hooks") {
+					// 	const userVersion = await this.resolve(
+					// 		path.resolve(srcDir, "common"),
+					// 		importer,
+					// 		{
+					// 			...options,
+					// 			skipSelf: true,
+					// 		},
+					// 	);
+					// 	return userVersion || id;
 				}
 			},
 
@@ -215,8 +215,8 @@ export async function rakkasVitePlugin(
 				`;
 				} else if (
 					id === "@rakkasjs/client-hooks" ||
-					id === "@rakkasjs/server-hooks" ||
-					id === "@rakkasjs/common-hooks"
+					id === "@rakkasjs/server-hooks"
+					// || id === "@rakkasjs/common-hooks"
 				) {
 					// This bogus export is for silencing the "Generated an empty chunk" warning
 					return "export const nothing = 1";

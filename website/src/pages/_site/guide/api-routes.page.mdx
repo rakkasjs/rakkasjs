@@ -47,7 +47,7 @@ The `headers` property can either be a name value dictionary or an array of name
 
 ## Endpoints
 
-An endpoint is a module in the `src/api` directory, named `endpoint.js` or anything that matches `*.endpoint.js` (or `ts`, or any other extension included in the `apiExtensions` configuration option). It exports method handlers, functions that correspond to HTTP methods like `get`, `post`, `put` etc. `DELETE` method is handled by the `del` function because `delete` is a reserved word in JavaScript.
+An endpoint is a module in the `src/api` directory, named `endpoint.js` or anything that matches `*.endpoint.js` (or `ts`, or any other extension included in the `apiExtensions` [configuration option](./configuration-options)). It exports method handlers, functions that correspond to HTTP methods like `get`, `post`, `put` etc. `DELETE` method is handled by the `del` function because `delete` is a reserved word in JavaScript.
 
 A method handler is just a function that takes a `RakkasRequest` and returns a `RakkasResponse`, possibly asynchronously.
 
@@ -64,7 +64,7 @@ As an alternative, or in addition to exporting individual method handlers you ca
 
 ## Middleware functions
 
-If you default export a function from a file named `middleware.js` (or `ts`, or any other extension included in the `apiExtensions` configuration option) in the `src/api` directory or in one of its subdirectories, you can intercept requests that would be otherwise handled by endpoint handlers in that directory or in one of its subdirectories. Like layouts, middleware functions can be nested and thematically grouped.
+If you default export a function from a file named `middleware.js` (or `ts`, or any other extension included in the `apiExtensions` [configuration option](./configuration-options)) in the `src/api` directory or in one of its subdirectories, you can intercept requests that would be otherwise handled by endpoint handlers in that directory or in one of its subdirectories. Like layouts, middleware functions can be nested and thematically grouped.
 
 A middleware function receives a `RakkasRequest` just like an endpoint handler and is expected to return a `RakkasRespone` (or a promise of one) just like an endpoint. But it receives a second parameter, a `next()` function which calls the next middleware function or endpoint handler in the hierarchy. You can pass `next()` a modified request and return a modified response or you can return a response without even calling `next`.
 

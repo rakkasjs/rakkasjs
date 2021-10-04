@@ -12,7 +12,8 @@
 			"jest",
 			"@testing-library/jest-dom"
 		],
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"plugins": [{ "name": "typescript-plugin-css-modules" }]
 	},
 	"include": ["src/**/*.ts", "src/**/*.tsx"]
 }

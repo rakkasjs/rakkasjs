@@ -27,14 +27,10 @@ import contextExampleEdit from "$examples/widget/[widgetId]/edit.page.tsx?sample
 	height="12em"
 />
 
-## Root context and server-side customization hooks
+## Root context <a id="root-context"/>
 
-The context passed to the outermost page or layout can be initialized **on the server-side** when the page is first served. To do so, you export a `servePage` function from `src/server.js` (or `.ts`):
+The context passed to the outermost page or layout is initialized **on the server-side** when the page is first served. See [server-side customization hooks](./customization-hooks#server-side) to see how. If not provided, its value will default to `{}`.
 
-import serverHook from "$examples/server.ts?sample";
-
-<SampleViewer filename="src/server.ts" code={serverHook} />
-
-Both `server.ts/.js` and `servePage` exports are optional. If not provided, the root context will be `{}`. The root context value can be updated on the client by calling the `setRootContext` function exported from `rakkasjs` module. The value will not be persisted on the server, you'll have to implement it yourself.
+The root context value can be updated on the client by calling the `setRootContext` function exported from `rakkasjs` module. The value will not be persisted on the server, you'll have to implement that yourself if you need such functionality.
 
 The root context can be used for session management among other things.

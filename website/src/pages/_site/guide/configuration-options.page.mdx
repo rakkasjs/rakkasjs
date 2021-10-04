@@ -1,0 +1,24 @@
+# Configuration options
+
+Rakkas looks for configuration file named `rakkas.config.js` (or `.ts`) in your project root. This file is bundled with esbuild before loading, so you can use modern EcmaScript and TypeScript features.
+
+The configuration file is not needed if you're happy with the defaults.
+
+This file should default export a configuration object or a function that returns one (possibly asynchronously). Supported options are:
+
+| Property             | Description                                                                                                   | Default value    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------- | ---------------- |
+| pageExtensions       | File extensions for [pages](./pages-and-routing) and [layouts](./layouts)                                     | `["jsx", "tsx"]` |
+| pagesDir             | Directory that contains pages and layouts relative to `/src`                                                  | `"pages"`        |
+| endpointExtensions   | File extensions for [endpoints and middleware](./api-routes)                                                  | `["js", "ts"]`   |
+| apiDir               | Directory that contains API routes relative to `/src`                                                         | `"api"`          |
+| apiRoot              | Base URL for API routes                                                                                       | `"/api"`         |
+| trustForwardedOrigin | Set to true to trust `x-forwarded-*` headers during development¹                                              | `false`          |
+| vite                 | [Vite configuration](https://vitejs.dev/config/) (not all options are supported)                              | `{}`             |
+| babel                | Babel options passed to [Vite's React plugin](https://github.com/vitejs/vite/tree/main/packages/plugin-react) | `{}`             |
+
+¹See the `TRUST_FORWARDED_ORIGIN` [environment variable](./environment-variables) for production use.
+
+## defineConfig
+
+You can import the `defineConfig` function from `@rakkasjs/cli` to ensure TypeScript IDE completion.

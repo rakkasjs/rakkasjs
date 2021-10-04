@@ -312,9 +312,10 @@ interface RawRequestBase {
 	originalUrl: URL;
 }
 
-interface RakkasRequestBase extends RawRequestBase {
+interface RakkasRequestBase<C = Record<string, unknown>>
+	extends RawRequestBase {
 	params: Record<string, string>;
-	context: Record<string, unknown>;
+	context: C;
 }
 
 interface EmptyBody {
@@ -350,7 +351,8 @@ export type RakkasRequestBodyAndType =
 	| JsonBody;
 
 export type RawRequest = RawRequestBase & RakkasRequestBodyAndType;
-export type RakkasRequest = RakkasRequestBase & RakkasRequestBodyAndType;
+export type RakkasRequest<C = Record<string, unknown>> = RakkasRequestBase<C> &
+	RakkasRequestBodyAndType;
 
 export interface RakkasResponse {
 	status?: number;

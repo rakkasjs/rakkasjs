@@ -4,7 +4,7 @@ import { SampleViewer } from "./SampleViewer";
 
 Rakkas provieds a `Link` component (in the `rakkasjs` package) for SPA-style client-side navigation. It takes exactly the same props as the HTML `<a>` element but intercepts user's click to handle the navigation without reloading the page. `NavLink` component is similar but accepts `currentRouteClass` and `currentRouteStyle` to style them differently when the `href` property matches the current URL. It is useful for marking the active item in a navigation menu, for example.
 
-Let's add client-side navigation to the previous example by replacing the `<a>` elements with `NavLink` and adding some inline styling for the active link. Notice how the page refreshes without a full reload now:
+Let's add client-side navigation to the previous example by replacing the `<a>` elements with `NavLink` and by adding some inline styling for the active link. Notice how the page refreshes without a full reload now:
 
 import navlinkExample from "$examples/navlink/[userName].page.jsx?sample";
 

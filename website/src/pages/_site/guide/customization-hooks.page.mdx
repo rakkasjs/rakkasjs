@@ -1,0 +1,86 @@
+import { SampleViewer } from "./SampleViewer";
+
+# Customization hooks
+
+You can customize the behavior of a Rakkas app by defining customization hooks in the files `src/server.js` or `src/client.js` for the server and the client respectively. You can also use the extensions `.jsx`, `.ts`, or `.tsx`.
+
+> Customization hooks are not related to React hooks.
+
+## Server-side customization hooks <a id="server-side"/>
+
+You can fully customize the way Rakkas renders and serves a page by exporting a `servePage` function from the file `src/server.{js|ts|jsx|tsx}`. It can be useful for the following purposes:
+
+- Initializing the [root context](./layout-context#root-context)
+- Wrapping your server-side app in a provider component (some React libraries require it for SSR support)
+- Outputting custom content in the returned HTML head element
+- Using a custom `renderToString` function (e.g. [`renderToStringWithData`](https://www.apollographql.com/docs/react/api/react/ssr/#rendertostringwithdata) from Apollo client)
+- Creating server-side [load helpers](./load-helpers)
+- Adding or modifying HTTP headers of returned page responses (e.g. `Cache-Control`)
+
+```tsx
+import { ServePageHook } from "rakkasjs";
+
+export const servePage: ServePageHook = async (request, renderPage) => {
+	// You can manipulate the request object here before passing it to renderPage
+
+	const response = await renderPage(
+		request,
+		{
+			// Initialize your root context here
+			userId: await getUserIdFromRequest(request),
+		},
+		{
+			createLoadHelpers: (fetch) => ({
+				// Initialize your server-side load helpers here
+			}),
+
+			wrap: (page) => (
+				// You can wrap the server-side app in a provider here.
+				// Useful for integrating with, e.g., Redux, styled-components, Apolle client etc.
+				<SomeProvider>{page}</SomeProvider>
+			),
+
+			// You can use a custom renderer instead of React DOM's renderToString.
+			// Useful for integrating with e.g. Apollo client (renderToStringWithData)
+			renderToString: (app) => someCustomRenderer(app),
+
+			// You can add extra head HTML here.
+			// Useful for integrating with, e.g., Redux, styled-components, Apolle client etc.
+			getHeadHtml() {
+				return `<title>My App</title>`;
+			},
+		},
+	);
+
+	// You can modify the response object here before returning
+	// e.g. by adding a Cache-Control header
+	return response;
+};
+```
+
+## Client-side customization hooks <a id="client-side"/>
+
+You can customize the client-side behavior of Rakkas by exporting certain hooks from the file `src/client.{js|ts|jsx|tsx}`. It can be useful for the following purposes:
+
+- Doing initialization work before client-side hydration
+- Wrapping your client-side app in a provider component (some React libraries require it)
+- Creating client-side [load helpers](./load-helpers)
+
+```tsx
+export function beforeStartClient() {
+	// Do initialization work before hydration
+	// If you return a promise, Rakkas will delay hydration until it resolves
+}
+
+export function wrap(app: JSX.Element) {
+	// You can wrap the client-side app in a provider here.
+	// Useful for integrating with, e.g., Redux, Apolle client etc.
+	return <SomeProvider>{app}</SomeProvider>;
+}
+
+export function createLoadHelpers(): LoadHelpers {
+	return {
+		// Initialize your client-side load helpers here
+	};
+}
+```

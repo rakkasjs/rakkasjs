@@ -8,10 +8,10 @@ If a page or layout needs to fetch data before rendering, instead of exporting a
 
 Here's a simple example of data loading that uses the free Pokéapi:
 
-import fetchDefinePageExample from "$examples/fetch-define-page/[pokemon].page.tsx?sample";
+import fetchDefinePageExample from "$examples/fetch/[pokemon].page.jsx?sample";
 
 <SampleViewer
-	url="/examples/fetch-define-page/pikachu"
+	url="/examples/fetch/pikachu"
 	code={fetchDefinePageExample}
 	height="35em"
 />
@@ -49,4 +49,4 @@ There are three types of possible return values:
 2. **An error result** is an object with an `error` property describing the error. We'll cover error handling more in depth below. For now all you should only know is that it has to have a `message` property. The return value may also have an optional `status` property which should be an integer in the form of 4xx or 5xx that will be used as the HTTP status of the response when doing server-side rendering. Default is 500, indicating a server error. If your `load` function throws or returns a promise that rejects, it will be treated as if it returned an error 500.
 3. **A redirection result** is an object that includes a `location` property which may be either a string or a URL object. A redirection result will abort the rendering of the current page and the user will be redirected to the specified location. The return value must also have a `status` property which should be an integer in the form of 3xx that will be used as the HTTP status of the redirection response when doing server-side rendering.
 
-> If you come from Next.js, `load` is similar to `getServerSideProps` and `getStaticProps`. But there are important differences: `getServerSideProps` will only run on the server but `load` may run either on the server or the client. So, calling backend functions from `load` is not allowed, all communication must go through an API even during server-side rendering. If you're familiar with `SvelteKit`, it is very similar to how it handles data fetching.
+> If you come from **Next.js**, `load` is similar to `getServerSideProps` and `getStaticProps`. But there are important differences: `getServerSideProps` will only run on the server but `load` may run either on the server or the client. So, calling backend functions from `load` is not allowed, all communication must go through an API even during server-side rendering. If you're familiar with `SvelteKit`, it is very similar to how it handles data fetching.

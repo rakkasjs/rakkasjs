@@ -27,4 +27,7 @@ export default {
 	//
 	// Vite configuration (not all options are supported)
 	// vite: {},
+	//
+	// Babel options passed to Vite's React plugin */
+	// babel: {},
 };
