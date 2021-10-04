@@ -87,10 +87,13 @@ export async function createServers({
 					request: {
 						// TODO: Get real host and port
 						url: new URL(url, `${proto}://${host}`),
+						ip: req.socket.remoteAddress,
 						method: req.method || "GET",
 						headers: new Headers(req.headers as Record<string, string>),
 						type,
 						body,
+						originalIp: req.socket.remoteAddress,
+						originalUrl: new URL(url, `${proto}://${host}`),
 					},
 					template: html,
 				});

@@ -55,6 +55,9 @@ export async function startServer() {
 			(trustForwardedOrigin && req.headers["x-forwarded-host"]) ||
 			req.headers.host ||
 			"localhost";
+		const ip =
+			(trustForwardedOrigin && req.headers["x-forwarded-for"]) ||
+			req.socket.remoteAddress;
 
 		async function handle() {
 			try {
@@ -65,12 +68,17 @@ export async function startServer() {
 					pageRoutes,
 					{
 						request: {
-							// TODO: Get real host and port
+							ip,
 							url: new URL(req.url || "/", `${proto}://${host}`),
 							method: req.method || "GET",
 							headers: new Headers(req.headers as Record<string, string>),
 							type,
 							body,
+							originalIp: req.socket.remoteAddress,
+							originalUrl: new URL(
+								req.url || "/",
+								`http://${req.headers.host || "localhost"}`,
+							),
 						},
 						template,
 						manifest,

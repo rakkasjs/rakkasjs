@@ -25,12 +25,13 @@
   - [x] Apollo client
   - [ ] Redux
   - [ ] Tailwind CSS
+- [x] ⚠️ BUG: No root page error on 404
+- [x] Expose `request.ip`, `request.originalUrl` and `request.originalIp`
 - [ ] Allow custom error serializers
 - [ ] Investigate Vite warnings:
   - [ ] fs.allow warning: https://vitejs.dev/config/#server-fs-allow
   - [ ] Circular dependency warning
 - [ ] Handle HEAD requests
-- [ ] Expose `request.ip`
 - [ ] chore: Add `engines` to `package.json` files
 - [ ] Investigate [vite-jest](https://github.com/sodatea/vite-jest)
 - [ ] Update documentation
@@ -40,6 +41,8 @@
 - [ ] Design a setData API
   - [ ] Design a navigate with data API
 - [ ] Serialize the routes into a smaller string in an external file
+- [ ] Serialize errors when exporting static site
+- [ ] Handle redirections when exporting static site
 
 ## For 1.0.0
 - [ ] Investigate debugging and sourcemaps
@@ -58,6 +61,11 @@
     - [ ] AWS Lambda (Begin / Architect)
     - [ ] Cloudflare Workers
     - [ ] Netlify
+  - [ ] Rendering modes
+    - [ ] Static (rendered when building)
+    - [ ] Server (rendered on the server)
+    - [ ] Incremental (rendered on the server and cached, served from the cache afterwards)
+    - [ ] Client (rendered on the client)
   - [ ] A way to trigger reloads from the reload function itself
   - [ ] Data caching
   	- [ ] Optimistic updates

@@ -304,9 +304,12 @@ export interface RouterInfo extends BaseRouterInfo {
 }
 
 interface RawRequestBase {
+	ip: string;
 	url: URL;
 	method: string;
 	headers: Headers;
+	originalIp: string;
+	originalUrl: URL;
 }
 
 interface RakkasRequestBase extends RawRequestBase {
