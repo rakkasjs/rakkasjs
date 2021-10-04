@@ -63,6 +63,7 @@ pre {
 	color: #eee;
 	padding: 1em;
 	white-space: pre !important;
+	tab-size: 2;
 }
 
 pre code {

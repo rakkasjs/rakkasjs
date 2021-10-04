@@ -34,6 +34,7 @@
 		"sanitize.css": "^13.0.0"
 	},
 	"devDependencies": {
+		"@mapbox/rehype-prism": "^0.8.0",
 		"@mdx-js/mdx": "^1.6.22",
 		"@rakkasjs/cli": "workspace:*",
 		"@types/cookie": "^0.4.1",

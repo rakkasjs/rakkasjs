@@ -1,5 +1,5 @@
-import React from "react";
-import { Layout, Link } from "rakkasjs";
+import React, { forwardRef } from "react";
+import { Layout, Link, useRouter } from "rakkasjs";
 import { Helmet } from "react-helmet-async";
 import { Header } from "../../lib/Header";
 import css from "./layout.module.css";
@@ -21,13 +21,13 @@ const MainLayout: Layout = ({ error, children }) => (
 
 		<Header />
 
-		<main className={css.main}>
+		<div className={css.main}>
 			{error ? (
 				<pre>{error.stack || error.message}</pre>
 			) : (
 				<MDXProvider
 					components={{
-						a: Link,
+						a: MdxLink,
 						// eslint-disable-next-line react/display-name
 						table: (props) => (
 							<div className={css.tableWrapper}>
@@ -39,7 +39,7 @@ const MainLayout: Layout = ({ error, children }) => (
 					{children}
 				</MDXProvider>
 			)}
-		</main>
+		</div>
 
 		<footer className={css.footer}>
 			<p>
@@ -61,3 +61,20 @@ const MainLayout: Layout = ({ error, children }) => (
 );
 
 export default MainLayout;
+
+const MdxLink: typeof Link = forwardRef((props, ref) => {
+	const { current } = useRouter();
+
+	const url =
+		props.href === undefined ? undefined : new URL(props.href, current);
+
+	return (
+		<Link
+			target={url?.origin === current.origin ? undefined : "_blank"}
+			{...props}
+			ref={ref}
+		/>
+	);
+});
+
+MdxLink.displayName = "MdxLink";

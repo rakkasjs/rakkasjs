@@ -8,6 +8,8 @@ import { highlight, loadLanguages } from "reprism";
 import tsx from "reprism/languages/typescript.js";
 // @ts-expect-error: No typings
 import bash from "reprism/languages/bash.js";
+// @ts-expect-error: No typings
+import rhypePrism from "@mapbox/rehype-prism";
 
 loadLanguages(tsx, bash);
 
@@ -15,7 +17,9 @@ export default defineConfig({
 	pageExtensions: ["jsx", "tsx", "mdx"],
 	vite: {
 		plugins: [
-			...mdx().map((x) => ({ ...x, enforce: "pre" } as const)),
+			...mdx({ rehypePlugins: [rhypePrism] }).map(
+				(x) => ({ ...x, enforce: "pre" } as const),
+			),
 			{
 				name: "code-sample-loader",
 

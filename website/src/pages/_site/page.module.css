@@ -1,6 +1,10 @@
+.main {
+	max-width: 70em;
+	margin: auto;
+}
+
 .banner {
 	text-align: center;
-	max-width: 32em;
 	margin: auto;
 }
 
@@ -10,15 +14,14 @@
 
 .logo > * {
 	display: inline-block;
-	margin: auto;
-	margin-top: 1rem;
+	margin: 1rem auto;
+	max-width: calc(100% - 4em);
 }
 
 .tagLine {
-	font-variant: small-caps;
 	font-style: italic;
 	font-size: 125%;
-	margin-top: 1rem;
+	margin-bottom: 3rem;
 }
 
 .cta {
@@ -63,7 +66,7 @@
 	.cards {
 		display: flex;
 		flex-wrap: wrap;
-		margin-top: 1rem;
+		margin-top: 3rem;
 		margin-right: -1rem;
 	}
 

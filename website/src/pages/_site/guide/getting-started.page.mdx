@@ -1,0 +1,42 @@
+# Getting started
+
+> 🚀 Thanks to StackBlitz, you can now **try Rakkas online, right in your browser**!
+>
+> - [Rakkas **TypeScript** demo](https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx)
+> - [Rakkas **JavaScript** demo](https://stackblitz.com/edit/rakkas-demo?file=src%2Fpages%2Fpage.jsx)
+
+The easiest way to try Rakkas out on your computer is to use the project initializer:
+
+```bash
+# Create the project directory
+mkdir my-app && cd my-app
+# Scaffold the demo app: Follow the prompts for the rest
+npx create-rakkas-app@latest
+```
+
+`create-rakkas-app` project initializer comes with many features, all off which are optional but we strongly recommend enabling TypeScript on your first project because self-documenting type definitions allow for a smoother learning curve.
+
+Demo project's source code comes with plenty of comments, you may not need this guide!
+
+> 👷 If you prefer a manual setup, you can install `rakkasjs`, `@rakkasjs/runner-node`, `react`, `react-dom`, and `react-helmet-async` as production dependencies, and `@rakkasjs/cli` as a dev dependency:
+>
+> ```bash
+> npm install --save rakkasjs @rakkasjs/runner-node react react-dom react-helmet-async
+> npm install --save-dev @rakkasjs/cli
+> ```
+>
+> Then you can start a development server on `localhost:3000` with `npx rakkas dev`, build with `npx rakkas build`, and launch with `npx @rakkasjs/runner-node`.
+
+## Project structure
+
+By default, `create-rakkas-app` generates a project with the following structure:
+
+| Path                   | Description                                                                |
+| ---------------------- | -------------------------------------------------------------------------- |
+| `/package.json`        | npm package file                                                           |
+| `/rakkas.config.[jt]s` | Rakkas configuration file                                                  |
+| `/public`              | [Static files](./static-files) to be served from `/`                       |
+| `/src/client.[jt]s`    | Client-side cusomization hooks                                             |
+| `/src/server.[jt]s`    | Server-side customization hooks                                            |
+| `/src/pages`           | [Pages](./pages-and-routing) and [layouts](./layouts) (client-side routes) |
+| `/src/api`             | [Endpoints and middlewares](./api-routes) (server-side routes)             |

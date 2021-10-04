@@ -1,9 +1,6 @@
 .main {
-	width: calc(100% - 2em);
-	max-width: 60em;
-	margin: auto;
-	margin-top: 1rem;
-	padding-bottom: 1em;
+	padding: 1em;
+	padding-bottom: 2em;
 	min-height: calc(100vh - 12rem);
 }
 

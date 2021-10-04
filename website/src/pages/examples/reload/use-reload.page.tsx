@@ -20,7 +20,7 @@ export default definePage<UseReloadPageTypes>({
 			// Reload when the internet connection is restored after a disconnection
 			reconnect: true,
 			// Reload every two seconds
-			interval: 2_000,
+			interval: 2000,
 			// But only if the window is in the foreground
 			background: false,
 		});

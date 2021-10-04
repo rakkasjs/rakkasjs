@@ -34,15 +34,15 @@
 - [ ] Handle HEAD requests
 - [ ] chore: Add `engines` to `package.json` files
 - [ ] Investigate [vite-jest](https://github.com/sodatea/vite-jest)
+- [ ] Handle redirections when exporting static site
 - [ ] Update documentation
-  - [ ] Split documentation into multiple pages
+  - [x] Split documentation into multiple pages
   - [ ] Document integrations with popular tools
   - [ ] Document rakkasjs types
 - [ ] Design a setData API
   - [ ] Design a navigate with data API
 - [ ] Serialize the routes into a smaller string in an external file
 - [ ] Serialize errors when exporting static site
-- [ ] Handle redirections when exporting static site
 
 ## For 1.0.0
 - [ ] Investigate debugging and sourcemaps

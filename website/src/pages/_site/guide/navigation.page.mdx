@@ -1,0 +1,25 @@
+import { SampleViewer } from "./SampleViewer";
+
+# Navigation
+
+Rakkas provieds a `Link` component (in the `rakkasjs` package) for SPA-style client-side navigation. It takes exactly the same props as the HTML `<a>` element but intercepts user's click to handle the navigation without reloading the page. `NavLink` component is similar but accepts `currentRouteClass` and `currentRouteStyle` to style them differently when the `href` property matches the current URL. It is useful for marking the active item in a navigation menu, for example.
+
+Let's add client-side navigation to the previous example by replacing the `<a>` elements with `NavLink` and adding some inline styling for the active link. Notice how the page refreshes without a full reload now:
+
+import navlinkExample from "$examples/navlink/[userName].page.jsx?sample";
+
+<SampleViewer code={navlinkExample} url="/examples/navlink/Fatih" />
+
+For programmatic navigation, use the `navigate` function exported from the `rakkasjs` package:
+
+import navigateExample from "$examples/navigate/[userName].page.jsx?sample";
+
+<SampleViewer url="/examples/navigate/Fatih" code={navigateExample} />
+
+You can use `navigate(-1)` and `navigate(1)` two navigate one page back or one page forward respectively.
+
+## Page transitions
+
+The `useRouter` custom hook from the `rakkasjs` package has a `current` property. It's a URL object that contains the URL of the currently rendered page. You should always use this property insteaf of `window.location` because, a) `window` is not available during server-side rendering, and b) you'll get the wrong URL during page transitions: When the user clicks on a `Link`, the URL in the location bar of the browser changes immediately but the old page is still shown while the new one is being loaded.
+
+The `next` property of the return value of `useRouter`, if present, contains the URL that the app is transitioning into. You can test for its presence to render some loading animation for example. Also, the `NavLink` component accepts `nextRouteClass` and `nextRouteStyle` props that take effect during a page transition if the `href` property matches the URL that the app is transitioning into.

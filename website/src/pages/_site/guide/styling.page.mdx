@@ -1,0 +1,15 @@
+# Styling
+
+Rakkas allows you to use all styling options available to React apps.
+
+Importing a `.css` file will inject its content to the page via a `<style>` tag. During development, it will happen dynamically so you may see a flash of unstyled content. When you build your app for production, though, imported styles will be split into external `.css` files and everything will work even with JavaScript disabled.
+
+For component scoped styles, Rakkas supports [CSS modules](https://github.com/css-modules/css-modules) with the usual naming convention `.module.css`.
+
+CSS preprocessors are also supported out of the box, you just need to install your preferred processor (`sass`, `less`, or `stylus`) to enable support for `.scss`, `.sass`, `.less`, `.styl` and `.stylus` file extensions.
+
+Finally, Rakkas also allows you to use CSS-in-JS solutions with first class SSR support.
+
+> TODO: styled-components example
+
+> TODO: tailwindcss example

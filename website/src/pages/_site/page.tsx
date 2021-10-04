@@ -6,17 +6,20 @@ import { Link } from "rakkasjs";
 import { Helmet } from "react-helmet-async";
 
 const HomePage: FC = () => (
-	<>
+	<main className={css.main}>
 		<Helmet>
 			<title>Rakkas</title>
 		</Helmet>
 
 		<div className={css.banner}>
 			<div className={css.logo}>
-				<Logomark height="100px" />
-				<Logotype height="100px" />
+				<Logomark height="160px" />
+				<Logotype height="160px" />
 			</div>
-			<div className={css.tagLine}>The Dancing Web Framework</div>
+
+			<div className={css.tagLine}>
+				Lightning fast Next.js alternative powered by Vite
+			</div>
 
 			<p>
 				<Link href="/guide" className={css.cta}>
@@ -38,18 +41,18 @@ const HomePage: FC = () => (
 		<div className={css.cards}>
 			<div className={css.card}>
 				<h4>⚡&nbsp; Lightning fast development</h4>
-				<p>
-					Build fast with{" "}
-					<a href="https://vitejs.dev/" target="_blank" rel="noreferrer">
-						Vite
-					</a>
-					&apos;s instant server restart and hot module reloading with fast
-					refresh
-				</p>
+				<p>Build fast with instant server start and hot module reloading</p>
 			</div>
 			<div className={css.card}>
 				<h4>🖥️&nbsp; Server-side rendering</h4>
 				<p>Render the initial page on the sever-side for excellent SEO</p>
+			</div>
+			<div className={css.card}>
+				<h4>📄&nbsp; Static site generation</h4>
+				<p>
+					Optionally, export a static site that can be hosted on any CDN or
+					static server
+				</p>
 			</div>
 			<div className={css.card}>
 				<h4>☸️&nbsp; SPA-style navigation</h4>
@@ -58,13 +61,6 @@ const HomePage: FC = () => (
 			<div className={css.card}>
 				<h4>📁&nbsp; File system-based routing</h4>
 				<p>Organize your pages and layouts in an intuitive manner</p>
-			</div>
-			<div className={css.card}>
-				<h4>⬇️&nbsp; Easy data fetching</h4>
-				<p>
-					Use the same code on the server and on the client when fecthing your
-					data
-				</p>
 			</div>
 			<div className={css.card}>
 				<h4>⚙️&nbsp; API routes</h4>
@@ -82,7 +78,7 @@ const HomePage: FC = () => (
 				<i>2. (obsolete)</i> Pendulum.
 			</div>
 		</section>
-	</>
+	</main>
 );
 
 export default HomePage;
