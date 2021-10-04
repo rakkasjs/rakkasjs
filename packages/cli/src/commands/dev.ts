@@ -32,9 +32,11 @@ async function startServer(opts: { port: string; host: string; open?: true }) {
 
 	const host = opts.host;
 
-	const { config, deps } = await loadConfig();
+	let { config, deps } = await loadConfig();
 
 	async function reload() {
+		({ config, deps } = await loadConfig());
+
 		http.on("close", async () => {
 			await vite.ws.close();
 			await vite.close();
