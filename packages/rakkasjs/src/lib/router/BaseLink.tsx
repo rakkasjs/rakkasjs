@@ -1,17 +1,13 @@
 import React, { AnchorHTMLAttributes, forwardRef } from "react";
+import { navigate } from "./Router";
 
 export interface BaseLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-	navigate(
-		to: string,
-		options?: {
-			replace?: boolean;
-			scroll?: boolean;
-		},
-	): boolean;
+	onNavigationStart?(): void;
+	onNavigationComplete?(interrupted: boolean): void;
 }
 
 export const BaseLink = forwardRef<HTMLAnchorElement, BaseLinkProps>(
-	({ navigate, onClick, ...props }, ref) => (
+	({ onNavigationStart, onNavigationComplete, onClick, ...props }, ref) => (
 		<a
 			{...props}
 			ref={ref}
@@ -29,7 +25,12 @@ export const BaseLink = forwardRef<HTMLAnchorElement, BaseLinkProps>(
 					return;
 				}
 
-				navigate(e.currentTarget.href);
+				onNavigationStart?.();
+
+				navigate(e.currentTarget.href)
+					.then(() => onNavigationComplete?.(false))
+					.catch(() => onNavigationComplete?.(true));
+
 				e.preventDefault();
 			}}
 		/>

@@ -1,7 +1,11 @@
-import React, { AnchorHTMLAttributes, CSSProperties, forwardRef } from "react";
+import React, {
+	AnchorHTMLAttributes,
+	CSSProperties,
+	forwardRef,
+	useState,
+} from "react";
 import { BaseLink } from "./BaseLink";
 import { useRouter } from "../useRouter";
-import { navigate } from "./Router";
 
 export interface NavLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 	/** Class to be added if `href` matches the current URL */
@@ -9,13 +13,13 @@ export interface NavLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 	/** Style to be added if `href` matches the current URL */
 	currentRouteStyle?: CSSProperties;
 
-	/** Class to be added if `href` matches the next URL, that is, the URL that is loading */
+	/** Class to be added if navigation is underway because the user clicked on this link */
 	nextRouteClass?: string;
-	/** Style to be added if `href` matches the current URL, that is, the URL that is loading */
+	/** Style to be added if navigation is underway because the user clicked on this link */
 	nextRouteStyle?: CSSProperties;
 
 	/**
-	 * Custom comparison function for checking if two URLs match
+	 * Custom comparison function for checking if the current URL matches this link
 	 * @param url  URL to be compared to `href`
 	 * @param href Value of `href` property, passed for convenience
 	 *
@@ -42,7 +46,8 @@ export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
 		},
 		ref,
 	) => {
-		const { current, next } = useRouter();
+		const [navigating, setNavigating] = useState(false);
+		const { current } = useRouter();
 
 		const classNames = className ? [className] : [];
 
@@ -54,7 +59,7 @@ export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
 				nextRouteStyle)
 		) {
 			const url = new URL(props.href, current);
-			if (next && onCompareUrls(next, url)) {
+			if (navigating) {
 				if (nextRouteClass) classNames.push(nextRouteClass);
 				if (nextRouteStyle) style = { ...style, ...nextRouteStyle };
 			}
@@ -68,10 +73,11 @@ export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
 		return (
 			<BaseLink
 				{...props}
-				navigate={navigate}
 				ref={ref}
 				className={classNames.join(" ") || undefined}
 				style={style}
+				onNavigationStart={() => setNavigating(true)}
+				onNavigationComplete={() => setNavigating(false)}
 			/>
 		);
 	},

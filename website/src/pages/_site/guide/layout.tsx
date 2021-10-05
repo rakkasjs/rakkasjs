@@ -47,6 +47,7 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 								<NavLink
 									href={"/guide/" + item.slug}
 									currentRouteStyle={{ fontWeight: "bold" }}
+									nextRouteStyle={{ color: "#f08" }}
 								>
 									{item.title}
 								</NavLink>

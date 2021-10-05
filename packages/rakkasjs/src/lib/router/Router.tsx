@@ -25,31 +25,54 @@ let notify = initClientGlobal(
 
 let nextKey = 1;
 
+let navigationPromise:
+	| {
+			resolve(): void;
+			reject(): void;
+	  }
+	| undefined;
+
 /**
  * Navigate programmatically
  * @param to URL to go to or an integer (-1 means back one page, 1 means forward one page)
- * @returns true if client-side navigation could be achieved
+ * @returns a promise that resolves when the navigation is complete and rejects if it's interrupted by another navigation request
  */
 export function navigate(
 	to: string | number,
 	options?: { replace?: boolean; scroll?: boolean; focus?: boolean },
-) {
+): Promise<void> {
 	if (typeof to === "number") {
 		window.history.go(to);
+
+		if (navigationPromise) navigationPromise.reject();
+
+		return new Promise((resolve, reject) => {
+			navigationPromise = { resolve, reject };
+		});
 	} else {
 		const url = new URL(to, window.location.href);
 
 		if (
 			// Different origin
-			url.origin !== window.location.origin ||
-			// Hash change only
-			(url.pathname === window.location.pathname &&
-				url.search === window.location.search &&
-				url.hash !== window.location.hash)
+			url.origin !== window.location.origin
 		) {
 			// Let the browser handle it
 			window.location.assign(to);
-			return false;
+			return new Promise(() => {
+				// Never resolves
+			});
+		}
+
+		if (
+			// Hash change only
+			url.pathname === window.location.pathname &&
+			url.search === window.location.search &&
+			url.hash !== window.location.hash
+		) {
+			// Let the browser handle it
+			window.location.assign(to);
+			// Resolves immediately
+			return Promise.resolve();
 		}
 
 		if (options?.replace) {
@@ -61,8 +84,14 @@ export function navigate(
 		notify(options || { scroll: true, focus: true });
 	}
 
-	return true;
+	if (navigationPromise) navigationPromise.reject();
+
+	return new Promise((resolve, reject) => {
+		navigationPromise = { resolve, reject };
+	});
 }
+
+if (typeof window !== "undefined") (window as any).navigate = navigate;
 
 export interface RouterProps {
 	/** Callback for rendering the view for a given URL */
@@ -231,6 +260,11 @@ export const Router: FC<RouterProps> = ({
 					}
 				}
 			});
+		}
+
+		if (navigationPromise) {
+			navigationPromise.resolve();
+			navigationPromise = undefined;
 		}
 
 		return () => {
