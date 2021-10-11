@@ -1,6 +1,6 @@
 {
 	"name": "@rakkasjs/apollo-server",
-	"version": "0.4.0-canary.1",
+	"version": "0.4.0-canary.3",
 	"description": "Rakkas.js Apollo server graphql runner",
 	"scripts": {
 		"prepublishOnly": "pnpm build",
@@ -28,7 +28,7 @@
 		"rakkasjs": "workspace:*"
 	},
 	"devDependencies": {
-		"esbuild": "^0.13.3",
+		"esbuild": "^0.13.4",
 		"esbuild-node-externals": "^1.3.0",
 		"prettier": "^2.4.1",
 		"rakkasjs": "workspace:*",

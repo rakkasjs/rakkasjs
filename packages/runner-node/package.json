@@ -1,6 +1,6 @@
 {
 	"name": "@rakkasjs/runner-node",
-	"version": "0.4.0-canary.1",
+	"version": "0.4.0-canary.3",
 	"description": "Rakkas.js Node runner",
 	"scripts": {
 		"prepublishOnly": "pnpm build",
@@ -35,9 +35,9 @@
 		"rakkasjs": "workspace:*"
 	},
 	"devDependencies": {
-		"@types/node": "^16.10.2",
+		"@types/node": "^16.10.3",
 		"@types/node-fetch": "2.5.12",
-		"esbuild": "^0.13.3",
+		"esbuild": "^0.13.4",
 		"prettier": "^2.4.1",
 		"rakkasjs": "workspace:*",
 		"rimraf": "^3.0.2",
