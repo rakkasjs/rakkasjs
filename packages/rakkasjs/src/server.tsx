@@ -173,6 +173,9 @@ export async function handleRequest(
 	const serverHooks = await import("@rakkasjs/server-hooks");
 	const { servePage = (req, render) => render(req) } = serverHooks;
 
+	let filename = request.url.pathname;
+	if (filename === "/") filename = "";
+
 	async function render(
 		request: RawRequest,
 		context: Record<string, unknown> = {},
@@ -195,14 +198,6 @@ export async function handleRequest(
 				? await options.createLoadHelpers(internalFetch)
 				: {},
 		});
-
-		// Handle redirection
-		if ("location" in stack) {
-			return {
-				status: stack.status,
-				headers: { location: String(stack.location) },
-			};
-		}
 
 		const helmetContext = {};
 
@@ -234,15 +229,31 @@ export async function handleRequest(
 			}),
 		)})`;
 
-		let head: string;
+		let head = "";
+		const headers: Record<string, string> = { "content-type": "text/html" };
 
-		let path = request.url.pathname;
-		if (path === "/") path = "";
+		let location: string | undefined;
+		const lastRendered = stack.rendered[stack.rendered.length - 1].loaded;
+
+		if ("location" in lastRendered) {
+			location = String(lastRendered.location);
+
+			if (
+				RAKKAS_BUILD_MODE === "static" &&
+				request.headers.get("x-rakkas-export") === "static"
+			) {
+				head += `<meta http-equiv="refresh" content="0; url=${encodeURI(
+					location,
+				)}">`;
+			}
+
+			headers.location = location;
+		}
 
 		if (RAKKAS_BUILD_MODE === "static") {
-			head = `<script id="rakkas-data-script" src="/__data${path}/index.js"></script>`;
+			head += `<script id="rakkas-data-script" src="/__data${filename}/index.js"></script>`;
 		} else {
-			head = `<script>${dataScript}</script>`;
+			head += `<script>${dataScript}</script>`;
 		}
 
 		if (pages) {
@@ -291,34 +302,32 @@ export async function handleRequest(
 
 		if (options.getHeadHtml) head += options.getHeadHtml();
 
-		let body = template.replace("<!-- rakkas-head-placeholder -->", head);
+		let html = template.replace("<!-- rakkas-head-placeholder -->", head);
 
 		const htmlAttributes = helmet.htmlAttributes.toString();
-		body = body.replace(
+		html = html.replace(
 			"><!-- rakkas-html-attributes-placeholder -->",
 			htmlAttributes ? " " + htmlAttributes + ">" : ">",
 		);
 
 		const bodyAttributes = helmet.bodyAttributes.toString();
-		body = body.replace(
+		html = html.replace(
 			"><!-- rakkas-body-attributes-placeholder -->",
 			bodyAttributes ? " " + bodyAttributes + ">" : ">",
 		);
 
-		body = body.replace("<!-- rakkas-app-placeholder -->", rendered);
-
-		const headers: Record<string, string> = { "content-type": "text/html" };
+		html = html.replace("<!-- rakkas-app-placeholder -->", rendered);
 
 		if (
 			RAKKAS_BUILD_MODE === "static" &&
 			request.headers.get("x-rakkas-export") === "static"
 		) {
-			await mkdirp(`dist/client${path}`);
-			await fs.promises.writeFile(`dist/client${path}/index.html`, body);
+			await mkdirp(`dist/client${filename}`);
+			await fs.promises.writeFile(`dist/client${filename}/index.html`, html);
 
-			await mkdirp(`dist/client/__data${path}`);
+			await mkdirp(`dist/client/__data${filename}`);
 			await fs.promises.writeFile(
-				`dist/client/__data${path}/index.js`,
+				`dist/client/__data${filename}/index.js`,
 				dataScript,
 			);
 
@@ -328,7 +337,7 @@ export async function handleRequest(
 		return {
 			status: stack.status,
 			headers,
-			body,
+			body: html,
 		};
 	}
 

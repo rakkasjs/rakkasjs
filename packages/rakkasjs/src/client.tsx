@@ -48,12 +48,6 @@ export async function startClient(routes?: Route[]) {
 		helpers,
 	});
 
-	// Redirection should not happen on initial render, but let's keep ts compiler happy
-	if ("location" in stack) {
-		window.location.href = String(stack.location);
-		return;
-	}
-
 	let rendered = (
 		<HelmetProvider>
 			<App initialStack={stack} routes={routes} helpers={helpers} />

@@ -1,66 +1,69 @@
 # TODO
 
 ## For 0.4.0
-- [x] Test the layout context API
-- [x] Static site generation
-- [x] Migrate to `@vitejs/plugin-react`
-- [x] Strip the load functions and similar when exporting static site
-- [x] Tidy up static site output
-- [x] Add command to unpublish canary releases
-- [x] Improve logging
-- [x] ⚠️ BUG: Vite plugin ordering when using mdx
-- [x] Design a way to wrap the rendered application in custom providers
-- [x] Simplify testing with `rakkas with-port` command
-- [x] Design an API to inject helpers to load functions
-- [x] ⚠️ BUG: SSR doesn't hot reload layouts
-- [x] ⚠️ BUG: Reload loses focus (CNR, fixed?)
-- [x] Define page/layout types depending on the parent layout type
-- [x] Project initializer enhancements:
-  - [x] Add option to skip generating the sample application
-  - [x] Add Cypress integration
-  - [x] Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
+- Test the layout context API
+- Static site generation
+- Migrate to `@vitejs/plugin-react`
+- Strip the load functions and similar when exporting static site
+- Tidy up static site output
+- Add command to unpublish canary releases
+- Improve logging
+- ⚠️ BUG: Vite plugin ordering when using mdx
+- Design a way to wrap the rendered application in custom providers
+- Simplify testing with `rakkas with-port` command
+- Design an API to inject helpers to load functions
+- ⚠️ BUG: SSR doesn't hot reload layouts
+- ⚠️ BUG: Reload loses focus (CNR, fixed?)
+- Define page/layout types depending on the parent layout type
+- Project initializer enhancements:
+  - Add option to skip generating the sample application
+  - Add Cypress integration
+  - Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
 - [ ] Create integration tests with popular tools
-  - [x] Styled components
-  - [x] Apollo server
-  - [x] Apollo client
+  - Styled components
+  - Apollo server
+  - Apollo client
   - [ ] Redux
   - [ ] Tailwind CSS
-- [x] ⚠️ BUG: No root page error on 404
-- [x] Expose `request.ip`, `request.originalUrl` and `request.originalIp`
-- [ ] Allow custom error serializers
+- ⚠️ BUG: No root page error on 404
+- Expose `request.ip`, `request.originalUrl` and `request.originalIp`
 - [ ] Investigate Vite warnings:
   - [ ] fs.allow warning: https://vitejs.dev/config/#server-fs-allow
   - [ ] Circular dependency warning
 - [ ] Handle HEAD requests
 - [ ] chore: Add `engines` to `package.json` files
-- [ ] Investigate [vite-jest](https://github.com/sodatea/vite-jest)
-- [ ] Handle redirections when exporting static site
+- [ ] Create examples
+  - [ ] Styled components
+  - [ ] Apollo GraphQL
+  - [ ] Redux
+  - [ ] Tailwind CSS
 - [ ] Update documentation
-  - [x] Split documentation into multiple pages
-  - [ ] Document integrations with popular tools
+  - Split documentation into multiple pages
   - [ ] Document rakkasjs types
-- [ ] Design a setData API
-  - [ ] Design a navigate with data API
 - [ ] Serialize the routes into a smaller string in an external file
-- [ ] Serialize errors when exporting static site
 
 ## For 1.0.0
 - [ ] Investigate debugging and sourcemaps
+- [ ] Design a setData API
+  - [ ] Design a navigate with data API
+- [ ] Investigate [vite-jest](https://github.com/sodatea/vite-jest)
 - Features
+  - [ ] Serverless platforms
+    - [ ] Vercel
+    - [ ] AWS Lambda (Begin / Architect)
+    - [ ] Cloudflare Workers
+    - [ ] Netlify
   - [ ] Add support for React 18 features (streaming SSR, Suspense, startTransition, server components etc.)
   - [ ] Add support for multipart/form-data
+  - [ ] Localizable and customizable router
+  - [ ] Allow custom error serializers
+  - [ ] Add support for logging
  	- [ ] Make server limits (maximum request body size etc.) configurable
   - [ ] Add a way to add cache-related HTTP headers on pages
   - [ ] Service workers
   - [ ] Link prefetching
   - [ ] HTTPS in dev server
   - [ ] Spread dynamic route parameters
-  - [ ] Localizable and customizable router
-  - [ ] Serverless platforms
-    - [ ] Vercel
-    - [ ] AWS Lambda (Begin / Architect)
-    - [ ] Cloudflare Workers
-    - [ ] Netlify
   - [ ] Rendering modes
     - [ ] Static (rendered when building)
     - [ ] Server (rendered on the server)

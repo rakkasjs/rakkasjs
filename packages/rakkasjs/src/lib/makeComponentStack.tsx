@@ -1,11 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
-import {
-	ErrorDescription,
-	LayoutLoadResult,
-	LoadRedirectResult,
-	ReloadHookParams,
-} from "..";
+import { ErrorDescription, LayoutLoadResult, ReloadHookParams } from "..";
 import { wrapInErrorBoundary } from "./ErrorBoundary";
 import {
 	ErrorPage,
@@ -74,7 +69,7 @@ export async function makeComponentStack({
 	isInitialRender,
 	rootContext = {},
 	helpers,
-}: StackArgs): Promise<LoadRedirectResult | StackResult> {
+}: StackArgs): Promise<StackResult> {
 	const { stack, params, match } = found;
 
 	let error: ErrorDescription | undefined;
@@ -186,10 +181,6 @@ export async function makeComponentStack({
 			loaded = previousRender![i].loaded;
 		}
 
-		if ("location" in loaded) {
-			return loaded;
-		}
-
 		thisRender.push({
 			Component,
 			loaded,
@@ -199,12 +190,6 @@ export async function makeComponentStack({
 
 		status = loaded.status ?? status;
 
-		if ("error" in loaded) {
-			if (status < 400) status = 500;
-			error = loaded.error;
-			break;
-		}
-
 		if ("context" in loaded) {
 			context = {
 				...context,
@@ -213,13 +198,24 @@ export async function makeComponentStack({
 		}
 
 		usedContexts.push(context);
+
+		if ("error" in loaded) {
+			if (status < 400) status = 500;
+			error = loaded.error;
+			break;
+		} else if ("location" in loaded) {
+			status = loaded.status || 301;
+			break;
+		}
 	}
+
+	const successfulRender = thisRender.slice(0);
 
 	if (error) {
-		thisRender.length = errorHandlerIndex + 1;
+		successfulRender.length = errorHandlerIndex + 1;
 	}
 
-	if (!thisRender.length) {
+	if (successfulRender.length === 0) {
 		thisRender.push({
 			Component: LastResort,
 			cacheKey: "",
@@ -227,7 +223,7 @@ export async function makeComponentStack({
 		});
 	}
 
-	const content = thisRender.reduceRight((prev, rendered, i) => {
+	const content = successfulRender.reduceRight((prev, rendered, i) => {
 		const reloadThis = RAKKAS_BUILD_MODE === "ssr" ? () => reload(i) : noop;
 
 		const Component = rendered.Component!;
@@ -352,6 +348,7 @@ async function loadDataScript(path: string) {
 		const oldScript = document.getElementById(
 			"rakkas-data-script",
 		) as HTMLScriptElement;
+
 		if (new URL(oldScript.src).pathname === src) {
 			return resolve($rakkas$rendered);
 		}

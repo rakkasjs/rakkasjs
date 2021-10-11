@@ -257,19 +257,20 @@ export interface ErrorDescription {
 
 export type PageLoadResult<T = unknown> =
 	| PageLoadSuccessResult<T>
-	| LoadErrorResult
-	| LoadRedirectResult;
+	| LoadErrorResult;
 
 export type LayoutLoadResult<
 	T = unknown,
 	C extends Record<string, any> = Record<string, any>,
-> = LayoutLoadSuccessResult<T, C> | LoadErrorResult | LoadRedirectResult;
+> = LayoutLoadSuccessResult<T, C> | LoadErrorResult;
 
 export interface PageLoadSuccessResult<T = unknown> {
-	// HTTP status, should be 2xx
+	/**  HTTP status, should be 2xx or 3xx for redirect */
 	status?: number;
-	// Data to be passed to the page component
+	/**  Data to be passed to the page component */
 	data: T;
+	/** Redirection target */
+	location?: string | URL;
 }
 
 export interface LayoutLoadSuccessResult<
@@ -282,6 +283,8 @@ export interface LayoutLoadSuccessResult<
 	data: T;
 	/** Context to be passed down to nested layouts and pages */
 	context?: C;
+	/** Redirection target */
+	location?: string | URL;
 }
 
 export interface LoadErrorResult {
@@ -289,13 +292,6 @@ export interface LoadErrorResult {
 	status?: number;
 	// An error object describing the error
 	error: ErrorDescription;
-}
-
-export interface LoadRedirectResult {
-	// HTTP status, should be 3xx
-	status: number;
-	// Location to redirect to
-	location: string | URL;
 }
 
 // Return value of useRouter custom hook

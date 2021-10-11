@@ -2,7 +2,7 @@
 // You may delete this file if you don't need to customize anything
 
 // Customize the way Rakkas renders and serves a page
-export function servePage(request, renderPage) {
+export async function servePage(request, renderPage) {
 	// You can manipulate the request object here before passing it to renderPage
 	const response = await renderPage(
 		request,

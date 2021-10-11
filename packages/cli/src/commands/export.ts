@@ -67,14 +67,19 @@ export default function exportCommand() {
 			// eslint-disable-next-line no-console
 			console.log(chalk.whiteBright("Crawling the application"));
 			const roots = new Set(["/"]);
+			const origin = `http://${host}:${port}`;
 			for (const root of roots) {
+				const currentUrl = origin + root;
+
 				const response =
 					firstResponse ||
-					(await fetch(`http://${host}:${port}${root}`, {
+					(await fetch(currentUrl, {
 						headers: { "x-rakkas-export": "static" },
 					}));
 
 				firstResponse = undefined;
+
+				if (response.headers.get("x-rakkas-export") !== "static") continue;
 
 				if (!response.ok) {
 					// eslint-disable-next-line no-console
@@ -85,7 +90,16 @@ export default function exportCommand() {
 					);
 				}
 
-				if (response.headers.get("x-rakkas-export") !== "static") continue;
+				// eslint-disable-next-line no-inner-declarations
+				function addPath(path: string) {
+					const url = new URL(path, currentUrl);
+					if (url.origin === origin) {
+						roots.add(url.pathname);
+					}
+				}
+
+				const location = response.headers.get("location");
+				if (location) addPath(location);
 
 				// eslint-disable-next-line no-console
 				console.log(chalk.gray("Exported page"), chalk.blue(root));
@@ -94,14 +108,7 @@ export default function exportCommand() {
 
 				const dom = cheerio.load(fetched);
 
-				dom("a[href]").each((i, el) => {
-					const url = new URL(el.attribs.href, `http://${host}:${port}`);
-					if (url.origin === `http://${host}:${port}`) {
-						if (!roots.has(url.pathname)) {
-							roots.add(url.pathname);
-						}
-					}
-				});
+				dom("a[href]").each((i, el) => addPath(el.attribs.href));
 			}
 
 			await mkdirp("dist");

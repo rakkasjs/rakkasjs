@@ -57,13 +57,13 @@ export const App: FC<{
 				helpers,
 			});
 
-			if ("location" in stack) {
-				navigate(String(stack.location), { replace: true });
-				return <></>;
-			}
-
 			if (stack.status === 404 && !initialRender.current) {
 				return null;
+			}
+
+			const lastRendered = stack.rendered[stack.rendered.length - 1].loaded;
+			if ("location" in lastRendered) {
+				navigate(String(lastRendered.location), { replace: true });
 			}
 
 			initialRender.current = false;

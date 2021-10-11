@@ -2,7 +2,7 @@ import React from "react";
 import { definePage, PageTypes } from "rakkasjs";
 
 interface IndexPageTypes extends PageTypes {
-	parentContext: { session: { user: { email: string } } };
+	parentContext: { session: { user: null | { email: string } } };
 }
 
 export default definePage<IndexPageTypes>({
@@ -15,6 +15,7 @@ export default definePage<IndexPageTypes>({
 			return {
 				status: 301,
 				location: "/sign-in",
+				data: {},
 			};
 		}
 
@@ -25,6 +26,10 @@ export default definePage<IndexPageTypes>({
 	},
 
 	Component: function IndexPage({ context }) {
-		return <p id="greeting">Hello {context.session.user.email}!</p>;
+		return context.session.user ? (
+			<p id="greeting">Hello {context.session.user.email}!</p>
+		) : (
+			<p>Redirecting to login page</p>
+		);
 	},
 });
