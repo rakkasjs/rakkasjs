@@ -1,6 +1,6 @@
 {
 	"name": "@rakkasjs/runner-node",
-	"version": "0.4.0-canary.3",
+	"version": "0.4.0-canary.4",
 	"description": "Rakkas.js Node runner",
 	"scripts": {
 		"prepublishOnly": "pnpm build",

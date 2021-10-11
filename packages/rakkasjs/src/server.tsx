@@ -17,7 +17,6 @@ import { RawRequest, PageRenderOptions } from "./lib/types";
 import { RouterProvider } from "./lib/useRouter";
 
 import fs from "fs";
-import mkdirp from "mkdirp";
 
 export interface EndpointModule {
 	[method: string]: RequestHandler | undefined;
@@ -322,10 +321,12 @@ export async function handleRequest(
 			RAKKAS_BUILD_MODE === "static" &&
 			request.headers.get("x-rakkas-export") === "static"
 		) {
-			await mkdirp(`dist/client${filename}`);
+			await fs.promises.mkdir(`dist/client${filename}`, { recursive: true });
 			await fs.promises.writeFile(`dist/client${filename}/index.html`, html);
 
-			await mkdirp(`dist/client/__data${filename}`);
+			await fs.promises.mkdir(`dist/client/__data${filename}`, {
+				recursive: true,
+			});
 			await fs.promises.writeFile(
 				`dist/client/__data${filename}/index.js`,
 				dataScript,

@@ -33,7 +33,6 @@ const options = [
 			"react-dom/server",
 			"react-helmet-async",
 			"node-fetch",
-			"mkdirp",
 		],
 		plugins: [
 			nodeResole(),

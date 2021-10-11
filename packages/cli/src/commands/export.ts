@@ -3,7 +3,6 @@ import getPort from "get-port";
 import cheerio from "cheerio";
 import fs from "fs";
 import path from "path";
-import mkdirp from "mkdirp";
 import { build } from "./build";
 import { spawn } from "child_process";
 import fetch, { FetchError, Response } from "node-fetch";
@@ -111,7 +110,7 @@ export default function exportCommand() {
 				dom("a[href]").each((i, el) => addPath(el.attribs.href));
 			}
 
-			await mkdirp("dist");
+			await fs.promises.mkdir("dist", { recursive: true });
 
 			await new Promise<void>((resolve, reject) =>
 				rimraf("dist/static", (error) => {
