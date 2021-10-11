@@ -5,7 +5,7 @@ export const servePage: ServePageHook = (request, renderPage) => {
 	const sheet = new ServerStyleSheet();
 
 	return renderPage(request, undefined, {
-		wrap: (page) => sheet.collectStyles(page),
+		wrap: (app) => sheet.collectStyles(app),
 		getHeadHtml: () => sheet.getStyleTags(),
 	});
 };
