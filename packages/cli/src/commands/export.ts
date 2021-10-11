@@ -7,7 +7,6 @@ import { build } from "./build";
 import { spawn } from "child_process";
 import fetch, { FetchError, Response } from "node-fetch";
 import rimraf from "rimraf";
-import os from "os";
 import chalk from "chalk";
 
 export default function exportCommand() {
@@ -17,13 +16,10 @@ export default function exportCommand() {
 			// eslint-disable-next-line no-console
 			console.log(chalk.whiteBright("Building static application"));
 
-			const buildDir = path.join(
-				await fs.promises.mkdtemp(
-					path.join(os.tmpdir(), "rakkas-export-static-"),
-				),
-			);
-
+			const buildDir = path.resolve("node_modules/.rakkas/export");
 			const distDir = path.join(buildDir, "dist");
+
+			await fs.promises.mkdir(distDir, { recursive: true });
 
 			await build({
 				buildMode: "static",
@@ -40,7 +36,7 @@ export default function exportCommand() {
 				shell: true,
 				env: { ...process.env, HOST: host, PORT: String(port) },
 				stdio: "ignore",
-				cwd: path.resolve(distDir, ".."),
+				cwd: buildDir,
 			});
 
 			let firstResponse: Response | undefined;
