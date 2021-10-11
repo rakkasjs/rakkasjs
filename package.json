@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "rakkasjs-root-workspace",
-	"version": "0.4.0-canary.5",
+	"version": "0.4.0-canary.6",
 	"description": "Rakkas.js workspace root",
 	"scripts": {
 		"check": "pnpm run -r --parallel --workspace-concurrency=0 check",

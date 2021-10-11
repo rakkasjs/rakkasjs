@@ -1,6 +1,6 @@
 {
 	"name": "@rakkasjs/cli",
-	"version": "0.4.0-canary.5",
+	"version": "0.4.0-canary.6",
 	"description": "Development tools for Rakkas.js",
 	"scripts": {
 		"prepublishOnly": "pnpm build",

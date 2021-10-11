@@ -1,4 +1,4 @@
-import { createServer as createViteServer } from "vite";
+import { createServer as createViteServer, ViteDevServer } from "vite";
 import { createServer as createHttpServer } from "http";
 import { makeViteConfig } from "../lib/vite-config";
 import { encode } from "html-entities";
@@ -19,12 +19,16 @@ export async function createServers({
 	deps: configDeps,
 	onReload,
 }: ServersConfig) {
-	const vite = await createViteServer(
-		await makeViteConfig(config, { configDeps, onConfigChange: onReload }),
-	);
+	let vite: ViteDevServer;
 
-	const http = createHttpServer({}, (req, res) => {
+	const http = createHttpServer({}, async (req, res) => {
 		const url = req.url || "/";
+
+		if (!vite) {
+			vite = await createViteServer(
+				await makeViteConfig(config, { configDeps, onConfigChange: onReload }),
+			);
+		}
 
 		vite.middlewares(req, res, async () => {
 			let html = htmlTemplate;
@@ -143,5 +147,10 @@ export async function createServers({
 		});
 	});
 
-	return { vite, http, config };
+	http.on("close", async () => {
+		await vite.ws.close();
+		await vite.close();
+	});
+
+	return { http, config };
 }

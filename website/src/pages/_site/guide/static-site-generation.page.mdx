@@ -1,6 +1,6 @@
 # Static site generation
 
-You can render a static version of your site with the command `rakkas export`. Rakkas will build a special version of your application and visit all the pages it can discover, starting from the root `/` and export a static site into the directory `dist/static`. You can preview it with, e.g., `npx sirv dist/static`. A static site doesn't need a Node.js server, you can serve it from a CDN or a static file server, such as **Github pages**.
+You can render a static version of your site with the command `rakkas export`. Rakkas will build a special version of your application into a temporary directory, start the server, and visit all the pages it can discover, starting from the root `/` and export a static site into the directory `dist/static`. You can preview it with, e.g., `npx sirv dist/static`. A static site doesn't need a Node.js server, you can serve it from a CDN or a static file server, such as **Github pages**.
 
 Not every Rakkas app is suitable to be exported as a static site. You can do it if and only if the contents of each and every page in your app are solely determined by its URL path. In particular, if the content depends on any of the following, it is not suitable to be a static page:
 

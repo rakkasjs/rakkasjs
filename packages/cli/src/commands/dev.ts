@@ -38,16 +38,12 @@ async function startServer(opts: { port: string; host: string; open?: true }) {
 		({ config, deps } = await loadConfig());
 
 		http.on("close", async () => {
-			await vite.ws.close();
-			await vite.close();
-
 			const newServers = await createServers({
 				config,
 				deps,
 				onReload: reload,
 			});
 
-			vite = newServers.vite;
 			http = newServers.http;
 			http.listen(3000).on("listening", () => {
 				// eslint-disable-next-line no-console
@@ -58,7 +54,7 @@ async function startServer(opts: { port: string; host: string; open?: true }) {
 		http.close();
 	}
 
-	let { vite, http } = await createServers({
+	let { http } = await createServers({
 		config,
 		deps,
 		onReload: reload,

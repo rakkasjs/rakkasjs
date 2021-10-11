@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "rakkas-styled-components-example",
-	"version": "0.4.0-canary.5",
+	"version": "0.4.0-canary.6",
 	"description": "Rakkas.js TypeScript demo project",
 	"scripts": {
 		"dev": "rakkas dev",
@@ -10,15 +10,15 @@
 		"typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"dependencies": {
-		"@rakkasjs/runner-node": "0.4.0-canary.5",
-		"rakkasjs": "0.4.0-canary.5",
+		"@rakkasjs/runner-node": "0.4.0-canary.6",
+		"rakkasjs": "0.4.0-canary.6",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-helmet-async": "^1.1.2",
 		"styled-components": "^5.3.1"
 	},
 	"devDependencies": {
-		"@rakkasjs/cli": "0.4.0-canary.5",
+		"@rakkasjs/cli": "0.4.0-canary.6",
 		"@types/react": "^17.0.27",
 		"@types/react-dom": "^17.0.9",
 		"@types/styled-components": "^5.1.15",
