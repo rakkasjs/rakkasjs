@@ -1,6 +1,6 @@
 {
 	"name": "create-rakkas-app",
-	"version": "0.4.0-canary.4",
+	"version": "0.4.0-canary.5",
 	"description": "Project initializer for Rakkas.js",
 	"scripts": {
 		"prepublishOnly": "pnpm build && sh copy-templates.sh",
@@ -32,8 +32,8 @@
 		"@types/node": "^16.10.3",
 		"@types/react": "^17.0.27",
 		"@types/which": "^2.0.1",
-		"@typescript-eslint/eslint-plugin": "^4.33.0",
-		"@typescript-eslint/parser": "^4.33.0",
+		"@typescript-eslint/eslint-plugin": "^5.0.0",
+		"@typescript-eslint/parser": "^5.0.0",
 		"commander": "^8.2.0",
 		"cpr": "^3.0.1",
 		"esbuild": "^0.13.4",

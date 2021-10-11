@@ -6,19 +6,8 @@
 		"jsx": "react",
 		"target": "es6",
 		"moduleResolution": "node",
-		"types": [
-			"rakkasjs/vite-types",
-			"node"
-		],
-		"skipLibCheck": true,
-		"plugins": [
-			{
-				"name": "typescript-plugin-css-modules"
-			}
-		]
+		"types": ["rakkasjs/vite-types", "node"],
+		"skipLibCheck": true
 	},
-	"include": [
-		"src/**/*.ts",
-		"src/**/*.tsx"
-	]
+	"include": ["src/**/*.ts", "src/**/*.tsx"]
 }
