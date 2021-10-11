@@ -1,6 +1,6 @@
 {
 	"name": "create-rakkas-app",
-	"version": "0.4.0-canary.0",
+	"version": "0.4.0-canary.1",
 	"description": "Project initializer for Rakkas.js",
 	"scripts": {
 		"prepublishOnly": "pnpm build && sh copy-templates.sh",
