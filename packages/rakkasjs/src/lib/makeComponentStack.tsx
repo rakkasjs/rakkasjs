@@ -137,12 +137,17 @@ export async function makeComponentStack({
 		const canHandleErrors =
 			options?.canHandleErrors ?? (!isPage && !!Component);
 
-		if (canHandleErrors && !import.meta.env.SSR) {
+		if (canHandleErrors) {
 			errorHandlerIndex = i;
-			// A trick to preserve component identity between renders
-			Component =
-				errorBoundaryCache[moduleId] ||
-				(errorBoundaryCache[moduleId] = wrapInErrorBoundary(Component as any));
+
+			if (!import.meta.env.SSR) {
+				// A trick to preserve component identity between renders
+				Component =
+					errorBoundaryCache[moduleId] ||
+					(errorBoundaryCache[moduleId] = wrapInErrorBoundary(
+						Component as any,
+					));
+			}
 		}
 
 		const cacheKey = stableJson(getCacheKey({ url, params, match, context }));
