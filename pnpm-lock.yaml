@@ -10,6 +10,70 @@ importers:
       husky: 7.0.2
       lint-staged: 11.1.2
 
+  examples/bare:
+    specifiers:
+      '@rakkasjs/cli': 0.4.0-canary.0
+      '@rakkasjs/runner-node': 0.4.0-canary.0
+      '@types/react': ^17.0.26
+      '@types/react-dom': ^17.0.9
+      npm-run-all: ^4.1.5
+      prettier: ^2.4.1
+      rakkasjs: 0.4.0-canary.0
+      react: ^17.0.2
+      react-dom: ^17.0.2
+      react-helmet-async: ^1.1.2
+      typescript: ^4.4.3
+      typescript-plugin-css-modules: ^3.4.0
+    dependencies:
+      '@rakkasjs/runner-node': link:../../packages/runner-node
+      rakkasjs: link:../../packages/rakkasjs
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      react-helmet-async: 1.1.2_react-dom@17.0.2+react@17.0.2
+    devDependencies:
+      '@rakkasjs/cli': link:../../packages/cli
+      '@types/react': 17.0.26
+      '@types/react-dom': 17.0.9
+      npm-run-all: 4.1.5
+      prettier: 2.4.1
+      typescript: 4.4.3
+      typescript-plugin-css-modules: 3.4.0_typescript@4.4.3
+
+  examples/styled-components:
+    specifiers:
+      '@rakkasjs/cli': 0.4.0-canary.0
+      '@rakkasjs/runner-node': 0.4.0-canary.0
+      '@types/react': ^17.0.26
+      '@types/react-dom': ^17.0.9
+      '@types/styled-components': ^5.1.14
+      babel-plugin-styled-components: ^1.13.2
+      npm-run-all: ^4.1.5
+      prettier: ^2.4.1
+      rakkasjs: 0.4.0-canary.0
+      react: ^17.0.2
+      react-dom: ^17.0.2
+      react-helmet-async: ^1.1.2
+      styled-components: ^5.3.1
+      typescript: ^4.4.3
+      typescript-plugin-css-modules: ^3.4.0
+    dependencies:
+      '@rakkasjs/runner-node': link:../../packages/runner-node
+      rakkasjs: link:../../packages/rakkasjs
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      react-helmet-async: 1.1.2_react-dom@17.0.2+react@17.0.2
+      styled-components: 5.3.1_react-dom@17.0.2+react@17.0.2
+    devDependencies:
+      '@rakkasjs/cli': link:../../packages/cli
+      '@types/react': 17.0.26
+      '@types/react-dom': 17.0.9
+      '@types/styled-components': 5.1.14
+      babel-plugin-styled-components: 1.13.2_styled-components@5.3.1
+      npm-run-all: 4.1.5
+      prettier: 2.4.1
+      typescript: 4.4.3
+      typescript-plugin-css-modules: 3.4.0_typescript@4.4.3
+
   packages/apollo-server:
     specifiers:
       apollo-server-core: ^3.3.0
@@ -3290,7 +3354,7 @@ packages:
   /@types/hoist-non-react-statics/3.3.1:
     resolution: {integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==}
     dependencies:
-      '@types/react': 17.0.19
+      '@types/react': 17.0.26
       hoist-non-react-statics: 3.3.2
     dev: true
 
@@ -3472,14 +3536,6 @@ packages:
       csstype: 3.0.8
     dev: true
 
-  /@types/react/17.0.19:
-    resolution: {integrity: sha512-sX1HisdB1/ZESixMTGnMxH9TDe8Sk709734fEQZzCV/4lSu9kJCPbo2PbTRoZM+53Pp0P10hYVyReUueGwUi4A==}
-    dependencies:
-      '@types/prop-types': 15.7.4
-      '@types/scheduler': 0.16.2
-      csstype: 3.0.8
-    dev: true
-
   /@types/react/17.0.24:
     resolution: {integrity: sha512-eIpyco99gTH+FTI3J7Oi/OH8MZoFMJuztNRimDOJwH4iGIsKV2qkGnk4M9VzlaVWeEEWLWSQRy0FEA0Kz218cg==}
     dependencies:
@@ -3538,7 +3594,7 @@ packages:
     resolution: {integrity: sha512-d6P1/tyNytqKwam3cQXq7a9uPtovc/mdAs7dBiz1YbDdNIT3X4WmuFU78YdSYh84TXVuhOwezZ3EeKuNBhwsHQ==}
     dependencies:
       '@types/hoist-non-react-statics': 3.3.1
-      '@types/react': 17.0.19
+      '@types/react': 17.0.26
       csstype: 3.0.8
     dev: true
 

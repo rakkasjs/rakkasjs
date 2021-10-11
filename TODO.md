@@ -7,37 +7,11 @@
 - Lots of minor features and fixes
 
 ## For 0.4.0
-- Test the layout context API
-- Static site generation
-- Migrate to `@vitejs/plugin-react`
-- Strip the load functions and similar when exporting static site
-- Tidy up static site output
-- Add command to unpublish canary releases
-- Improve logging
-- ⚠️ BUG: Vite plugin ordering when using mdx
-- Design a way to wrap the rendered application in custom providers
-- Simplify testing with `rakkas with-port` command
-- Design an API to inject helpers to load functions
-- ⚠️ BUG: SSR doesn't hot reload layouts
-- ⚠️ BUG: Reload loses focus (CNR, fixed?)
-- Define page/layout types depending on the parent layout type
-- Project initializer enhancements:
-  - Add option to skip generating the sample application
-  - Add Cypress integration
-  - Integrate `eslint-import-resolver-typescript`, `eslint-plugin-ssr-friendly`, and `eslint-plugin-css-modules`
-- [ ] Create integration tests with popular tools
-  - Styled components
-  - Apollo server
-  - Apollo client
-  - [ ] Redux
-  - [ ] Tailwind CSS
-- ⚠️ BUG: No root page error on 404
-- Expose `request.ip`, `request.originalUrl` and `request.originalIp`
 - [ ] Create examples
   - [ ] Styled components
-  - [ ] Apollo GraphQL
-  - [ ] Redux
   - [ ] Tailwind CSS
+  - [ ] Apollo GraphQL
+  - [ ] MDX
 
 ## For 1.0.0
 - [ ] Investigate debugging and sourcemaps

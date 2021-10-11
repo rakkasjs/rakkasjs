@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"module": "ES2020",
+		"esModuleInterop": true,
+		"jsx": "react",
+		"target": "es6",
+		"moduleResolution": "node",
+		"types": [
+			"rakkasjs/vite-types",
+			"node"
+		],
+		"skipLibCheck": true,
+		"plugins": [
+			{
+				"name": "typescript-plugin-css-modules"
+			}
+		]
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.tsx"
+	]
+}
