@@ -2,8 +2,8 @@ const titles = [
 	"What is Rakkas?",
 	"Getting started",
 	"Pages and routing",
-	"Navigation",
 	"Static files",
+	"Navigation",
 	"Layouts",
 	"Styling",
 	"Data fetching",
@@ -17,7 +17,8 @@ const titles = [
 	"Customization hooks",
 	"Configuration options",
 	"Environment variables",
-	"Roadmap",
+	"Integrations",
+	"Roadmap and credits",
 ];
 
 export const toc = titles.map((title) => {

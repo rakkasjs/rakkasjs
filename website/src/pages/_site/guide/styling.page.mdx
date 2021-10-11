@@ -6,10 +6,9 @@ Importing a `.css` file will inject its content to the page via a `<style>` tag.
 
 For component scoped styles, Rakkas supports [CSS modules](https://github.com/css-modules/css-modules) with the usual naming convention `.module.css`.
 
-CSS preprocessors are also supported out of the box, you just need to install your preferred processor (`sass`, `less`, or `stylus`) to enable support for `.scss`, `.sass`, `.less`, `.styl` and `.stylus` file extensions.
+If the project contains valid PostCSS config, it will be automatically applied to all imported CSS. CSS preprocessors are also supported out of the box, you just need to install your preferred processor (`sass`, `less`, or `stylus`) to enable support for `.scss`, `.sass`, `.less`, `.styl` and `.stylus` file extensions. See [Vite's documentation](https://vitejs.dev/guide/features.html#css) for more details.
 
-Finally, Rakkas also allows you to use CSS-in-JS solutions with first class SSR support.
+In addition, Rakkas allows you to use CSS-in-JS solutions. Tailwind CSS can also be easily integrated. See the following examples:
 
-> TODO: styled-components example
-
-> TODO: tailwindcss example
+- [Styled Components integration example](https://github.com/rakkasjs/rakkasjs/tree/main/examples/styled-components")
+- [Tailwind CSS integration example](https://github.com/rakkasjs/rakkasjs/tree/main/examples/tailwind-css")

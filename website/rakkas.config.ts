@@ -17,9 +17,7 @@ export default defineConfig({
 	pageExtensions: ["jsx", "tsx", "mdx"],
 	vite: {
 		plugins: [
-			...mdx({ rehypePlugins: [rhypePrism] }).map(
-				(x) => ({ ...x, enforce: "pre" } as const),
-			),
+			mdx({ rehypePlugins: [rhypePrism] }),
 			{
 				name: "code-sample-loader",
 

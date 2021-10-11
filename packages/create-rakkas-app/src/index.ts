@@ -93,13 +93,19 @@ function parseCommandLineArguments() {
 					process.exit(1);
 				}
 
-				packageManager = getPackageManager();
+				packageManager =
+					getPackageManager() || pnpmAvailable
+						? "pnpm"
+						: yarnAvailable
+						? "yarn"
+						: "npm";
 
 				if (
 					(packageManager === "pnpm" && !pnpmAvailable) ||
 					(packageManager === "yarn" && !yarnAvailable)
-				)
+				) {
 					packageManager = "npm";
+				}
 
 				interactiveInput = !!(interactiveInput || ttyin);
 				colorOutput = !!(colorOutput || ttyout);
@@ -155,24 +161,24 @@ function getPackageManager() {
 		const parent = process.env._;
 
 		if (!parent) {
-			// No luck, assume npm
-			return "npm";
+			// No luck
+			return null;
 		}
 
 		if (parent.endsWith("pnpx") || parent.endsWith("pnpm")) return "pnpm";
 		if (parent.endsWith("yarn")) return "yarn";
+		if (parent.endsWith("npx") || parent.endsWith("npm")) return "npm";
 
-		// Assume npm for anything else
-		return "npm";
+		return null;
 	}
 
 	const [program] = agent.split("/");
 
 	if (program === "yarn") return "yarn";
 	if (program === "pnpm") return "pnpm";
+	if (program === "npm") return "npm";
 
-	// Assume npm
-	return "npm";
+	return null;
 }
 
 main().catch((error) => {

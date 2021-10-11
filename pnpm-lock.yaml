@@ -686,7 +686,7 @@ importers:
       reprism: ^0.0.11
       sanitize.css: ^13.0.0
       typescript: ^4.4.3
-      vite-plugin-mdx: ^3.5.6
+      vite-plugin-mdx: ^3.5.8
     dependencies:
       '@mdx-js/react': 1.6.22_react@17.0.2
       '@rakkasjs/runner-node': link:../packages/runner-node
@@ -718,7 +718,7 @@ importers:
       prettier: 2.4.1
       reprism: 0.0.11
       typescript: 4.4.3
-      vite-plugin-mdx: 3.5.6_@mdx-js+mdx@1.6.22
+      vite-plugin-mdx: 3.5.8_@mdx-js+mdx@1.6.22
 
 packages:
 
@@ -12288,8 +12288,8 @@ packages:
       vfile-message: 2.0.4
     dev: true
 
-  /vite-plugin-mdx/3.5.6_@mdx-js+mdx@1.6.22:
-    resolution: {integrity: sha512-KRc6/MN/ZSJEv3PxfPEM3p5NRAnhknK9RO3h86GqOcFCCaaB88WpsLxBWPqg5cWoI3uJm+Fp/ZGfs1Fd7cQnSw==}
+  /vite-plugin-mdx/3.5.8_@mdx-js+mdx@1.6.22:
+    resolution: {integrity: sha512-UvJc+xpbgfjHGKPkvO38yALDmilIXe6m5C/VJewkERmEDEtqb5DkKh4XsxCw1Mv/oeAL+PyFSIHZCafMGkrZ4w==}
     peerDependencies:
       '@mdx-js/mdx': '*'
       vite: '*'

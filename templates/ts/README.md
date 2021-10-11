@@ -27,6 +27,7 @@ HOST=0.0.0.0 PORT=3000 TRUST_FORWARDED_ORIGIN=1 npm start
 | `src/server.ts`    | Server-side customization hooks               |
 | `src/pages`        | Pages and layouts (client-side routes)        |
 | `src/api`          | Endpoints and middleware (server-side routes) |
+| `src/ambient.d.ts` | Ambient type declarations                     |
 
 ## All development scripts
 

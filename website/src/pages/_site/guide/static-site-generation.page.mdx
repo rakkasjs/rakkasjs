@@ -7,4 +7,4 @@ Not every Rakkas app is suitable to be exported as a static site. You can do it 
 - Cookies: A static site can't show different contents to different visitors, so you can't have any sort of session management.
 - Query parameters: A static site can't load different data based on query parameters. Path parameters are fine, though. So, instead of a URL pattern like `/books?page=2` you should prefer `/books/page-2` if you intent to export a static site.
 
-You can have `load` functions for your layouts and pages but they will be run during build-time instead of run-time. In fact, they will be stripped off of the final bundle to optimize asset sizes.
+You can have still `load` functions for your layouts and pages but they will be run during **build-time** instead of run-time. In fact, they will be stripped off of the final bundle to optimize asset sizes.

@@ -36,7 +36,7 @@ export const servePage: ServePageHook = async (request, renderPage) => {
 
 			wrap: (page) => (
 				// You can wrap the server-side app in a provider here.
-				// Useful for integrating with, e.g., Redux, styled-components, Apolle client etc.
+				// Useful for integrating with, e.g., Redux, styled-components, Apollo client etc.
 				<SomeProvider>{page}</SomeProvider>
 			),
 
@@ -45,7 +45,7 @@ export const servePage: ServePageHook = async (request, renderPage) => {
 			renderToString: (app) => someCustomRenderer(app),
 
 			// You can add extra head HTML here.
-			// Useful for integrating with, e.g., Redux, styled-components, Apolle client etc.
+			// Useful for integrating with, e.g., Redux, styled-components, Apollo client etc.
 			getHeadHtml() {
 				return `<title>My App</title>`;
 			},
@@ -74,7 +74,7 @@ export function beforeStartClient() {
 
 export function wrap(app: JSX.Element) {
 	// You can wrap the client-side app in a provider here.
-	// Useful for integrating with, e.g., Redux, Apolle client etc.
+	// Useful for integrating with, e.g., Redux, Apollo client etc.
 	return <SomeProvider>{app}</SomeProvider>;
 }
 

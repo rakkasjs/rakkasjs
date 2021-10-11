@@ -103,7 +103,7 @@ export async function rakkasVitePlugin(
 	return [
 		virtualModules,
 		{
-			name: "rakkas-resolve",
+			name: "rakkas",
 			enforce: "pre",
 
 			configResolved(config) {

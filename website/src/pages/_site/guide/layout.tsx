@@ -15,7 +15,11 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 		<div className={css.wrapper}>
 			<Helmet
 				title={
-					(error ? error.message : toc[currentIndex].title) + " - Rakkas Guide"
+					error
+						? error.message
+						: toc[currentIndex]
+						? toc[currentIndex].title + " - Rakkas Guide"
+						: "Rakkas Guide"
 				}
 			/>
 
@@ -48,6 +52,7 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 									href={"/guide/" + item.slug}
 									currentRouteStyle={{ fontWeight: "bold" }}
 									nextRouteStyle={{ color: "#f08" }}
+									onCompareUrls={(url, href) => url.pathname === href.pathname}
 								>
 									{item.title}
 								</NavLink>

@@ -49,14 +49,14 @@ export async function handleRequest(
 ): Promise<RakkasResponse> {
 	const path = decodeURI(request.url.pathname);
 
-	const found = findRoute(path, apiRoutes);
+	const apiRoute = findRoute(path, apiRoutes);
 
-	if (found) {
+	if (apiRoute) {
 		let method = request.method.toLowerCase();
 		if (method === "delete") method = "del";
 		let handler: RequestHandler | undefined;
 
-		const moduleId = found.stack[found.stack.length - 1];
+		const moduleId = apiRoute.stack[apiRoute.stack.length - 1];
 		const module = await (import.meta.env.DEV
 			? import(/* @vite-ignore */ moduleId)
 			: importers[moduleId]());
@@ -64,7 +64,7 @@ export async function handleRequest(
 		const leaf = module[method] || module.default;
 
 		if (leaf) {
-			const middleware = found.stack.slice(0, -1);
+			const middleware = apiRoute.stack.slice(0, -1);
 			handler = middleware.reduceRight((prev, cur) => {
 				return async (req: RakkasRequest) => {
 					const mdl = await (import.meta.env.DEV
@@ -74,7 +74,7 @@ export async function handleRequest(
 				};
 			}, leaf);
 
-			return handler!({ ...request, params: found.params, context: {} });
+			return handler!({ ...request, params: apiRoute.params, context: {} });
 		}
 	}
 
