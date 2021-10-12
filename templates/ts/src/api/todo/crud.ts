@@ -1,5 +1,6 @@
-// This is our mockup data store. The data won't persist between server restarts.
-// It will also not work when we start supporting serveress functions.
+// This is our mock data store. The data won't persist between server restarts
+// and it won't work in a serverless function. Just a simple way to
+// demonstrate a CRUD app.
 
 export interface TodoItem {
 	id: number;

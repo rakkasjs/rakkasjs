@@ -9,15 +9,13 @@ interface TodoPageTypes extends PageTypes {
 	data: TodoItem[];
 }
 
-// definePage is an alterntive way to define a page module that ensures type compatibility
+// definePage is how one defines a page with data requirements.
+// It also hepls with type safety if you're using TypeScript.
 export default definePage<TodoPageTypes>({
 	// load() will be called before rendering the component and its returnValue.data will be passed to the
 	// component as props.data. It may be called both on the server and on the client.
 	async load({ fetch }) {
-		// Initialized in getRootContext() at src/server.js
-		// console.log("Session:", args.context.session);
-
-		// Use the passed fetch function to make requests with credentials.
+		// Use the fetch argument to make requests with credentials.
 		return await fetch("/api/todo").then(async (r) => {
 			if (!r.ok) {
 				return {

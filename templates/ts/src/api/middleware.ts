@@ -8,10 +8,9 @@ const ensureJson: RakkasMiddleware = (req, next) => {
 		req.headers.get("content-type") !== "application/json"
 	) {
 		return {
-			status: 406,
-			body: {
-				error: "Only JSON is accepted",
-			},
+			// Unsupported Media Type
+			status: 415,
+			body: { error: "Only JSON is accepted" },
 		};
 	}
 

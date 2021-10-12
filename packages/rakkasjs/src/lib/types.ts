@@ -3,12 +3,34 @@
 import { FC } from "react";
 import { BaseRouterInfo } from "./router/Router";
 
+/**
+ * Types related to a page definition
+ *
+ * This is the least strict typing for a page definition.
+ * @see DefaultPageTypes for stricted possible types
+ * @see DefinePageType for defining your own types
+ */
 export interface PageTypes {
 	params: Record<string, string>;
 	parentContext: Record<string, any>;
 	data: any;
 }
 
+/**
+ * Strictest definitions for page types
+ */
+export type DefaultPageTypes = DefinePageTypes<{
+	params: never;
+	parentContext: RootContext;
+	data: undefined;
+}>;
+
+/**
+ * Utility type for defining a page with strict types
+ *
+ * Use the type parameter to define strict types for data, params,
+ * context etc.
+ */
 export type DefinePageTypes<T extends Partial<PageTypes>> = {
 	params: T extends { params: any } ? T["params"] : never;
 	parentContext: T extends { parentContext: any }
@@ -17,6 +39,11 @@ export type DefinePageTypes<T extends Partial<PageTypes>> = {
 	data: T extends { data: any } ? T["data"] : undefined;
 };
 
+/**
+ * Utility type for defining a page with strict types for data and params while
+ * inferring the type for context from the type definitions of the
+ * parent layout
+ */
 export type DefinePageTypesUnder<
 	P extends LayoutTypes,
 	T extends Partial<PageTypes & { parentContext: never }> = {},
@@ -26,22 +53,35 @@ export type DefinePageTypesUnder<
 	data: T extends { data: any } ? T["data"] : undefined;
 };
 
-export type DefaultPageTypes = DefinePageTypes<{
-	params: never;
-	parentContext: RootContext;
-	data: undefined;
-}>;
-
+/**
+ * Types related to a layout definition
+ *
+ * This is the least strict typing for a laout definition.
+ * @see DefaultLayoutTypes for stricted possible types
+ * @see DefineLayoutType for defining your own types
+ */
 export interface LayoutTypes extends PageTypes {
 	contextOverrides: Record<string, any>;
 }
 
+/**
+ * Utility type for defining a page with strict types
+ *
+ * Use the type parameter to define strict types for data, params,
+ * context etc.
+ */
 export type DefaultLayoutTypes = DefineLayoutTypes<{
 	params: never;
 	parentContext: RootContext;
 	data: undefined;
 }>;
 
+/**
+ * Utility type for defining a layout with strict types
+ *
+ * Use the type parameter to define strict types for data, params,
+ * context etc.
+ */
 export type DefineLayoutTypes<T extends Partial<LayoutTypes>> = {
 	params: T extends { params: any } ? T["params"] : never;
 	parentContext: T extends { parentContext: any }
@@ -53,6 +93,11 @@ export type DefineLayoutTypes<T extends Partial<LayoutTypes>> = {
 		: Record<string, never>;
 };
 
+/**
+ * Utility type for defining a page with strict types for data and params while
+ * inferring the type for context from the type definitions of the
+ * parent layout
+ */
 export type DefineLayoutTypesUnder<
 	P extends LayoutTypes,
 	T extends Partial<LayoutTypes & { parentContext: never }> = {},

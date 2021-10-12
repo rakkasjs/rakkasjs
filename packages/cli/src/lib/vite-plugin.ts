@@ -223,7 +223,7 @@ export async function rakkasVitePlugin(
 				}
 			},
 
-			async transform(code, id, ssr) {
+			async transform(code, id, ssr?: boolean) {
 				if (ssr || command === "build") return;
 
 				if (isPage(id) || isLayout(id)) {
