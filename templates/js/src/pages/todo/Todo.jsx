@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import css from "./Todo.module.css";
 
-export function Todo({ todo, reload }) {
+export const Todo = ({ todo, reload }) => {
 	const [state, setState] = useState({ text: todo.text, editing: false });
-	// const state = { text: todo.text, editing: false };
 
 	async function update(data) {
 		await fetch(`/api/todo/${todo.id}`, {
@@ -93,4 +92,4 @@ export function Todo({ todo, reload }) {
 			</span>
 		</li>
 	);
-}
+};

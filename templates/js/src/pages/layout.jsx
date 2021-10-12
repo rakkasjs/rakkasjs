@@ -7,9 +7,9 @@ import { Helmet } from "react-helmet-async";
 // Vite supports CSS modules out of the box!
 import css from "./layout.module.css";
 
-export default ({ error, children }) => (
+const MainLayout = ({ error, children }) => (
 	<>
-		{/* Rakkas relies on ract-helmet-async for managing the document head */}
+		{/* Rakkas relies on react-helmet-async for managing the document head */}
 		{/* See their documentation: https://github.com/staylor/react-helmet-async#readme */}
 		<Helmet title="Rakkas Demo App" />
 
@@ -22,7 +22,7 @@ export default ({ error, children }) => (
 			<nav className={css.nav}>
 				<ul>
 					<li>
-						{/* <NavLink /> is like <Link /> but it can be styled based on the current route w(hich is useful for navigation links). */}
+						{/* <NavLink /> is like <Link /> but it can be styled based on the current route (which is useful for navigation links). */}
 						<NavLink href="/" currentRouteClass={css.activeLink}>
 							Home
 						</NavLink>
@@ -74,3 +74,5 @@ export default ({ error, children }) => (
 		</footer>
 	</>
 );
+
+export default MainLayout;

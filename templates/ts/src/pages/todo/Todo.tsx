@@ -10,7 +10,6 @@ export interface TodoProps {
 
 export const Todo: FC<TodoProps> = ({ todo, reload }) => {
 	const [state, setState] = useState({ text: todo.text, editing: false });
-	// const state = { text: todo.text, editing: false };
 
 	async function update(data: Partial<TodoItem>) {
 		await fetch(`/api/todo/${todo.id}`, {

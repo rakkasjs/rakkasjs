@@ -1,6 +1,6 @@
 import React from "react";
 
-function HomePage() {
+const HomePage = function HomePage() {
 	return (
 		<main>
 			<h1>Hello world!</h1>
@@ -14,6 +14,6 @@ function HomePage() {
 			</p>
 		</main>
 	);
-}
+};
 
 export default HomePage;
