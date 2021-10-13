@@ -1,12 +1,5 @@
 # TODO
 
-- Static site generation
-- Switch to React automatic JSX runtime
-- Integration examples (Apollo GraphQL, Styled Components, MDX, Tailwind CSS)
-- More options in the project generator
-- Lots of minor features and fixes
-- Much-expanded documentation
-
 ## For 1.0.0
 - ⚠️ CSS module imported from a layout doesn't hot reload
 - [ ] Investigate debugging and sourcemaps

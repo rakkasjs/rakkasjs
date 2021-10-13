@@ -69,3 +69,14 @@ Demo project's source code comes with plenty of comments, you may not need to re
 ## Credits
 - [Fatih Aygün](https://github.com/cyco130), under [MIT License](https://opensource.org/licenses/MIT).
 - Logomark: “Flamenco” by [gzz from Noun Project](https://thenounproject.com/term/flamenco/111303) (not affiliated) under [Creative Commons Attribution Generic license (CCBY)](https://creativecommons.org/licenses/by/2.0/)
+
+## Version history
+
+## 0.4.0
+- Static site generation
+- Switch to React automatic JSX runtime
+- Integration examples (Apollo GraphQL, Styled Components, MDX, Tailwind CSS)
+- More options in the project generator
+- Lots of minor features and fixes
+- Much-expanded documentation
+
