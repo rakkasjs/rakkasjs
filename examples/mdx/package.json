@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "rakkas-mdx-example",
-	"version": "0.4.0-canary.8",
+	"version": "0.4.0",
 	"description": "Rakkas.js MDX example",
 	"scripts": {
 		"dev": "rakkas dev",
@@ -11,14 +11,14 @@
 	"dependencies": {
 		"@mdx-js/mdx": "^1.6.22",
 		"@mdx-js/react": "^1.6.22",
-		"@rakkasjs/runner-node": "0.4.0-canary.8",
-		"rakkasjs": "0.4.0-canary.8",
+		"@rakkasjs/runner-node": "0.4.0",
+		"rakkasjs": "0.4.0",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-helmet-async": "^1.1.2"
 	},
 	"devDependencies": {
-		"@rakkasjs/cli": "0.4.0-canary.8",
+		"@rakkasjs/cli": "0.4.0",
 		"vite-plugin-mdx": "^3.5.8"
 	}
 }

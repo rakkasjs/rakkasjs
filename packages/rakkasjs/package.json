@@ -1,6 +1,6 @@
 {
 	"name": "rakkasjs",
-	"version": "0.4.0-canary.8",
+	"version": "0.4.0",
 	"description": "Lightning fast Next.js alternative powered by Vite",
 	"scripts": {
 		"prepublishOnly": "pnpm build",
