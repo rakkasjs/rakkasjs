@@ -14,13 +14,13 @@ importers:
     specifiers:
       '@apollo/client': ^3.4.16
       '@graphql-tools/schema': ^8.2.0
-      '@rakkasjs/apollo-server': workspace:^0.4.0-canary.6
-      '@rakkasjs/cli': 0.4.0-canary.6
-      '@rakkasjs/runner-node': 0.4.0-canary.6
+      '@rakkasjs/apollo-server': 0.4.0-canary.7
+      '@rakkasjs/cli': 0.4.0-canary.7
+      '@rakkasjs/runner-node': 0.4.0-canary.7
       '@types/react': ^17.0.27
       '@types/react-dom': ^17.0.9
       graphql: ^15.6.1
-      rakkasjs: 0.4.0-canary.6
+      rakkasjs: 0.4.0-canary.7
       react: ^17.0.2
       react-dom: ^17.0.2
       react-helmet-async: ^1.1.2
@@ -45,9 +45,9 @@ importers:
     specifiers:
       '@mdx-js/mdx': ^1.6.22
       '@mdx-js/react': ^1.6.22
-      '@rakkasjs/cli': 0.4.0-canary.6
-      '@rakkasjs/runner-node': 0.4.0-canary.6
-      rakkasjs: 0.4.0-canary.6
+      '@rakkasjs/cli': 0.4.0-canary.7
+      '@rakkasjs/runner-node': 0.4.0-canary.7
+      rakkasjs: 0.4.0-canary.7
       react: ^17.0.2
       react-dom: ^17.0.2
       react-helmet-async: ^1.1.2
@@ -66,13 +66,13 @@ importers:
 
   examples/styled-components:
     specifiers:
-      '@rakkasjs/cli': 0.4.0-canary.6
-      '@rakkasjs/runner-node': 0.4.0-canary.6
+      '@rakkasjs/cli': 0.4.0-canary.7
+      '@rakkasjs/runner-node': 0.4.0-canary.7
       '@types/react': ^17.0.27
       '@types/react-dom': ^17.0.9
       '@types/styled-components': ^5.1.15
       babel-plugin-styled-components: ^1.13.2
-      rakkasjs: 0.4.0-canary.6
+      rakkasjs: 0.4.0-canary.7
       react: ^17.0.2
       react-dom: ^17.0.2
       react-helmet-async: ^1.1.2
@@ -95,11 +95,11 @@ importers:
 
   examples/tailwind:
     specifiers:
-      '@rakkasjs/cli': 0.4.0-canary.6
-      '@rakkasjs/runner-node': 0.4.0-canary.6
+      '@rakkasjs/cli': 0.4.0-canary.7
+      '@rakkasjs/runner-node': 0.4.0-canary.7
       autoprefixer: ^10.3.7
       postcss: ^8.3.9
-      rakkasjs: 0.4.0-canary.6
+      rakkasjs: 0.4.0-canary.7
       react: ^17.0.2
       react-dom: ^17.0.2
       react-helmet-async: ^1.1.2

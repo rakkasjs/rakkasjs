@@ -11,12 +11,6 @@ const MainLayout: Layout = ({ error, children }) => (
 		<Helmet>
 			<html lang="en" />
 			<title>Rakkas</title>
-			<meta property="og:title" content="Rakkas - the dancing web framework" />
-			<meta property="og:url" content="https://rakkasjs.org" />
-			<meta property="og:type" content="website" />
-			<meta property="og:image" content="https://rakkasjs.org/og-image.png" />
-			<meta property="og:image:width" content="582" />
-			<meta property="og:image:height" content="278" />
 		</Helmet>
 
 		<Header />
