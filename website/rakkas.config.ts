@@ -1,6 +1,7 @@
 import { defineConfig } from "@rakkasjs/cli";
 import mdx from "vite-plugin-mdx";
 import fs from "fs";
+import path from "path";
 
 // @ts-expect-error: No typings
 import { highlight, loadLanguages } from "reprism";
@@ -34,12 +35,13 @@ export default defineConfig({
 
 				async load(id) {
 					if (id.endsWith("?sample")) {
-						const content = fs.readFileSync(id.slice(0, -7), "utf8");
+						const filename = id.slice(0, -7);
+						const content = fs.readFileSync(filename, "utf8");
 
 						return {
-							code: `export default ${JSON.stringify(
-								highlight(content, "typescript"),
-							)}`,
+							code: `export default {file: ${JSON.stringify(
+								path.relative("src/pages/examples", filename),
+							)}, code: ${JSON.stringify(highlight(content, "typescript"))}}`,
 						};
 					}
 				},

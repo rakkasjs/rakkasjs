@@ -1,7 +1,7 @@
 import { defineLayout, DefineLayoutTypes } from "rakkasjs";
 
-// DefineLayoutTypes and DefinePageTypes are utility types to ensure strict
-// type checking when defining pages and layouts.
+// DefineLayoutTypes and DefinePageTypes are utility types
+// to ensure strict type checking when defining pages and layouts.
 export type WidgetLayoutTypes = DefineLayoutTypes<{
 	params: { widgetId: string };
 	contextOverrides: {

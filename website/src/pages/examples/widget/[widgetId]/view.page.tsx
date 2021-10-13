@@ -2,8 +2,8 @@ import React from "react";
 import { definePage, DefinePageTypesUnder, Link } from "rakkasjs";
 import { WidgetLayoutTypes } from "./layout";
 
-// DefinePageTypesUnder and DefineLayoutTypesUnder are utility types to ensure
-// strict types for the incoming context
+// DefinePageTypesUnder and DefineLayoutTypesUnder are utility types
+// to ensure strict types for the parent context
 type WidgetViewPageTypes = DefinePageTypesUnder<
 	WidgetLayoutTypes,
 	{

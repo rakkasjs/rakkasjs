@@ -1,5 +1,5 @@
 .wrapper {
-	margin: 2rem;
+	margin: 1rem 0;
 }
 
 .toc {
@@ -17,37 +17,89 @@
 	flex-grow: 1;
 }
 
-.nextPrev {
+.prevNext {
+	margin-top: 2em;
 	display: flex;
 	justify-content: space-between;
 }
 
-.nextPrev a {
-	margin-top: 2em;
+.prevNext:first-child {
+	margin-top: 0;
+	margin-bottom: 2em;
+}
+
+.prevNext a {
 	display: inline-block;
 	padding: 1em;
 	border: solid 1px #ccc;
 	max-width: 50%;
 }
 
+.prevNext a:first-child {
+	margin-right: 1em;
+}
+
+.toc2 {
+	display: none;
+}
+
 @media (min-width: 900px) {
 	.wrapper {
 		display: flex;
-		align-items: flex-start;
+		align-items: stretch;
 		justify-content: flex-end;
-		flex-direction: row-reverse;
+	}
+
+	.contentWrapper {
+		/* background-color: yellow; */
+		width: 66.666666%;
+		order: 2;
+		padding: 0 1rem;
+	}
+
+	.tocWrapper {
+		/* background-color: red; */
+		width: 33.333333%;
+		order: 1;
+		padding: 0 1rem;
+	}
+
+	.toc2 {
+		/* background-color: red; */
 	}
 
 	.toc {
 		width: 16rem;
-		margin-right: 2rem;
 		position: sticky;
 		top: 2rem;
+		margin: auto;
 		margin-top: 0;
 	}
 
 	.content {
-		width: calc(100% - 18rem);
+		margin: auto;
 		max-width: 50rem;
+	}
+}
+
+@media (min-width: 1200px) {
+	.contentWrapper {
+		/* background-color: yellow; */
+		width: 50%;
+		order: 2;
+		padding: 0 1rem;
+	}
+
+	.tocWrapper {
+		/* background-color: red; */
+		width: 30%;
+		order: 1;
+		padding: 0 1rem;
+	}
+
+	.toc2 {
+		display: block;
+		width: 20%;
+		order: 3;
 	}
 }

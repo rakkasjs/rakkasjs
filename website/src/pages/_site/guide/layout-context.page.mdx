@@ -4,7 +4,7 @@ import { SampleViewer } from "./SampleViewer";
 
 A Rakkas layout is not just a simple wrapper component, it also acts as data fetching middleware for nested layouts and pages. A layout's `load` function, unlike a page's, can return a `context` object which will be passed down to lower level layouts and pages. Both the `load` functions and the React components receive this as a prop. `context` objects returned from nested layouts are shallowly merged with the parent one. All context values must be serializable by `devalue`.
 
-> ⚠️ There's no relation with the React context API and Rakkas's layout context system.
+> ⚠️ There's no relation between the React context API and Rakkas's layout context system.
 
 Let's say you have two pages, `/widget/[widgetId]/view` and `/widget/[widgetId]/edit` which views and edits a widget respectively. Both pages will need the contents of the widget. You can achieve this, without duplicating your code in both pages, by creating a layout `/widget/[widgetId]/layout.jsx` that fetches the widget data and passes it down to the pages using the `context` mechanism. You don't even have to define a component for your layout if it's only used for data fetching:
 

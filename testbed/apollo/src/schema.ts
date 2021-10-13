@@ -1,6 +1,5 @@
 import { gql } from "@rakkasjs/apollo-server";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import { IResolvers } from "@graphql-tools/utils";
 import { RakkasRequest } from "rakkasjs";
 
 export const schema = makeExecutableSchema<RakkasRequest>({

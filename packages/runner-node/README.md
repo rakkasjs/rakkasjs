@@ -1,3 +1,3 @@
-This is the Node.JS runner for [Rakkas.JS](https://rakkas.cyco130.co.
+# `@rakkasjs/runnder-node`
 
-See the [website](https://rakkasjs.org) for details.
+This is the Node.JS runner for [Rakkas.JS](https://rakkasjs.org).

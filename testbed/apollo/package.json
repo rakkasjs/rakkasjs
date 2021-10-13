@@ -17,7 +17,6 @@
 	"dependencies": {
 		"@apollo/client": "^3.4.16",
 		"@graphql-tools/schema": "^8.2.0",
-		"@graphql-tools/utils": "^8.2.5",
 		"@rakkasjs/apollo-server": "workspace:*",
 		"@rakkasjs/runner-node": "workspace:*",
 		"devalue": "^2.0.1",

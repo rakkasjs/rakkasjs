@@ -11,6 +11,22 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 	const prev = toc[currentIndex - 1];
 	const next = toc[currentIndex + 1];
 
+	const prevNext = (
+		<nav className={css.prevNext}>
+			{prev ? (
+				<Link href={"/guide/" + prev.slug}>←&nbsp;{prev.title}</Link>
+			) : (
+				"\xa0"
+			)}
+
+			{next ? (
+				<Link href={"/guide/" + next.slug}>{next.title}&nbsp;→</Link>
+			) : (
+				"\xa0"
+			)}
+		</nav>
+	);
+
 	return (
 		<div className={css.wrapper}>
 			<Helmet
@@ -23,45 +39,42 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 				}
 			/>
 
-			<div className={css.content}>
-				<article>{error ? error.message : children}</article>
+			<div className={css.contentWrapper}>
+				<div className={css.content}>
+					{prevNext}
 
-				<aside>
-					<nav className={css.nextPrev}>
-						{prev ? (
-							<Link href={"/guide/" + prev.slug}>← {prev.title}</Link>
-						) : (
-							"\xa0"
-						)}
+					<article>{error ? error.message : children}</article>
 
-						{next ? (
-							<Link href={"/guide/" + next.slug}>{next.title} →</Link>
-						) : (
-							"\xa0"
-						)}
+					{prevNext}
+				</div>
+			</div>
+
+			<div className={css.tocWrapper}>
+				<aside className={css.toc}>
+					<nav>
+						<ul>
+							{toc.map((item) => (
+								<li key={item.slug}>
+									<NavLink
+										href={"/guide/" + item.slug}
+										currentRouteStyle={{ fontWeight: "bold" }}
+										nextRouteStyle={{ color: "#f08" }}
+										onCompareUrls={(url, href) =>
+											url.pathname === href.pathname
+										}
+									>
+										{item.title}
+									</NavLink>
+								</li>
+							))}
+						</ul>
 					</nav>
 				</aside>
 			</div>
 
-			<aside className={css.toc}>
-				<nav>
-					<ul>
-						{toc.map((item) => (
-							<li key={item.slug}>
-								<NavLink
-									href={"/guide/" + item.slug}
-									currentRouteStyle={{ fontWeight: "bold" }}
-									nextRouteStyle={{ color: "#f08" }}
-									onCompareUrls={(url, href) => url.pathname === href.pathname}
-								>
-									{item.title}
-								</NavLink>
-							</li>
-						))}
-					</ul>
-				</nav>
-			</aside>
+			<div className={css.toc2} />
 		</div>
 	);
 };
+
 export default GuideLayout;

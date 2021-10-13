@@ -1,3 +1,5 @@
-This is the Apollo server integration for [Rakkas.JS](https://rakkas.cyco130.co.
+# `@rakkasjs/apollo-server`
 
-See the [website](https://rakkasjs.org) for details.
+This is the Apollo Server integration package for [Rakkas.JS](https://rakkasjs.org).
+
+See the [example](https://github.com/rakkasjs/rakkasjs/tree/main/examples/apollo-graphql) on how to integrate Apollo Server into your Rakkas app.

@@ -1,19 +1,14 @@
 # TODO
 
 - Static site generation
-- Switch to automatic JSX runtime
-- Integration examples (Redux, Apollo GraphQL, Styled Components, MDX, Tailwind CSS)
-- Enhancements in the project generator
+- Switch to React automatic JSX runtime
+- Integration examples (Apollo GraphQL, Styled Components, MDX, Tailwind CSS)
+- More options in the project generator
 - Lots of minor features and fixes
-
-## For 0.4.0
-- [ ] Create examples
-  - [ ] Styled components
-  - [ ] Tailwind CSS
-  - [ ] Apollo GraphQL
-  - [ ] MDX
+- Much-expanded documentation
 
 ## For 1.0.0
+- ⚠️ CSS module imported from a layout doesn't hot reload
 - [ ] Investigate debugging and sourcemaps
 - [ ] Design a setData API
   - [ ] Design a navigate with data API

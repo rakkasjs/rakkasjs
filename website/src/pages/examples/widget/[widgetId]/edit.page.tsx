@@ -2,15 +2,15 @@ import React from "react";
 import { definePage, DefinePageTypesUnder, Link } from "rakkasjs";
 import { WidgetLayoutTypes } from "./layout";
 
-type WidgetViewPageTypes = DefinePageTypesUnder<
+type WidgetEditPageTypes = DefinePageTypesUnder<
 	WidgetLayoutTypes,
 	{
 		params: { widgetId: string };
 	}
 >;
 
-export default definePage<WidgetViewPageTypes>({
-	Component: function WidgetViewPage({ context: { widget } }) {
+export default definePage<WidgetEditPageTypes>({
+	Component: function WidgetEditPage({ context: { widget } }) {
 		return (
 			<div>
 				<h1>Edit {widget.name}</h1>

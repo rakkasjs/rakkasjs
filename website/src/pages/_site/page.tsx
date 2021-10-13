@@ -13,8 +13,8 @@ const HomePage: FC = () => (
 
 		<div className={css.banner}>
 			<div className={css.logo}>
-				<Logomark height="160px" />
-				<Logotype height="160px" />
+				<Logomark height="120px" />
+				<Logotype height="120px" />
 			</div>
 
 			<div className={css.tagLine}>
@@ -29,7 +29,7 @@ const HomePage: FC = () => (
 
 			<p>
 				<a
-					href="https://stackblitz.com/edit/rakkas-app?file=src%2Fpages%2Fpage.tsx"
+					href="https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx"
 					target="_blank"
 					rel="noreferrer"
 				>

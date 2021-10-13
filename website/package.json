@@ -7,7 +7,7 @@
 		"start": "rakkas-node",
 		"build": "rakkas build",
 		"dev": "rakkas dev",
-		"devdev": "node-dev node_modules/@rakkasjs/cli/dist/bin.js dev"
+		"prepublishOnly": "pnpm build"
 	},
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
