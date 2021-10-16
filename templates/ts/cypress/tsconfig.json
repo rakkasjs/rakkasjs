@@ -3,6 +3,7 @@
 		"strict": true,
 		"module": "ES2020",
 		"esModuleInterop": true,
+		"isolatedModules": true,
 		"jsx": "react",
 		"target": "es6",
 		"moduleResolution": "node",
