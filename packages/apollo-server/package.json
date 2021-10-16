@@ -1,6 +1,6 @@
 {
 	"name": "@rakkasjs/apollo-server",
-	"version": "0.4.0",
+	"version": "0.5.0-canary.1",
 	"description": "Rakkas.js Apollo server graphql runner",
 	"scripts": {
 		"prepublishOnly": "pnpm build",
