@@ -4,3 +4,5 @@ coverage
 *.tgz
 *.log
 .vscode
+*.local
+*.local.*
