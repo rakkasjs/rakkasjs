@@ -9,7 +9,7 @@
 		"build": "pnpm run -r build",
 		"precommit": "lint-staged",
 		"prepare": "husky install",
-		"set-version": "pnpm -r exec -- npm version --no-git-tag-version",
+		"set-version": "sh set-version.sh",
 		"canary": "pnpm -r exec -- npm version --no-git-tag-version prerelease --preid=canary && pnpm -r --filter=./packages exec -- pnpm publish --tag canary --no-git-checks --access=public",
 		"publish": "pnpm -r exec -- pnpm version patch --no-git-tag-version && pnpm -r --filter=./packages exec -- pnpm publish --no-git-checks --access=public",
 		"publish-all": "pnpm -r --filter=./packages exec -- pnpm publish",
