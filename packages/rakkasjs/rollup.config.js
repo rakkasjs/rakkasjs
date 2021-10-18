@@ -13,12 +13,6 @@ const options = [
 				dir: "dist",
 				format: "esm",
 				chunkFileNames: "chunks/[name]-[hash].js",
-				plugins: isProd
-					? [
-							// TODO: Investigate why terser breaks the build
-							// terser()
-					  ]
-					: [],
 			},
 		],
 		external: [

@@ -89,7 +89,6 @@ export async function createServers({
 
 				const response: RakkasResponse = await processRequest({
 					request: {
-						// TODO: Get real host and port
 						url: new URL(url, `${proto}://${host}`),
 						ip: req.socket.remoteAddress,
 						method: req.method || "GET",
