@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "rakkas-testbed-general",
-	"version": "0.5.0-canary.1",
+	"version": "0.5.0-canary.6",
 	"description": "Rakkas.js test bed for general features",
 	"scripts": {
 		"dev": "rakkas dev",

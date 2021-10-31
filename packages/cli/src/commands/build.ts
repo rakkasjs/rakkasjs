@@ -12,6 +12,7 @@ import getPort from "get-port";
 import { spawn } from "child_process";
 import fetch, { FetchError, Response } from "node-fetch";
 import rimraf from "rimraf";
+import { build as esbuild } from "esbuild";
 
 const TARGETS: BuildTarget[] = [
 	"node",
@@ -50,28 +51,55 @@ export default function buildCommand() {
 	return cmd;
 }
 
-export interface BuildOptions {
-	buildMode?: "ssr" | "static";
-	outDir?: string;
-}
-
 export async function build(config: FullConfig) {
 	let outDir: string;
+	let clientOutDir: string;
+	let serverOutDir: string;
+	let entry: string;
 
 	switch (config.target) {
 		case "node":
 			outDir = path.resolve("dist");
+			clientOutDir = path.join(outDir, "client");
+			serverOutDir = path.join(outDir, "server");
+			entry = path.resolve(__dirname, "./entries/entry-node.js");
 			break;
 
 		case "static":
 			outDir = path.resolve("node_modules/.rakkas/static");
+			clientOutDir = path.join(outDir, "client");
+			serverOutDir = path.join(outDir, "server");
+			entry = path.resolve(__dirname, "./entries/entry-node.js");
+			break;
+
+		case "vercel":
+			outDir = path.resolve(".vercel_build_output");
+			clientOutDir = path.join(outDir, "static");
+			serverOutDir = path.resolve("./node_modules/.rakkas/vercel");
+			entry = path.resolve(__dirname, "./entries/entry-vercel.js");
+
+			await fs.promises.mkdir(path.join(outDir, "config"), {
+				recursive: true,
+			});
+
+			await fs.promises.writeFile(
+				path.join(outDir, "config", "routes.json"),
+				JSON.stringify([
+					{ handle: "filesystem" },
+					{
+						src: "/(.*)",
+						dest: "/.vercel/functions/render",
+					},
+				]),
+			);
 			break;
 
 		default:
 			throw new Error(`Build target ${config.target} is not supported yet`);
 	}
 
-	await fs.promises.mkdir(outDir, { recursive: true });
+	await fs.promises.mkdir(clientOutDir, { recursive: true });
+	await fs.promises.mkdir(serverOutDir, { recursive: true });
 
 	// eslint-disable-next-line no-console
 	console.log(chalk.gray("Building client"));
@@ -82,7 +110,7 @@ export async function build(config: FullConfig) {
 		...clientConfig,
 
 		build: {
-			outDir: path.join(outDir, "client"),
+			outDir: clientOutDir,
 			emptyOutDir: true,
 			ssrManifest: true,
 			target: "es2020",
@@ -93,7 +121,7 @@ export async function build(config: FullConfig) {
 
 	// Fix index.html
 	const htmlTemplate = await fs.promises.readFile(
-		path.join(outDir, "client", "index.html"),
+		path.join(clientOutDir, "index.html"),
 	);
 
 	const dom = cheerio.load(htmlTemplate);
@@ -106,25 +134,19 @@ export async function build(config: FullConfig) {
 	Object.keys(body.attr()).forEach((a) => body.removeAttr(a));
 	body.prepend("<!-- rakkas-body-attributes-placeholder -->");
 
-	await fs.promises.writeFile(
-		path.join(outDir, "html-template.js"),
-		`module.exports = ${JSON.stringify(dom.html())}`,
-		"utf8",
-	);
-
-	await fs.promises.unlink(path.join(outDir, "client", "index.html"));
+	await fs.promises.unlink(path.join(clientOutDir, "index.html"));
 
 	// Fix manifest
 	const rawManifest = JSON.parse(
 		await fs.promises.readFile(
-			path.join(outDir, "client", "ssr-manifest.json"),
+			path.join(clientOutDir, "ssr-manifest.json"),
 			"utf-8",
 		),
 	) as Record<string, string[]>;
 
 	const importManifest = JSON.parse(
 		await fs.promises.readFile(
-			path.join(outDir, "client", "import-manifest.json"),
+			path.join(clientOutDir, "import-manifest.json"),
 			"utf-8",
 		),
 	) as Record<string, string[]>;
@@ -162,13 +184,8 @@ export async function build(config: FullConfig) {
 			.filter(Boolean) as Array<[string, string[]]>,
 	);
 
-	fs.promises.writeFile(
-		path.join(outDir, "rakkas-manifest.json"),
-		JSON.stringify(manifest),
-		"utf8",
-	);
-	fs.promises.unlink(path.join(outDir, "client", "ssr-manifest.json"));
-	fs.promises.unlink(path.join(outDir, "client", "import-manifest.json"));
+	await fs.promises.unlink(path.join(clientOutDir, "ssr-manifest.json"));
+	await fs.promises.unlink(path.join(clientOutDir, "import-manifest.json"));
 
 	// eslint-disable-next-line no-console
 	console.log(chalk.gray("Building server"));
@@ -179,7 +196,7 @@ export async function build(config: FullConfig) {
 		build: {
 			ssr: true,
 			target: "node12",
-			outDir: path.join(outDir, "server"),
+			outDir: serverOutDir,
 			rollupOptions: {
 				input: [
 					"@rakkasjs/page-routes",
@@ -193,10 +210,36 @@ export async function build(config: FullConfig) {
 		publicDir: false,
 	});
 
-	await fs.promises.copyFile(
-		path.resolve(__dirname, "./entries/entry-node.js"),
-		path.join(outDir, "server", "index.js"),
+	await fs.promises.writeFile(
+		path.join(serverOutDir, "rakkas-manifest.json"),
+		JSON.stringify(manifest),
+		"utf8",
 	);
+
+	await fs.promises.writeFile(
+		path.join(serverOutDir, "html-template.js"),
+		`module.exports = ${JSON.stringify(dom.html())}`,
+		"utf8",
+	);
+
+	await fs.promises.copyFile(entry, path.join(serverOutDir, "index.js"));
+
+	if (config.target === "vercel") {
+		// eslint-disable-next-line no-console
+		console.log(chalk.gray("Bundling serverless fuction"));
+
+		await fs.promises.mkdir(path.join(outDir, "functions/node/render"), {
+			recursive: true,
+		});
+
+		await esbuild({
+			bundle: true,
+			entryPoints: [path.join(serverOutDir, "index.js")],
+			outfile: path.join(outDir, "functions/node/render/index.js"),
+			platform: "node",
+			target: "node12",
+		});
+	}
 
 	if (config.target === "static") {
 		await crawl(outDir);

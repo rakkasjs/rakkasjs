@@ -43,7 +43,7 @@ export async function loadConfig(
 	}
 
 	return {
-		config: withDefaults({ ...loaded, cliOverrides }),
+		config: withDefaults({ ...loaded, ...cliOverrides }),
 		deps,
 	};
 }

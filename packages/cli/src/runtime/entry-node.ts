@@ -7,8 +7,6 @@ import type { handleRequest as HandleRequest } from "rakkasjs/dist/server";
 import fs from "fs";
 import path from "path";
 
-const SERVER = "./server.js";
-
 async function startServer() {
 	installNodeFetch();
 
@@ -20,7 +18,8 @@ async function startServer() {
 
 	const app = createServer((req, res) => {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const handleRequest = require(SERVER).handleRequest as typeof HandleRequest;
+		const handleRequest = require("$output/server.js")
+			.handleRequest as typeof HandleRequest;
 
 		async function handle() {
 			await handleNodeRequest({
