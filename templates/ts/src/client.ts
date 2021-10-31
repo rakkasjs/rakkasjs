@@ -19,3 +19,6 @@
 // 		// Initialize your client-side load helpers here (see: https://rakkasjs.org/guide/load-helpers)
 // 	};
 // }
+
+// Must be module
+export {};

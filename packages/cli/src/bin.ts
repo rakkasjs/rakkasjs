@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-import path from "path";
-import fs from "fs";
 import { program, Command } from "commander";
 
 import devCommand from "./commands/dev";
@@ -16,11 +14,7 @@ async function main() {
 }
 
 async function readPackageJson() {
-	const packageJsonFileName = path.resolve(__dirname, "../package.json");
-	const content = await fs.promises.readFile(packageJsonFileName, {
-		encoding: "utf-8",
-	});
-	return JSON.parse(content);
+	return await import("../package.json");
 }
 
 function parseCommandLineArguments(version: string) {

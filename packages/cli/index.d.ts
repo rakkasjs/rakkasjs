@@ -4,6 +4,7 @@ import { UserConfig } from "vite";
 export function defineConfig(config: Config);
 
 export interface FullConfig {
+	target: BuildTarget;
 	/**
 	 * File extensions for pages and layouts @default ["jsx", "tsx"] */
 	pageExtensions: string[];
@@ -34,3 +35,10 @@ export interface FullConfig {
 }
 
 export type Config = Partial<FullConfig>;
+
+type BuildTarget =
+	| "node"
+	| "static"
+	| "vercel"
+	| "netlify"
+	| "cloudflare-workers";

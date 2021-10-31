@@ -3,7 +3,7 @@ import getPort from "get-port";
 import cheerio from "cheerio";
 import fs from "fs";
 import path from "path";
-import { build } from "./build";
+// import { build } from "./build";
 import { spawn } from "child_process";
 import fetch, { FetchError, Response } from "node-fetch";
 import rimraf from "rimraf";
@@ -21,10 +21,11 @@ export default function exportCommand() {
 
 			await fs.promises.mkdir(distDir, { recursive: true });
 
-			await build({
-				buildMode: "static",
-				outDir: distDir,
-			});
+			// TODO: Move to rakkas build --target static
+			// await build({
+			// 	// buildMode: "static",
+			// 	// outDir: distDir,
+			// });
 
 			const host = "localhost";
 			const port = await getPort();

@@ -4,6 +4,7 @@
 		"module": "es2020",
 		"skipLibCheck": true,
 		"moduleResolution": "Node",
+		"resolveJsonModule": true,
 		"strict": true,
 		"lib": ["ScriptHost", "DOM", "ES2019"],
 		"target": "ES2019"

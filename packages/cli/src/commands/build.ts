@@ -1,4 +1,4 @@
-import { Command } from "commander";
+import { createCommand, Option } from "commander";
 import { build as viteBuild } from "vite";
 import { loadConfig } from "../lib/config";
 import { makeViteConfig } from "../lib/vite-config";
@@ -7,24 +7,40 @@ import fs from "fs";
 import path from "path";
 import micromatch from "micromatch";
 import chalk from "chalk";
+import { BuildTarget, FullConfig } from "../..";
+
+const TARGETS: BuildTarget[] = [
+	"node",
+	"static",
+	"vercel",
+	"netlify",
+	"cloudflare-workers",
+];
+
+interface BuildCommandOptions {
+	target?: BuildTarget;
+}
 
 export default function buildCommand() {
-	return new Command("build")
+	const cmd = createCommand("build")
 		.description("Build for production")
-		.action(async () => {
-			// eslint-disable-next-line no-console
-			console.log(chalk.whiteBright("Building for production"));
+		.addOption(
+			new Option("-t, --target <target>", "Override build target").choices(
+				TARGETS,
+			),
+		)
+		.action(async (options: BuildCommandOptions) => {
+			const { config } = await loadConfig(undefined, options);
 
-			const result = await build();
-
 			// eslint-disable-next-line no-console
-			console.log(
-				chalk.whiteBright("Production application built into the directory"),
-				chalk.green("dist"),
-			);
+			console.log(chalk.whiteBright(`Building for target "${config.target}"`));
+
+			const result = await build(config);
 
 			return result;
 		});
+
+	return cmd;
 }
 
 export interface BuildOptions {
@@ -32,38 +48,33 @@ export interface BuildOptions {
 	outDir?: string;
 }
 
-export async function build(options: BuildOptions = {}) {
-	const { buildMode = "ssr", outDir = path.resolve("dist") } = options;
-	const { config } = await loadConfig();
-	let viteConfig = await makeViteConfig(config, {
-		buildMode,
-		stripLoadFunctions: buildMode === "static",
-	});
-
-	viteConfig.logLevel = "warn";
+export async function build(config: FullConfig) {
+	const outDir = path.resolve("dist");
 
 	// eslint-disable-next-line no-console
 	console.log(chalk.gray("Building client"));
 
+	const clientConfig = await makeViteConfig(config, { ssr: false });
+
 	await viteBuild({
-		...viteConfig,
+		...clientConfig,
 
 		build: {
 			outDir: path.join(outDir, "client"),
 			emptyOutDir: true,
 			ssrManifest: true,
+			target: "es2020",
 		},
 	});
 
-	viteConfig = await makeViteConfig(config, { buildMode });
-	viteConfig.logLevel = "warn";
+	const ssrConfig = await makeViteConfig(config, { ssr: true });
 
 	// Fix index.html
-	const template = await fs.promises.readFile(
+	const htmlTemplate = await fs.promises.readFile(
 		path.join(outDir, "client", "index.html"),
 	);
 
-	const dom = cheerio.load(template);
+	const dom = cheerio.load(htmlTemplate);
 
 	const html = dom("html").first();
 	Object.keys(html.attr()).forEach((a) => html.removeAttr(a));
@@ -73,8 +84,13 @@ export async function build(options: BuildOptions = {}) {
 	Object.keys(body.attr()).forEach((a) => body.removeAttr(a));
 	body.prepend("<!-- rakkas-body-attributes-placeholder -->");
 
-	fs.promises.writeFile(path.join(outDir, "index.html"), dom.html(), "utf8");
-	fs.promises.unlink(path.join(outDir, "client", "index.html"));
+	await fs.promises.writeFile(
+		path.join(outDir, "html-template.js"),
+		`module.exports = ${JSON.stringify(dom.html())}`,
+		"utf8",
+	);
+
+	await fs.promises.unlink(path.join(outDir, "client", "index.html"));
 
 	// Fix manifest
 	const rawManifest = JSON.parse(
@@ -98,6 +114,7 @@ export async function build(options: BuildOptions = {}) {
 	const layoutMatcher = micromatch.matcher(
 		`**/(*/)?layout.(${pageExtensions})`,
 	);
+
 	const manifest = Object.fromEntries(
 		Object.entries(rawManifest)
 			.map(([name, value]) => {
@@ -133,13 +150,13 @@ export async function build(options: BuildOptions = {}) {
 
 	// eslint-disable-next-line no-console
 	console.log(chalk.gray("Building server"));
-	// Build server
+
 	await viteBuild({
-		...viteConfig,
+		...ssrConfig,
 
 		build: {
 			ssr: true,
-			target: "modules",
+			target: "node12",
 			outDir: path.join(outDir, "server"),
 			rollupOptions: {
 				input: [
@@ -153,4 +170,12 @@ export async function build(options: BuildOptions = {}) {
 
 		publicDir: false,
 	});
+
+	await fs.promises.copyFile(
+		path.resolve(__dirname, "./entries/entry-node.js"),
+		path.join(outDir, "server", "index.js"),
+	);
+
+	// eslint-disable-next-line no-console
+	console.log(chalk.whiteBright(`Application built in ${outDir}`));
 }

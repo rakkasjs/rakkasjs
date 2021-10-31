@@ -6,7 +6,12 @@ declare interface Window {
 	readonly $rakkas$routes: any;
 }
 
-declare const RAKKAS_BUILD_MODE: "ssr" | "static";
+declare const RAKKAS_BUILD_TARGET:
+	| "node"
+	| "static"
+	| "vercel"
+	| "netlify"
+	| "cloudflare-workers";
 
 declare module "@rakkasjs/page-imports" {
 	const importer: Record<string, () => Promise<any>>;

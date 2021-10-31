@@ -63,28 +63,25 @@ export async function startServer() {
 			try {
 				const { body, type } = await parseBody(req);
 
-				const response: RakkasResponse = await handleRequest(
+				const response: RakkasResponse = await handleRequest({
+					htmlTemplate: template,
 					apiRoutes,
 					pageRoutes,
-					{
-						request: {
-							ip,
-							url: new URL(req.url || "/", `${proto}://${host}`),
-							method: req.method || "GET",
-							headers: new Headers(req.headers as Record<string, string>),
-							type,
-							body,
-							originalIp: req.socket.remoteAddress,
-							originalUrl: new URL(
-								req.url || "/",
-								`http://${req.headers.host || "localhost"}`,
-							),
-						},
-						template,
-						manifest,
-						pages: pageRoutes,
+					manifest,
+					request: {
+						ip,
+						url: new URL(req.url || "/", `${proto}://${host}`),
+						method: req.method || "GET",
+						headers: new Headers(req.headers as Record<string, string>),
+						type,
+						body,
+						originalIp: req.socket.remoteAddress,
+						originalUrl: new URL(
+							req.url || "/",
+							`http://${req.headers.host || "localhost"}`,
+						),
 					},
-				);
+				});
 
 				res.statusCode = response.status ?? 200;
 

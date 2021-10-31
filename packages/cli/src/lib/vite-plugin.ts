@@ -56,15 +56,6 @@ export async function rakkasVitePlugin(
 	const normalizedIndexHtmlPath = normalizePath(indexHtmlPath);
 
 	const virtualModules = virtual({
-		"@rakkasjs/page-routes": await makeRouteManifest({
-			srcDir,
-			routesDir: pagesDir,
-			finalExtensions: componentExtensions,
-			wrapperExt: "layout",
-			leafExt: "page",
-			rootUrl: "/",
-		}),
-
 		"@rakkasjs/page-imports": `
 			const pages = import.meta.glob(${JSON.stringify(PAGES)});
 			const layouts = import.meta.glob(${JSON.stringify(LAYOUTS)});
@@ -77,6 +68,15 @@ export async function rakkasVitePlugin(
 			export default Object.assign(endpoints, middleware);
 		`,
 
+		"@rakkasjs/page-routes": await makeRouteManifest({
+			srcDir,
+			routesDir: pagesDir,
+			finalExtensions: componentExtensions,
+			wrapperExt: "layout",
+			leafExt: "page",
+			rootUrl: "/",
+		}),
+
 		"@rakkasjs/api-routes": await makeRouteManifest({
 			srcDir,
 			routesDir: apiDir,
@@ -85,16 +85,6 @@ export async function rakkasVitePlugin(
 			leafExt: "endpoint",
 			rootUrl: apiRoot + "/",
 		}),
-
-		"@rakkasjs/process-request": `
-			import apiRoutes from "@rakkasjs/api-routes";
-			import pageRoutes from "@rakkasjs/page-routes";
-
-			import {handleRequest} from "rakkasjs/server";
-
-			export function processRequest(req){
-				return handleRequest(apiRoutes,pageRoutes,req);
-			}`,
 	});
 
 	let ssr: boolean;

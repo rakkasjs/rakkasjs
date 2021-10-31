@@ -6,18 +6,12 @@ import { rakkasVitePlugin } from "./vite-plugin";
 export interface ConfigFlavorOptions {
 	configDeps?: string[];
 	onConfigChange?: () => void;
-	buildMode?: "ssr" | "static";
-	stripLoadFunctions?: boolean;
+	ssr?: boolean;
 }
 
 export async function makeViteConfig(
 	config: FullConfig,
-	{
-		configDeps,
-		onConfigChange,
-		buildMode = "ssr",
-		stripLoadFunctions = false,
-	}: ConfigFlavorOptions = {},
+	{ configDeps, onConfigChange, ssr }: ConfigFlavorOptions = {},
 ): Promise<InlineConfig> {
 	const srcDir = normalizePath(path.resolve("src"));
 	const publicDir = normalizePath(path.resolve("public"));
@@ -72,14 +66,14 @@ export async function makeViteConfig(
 				endpointExtensions: config.endpointExtensions,
 				apiRoot: config.apiRoot,
 				configDeps,
-				stripLoadFunctions,
+				stripLoadFunctions: config.target === "static" && !ssr,
 				babel: config.babel,
 				onConfigChange,
 			}),
 		],
 		define: {
 			...config.vite.define,
-			RAKKAS_BUILD_MODE: JSON.stringify(buildMode),
+			RAKKAS_BUILD_TARGET: JSON.stringify(config.target),
 		},
 	};
 

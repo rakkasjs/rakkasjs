@@ -4,3 +4,6 @@ describe("Sample unit test", () => {
 		expect(2 + 2).toBe(4);
 	});
 });
+
+// Must be a module
+export {};

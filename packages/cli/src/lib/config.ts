@@ -10,14 +10,17 @@ export interface ConfigConfig {
 	collectDeps?: boolean;
 }
 
-export async function loadConfig(configConfig: ConfigConfig = {}): Promise<{
+export async function loadConfig(
+	configConfig: ConfigConfig = {},
+	cliOverrides?: Config,
+): Promise<{
 	config: FullConfig;
 	deps?: string[];
 }> {
 	configConfig.root = configConfig.root ?? process.cwd();
 	const filename = findConfigFile(configConfig);
 	if (!filename) {
-		return { config: withDefaults({}), deps: [] };
+		return { config: withDefaults(cliOverrides || {}), deps: [] };
 	}
 
 	// eslint-disable-next-line no-console
@@ -40,7 +43,7 @@ export async function loadConfig(configConfig: ConfigConfig = {}): Promise<{
 	}
 
 	return {
-		config: withDefaults(loaded),
+		config: withDefaults({ ...loaded, cliOverrides }),
 		deps,
 	};
 }
@@ -111,15 +114,21 @@ async function buildFile(filename: string, root: string, collectDeps = true) {
 
 function withDefaults(config: Config): FullConfig {
 	const out: FullConfig = {
-		vite: {},
+		target: "node",
 		pagesDir: "pages",
 		pageExtensions: ["jsx", "tsx"],
 		apiDir: "api",
 		apiRoot: "/api",
 		endpointExtensions: ["js", "ts"],
 		trustForwardedOrigin: false,
-		babel: {},
 		...config,
+		vite: {
+			logLevel: "warn",
+			...config.vite,
+		},
+		babel: {
+			...config.babel,
+		},
 	};
 
 	return out;

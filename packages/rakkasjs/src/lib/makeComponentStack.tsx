@@ -148,13 +148,13 @@ export async function makeComponentStack({
 		const cacheKey = stableJson(getCacheKey({ url, params, match, context }));
 		let loaded: PageLoadResult | LayoutLoadResult;
 
-		if (RAKKAS_BUILD_MODE === "static" && !import.meta.env.SSR) {
+		if (RAKKAS_BUILD_TARGET === "static" && !import.meta.env.SSR) {
 			previousRender = await loadDataScript(url.pathname);
 		}
 
 		if (
 			// Never reload on the client if static
-			(RAKKAS_BUILD_MODE !== "static" || import.meta.env.SSR) &&
+			(RAKKAS_BUILD_TARGET !== "static" || import.meta.env.SSR) &&
 			// No previous render, we're in server side; should reload
 			(!previousRender ||
 				// Different component; should reload
@@ -224,7 +224,8 @@ export async function makeComponentStack({
 	}
 
 	const content = successfulRender.reduceRight((prev, rendered, i) => {
-		const reloadThis = RAKKAS_BUILD_MODE === "ssr" ? () => reload(i) : noop;
+		const reloadThis =
+			RAKKAS_BUILD_TARGET === "static" ? noop : () => reload(i);
 
 		const Component = rendered.Component!;
 
@@ -245,9 +246,9 @@ export async function makeComponentStack({
 			error: errorHandlerIndex === i ? error : undefined,
 			reload: reloadThis,
 			useReload:
-				RAKKAS_BUILD_MODE === "ssr"
-					? makeUseReload(reloadThis, isInitialRender)
-					: noop,
+				RAKKAS_BUILD_TARGET === "static"
+					? noop
+					: makeUseReload(reloadThis, isInitialRender),
 		};
 
 		return <Component {...props}>{prev}</Component>;

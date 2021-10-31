@@ -16,7 +16,7 @@ import importers from "@rakkasjs/api-imports";
 import { RawRequest, PageRenderOptions } from "./lib/types";
 import { RouterProvider } from "./lib/useRouter";
 
-import fs from "fs";
+export type { Route };
 
 export interface EndpointModule {
 	[method: string]: RequestHandler | undefined;
@@ -31,21 +31,23 @@ export type MiddlewareImporter = () =>
 	| MiddlewareModule
 	| Promise<MiddlewareModule>;
 
-export async function handleRequest(
-	apiRoutes: Route[],
-	pageRoutes: Route[],
-	{
-		request,
-		template,
-		manifest,
-		pages,
-	}: {
-		request: RawRequest;
-		template: string;
-		manifest?: Record<string, string[] | undefined>;
-		pages?: Array<[RegExp, string, string]>;
-	},
-): Promise<RakkasResponse> {
+interface RequestContext {
+	htmlTemplate: string;
+	apiRoutes: Route[];
+	pageRoutes: Route[];
+	manifest?: Record<string, string[] | undefined>;
+	request: RawRequest;
+	writeFile?(name: string, content: string): Promise<void>;
+}
+
+export async function handleRequest({
+	htmlTemplate,
+	apiRoutes,
+	pageRoutes,
+	manifest,
+	request,
+	writeFile,
+}: RequestContext): Promise<RakkasResponse> {
 	const path = decodeURI(request.url.pathname);
 
 	const apiRoute = findRoute(path, apiRoutes);
@@ -238,7 +240,7 @@ export async function handleRequest(
 			location = String(lastRendered.location);
 
 			if (
-				RAKKAS_BUILD_MODE === "static" &&
+				RAKKAS_BUILD_TARGET === "static" &&
 				request.headers.get("x-rakkas-export") === "static"
 			) {
 				head += `<meta http-equiv="refresh" content="0; url=${encodeURI(
@@ -249,14 +251,16 @@ export async function handleRequest(
 			headers.location = location;
 		}
 
-		if (RAKKAS_BUILD_MODE === "static") {
+		if (RAKKAS_BUILD_TARGET === "static") {
 			head += `<script id="rakkas-data-script" src="/__data${filename}/index.js"></script>`;
 		} else {
 			head += `<script>${dataScript}</script>`;
 		}
 
-		if (pages) {
-			head += `<script>$rakkas$routes=(0,eval)(${devalue(pages)})</script>`;
+		if (pageRoutes) {
+			head += `<script>$rakkas$routes=(0,eval)(${devalue(
+				pageRoutes,
+			)})</script>`;
 		}
 
 		head +=
@@ -301,7 +305,7 @@ export async function handleRequest(
 
 		if (options.getHeadHtml) head += options.getHeadHtml();
 
-		let html = template.replace("<!-- rakkas-head-placeholder -->", head);
+		let html = htmlTemplate.replace("<!-- rakkas-head-placeholder -->", head);
 
 		const htmlAttributes = helmet.htmlAttributes.toString();
 		html = html.replace(
@@ -318,20 +322,11 @@ export async function handleRequest(
 		html = html.replace("<!-- rakkas-app-placeholder -->", rendered);
 
 		if (
-			RAKKAS_BUILD_MODE === "static" &&
+			RAKKAS_BUILD_TARGET === "static" &&
 			request.headers.get("x-rakkas-export") === "static"
 		) {
-			await fs.promises.mkdir(`dist/client${filename}`, { recursive: true });
-			await fs.promises.writeFile(`dist/client${filename}/index.html`, html);
-
-			await fs.promises.mkdir(`dist/client/__data${filename}`, {
-				recursive: true,
-			});
-			await fs.promises.writeFile(
-				`dist/client/__data${filename}/index.js`,
-				dataScript,
-			);
-
+			await writeFile!(`${filename}/index.html`, html);
+			await writeFile!(`__data${filename}/index.js`, dataScript);
 			headers["x-rakkas-export"] = "static";
 		}
 
