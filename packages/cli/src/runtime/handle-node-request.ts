@@ -14,15 +14,13 @@ export interface NodeRequestContext {
 
 	manifest?: Record<string, string[] | undefined>;
 
-	proto: string;
-	host: string;
-	ip: string;
-
 	req: IncomingMessage;
 	res: ServerResponse;
-}
 
-const SERVER = "./server.js";
+	trustForwardedOrigin: boolean;
+
+	handleRequest: typeof HandleRequest;
+}
 
 export async function handleNodeRequest({
 	htmlTemplate,
@@ -32,19 +30,24 @@ export async function handleNodeRequest({
 
 	manifest,
 
-	proto,
-	host,
-	ip,
-
 	req,
 	res,
+
+	trustForwardedOrigin,
+	handleRequest,
 }: NodeRequestContext) {
 	const { body, type } = await parseNodeRequestBody(req);
-
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	const { handleRequest } = require(SERVER) as {
-		handleRequest: typeof HandleRequest;
-	};
+	const proto =
+		(trustForwardedOrigin && (req.headers["x-forwarded-proto"] as string)) ||
+		"http";
+	const host =
+		(trustForwardedOrigin && (req.headers["x-forwarded-host"] as string)) ||
+		req.headers.host ||
+		"localhost";
+	const ip =
+		(trustForwardedOrigin && (req.headers["x-forwarded-for"] as string)) ||
+		req.socket.remoteAddress ||
+		"";
 
 	const response: RakkasResponse = await handleRequest({
 		apiRoutes,

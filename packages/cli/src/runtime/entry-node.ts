@@ -3,6 +3,9 @@ import sirv from "sirv";
 import { installNodeFetch } from "./install-node-fetch";
 import { handleNodeRequest } from "./handle-node-request";
 import { apiRoutes, pageRoutes, manifest, htmlTemplate } from "./manifests";
+import type { handleRequest as HandleRequest } from "rakkasjs/dist/server";
+
+const SERVER = "./server.js";
 
 async function startServer() {
 	installNodeFetch();
@@ -14,17 +17,8 @@ async function startServer() {
 	const port = process.env.PORT || 3000;
 
 	const app = createServer((req, res) => {
-		const proto =
-			(trustForwardedOrigin && (req.headers["x-forwarded-proto"] as string)) ||
-			"http";
-		const host =
-			(trustForwardedOrigin && (req.headers["x-forwarded-host"] as string)) ||
-			req.headers.host ||
-			"localhost";
-		const ip =
-			(trustForwardedOrigin && (req.headers["x-forwarded-for"] as string)) ||
-			req.socket.remoteAddress ||
-			"";
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		const handleRequest = require(SERVER).handleRequest as typeof HandleRequest;
 
 		async function handle() {
 			await handleNodeRequest({
@@ -35,12 +29,11 @@ async function startServer() {
 
 				manifest,
 
-				proto,
-				host,
-				ip,
-
 				req,
 				res,
+
+				handleRequest,
+				trustForwardedOrigin,
 			}).catch((error) => {
 				// TODO: logging
 				// eslint-disable-next-line no-console

@@ -16,6 +16,20 @@ async function run() {
 		})
 		.catch(() => process.exit(1));
 
+	console.log("Building Node dev runtime");
+	await esbuild
+		.build({
+			bundle: true,
+			logLevel: "info",
+			entryPoints: ["src/runtime/handle-node-request.ts"],
+			outdir: "dist/entries",
+			platform: "node",
+			target: ["node12"],
+			format: "esm",
+			watch: process.argv[2] === "--watch",
+		})
+		.catch(() => process.exit(1));
+
 	console.log("Building Node runtime");
 	await esbuild
 		.build({

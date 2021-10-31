@@ -2,11 +2,10 @@ import { createServer as createViteServer, ViteDevServer } from "vite";
 import { createServer as createHttpServer } from "http";
 import { makeViteConfig } from "../lib/vite-config";
 import { encode } from "html-entities";
-import { parseBody } from "@rakkasjs/runner-node/parse-body";
-import { RakkasResponse } from "rakkasjs";
 import { htmlTemplate } from "../lib/html-template";
 import { FullConfig } from "../..";
 import chalk from "chalk";
+import path from "path";
 
 export interface ServersConfig {
 	config: FullConfig;
@@ -69,61 +68,32 @@ export async function createServers({
 			try {
 				// Force them into module cache. Otherwise symlinks confuse vite.
 				await vite.ssrLoadModule("rakkasjs");
-				await vite.ssrLoadModule("rakkasjs/server");
+				const { handleRequest } = await vite.ssrLoadModule("rakkasjs/server");
+				const pageRoutes = (await vite.ssrLoadModule("@rakkasjs/page-routes"))
+					.default;
+				const apiRoutes = (await vite.ssrLoadModule("@rakkasjs/api-routes"))
+					.default;
 
-				const { processRequest } = await vite.ssrLoadModule(
-					"@rakkasjs/process-request",
-				);
+				const all = (await vite.ssrLoadModule(
+					path.resolve(__dirname, "entries/handle-node-request.js"),
+				)) as typeof import("../runtime/handle-node-request");
+
+				const { handleNodeRequest } = all;
 
 				html = await vite.transformIndexHtml(url, html);
 
-				const proto =
-					(config.trustForwardedOrigin && req.headers["x-forwarded-proto"]) ||
-					"http";
-				const host =
-					(config.trustForwardedOrigin && req.headers["x-forwarded-host"]) ||
-					req.headers.host ||
-					"localhost";
-
-				const { body, type } = await parseBody(req);
-
-				const response: RakkasResponse = await processRequest({
-					request: {
-						url: new URL(url, `${proto}://${host}`),
-						ip: req.socket.remoteAddress,
-						method: req.method || "GET",
-						headers: new Headers(req.headers as Record<string, string>),
-						type,
-						body,
-						originalIp: req.socket.remoteAddress,
-						originalUrl: new URL(url, `${proto}://${host}`),
-					},
-					template: html,
+				await handleNodeRequest({
+					pageRoutes,
+					apiRoutes,
+					htmlTemplate: html,
+					req,
+					res,
+					handleRequest,
+					trustForwardedOrigin: config.trustForwardedOrigin,
 				});
 
-				res.statusCode = response.status ?? 200;
-
+				// TODO: Logging
 				logResponse();
-
-				let headers = response.headers;
-				if (!headers) headers = [];
-				if (!Array.isArray(headers)) headers = Object.entries(headers);
-
-				headers.forEach(([name, value]) => {
-					if (value === undefined) return;
-					res.setHeader(name, value);
-				});
-
-				if (
-					response.body === null ||
-					response.body === undefined ||
-					response.body instanceof Uint8Array ||
-					typeof response.body === "string"
-				) {
-					res.end(response.body);
-				} else {
-					res.end(JSON.stringify(response.body));
-				}
 			} catch (error: any) {
 				vite.ssrFixStacktrace(error);
 				// eslint-disable-next-line no-console

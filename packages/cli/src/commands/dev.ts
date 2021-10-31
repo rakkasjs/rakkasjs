@@ -2,7 +2,7 @@ import chalk from "chalk";
 import { Command } from "commander";
 import open from "open";
 import { loadConfig } from "../lib/config";
-import { installNodeFetch } from "../lib/install-node-fetch";
+import { installNodeFetch } from "../runtime/install-node-fetch";
 import { createServers } from "../lib/servers";
 
 export default function devCommand() {
