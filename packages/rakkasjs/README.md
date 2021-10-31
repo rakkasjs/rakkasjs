@@ -57,14 +57,14 @@ npx create-rakkas-app
 
 Demo project's source code comes with plenty of comments, you may not need to read the guide!
 
-> 👷 If you prefer a manual setup, you can install `rakkasjs`, `@rakkasjs/runner-node`, `react`, `react-dom`, and `react-helmet-async` as production dependencies, and `@rakkasjs/cli` as a dev dependency:
+> 👷 If you prefer a manual setup, you can install `rakkasjs`, `react`, `react-dom`, and `react-helmet-async` as production dependencies, and `@rakkasjs/cli` as a dev dependency:
 >
 > ```sh
-> npm install --save rakkasjs @rakkasjs/runner-node react react-dom react-helmet-async
+> npm install --save rakkasjs react react-dom react-helmet-async
 > npm install --save-dev @rakkasjs/cli
 > ```
 >
-> Then you can start a development server on `localhost:3000` with `npx rakkas dev`, build with `npx rakkas build`, and launch with `npx @rakkasjs/runner-node`.
+> Then you can start a development server on `localhost:3000` with `npx rakkas dev`, build with `npx rakkas build`, and launch with `node dist/server`.
 
 ## Credits
 - [Fatih Aygün](https://github.com/cyco130), under [MIT License](https://opensource.org/licenses/MIT).

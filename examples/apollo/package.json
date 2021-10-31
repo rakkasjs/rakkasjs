@@ -6,14 +6,13 @@
 	"scripts": {
 		"dev": "rakkas dev",
 		"build": "rakkas build",
-		"start": "rakkas-node",
+		"start": "node dist/server",
 		"typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.4.16",
 		"@graphql-tools/schema": "^8.2.0",
 		"@rakkasjs/apollo-server": "0.5.0-canary.1",
-		"@rakkasjs/runner-node": "0.5.0-canary.1",
 		"graphql": "^15.6.1",
 		"rakkasjs": "0.5.0-canary.1",
 		"react": "^17.0.2",

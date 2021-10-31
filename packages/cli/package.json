@@ -38,7 +38,6 @@
 		"react-dom": "^17"
 	},
 	"devDependencies": {
-		"@rakkasjs/runner-node": "workspace:*",
 		"@types/jest": "^27.0.2",
 		"@types/jsdom": "^16.2.13",
 		"@types/micromatch": "^4.0.2",

@@ -19,6 +19,7 @@ export interface NodeRequestContext {
 
 	trustForwardedOrigin: boolean;
 
+	writeFile?(name: string, content: string): Promise<void>;
 	handleRequest: typeof HandleRequest;
 }
 
@@ -34,6 +35,8 @@ export async function handleNodeRequest({
 	res,
 
 	trustForwardedOrigin,
+
+	writeFile,
 	handleRequest,
 }: NodeRequestContext) {
 	const { body, type } = await parseNodeRequestBody(req);
@@ -67,6 +70,7 @@ export async function handleNodeRequest({
 				`http://${req.headers.host || "localhost"}`,
 			),
 		},
+		writeFile,
 	});
 
 	res.statusCode = response.status ?? 200;

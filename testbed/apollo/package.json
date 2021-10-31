@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "rakkas dev",
 		"build": "rakkas build",
-		"start": "rakkas-node",
+		"start": "node dist/server",
 		"check": "run-p typecheck 'test:*'",
 		"test": "run-p 'test:*'",
 		"test:e2e": "rakkas with-port \"start-server-and-test 'pnpm start' http-get://\\$HOST:\\$PORT 'run-s 'test:e2e:*''\"",
@@ -18,7 +18,6 @@
 		"@apollo/client": "^3.4.16",
 		"@graphql-tools/schema": "^8.2.0",
 		"@rakkasjs/apollo-server": "workspace:*",
-		"@rakkasjs/runner-node": "workspace:*",
 		"devalue": "^2.0.1",
 		"graphql": "^15.6.1",
 		"rakkasjs": "workspace:*",

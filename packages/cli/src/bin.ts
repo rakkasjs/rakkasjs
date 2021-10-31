@@ -4,7 +4,6 @@ import { program, Command } from "commander";
 
 import devCommand from "./commands/dev";
 import buildCommand from "./commands/build";
-import exportCommand from "./commands/export";
 import { loadConfig } from "./lib/config";
 import withPortCommand from "./commands/with-port";
 
@@ -23,7 +22,6 @@ function parseCommandLineArguments(version: string) {
 
 	program.addCommand(devCommand());
 	program.addCommand(buildCommand());
-	program.addCommand(exportCommand());
 	program.addCommand(withPortCommand());
 
 	program.addCommand(

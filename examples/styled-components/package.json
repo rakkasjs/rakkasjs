@@ -6,11 +6,10 @@
 	"scripts": {
 		"dev": "rakkas dev",
 		"build": "rakkas build",
-		"start": "rakkas-node",
+		"start": "node dist/server",
 		"typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"dependencies": {
-		"@rakkasjs/runner-node": "0.5.0-canary.1",
 		"rakkasjs": "0.5.0-canary.1",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",

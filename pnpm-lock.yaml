@@ -16,7 +16,6 @@ importers:
       '@graphql-tools/schema': ^8.2.0
       '@rakkasjs/apollo-server': 0.5.0-canary.1
       '@rakkasjs/cli': 0.5.0-canary.1
-      '@rakkasjs/runner-node': 0.5.0-canary.1
       '@types/react': ^17.0.27
       '@types/react-dom': ^17.0.9
       graphql: ^15.6.1
@@ -29,7 +28,6 @@ importers:
       '@apollo/client': 3.4.16_graphql@15.6.1+react@17.0.2
       '@graphql-tools/schema': 8.2.0_graphql@15.6.1
       '@rakkasjs/apollo-server': link:../../packages/apollo-server
-      '@rakkasjs/runner-node': link:../../packages/runner-node
       graphql: 15.6.1
       rakkasjs: link:../../packages/rakkasjs
       react: 17.0.2
@@ -46,7 +44,6 @@ importers:
       '@mdx-js/mdx': ^1.6.22
       '@mdx-js/react': ^1.6.22
       '@rakkasjs/cli': 0.5.0-canary.1
-      '@rakkasjs/runner-node': 0.5.0-canary.1
       rakkasjs: 0.5.0-canary.1
       react: ^17.0.2
       react-dom: ^17.0.2
@@ -55,7 +52,6 @@ importers:
     dependencies:
       '@mdx-js/mdx': 1.6.22
       '@mdx-js/react': 1.6.22_react@17.0.2
-      '@rakkasjs/runner-node': link:../../packages/runner-node
       rakkasjs: link:../../packages/rakkasjs
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -67,7 +63,6 @@ importers:
   examples/styled-components:
     specifiers:
       '@rakkasjs/cli': 0.5.0-canary.1
-      '@rakkasjs/runner-node': 0.5.0-canary.1
       '@types/react': ^17.0.27
       '@types/react-dom': ^17.0.9
       '@types/styled-components': ^5.1.15
@@ -79,7 +74,6 @@ importers:
       styled-components: ^5.3.1
       typescript: ^4.4.3
     dependencies:
-      '@rakkasjs/runner-node': link:../../packages/runner-node
       rakkasjs: link:../../packages/rakkasjs
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -96,7 +90,6 @@ importers:
   examples/tailwind:
     specifiers:
       '@rakkasjs/cli': 0.5.0-canary.1
-      '@rakkasjs/runner-node': 0.5.0-canary.1
       autoprefixer: ^10.3.7
       postcss: ^8.3.9
       rakkasjs: 0.5.0-canary.1
@@ -106,7 +99,6 @@ importers:
       tailwindcss: ^2.2.16
       typescript: ^4.4.3
     dependencies:
-      '@rakkasjs/runner-node': link:../../packages/runner-node
       rakkasjs: link:../../packages/rakkasjs
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -140,9 +132,6 @@ importers:
   packages/cli:
     specifiers:
       '@babel/core': ^7.15.8
-      '@rakkasjs/runner-node': workspace:*
-      '@swc/cli': ^0.1.51
-      '@swc/core': ^1.2.106
       '@types/jest': ^27.0.2
       '@types/jsdom': ^16.2.13
       '@types/micromatch': ^4.0.2
@@ -194,9 +183,6 @@ importers:
       vite: 2.6.7
       vite-plugin-virtual: 0.1.1_vite@2.6.7
     devDependencies:
-      '@rakkasjs/runner-node': link:../runner-node
-      '@swc/cli': 0.1.51_@swc+core@1.2.106
-      '@swc/core': 1.2.106
       '@types/jest': 27.0.2
       '@types/jsdom': 16.2.13
       '@types/micromatch': 4.0.2
@@ -352,33 +338,9 @@ importers:
       rollup-plugin-ts: 1.4.7_rollup@2.58.0+typescript@4.4.3
       typescript: 4.4.3
 
-  packages/runner-node:
-    specifiers:
-      '@types/node': ^16.10.3
-      '@types/node-fetch': 2.5.12
-      esbuild: ^0.13.4
-      node-fetch: ^2.6.5
-      prettier: ^2.4.1
-      rakkasjs: workspace:*
-      rimraf: ^3.0.2
-      sirv: ^1.0.17
-      typescript: ^4.4.3
-    dependencies:
-      node-fetch: 2.6.5
-      sirv: 1.0.17
-    devDependencies:
-      '@types/node': 16.10.3
-      '@types/node-fetch': 2.5.12
-      esbuild: 0.13.4
-      prettier: 2.4.1
-      rakkasjs: link:../rakkasjs
-      rimraf: 3.0.2
-      typescript: 4.4.3
-
   templates/js:
     specifiers:
       '@rakkasjs/cli': workspace:*
-      '@rakkasjs/runner-node': workspace:*
       '@testing-library/jest-dom': ^5.14.1
       '@testing-library/react': ^12.1.2
       cypress: ^8.6.0
@@ -408,7 +370,6 @@ importers:
       stylelint-config-prettier: ^8.0.2
       stylelint-config-standard: ^22.0.0
     dependencies:
-      '@rakkasjs/runner-node': link:../../packages/runner-node
       rakkasjs: link:../../packages/rakkasjs
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -443,7 +404,6 @@ importers:
   templates/ts:
     specifiers:
       '@rakkasjs/cli': workspace:*
-      '@rakkasjs/runner-node': workspace:*
       '@testing-library/jest-dom': ^5.14.1
       '@testing-library/react': ^12.1.2
       '@types/jest': ^27.0.2
@@ -483,7 +443,6 @@ importers:
       typescript: ^4.4.3
       typescript-plugin-css-modules: ^3.4.0
     dependencies:
-      '@rakkasjs/runner-node': link:../../packages/runner-node
       rakkasjs: link:../../packages/rakkasjs
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -531,7 +490,6 @@ importers:
       '@graphql-tools/schema': ^8.2.0
       '@rakkasjs/apollo-server': workspace:*
       '@rakkasjs/cli': workspace:*
-      '@rakkasjs/runner-node': workspace:*
       '@testing-library/react': ^12.1.2
       '@types/jest': ^27.0.2
       '@types/node-fetch': 2.5.12
@@ -556,7 +514,6 @@ importers:
       '@apollo/client': 3.4.16_graphql@15.6.1+react@17.0.2
       '@graphql-tools/schema': 8.2.0_graphql@15.6.1
       '@rakkasjs/apollo-server': link:../../packages/apollo-server
-      '@rakkasjs/runner-node': link:../../packages/runner-node
       devalue: 2.0.1
       graphql: 15.6.1
       rakkasjs: link:../../packages/rakkasjs
@@ -583,7 +540,6 @@ importers:
   testbed/general:
     specifiers:
       '@rakkasjs/cli': workspace:*
-      '@rakkasjs/runner-node': workspace:*
       '@testing-library/jest-dom': ^5.14.1
       '@testing-library/react': ^12.1.2
       '@types/jest': ^27.0.2
@@ -616,7 +572,6 @@ importers:
       stylelint-config-standard: ^22.0.0
       typescript: ^4.4.3
     dependencies:
-      '@rakkasjs/runner-node': link:../../packages/runner-node
       rakkasjs: link:../../packages/rakkasjs
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -654,7 +609,6 @@ importers:
   testbed/static:
     specifiers:
       '@rakkasjs/cli': workspace:*
-      '@rakkasjs/runner-node': workspace:*
       '@testing-library/jest-dom': ^5.14.1
       '@testing-library/react': ^12.1.2
       '@types/jest': ^27.0.2
@@ -688,7 +642,6 @@ importers:
       stylelint-config-standard: ^22.0.0
       typescript: ^4.4.3
     dependencies:
-      '@rakkasjs/runner-node': link:../../packages/runner-node
       rakkasjs: link:../../packages/rakkasjs
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -727,7 +680,6 @@ importers:
   testbed/styled-components:
     specifiers:
       '@rakkasjs/cli': workspace:*
-      '@rakkasjs/runner-node': workspace:*
       '@types/react': ^17.0.27
       '@types/react-dom': ^17.0.9
       '@types/styled-components': ^5.1.15
@@ -742,7 +694,6 @@ importers:
       styled-components: ^5.3.1
       typescript: ^4.4.3
     dependencies:
-      '@rakkasjs/runner-node': link:../../packages/runner-node
       rakkasjs: link:../../packages/rakkasjs
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -765,7 +716,6 @@ importers:
       '@mdx-js/mdx': ^1.6.22
       '@mdx-js/react': ^1.6.22
       '@rakkasjs/cli': workspace:*
-      '@rakkasjs/runner-node': workspace:*
       '@types/cookie': ^0.4.1
       '@types/mdx-js__react': ^1.5.4
       '@types/react': ^17.0.27
@@ -793,7 +743,6 @@ importers:
       vite-plugin-mdx: ^3.5.8
     dependencies:
       '@mdx-js/react': 1.6.22_react@17.0.2
-      '@rakkasjs/runner-node': link:../packages/runner-node
       cookie: 0.4.1
       prism: 4.1.2_react@17.0.2
       prism-themes: 1.9.0
@@ -2696,16 +2645,6 @@ packages:
   /@mdx-js/util/1.6.22:
     resolution: {integrity: sha512-H1rQc1ZOHANWBvPcW+JpGwr+juXSxM8Q8YCkm3GhZd8REu1fHR3z99CErO1p9pkcfcxZnMdIZdIsXkOHY0NilA==}
 
-  /@napi-rs/triples/1.0.3:
-    resolution: {integrity: sha512-jDJTpta+P4p1NZTFVLHJ/TLFVYVcOqv6l8xwOeBKNPMgY/zDYH/YH7SJbvrr/h1RcS9GzbPcLKGzpuK9cV56UA==}
-    dev: true
-
-  /@node-rs/helper/1.2.1:
-    resolution: {integrity: sha512-R5wEmm8nbuQU0YGGmYVjEc0OHtYsuXdpRG+Ut/3wZ9XAvQWyThN08bTh2cBJgoZxHQUPtvRfeQuxcAgLuiBISg==}
-    dependencies:
-      '@napi-rs/triples': 1.0.3
-    dev: true
-
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -2726,6 +2665,7 @@ packages:
 
   /@polka/url/1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
+    dev: true
 
   /@protobufjs/aspromise/1.1.2:
     resolution: {integrity: sha1-m4sMxmPWaafY9vXQiToU00jzD78=}
@@ -2876,152 +2816,6 @@ packages:
       unist-util-find-all-after: 3.0.2
     transitivePeerDependencies:
       - supports-color
-    dev: true
-
-  /@swc/cli/0.1.51_@swc+core@1.2.106:
-    resolution: {integrity: sha512-7eqZGpkI4QOYfF+9FV4xpT/V/LSRDs5OMJcm4Z46JnPMvv+sxumAFdCe1hHRzHgnzwis9OtjI8Tt3Srf9JudQw==}
-    engines: {node: '>= 12.13'}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': ^1.2.66
-      chokidar: ^3.5.1
-    peerDependenciesMeta:
-      chokidar:
-        optional: true
-    dependencies:
-      '@swc/core': 1.2.106
-      commander: 7.2.0
-      fast-glob: 3.2.7
-      slash: 3.0.0
-      source-map: 0.7.3
-    dev: true
-
-  /@swc/core-android-arm64/1.2.106:
-    resolution: {integrity: sha512-F5T6kP3yV9S0/oXyco305QaAyE6rLNsNSdR0QI4CtACwKadiPwTOptwNIDCiTNLNgWlWLQmIRkPpxg+G4doT6Q==}
-    engines: {node: '>=10'}
-    cpu: [arm64]
-    os: [android]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core-darwin-arm64/1.2.106:
-    resolution: {integrity: sha512-bgKzzYLFnc+mv2mDS/DLwzBvx5DCC9ZCKYY46b4dAnBfasr+SMHj+v/WI84HtilbjLBMUfYZ2hgYKls3CebIIQ==}
-    engines: {node: '>=10'}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core-darwin-x64/1.2.106:
-    resolution: {integrity: sha512-I5Uhit5RqbXaMIV2+v9jL+MIQeR3lT1DqVwzxZs1bTARclAheFZQpTmg+h6QmichjCiUT74SXQb6Apc/vqYKog==}
-    engines: {node: '>=10'}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core-freebsd-x64/1.2.106:
-    resolution: {integrity: sha512-ZSK3vgzbA2Pkpw2LgHlAkUdx4okIpdXXTbLXuc5jkZMw1KhRWpeQaDlwbrN7XVynAYjkj2qgGQ7wv1tD43vQig==}
-    engines: {node: '>=10'}
-    cpu: [x64]
-    os: [freebsd]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core-linux-arm-gnueabihf/1.2.106:
-    resolution: {integrity: sha512-WZh6XV8cQ9Fh3IQNX9z87Tv68+sLtfnT51ghMQxceRhfvc5gIaYW+PCppezDDdlPJnWXhybGWNPAl5SHppWb2g==}
-    engines: {node: '>=10'}
-    cpu: [arm]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core-linux-arm64-gnu/1.2.106:
-    resolution: {integrity: sha512-OSI9VUWPsRrCbUlRQ4KdYqdwV63VYBC5ahSNq+72DXhtRwVbLSFuF7MNsnXgUSMHidxbc0No3/bPPamshqHdsQ==}
-    engines: {node: '>=10'}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core-linux-arm64-musl/1.2.106:
-    resolution: {integrity: sha512-de8AAUOP8D2/tZIpQ399xw+pGGKlR1+l5Jmy4lW7ixarEI4xKkBSF4bS9eXtC1jckmenzrLPiK/5sSbQSf6BWQ==}
-    engines: {node: '>=10'}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core-linux-x64-gnu/1.2.106:
-    resolution: {integrity: sha512-QzFC7+lBSuVBmX5tS2pdM+74voiJcGgIMJ+x9pcjUu3GkDl3ow6WC6ta2WUzlgGopCGNp6IdZaFemKRzjLr3lw==}
-    engines: {node: '>=10'}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core-linux-x64-musl/1.2.106:
-    resolution: {integrity: sha512-QZ1gFqNiCJefkNMihbmYc7nr5stERyjoQpWgAIN6dzrgMUzRHXHGDRl/p1qsXW2VKos+okSdLwPFEmRT94H+1A==}
-    engines: {node: '>=10'}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core-win32-arm64-msvc/1.2.106:
-    resolution: {integrity: sha512-MbuQwk+s43bfBNnAZTKnoQlfo4UPSOsy6t9F15yU4P3rVUuFtcxdZg6CpDnUqNPbojILXujp8z4SSigRYh5cgg==}
-    engines: {node: '>=10'}
-    cpu: [arm64]
-    os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core-win32-ia32-msvc/1.2.106:
-    resolution: {integrity: sha512-BFxWpcPxsG2LLQZ+8K8ma45rbTckjpPbnvOOhybQ0hEhLgoVzMVPp3RIUGmC+RMZe6DkGSaEQf/Rjn2cbMdQhw==}
-    engines: {node: '>=10'}
-    cpu: [ia32]
-    os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core-win32-x64-msvc/1.2.106:
-    resolution: {integrity: sha512-Emn5akqApGXzPsA7ntSXEohL0AH0WjQMHy6mT3MS9Yil42yTJ96dJGf68ejKVptxwg7Iz798mT+J9r1JbAFBgg==}
-    engines: {node: '>=10'}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@swc/core/1.2.106:
-    resolution: {integrity: sha512-9uw8gqU+lsk7KROAcSNhsrnBgNiC5H4MIaps5LlnnEevJmKu/o1ws22tXc2qjJg+F4/V1ynUbh8E0rYlmo1XGw==}
-    engines: {node: '>=10'}
-    dependencies:
-      '@node-rs/helper': 1.2.1
-    optionalDependencies:
-      '@swc/core-android-arm64': 1.2.106
-      '@swc/core-darwin-arm64': 1.2.106
-      '@swc/core-darwin-x64': 1.2.106
-      '@swc/core-freebsd-x64': 1.2.106
-      '@swc/core-linux-arm-gnueabihf': 1.2.106
-      '@swc/core-linux-arm64-gnu': 1.2.106
-      '@swc/core-linux-arm64-musl': 1.2.106
-      '@swc/core-linux-x64-gnu': 1.2.106
-      '@swc/core-linux-x64-musl': 1.2.106
-      '@swc/core-win32-arm64-msvc': 1.2.106
-      '@swc/core-win32-ia32-msvc': 1.2.106
-      '@swc/core-win32-x64-msvc': 1.2.106
     dev: true
 
   /@szmarczak/http-timer/1.1.2:
@@ -4768,11 +4562,6 @@ packages:
   /commander/6.2.1:
     resolution: {integrity: sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==}
     engines: {node: '>= 6'}
-    dev: true
-
-  /commander/7.2.0:
-    resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
-    engines: {node: '>= 10'}
     dev: true
 
   /commander/8.2.0:
@@ -9030,6 +8819,7 @@ packages:
     resolution: {integrity: sha512-tqkh47FzKeCPD2PUiPB6pkbMzsCasjxAfC62/Wap5qrUWcb+sFasXUC5I3gYM5iBM8v/Qpn4UK0x+j0iHyFPDg==}
     engines: {node: '>=4.0.0'}
     hasBin: true
+    dev: true
 
   /mimic-fn/2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
@@ -10947,6 +10737,7 @@ packages:
       '@polka/url': 1.0.0-next.21
       mime: 2.5.2
       totalist: 1.1.0
+    dev: true
 
   /sisteransi/1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -11702,6 +11493,7 @@ packages:
   /totalist/1.1.0:
     resolution: {integrity: sha512-gduQwd1rOdDMGxFG1gEvhV88Oirdo2p+KjoYFU7k2g+i7n6AFFbDQ5kMPUsW0pNbfQsB/cwXvT1i4Bue0s9g5g==}
     engines: {node: '>=6'}
+    dev: true
 
   /tough-cookie/2.5.0:
     resolution: {integrity: sha512-nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g==}

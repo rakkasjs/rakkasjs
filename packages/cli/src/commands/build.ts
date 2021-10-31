@@ -8,6 +8,10 @@ import path from "path";
 import micromatch from "micromatch";
 import chalk from "chalk";
 import { BuildTarget, FullConfig } from "../..";
+import getPort from "get-port";
+import { spawn } from "child_process";
+import fetch, { FetchError, Response } from "node-fetch";
+import rimraf from "rimraf";
 
 const TARGETS: BuildTarget[] = [
 	"node",
@@ -33,7 +37,10 @@ export default function buildCommand() {
 			const { config } = await loadConfig(undefined, options);
 
 			// eslint-disable-next-line no-console
-			console.log(chalk.whiteBright(`Building for target "${config.target}"`));
+			console.log(
+				chalk.whiteBright("Building for target"),
+				chalk.yellowBright(config.target),
+			);
 
 			const result = await build(config);
 
@@ -49,7 +56,22 @@ export interface BuildOptions {
 }
 
 export async function build(config: FullConfig) {
-	const outDir = path.resolve("dist");
+	let outDir: string;
+
+	switch (config.target) {
+		case "node":
+			outDir = path.resolve("dist");
+			break;
+
+		case "static":
+			outDir = path.resolve("node_modules/.rakkas/static");
+			break;
+
+		default:
+			throw new Error(`Build target ${config.target} is not supported yet`);
+	}
+
+	await fs.promises.mkdir(outDir, { recursive: true });
 
 	// eslint-disable-next-line no-console
 	console.log(chalk.gray("Building client"));
@@ -176,6 +198,133 @@ export async function build(config: FullConfig) {
 		path.join(outDir, "server", "index.js"),
 	);
 
+	if (config.target === "static") {
+		await crawl(outDir);
+	} else {
+		// eslint-disable-next-line no-console
+		console.log(
+			chalk.whiteBright("Application built in "),
+			chalk.green(outDir),
+		);
+	}
+}
+
+async function crawl(outDir: string) {
+	const host = "localhost";
+	const port = await getPort();
+
 	// eslint-disable-next-line no-console
-	console.log(chalk.whiteBright(`Application built in ${outDir}`));
+	console.log(chalk.whiteBright("Launching server"));
+
+	const server = spawn("node node_modules/.rakkas/static/server", {
+		shell: true,
+		env: { ...process.env, HOST: host, PORT: String(port) },
+		stdio: "ignore",
+	});
+
+	server.on("error", (error) => {
+		throw error;
+	});
+
+	let firstResponse: Response | undefined;
+
+	// eslint-disable-next-line no-console
+	console.log(chalk.gray("Waiting for server to respond"));
+	for (;;) {
+		try {
+			firstResponse = await fetch(`http://${host}:${port}`, {
+				headers: { "x-rakkas-export": "static" },
+			});
+		} catch (err) {
+			if (err instanceof FetchError) {
+				await new Promise((resolve) => setTimeout(resolve, 100));
+				continue;
+			}
+			throw err;
+		}
+
+		break;
+	}
+
+	// eslint-disable-next-line no-console
+	console.log(chalk.whiteBright("Crawling the application"));
+	const roots = new Set(["/"]);
+	const origin = `http://${host}:${port}`;
+	for (const root of roots) {
+		const currentUrl = origin + root;
+
+		const response =
+			firstResponse ||
+			(await fetch(currentUrl, {
+				headers: { "x-rakkas-export": "static" },
+			}));
+
+		firstResponse = undefined;
+
+		if (response.headers.get("x-rakkas-export") !== "static") continue;
+
+		if (!response.ok) {
+			// eslint-disable-next-line no-console
+			console.log(
+				chalk.yellowBright(
+					`Request to ${root} returned status ${response.status}.`,
+				),
+			);
+		}
+
+		// eslint-disable-next-line no-inner-declarations
+		function addPath(path: string) {
+			const url = new URL(path, currentUrl);
+			if (url.origin === origin) {
+				roots.add(url.pathname);
+			}
+		}
+
+		const location = response.headers.get("location");
+		if (location) addPath(location);
+
+		// eslint-disable-next-line no-console
+		console.log(chalk.gray("Exported page"), chalk.blue(root));
+
+		const fetched = await response.text();
+
+		const dom = cheerio.load(fetched);
+
+		dom("a[href]").each((i, el) => addPath(el.attribs.href));
+	}
+
+	await fs.promises.mkdir("dist", { recursive: true });
+
+	await new Promise<void>((resolve, reject) =>
+		rimraf("dist/static", (error) => {
+			if (error) {
+				reject(error);
+			} else {
+				resolve();
+			}
+		}),
+	);
+
+	await fs.promises.rename(path.join(outDir, "client"), "dist/static");
+
+	await new Promise((resolve) => {
+		server.on("exit", resolve);
+		server.kill();
+	});
+
+	await new Promise<void>((resolve, reject) =>
+		rimraf(outDir, (error) => {
+			if (error) {
+				reject(error);
+			} else {
+				resolve();
+			}
+		}),
+	);
+
+	// eslint-disable-next-line no-console
+	console.log(
+		chalk.whiteBright("Static application exported into the directory"),
+		chalk.green("dist/static"),
+	);
 }

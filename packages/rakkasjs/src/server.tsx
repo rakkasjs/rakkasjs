@@ -325,8 +325,8 @@ export async function handleRequest({
 			RAKKAS_BUILD_TARGET === "static" &&
 			request.headers.get("x-rakkas-export") === "static"
 		) {
-			await writeFile!(`${filename}/index.html`, html);
-			await writeFile!(`__data${filename}/index.js`, dataScript);
+			await writeFile!(`client/${filename}/index.html`, html);
+			await writeFile!(`client/__data${filename}/index.js`, dataScript);
 			headers["x-rakkas-export"] = "static";
 		}
 

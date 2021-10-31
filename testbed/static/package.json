@@ -5,7 +5,7 @@
 	"description": "Rakkas static site generation test bed",
 	"scripts": {
 		"dev": "rakkas dev",
-		"build": "rakkas export",
+		"build": "rakkas build --target static",
 		"start": "sirv -p 3000 dist/static",
 		"check": "run-p e2e test typecheck lint:ts",
 		"e2e": "rakkas with-port \"start-server-and-test 'pnpm start' :\\$PORT/ 'cypress run'\"",
@@ -15,7 +15,6 @@
 		"format": "prettier . --write"
 	},
 	"dependencies": {
-		"@rakkasjs/runner-node": "workspace:*",
 		"rakkasjs": "workspace:*",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
