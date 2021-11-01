@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "rakkas-tailwind-css-example",
-	"version": "0.5.0-canary.6",
+	"version": "0.5.0-canary.8",
 	"description": "Rakkas.js Tailwind CSS example",
 	"scripts": {
 		"dev": "rakkas dev",

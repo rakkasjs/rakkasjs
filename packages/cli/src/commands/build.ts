@@ -3,7 +3,7 @@ import { build as viteBuild } from "vite";
 import { loadConfig } from "../lib/config";
 import { makeViteConfig } from "../lib/vite-config";
 import cheerio from "cheerio";
-import fs from "fs";
+import fs, { existsSync } from "fs";
 import path from "path";
 import micromatch from "micromatch";
 import chalk from "chalk";
@@ -92,6 +92,13 @@ export async function build(config: FullConfig) {
 					},
 				]),
 			);
+			break;
+
+		case "netlify":
+			outDir = path.resolve("netlify");
+			clientOutDir = path.join(outDir, "static");
+			serverOutDir = path.resolve("./node_modules/.rakkas/nwtlify");
+			entry = path.resolve(__dirname, "./entries/entry-netlify.js");
 			break;
 
 		default:
@@ -238,7 +245,36 @@ export async function build(config: FullConfig) {
 			outfile: path.join(outDir, "functions/node/render/index.js"),
 			platform: "node",
 			target: "node12",
+			format: "cjs",
 		});
+	} else if (config.target === "netlify") {
+		// eslint-disable-next-line no-console
+		console.log(chalk.gray("Bundling serverless fuction"));
+
+		await fs.promises.mkdir(path.join(outDir, "functions"), {
+			recursive: true,
+		});
+
+		await esbuild({
+			bundle: true,
+			entryPoints: [path.join(serverOutDir, "index.js")],
+			outfile: path.join(outDir, "functions/render.js"),
+			platform: "node",
+			target: "node12",
+			format: "cjs",
+		});
+
+		await fs.promises.writeFile(
+			path.join(clientOutDir, "_redirects"),
+			"/*  /.netlify/functions/render  200",
+		);
+
+		if (!existsSync("netlify.toml")) {
+			await fs.promises.writeFile(
+				"netlify.toml",
+				`[build]\ncommand = "npx rakkas build -t netlify"\npublish = "netlify/static/"\n`,
+			);
+		}
 	}
 
 	if (config.target === "static") {

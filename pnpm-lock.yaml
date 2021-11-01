@@ -157,6 +157,7 @@ importers:
       jest: ^27.2.5
       lint-staged: ^11.2.3
       micromatch: ^4.0.4
+      netlify-lambda-types: ^1.0.0
       node-fetch: ^2.6.5
       npm-run-all: ^4.1.5
       open: ^8.3.0
@@ -200,6 +201,7 @@ importers:
       eslint-plugin-only-warn: 1.0.3
       jest: 27.2.5
       lint-staged: 11.2.3
+      netlify-lambda-types: 1.0.0
       npm-run-all: 4.1.5
       prettier: 2.4.1
       rakkasjs: link:../rakkasjs
@@ -2876,6 +2878,10 @@ packages:
 
   /@types/aria-query/4.2.2:
     resolution: {integrity: sha512-HnYpAE1Y6kRyKM/XkEuiRQhTHvkzMBurTHnpFLYLBGPIylZNPs9jJcuOOYWxPLJCSEtmZT0Y8rHDokKN7rRTig==}
+    dev: true
+
+  /@types/aws-lambda/8.10.84:
+    resolution: {integrity: sha512-5V78eLtmN0d4RA14hKDwcsMQRl3JotQJlhGFDBo/jdE2TyDFRaYwB/UmMUC4SzhSvRGn+YMkh7jGPnXi8COAng==}
     dev: true
 
   /@types/babel__core/7.1.16:
@@ -8996,6 +9002,13 @@ packages:
       sax: 1.2.4
     dev: true
     optional: true
+
+  /netlify-lambda-types/1.0.0:
+    resolution: {integrity: sha512-MRm3o0OSrl5kjz1Wwb+SjT7dX2JRaYt8gYjGaGHJyw4PLfPTPsBdZn37hISMU6xLh3JAeyGQ16OGfg645Z1ovQ==}
+    dependencies:
+      '@types/aws-lambda': 8.10.84
+      '@types/node': 14.17.21
+    dev: true
 
   /nice-try/1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
