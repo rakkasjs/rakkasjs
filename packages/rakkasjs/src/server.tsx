@@ -13,7 +13,11 @@ import { makeComponentStack } from "./lib/makeComponentStack";
 import { findRoute, Route } from "./lib/find-route";
 
 import importers from "@rakkasjs/api-imports";
-import { RawRequest, PageRenderOptions } from "./lib/types";
+import {
+	RawRequest,
+	PageRenderOptions,
+	RakkasRequestBodyAndType,
+} from "./lib/types";
 import { RouterProvider } from "./lib/useRouter";
 
 export type { Route };
@@ -85,7 +89,7 @@ export async function handleRequest({
 		};
 	}
 
-	function internalFetch(
+	async function internalFetch(
 		input: RequestInfo,
 		init?: RequestInit,
 	): Promise<Response> {
@@ -129,6 +133,41 @@ export async function handleRequest({
 				if (!fullInit.headers.has("authorization") && authorization !== null) {
 					fullInit.headers.set("authorization", authorization);
 				}
+			}
+
+			const buf = fullInit.body
+				? Buffer.from(String(fullInit.body))
+				: undefined;
+
+			try {
+				const response = await handleRequest({
+					htmlTemplate,
+					apiRoutes,
+					pageRoutes,
+					request: {
+						ip: request.ip,
+						url: parsed,
+						headers: fullInit.headers,
+						method: fullInit.method || "GET",
+						originalIp: request.ip,
+						originalUrl: parsed,
+						...parseBody(buf, fullInit.headers),
+					},
+				});
+
+				let body = response.body;
+
+				if (typeof body !== "string" && !(body instanceof Uint8Array)) {
+					body = JSON.stringify(body);
+				}
+
+				return new Response(body as any, {
+					status: response.status || 200,
+					headers: response.headers as Record<string, string>,
+				});
+			} catch (error) {
+				// TODO: Logging
+				return new Response("Server error", { status: 500 });
 			}
 		}
 
@@ -338,4 +377,49 @@ export async function handleRequest({
 	}
 
 	return servePage(request, render);
+}
+
+function parseBody(
+	bodyBuffer: Buffer | undefined,
+	headers: Headers,
+): RakkasRequestBodyAndType {
+	if (!bodyBuffer || bodyBuffer.length === 0) {
+		return { type: "empty" };
+	}
+
+	const [type, ...directives] = (headers.get("content-type") || "").split(";");
+	const isJson = type === "application/json" || type.endsWith("+json");
+	const isUrlEncoded = type === "application/x-www-form-urlencoded";
+
+	if (type.startsWith("text/") || isJson || isUrlEncoded) {
+		const dirs = Object.fromEntries(
+			directives.map((dir) => dir.split("=").map((x) => x.trim())),
+		);
+
+		let text: string;
+		try {
+			text = bodyBuffer.toString(dirs.charset || "utf-8");
+		} catch (error) {
+			(error as any).status = 400;
+			throw error;
+		}
+
+		if (isJson) {
+			try {
+				return { type: "json", body: JSON.parse(text) };
+			} catch (error) {
+				(error as any).status = 400;
+				throw error;
+			}
+		} else if (isUrlEncoded) {
+			return {
+				type: "form-data",
+				body: new URLSearchParams(text),
+			};
+		}
+
+		return { type: "text", body: text };
+	}
+
+	return { type: "binary", body: new Uint8Array(bodyBuffer) };
 }
