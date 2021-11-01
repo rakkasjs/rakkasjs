@@ -7,11 +7,12 @@ export interface ConfigFlavorOptions {
 	configDeps?: string[];
 	onConfigChange?: () => void;
 	ssr?: boolean;
+	noExternal?: boolean;
 }
 
 export async function makeViteConfig(
 	config: FullConfig,
-	{ configDeps, onConfigChange, ssr }: ConfigFlavorOptions = {},
+	{ configDeps, onConfigChange, ssr, noExternal }: ConfigFlavorOptions = {},
 ): Promise<InlineConfig> {
 	const srcDir = normalizePath(path.resolve("src"));
 	const publicDir = normalizePath(path.resolve("public"));
@@ -79,7 +80,7 @@ export async function makeViteConfig(
 
 	const ssrOptions: SSROptions = {
 		external: ["@rakkasjs/apollo-server"],
-		noExternal: ["rakkasjs", "rakkasjs/server"],
+		noExternal: noExternal || ["rakkasjs", "rakkasjs/server"],
 	};
 
 	// @ts-expect-error: SSR options are not in the type definitions yet

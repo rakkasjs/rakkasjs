@@ -135,9 +135,7 @@ export async function handleRequest({
 				}
 			}
 
-			const buf = fullInit.body
-				? Buffer.from(String(fullInit.body))
-				: undefined;
+			const buf = await new Response(fullInit.body).arrayBuffer();
 
 			try {
 				const response = await handleRequest({
@@ -151,7 +149,7 @@ export async function handleRequest({
 						method: fullInit.method || "GET",
 						originalIp: request.ip,
 						originalUrl: parsed,
-						...parseBody(buf, fullInit.headers),
+						...parseBody(new Uint8Array(buf), fullInit.headers),
 					},
 				});
 
@@ -380,25 +378,21 @@ export async function handleRequest({
 }
 
 function parseBody(
-	bodyBuffer: Buffer | undefined,
+	bodyBuffer: Uint8Array,
 	headers: Headers,
 ): RakkasRequestBodyAndType {
 	if (!bodyBuffer || bodyBuffer.length === 0) {
 		return { type: "empty" };
 	}
 
-	const [type, ...directives] = (headers.get("content-type") || "").split(";");
+	const [type] = (headers.get("content-type") || "").split(";");
 	const isJson = type === "application/json" || type.endsWith("+json");
 	const isUrlEncoded = type === "application/x-www-form-urlencoded";
 
 	if (type.startsWith("text/") || isJson || isUrlEncoded) {
-		const dirs = Object.fromEntries(
-			directives.map((dir) => dir.split("=").map((x) => x.trim())),
-		);
-
 		let text: string;
 		try {
-			text = bodyBuffer.toString(dirs.charset || "utf-8");
+			text = new TextDecoder("utf8").decode(bodyBuffer);
 		} catch (error) {
 			(error as any).status = 400;
 			throw error;

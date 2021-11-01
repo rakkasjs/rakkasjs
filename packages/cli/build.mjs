@@ -99,6 +99,21 @@ async function run() {
 			watch: process.argv[2] === "--watch",
 		})
 		.catch(() => process.exit(1));
+
+	console.log("Building Cloudflare Workers runtime");
+	await esbuild
+		.build({
+			bundle: true,
+			logLevel: "info",
+			entryPoints: ["src/runtime/entry-cloudflare-workers.ts"],
+			outdir: "dist/entries",
+			platform: "node",
+			target: ["node12"],
+			external: nodeRuntmeExternals,
+			plugins: [lateResolvePlugin()],
+			watch: process.argv[2] === "--watch",
+		})
+		.catch(() => process.exit(1));
 }
 
 run();

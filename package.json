@@ -1,10 +1,10 @@
 {
 	"private": true,
 	"name": "rakkasjs-root-workspace",
-	"version": "0.5.0-canary.8",
+	"version": "0.5.0-canary.12",
 	"description": "Rakkas.js workspace root",
 	"scripts": {
-		"check": "pnpm run -r --parallel --workspace-concurrency=0 check",
+		"check": "pnpm run -r check",
 		"dev": "pnpm run -r --filter=./packages '--filter=!create-rakkas-app' --parallel dev",
 		"build": "pnpm run -r build",
 		"precommit": "lint-staged",

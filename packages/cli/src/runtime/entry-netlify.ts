@@ -3,7 +3,7 @@ import { apiRoutes, pageRoutes, manifest, htmlTemplate } from "./manifests";
 
 import type { handleRequest as HandleRequest } from "rakkasjs/dist/server";
 import type { NetlifyFunction } from "netlify-lambda-types";
-import { RakkasRequestBodyAndType } from "rakkasjs";
+import type { RakkasRequestBodyAndType } from "rakkasjs";
 
 installNodeFetch();
 

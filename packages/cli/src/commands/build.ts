@@ -3,7 +3,7 @@ import { build as viteBuild } from "vite";
 import { loadConfig } from "../lib/config";
 import { makeViteConfig } from "../lib/vite-config";
 import cheerio from "cheerio";
-import fs, { existsSync } from "fs";
+import fs from "fs";
 import path from "path";
 import micromatch from "micromatch";
 import chalk from "chalk";
@@ -97,8 +97,15 @@ export async function build(config: FullConfig) {
 		case "netlify":
 			outDir = path.resolve("netlify");
 			clientOutDir = path.join(outDir, "static");
-			serverOutDir = path.resolve("./node_modules/.rakkas/nwtlify");
+			serverOutDir = path.resolve("./node_modules/.rakkas/netlify");
 			entry = path.resolve(__dirname, "./entries/entry-netlify.js");
+			break;
+
+		case "cloudflare-workers":
+			outDir = path.resolve("cloudflare");
+			clientOutDir = path.join(outDir, "static");
+			serverOutDir = path.resolve("./node_modules/.rakkas/cloudflare");
+			entry = path.resolve(__dirname, "./entries/entry-cloudflare-workers.js");
 			break;
 
 		default:
@@ -124,7 +131,10 @@ export async function build(config: FullConfig) {
 		},
 	});
 
-	const ssrConfig = await makeViteConfig(config, { ssr: true });
+	const ssrConfig = await makeViteConfig(config, {
+		ssr: true,
+		// noExternal: config.target === "cloudflare-workers",
+	});
 
 	// Fix index.html
 	const htmlTemplate = await fs.promises.readFile(
@@ -268,13 +278,27 @@ export async function build(config: FullConfig) {
 			path.join(clientOutDir, "_redirects"),
 			"/*  /.netlify/functions/render  200",
 		);
+	} else if (config.target === "cloudflare-workers") {
+		// eslint-disable-next-line no-console
+		console.log(chalk.gray("Bundling serverless fuction"));
 
-		if (!existsSync("netlify.toml")) {
-			await fs.promises.writeFile(
-				"netlify.toml",
-				`[build]\ncommand = "npx rakkas build -t netlify"\npublish = "netlify/static/"\n`,
-			);
-		}
+		await fs.promises.mkdir(path.join(outDir, "functions"), {
+			recursive: true,
+		});
+
+		await esbuild({
+			bundle: true,
+			entryPoints: [path.join(serverOutDir, "index.js")],
+			outfile: path.join(outDir, "index.js"),
+			platform: "browser",
+			target: "node12",
+			format: "cjs",
+		});
+
+		await fs.promises.writeFile(
+			path.join(outDir, "package.json"),
+			`{"main":"index.js"}`,
+		);
 	}
 
 	if (config.target === "static") {
