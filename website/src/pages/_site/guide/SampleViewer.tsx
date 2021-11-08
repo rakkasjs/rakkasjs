@@ -8,7 +8,7 @@ export interface SampleViewerProps {
 	height?: string | number;
 }
 
-const DEFAULT_TITLE = "Rakaks Demo App";
+const DEFAULT_TITLE = "Rakkas Demo App";
 
 export const SampleViewer: FC<SampleViewerProps> = ({
 	filename,

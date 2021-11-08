@@ -20,7 +20,7 @@ import navigateExample from "$examples/navigate/[userName].page.jsx?sample";
 
 `NavLink` component also accepts `nextRouteClass` and `nextRouteStyle` props. They are applied while the navigation is underway due the user clicking on this link. This feature is useful for giving the user immediate feedback about the fact that their click has been registered and is being processed.
 
-`navigate` returns a promise that resolves when the navigation successfully completes and rejects if it is interrupted (due to another call to navigate, for example). If `navigate` is called with a link that causes a full reload, the pormise never resolves or rejects.
+`navigate` returns a promise that resolves when the navigation successfully completes and rejects if it is interrupted (due to another call to navigate, for example). If `navigate` is called with a link that causes a full reload, the promise never resolves or rejects.
 
 You can also use positive and negative numbers like `navigate(-1)` and `navigate(1)` for navigating back or forward.
 

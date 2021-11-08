@@ -13,7 +13,7 @@ There are three methods for changing the reloading behavior:
 
 ## `getCacheKey` function
 
-You can have a `getCacheKey` function in the object you pass to `definePage` or `defineLayout`. It is passed the same arguments as the `load` function except for `fetch`. Its return value can be anything that can be serialized into JSON. Rakkas will call it everytime it has to decide whether to call the `load` function and will only call it if the return value is different than the last time.
+You can have a `getCacheKey` function in the object you pass to `definePage` or `defineLayout`. It is passed the same arguments as the `load` function except for `fetch`. Its return value can be anything that can be serialized into JSON. Rakkas will call it every time it has to decide whether to call the `load` function and will only call it if the return value is different than the last time.
 
 For example, you can tell Rakkas to call a page's `load` function only when the URL path changes and not when the query string changes:
 

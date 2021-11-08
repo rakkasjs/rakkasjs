@@ -66,7 +66,7 @@ As an alternative, or in addition to exporting individual method handlers you ca
 
 If you default export a function from a file named `middleware.js` (or `ts`, or any other extension included in the `apiExtensions` [configuration option](./configuration-options)) in the `src/api` directory or in one of its subdirectories, you can intercept requests that would be otherwise handled by endpoint handlers in that directory or in one of its subdirectories. Like layouts, middleware functions can be nested and thematically grouped.
 
-A middleware function receives a `RakkasRequest` just like an endpoint handler and is expected to return a `RakkasRespone` (or a promise of one) just like an endpoint. But it receives a second parameter, a `next()` function which calls the next middleware function or endpoint handler in the hierarchy. You can pass `next()` a modified request and return a modified response or you can return a response without even calling `next`.
+A middleware function receives a `RakkasRequest` just like an endpoint handler and is expected to return a `RakkasResponse` (or a promise of one) just like an endpoint. But it receives a second parameter, a `next()` function which calls the next middleware function or endpoint handler in the hierarchy. You can pass `next()` a modified request and return a modified response or you can return a response without even calling `next`.
 
 The `context` property is a way to pass data from a middleware function to nested middleware functions or endpoint handlers. For example, you can create a cookie parsing middleware like this:
 
@@ -74,7 +74,7 @@ import middlewareExample from "$examples/middleware.ts?sample";
 
 <SampleViewer code={middlewareExample} />
 
-And you can acces the cookies like this:
+And you can access the cookies like this:
 
 import endpointExample from "$examples/endpoint.ts?sample";
 

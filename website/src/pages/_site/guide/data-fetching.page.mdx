@@ -47,7 +47,7 @@ import fetchDefinePageExample from "$examples/fetch/[pokemon].page.jsx?sample";
 
 There are three types of possible return values:
 
-1. **A succesful result** is an object with a `data` property that will be passed to the page component as `props.data`, and optionally a `status` property which should be an integer in the form of 2xx that will be used as the HTTP status of the response when doing server-side rendering. Default is 200.
+1. **A successful result** is an object with a `data` property that will be passed to the page component as `props.data`, and optionally a `status` property which should be an integer in the form of 2xx that will be used as the HTTP status of the response when doing server-side rendering. Default is 200.
 
    ```js
    return {
@@ -71,7 +71,7 @@ There are three types of possible return values:
    return {
    	location: "/some/other/path",
    	status: 302,
-   	// You shouls still return some data
+   	// You should still return some data
    	// The page or layout will be rendered
    	// in the redirect response.
    	data: "...",
