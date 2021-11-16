@@ -216,9 +216,9 @@ export async function build(config: FullConfig) {
 			outDir: serverOutDir,
 			rollupOptions: {
 				input: [
-					"@rakkasjs/page-routes",
-					"@rakkasjs/api-routes",
-					"rakkasjs/server",
+					"/virtual:/@rakkasjs/page-routes",
+					"/virtual:/@rakkasjs/api-routes",
+					"/virtual:/rakkasjs/server",
 				],
 			},
 			emptyOutDir: true,

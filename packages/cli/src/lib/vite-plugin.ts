@@ -55,6 +55,24 @@ export async function rakkasVitePlugin(
 	const indexHtmlPath = path.resolve("src", "index.html");
 	const normalizedIndexHtmlPath = normalizePath(indexHtmlPath);
 
+	const pageRoutesContent = await makeRouteManifest({
+		srcDir,
+		routesDir: pagesDir,
+		finalExtensions: componentExtensions,
+		wrapperExt: "layout",
+		leafExt: "page",
+		rootUrl: "/",
+	});
+
+	const apiRoutesContent = await makeRouteManifest({
+		srcDir,
+		routesDir: apiDir,
+		finalExtensions: apiExtensions,
+		wrapperExt: "middleware",
+		leafExt: "endpoint",
+		rootUrl: apiRoot + "/",
+	});
+
 	const virtualModules = virtual({
 		"@rakkasjs/page-imports": `
 			const pages = import.meta.glob(${JSON.stringify(PAGES)});
@@ -68,23 +86,10 @@ export async function rakkasVitePlugin(
 			export default Object.assign(endpoints, middleware);
 		`,
 
-		"@rakkasjs/page-routes": await makeRouteManifest({
-			srcDir,
-			routesDir: pagesDir,
-			finalExtensions: componentExtensions,
-			wrapperExt: "layout",
-			leafExt: "page",
-			rootUrl: "/",
-		}),
-
-		"@rakkasjs/api-routes": await makeRouteManifest({
-			srcDir,
-			routesDir: apiDir,
-			finalExtensions: apiExtensions,
-			wrapperExt: "middleware",
-			leafExt: "endpoint",
-			rootUrl: apiRoot + "/",
-		}),
+		"@rakkasjs/page-routes": pageRoutesContent,
+		"@rakkasjs/api-routes": apiRoutesContent,
+		"/virtual:/@rakkasjs/page-routes": pageRoutesContent,
+		"/virtual:/@rakkasjs/api-routes": apiRoutesContent,
 	});
 
 	let ssr: boolean;
@@ -154,7 +159,10 @@ export async function rakkasVitePlugin(
 			},
 
 			async resolveId(id, importer, options) {
-				if (id === indexHtmlPath) {
+				if (id === "/virtual:/rakkasjs/server") {
+					const result = await this.resolve("rakkasjs/server");
+					return result;
+				} else if (id === indexHtmlPath) {
 					return normalizedIndexHtmlPath;
 				} else if (
 					id === "/__rakkas-start-client.js" &&
@@ -213,7 +221,8 @@ export async function rakkasVitePlugin(
 				}
 			},
 
-			async transform(code, id, ssr?: boolean) {
+			async transform(code, id, options) {
+				const ssr = options && options.ssr;
 				if (ssr || command === "build") return;
 
 				if (isPage(id) || isLayout(id)) {
