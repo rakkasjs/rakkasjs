@@ -159,7 +159,20 @@ export async function rakkasVitePlugin(
 			},
 
 			async resolveId(id, importer, options) {
-				if (id === "/virtual:/rakkasjs/server") {
+				if (id === "rakkasjs/server") {
+					const result = await this.resolve(id, importer, {
+						...options,
+						skipSelf: true,
+					});
+					if (result) {
+						const qPos = result.id.indexOf("?");
+						if (qPos >= 0) {
+							result.id = result.id.slice(0, result.id.indexOf("?"));
+						}
+					}
+
+					return result;
+				} else if (id === "/virtual:/rakkasjs/server") {
 					const result = await this.resolve("rakkasjs/server");
 					return result;
 				} else if (id === indexHtmlPath) {
@@ -222,7 +235,8 @@ export async function rakkasVitePlugin(
 			},
 
 			async transform(code, id, options) {
-				const ssr = options && options.ssr;
+				const ssr: boolean | undefined =
+					options && (options === true || (options as any).ssr);
 				if (ssr || command === "build") return;
 
 				if (isPage(id) || isLayout(id)) {

@@ -2,7 +2,7 @@
 	"private": true,
 	"type": "commonjs",
 	"name": "rakkas-styled-components-example",
-	"version": "0.5.0-canary.12",
+	"version": "0.5.0-canary.13",
 	"description": "Rakkas.js Styled Components example",
 	"scripts": {
 		"dev": "rakkas dev",
@@ -11,14 +11,14 @@
 		"typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"dependencies": {
-		"rakkasjs": "0.5.0-canary.12",
+		"rakkasjs": "0.5.0-canary.13",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-helmet-async": "^1.1.2",
 		"styled-components": "^5.3.3"
 	},
 	"devDependencies": {
-		"@rakkasjs/cli": "0.5.0-canary.12",
+		"@rakkasjs/cli": "0.5.0-canary.13",
 		"@types/react": "^17.0.27",
 		"@types/react-dom": "^17.0.9",
 		"@types/styled-components": "^5.1.15",

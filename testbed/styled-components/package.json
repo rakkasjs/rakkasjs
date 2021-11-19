@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "rakkas-styled-components-testbed",
-	"version": "0.5.0-canary.12",
+	"version": "0.5.0-canary.13",
 	"description": "Rakkas.js style-components example project",
 	"scripts": {
 		"dev": "rakkas dev --open",
