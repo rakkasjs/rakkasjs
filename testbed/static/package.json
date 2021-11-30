@@ -1,7 +1,7 @@
 {
 	"name": "rakkas-testbed-static",
 	"private": true,
-	"version": "0.5.0-canary.13",
+	"version": "0.5.0-canary.15",
 	"description": "Rakkas static site generation test bed",
 	"scripts": {
 		"dev": "rakkas dev",

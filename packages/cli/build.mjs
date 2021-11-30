@@ -1,6 +1,9 @@
 import esbuild from "esbuild";
 import { nodeExternalsPlugin } from "esbuild-node-externals";
 import alias from "esbuild-plugin-alias";
+import path from "path";
+import { createRequire } from "module";
+import fs from "fs";
 
 async function run() {
 	console.log("Building CLI");
@@ -12,12 +15,13 @@ async function run() {
 			outdir: "dist",
 			platform: "node",
 			target: ["node12"],
+			format: "cjs",
 			plugins: [nodeExternalsPlugin()],
 			watch: process.argv[2] === "--watch",
 		})
 		.catch(() => process.exit(1));
 
-	const nodeRuntmeExternals = [
+	const nodeRuntimeExternals = [
 		"$output/server.js",
 		"$output/api-routes.js",
 		"$output/page-routes.js",
@@ -47,10 +51,15 @@ async function run() {
 			entryPoints: ["src/runtime/handle-node-request.ts"],
 			outdir: "dist/entries",
 			platform: "node",
-			target: ["node12"],
+			target: ["node14"],
 			format: "esm",
-			external: nodeRuntmeExternals,
-			plugins: [lateResolvePlugin()],
+			external: [
+				...nodeRuntimeExternals,
+				"react",
+				"react-dom",
+				"react-helmet-async",
+			],
+			plugins: [lateResolvePlugin(), nodeExternalsPlugin()],
 			watch: process.argv[2] === "--watch",
 		})
 		.catch(() => process.exit(1));
@@ -63,9 +72,10 @@ async function run() {
 			entryPoints: ["src/runtime/entry-node.ts"],
 			outdir: "dist/entries",
 			platform: "node",
-			target: ["node12"],
-			external: nodeRuntmeExternals,
-			plugins: [lateResolvePlugin()],
+			target: ["esnext"],
+			format: "cjs",
+			external: nodeRuntimeExternals,
+			plugins: [lateResolvePlugin(), nodeExternalsPlugin()],
 			watch: process.argv[2] === "--watch",
 		})
 		.catch(() => process.exit(1));
@@ -79,7 +89,7 @@ async function run() {
 			outdir: "dist/entries",
 			platform: "node",
 			target: ["node12"],
-			external: nodeRuntmeExternals,
+			external: nodeRuntimeExternals,
 			plugins: [lateResolvePlugin()],
 			watch: process.argv[2] === "--watch",
 		})
@@ -94,7 +104,7 @@ async function run() {
 			outdir: "dist/entries",
 			platform: "node",
 			target: ["node12"],
-			external: nodeRuntmeExternals,
+			external: nodeRuntimeExternals,
 			plugins: [lateResolvePlugin()],
 			watch: process.argv[2] === "--watch",
 		})
@@ -109,7 +119,7 @@ async function run() {
 			outdir: "dist/entries",
 			platform: "node",
 			target: ["node12"],
-			external: nodeRuntmeExternals,
+			external: nodeRuntimeExternals,
 			plugins: [lateResolvePlugin()],
 			watch: process.argv[2] === "--watch",
 		})

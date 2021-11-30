@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "rakkas-demo-js",
-	"version": "0.5.0-canary.13",
+	"version": "0.5.0-canary.15",
 	"description": "Rakkas.js vanilla JS demo project",
 	"scripts": {
 		"dev": "rakkas dev --open",

@@ -1,10 +1,17 @@
 import { TransformOptions } from "@babel/core";
-import { UserConfig } from "vite";
+import { UserConfig, SSROptions } from "vite";
+import { BuildOptions as EsbuildOptions } from "esbuild";
 
-export function defineConfig(config: Config);
+type ViteConfig = UserConfig & { ssr?: SSROptions };
+
+export function defineConfig(configOrConfigFactory: ConfigExport);
+
+export type ConfigExport =
+	| Config
+	| Promise<Config>
+	| ((info: ConfigFactoryInfo) => Config | Promise<Config>);
 
 export interface FullConfig {
-	target: BuildTarget;
 	/**
 	 * File extensions for pages and layouts @default ["jsx", "tsx"] */
 	pageExtensions: string[];
@@ -28,17 +35,34 @@ export interface FullConfig {
 	trustForwardedOrigin: boolean;
 
 	/** Vite configuration (not all options are supported) */
-	vite: UserConfig;
+	vite:
+		| ViteConfig
+		| ((type?: ViteBuiltType) => ViteConfig | Promise<ViteConfig>);
 
 	/** Babel options passed to Vite's React plugin */
 	babel: TransformOptions;
+
+	/** Hook to modify ESBuild options used when bundling serverless functions */
+	modifyEsbuildOptions?(options: EsbuildOptions): void | Promise<void>;
 }
 
 export type Config = Partial<FullConfig>;
 
-type BuildTarget =
+export interface ConfigFactoryInfo {
+	/** Rakkas command that is being executed */
+	command: RakkasCommand;
+	/** Deployment target (only available for the "build" command) */
+	deploymentTarget?: RakkasDeploymentTarget;
+}
+
+export type RakkasDeploymentTarget =
 	| "node"
 	| "static"
 	| "vercel"
 	| "netlify"
 	| "cloudflare-workers";
+
+export type RakkasCommand = "dev" | "build";
+
+/** Whether the config will be used for the client build or the SSR build. Not available during dev. */
+export type ViteBuiltType = "client" | "ssr";

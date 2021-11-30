@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { program, Command } from "commander";
-
+import commander from "commander";
 import devCommand from "./commands/dev";
 import buildCommand from "./commands/build";
-import { loadConfig } from "./lib/config";
 import withPortCommand from "./commands/with-port";
+
+const { program } = commander;
 
 async function main() {
 	const packageJson = await readPackageJson();
@@ -23,16 +23,6 @@ function parseCommandLineArguments(version: string) {
 	program.addCommand(devCommand());
 	program.addCommand(buildCommand());
 	program.addCommand(withPortCommand());
-
-	program.addCommand(
-		new Command("print-config")
-			.description("Print configuration")
-			.action(async () => {
-				const { config } = await loadConfig();
-				// eslint-disable-next-line no-console
-				console.log(config);
-			}),
-	);
 
 	return program.parse();
 }

@@ -435,3 +435,13 @@ export interface PageRenderOptions {
 	/** Custom rendering */
 	renderToString?(app: JSX.Element): string | Promise<string>;
 }
+
+export interface ClientHooks {
+	beforeStartClient?(rootContext: RootContext): void | Promise<void>;
+
+	wrap?(page: JSX.Element, rootContext: RootContext): JSX.Element;
+
+	createLoadHelpers?(
+		rootContext: RootContext,
+	): LoadHelpers | Promise<LoadHelpers>;
+}

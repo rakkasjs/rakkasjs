@@ -1,45 +1,64 @@
 import path from "path";
 import { InlineConfig, normalizePath, SSROptions } from "vite";
-import { FullConfig } from "../..";
+import { FullConfig, RakkasDeploymentTarget } from "../..";
 import { rakkasVitePlugin } from "./vite-plugin";
 
 export interface ConfigFlavorOptions {
 	configDeps?: string[];
 	onConfigChange?: () => void;
 	ssr?: boolean;
-	noExternal?: boolean;
 }
 
 export async function makeViteConfig(
 	config: FullConfig,
-	{ configDeps, onConfigChange, ssr, noExternal }: ConfigFlavorOptions = {},
-): Promise<InlineConfig> {
+	deploymentTarget: RakkasDeploymentTarget,
+	{ configDeps, onConfigChange, ssr }: ConfigFlavorOptions = {},
+): Promise<InlineConfig & { ssr: SSROptions }> {
 	const srcDir = normalizePath(path.resolve("src"));
 	const publicDir = normalizePath(path.resolve("public"));
 	const pagesDir = normalizePath(config.pagesDir);
 	const apiDir = normalizePath(config.apiDir);
 
-	const result: InlineConfig = {
-		...config.vite,
+	let viteConfig = config.vite;
+	if (typeof viteConfig === "function") {
+		viteConfig = await viteConfig(
+			onConfigChange ? undefined : ssr ? "ssr" : "client",
+		);
+	}
+
+	let noExternal: true | (string | RegExp)[] = ["rakkasjs", "rakkasjs/server"];
+
+	const ssrConf = viteConfig.ssr || {};
+
+	if (ssrConf.noExternal === true) {
+		noExternal = true;
+	} else if (typeof ssrConf.noExternal === "string") {
+		noExternal.push(ssrConf.noExternal);
+	} else if (Array.isArray(ssrConf.noExternal)) {
+		noExternal = noExternal.concat(ssrConf.noExternal);
+	}
+
+	const result: InlineConfig & { ssr: SSROptions } = {
+		...viteConfig,
 		configFile: false,
 		root: srcDir,
 		publicDir,
 
 		server: {
-			...config.vite.server,
+			...viteConfig.server,
 			middlewareMode: "ssr",
 		},
 
 		optimizeDeps: {
-			...config.vite.optimizeDeps,
+			...viteConfig.optimizeDeps,
 			exclude: [
-				...(config.vite.optimizeDeps?.exclude || [
+				...(viteConfig.optimizeDeps?.exclude || [
 					"rakkasjs",
 					"rakkasjs/server",
 				]),
 			],
 			include: [
-				...(config.vite.optimizeDeps?.include || []),
+				...(viteConfig.optimizeDeps?.include || []),
 				"react",
 				"react-dom",
 				"react-dom/server",
@@ -48,9 +67,9 @@ export async function makeViteConfig(
 		},
 
 		resolve: {
-			...config.vite.resolve,
+			...viteConfig.resolve,
 			dedupe: [
-				...(config.vite.resolve?.dedupe || []),
+				...(viteConfig.resolve?.dedupe || []),
 				"react",
 				"react-dom",
 				"react-dom/server",
@@ -58,7 +77,7 @@ export async function makeViteConfig(
 			],
 		},
 		plugins: [
-			...(config.vite.plugins || []),
+			...(viteConfig.plugins || []),
 			await rakkasVitePlugin({
 				srcDir,
 				pagesDir,
@@ -67,24 +86,23 @@ export async function makeViteConfig(
 				endpointExtensions: config.endpointExtensions,
 				apiRoot: config.apiRoot,
 				configDeps,
-				stripLoadFunctions: config.target === "static" && !ssr,
+				stripLoadFunctions: deploymentTarget === "static" && !ssr,
 				babel: config.babel,
 				onConfigChange,
 			}),
 		],
 		define: {
-			...config.vite.define,
-			RAKKAS_BUILD_TARGET: JSON.stringify(config.target),
+			...viteConfig.define,
+			RAKKAS_BUILD_TARGET: JSON.stringify(deploymentTarget),
+		},
+
+		ssr: {
+			// This may not be required anymore
+			...(viteConfig.ssr || {}),
+			external: viteConfig.ssr?.external,
+			noExternal,
 		},
 	};
-
-	const ssrOptions: SSROptions = {
-		external: ["@rakkasjs/apollo-server"],
-		noExternal: noExternal || ["rakkasjs", "rakkasjs/server"],
-	};
-
-	// @ts-expect-error: SSR options are not in the type definitions yet
-	result.ssr = ssrOptions;
 
 	return result;
 }

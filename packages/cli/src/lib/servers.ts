@@ -22,11 +22,13 @@ export async function createServers({
 
 	const http = createHttpServer({}, async (req, res) => {
 		const url = req.url || "/";
+		const viteConfig = await makeViteConfig(config, "node", {
+			configDeps,
+			onConfigChange: onReload,
+		});
 
 		if (!vite) {
-			vite = await createViteServer(
-				await makeViteConfig(config, { configDeps, onConfigChange: onReload }),
-			);
+			vite = await createViteServer({ ...viteConfig });
 		}
 
 		vite.middlewares(req, res, async () => {

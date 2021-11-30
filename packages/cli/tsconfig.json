@@ -1,14 +1,14 @@
 {
 	"compilerOptions": {
 		"esModuleInterop": true,
-		"module": "es2020",
+		"module": "ESNext",
+		"target": "ESNext",
 		"skipLibCheck": true,
 		"moduleResolution": "Node",
 		"resolveJsonModule": true,
 		"strict": true,
 		"lib": ["ScriptHost", "DOM", "ES2019"],
-		"types": ["@types/jest", "@cloudflare/workers-types"],
-		"target": "ES2019"
+		"types": ["@types/jest", "@cloudflare/workers-types"]
 	},
 	"include": ["src"]
 }

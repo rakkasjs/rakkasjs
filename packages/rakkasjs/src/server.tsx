@@ -75,7 +75,8 @@ export async function handleRequest({
 					const mdl = await (import.meta.env.DEV
 						? import(/* @vite-ignore */ cur)
 						: importers[cur]());
-					return mdl.default(req, prev);
+
+					return mdl.default ? mdl.default(req, prev) : prev(req);
 				};
 			}, leaf);
 
@@ -120,10 +121,13 @@ export async function handleRequest({
 			};
 		}
 
+		const credentials = fullInit.credentials;
+		delete fullInit.credentials;
+
 		const parsed = new URL(url, request.url);
 
 		if (parsed.origin === request.url.origin) {
-			if (fullInit.credentials !== "omit") {
+			if (credentials !== "omit") {
 				const cookie = request.headers.get("cookie");
 				if (cookie !== null) {
 					fullInit.headers.set("cookie", cookie);

@@ -1,26 +1,31 @@
 import fs from "fs";
 import path from "path";
 import { build } from "esbuild";
-import type { Config, FullConfig } from "../..";
 import chalk from "chalk";
+import type {
+	Config,
+	ConfigFactoryInfo,
+	FullConfig,
+	RakkasCommand,
+	RakkasDeploymentTarget,
+} from "../..";
 
 export interface ConfigConfig {
+	command: RakkasCommand;
+	deploymentTarget: RakkasDeploymentTarget;
 	filename?: string;
 	root?: string;
 	collectDeps?: boolean;
 }
 
-export async function loadConfig(
-	configConfig: ConfigConfig = {},
-	cliOverrides?: Config,
-): Promise<{
+export async function loadConfig(configConfig: ConfigConfig): Promise<{
 	config: FullConfig;
 	deps?: string[];
 }> {
 	configConfig.root = configConfig.root ?? process.cwd();
 	const filename = findConfigFile(configConfig);
 	if (!filename) {
-		return { config: withDefaults(cliOverrides || {}), deps: [] };
+		return { config: withDefaults({}), deps: [] };
 	}
 
 	// eslint-disable-next-line no-console
@@ -31,19 +36,25 @@ export async function loadConfig(
 		configConfig.collectDeps,
 	);
 
-	delete require.cache[require.resolve(outfile)];
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	let loaded = require(outfile);
+	let loaded = await (0, eval)(
+		`import(${JSON.stringify(outfile + "?" + Math.random())})`,
+	);
 
-	// Poor man's esModuleInterop
 	while (loaded.default) loaded = loaded.default;
 
 	if (typeof loaded === "function") {
-		loaded = await loaded();
+		const info: ConfigFactoryInfo = {
+			command: configConfig.command,
+			deploymentTarget: configConfig.deploymentTarget,
+		};
+
+		loaded = await loaded(info);
+	} else {
+		loaded = await loaded;
 	}
 
 	return {
-		config: withDefaults({ ...loaded, ...cliOverrides }),
+		config: withDefaults(loaded),
 		deps,
 	};
 }
@@ -73,7 +84,7 @@ async function buildFile(filename: string, root: string, collectDeps = true) {
 	const outfile = path.resolve(
 		root,
 		"node_modules/.rakkas",
-		"rakkas.config.cjs",
+		"rakkas.config.mjs",
 	);
 
 	const buildResult = await build({
@@ -82,7 +93,7 @@ async function buildFile(filename: string, root: string, collectDeps = true) {
 		bundle: true,
 		write: true,
 		platform: "node",
-		format: "cjs",
+		format: "esm",
 		metafile: collectDeps,
 		plugins: [
 			{
@@ -114,7 +125,6 @@ async function buildFile(filename: string, root: string, collectDeps = true) {
 
 function withDefaults(config: Config): FullConfig {
 	const out: FullConfig = {
-		target: "node",
 		pagesDir: "pages",
 		pageExtensions: ["jsx", "tsx"],
 		apiDir: "api",

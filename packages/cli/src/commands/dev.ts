@@ -1,9 +1,11 @@
 import chalk from "chalk";
-import { Command } from "commander";
+import commander from "commander";
 import open from "open";
 import { loadConfig } from "../lib/config";
 import { installNodeFetch } from "../runtime/install-node-fetch";
 import { createServers } from "../lib/servers";
+
+const { Command } = commander;
 
 export default function devCommand() {
 	return new Command("dev")
@@ -32,10 +34,16 @@ async function startServer(opts: { port: string; host: string; open?: true }) {
 
 	const host = opts.host;
 
-	let { config, deps } = await loadConfig();
+	let { config, deps } = await loadConfig({
+		command: "dev",
+		deploymentTarget: "node",
+	});
 
 	async function reload() {
-		({ config, deps } = await loadConfig());
+		({ config, deps } = await loadConfig({
+			command: "dev",
+			deploymentTarget: "node",
+		}));
 
 		http.on("close", async () => {
 			const newServers = await createServers({

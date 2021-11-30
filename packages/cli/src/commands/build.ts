@@ -1,4 +1,4 @@
-import { createCommand, Option } from "commander";
+import commander from "commander";
 import { build as viteBuild } from "vite";
 import { loadConfig } from "../lib/config";
 import { makeViteConfig } from "../lib/vite-config";
@@ -7,14 +7,17 @@ import fs from "fs";
 import path from "path";
 import micromatch from "micromatch";
 import chalk from "chalk";
-import { BuildTarget, FullConfig } from "../..";
+import { RakkasDeploymentTarget, FullConfig } from "../..";
 import getPort from "get-port";
 import { spawn } from "child_process";
 import fetch, { FetchError, Response } from "node-fetch";
 import rimraf from "rimraf";
-import { build as esbuild } from "esbuild";
+import { build as esbuild, BuildOptions as ESBuildOptions } from "esbuild";
+import { builtinModules } from "module";
 
-const TARGETS: BuildTarget[] = [
+const { createCommand, Option } = commander;
+
+const TARGETS: RakkasDeploymentTarget[] = [
 	"node",
 	"static",
 	"vercel",
@@ -23,27 +26,30 @@ const TARGETS: BuildTarget[] = [
 ];
 
 interface BuildCommandOptions {
-	target?: BuildTarget;
+	deploymentTarget: RakkasDeploymentTarget;
 }
 
 export default function buildCommand() {
 	const cmd = createCommand("build")
 		.description("Build for production")
 		.addOption(
-			new Option("-t, --target <target>", "Override build target").choices(
-				TARGETS,
-			),
+			new Option("-d, --deployment-target <target>", "Deployment target")
+				.choices(TARGETS)
+				.default("node"),
 		)
 		.action(async (options: BuildCommandOptions) => {
-			const { config } = await loadConfig(undefined, options);
+			const { config } = await loadConfig({
+				command: "build",
+				deploymentTarget: options.deploymentTarget,
+			});
 
 			// eslint-disable-next-line no-console
 			console.log(
-				chalk.whiteBright("Building for target"),
-				chalk.yellowBright(config.target),
+				chalk.whiteBright("Building for deployment target"),
+				chalk.yellowBright(options.deploymentTarget),
 			);
 
-			const result = await build(config);
+			const result = await build(config, options.deploymentTarget);
 
 			return result;
 		});
@@ -51,13 +57,16 @@ export default function buildCommand() {
 	return cmd;
 }
 
-export async function build(config: FullConfig) {
+export async function build(
+	config: FullConfig,
+	deploymentTarget: RakkasDeploymentTarget,
+) {
 	let outDir: string;
 	let clientOutDir: string;
 	let serverOutDir: string;
 	let entry: string;
 
-	switch (config.target) {
+	switch (deploymentTarget) {
 		case "node":
 			outDir = path.resolve("dist");
 			clientOutDir = path.join(outDir, "client");
@@ -109,7 +118,7 @@ export async function build(config: FullConfig) {
 			break;
 
 		default:
-			throw new Error(`Build target ${config.target} is not supported yet`);
+			throw new Error(`Build target ${deploymentTarget} is not supported yet`);
 	}
 
 	await fs.promises.mkdir(clientOutDir, { recursive: true });
@@ -118,7 +127,9 @@ export async function build(config: FullConfig) {
 	// eslint-disable-next-line no-console
 	console.log(chalk.gray("Building client"));
 
-	const clientConfig = await makeViteConfig(config, { ssr: false });
+	const clientConfig = await makeViteConfig(config, deploymentTarget, {
+		ssr: false,
+	});
 
 	await viteBuild({
 		...clientConfig,
@@ -131,9 +142,8 @@ export async function build(config: FullConfig) {
 		},
 	});
 
-	const ssrConfig = await makeViteConfig(config, {
+	const ssrConfig = await makeViteConfig(config, deploymentTarget, {
 		ssr: true,
-		// noExternal: config.target === "cloudflare-workers",
 	});
 
 	// Fix index.html
@@ -207,6 +217,14 @@ export async function build(config: FullConfig) {
 	// eslint-disable-next-line no-console
 	console.log(chalk.gray("Building server"));
 
+	if (deploymentTarget === "cloudflare-workers") {
+		ssrConfig.ssr.target = "webworker";
+		ssrConfig.resolve = ssrConfig.resolve || {};
+		ssrConfig.resolve.mainFields = ["module", "main", "browser"];
+		ssrConfig.resolve.conditions = ssrConfig.resolve.conditions || [];
+		ssrConfig.resolve.conditions.push("worker");
+	}
+
 	await viteBuild({
 		...ssrConfig,
 
@@ -220,6 +238,10 @@ export async function build(config: FullConfig) {
 					"/virtual:/@rakkasjs/api-routes",
 					"/virtual:/rakkasjs/server",
 				],
+				output:
+					deploymentTarget === "cloudflare-workers"
+						? { format: "es" }
+						: undefined,
 			},
 			emptyOutDir: true,
 		},
@@ -241,7 +263,7 @@ export async function build(config: FullConfig) {
 
 	await fs.promises.copyFile(entry, path.join(serverOutDir, "index.js"));
 
-	if (config.target === "vercel") {
+	if (deploymentTarget === "vercel") {
 		// eslint-disable-next-line no-console
 		console.log(chalk.gray("Bundling serverless fuction"));
 
@@ -249,15 +271,19 @@ export async function build(config: FullConfig) {
 			recursive: true,
 		});
 
-		await esbuild({
+		const esbuilfOptions: ESBuildOptions = {
 			bundle: true,
 			entryPoints: [path.join(serverOutDir, "index.js")],
 			outfile: path.join(outDir, "functions/node/render/index.js"),
 			platform: "node",
 			target: "node12",
 			format: "cjs",
-		});
-	} else if (config.target === "netlify") {
+		};
+
+		config.modifyEsbuildOptions?.(esbuilfOptions);
+
+		await esbuild(esbuilfOptions);
+	} else if (deploymentTarget === "netlify") {
 		// eslint-disable-next-line no-console
 		console.log(chalk.gray("Bundling serverless fuction"));
 
@@ -265,20 +291,24 @@ export async function build(config: FullConfig) {
 			recursive: true,
 		});
 
-		await esbuild({
+		const esbuilfOptions: ESBuildOptions = {
 			bundle: true,
 			entryPoints: [path.join(serverOutDir, "index.js")],
 			outfile: path.join(outDir, "functions/render.js"),
 			platform: "node",
 			target: "node12",
 			format: "cjs",
-		});
+		};
+
+		config.modifyEsbuildOptions?.(esbuilfOptions);
+
+		await esbuild(esbuilfOptions);
 
 		await fs.promises.writeFile(
 			path.join(clientOutDir, "_redirects"),
 			"/*  /.netlify/functions/render  200",
 		);
-	} else if (config.target === "cloudflare-workers") {
+	} else if (deploymentTarget === "cloudflare-workers") {
 		// eslint-disable-next-line no-console
 		console.log(chalk.gray("Bundling serverless fuction"));
 
@@ -286,14 +316,20 @@ export async function build(config: FullConfig) {
 			recursive: true,
 		});
 
-		await esbuild({
+		const esbuilfOptions: ESBuildOptions = {
 			bundle: true,
 			entryPoints: [path.join(serverOutDir, "index.js")],
 			outfile: path.join(outDir, "index.js"),
 			platform: "browser",
 			target: "node12",
-			format: "cjs",
-		});
+			format: "esm",
+			mainFields: ["module", "main", "browser"],
+			external: builtinModules,
+		};
+
+		config.modifyEsbuildOptions?.(esbuilfOptions);
+
+		await esbuild(esbuilfOptions);
 
 		await fs.promises.writeFile(
 			path.join(outDir, "package.json"),
@@ -301,7 +337,7 @@ export async function build(config: FullConfig) {
 		);
 	}
 
-	if (config.target === "static") {
+	if (deploymentTarget === "static") {
 		await crawl(outDir);
 	} else {
 		// eslint-disable-next-line no-console

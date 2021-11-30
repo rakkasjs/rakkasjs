@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "@rakkasjs/website",
-	"version": "0.5.0-canary.13",
+	"version": "0.5.0-canary.15",
 	"description": "Rakkas.js website",
 	"scripts": {
 		"start": "node dist/server",

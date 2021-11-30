@@ -16,9 +16,10 @@ import {
 	ErrorPage,
 	Layout,
 	SimpleLayout,
+	ClientHooks,
 } from "./lib/types";
 
-export { setRootContext } from "./app";
+export { setRootContext } from "./root-context";
 
 // canHandleErrors missing or false => normal page
 export function definePage<T extends PageTypes = DefaultPageTypes>(def: {
@@ -149,4 +150,8 @@ export function defineLayout<T extends LayoutTypes = DefaultLayoutTypes>(def: {
 	}
 
 	return def;
+}
+
+export function defineClientHooks(hooks: ClientHooks): ClientHooks {
+	return hooks;
 }

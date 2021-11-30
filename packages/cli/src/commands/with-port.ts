@@ -1,6 +1,8 @@
 import { spawn } from "child_process";
-import { Command } from "commander";
+import commander from "commander";
 import getPort from "get-port";
+
+const { Command } = commander;
 
 export default function withPortCommand() {
 	return new Command("with-port")

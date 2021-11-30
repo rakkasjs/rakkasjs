@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { createServer } from "http";
 import sirv from "sirv";
 import { installNodeFetch } from "./install-node-fetch";
@@ -6,6 +7,9 @@ import { apiRoutes, pageRoutes, manifest, htmlTemplate } from "./manifests";
 import type { handleRequest as HandleRequest } from "rakkasjs/dist/server";
 import fs from "fs";
 import path from "path";
+
+// @ts-expect-error: No typings
+import * as server from "$output/server.js";
 
 async function startServer() {
 	installNodeFetch();
@@ -16,10 +20,8 @@ async function startServer() {
 	const host = process.env.HOST || "localhost";
 	const port = process.env.PORT || 3000;
 
-	const app = createServer((req, res) => {
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const handleRequest = require("$output/server.js")
-			.handleRequest as typeof HandleRequest;
+	const app = createServer(async (req, res) => {
+		const handleRequest = server.handleRequest as typeof HandleRequest;
 
 		async function handle() {
 			await handleNodeRequest({

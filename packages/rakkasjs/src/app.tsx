@@ -1,24 +1,11 @@
-import React, {
-	FC,
-	useRef,
-	useState,
-	useCallback,
-	Dispatch,
-	SetStateAction,
-} from "react";
+import React, { FC, useRef, useState, useCallback } from "react";
 import { useBaseRouter } from "./lib/router/useBaseRouter";
 import { findRoute, Route } from "./lib/find-route";
 import { navigate, Router, RouteRenderArgs } from "./lib/router/Router";
-import { initClientGlobal, setGlobal } from "./lib/init-global";
 import { RouterProvider } from "./lib/useRouter";
 import { StackResult, makeComponentStack } from "./lib/makeComponentStack";
-import { LoadHelpers, RootContext } from "./lib/types";
-
-export let setRootContext = initClientGlobal<
-	Dispatch<SetStateAction<RootContext>>
->("rootContext", () => {
-	throw new Error("setRootContext called outside of the render tree");
-});
+import { LoadHelpers } from "./lib/types";
+import { updateSetRootContext } from "./root-context";
 
 export const App: FC<{
 	initialStack: StackResult;
@@ -28,7 +15,7 @@ export const App: FC<{
 	const initialRender = useRef(true);
 	const lastStack = useRef(initialStack);
 	const [rootContextState, setRootContextState] = useState($rakkas$rootContext);
-	setRootContext = setGlobal("rootContext", setRootContextState);
+	updateSetRootContext(setRootContextState);
 
 	const render = useCallback(
 		async ({ url, rerender }: RouteRenderArgs) => {

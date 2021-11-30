@@ -11,19 +11,24 @@ import {
 } from "./lib/makeComponentStack";
 import { App } from "./app";
 import { findRoute, Route } from "./lib/find-route";
+import { ClientHooks } from "./lib/types";
 
 const lastRendered: RenderedStackItem[] = $rakkas$rendered;
 
 export async function startClient(routes?: Route[]) {
-	const clientHooks = await import("@rakkasjs/client-hooks");
+	let clientHooks: ClientHooks = await import("@rakkasjs/client-hooks");
+
+	if ((clientHooks as any).default) clientHooks = (clientHooks as any).default;
 
 	const { beforeStartClient, wrap, createLoadHelpers } = clientHooks;
 
 	if (beforeStartClient) {
-		await beforeStartClient();
+		await beforeStartClient($rakkas$rootContext);
 	}
 
-	const helpers = createLoadHelpers ? await createLoadHelpers() : {};
+	const helpers = createLoadHelpers
+		? await createLoadHelpers($rakkas$rootContext)
+		: {};
 
 	const url = new URL(window.location.href);
 
@@ -54,7 +59,7 @@ export async function startClient(routes?: Route[]) {
 		</HelmetProvider>
 	);
 
-	if (wrap) rendered = wrap(rendered);
+	if (wrap) rendered = wrap(rendered, $rakkas$rootContext);
 
 	hydrate(rendered, document.getElementById("rakkas-app"));
 }

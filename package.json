@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "rakkasjs-root-workspace",
-	"version": "0.5.0-canary.13",
+	"version": "0.5.0-canary.15",
 	"description": "Rakkas.js workspace root",
 	"scripts": {
 		"check": "pnpm run -r check",

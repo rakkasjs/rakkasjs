@@ -18,6 +18,8 @@ async function handler(event: FetchEvent) {
 			return await getAssetFromKV(event);
 		} catch (error) {
 			if (!(error instanceof NotFoundError)) {
+				// eslint-disable-next-line no-console
+				console.error(error);
 				return new Response("Server error", { status: 500 });
 			}
 		}
@@ -60,6 +62,8 @@ async function handler(event: FetchEvent) {
 			headers: response.headers as Record<string, string>,
 		});
 	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.error(error);
 		return new Response("Server error", { status: 500 });
 	}
 }
@@ -109,4 +113,15 @@ function parseBody(
 	}
 
 	return { type: "binary", body: new Uint8Array(bodyBuffer) };
+}
+
+// process.env shim
+(globalThis as any).process = { env: {} };
+for (const key of Object.keys(globalThis).filter(
+	(k) =>
+		k !== "__STATIC_CONTENT_MANIFEST" &&
+		typeof (globalThis as any)[k] === "string" &&
+		[...k].every((l) => l === l.toUpperCase()),
+)) {
+	globalThis.process.env[key] = (globalThis as any)[key];
 }
