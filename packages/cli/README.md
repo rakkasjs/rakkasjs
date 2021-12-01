@@ -16,4 +16,10 @@ Commands:
   help [command]  display help for command
 ```
 
+The `build` command also supports the following option:
+
+```
+-d, --deployment-target <target>  Deployment target (choices: "node", "static", "vercel", "netlify", "cloudflare-workers", default: "node")
+```
+
 See the [website](https://rakkasjs.org) for details.

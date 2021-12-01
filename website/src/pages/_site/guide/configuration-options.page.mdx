@@ -16,9 +16,31 @@ This file should default export a configuration object or a function that return
 | trustForwardedOrigin      | Set to true to trust `x-forwarded-*` headers during development¹                                              | `false`          |
 | vite <a href="#vite" />   | [Vite configuration](https://vitejs.dev/config/) (not all options are supported)                              | `{}`             |
 | babel <a href="#babel" /> | Babel options passed to [Vite's React plugin](https://github.com/vitejs/vite/tree/main/packages/plugin-react) | `{}`             |
+| modifyEsbuildOptions      | Hook to modify ESBuild options used when bundling serverless functions                                        | `undefined`      |
 
-¹See the `TRUST_FORWARDED_ORIGIN` [environment variable](./environment-variables) for production use.
+¹ See the `TRUST_FORWARDED_ORIGIN` [environment variable](./environment-variables) for production use.
 
 ## defineConfig
 
 You can import the `defineConfig` function from `@rakkasjs/cli` to ensure TypeScript IDE completion.
+
+## Conditional configuration
+
+You can provide a function (can be async) instead of a configuration object. The function will be called with the following info:
+
+```typescript
+export interface ConfigFactoryInfo {
+	/** Rakkas command that is being executed */
+	command: "dev" | "build";
+
+	/** Deployment target (only available for the "build" command) */
+	deploymentTarget?:
+		| "node"
+		| "static"
+		| "vercel"
+		| "netlify"
+		| "cloudflare-workers";
+}
+```
+
+You can also provide a function for Vite configuration. In build mode, it will be called with an argument specifying whether the configuration will be used for `"ssr"` or `"client"`.

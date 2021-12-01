@@ -45,10 +45,7 @@ const MainLayout: Layout = ({ error, children }) => (
 				<a href="https://thenounproject.com/term/flamenco/111303/">
 					gzz from Noun Project
 				</a>{" "}
-				(not affiliated). Used under{" "}
-				<a href="https://creativecommons.org/licenses/by/2.0/">
-					Creative Commons Attribution Generic license (CCBY)
-				</a>
+				(not affiliated).
 			</p>
 		</footer>
 	</>

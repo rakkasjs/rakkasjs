@@ -67,20 +67,24 @@ You can customize the client-side behavior of Rakkas by exporting certain hooks 
 - Creating client-side [load helpers](./load-helpers)
 
 ```tsx
-export function beforeStartClient() {
-	// Do initialization work before hydration
-	// If you return a promise, Rakkas will delay hydration until it resolves
-}
+import { defineClientHooks } from "rakkasjs";
 
-export function wrap(app: JSX.Element) {
-	// You can wrap the client-side app in a provider here.
-	// Useful for integrating with, e.g., Redux, Apollo client etc.
-	return <SomeProvider>{app}</SomeProvider>;
-}
+export default defineClientHooks({
+	beforeStartClient(rootContext) {
+		// Do initialization work before hydration
+		// If you return a promise, Rakkas will delay hydration until it resolves
+	},
 
-export function createLoadHelpers(): LoadHelpers {
-	return {
-		// Initialize your client-side load helpers here
-	};
-}
+	wrap(app, rootContext) {
+		// You can wrap the client-side app in a provider here.
+		// Useful for integrating with, e.g., Redux, Apollo client etc.
+		return <SomeProvider>{app}</SomeProvider>;
+	},
+
+	createLoadHelpers(rootContext) {
+		return {
+			// Initialize your client-side load helpers here
+		};
+	},
+});
 ```

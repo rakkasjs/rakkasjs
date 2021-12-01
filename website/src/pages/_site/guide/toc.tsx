@@ -8,7 +8,6 @@ const titles = [
 	"Styling",
 	"Data fetching",
 	"Layout context",
-	"Static site generation",
 	"Fast refresh",
 	"Refetching data",
 	"Error handling",
@@ -17,8 +16,10 @@ const titles = [
 	"Customization hooks",
 	"Configuration options",
 	"Environment variables",
+	"Deployment targets",
 	"Integrations",
-	"Roadmap and credits",
+	"Feature comparison",
+	"Credits",
 ];
 
 export const toc = titles.map((title) => {

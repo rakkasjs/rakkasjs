@@ -41,11 +41,17 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 
 			<div className={css.contentWrapper}>
 				<div className={css.content}>
-					{prevNext}
+					{error ? (
+						<h1>{error.message}</h1>
+					) : (
+						<>
+							{prevNext}
 
-					<article>{error ? error.message : children}</article>
+							<article>{children}</article>
 
-					{prevNext}
+							{prevNext}
+						</>
+					)}
 				</div>
 			</div>
 

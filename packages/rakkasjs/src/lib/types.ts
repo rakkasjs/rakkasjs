@@ -426,21 +426,27 @@ export type ServePageHook = (
 export interface PageRenderOptions {
 	/** Wrap the rendered page in server-side providers */
 	wrap?(page: JSX.Element): JSX.Element;
+
 	/** Get extra HTML to be emitted to the head */
 	getHeadHtml?(): string;
+
 	/** Create the helpers object to be passed to load functions */
 	createLoadHelpers?(
 		fetch: typeof global.fetch,
 	): LoadHelpers | Promise<LoadHelpers>;
+
 	/** Custom rendering */
 	renderToString?(app: JSX.Element): string | Promise<string>;
 }
 
 export interface ClientHooks {
+	/** Do initialization work before hydration. If you return a promise, Rakkas will delay hydration until it resolves */
 	beforeStartClient?(rootContext: RootContext): void | Promise<void>;
 
+	/** You can wrap the client-side app in a provider here. Useful for integrating with, e.g., Redux, Apollo client etc. */
 	wrap?(page: JSX.Element, rootContext: RootContext): JSX.Element;
 
+	/** Initialize your client-side load helpers here */
 	createLoadHelpers?(
 		rootContext: RootContext,
 	): LoadHelpers | Promise<LoadHelpers>;

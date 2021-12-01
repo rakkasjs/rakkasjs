@@ -1,0 +1,70 @@
+# Deployment targets
+
+Rakkas has first-class support for deploying on Node, Vercel, Netlify, and Cloudflare Workers, as well as static file servers. The `build` CLI command accepts a `--deployment-target` option (`-d` for short) to specify the deployment target. Its value can be `node`, `static`, `vercel`, `netlify`, or `cloudflare-workers`. The default value is `node`.
+
+## Node
+
+When you build your application for Node, Rakkas will generate a Node application with an entry point in `dist/server/index.js`, so you can start the server with `node dist/server`. You can customize the runtime behavior of the server with the following environment variables:
+
+| Variable                 | Description                              |
+| ------------------------ | ---------------------------------------- |
+| `TRUST_FORWARDED_ORIGIN` | Whether to trust `x-forwarded-*` headers |
+| `HOST`                   | Server host                              |
+| `PORT`                   | HTTP port                                |
+
+The generated server doesn't reference any external modules, so you only need to install the dependencies used in _your own_ code. In particular, `rakkasjs` and `@rakkasjs/cli` don't need to be installed
+
+The server can serve the client assets on its own but if you choose to use your reverse proxy (e.g. NGINX) to serve them instead, they reside in the `dist/client` directory.
+
+## Static
+
+When you build with `rakkas build -d static`, Rakkas will run a specially-built version of your application and visit all the pages it can discover, starting from the root `/` and export a static site into the directory `dist/static`. You can preview it with, e.g., `npx sirv dist/static`. A static site doesn't need a Node.js server, you can serve it from a CDN or a static file server, such as **Github pages**.
+
+Not every Rakkas app is suitable to be exported as a static site. You can do it if and only if the contents of each and every page in your app are solely determined by its URL path. In particular, if the content depends on any of the following, it is not suitable to be a static page:
+
+- Cookies: A static site can't show different contents to different visitors, so you can't have any sort of session management.
+- Query parameters: A static site can't load different data based on query parameters. Path parameters are fine, though. So, instead of a URL pattern like `/books?page=2` you should prefer `/books/page-2` if you intent to export a static site.
+
+You can still have API routes and `load` functions and for your layouts and pages but they will be run during **build-time** instead of run-time. In fact, they will be stripped off of the final bundle completely.
+
+## Vercel
+
+If you add a `build` or `vercel-build` script to your `package.json` with the content `rakkas build -d vercel`, you can use the Vercel CLI or their [git integration](https://vercel.com/docs/concepts/git) to deploy your app.
+
+Vercel can't automatically detect a Rakkas application as of yet but Rakkas uses the [file system API](https://vercel.com/docs/file-system-api), so you can just use the default values for build and development settings.
+
+## Netlify
+
+Create a `netlify.toml` file in the root of your project with the following content:
+
+```toml
+[build]
+command = "npx rakkas build -d netlify"
+publish = "netlify/static"
+```
+
+and use the Netlify CLI to deploy your app. You can also [link your git repository to Netlify](https://docs.netlify.com/configure-builds/get-started/) to automatically deploy your app when you push to your repository.
+
+## Cloudflare Workers
+
+Create a `wrangler.toml` file in the root of your project like the following:
+
+```toml
+compatibility_date = "2021-11-01"
+compatibility_flags = []
+name = "<the name of your app>"
+route = ''
+site = {bucket = "cloudflare/static", entry-point = "cloudflare"}
+type = "javascript"
+usage_model = ''
+workers_dev = true
+zone_id = ''
+
+[build]
+command = "npx rakkas build -d cloudflare-workers"
+
+[build.upload]
+format = "service-worker"
+```
+
+and use `wrangler` CLI tool to deploy your app. `miniflare` is also supported (use `miniflare cloudflare/index.js`)

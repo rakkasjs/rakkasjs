@@ -1,12 +1,14 @@
 # Environment variables
 
-Rakkas handles environment variables [the same way as Vite](https://vitejs.dev/guide/env-and-mode.html), which means `process.env` and `import.meta.env` will be expanded **in build-time**. This causes problems if you want to use environment variables for configuration because you will have to rebuild your app every time you change an environment variable.
+For the most part, Rakkas handles environment variables [the same way as Vite](https://vitejs.dev/guide/env-and-mode.html). `import.meta.env` will be expanded **in build-time**. Variables starting with `VITE_` will be exposed to client-side code while the rest will only be exposed to server-side code.
 
-There is an [open issue](https://github.com/vitejs/vite/issues/3176) on the Vite side about this limitation. One way around it is to use `(0, eval)("process.env")` for the time being to access the real runtime environment variables from server-side code.
+_Runtime_ environment variables can be accessed using `process.env` on the server-side. If you're deployment target is `cloudflare-workers`, there's a shim in the runtime code that exposes all `ALL_CAPS` global variables with a string value in the `process.env` object to help with portability.
+
+If you need to access runtime environment variables in client code, you should expose them yourself, e.g., using [`rootContext`](/guide/layout-context#root-context).
 
 ## Configuration through environment variables
 
-A Rakkas production server supports the following environment variables:
+If you're deployment target is `node`, the generated server supports the following environment variables:
 
 | Variable                 | Description                              |
 | ------------------------ | ---------------------------------------- |

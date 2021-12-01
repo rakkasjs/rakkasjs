@@ -48,15 +48,15 @@ const HomePage: FC = () => (
 				<p>Render the initial page on the sever-side for excellent SEO</p>
 			</div>
 			<div className={css.card}>
+				<h4>🚀&nbsp; Deploy anywhere</h4>
+				<p>Deploy on Node, Vercel, Netlify, Cloudflare Workers...</p>
+			</div>
+			<div className={css.card}>
 				<h4>📄&nbsp; Static site generation</h4>
 				<p>
 					Optionally, export a static site that can be hosted on any CDN or
 					static server
 				</p>
-			</div>
-			<div className={css.card}>
-				<h4>☸️&nbsp; SPA-style navigation</h4>
-				<p>Hydrate on the client for fast app-like page transitions</p>
 			</div>
 			<div className={css.card}>
 				<h4>📁&nbsp; File system-based routing</h4>
