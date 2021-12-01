@@ -84,7 +84,7 @@ async function buildFile(filename: string, root: string, collectDeps = true) {
 	const outfile = path.resolve(
 		root,
 		"node_modules/.rakkas",
-		"rakkas.config.mjs",
+		"rakkas.config.cjs",
 	);
 
 	const buildResult = await build({
@@ -93,7 +93,7 @@ async function buildFile(filename: string, root: string, collectDeps = true) {
 		bundle: true,
 		write: true,
 		platform: "node",
-		format: "esm",
+		format: "cjs",
 		metafile: collectDeps,
 		plugins: [
 			{
