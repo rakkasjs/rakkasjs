@@ -7,7 +7,7 @@
 		"start": "node dist/server",
 		"build": "rakkas build",
 		"dev": "rakkas dev",
-		"prepublishOnly": "pnpm build"
+		"prepack": "pnpm build"
 	},
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",

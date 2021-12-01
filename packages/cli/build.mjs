@@ -59,7 +59,7 @@ async function run() {
 				"react-dom",
 				"react-helmet-async",
 			],
-			plugins: [lateResolvePlugin(), nodeExternalsPlugin()],
+			plugins: [lateResolvePlugin()],
 			watch: process.argv[2] === "--watch",
 		})
 		.catch(() => process.exit(1));
@@ -75,7 +75,7 @@ async function run() {
 			target: ["esnext"],
 			format: "cjs",
 			external: nodeRuntimeExternals,
-			plugins: [lateResolvePlugin(), nodeExternalsPlugin()],
+			plugins: [lateResolvePlugin()],
 			watch: process.argv[2] === "--watch",
 		})
 		.catch(() => process.exit(1));
