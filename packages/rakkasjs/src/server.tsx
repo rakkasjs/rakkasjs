@@ -262,14 +262,12 @@ export async function handleRequest({
 
 		const { helmet } = helmetContext as FilledContext;
 
-		const dataScript = `$rakkas$rootContext=(0,eval)(${devalue(
-			context,
-		)});$rakkas$rendered=(0,eval)(${devalue(
+		const dataScript = `[(0,eval)(${devalue(context)}),(0,eval)(${devalue(
 			stack.rendered.map((x) => {
 				delete x.Component;
 				return x;
 			}),
-		)})`;
+		)})]`;
 
 		let head = "";
 		const headers: Record<string, string> = { "content-type": "text/html" };
@@ -292,10 +290,13 @@ export async function handleRequest({
 			headers.location = location;
 		}
 
+		const dataScriptName = `/__data${filename}/index.js`;
+
 		if (RAKKAS_BUILD_TARGET === "static") {
-			head += `<script id="rakkas-data-script" src="/__data${filename}/index.js"></script>`;
+			head += `<script type="module" src="${dataScriptName}"></script>`;
+			head += `<script>[$rakkas$rootContext,$rakkas$rendered]=[]</script>`;
 		} else {
-			head += `<script>${dataScript}</script>`;
+			head += `<script>[$rakkas$rootContext,$rakkas$rendered]=${dataScript}</script>`;
 		}
 
 		if (pageRoutes) {
@@ -367,7 +368,10 @@ export async function handleRequest({
 			request.headers.get("x-rakkas-export") === "static"
 		) {
 			await writeFile!(`client/${filename}/index.html`, html);
-			await writeFile!(`client/__data${filename}/index.js`, dataScript);
+			await writeFile!(
+				"client" + dataScriptName,
+				`export default ${dataScript}`,
+			);
 			headers["x-rakkas-export"] = "static";
 		}
 
