@@ -152,6 +152,7 @@ export async function makeComponentStack({
 		if (RAKKAS_BUILD_TARGET === "static" && !import.meta.env.SSR) {
 			previousRender = await loadDataScript(url.pathname);
 		}
+		1;
 
 		if (
 			// Never reload on the client if static
@@ -344,39 +345,13 @@ const defaultPageGetCacheKey: GetCacheKeyFunc = ({ url, context, params }) => [
 ];
 
 async function loadDataScript(path: string) {
-	return new Promise<any>((resolve, reject) => {
-		if (path === "/") path = "";
-		const src = `/__data${path}/index.js`;
+	if (path === "/") path = "";
+	const src = `/__data${path}/index.js`;
 
-		const oldScript = document.getElementById(
-			"rakkas-data-script",
-		) as HTMLScriptElement;
-
-		if (new URL(oldScript.src).pathname === src) {
-			return resolve($rakkas$rendered);
-		}
-
-		oldScript.remove();
-
-		const script = document.createElement("script");
-		script.id = "rakkas-data-script";
-
-		function handleLoad() {
-			script.removeEventListener("load", handleLoad);
-			resolve($rakkas$rendered);
-		}
-
-		function handleError() {
-			script.removeEventListener("error", handleError);
-			reject(new Error(`Failed to load script ${src}`));
-		}
-
-		script.addEventListener("error", handleError);
-		script.addEventListener("load", handleLoad);
-
-		script.src = src;
-		document.head.appendChild(script);
-	});
+	[$rakkas$rootContext, $rakkas$rendered] = (
+		await import(/* @vite-ignore */ src)
+	).default;
+	return $rakkas$rendered;
 }
 
 function noop() {

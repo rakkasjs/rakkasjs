@@ -1,5 +1,5 @@
-declare const $rakkas$rendered: any;
-declare const $rakkas$rootContext: Record<string, any>;
+declare let $rakkas$rendered: any;
+declare let $rakkas$rootContext: Record<string, any>;
 
 declare interface Window {
 	$rakkas$reloader: Record<string, (m: any) => void>;
