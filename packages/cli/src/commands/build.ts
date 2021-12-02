@@ -8,12 +8,14 @@ import path from "path";
 import micromatch from "micromatch";
 import chalk from "chalk";
 import { RakkasDeploymentTarget, FullConfig } from "../..";
-import getPort from "get-port";
-import { spawn } from "child_process";
-import fetch, { FetchError, Response } from "node-fetch";
 import rimraf from "rimraf";
 import { build as esbuild, BuildOptions as ESBuildOptions } from "esbuild";
 import { builtinModules } from "module";
+import type {
+	handleRequest as HandleRequest,
+	Route,
+} from "rakkasjs/dist/server";
+import { installNodeFetch } from "../runtime/install-node-fetch";
 
 const { createCommand, Option } = commander;
 
@@ -64,7 +66,7 @@ export async function build(
 	let outDir: string;
 	let clientOutDir: string;
 	let serverOutDir: string;
-	let entry: string;
+	let entry: string | undefined;
 
 	switch (deploymentTarget) {
 		case "node":
@@ -78,7 +80,6 @@ export async function build(
 			outDir = path.resolve("node_modules/.rakkas/static");
 			clientOutDir = path.join(outDir, "client");
 			serverOutDir = path.join(outDir, "server");
-			entry = path.resolve(__dirname, "./entries/entry-node.js");
 			break;
 
 		case "vercel":
@@ -149,6 +150,7 @@ export async function build(
 	// Fix index.html
 	const htmlTemplate = await fs.promises.readFile(
 		path.join(clientOutDir, "index.html"),
+		"utf-8",
 	);
 
 	const dom = cheerio.load(htmlTemplate);
@@ -211,8 +213,10 @@ export async function build(
 			.filter(Boolean) as Array<[string, string[]]>,
 	);
 
-	await fs.promises.unlink(path.join(clientOutDir, "ssr-manifest.json"));
-	await fs.promises.unlink(path.join(clientOutDir, "import-manifest.json"));
+	if (deploymentTarget !== "static") {
+		await fs.promises.unlink(path.join(clientOutDir, "ssr-manifest.json"));
+		await fs.promises.unlink(path.join(clientOutDir, "import-manifest.json"));
+	}
 
 	// eslint-disable-next-line no-console
 	console.log(chalk.gray("Building server"));
@@ -249,19 +253,21 @@ export async function build(
 		publicDir: false,
 	});
 
-	await fs.promises.writeFile(
-		path.join(serverOutDir, "rakkas-manifest.json"),
-		JSON.stringify(manifest),
-		"utf8",
-	);
+	if (deploymentTarget !== "static") {
+		await fs.promises.writeFile(
+			path.join(serverOutDir, "rakkas-manifest.json"),
+			JSON.stringify(manifest),
+			"utf8",
+		);
 
-	await fs.promises.writeFile(
-		path.join(serverOutDir, "html-template.js"),
-		`module.exports = ${JSON.stringify(dom.html())}`,
-		"utf8",
-	);
+		await fs.promises.writeFile(
+			path.join(serverOutDir, "html-template.js"),
+			`module.exports = ${JSON.stringify(dom.html())}`,
+			"utf8",
+		);
 
-	await fs.promises.copyFile(entry, path.join(serverOutDir, "index.js"));
+		await fs.promises.copyFile(entry!, path.join(serverOutDir, "index.js"));
+	}
 
 	if (deploymentTarget === "vercel") {
 		// eslint-disable-next-line no-console
@@ -338,7 +344,7 @@ export async function build(
 	}
 
 	if (deploymentTarget === "static") {
-		await crawl(outDir);
+		await crawl(outDir, dom.html(), manifest);
 	} else {
 		// eslint-disable-next-line no-console
 		console.log(
@@ -348,61 +354,80 @@ export async function build(
 	}
 }
 
-async function crawl(outDir: string) {
-	const host = "localhost";
-	const port = await getPort();
-
+async function crawl(
+	outDir: string,
+	htmlTemplate: string,
+	manifest: Record<string, string[]>,
+) {
 	// eslint-disable-next-line no-console
-	console.log(chalk.whiteBright("Launching server"));
+	console.log(chalk.whiteBright("Loading server"));
 
-	const server = spawn("node node_modules/.rakkas/static/server", {
-		shell: true,
-		env: { ...process.env, HOST: host, PORT: String(port) },
-		stdio: "ignore",
-	});
+	const server = await (0, eval)(
+		`import(${JSON.stringify(path.join(outDir, "server/server.js"))})`,
+	);
 
-	server.on("error", (error) => {
-		throw error;
-	});
+	const handleRequest: typeof HandleRequest = server.handleRequest;
 
-	let firstResponse: Response | undefined;
+	const pageRoutes: Route[] = (
+		await (0, eval)(
+			`import(${JSON.stringify(path.join(outDir, "server/page-routes.js"))})`,
+		)
+	).default.default;
 
-	// eslint-disable-next-line no-console
-	console.log(chalk.gray("Waiting for server to respond"));
-	for (;;) {
-		try {
-			firstResponse = await fetch(`http://${host}:${port}`, {
-				headers: { "x-rakkas-export": "static" },
-			});
-		} catch (err) {
-			if (err instanceof FetchError) {
-				await new Promise((resolve) => setTimeout(resolve, 100));
-				continue;
-			}
-			throw err;
-		}
-
-		break;
-	}
+	const apiRoutes: Route[] = (
+		await (0, eval)(
+			`import(${JSON.stringify(path.join(outDir, "server/api-routes.js"))})`,
+		)
+	).default.default;
 
 	// eslint-disable-next-line no-console
 	console.log(chalk.whiteBright("Crawling the application"));
 	const roots = new Set(["/"]);
-	const origin = `http://${host}:${port}`;
+	const origin = `http://localhost`;
+
+	installNodeFetch();
+
+	const headers = new Headers({ "x-rakkas-export": "static" });
+
 	for (const root of roots) {
-		const currentUrl = origin + root;
+		const currentUrl = new URL(origin + root);
 
-		const response =
-			firstResponse ||
-			(await fetch(currentUrl, {
-				headers: { "x-rakkas-export": "static" },
-			}));
+		const response = await handleRequest({
+			htmlTemplate,
+			pageRoutes,
+			apiRoutes,
+			manifest,
+			async writeFile(name, content) {
+				const fullname = path.resolve(outDir, name);
+				const dir = path.parse(fullname).dir;
 
-		firstResponse = undefined;
+				await fs.promises.mkdir(dir, { recursive: true });
+				await fs.promises.writeFile(fullname, content);
+			},
+			request: {
+				url: currentUrl,
+				ip: "",
+				method: "GET",
+				headers,
+				originalIp: "",
+				originalUrl: currentUrl,
+				type: "empty",
+			},
+		});
 
-		if (response.headers.get("x-rakkas-export") !== "static") continue;
+		let replyHeaders = response.headers || [];
 
-		if (!response.ok) {
+		if (!Array.isArray(replyHeaders)) {
+			replyHeaders = Object.entries(replyHeaders);
+		}
+
+		const exportHeader = replyHeaders.find(
+			(x) => x[0].toLowerCase() === "x-rakkas-export",
+		)?.[1];
+
+		if (exportHeader !== "static") continue;
+
+		if ((response.status || 200) > 399) {
 			// eslint-disable-next-line no-console
 			console.log(
 				chalk.yellowBright(
@@ -419,17 +444,25 @@ async function crawl(outDir: string) {
 			}
 		}
 
-		const location = response.headers.get("location");
-		if (location) addPath(location);
+		const location = replyHeaders.find(
+			(x) => x[0].toLowerCase() === "location",
+		)?.[1];
 
-		// eslint-disable-next-line no-console
-		console.log(chalk.gray("Exported page"), chalk.blue(root));
+		if (typeof location === "string") addPath(location);
 
-		const fetched = await response.text();
+		if (typeof response.body !== "string") {
+			// eslint-disable-next-line no-console
+			console.log(
+				chalk.yellowBright(`Request to ${root} returned unknown body type.`),
+			);
+		} else {
+			// eslint-disable-next-line no-console
+			console.log(chalk.gray("Exported page"), chalk.blue(root));
 
-		const dom = cheerio.load(fetched);
+			const dom = cheerio.load(response.body);
 
-		dom("a[href]").each((i, el) => addPath(el.attribs.href));
+			dom("a[href]").each((i, el) => addPath(el.attribs.href));
+		}
 	}
 
 	await fs.promises.mkdir("dist", { recursive: true });
@@ -445,11 +478,6 @@ async function crawl(outDir: string) {
 	);
 
 	await fs.promises.rename(path.join(outDir, "client"), "dist/static");
-
-	await new Promise((resolve) => {
-		server.on("exit", resolve);
-		server.kill();
-	});
 
 	await new Promise<void>((resolve, reject) =>
 		rimraf(outDir, (error) => {
