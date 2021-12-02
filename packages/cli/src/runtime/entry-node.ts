@@ -43,10 +43,7 @@ async function startServer() {
 					const dir = path.parse(fullname).dir;
 
 					await fs.promises.mkdir(dir, { recursive: true });
-					await fs.promises.writeFile(
-						path.resolve(__dirname, "..", name),
-						content,
-					);
+					await fs.promises.writeFile(fullname, content);
 				},
 			}).catch((error) => {
 				// TODO: logging
