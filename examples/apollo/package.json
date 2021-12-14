@@ -10,19 +10,19 @@
 		"typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"dependencies": {
-		"@apollo/client": "^3.4.16",
-		"@graphql-tools/schema": "^8.2.0",
+		"@apollo/client": "^3.5.6",
+		"@graphql-tools/schema": "^8.3.1",
 		"@rakkasjs/apollo-server": "0.5.0-next.3",
-		"graphql": "^15.6.1",
+		"graphql": "^16.1.0",
 		"rakkasjs": "0.5.0-next.3",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
-		"react-helmet-async": "^1.1.2"
+		"react-helmet-async": "^1.2.2"
 	},
 	"devDependencies": {
 		"@rakkasjs/cli": "0.5.0-next.3",
-		"@types/react": "^17.0.27",
-		"@types/react-dom": "^17.0.9",
-		"typescript": "^4.4.3"
+		"@types/react": "^17.0.37",
+		"@types/react-dom": "^17.0.11",
+		"typescript": "^4.5.4"
 	}
 }

@@ -29,7 +29,7 @@
 		"rakkasjs": "workspace:*",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
-		"react-helmet-async": "^1.1.2",
+		"react-helmet-async": "^1.2.2",
 		"sanitize.css": "^13.0.0"
 	},
 	"devDependencies": {
@@ -37,21 +37,21 @@
 		"@mdx-js/mdx": "^1.6.22",
 		"@rakkasjs/cli": "workspace:*",
 		"@types/cookie": "^0.4.1",
-		"@types/mdx-js__react": "^1.5.4",
-		"@types/react": "^17.0.27",
-		"@types/react-dom": "^17.0.9",
-		"@typescript-eslint/eslint-plugin": "^5.0.0",
-		"@typescript-eslint/parser": "^5.0.0",
-		"eslint": "^7.32.0",
-		"eslint-plugin-import": "^2.24.2",
+		"@types/mdx-js__react": "^1.5.5",
+		"@types/react": "^17.0.37",
+		"@types/react-dom": "^17.0.11",
+		"@typescript-eslint/eslint-plugin": "^5.7.0",
+		"@typescript-eslint/parser": "^5.7.0",
+		"eslint": "^8.4.1",
+		"eslint-plugin-import": "^2.25.3",
 		"eslint-plugin-only-warn": "^1.0.3",
-		"eslint-plugin-react": "^7.26.1",
-		"eslint-plugin-react-hooks": "^4.2.0",
+		"eslint-plugin-react": "^7.27.1",
+		"eslint-plugin-react-hooks": "^4.3.0",
 		"install": "^0.13.0",
-		"node-dev": "^7.0.0",
-		"prettier": "^2.4.1",
+		"node-dev": "^7.1.0",
+		"prettier": "^2.5.1",
 		"reprism": "^0.0.11",
-		"typescript": "^4.4.3",
-		"vite-plugin-mdx": "^3.5.8"
+		"typescript": "^4.5.4",
+		"vite-plugin-mdx": "^3.5.10"
 	}
 }

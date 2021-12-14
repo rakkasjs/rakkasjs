@@ -81,7 +81,7 @@ main {
 }
 
 .main {
-	padding: 0 1em 1em 1em;
+	padding: 0 1em 1em;
 	min-height: calc(100vh - 16rem);
 }
 

@@ -4,7 +4,7 @@ import { makeViteConfig } from "../lib/vite-config";
 import { encode } from "html-entities";
 import { htmlTemplate } from "../lib/html-template";
 import { FullConfig } from "../..";
-import chalk from "chalk";
+import chalk, { Chalk } from "chalk";
 import path from "path";
 
 export interface ServersConfig {
@@ -36,7 +36,7 @@ export async function createServers({
 			function logResponse() {
 				const statusType = Math.floor(res.statusCode / 100);
 
-				const statusColorMap: Record<number, chalk.Chalk | undefined> = {
+				const statusColorMap: Record<number, Chalk | undefined> = {
 					2: chalk.green,
 					3: chalk.blue,
 					4: chalk.yellow,
@@ -45,7 +45,7 @@ export async function createServers({
 
 				const statusColor = statusColorMap[statusType] || chalk.magenta;
 
-				const methodColorMap: Record<string, chalk.Chalk | undefined> = {
+				const methodColorMap: Record<string, Chalk | undefined> = {
 					GET: chalk.white,
 					HEAD: chalk.gray,
 					POST: chalk.green,
