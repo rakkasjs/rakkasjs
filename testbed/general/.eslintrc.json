@@ -28,6 +28,10 @@
 	"rules": {
 		"react/prop-types": "off",
 		"react-hooks/rules-of-hooks": "error",
-		"react-hooks/exhaustive-deps": "error"
+		"react-hooks/exhaustive-deps": "error",
+		"import/no-unresolved": [
+			"error",
+			{ "ignore": ["rakkasjs", "@rakkasjs/cli"] }
+		]
 	}
 }
