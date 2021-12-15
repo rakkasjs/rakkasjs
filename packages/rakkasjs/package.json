@@ -10,7 +10,7 @@
 		"check": "run-p typecheck lint:ts test",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
 		"lint:ts": "eslint --max-warnings=0 src",
-		"test": "jest"
+		"test": "vitest run --dom=happy-dom src"
 	},
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",
@@ -41,11 +41,7 @@
 		"react-helmet-async": "^1"
 	},
 	"devDependencies": {
-		"@testing-library/jest-dom": "^5.16.1",
-		"@testing-library/react": "^12.1.2",
-		"@types/jest": "^27.0.3",
 		"@types/react-dom": "^17.0.11",
-		"@types/testing-library__jest-dom": "^5.14.2",
 		"@typescript-eslint/eslint-plugin": "^5.7.0",
 		"@typescript-eslint/parser": "^5.7.0",
 		"core-js": "^3.19.3",
@@ -55,7 +51,7 @@
 		"eslint-plugin-only-warn": "^1.0.3",
 		"eslint-plugin-react": "^7.27.1",
 		"eslint-plugin-react-hooks": "^4.3.0",
-		"jest": "^27.4.5",
+		"happy-dom": "^2.24.5",
 		"knave-react": "^1.1.0",
 		"lint-staged": "^12.1.2",
 		"npm-run-all": "^4.1.5",
@@ -64,6 +60,7 @@
 		"react-dom": "^17.0.2",
 		"react-helmet-async": "^1.1.2",
 		"tsup": "^5.11.5",
-		"typescript": "^4.5.4"
+		"typescript": "^4.5.4",
+		"vitest": "^0.0.88"
 	}
 }

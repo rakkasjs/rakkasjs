@@ -433,7 +433,7 @@ export interface PageRenderOptions {
 
 	/** Create the helpers object to be passed to load functions */
 	createLoadHelpers?(
-		fetch: typeof global.fetch,
+		fetch: typeof globalThis.fetch,
 	): LoadHelpers | Promise<LoadHelpers>;
 
 	/** Custom rendering */
