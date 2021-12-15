@@ -18,7 +18,8 @@ import {
 	PageRenderOptions,
 	RakkasRequestBodyAndType,
 } from "./lib/types";
-import { RouterProvider } from "./lib/useRouter";
+import { KnaveServerSideProvider } from "knave-react";
+import { ParamsContext } from "./lib/useRouter";
 
 export type { Route };
 
@@ -244,14 +245,13 @@ export async function handleRequest({
 		const helmetContext = {};
 
 		let app = (
-			<RouterProvider
-				value={{
-					current: request.url,
-					params: stack.params,
-				}}
-			>
-				<HelmetProvider context={helmetContext}>{stack.content}</HelmetProvider>
-			</RouterProvider>
+			<KnaveServerSideProvider url={request.url.href}>
+				<ParamsContext.Provider value={{ params: foundPage.params }}>
+					<HelmetProvider context={helmetContext}>
+						{stack.content}
+					</HelmetProvider>
+				</ParamsContext.Provider>
+			</KnaveServerSideProvider>
 		);
 
 		if (options.wrap) app = options.wrap(app);

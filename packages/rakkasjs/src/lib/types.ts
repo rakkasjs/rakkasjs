@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 /* eslint-disable @typescript-eslint/ban-types */
 import { FC } from "react";
-import { BaseRouterInfo } from "./router/Router";
 
 /**
  * Types related to a page definition
@@ -340,8 +339,10 @@ export interface LoadErrorResult {
 }
 
 // Return value of useRouter custom hook
-export interface RouterInfo extends BaseRouterInfo {
+export interface RouterInfo {
+	currentUrl: URL;
 	params: Record<string, string>;
+	pendingUrl?: URL;
 }
 
 interface RawRequestBase {

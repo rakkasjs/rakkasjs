@@ -1,8 +1,14 @@
 export * from "./lib/types";
 
-export { navigate } from "./lib/router/Router";
-export { Link } from "./lib/router/Link";
-export { NavLink } from "./lib/router/NavLink";
+export {
+	navigate,
+	Link,
+	StyledLink as NavLink,
+	useCurrentLocation,
+	usePendingLocation,
+	useNavigationState,
+	useNavigationBlocker,
+} from "knave-react";
 export { useRouter } from "./lib/useRouter";
 import {
 	PageTypes,

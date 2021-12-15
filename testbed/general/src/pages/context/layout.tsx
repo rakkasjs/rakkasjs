@@ -19,14 +19,14 @@ export default defineLayout<OuterLayoutTypes>({
 			<>
 				<p>
 					<NavLink
-						currentRouteStyle={{ background: "#333", color: "#fff" }}
+						activeStyle={{ background: "#333", color: "#fff" }}
 						href="/context/a"
 					>
 						Go to A
 					</NavLink>{" "}
 					&nbsp;{" "}
 					<NavLink
-						currentRouteStyle={{ background: "#333", color: "#fff" }}
+						activeStyle={{ background: "#333", color: "#fff" }}
 						href="/context/b"
 					>
 						Go to B

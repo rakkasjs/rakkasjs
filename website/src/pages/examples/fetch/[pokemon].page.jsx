@@ -27,19 +27,19 @@ export default definePage({
 						<ul className={css.links}>
 							<NavLink
 								href="/examples/fetch-define-page/pikachu"
-								currentRouteClass={css.activeLink}
+								activeClass={css.activeLink}
 							>
 								Pikachu
 							</NavLink>
 							<NavLink
 								href="/examples/fetch-define-page/charizard"
-								currentRouteClass={css.activeLink}
+								activeClass={css.activeLink}
 							>
 								Charizard
 							</NavLink>
 							<NavLink
 								href="/examples/fetch-define-page/onix"
-								currentRouteClass={css.activeLink}
+								activeClass={css.activeLink}
 							>
 								Onix
 							</NavLink>

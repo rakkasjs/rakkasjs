@@ -54,14 +54,14 @@ const MainLayout: Layout = ({ error, children }) => (
 export default MainLayout;
 
 const MdxLink: typeof Link = forwardRef((props, ref) => {
-	const { current } = useRouter();
+	const { currentUrl } = useRouter();
 
 	const url =
-		props.href === undefined ? undefined : new URL(props.href, current);
+		props.href === undefined ? undefined : new URL(props.href, currentUrl);
 
 	return (
 		<Link
-			target={url?.origin === current.origin ? undefined : "_blank"}
+			target={url?.origin === currentUrl.origin ? undefined : "_blank"}
 			{...props}
 			ref={ref}
 		/>
