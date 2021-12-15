@@ -9,7 +9,9 @@ export const post: RequestHandler = async (req) => {
 		[from, to] = [to, from];
 	}
 
-	let content = await fs.promises.readFile(FILE_NAME, { encoding: "utf-8" });
+	let content = (await fs.promises.readFile(FILE_NAME, {
+		encoding: "utf-8",
+	})) as string;
 	content = content.replace(from, to);
 	await fs.promises.writeFile(FILE_NAME, content);
 

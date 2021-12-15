@@ -1,10 +1,11 @@
+import { describe, it, expect } from "vitest";
 import { splitIntoSubSegments, sortRoutes } from "./sortRoutes";
 
 describe("Parses subsegments", () => {
 	it("splits subsegment correctly", () => {
-		expect(splitIntoSubSegments("[xyz]")).toStrictEqual(["[xyz]"]);
-		expect(splitIntoSubSegments("[xyz].abc")).toStrictEqual(["[xyz]", ".abc"]);
-		expect(splitIntoSubSegments("[xyz]-[abc]")).toStrictEqual([
+		expect(splitIntoSubSegments("[xyz]")).toMatchObject(["[xyz]"]);
+		expect(splitIntoSubSegments("[xyz].abc")).toMatchObject(["[xyz]", ".abc"]);
+		expect(splitIntoSubSegments("[xyz]-[abc]")).toMatchObject([
 			"[xyz]",
 			"-",
 			"[abc]",
@@ -21,7 +22,7 @@ describe("Sorts routes", () => {
 			})),
 		);
 
-		expect(sorted.map((x) => x.pattern)).toStrictEqual([
+		expect(sorted.map((x) => x.pattern)).toMatchObject([
 			"/specific",
 			"/[parametric]",
 		]);
@@ -32,13 +33,13 @@ describe("Sorts routes", () => {
 			["/a/b", "/a"].map((x) => ({ pattern: x, content: null })),
 		);
 
-		expect(sorted.map((x) => x.pattern)).toStrictEqual(["/a", "/a/b"]);
+		expect(sorted.map((x) => x.pattern)).toMatchObject(["/a", "/a/b"]);
 
 		const sorted2 = sortRoutes(
 			["/a", "/a/b"].map((x) => ({ pattern: x, content: null })),
 		);
 
-		expect(sorted2.map((x) => x.pattern)).toStrictEqual(["/a", "/a/b"]);
+		expect(sorted2.map((x) => x.pattern)).toMatchObject(["/a", "/a/b"]);
 	});
 
 	it("orders alphabetically", () => {
@@ -46,7 +47,7 @@ describe("Sorts routes", () => {
 			["/b", "/a"].map((x) => ({ pattern: x, content: null })),
 		);
 
-		expect(sorted.map((x) => x.pattern)).toStrictEqual(["/a", "/b"]);
+		expect(sorted.map((x) => x.pattern)).toMatchObject(["/a", "/b"]);
 	});
 
 	it("orders more placeholders before fewer", () => {
@@ -54,13 +55,13 @@ describe("Sorts routes", () => {
 			["/[a]-[b]", "/[a]"].map((x) => ({ pattern: x, content: null })),
 		);
 
-		expect(sorted.map((x) => x.pattern)).toStrictEqual(["/[a]-[b]", "/[a]"]);
+		expect(sorted.map((x) => x.pattern)).toMatchObject(["/[a]-[b]", "/[a]"]);
 
 		const sorted2 = sortRoutes(
 			["/[a]", "/[a]-[b]"].map((x) => ({ pattern: x, content: null })),
 		);
 
-		expect(sorted2.map((x) => x.pattern)).toStrictEqual(["/[a]-[b]", "/[a]"]);
+		expect(sorted2.map((x) => x.pattern)).toMatchObject(["/[a]-[b]", "/[a]"]);
 	});
 
 	it("generates correct regexp", () => {
@@ -75,7 +76,7 @@ describe("Sorts routes", () => {
 			Array.from("/foo-bar/something/spam.json".match(sorted[0].regexp)!).slice(
 				1,
 			),
-		).toStrictEqual(["foo", "bar", "spam"]);
+		).toMatchObject(["foo", "bar", "spam"]);
 	});
 
 	it("generates correct parameter names", () => {
@@ -86,6 +87,6 @@ describe("Sorts routes", () => {
 			})),
 		);
 
-		expect(sorted[0].paramNames).toStrictEqual(["a", "b", "c"]);
+		expect(sorted[0].paramNames).toMatchObject(["a", "b", "c"]);
 	});
 });

@@ -8,7 +8,7 @@
 		"jsx": "react",
 		"target": "es6",
 		"moduleResolution": "node",
-		"types": ["vite/client", "jest", "node", "@testing-library/jest-dom"],
+		"types": ["vite/client", "node"],
 		"skipLibCheck": true,
 		"noEmitOnError": false,
 		"baseUrl": "." /* Base directory to resolve non-absolute module names. */,

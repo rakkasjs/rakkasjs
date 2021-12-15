@@ -8,7 +8,7 @@
 		"resolveJsonModule": true,
 		"strict": true,
 		"lib": ["ScriptHost", "DOM", "ES2019"],
-		"types": ["@types/jest", "@cloudflare/workers-types"]
+		"types": ["@cloudflare/workers-types"]
 	},
 	"include": ["src"]
 }
