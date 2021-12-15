@@ -290,7 +290,7 @@ export async function handleRequest({
 			headers.location = location;
 		}
 
-		const dataScriptName = `/__data${filename}/index.js`;
+		const dataScriptName = `/_data/${RAKKAS_BUILD_ID}${filename}/index.js`;
 
 		if (RAKKAS_BUILD_TARGET === "static") {
 			head += `<script type="module" src="${dataScriptName}"></script>`;

@@ -12,6 +12,7 @@ export interface ConfigFlavorOptions {
 export async function makeViteConfig(
 	config: FullConfig,
 	deploymentTarget: RakkasDeploymentTarget,
+	buildId: string,
 	{ configDeps, onConfigChange, ssr }: ConfigFlavorOptions = {},
 ): Promise<InlineConfig & { ssr: SSROptions }> {
 	const srcDir = normalizePath(path.resolve("src"));
@@ -94,6 +95,7 @@ export async function makeViteConfig(
 		define: {
 			...viteConfig.define,
 			RAKKAS_BUILD_TARGET: JSON.stringify(deploymentTarget),
+			RAKKAS_BUILD_ID: JSON.stringify(buildId),
 		},
 
 		ssr: {

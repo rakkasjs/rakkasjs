@@ -7,4 +7,5 @@ declare global {
 		| "vercel"
 		| "netlify"
 		| "cloudflare-workers";
+	const RAKKAS_BUILD_ID: string;
 }

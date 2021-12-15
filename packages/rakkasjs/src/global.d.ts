@@ -13,6 +13,8 @@ declare const RAKKAS_BUILD_TARGET:
 	| "netlify"
 	| "cloudflare-workers";
 
+declare const RAKKAS_BUILD_ID: string;
+
 declare module "@rakkasjs/page-imports" {
 	const importer: Record<string, () => Promise<any>>;
 	export default importer;
