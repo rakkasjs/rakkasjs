@@ -16,6 +16,9 @@ export const App: FC<{
 	const initialRender = useRef(true);
 	const lastStack = useRef(initialStack);
 	const [rootContextState, setRootContextState] = useState($rakkas$rootContext);
+	const rootContextRef = useRef(rootContextState);
+	rootContextRef.current = rootContextState;
+
 	updateSetRootContext(setRootContextState);
 
 	const render = useCallback(
@@ -49,7 +52,7 @@ export const App: FC<{
 					}
 				},
 				previousRender: lastStack.current.rendered,
-				rootContext: rootContextState,
+				rootContext: rootContextRef.current,
 				helpers,
 			});
 
@@ -92,7 +95,7 @@ export const App: FC<{
 				</ParamsContext.Provider>
 			);
 		},
-		[rootContextState, routes, helpers],
+		[routes, helpers],
 	);
 
 	return (
