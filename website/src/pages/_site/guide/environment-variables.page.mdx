@@ -2,7 +2,7 @@
 
 For the most part, Rakkas handles environment variables [the same way as Vite](https://vitejs.dev/guide/env-and-mode.html). `import.meta.env` will be expanded **in build-time**. Variables starting with `VITE_` will be exposed to client-side code while the rest will only be exposed to server-side code.
 
-_Runtime_ environment variables can be accessed using `process.env` on the server-side. If you're deployment target is `cloudflare-workers`, there's a shim in the runtime code that exposes all `ALL_CAPS` global variables with a string value in the `process.env` object to help with portability.
+_Runtime_ environment variables can be accessed using **process&#x200B;.env** on the server-side. If you're deployment target is `cloudflare-workers`, there's a shim in the runtime code that exposes all `ALL_CAPS` global variables with a string value in the **process&#x200B;.env** object to help with portability.
 
 If you need to access runtime environment variables in client code, you should expose them yourself, e.g., using [`rootContext`](/guide/layout-context#root-context).
 

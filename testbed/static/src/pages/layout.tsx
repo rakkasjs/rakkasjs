@@ -8,13 +8,13 @@ export type MainLayoutTypes = DefineLayoutTypes<{
 
 export default defineLayout<MainLayoutTypes>({
 	async load({ fetch }) {
-		const result: MainLayoutTypes["data"] = await fetch("/api/people").then(
-			(r) => {
-				if (!r.ok) throw new Error(`/api/people returnes status ${r.status}`);
+		const result: MainLayoutTypes["data"] = await fetch(
+			"/api/people.json",
+		).then((r) => {
+			if (!r.ok) throw new Error(`/api/people returnes status ${r.status}`);
 
-				return r.json();
-			},
-		);
+			return r.json();
+		});
 
 		return { data: result };
 	},

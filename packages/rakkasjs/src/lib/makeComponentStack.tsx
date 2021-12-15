@@ -149,23 +149,16 @@ export async function makeComponentStack({
 		const cacheKey = stableJson(getCacheKey({ url, params, match, context }));
 		let loaded: PageLoadResult | LayoutLoadResult;
 
-		if (RAKKAS_BUILD_TARGET === "static" && !import.meta.env.SSR) {
-			previousRender = await loadDataScript(url.pathname);
-		}
-		1;
-
 		if (
-			// Never reload on the client if static
-			(RAKKAS_BUILD_TARGET !== "static" || import.meta.env.SSR) &&
 			// No previous render, we're in server side; should reload
-			(!previousRender ||
-				// Different component; should reload
-				!previousRender[i] ||
-				(previousRender[i].name && previousRender[i].name !== moduleId) ||
-				// Cache key manually invalidated; should reload
-				!previousRender[i].cacheKey ||
-				// Cache key changed; should reload
-				previousRender[i].cacheKey !== cacheKey)
+			!previousRender ||
+			// Different component; should reload
+			!previousRender[i] ||
+			(previousRender[i].name && previousRender[i].name !== moduleId) ||
+			// Cache key manually invalidated; should reload
+			!previousRender[i].cacheKey ||
+			// Cache key changed; should reload
+			previousRender[i].cacheKey !== cacheKey
 		) {
 			if (load) {
 				try {
@@ -226,8 +219,7 @@ export async function makeComponentStack({
 	}
 
 	const content = successfulRender.reduceRight((prev, rendered, i) => {
-		const reloadThis =
-			RAKKAS_BUILD_TARGET === "static" ? noop : () => reload(i);
+		const reloadThis = () => reload(i);
 
 		const Component = rendered.Component!;
 
@@ -247,10 +239,7 @@ export async function makeComponentStack({
 			data: (rendered.loaded as any).data,
 			error: errorHandlerIndex === i ? error : undefined,
 			reload: reloadThis,
-			useReload:
-				RAKKAS_BUILD_TARGET === "static"
-					? noop
-					: makeUseReload(reloadThis, isInitialRender),
+			useReload: makeUseReload(reloadThis, isInitialRender),
 		};
 
 		return <Component {...props}>{prev}</Component>;
@@ -343,20 +332,6 @@ const defaultPageGetCacheKey: GetCacheKeyFunc = ({ url, context, params }) => [
 	params,
 	url.search,
 ];
-
-async function loadDataScript(path: string) {
-	if (path === "/") path = "";
-	const src = `/_data/${RAKKAS_BUILD_ID}${path}/index.js`;
-
-	[$rakkas$rootContext, $rakkas$rendered] = (
-		await import(/* @vite-ignore */ src)
-	).default;
-	return $rakkas$rendered;
-}
-
-function noop() {
-	// Do nothing
-}
 
 if (import.meta.hot && !window.$rakkas$reloader) {
 	window.$rakkas$reloader = {};

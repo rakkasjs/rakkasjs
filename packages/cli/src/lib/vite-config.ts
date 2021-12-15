@@ -87,7 +87,6 @@ export async function makeViteConfig(
 				endpointExtensions: config.endpointExtensions,
 				apiRoot: config.apiRoot,
 				configDeps,
-				stripLoadFunctions: deploymentTarget === "static" && !ssr,
 				babel: config.babel,
 				onConfigChange,
 			}),

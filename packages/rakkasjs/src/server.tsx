@@ -42,7 +42,7 @@ interface RequestContext {
 	pageRoutes: Route[];
 	manifest?: Record<string, string[] | undefined>;
 	request: RawRequest;
-	writeFile?(name: string, content: string): Promise<void>;
+	writeFile?(name: string, content: string | Uint8Array): Promise<void>;
 }
 
 export async function handleRequest({
@@ -143,6 +143,8 @@ export async function handleRequest({
 			const buf = await new Response(fullInit.body).arrayBuffer();
 
 			try {
+				const method = fullInit.method || "GET";
+
 				const response = await handleRequest({
 					htmlTemplate,
 					apiRoutes,
@@ -151,7 +153,7 @@ export async function handleRequest({
 						ip: request.ip,
 						url: parsed,
 						headers: fullInit.headers,
-						method: fullInit.method || "GET",
+						method,
 						originalIp: request.ip,
 						originalUrl: parsed,
 						...parseBody(new Uint8Array(buf), fullInit.headers),
@@ -162,6 +164,14 @@ export async function handleRequest({
 
 				if (typeof body !== "string" && !(body instanceof Uint8Array)) {
 					body = JSON.stringify(body);
+				}
+
+				if (
+					RAKKAS_BUILD_TARGET === "static" &&
+					request.headers.get("x-rakkas-export") === "static" &&
+					method === "GET"
+				) {
+					await writeFile!(`${parsed.pathname}`, body as string | Uint8Array);
 				}
 
 				return new Response(body as any, {
@@ -290,14 +300,7 @@ export async function handleRequest({
 			headers.location = location;
 		}
 
-		const dataScriptName = `/_data/${RAKKAS_BUILD_ID}${filename}/index.js`;
-
-		if (RAKKAS_BUILD_TARGET === "static") {
-			head += `<script type="module" src="${dataScriptName}"></script>`;
-			head += `<script>[$rakkas$rootContext,$rakkas$rendered]=[]</script>`;
-		} else {
-			head += `<script>[$rakkas$rootContext,$rakkas$rendered]=${dataScript}</script>`;
-		}
+		head += `<script>[$rakkas$rootContext,$rakkas$rendered]=${dataScript}</script>`;
 
 		if (pageRoutes) {
 			head += `<script>$rakkas$routes=(0,eval)(${devalue(
@@ -367,11 +370,7 @@ export async function handleRequest({
 			RAKKAS_BUILD_TARGET === "static" &&
 			request.headers.get("x-rakkas-export") === "static"
 		) {
-			await writeFile!(`client/${filename}/index.html`, html);
-			await writeFile!(
-				"client" + dataScriptName,
-				`export default ${dataScript}`,
-			);
+			await writeFile!(`${filename}/index.html`, html);
 			headers["x-rakkas-export"] = "static";
 		}
 
