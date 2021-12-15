@@ -58,6 +58,7 @@ export interface StackResult {
 	status: number;
 	content: React.ReactNode;
 	rendered: RenderedStackItem[];
+	found: boolean;
 }
 
 export async function makeComponentStack({
@@ -259,6 +260,7 @@ export async function makeComponentStack({
 		content,
 		rendered: thisRender.map(({ ...rest }) => rest),
 		params,
+		found: !!match,
 	};
 }
 
