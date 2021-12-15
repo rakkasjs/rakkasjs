@@ -384,13 +384,14 @@ async function crawl(
 	).default.default;
 
 	// eslint-disable-next-line no-console
-	console.log(chalk.whiteBright("Crawling the application"));
+	console.log(chalk.whiteBright("Prerendering static routes"));
 	const roots = new Set(["/"]);
 	const origin = `http://localhost`;
 
 	installNodeFetch();
 
 	const headers = new Headers({ "x-rakkas-export": "static" });
+	const clientDir = path.resolve(outDir, "client");
 
 	for (const root of roots) {
 		const currentUrl = new URL(origin + root);
@@ -401,8 +402,11 @@ async function crawl(
 			apiRoutes,
 			manifest,
 			async writeFile(name, content) {
-				const fullname = path.resolve(outDir, name);
+				const fullname = clientDir + name;
 				const dir = path.parse(fullname).dir;
+
+				// eslint-disable-next-line no-console
+				console.log(chalk.gray(name));
 
 				await fs.promises.mkdir(dir, { recursive: true });
 				await fs.promises.writeFile(fullname, content);
@@ -459,12 +463,8 @@ async function crawl(
 				chalk.yellowBright(`Request to ${root} returned unknown body type.`),
 			);
 		} else {
-			// eslint-disable-next-line no-console
-			console.log(chalk.gray("Exported page"), chalk.blue(root));
-
 			const dom = cheerio.load(response.body);
-
-			dom("a[href]").each((i, el) => addPath(el.attribs.href));
+			dom("a[href]").each((_, el) => addPath(el.attribs.href));
 		}
 	}
 

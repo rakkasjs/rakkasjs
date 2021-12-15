@@ -20,7 +20,7 @@ export type ProfilePageTypes = DefinePageTypes<{
 export default definePage<ProfilePageTypes>({
 	async load({ fetch, params }) {
 		const result: ProfilePageTypes["data"] = await fetch(
-			`/api/people/${params.id}`,
+			`/api/people/${params.id}.json`,
 		).then((r) => {
 			if (!r.ok)
 				throw new Error(`/people/${params.id} returned status ${r.status}`);

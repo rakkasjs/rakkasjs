@@ -1,5 +1,5 @@
 import { RequestHandler } from "rakkasjs";
-import { people } from "./people-data";
+import { people } from "./people/people-data";
 
 export const get: RequestHandler = () => {
 	return {
