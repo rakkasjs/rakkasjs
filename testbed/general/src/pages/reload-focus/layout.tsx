@@ -13,15 +13,7 @@ export default defineLayout<ReloadFocusLayoutTypes>({
 	},
 
 	Component: function ReloadFocusLayout({ data, children, reload }) {
-		const firstRender = useRef(true);
-
 		useEffect(() => {
-			// Skip first render for reload to work
-			if (firstRender.current) {
-				firstRender.current = false;
-				return;
-			}
-
 			document.reloadFocusLayout = (v) => {
 				value = v;
 				reload();

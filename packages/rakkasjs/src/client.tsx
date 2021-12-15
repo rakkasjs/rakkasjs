@@ -12,6 +12,7 @@ import {
 import { App } from "./app";
 import { findRoute, Route } from "./lib/find-route";
 import { ClientHooks } from "./lib/types";
+import { navigate } from "knave-react";
 
 const lastRendered: RenderedStackItem[] = $rakkas$rendered;
 
@@ -46,7 +47,12 @@ export async function startClient(routes?: Route[]) {
 		fetch,
 		previousRender: lastRendered,
 		reload(i) {
-			lastRendered[i].cacheKey = "";
+			stack.rendered[i].cacheKey = "";
+			navigate(url.href, {
+				replace: true,
+				scroll: false,
+				data: history.state.data,
+			});
 		},
 		rootContext: $rakkas$rootContext,
 		isInitialRender: true,
