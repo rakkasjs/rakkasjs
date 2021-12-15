@@ -6,6 +6,8 @@ import { LoadHelpers } from "./lib/types";
 import { updateSetRootContext } from "./root-context";
 import { ParamsContext } from "./lib/useRouter";
 
+let unmounted = false;
+
 export const App: FC<{
 	initialStack: StackResult;
 	routes: Route[];
@@ -16,58 +18,82 @@ export const App: FC<{
 	const [rootContextState, setRootContextState] = useState($rakkas$rootContext);
 	updateSetRootContext(setRootContextState);
 
-	const render = useCallback(async () => {
-		const url = new URL(location.href);
-		const data = history.state.data;
+	const render = useCallback(
+		async (signal: AbortSignal) => {
+			if (unmounted) return lastStack.current.content;
 
-		const found = findRoute(decodeURI(url.pathname), routes, true) || {
-			stack: [],
-			params: {},
-			match: undefined,
-		};
+			const url = new URL(location.href);
+			const data = history.state.data;
 
-		let reloadPending = false;
+			const found = findRoute(decodeURI(url.pathname), routes, true) || {
+				stack: [],
+				params: {},
+				match: undefined,
+			};
 
-		const stack = await makeComponentStack({
-			found,
-			url,
-			fetch,
-			reload(i) {
-				lastStack.current.rendered[i].cacheKey = "";
-				if (!reloadPending) {
-					reloadPending = true;
-					navigate(url.href, {
-						replace: true,
-						scroll: false,
-						data,
-					}).then(() => (reloadPending = false));
+			let reloadPending = false;
+
+			const stack = await makeComponentStack({
+				found,
+				url,
+				fetch,
+				reload(i) {
+					lastStack.current.rendered[i].cacheKey = "";
+					if (!reloadPending) {
+						reloadPending = true;
+						navigate(url.href, {
+							replace: true,
+							scroll: false,
+							data,
+						}).then(() => (reloadPending = false));
+					}
+				},
+				previousRender: lastStack.current.rendered,
+				rootContext: rootContextState,
+				helpers,
+			});
+
+			if (signal.aborted) {
+				return null;
+			}
+
+			if (!stack.found) {
+				unmounted = true;
+
+				// We will hard reload if no route found (maybe it's a link to a static file)
+
+				// This hack is needed for Chrome: We have to take back the soft nav and perform a hard nav instead
+				history.go(-1);
+
+				while (location.href === url.href) {
+					await new Promise((r) => requestAnimationFrame(r));
 				}
-			},
-			previousRender: lastStack.current.rendered,
-			rootContext: rootContextState,
-			helpers,
-		});
 
-		if (stack.status === 404 && !initialRender.current) {
-			return null;
-		}
+				location.href = url.href;
 
-		const lastRendered = stack.rendered[stack.rendered.length - 1].loaded;
-		initialRender.current = false;
+				return new Promise(() => {
+					// Wait forever!
+				});
+			}
 
-		if ("location" in lastRendered) {
-			navigate(String(lastRendered.location), { replace: true });
-			return null;
-		}
+			const lastRendered = stack.rendered[stack.rendered.length - 1].loaded;
+			initialRender.current = false;
 
-		lastStack.current = stack;
+			if ("location" in lastRendered) {
+				navigate(String(lastRendered.location), { replace: true });
+				return null;
+			}
 
-		return (
-			<ParamsContext.Provider value={{ params: stack.params }}>
-				{stack.content}
-			</ParamsContext.Provider>
-		);
-	}, [rootContextState, routes, helpers]);
+			lastStack.current = stack;
+
+			return (
+				<ParamsContext.Provider value={{ params: stack.params }}>
+					{stack.content}
+				</ParamsContext.Provider>
+			);
+		},
+		[rootContextState, routes, helpers],
+	);
 
 	return (
 		<Knave
