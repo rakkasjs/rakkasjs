@@ -3,9 +3,9 @@
 	"version": "0.5.0-next.3",
 	"description": "Lightning fast Next.js alternative powered by Vite",
 	"scripts": {
-		"prepublishOnly": "pnpm build",
-		"build": "rimraf dist && cross-env NODE_ENV=production rollup --config rollup.config.js",
-		"dev": "rollup --watch --config rollup.config.js",
+		"prepack": "pnpm build",
+		"build": "tsup",
+		"dev": "tsup --watch",
 		"precommit": "lint-staged --no-stash",
 		"check": "run-p typecheck lint:ts test",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
@@ -27,9 +27,9 @@
 		"*.d.ts"
 	],
 	"exports": {
-		".": "./dist/index.js",
-		"./server": "./dist/server.js",
-		"./client": "./dist/client.js"
+		".": "./dist/index.mjs",
+		"./server": "./dist/server.mjs",
+		"./client": "./dist/client.mjs"
 	},
 	"dependencies": {
 		"@types/react": "^17.0.37",
@@ -41,13 +41,6 @@
 		"react-helmet-async": "^1"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.16.5",
-		"@babel/plugin-transform-runtime": "^7.16.5",
-		"@babel/preset-env": "^7.16.5",
-		"@babel/preset-react": "^7.16.5",
-		"@babel/preset-typescript": "^7.16.5",
-		"@rollup/plugin-commonjs": "^21.0.1",
-		"@rollup/plugin-node-resolve": "^13.1.1",
 		"@testing-library/jest-dom": "^5.16.1",
 		"@testing-library/react": "^12.1.2",
 		"@types/jest": "^27.0.3",
@@ -55,9 +48,7 @@
 		"@types/testing-library__jest-dom": "^5.14.2",
 		"@typescript-eslint/eslint-plugin": "^5.7.0",
 		"@typescript-eslint/parser": "^5.7.0",
-		"babel-plugin-transform-vite-meta-env": "^1.0.3",
 		"core-js": "^3.19.3",
-		"cross-env": "^7.0.3",
 		"devalue": "^2.0.1",
 		"eslint": "^8.4.1",
 		"eslint-plugin-import": "^2.25.3",
@@ -71,10 +62,7 @@
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-helmet-async": "^1.1.2",
-		"rimraf": "^3.0.2",
-		"rollup": "^2.61.1",
-		"rollup-plugin-terser": "^7.0.2",
-		"rollup-plugin-ts": "^2.0.4",
+		"tsup": "^5.11.5",
 		"typescript": "^4.5.4"
 	}
 }
