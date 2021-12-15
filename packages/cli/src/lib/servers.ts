@@ -22,7 +22,7 @@ export async function createServers({
 
 	const http = createHttpServer({}, async (req, res) => {
 		const url = req.url || "/";
-		const viteConfig = await makeViteConfig(config, "node", {
+		const viteConfig = await makeViteConfig(config, "node", "dev", {
 			configDeps,
 			onConfigChange: onReload,
 		});

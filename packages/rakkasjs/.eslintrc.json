@@ -42,7 +42,8 @@
 					"@rakkasjs/page-imports",
 					"@rakkasjs/api-imports",
 					"@rakkasjs/server-hooks",
-					"@rakkasjs/client-hooks"
+					"@rakkasjs/client-hooks",
+					"./dist"
 				]
 			}
 		],

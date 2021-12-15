@@ -346,7 +346,7 @@ const defaultPageGetCacheKey: GetCacheKeyFunc = ({ url, context, params }) => [
 
 async function loadDataScript(path: string) {
 	if (path === "/") path = "";
-	const src = `/__data${path}/index.js`;
+	const src = `/_data/${RAKKAS_BUILD_ID}${path}/index.js`;
 
 	[$rakkas$rootContext, $rakkas$rendered] = (
 		await import(/* @vite-ignore */ src)

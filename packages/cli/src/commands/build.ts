@@ -16,6 +16,7 @@ import type {
 	Route,
 } from "rakkasjs/dist/server";
 import { installNodeFetch } from "../runtime/install-node-fetch";
+import { spawn } from "child_process";
 
 const { createCommand, Option } = commander;
 
@@ -128,7 +129,9 @@ export async function build(
 	// eslint-disable-next-line no-console
 	console.log(chalk.gray("Building client"));
 
-	const clientConfig = await makeViteConfig(config, deploymentTarget, {
+	const buildId = await getBuildId();
+
+	const clientConfig = await makeViteConfig(config, deploymentTarget, buildId, {
 		ssr: false,
 	});
 
@@ -143,7 +146,7 @@ export async function build(
 		},
 	});
 
-	const ssrConfig = await makeViteConfig(config, deploymentTarget, {
+	const ssrConfig = await makeViteConfig(config, deploymentTarget, buildId, {
 		ssr: true,
 	});
 
@@ -494,4 +497,28 @@ async function crawl(
 		chalk.whiteBright("Static application exported into the directory"),
 		chalk.green("dist/static"),
 	);
+}
+
+async function getBuildId(): Promise<string> {
+	return await new Promise<string>((resolve) => {
+		const git = spawn("git", ["rev-parse", "HEAD"], {
+			stdio: ["ignore", "pipe", "ignore"],
+		});
+
+		git.stdout.setEncoding("utf8");
+		let output = "";
+
+		git.stdout.on("data", (data) => {
+			output += data;
+		});
+
+		git.on("close", (code) => {
+			if (code === 0) {
+				resolve(output.trim().slice(0, 11));
+			} else {
+				// Return a random hash if git fails
+				resolve(Math.random().toString(36).substring(2, 15));
+			}
+		});
+	});
 }
