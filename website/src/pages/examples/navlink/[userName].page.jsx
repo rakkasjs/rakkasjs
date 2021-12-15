@@ -13,7 +13,7 @@ const UserProfilePage = ({ params }) => (
 				<li>
 					<NavLink
 						href="/examples/navlink/Fatih"
-						currentRouteStyle={{ fontWeight: "bold" }}
+						activeStyle={{ fontWeight: "bold" }}
 					>
 						Fatih&apos;s profile
 					</NavLink>
@@ -21,7 +21,7 @@ const UserProfilePage = ({ params }) => (
 				<li>
 					<NavLink
 						href="/examples/navlink/Dan"
-						currentRouteStyle={{ fontWeight: "bold" }}
+						activeStyle={{ fontWeight: "bold" }}
 					>
 						Dan&apos;s profile
 					</NavLink>
@@ -29,7 +29,7 @@ const UserProfilePage = ({ params }) => (
 				<li>
 					<NavLink
 						href="/examples/navlink/Engin"
-						currentRouteStyle={{ fontWeight: "bold" }}
+						activeStyle={{ fontWeight: "bold" }}
 					>
 						Engin&apos;s profile
 					</NavLink>

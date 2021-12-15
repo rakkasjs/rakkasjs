@@ -23,17 +23,17 @@ const MainLayout: Layout = ({ error, children }) => (
 				<ul>
 					<li>
 						{/* <NavLink /> is like <Link /> but it can be styled based on the current route ()which is useful for navigation links). */}
-						<NavLink href="/" currentRouteClass={css.activeLink}>
+						<NavLink href="/" activeClass={css.activeLink}>
 							Home
 						</NavLink>
 					</li>
 					<li>
-						<NavLink href="/about" currentRouteClass={css.activeLink}>
+						<NavLink href="/about" activeClass={css.activeLink}>
 							About
 						</NavLink>
 					</li>
 					<li>
-						<NavLink href="/todo" currentRouteClass={css.activeLink}>
+						<NavLink href="/todo" activeClass={css.activeLink}>
 							Todo
 						</NavLink>
 					</li>

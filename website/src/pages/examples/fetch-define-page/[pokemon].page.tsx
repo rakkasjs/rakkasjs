@@ -45,20 +45,17 @@ export default definePage<PokemonStatPageTypes>({
 						<ul className={css.links}>
 							<NavLink
 								href="/examples/fetch/pikachu"
-								currentRouteClass={css.activeLink}
+								activeClass={css.activeLink}
 							>
 								Pikachu
 							</NavLink>
 							<NavLink
 								href="/examples/fetch/charizard"
-								currentRouteClass={css.activeLink}
+								activeClass={css.activeLink}
 							>
 								Charizard
 							</NavLink>
-							<NavLink
-								href="/examples/fetch/onix"
-								currentRouteClass={css.activeLink}
-							>
+							<NavLink href="/examples/fetch/onix" activeClass={css.activeLink}>
 								Onix
 							</NavLink>
 						</ul>

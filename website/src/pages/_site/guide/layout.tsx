@@ -63,8 +63,8 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 								<li key={item.slug}>
 									<NavLink
 										href={"/guide/" + item.slug}
-										currentRouteStyle={{ fontWeight: "bold" }}
-										nextRouteStyle={{ color: "#f08" }}
+										activeStyle={{ fontWeight: "bold" }}
+										pendingStyle={{ color: "#f08" }}
 										onCompareUrls={(url, href) =>
 											url.pathname === href.pathname
 										}

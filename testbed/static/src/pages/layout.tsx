@@ -41,7 +41,7 @@ export default defineLayout<MainLayoutTypes>({
 				<nav>
 					<ul>
 						<li>
-							<NavLink href="/" currentRouteStyle={{ fontWeight: "bold" }}>
+							<NavLink href="/" activeStyle={{ fontWeight: "bold" }}>
 								Home
 							</NavLink>
 						</li>
@@ -53,7 +53,7 @@ export default defineLayout<MainLayoutTypes>({
 									<li key={p.id}>
 										<NavLink
 											href={`/profile/${p.id}`}
-											currentRouteStyle={{ fontWeight: "bold" }}
+											activeStyle={{ fontWeight: "bold" }}
 										>
 											{p.fullName}
 										</NavLink>

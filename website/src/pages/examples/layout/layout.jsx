@@ -5,16 +5,13 @@ const MainLayout = ({ children }) => (
 	<div>
 		<header>Shared header</header>
 		<nav>
-			<NavLink
-				href="/examples/layout"
-				currentRouteStyle={{ fontWeight: "bold" }}
-			>
+			<NavLink href="/examples/layout" activeStyle={{ fontWeight: "bold" }}>
 				Home
 			</NavLink>{" "}
 			|{" "}
 			<NavLink
 				href="/examples/layout/about"
-				currentRouteStyle={{ fontWeight: "bold" }}
+				activeStyle={{ fontWeight: "bold" }}
 			>
 				About
 			</NavLink>

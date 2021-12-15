@@ -15,12 +15,12 @@ export default defineLayout({
 				<nav>
 					<ul>
 						<li>
-							<NavLink href="/" currentRouteStyle={{ fontWeight: "bold" }}>
+							<NavLink href="/" activeStyle={{ fontWeight: "bold" }}>
 								Home page
 							</NavLink>
 						</li>
 						<li>
-							<NavLink href="/other" currentRouteStyle={{ fontWeight: "bold" }}>
+							<NavLink href="/other" activeStyle={{ fontWeight: "bold" }}>
 								Other page
 							</NavLink>
 						</li>

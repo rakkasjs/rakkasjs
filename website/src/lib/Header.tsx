@@ -16,8 +16,8 @@ export const Header: FC = () => (
 				<li>
 					<NavLink
 						href="/"
-						currentRouteClass={css.activeLink}
-						nextRouteClass={css.nextLink}
+						activeClass={css.activeLink}
+						pendingClass={css.nextLink}
 					>
 						Home
 					</NavLink>
@@ -25,8 +25,8 @@ export const Header: FC = () => (
 				<li>
 					<NavLink
 						href="/guide"
-						currentRouteClass={css.activeLink}
-						nextRouteClass={css.nextLink}
+						activeClass={css.activeLink}
+						pendingClass={css.nextLink}
 						onCompareUrls={(url) => url.pathname.startsWith("/guide")}
 					>
 						Guide

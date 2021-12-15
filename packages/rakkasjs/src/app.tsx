@@ -1,11 +1,10 @@
 import React, { FC, useRef, useState, useCallback } from "react";
-import { useBaseRouter } from "./lib/router/useBaseRouter";
 import { findRoute, Route } from "./lib/find-route";
-import { navigate, Router, RouteRenderArgs } from "./lib/router/Router";
-import { RouterProvider } from "./lib/useRouter";
+import { navigate, Knave } from "knave-react";
 import { StackResult, makeComponentStack } from "./lib/makeComponentStack";
 import { LoadHelpers } from "./lib/types";
 import { updateSetRootContext } from "./root-context";
+import { ParamsContext } from "./lib/useRouter";
 
 export const App: FC<{
 	initialStack: StackResult;
@@ -17,69 +16,67 @@ export const App: FC<{
 	const [rootContextState, setRootContextState] = useState($rakkas$rootContext);
 	updateSetRootContext(setRootContextState);
 
-	const render = useCallback(
-		async ({ url, rerender }: RouteRenderArgs) => {
-			const found = findRoute(decodeURI(url.pathname), routes, true) || {
-				stack: [],
-				params: {},
-				match: undefined,
-			};
+	const render = useCallback(async () => {
+		const url = new URL(location.href);
+		const data = history.state.data;
 
-			let reloadPending = false;
+		const found = findRoute(decodeURI(url.pathname), routes, true) || {
+			stack: [],
+			params: {},
+			match: undefined,
+		};
 
-			const stack = await makeComponentStack({
-				found,
-				url,
-				fetch,
-				reload(i) {
-					lastStack.current.rendered[i].cacheKey = "";
-					if (!reloadPending) {
-						reloadPending = true;
-						rerender();
-						requestAnimationFrame(() => (reloadPending = false));
-					}
-				},
-				previousRender: lastStack.current.rendered,
-				rootContext: rootContextState,
-				helpers,
-			});
+		let reloadPending = false;
 
-			if (stack.status === 404 && !initialRender.current) {
-				return null;
-			}
+		const stack = await makeComponentStack({
+			found,
+			url,
+			fetch,
+			reload(i) {
+				lastStack.current.rendered[i].cacheKey = "";
+				if (!reloadPending) {
+					reloadPending = true;
+					navigate(url.href, {
+						replace: true,
+						scroll: false,
+						data,
+					}).then(() => (reloadPending = false));
+				}
+			},
+			previousRender: lastStack.current.rendered,
+			rootContext: rootContextState,
+			helpers,
+		});
 
-			const lastRendered = stack.rendered[stack.rendered.length - 1].loaded;
-			if ("location" in lastRendered) {
-				navigate(String(lastRendered.location), { replace: true });
-			}
+		if (stack.status === 404 && !initialRender.current) {
+			return null;
+		}
 
-			initialRender.current = false;
+		const lastRendered = stack.rendered[stack.rendered.length - 1].loaded;
+		initialRender.current = false;
 
-			lastStack.current = stack;
+		if ("location" in lastRendered) {
+			navigate(String(lastRendered.location), { replace: true });
+			return null;
+		}
 
-			return <Wrapper params={stack.params}>{stack.content}</Wrapper>;
-		},
-		[rootContextState, routes, helpers],
-	);
+		lastStack.current = stack;
+
+		return (
+			<ParamsContext.Provider value={{ params: stack.params }}>
+				{stack.content}
+			</ParamsContext.Provider>
+		);
+	}, [rootContextState, routes, helpers]);
 
 	return (
-		<Router
+		<Knave
 			render={render}
 			// skipInitialRender={isDataValid.current.every(Boolean)}
 		>
-			<Wrapper params={initialStack.params}>
+			<ParamsContext.Provider value={{ params: initialStack.params }}>
 				{lastStack.current.content}
-			</Wrapper>
-		</Router>
-	);
-};
-
-const Wrapper: FC<{
-	params: Record<string, string>;
-}> = ({ params, children }) => {
-	const router = useBaseRouter();
-
-	return (
-		<RouterProvider value={{ ...router, params }}>{children}</RouterProvider>
+			</ParamsContext.Provider>
+		</Knave>
 	);
 };
