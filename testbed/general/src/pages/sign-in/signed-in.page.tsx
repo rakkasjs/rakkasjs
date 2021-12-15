@@ -10,6 +10,7 @@ export default definePage<IndexPageTypes>({
 
 	load({ context }) {
 		console.log("Loading");
+		console.log("Context is", context);
 		if (!context.session.user) {
 			console.log("Redirecting");
 			return {
