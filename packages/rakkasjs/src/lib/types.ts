@@ -255,8 +255,6 @@ export interface PageOptions {
 	canHandleErrors?: boolean;
 	/** Should this page rendered on the server? */
 	ssr?: boolean;
-	/** Should this page be prerendered in build-time? */
-	prerender?: boolean;
 }
 
 export type LayoutOptions = PageOptions;
@@ -318,6 +316,10 @@ export interface PageLoadSuccessResult<T = unknown> {
 	data: T;
 	/** Redirection target */
 	location?: string | URL;
+	/** Should this page be prerendered? */
+	prerender?: boolean;
+	/** Should this page be crawled to discover more pages to pre-render? */
+	crawl?: boolean;
 }
 
 export interface LayoutLoadSuccessResult<
@@ -332,6 +334,10 @@ export interface LayoutLoadSuccessResult<
 	context?: C;
 	/** Redirection target */
 	location?: string | URL;
+	/** Should this page be prerendered? */
+	prerender?: boolean;
+	/** Should this page be crawled to discover more pages to pre-render? */
+	crawl?: boolean;
 }
 
 export interface LoadErrorResult {
@@ -339,6 +345,10 @@ export interface LoadErrorResult {
 	status?: number;
 	// An error object describing the error
 	error: ErrorDescription;
+	/** Should this page be prerendered? */
+	prerender?: boolean;
+	/** Should this page be crawled to discover more pages to pre-render? */
+	crawl?: boolean;
 }
 
 // Return value of useRouter custom hook
