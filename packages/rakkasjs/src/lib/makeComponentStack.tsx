@@ -59,6 +59,7 @@ export interface StackResult {
 	content: React.ReactNode;
 	rendered: RenderedStackItem[];
 	found: boolean;
+	prerender: boolean;
 }
 
 export async function makeComponentStack({
@@ -87,6 +88,7 @@ export async function makeComponentStack({
 		};
 	}
 
+	let prerender = RAKKAS_BUILD_TARGET === "static";
 	const usedContexts: Record<string, unknown>[] = [];
 
 	for (const [i, moduleId] of stack.entries()) {
@@ -132,6 +134,8 @@ export async function makeComponentStack({
 
 		const canHandleErrors =
 			options?.canHandleErrors ?? (!isPage && !!Component);
+
+		prerender = prerender ?? options?.prerender;
 
 		if (canHandleErrors) {
 			errorHandlerIndex = i;
@@ -251,6 +255,7 @@ export async function makeComponentStack({
 		rendered: thisRender.map(({ ...rest }) => rest),
 		params,
 		found: !!match,
+		prerender,
 	};
 }
 

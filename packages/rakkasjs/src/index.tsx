@@ -26,6 +26,8 @@ import {
 	Layout,
 	SimpleLayout,
 	ClientHooks,
+	PageOptions,
+	LayoutOptions,
 } from "./lib/types";
 
 (globalThis as any).navigate = navigate;
@@ -37,16 +39,14 @@ export function definePage<T extends PageTypes = DefaultPageTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
 	Component: Page<T>;
-	options?: {
+	options?: PageOptions & {
 		canHandleErrors?: false;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
 	Component: Page<T>;
-	options?: {
-		canHandleErrors?: false;
-	};
+	options?: PageOptions;
 };
 
 // canHandleErrors true => error handling page
@@ -54,16 +54,14 @@ export function definePage<T extends PageTypes = DefaultPageTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
 	Component: ErrorPage<T>;
-	options: {
+	options: PageOptions & {
 		canHandleErrors: true;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
 	Component: ErrorPage<T>;
-	options: {
-		canHandleErrors: true;
-	};
+	options: PageOptions;
 };
 
 // Implementation
@@ -71,16 +69,12 @@ export function definePage<T extends PageTypes = DefaultPageTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
 	Component: ErrorPage<T> | Page<T>;
-	options?: {
-		canHandleErrors?: boolean;
-	};
+	options?: PageOptions;
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: PageLoadFunc<T>;
 	Component: ErrorPage<T> | Page<T>;
-	options?: {
-		canHandleErrors?: boolean;
-	};
+	options?: PageOptions;
 } {
 	if (import.meta.hot && !import.meta.env.SSR) {
 		// Register for React refresh
@@ -94,16 +88,14 @@ export function defineLayout<T extends LayoutTypes = DefaultLayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
 	Component: Layout<T>;
-	options?: {
+	options?: LayoutOptions & {
 		canHandleErrors?: true;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
 	Component: Layout<T>;
-	options?: {
-		canHandleErrors?: false;
-	};
+	options?: LayoutOptions;
 };
 
 // render missing => candHandleErrors cannot be true
@@ -111,15 +103,13 @@ export function defineLayout<T extends LayoutTypes = DefaultLayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
 	Component?: never;
-	options?: {
+	options?: LayoutOptions & {
 		canHandleErrors?: false;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
-	options?: {
-		canHandleErrors?: false;
-	};
+	options?: LayoutOptions;
 };
 
 // canHandleErrors = false => simple layout
@@ -127,16 +117,14 @@ export function defineLayout<T extends LayoutTypes = DefaultLayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
 	Component: SimpleLayout<T>;
-	options?: {
-		canHandleErrors?: boolean;
+	options?: LayoutOptions & {
+		canHandleErrors?: false;
 	};
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
 	Component: SimpleLayout<T>;
-	options: {
-		canHandleErrors: false;
-	};
+	options: LayoutOptions;
 };
 
 // Implementation
@@ -144,16 +132,12 @@ export function defineLayout<T extends LayoutTypes = DefaultLayoutTypes>(def: {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
 	Component?: Layout<T> | SimpleLayout<T>;
-	options?: {
-		canHandleErrors?: boolean;
-	};
+	options?: LayoutOptions;
 }): {
 	getCacheKey?: GetCacheKeyFunc<T>;
 	load?: LayoutLoadFunc<T>;
 	Component?: Layout<T> | SimpleLayout<T>;
-	options?: {
-		canHandleErrors?: boolean;
-	};
+	options?: LayoutOptions;
 } {
 	if (import.meta.hot && !import.meta.env.SSR && def.Component) {
 		// Register for React refresh

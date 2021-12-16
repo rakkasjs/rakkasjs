@@ -222,18 +222,14 @@ export interface PageComponentModule {
 	default: Page | ErrorPage;
 	load?: PageLoadFunc;
 	getCacheKey?: GetCacheKeyFunc;
-	pageOptions?: {
-		canHandleErrors?: boolean;
-	};
+	pageOptions?: PageOptions;
 }
 
 export interface PageDefinition {
 	Component: Page | ErrorPage;
 	load?: PageLoadFunc;
 	getCacheKey?: GetCacheKeyFunc;
-	options?: {
-		canHandleErrors?: boolean;
-	};
+	options?: PageOptions;
 }
 
 export interface PageDefinitionModule {
@@ -244,19 +240,26 @@ export interface LayoutComponentModule {
 	default?: Layout | SimpleLayout;
 	load?: LayoutLoadFunc;
 	getCacheKey?: GetCacheKeyFunc;
-	layoutOptions?: {
-		canHandleErrors?: boolean;
-	};
+	layoutOptions?: LayoutOptions;
 }
 
 export interface LayoutDefinition {
 	Component: Layout | SimpleLayout;
 	load?: LayoutLoadFunc;
 	getCacheKey?: GetCacheKeyFunc;
-	options?: {
-		canHandleErrors?: boolean;
-	};
+	options?: LayoutOptions;
 }
+
+export interface PageOptions {
+	/** Can this page or layout handle errors? */
+	canHandleErrors?: boolean;
+	/** Should this page rendered on the server? */
+	ssr?: boolean;
+	/** Should this page be prerendered in build-time? */
+	prerender?: boolean;
+}
+
+export type LayoutOptions = PageOptions;
 
 export interface LayoutDefinitionModule {
 	default: LayoutDefinition;
@@ -402,6 +405,7 @@ export interface RakkasResponse {
 		| Record<string, string | string[] | undefined>
 		| Array<[string, string | string[] | undefined]>;
 	body?: unknown;
+	prerender?: boolean;
 }
 
 export type RequestHandler = (
