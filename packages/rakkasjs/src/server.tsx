@@ -43,6 +43,7 @@ interface RequestContext {
 	manifest?: Record<string, string[] | undefined>;
 	request: RawRequest;
 	writeFile?(name: string, content: string | Uint8Array): Promise<void>;
+	prerendering?: boolean;
 }
 
 export async function handleRequest({
@@ -52,6 +53,7 @@ export async function handleRequest({
 	manifest,
 	request,
 	writeFile,
+	prerendering,
 }: RequestContext): Promise<RakkasResponse> {
 	const path = decodeURI(request.url.pathname);
 
@@ -90,7 +92,7 @@ export async function handleRequest({
 			response.status = response.status || (method === "post" ? 201 : 200);
 
 			if (
-				RAKKAS_BUILD_TARGET === "static" &&
+				prerendering &&
 				method === "get" &&
 				(response.prerender ?? response.status !== 404)
 			) {
@@ -184,6 +186,7 @@ export async function handleRequest({
 					},
 					manifest,
 					writeFile,
+					prerendering,
 				});
 
 				let body = response.body;
@@ -302,7 +305,7 @@ export async function handleRequest({
 		if ("location" in lastRendered) {
 			location = String(lastRendered.location);
 
-			if (RAKKAS_BUILD_TARGET === "static") {
+			if (prerendering) {
 				head += `<meta http-equiv="refresh" content="0; url=${encodeURI(
 					location,
 				)}">`;
@@ -377,11 +380,11 @@ export async function handleRequest({
 
 		html = html.replace("<!-- rakkas-app-placeholder -->", rendered);
 
-		if (RAKKAS_BUILD_TARGET === "static" && stack.prerender) {
+		if (prerendering && stack.prerender) {
 			await writeFile!(`${filename}/index.html`, html);
 		}
 
-		if (RAKKAS_BUILD_TARGET === "static" && !stack.crawl) {
+		if (prerendering && !stack.crawl) {
 			headers["x-rakkas-prerender"] = "no-crawl";
 		}
 

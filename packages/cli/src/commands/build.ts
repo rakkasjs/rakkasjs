@@ -128,7 +128,7 @@ export async function build(
 	await fs.promises.mkdir(serverOutDir, { recursive: true });
 
 	// eslint-disable-next-line no-console
-	console.log(chalk.gray("Building client"));
+	console.log(chalk.blue("Building client"));
 
 	const buildId = await getBuildId();
 
@@ -223,7 +223,7 @@ export async function build(
 	}
 
 	// eslint-disable-next-line no-console
-	console.log(chalk.gray("Building server"));
+	console.log(chalk.blue("Building server"));
 
 	if (deploymentTarget === "cloudflare-workers") {
 		ssrConfig.ssr.target = "webworker";
@@ -275,7 +275,7 @@ export async function build(
 
 	if (deploymentTarget === "vercel") {
 		// eslint-disable-next-line no-console
-		console.log(chalk.gray("Bundling serverless fuction"));
+		console.log(chalk.blue("Bundling serverless fuction"));
 
 		await fs.promises.mkdir(path.join(outDir, "functions/node/render"), {
 			recursive: true,
@@ -295,7 +295,7 @@ export async function build(
 		await esbuild(esbuilfOptions);
 	} else if (deploymentTarget === "netlify") {
 		// eslint-disable-next-line no-console
-		console.log(chalk.gray("Bundling serverless fuction"));
+		console.log(chalk.blue("Bundling serverless fuction"));
 
 		await fs.promises.mkdir(path.join(outDir, "functions"), {
 			recursive: true,
@@ -320,7 +320,7 @@ export async function build(
 		);
 	} else if (deploymentTarget === "cloudflare-workers") {
 		// eslint-disable-next-line no-console
-		console.log(chalk.gray("Bundling serverless fuction"));
+		console.log(chalk.blue("Bundling serverless fuction"));
 
 		await fs.promises.mkdir(path.join(outDir, "functions"), {
 			recursive: true,
@@ -347,25 +347,50 @@ export async function build(
 		);
 	}
 
+	await prerender(outDir, dom.html(), manifest, config.prerender);
+
 	if (deploymentTarget === "static") {
-		await prerender(outDir, dom.html(), manifest, true);
-	} else {
-		// eslint-disable-next-line no-console
-		console.log(
-			chalk.whiteBright("Application built in "),
-			chalk.green(outDir),
+		await fs.promises.mkdir("dist", { recursive: true });
+
+		await new Promise<void>((resolve, reject) =>
+			rimraf("dist", (error) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve();
+				}
+			}),
 		);
+
+		await fs.promises.rename(path.join(outDir, "client"), "dist");
+
+		await new Promise<void>((resolve, reject) =>
+			rimraf(outDir, (error) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve();
+				}
+			}),
+		);
+
+		outDir = path.resolve("dist");
 	}
+
+	// eslint-disable-next-line no-console
+	console.log(chalk.whiteBright("Application built in "), chalk.green(outDir));
 }
 
 async function prerender(
 	outDir: string,
 	htmlTemplate: string,
 	manifest: Record<string, string[]>,
-	crawl: boolean,
+	prerender: string[],
 ) {
+	if (!prerender.length) return;
+
 	// eslint-disable-next-line no-console
-	console.log(chalk.whiteBright("Prerendering static routes"));
+	console.log(chalk.blue("Pre-rendering static routes"));
 
 	const server = await (0, eval)(
 		`import(${JSON.stringify(path.join(outDir, "server/server.js"))})`,
@@ -385,7 +410,7 @@ async function prerender(
 		)
 	).default.default;
 
-	const roots = new Set(["/"]);
+	const roots = new Set(prerender);
 	const origin = `http://localhost`;
 
 	installNodeFetch();
@@ -397,6 +422,7 @@ async function prerender(
 		const currentUrl = new URL(origin + root);
 
 		const response = await handleRequest({
+			prerendering: true,
 			htmlTemplate,
 			pageRoutes,
 			apiRoutes,
@@ -466,44 +492,13 @@ async function prerender(
 				chalk.yellowBright(`Request to ${root} returned unknown body type.`),
 			);
 		} else if (
-			crawl &&
 			(response.headers as Record<string, string>)?.["x-rakkas-prerender"] !==
-				"no-crawl"
+			"no-crawl"
 		) {
 			const dom = cheerio.load(response.body);
 			dom("a[href]").each((_, el) => addPath(el.attribs.href));
 		}
 	}
-
-	await fs.promises.mkdir("dist", { recursive: true });
-
-	await new Promise<void>((resolve, reject) =>
-		rimraf("dist/static", (error) => {
-			if (error) {
-				reject(error);
-			} else {
-				resolve();
-			}
-		}),
-	);
-
-	await fs.promises.rename(path.join(outDir, "client"), "dist/static");
-
-	await new Promise<void>((resolve, reject) =>
-		rimraf(outDir, (error) => {
-			if (error) {
-				reject(error);
-			} else {
-				resolve();
-			}
-		}),
-	);
-
-	// eslint-disable-next-line no-console
-	console.log(
-		chalk.whiteBright("Static application exported into the directory"),
-		chalk.green("dist/static"),
-	);
 }
 
 async function getBuildId(): Promise<string> {

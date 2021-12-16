@@ -28,6 +28,9 @@ export interface FullConfig {
 	/** Base URL for endpoints @default "/api" */
 	apiRoot: string;
 
+	/** Paths to start crawling when pre-rendering */
+	prerender: string[];
+
 	/** Trust the x-forwarded-host and x-forwarded-proto headers in dev server.
 	 * This is useful behind a reverse proxy. Set env variable TRUST_FORWARDED_ORIGIN to
 	 * a non-empty string if you want the same in production.
