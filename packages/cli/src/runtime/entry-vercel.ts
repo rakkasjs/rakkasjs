@@ -1,6 +1,12 @@
 import { handleNodeRequest } from "./handle-node-request";
 import { installNodeFetch } from "./install-node-fetch";
-import { apiRoutes, pageRoutes, manifest, htmlTemplate } from "./manifests";
+import {
+	apiRoutes,
+	pageRoutes,
+	manifest,
+	htmlTemplate,
+	htmlPlaceholder,
+} from "./manifests";
 
 import type { IncomingMessage, ServerResponse } from "http";
 import type { handleRequest as HandleRequest } from "rakkasjs/dist/server";
@@ -17,6 +23,7 @@ export default async function vercel(
 ) {
 	await handleNodeRequest({
 		htmlTemplate,
+		htmlPlaceholder,
 
 		apiRoutes,
 		pageRoutes,

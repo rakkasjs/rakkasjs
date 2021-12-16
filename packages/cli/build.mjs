@@ -23,8 +23,8 @@ async function run() {
 
 	const nodeRuntimeExternals = [
 		"$output/server.js",
-		"$output/api-routes.js",
-		"$output/page-routes.js",
+		"$output/virtual_rakkasjs_api-routes.js",
+		"$output/virtual_rakkasjs_page-routes.js",
 		"$output/rakkas-manifest.json",
 		"$output/html-template.js",
 	];

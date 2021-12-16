@@ -71,22 +71,20 @@ export async function rakkasVitePlugin(
 	});
 
 	const virtualModules = virtual({
-		"@rakkasjs/page-imports": `
+		"virtual:rakkasjs:page-imports": `
 			const pages = import.meta.glob(${JSON.stringify(PAGES)});
 			const layouts = import.meta.glob(${JSON.stringify(LAYOUTS)});
 			export default Object.assign(pages, layouts);
 		`,
 
-		"@rakkasjs/api-imports": `
+		"virtual:rakkasjs:api-imports": `
 			const endpoints = import.meta.glob(${JSON.stringify(ENDPOINTS)});
 			const middleware = import.meta.glob(${JSON.stringify(MIDDLEWARE)});
 			export default Object.assign(endpoints, middleware);
 		`,
 
-		"@rakkasjs/page-routes": pageRoutesContent,
-		"@rakkasjs/api-routes": apiRoutesContent,
-		"/virtual:/@rakkasjs/page-routes": pageRoutesContent,
-		"/virtual:/@rakkasjs/api-routes": apiRoutesContent,
+		"virtual:rakkasjs:page-routes": pageRoutesContent,
+		"virtual:rakkasjs:api-routes": apiRoutesContent,
 	});
 
 	let ssr: boolean;
@@ -108,7 +106,7 @@ export async function rakkasVitePlugin(
 					if ((isPage(fn) || isLayout(fn)) && (e === "add" || e === "unlink")) {
 						updateVirtualModule(
 							virtualModules,
-							"@rakkasjs/page-routes",
+							"virtual:rakkasjs:page-routes",
 							await makeRouteManifest({
 								srcDir,
 								routesDir: pagesDir,
@@ -124,7 +122,7 @@ export async function rakkasVitePlugin(
 					) {
 						updateVirtualModule(
 							virtualModules,
-							"@rakkasjs/api-routes",
+							"virtual:rakkasjs:api-routes",
 							await makeRouteManifest({
 								srcDir,
 								routesDir: apiDir,
@@ -156,11 +154,17 @@ export async function rakkasVitePlugin(
 			},
 
 			async resolveId(id, importer, options) {
+				const i = id.indexOf("virtual:rakkasjs");
+				if (i > 0) {
+					return this.resolve(id.slice(i), importer, options);
+				}
+
 				if (id === "rakkasjs/server") {
 					const result = await this.resolve(id, importer, {
 						...options,
 						skipSelf: true,
 					});
+
 					if (result) {
 						const qPos = result.id.indexOf("?");
 						if (qPos >= 0) {
@@ -169,17 +173,20 @@ export async function rakkasVitePlugin(
 					}
 
 					return result;
-				} else if (id === "/virtual:/rakkasjs/server") {
+				} else if (id === "virtual:rakkasjs:server") {
 					const result = await this.resolve("rakkasjs/server");
+					return result;
+				} else if (id === "virtual:rakkasjs:placeholder-loader") {
+					const result = await this.resolve("rakkasjs/placeholder-loader");
 					return result;
 				} else if (id === indexHtmlPath) {
 					return normalizedIndexHtmlPath;
 				} else if (
-					id === "/__rakkas-start-client.js" &&
+					id === "virtual:rakkasjs:start-client.js" &&
 					importer === normalizedIndexHtmlPath
 				) {
-					return id;
-				} else if (id === "@rakkasjs/client-hooks") {
+					return "virtual:rakkasjs:start-client.js";
+				} else if (id === "virtual:rakkasjs:client-hooks") {
 					const userVersion = await this.resolve(
 						path.resolve(srcDir, "client"),
 						importer,
@@ -189,7 +196,7 @@ export async function rakkasVitePlugin(
 						},
 					);
 					return userVersion || id;
-				} else if (id === "@rakkasjs/server-hooks") {
+				} else if (id === "virtual:rakkasjs:server-hooks") {
 					const userVersion = await this.resolve(
 						path.resolve(srcDir, "server"),
 						importer,
@@ -199,35 +206,47 @@ export async function rakkasVitePlugin(
 						},
 					);
 					return userVersion || id;
-					// } else if (id === "@rakkasjs/common-hooks") {
-					// 	const userVersion = await this.resolve(
-					// 		path.resolve(srcDir, "common"),
-					// 		importer,
-					// 		{
-					// 			...options,
-					// 			skipSelf: true,
-					// 		},
-					// 	);
-					// 	return userVersion || id;
+				} else if (id === "virtual:rakkasjs:common-hooks") {
+					const userVersion = await this.resolve(
+						path.resolve(srcDir, "common"),
+						importer,
+						{
+							...options,
+							skipSelf: true,
+						},
+					);
+					return userVersion || id;
+				} else if (id === "virtual:rakkasjs:placeholder") {
+					const userVersion = await this.resolve(
+						path.resolve(srcDir, "placeholder"),
+						importer,
+						{
+							...options,
+							skipSelf: true,
+						},
+					);
+					return userVersion || id;
 				}
 			},
 
 			async load(id) {
 				if (id === normalizedIndexHtmlPath) {
 					return htmlTemplate;
-				} else if (id === "/__rakkas-start-client.js") {
+				} else if (id === "virtual:rakkasjs:start-client.js") {
 					return `
 					import {startClient} from "rakkasjs/client";
-					import routes from "@rakkasjs/page-routes";
+					import routes from "virtual:rakkasjs:page-routes";
 					startClient(routes);
 				`;
 				} else if (
-					id === "@rakkasjs/client-hooks" ||
-					id === "@rakkasjs/server-hooks"
-					// || id === "@rakkasjs/common-hooks"
+					id === "virtual:rakkasjs:client-hooks" ||
+					id === "virtual:rakkasjs:server-hooks" ||
+					id === "@rakkasjs/common-hooks"
 				) {
 					// This bogus export is for silencing the "Generated an empty chunk" warning
 					return "export const nothing = 1";
+				} else if (id === "virtual:rakkasjs:placeholder") {
+					return `export default () => "Loading..."`;
 				}
 			},
 

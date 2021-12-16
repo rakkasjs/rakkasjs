@@ -36,7 +36,7 @@ export const App: FC<{
 
 			let reloadPending = false;
 
-			const stack = await makeComponentStack({
+			const stack = (await makeComponentStack({
 				found,
 				url,
 				fetch,
@@ -54,7 +54,7 @@ export const App: FC<{
 				previousRender: lastStack.current.rendered,
 				rootContext: rootContextRef.current,
 				helpers,
-			});
+			}))!;
 
 			if (signal.aborted) {
 				return null;

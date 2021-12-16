@@ -12,7 +12,7 @@ import devalue from "devalue";
 import { makeComponentStack } from "./lib/makeComponentStack";
 import { findRoute, Route } from "./lib/find-route";
 
-import importers from "@rakkasjs/api-imports";
+import importers from "virtual:rakkasjs:api-imports";
 import {
 	RawRequest,
 	PageRenderOptions,
@@ -50,6 +50,7 @@ const pendingResponses: Record<string, Promise<RakkasResponse> | undefined> =
 
 interface RequestContext {
 	htmlTemplate: string;
+	htmlPlaceholder: string;
 	apiRoutes: Route[];
 	pageRoutes: Route[];
 	manifest?: Record<string, string[] | undefined>;
@@ -86,6 +87,7 @@ export async function generateResponse(
 	path: string,
 	{
 		htmlTemplate,
+		htmlPlaceholder,
 		apiRoutes,
 		pageRoutes,
 		manifest,
@@ -206,6 +208,7 @@ export async function generateResponse(
 
 				const response = await handleRequest({
 					htmlTemplate,
+					htmlPlaceholder,
 					apiRoutes,
 					pageRoutes,
 					request: {
@@ -274,7 +277,7 @@ export async function generateResponse(
 		match: undefined,
 	};
 
-	const serverHooks = await import("@rakkasjs/server-hooks");
+	const serverHooks = await import("virtual:rakkasjs:server-hooks");
 	const { servePage = (req, render) => render(req) } = serverHooks;
 
 	let filename = request.url.pathname;
@@ -303,6 +306,20 @@ export async function generateResponse(
 				: {},
 		});
 
+		if (!stack) {
+			const html = htmlPlaceholder.replace(
+				"<!-- rakkas-context-placeholder -->",
+				`<script>$rakkas$rootContext=${devalue(context)}</script>`,
+			);
+
+			return {
+				body: html,
+				headers: {
+					"content-type": "text/html",
+				},
+			};
+		}
+
 		const helmetContext = {};
 
 		let app = (
@@ -323,12 +340,12 @@ export async function generateResponse(
 
 		const { helmet } = helmetContext as FilledContext;
 
-		const dataScript = `[(0,eval)(${devalue(context)}),(0,eval)(${devalue(
+		const dataScript = `[${devalue(context)},${devalue(
 			stack.rendered.map((x) => {
 				delete x.Component;
 				return x;
 			}),
-		)})]`;
+		)}]`;
 
 		let head = "";
 		const headers: Record<string, string> = { "content-type": "text/html" };

@@ -29,7 +29,8 @@
 	"exports": {
 		".": "./dist/index.mjs",
 		"./server": "./dist/server.mjs",
-		"./client": "./dist/client.mjs"
+		"./client": "./dist/client.mjs",
+		"./placeholder-loader": "./dist/placeholder-loader.mjs"
 	},
 	"dependencies": {
 		"@types/react": "^17.0.37",

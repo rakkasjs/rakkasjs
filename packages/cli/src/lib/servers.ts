@@ -71,10 +71,12 @@ export async function createServers({
 				// Force them into module cache. Otherwise symlinks confuse vite.
 				await vite.ssrLoadModule("rakkasjs");
 				const { handleRequest } = await vite.ssrLoadModule("rakkasjs/server");
-				const pageRoutes = (await vite.ssrLoadModule("@rakkasjs/page-routes"))
-					.default;
-				const apiRoutes = (await vite.ssrLoadModule("@rakkasjs/api-routes"))
-					.default;
+				const pageRoutes = (
+					await vite.ssrLoadModule("virtual:rakkasjs:page-routes")
+				).default;
+				const apiRoutes = (
+					await vite.ssrLoadModule("virtual:rakkasjs:api-routes")
+				).default;
 
 				const all = (await vite.ssrLoadModule(
 					path.resolve(__dirname, "entries/handle-node-request.js"),
@@ -84,10 +86,15 @@ export async function createServers({
 
 				html = await vite.transformIndexHtml(url, html);
 
+				const htmlPlaceholder = await (
+					await vite.ssrLoadModule("virtual:rakkasjs:placeholder-loader")
+				).default(html, pageRoutes);
+
 				await handleNodeRequest({
 					pageRoutes,
 					apiRoutes,
 					htmlTemplate: html,
+					htmlPlaceholder,
 					req,
 					res,
 					handleRequest,

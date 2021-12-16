@@ -1,12 +1,18 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-	entry: ["src/index.tsx", "src/server.tsx", "src/client.tsx"],
+	entry: [
+		"src/index.tsx",
+		"src/server.tsx",
+		"src/client.tsx",
+		"src/placeholder-loader.tsx",
+	],
 	external: [
-		"@rakkasjs/server-hooks",
-		"@rakkasjs/client-hooks",
-		"@rakkasjs/page-imports",
-		"@rakkasjs/api-imports",
+		"virtual:rakkasjs:server-hooks",
+		"virtual:rakkasjs:client-hooks",
+		"virtual:rakkasjs:page-imports",
+		"virtual:rakkasjs:api-imports",
+		"virtual:rakkasjs:placeholder",
 	],
 	format: ["esm"],
 	dts: true,

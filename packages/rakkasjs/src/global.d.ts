@@ -15,17 +15,17 @@ declare const RAKKAS_BUILD_TARGET:
 
 declare const RAKKAS_BUILD_ID: string;
 
-declare module "@rakkasjs/page-imports" {
+declare module "virtual:rakkasjs:page-imports" {
 	const importer: Record<string, () => Promise<any>>;
 	export default importer;
 }
 
-declare module "@rakkasjs/api-imports" {
+declare module "virtual:rakkasjs:api-imports" {
 	const importer: Record<string, () => Promise<any>>;
 	export default importer;
 }
 
-declare module "@rakkasjs/server-hooks" {
+declare module "virtual:rakkasjs:server-hooks" {
 	const servePage:
 		| ((
 				request: RawRequest,
@@ -38,7 +38,7 @@ declare module "@rakkasjs/server-hooks" {
 		| undefined;
 }
 
-declare module "@rakkasjs/client-hooks" {
+declare module "virtual:rakkasjs:client-hooks" {
 	const beforeStartClient:
 		| ((rootContext: RootContext) => Promise<void>)
 		| undefined;
@@ -50,4 +50,8 @@ declare module "@rakkasjs/client-hooks" {
 	const createLoadHelpers:
 		| undefined
 		| ((rootContext: RootContext) => LoadHelpers | Promise<LoadHelpers>);
+}
+
+declare module "virtual:rakkasjs:placeholder" {
+	export default function render(): Promise<React.ReactNode>;
 }

@@ -9,6 +9,7 @@ import { parseNodeRequestBody } from "./parse-node-request-body";
 
 export interface NodeRequestContext {
 	htmlTemplate: string;
+	htmlPlaceholder: string;
 
 	apiRoutes: Route[];
 	pageRoutes: Route[];
@@ -28,6 +29,7 @@ export interface NodeRequestContext {
 
 export async function handleNodeRequest({
 	htmlTemplate,
+	htmlPlaceholder,
 
 	apiRoutes,
 	pageRoutes,
@@ -61,6 +63,7 @@ export async function handleNodeRequest({
 		apiRoutes,
 		pageRoutes,
 		htmlTemplate,
+		htmlPlaceholder,
 		manifest,
 		request: {
 			ip,

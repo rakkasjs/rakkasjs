@@ -1,5 +1,11 @@
 import { installNodeFetch } from "./install-node-fetch";
-import { apiRoutes, pageRoutes, manifest, htmlTemplate } from "./manifests";
+import {
+	apiRoutes,
+	pageRoutes,
+	manifest,
+	htmlTemplate,
+	htmlPlaceholder,
+} from "./manifests";
 
 import type { handleRequest as HandleRequest } from "rakkasjs/dist/server";
 import type { NetlifyFunction } from "netlify-lambda-types";
@@ -29,6 +35,7 @@ export const handler: NetlifyFunction = async (event) => {
 
 	const response = await handleRequest({
 		htmlTemplate,
+		htmlPlaceholder,
 
 		apiRoutes,
 		pageRoutes,

@@ -1,4 +1,10 @@
-import { apiRoutes, pageRoutes, manifest, htmlTemplate } from "./manifests";
+import {
+	apiRoutes,
+	pageRoutes,
+	manifest,
+	htmlTemplate,
+	htmlPlaceholder,
+} from "./manifests";
 import { getAssetFromKV, NotFoundError } from "@cloudflare/kv-asset-handler";
 
 import type { handleRequest as HandleRequest } from "rakkasjs/dist/server";
@@ -30,6 +36,7 @@ async function handler(event: FetchEvent) {
 		const headers = event.request.headers;
 
 		const response = await handleRequest({
+			htmlPlaceholder,
 			htmlTemplate,
 
 			apiRoutes,
@@ -55,6 +62,10 @@ async function handler(event: FetchEvent) {
 
 		if (typeof body !== "string" && !(body instanceof Uint8Array)) {
 			body = JSON.stringify(body);
+		}
+
+		if (response.waitUntil) {
+			event.waitUntil(response.waitUntil);
 		}
 
 		return new Response(body as any, {

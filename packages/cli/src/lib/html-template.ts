@@ -8,6 +8,6 @@ export const htmlTemplate = `<!DOCTYPE html>
 	</head>
 	<body><!-- rakkas-body-attributes-placeholder -->
 		<div id="rakkas-app"><!-- rakkas-app-placeholder --></div>
-		<script type="module" src="/__rakkas-start-client.js"></script>
+		<script type="module" src="/virtual:rakkasjs:start-client.js"></script>
 	</body>
 </html>`;
