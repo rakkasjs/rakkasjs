@@ -36,27 +36,65 @@ export type MiddlewareImporter = () =>
 	| MiddlewareModule
 	| Promise<MiddlewareModule>;
 
+export interface CachedResponse {
+	response: RakkasResponse;
+	expired: false;
+}
+
+export interface RakkasServerResponse extends RakkasResponse {
+	waitUntil?: Promise<any>;
+}
+
+const pendingResponses: Record<string, Promise<RakkasResponse> | undefined> =
+	{};
+
 interface RequestContext {
 	htmlTemplate: string;
 	apiRoutes: Route[];
 	pageRoutes: Route[];
 	manifest?: Record<string, string[] | undefined>;
 	request: RawRequest;
-	writeFile?(name: string, content: string | Uint8Array): Promise<void>;
+	getCachedResponse?(path: string): Promise<CachedResponse | undefined>;
+	saveResponse?(path: string, response: RakkasResponse): Promise<void>;
 	prerendering?: boolean;
 }
 
-export async function handleRequest({
-	htmlTemplate,
-	apiRoutes,
-	pageRoutes,
-	manifest,
-	request,
-	writeFile,
-	prerendering,
-}: RequestContext): Promise<RakkasResponse> {
-	const path = decodeURI(request.url.pathname);
+export async function handleRequest(
+	context: RequestContext,
+): Promise<RakkasServerResponse> {
+	const path = decodeURI(context.request.url.pathname);
 
+	const cached = await context.getCachedResponse?.(path);
+
+	if (cached) {
+		if (cached.expired && !pendingResponses[path]) {
+			pendingResponses[path] = generateResponse(path, context).finally(() => {
+				delete pendingResponses[path];
+			});
+		}
+
+		return {
+			...cached.response,
+			waitUntil: pendingResponses[path],
+		};
+	}
+
+	return generateResponse(path, context);
+}
+
+export async function generateResponse(
+	path: string,
+	{
+		htmlTemplate,
+		apiRoutes,
+		pageRoutes,
+		manifest,
+		request,
+		getCachedResponse,
+		saveResponse,
+		prerendering,
+	}: RequestContext,
+): Promise<RakkasResponse> {
 	const apiRoute = findRoute(path, apiRoutes);
 
 	if (apiRoute) {
@@ -94,17 +132,12 @@ export async function handleRequest({
 			if (
 				prerendering &&
 				method === "get" &&
-				(response.prerender ?? response.status !== 404)
+				!(response.body instanceof Uint8Array) &&
+				saveResponse &&
+				(response.prerender ??
+					(RAKKAS_BUILD_TARGET === "static" && response.status !== 404))
 			) {
-				let { body } = response;
-
-				if (body === undefined || body === null) {
-					body = "";
-				} else if (typeof body !== "string" && !(body instanceof Uint8Array)) {
-					body = JSON.stringify(body);
-				}
-
-				await writeFile!(`${path}`, body as string | Uint8Array);
+				await saveResponse(path, response);
 			}
 
 			return response;
@@ -185,7 +218,8 @@ export async function handleRequest({
 						...parseBody(new Uint8Array(buf), fullInit.headers),
 					},
 					manifest,
-					writeFile,
+					getCachedResponse,
+					saveResponse,
 					prerendering,
 				});
 
@@ -380,19 +414,21 @@ export async function handleRequest({
 
 		html = html.replace("<!-- rakkas-app-placeholder -->", rendered);
 
-		if (prerendering && stack.prerender) {
-			await writeFile!(`${filename}/index.html`, html);
-		}
-
 		if (prerendering && !stack.crawl) {
 			headers["x-rakkas-prerender"] = "no-crawl";
 		}
 
-		return {
+		const response = {
 			status: stack.status,
 			headers,
 			body: html,
 		};
+
+		if (prerendering && stack.prerender && saveResponse) {
+			await saveResponse(`${filename}/index.html`, response);
+		}
+
+		return response;
 	}
 
 	return servePage(request, render);
