@@ -60,6 +60,7 @@ export interface StackResult {
 	rendered: RenderedStackItem[];
 	found: boolean;
 	prerender: boolean;
+	crawl: boolean;
 }
 
 export async function makeComponentStack({
@@ -88,7 +89,8 @@ export async function makeComponentStack({
 		};
 	}
 
-	let prerender = RAKKAS_BUILD_TARGET === "static";
+	let prerender: boolean | undefined;
+	let crawl: boolean | undefined;
 	const usedContexts: Record<string, unknown>[] = [];
 
 	for (const [i, moduleId] of stack.entries()) {
@@ -135,8 +137,6 @@ export async function makeComponentStack({
 		const canHandleErrors =
 			options?.canHandleErrors ?? (!isPage && !!Component);
 
-		prerender = prerender ?? options?.prerender;
-
 		if (canHandleErrors) {
 			errorHandlerIndex = i;
 
@@ -179,6 +179,9 @@ export async function makeComponentStack({
 		} else {
 			loaded = previousRender![i].loaded;
 		}
+
+		prerender = prerender ?? loaded.prerender;
+		crawl = crawl ?? loaded.crawl;
 
 		thisRender.push({
 			Component,
@@ -255,7 +258,9 @@ export async function makeComponentStack({
 		rendered: thisRender.map(({ ...rest }) => rest),
 		params,
 		found: !!match,
-		prerender,
+		prerender:
+			prerender ?? (RAKKAS_BUILD_TARGET === "static" && status !== 404),
+		crawl: crawl ?? true,
 	};
 }
 

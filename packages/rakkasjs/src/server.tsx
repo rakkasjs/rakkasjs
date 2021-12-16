@@ -87,11 +87,12 @@ export async function handleRequest({
 				context: {},
 			});
 
+			response.status = response.status || (method === "post" ? 201 : 200);
+
 			if (
 				RAKKAS_BUILD_TARGET === "static" &&
 				method === "get" &&
-				response.prerender !== false &&
-				response.status !== 404
+				(response.prerender ?? response.status !== 404)
 			) {
 				let { body } = response;
 
@@ -192,7 +193,7 @@ export async function handleRequest({
 				}
 
 				return new Response(body as any, {
-					status: response.status || 200,
+					status: response.status || (method === "POST" ? 201 : 200),
 					headers: response.headers as Record<string, string>,
 				});
 			} catch (error) {
@@ -376,8 +377,12 @@ export async function handleRequest({
 
 		html = html.replace("<!-- rakkas-app-placeholder -->", rendered);
 
-		if (RAKKAS_BUILD_TARGET === "static" && stack.found) {
+		if (RAKKAS_BUILD_TARGET === "static" && stack.prerender) {
 			await writeFile!(`${filename}/index.html`, html);
+		}
+
+		if (RAKKAS_BUILD_TARGET === "static" && !stack.crawl) {
+			headers["x-rakkas-prerender"] = "no-crawl";
 		}
 
 		return {

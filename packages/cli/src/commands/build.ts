@@ -348,7 +348,7 @@ export async function build(
 	}
 
 	if (deploymentTarget === "static") {
-		await crawl(outDir, dom.html(), manifest);
+		await prerender(outDir, dom.html(), manifest, true);
 	} else {
 		// eslint-disable-next-line no-console
 		console.log(
@@ -358,10 +358,11 @@ export async function build(
 	}
 }
 
-async function crawl(
+async function prerender(
 	outDir: string,
 	htmlTemplate: string,
 	manifest: Record<string, string[]>,
+	crawl: boolean,
 ) {
 	// eslint-disable-next-line no-console
 	console.log(chalk.whiteBright("Prerendering static routes"));
@@ -390,6 +391,7 @@ async function crawl(
 	installNodeFetch();
 
 	const clientDir = path.resolve(outDir, "client");
+	const prerendered = new Set<string>();
 
 	for (const root of roots) {
 		const currentUrl = new URL(origin + root);
@@ -400,6 +402,8 @@ async function crawl(
 			apiRoutes,
 			manifest,
 			async writeFile(name, content) {
+				if (prerendered.has(name)) return;
+
 				try {
 					const fullname = clientDir + name;
 					const dir = path.parse(fullname).dir;
@@ -409,6 +413,8 @@ async function crawl(
 
 					await fs.promises.mkdir(dir, { recursive: true });
 					await fs.promises.writeFile(fullname, content);
+
+					prerendered.add(name);
 				} catch (error) {
 					// eslint-disable-next-line no-console
 					console.error(error);
@@ -459,7 +465,11 @@ async function crawl(
 			console.log(
 				chalk.yellowBright(`Request to ${root} returned unknown body type.`),
 			);
-		} else {
+		} else if (
+			crawl &&
+			(response.headers as Record<string, string>)?.["x-rakkas-prerender"] !==
+				"no-crawl"
+		) {
 			const dom = cheerio.load(response.body);
 			dom("a[href]").each((_, el) => addPath(el.attribs.href));
 		}
