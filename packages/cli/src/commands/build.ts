@@ -469,7 +469,12 @@ async function prerender(
 			},
 
 			async getCachedResponse(name) {
-				const response = prerendered[name];
+				const response =
+					prerendered[name] ||
+					prerendered[
+						name.endsWith("/") ? name + "index.html" : name + "/index.html"
+					];
+
 				if (!response) {
 					return undefined;
 				}
