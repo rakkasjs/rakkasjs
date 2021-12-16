@@ -3,6 +3,7 @@ import type { RakkasResponse } from "rakkasjs";
 import type {
 	Route,
 	handleRequest as HandleRequest,
+	CachedResponse,
 } from "rakkasjs/dist/server";
 import { parseNodeRequestBody } from "./parse-node-request-body";
 
@@ -19,7 +20,9 @@ export interface NodeRequestContext {
 
 	trustForwardedOrigin: boolean;
 
-	writeFile?(name: string, content: string): Promise<void>;
+	getCachedResponse?(path: string): Promise<CachedResponse | undefined>;
+	saveResponse?(path: string, response: RakkasResponse): Promise<void>;
+
 	handleRequest: typeof HandleRequest;
 }
 
@@ -36,7 +39,9 @@ export async function handleNodeRequest({
 
 	trustForwardedOrigin,
 
-	writeFile,
+	getCachedResponse,
+	saveResponse,
+
 	handleRequest,
 }: NodeRequestContext) {
 	const { body, type } = await parseNodeRequestBody(req);
@@ -70,7 +75,8 @@ export async function handleNodeRequest({
 				`http://${req.headers.host || "localhost"}`,
 			),
 		},
-		writeFile,
+		getCachedResponse,
+		saveResponse,
 	});
 
 	res.statusCode = response.status ?? 200;
@@ -79,7 +85,7 @@ export async function handleNodeRequest({
 	if (!headers) headers = [];
 	if (!Array.isArray(headers)) headers = Object.entries(headers);
 
-	headers.forEach(([name, value]) => {
+	headers.forEach(([name, value]: [string, string | string[] | undefined]) => {
 		if (value === undefined) return;
 		res.setHeader(name, value);
 	});

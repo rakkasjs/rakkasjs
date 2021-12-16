@@ -18,6 +18,7 @@ import type {
 import { installNodeFetch } from "../runtime/install-node-fetch";
 import { spawn } from "child_process";
 import { Headers } from "node-fetch";
+import { RakkasResponse } from "rakkasjs";
 
 const { createCommand, Option } = commander;
 
@@ -416,7 +417,13 @@ async function prerender(
 	installNodeFetch();
 
 	const clientDir = path.resolve(outDir, "client");
-	const prerendered = new Set<string>();
+	const prerendered: Record<
+		string,
+		{
+			content: RakkasResponse;
+			filename: string;
+		}
+	> = {};
 
 	for (const root of roots) {
 		const currentUrl = new URL(origin + root);
@@ -427,25 +434,55 @@ async function prerender(
 			pageRoutes,
 			apiRoutes,
 			manifest,
-			async writeFile(name, content) {
-				if (prerendered.has(name)) return;
 
+			async saveResponse(name, response) {
 				try {
 					const fullname = clientDir + name;
 					const dir = path.parse(fullname).dir;
+
+					const { body, ...bodiless } = response;
+
+					let content = body;
+					if (content === undefined || content === null) {
+						content = "";
+					} else if (
+						typeof content !== "string" &&
+						!(content instanceof Uint8Array)
+					) {
+						content = JSON.stringify(content);
+					}
 
 					// eslint-disable-next-line no-console
 					console.log(chalk.gray(name));
 
 					await fs.promises.mkdir(dir, { recursive: true });
-					await fs.promises.writeFile(fullname, content);
+					await fs.promises.writeFile(fullname, content as any);
 
-					prerendered.add(name);
+					prerendered[name] = {
+						content: bodiless,
+						filename: fullname,
+					};
 				} catch (error) {
 					// eslint-disable-next-line no-console
 					console.error(error);
 				}
 			},
+
+			async getCachedResponse(name) {
+				const response = prerendered[name];
+				if (!response) {
+					return undefined;
+				}
+
+				return {
+					response: {
+						...response.content,
+						body: await fs.promises.readFile(response.filename),
+					},
+					expired: false,
+				};
+			},
+
 			request: {
 				url: currentUrl,
 				ip: "",

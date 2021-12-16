@@ -5,8 +5,6 @@ import { installNodeFetch } from "./install-node-fetch";
 import { handleNodeRequest } from "./handle-node-request";
 import { apiRoutes, pageRoutes, manifest, htmlTemplate } from "./manifests";
 import type { handleRequest as HandleRequest } from "rakkasjs/dist/server";
-import fs from "fs";
-import path from "path";
 
 // @ts-expect-error: No typings
 import * as server from "$output/server.js";
@@ -38,13 +36,6 @@ async function startServer() {
 				trustForwardedOrigin,
 
 				handleRequest,
-				async writeFile(name, content) {
-					const fullname = path.resolve(__dirname, "..", name);
-					const dir = path.parse(fullname).dir;
-
-					await fs.promises.mkdir(dir, { recursive: true });
-					await fs.promises.writeFile(fullname, content);
-				},
 			}).catch((error) => {
 				// TODO: logging
 				// eslint-disable-next-line no-console
