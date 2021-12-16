@@ -3,7 +3,13 @@ import { createServer } from "http";
 import sirv from "sirv";
 import { installNodeFetch } from "./install-node-fetch";
 import { handleNodeRequest } from "./handle-node-request";
-import { apiRoutes, pageRoutes, manifest, htmlTemplate } from "./manifests";
+import {
+	apiRoutes,
+	pageRoutes,
+	manifest,
+	htmlTemplate,
+	htmlPlaceholder,
+} from "./manifests";
 import type { handleRequest as HandleRequest } from "rakkasjs/dist/server";
 
 // @ts-expect-error: No typings
@@ -24,6 +30,7 @@ async function startServer() {
 		async function handle() {
 			await handleNodeRequest({
 				htmlTemplate,
+				htmlPlaceholder,
 
 				apiRoutes,
 				pageRoutes,

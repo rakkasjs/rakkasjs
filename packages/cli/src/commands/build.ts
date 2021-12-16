@@ -160,14 +160,6 @@ export async function build(
 
 	const dom = cheerio.load(htmlTemplate);
 
-	const html = dom("html").first();
-	Object.keys(html.attr()).forEach((a) => html.removeAttr(a));
-	html.prepend("<!-- rakkas-html-attributes-placeholder -->");
-
-	const body = html.find("body").first();
-	Object.keys(body.attr()).forEach((a) => body.removeAttr(a));
-	body.prepend("<!-- rakkas-body-attributes-placeholder -->");
-
 	await fs.promises.unlink(path.join(clientOutDir, "index.html"));
 
 	// Fix manifest
@@ -243,9 +235,10 @@ export async function build(
 			outDir: serverOutDir,
 			rollupOptions: {
 				input: [
-					"/virtual:/@rakkasjs/page-routes",
-					"/virtual:/@rakkasjs/api-routes",
-					"/virtual:/rakkasjs/server",
+					"virtual:rakkasjs:page-routes",
+					"virtual:rakkasjs:api-routes",
+					"virtual:rakkasjs:server",
+					"virtual:rakkasjs:placeholder-loader",
 				],
 				output:
 					deploymentTarget === "cloudflare-workers"
@@ -267,7 +260,7 @@ export async function build(
 
 		await fs.promises.writeFile(
 			path.join(serverOutDir, "html-template.js"),
-			`module.exports = ${JSON.stringify(dom.html())}`,
+			`module.exports=${JSON.stringify(dom.html())}`,
 			"utf8",
 		);
 
@@ -348,7 +341,40 @@ export async function build(
 		);
 	}
 
-	await prerender(outDir, dom.html(), manifest, config.prerender);
+	const pageRoutes: Route[] = (
+		await (0, eval)(
+			`import(${JSON.stringify(
+				path.join(outDir, "server/virtual_rakkasjs_page-routes.js"),
+			)})`,
+		)
+	).default.default;
+
+	installNodeFetch();
+
+	const htmlContents = dom.html();
+
+	const placeholderLoader = path.join(outDir, "server/placeholder-loader.js");
+
+	const htmlPlaceholder = await (
+		await (0, eval)(`import(${JSON.stringify(placeholderLoader)})`)
+	).default.default(htmlContents, pageRoutes);
+
+	await fs.promises.unlink(placeholderLoader);
+
+	fs.promises.writeFile(
+		path.join(outDir, "server/placeholder.js"),
+		`module.exports=${JSON.stringify(htmlPlaceholder)}`,
+		"utf8",
+	);
+
+	await prerender(
+		outDir,
+		htmlContents,
+		htmlPlaceholder,
+		manifest,
+		config.prerender,
+		pageRoutes,
+	);
 
 	if (deploymentTarget === "static") {
 		await fs.promises.mkdir("dist", { recursive: true });
@@ -385,8 +411,10 @@ export async function build(
 async function prerender(
 	outDir: string,
 	htmlTemplate: string,
+	htmlPlaceholder: string,
 	manifest: Record<string, string[]>,
 	prerender: string[],
+	pageRoutes: Route[],
 ) {
 	if (!prerender.length) return;
 
@@ -399,22 +427,16 @@ async function prerender(
 
 	const handleRequest: typeof HandleRequest = server.handleRequest;
 
-	const pageRoutes: Route[] = (
-		await (0, eval)(
-			`import(${JSON.stringify(path.join(outDir, "server/page-routes.js"))})`,
-		)
-	).default.default;
-
 	const apiRoutes: Route[] = (
 		await (0, eval)(
-			`import(${JSON.stringify(path.join(outDir, "server/api-routes.js"))})`,
+			`import(${JSON.stringify(
+				path.join(outDir, "server/virtual_rakkasjs_api-routes.js"),
+			)})`,
 		)
 	).default.default;
 
 	const roots = new Set(prerender);
 	const origin = `http://localhost`;
-
-	installNodeFetch();
 
 	const clientDir = path.resolve(outDir, "client");
 	const prerendered: Record<
@@ -431,6 +453,7 @@ async function prerender(
 		const response = await handleRequest({
 			prerendering: true,
 			htmlTemplate,
+			htmlPlaceholder,
 			pageRoutes,
 			apiRoutes,
 			manifest,

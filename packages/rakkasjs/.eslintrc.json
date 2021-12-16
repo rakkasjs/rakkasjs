@@ -39,10 +39,11 @@
 			"error",
 			{
 				"ignore": [
-					"@rakkasjs/page-imports",
-					"@rakkasjs/api-imports",
-					"@rakkasjs/server-hooks",
-					"@rakkasjs/client-hooks",
+					"virtual:rakkasjs:page-imports",
+					"virtual:rakkasjs:api-imports",
+					"virtual:rakkasjs:server-hooks",
+					"virtual:rakkasjs:client-hooks",
+					"virtual:rakkasjs:placeholder",
 					"./dist"
 				]
 			}

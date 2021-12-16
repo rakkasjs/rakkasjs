@@ -19,7 +19,7 @@ import { stableJson } from "./stable-json";
 import { toErrorDescription } from "./toErrorDescription";
 import { initGlobal } from "./init-global";
 
-import importers from "@rakkasjs/page-imports";
+import importers from "virtual:rakkasjs:page-imports";
 
 const moduleCache: Record<string, any> = initGlobal("moduleCache", {});
 const errorBoundaryCache: Record<string, any> = initGlobal(
@@ -72,7 +72,7 @@ export async function makeComponentStack({
 	isInitialRender,
 	rootContext = {},
 	helpers,
-}: StackArgs): Promise<StackResult> {
+}: StackArgs): Promise<StackResult | null> {
 	const { stack, params, match } = found;
 
 	let error: ErrorDescription | undefined;
@@ -87,6 +87,46 @@ export async function makeComponentStack({
 			message: "Page not found",
 			status,
 		};
+	}
+
+	if (import.meta.env.SSR && RAKKAS_BUILD_TARGET !== "static") {
+		for (const [i, moduleId] of [...stack].reverse().entries()) {
+			const module = await importers[moduleId]();
+
+			const isPage = match && i === 0;
+
+			const moduleExports =
+				typeof module.default === "object"
+					? {
+							Component: module.default.Component || DefaultLayout,
+							load: module.default.load,
+							options: module.default.options,
+							getCacheKey:
+								module.default.getCacheKey ||
+								(isPage ? defaultPageGetCacheKey : () => ""),
+					  }
+					: {
+							Component:
+								(module as PageComponentModule | LayoutComponentModule)
+									.default || DefaultLayout,
+							load: (module as PageComponentModule | LayoutComponentModule)
+								.load,
+							options: isPage
+								? (module as PageComponentModule).pageOptions
+								: (module as LayoutComponentModule).layoutOptions,
+							getCacheKey:
+								(module as PageComponentModule | LayoutComponentModule)
+									.getCacheKey || (isPage ? defaultPageGetCacheKey : () => ""),
+					  };
+
+			const { options } = moduleExports;
+
+			if (!options) continue;
+			if (options.ssr) break;
+			if (options.ssr === false) {
+				return null;
+			}
+		}
 	}
 
 	let prerender: boolean | undefined;

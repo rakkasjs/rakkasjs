@@ -3,7 +3,7 @@ import "core-js/features/object/from-entries";
 import "core-js/features/string/match-all";
 
 import React from "react";
-import { hydrate } from "react-dom";
+import { hydrate, render } from "react-dom";
 import { HelmetProvider } from "react-helmet-async";
 import {
 	makeComponentStack,
@@ -14,10 +14,11 @@ import { findRoute, Route } from "./lib/find-route";
 import { ClientHooks } from "./lib/types";
 import { navigate } from "knave-react";
 
-const lastRendered: RenderedStackItem[] = $rakkas$rendered;
+const lastRendered: RenderedStackItem[] =
+	(window as any).$rakkas$rendered || [];
 
 export async function startClient(routes?: Route[]) {
-	let clientHooks: ClientHooks = await import("@rakkasjs/client-hooks");
+	let clientHooks: ClientHooks = await import("virtual:rakkasjs:client-hooks");
 
 	if ((clientHooks as any).default) clientHooks = (clientHooks as any).default;
 
@@ -41,7 +42,7 @@ export async function startClient(routes?: Route[]) {
 		match: undefined,
 	};
 
-	const stack = await makeComponentStack({
+	const stack = (await makeComponentStack({
 		found,
 		url,
 		fetch,
@@ -57,7 +58,7 @@ export async function startClient(routes?: Route[]) {
 		rootContext: $rakkas$rootContext,
 		isInitialRender: true,
 		helpers,
-	});
+	}))!;
 
 	let rendered = (
 		<HelmetProvider>
@@ -67,5 +68,11 @@ export async function startClient(routes?: Route[]) {
 
 	if (wrap) rendered = wrap(rendered, $rakkas$rootContext);
 
-	hydrate(rendered, document.getElementById("rakkas-app"));
+	const container = document.getElementById("rakkas-app");
+
+	if (lastRendered.length) {
+		hydrate(rendered, container);
+	} else {
+		render(rendered, container);
+	}
 }
