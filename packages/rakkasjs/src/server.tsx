@@ -81,7 +81,30 @@ export async function handleRequest({
 				};
 			}, leaf);
 
-			return handler!({ ...request, params: apiRoute.params, context: {} });
+			const response = await handler!({
+				...request,
+				params: apiRoute.params,
+				context: {},
+			});
+
+			if (
+				RAKKAS_BUILD_TARGET === "static" &&
+				method === "get" &&
+				response.prerender !== false &&
+				response.status !== 404
+			) {
+				let { body } = response;
+
+				if (body === undefined || body === null) {
+					body = "";
+				} else if (typeof body !== "string" && !(body instanceof Uint8Array)) {
+					body = JSON.stringify(body);
+				}
+
+				await writeFile!(`${path}`, body as string | Uint8Array);
+			}
+
+			return response;
 		}
 	}
 
@@ -158,20 +181,14 @@ export async function handleRequest({
 						originalUrl: parsed,
 						...parseBody(new Uint8Array(buf), fullInit.headers),
 					},
+					manifest,
+					writeFile,
 				});
 
 				let body = response.body;
 
 				if (typeof body !== "string" && !(body instanceof Uint8Array)) {
 					body = JSON.stringify(body);
-				}
-
-				if (
-					RAKKAS_BUILD_TARGET === "static" &&
-					request.headers.get("x-rakkas-export") === "static" &&
-					method === "GET"
-				) {
-					await writeFile!(`${parsed.pathname}`, body as string | Uint8Array);
 				}
 
 				return new Response(body as any, {
@@ -195,10 +212,6 @@ export async function handleRequest({
 				fullInit.headers.set(header, request.headers.get(header)!);
 			}
 		});
-
-		if (request.headers.has("referer")) {
-			fullInit.headers.set("referer", request.headers.get("referer")!);
-		}
 
 		if (
 			!fullInit.headers.has("accept-language") &&
@@ -288,10 +301,7 @@ export async function handleRequest({
 		if ("location" in lastRendered) {
 			location = String(lastRendered.location);
 
-			if (
-				RAKKAS_BUILD_TARGET === "static" &&
-				request.headers.get("x-rakkas-export") === "static"
-			) {
+			if (RAKKAS_BUILD_TARGET === "static") {
 				head += `<meta http-equiv="refresh" content="0; url=${encodeURI(
 					location,
 				)}">`;
@@ -366,12 +376,8 @@ export async function handleRequest({
 
 		html = html.replace("<!-- rakkas-app-placeholder -->", rendered);
 
-		if (
-			RAKKAS_BUILD_TARGET === "static" &&
-			request.headers.get("x-rakkas-export") === "static"
-		) {
+		if (RAKKAS_BUILD_TARGET === "static" && stack.found) {
 			await writeFile!(`${filename}/index.html`, html);
-			headers["x-rakkas-export"] = "static";
 		}
 
 		return {

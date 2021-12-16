@@ -17,6 +17,7 @@ import type {
 } from "rakkasjs/dist/server";
 import { installNodeFetch } from "../runtime/install-node-fetch";
 import { spawn } from "child_process";
+import { Headers } from "node-fetch";
 
 const { createCommand, Option } = commander;
 
@@ -363,7 +364,7 @@ async function crawl(
 	manifest: Record<string, string[]>,
 ) {
 	// eslint-disable-next-line no-console
-	console.log(chalk.whiteBright("Loading server"));
+	console.log(chalk.whiteBright("Prerendering static routes"));
 
 	const server = await (0, eval)(
 		`import(${JSON.stringify(path.join(outDir, "server/server.js"))})`,
@@ -383,14 +384,11 @@ async function crawl(
 		)
 	).default.default;
 
-	// eslint-disable-next-line no-console
-	console.log(chalk.whiteBright("Prerendering static routes"));
 	const roots = new Set(["/"]);
 	const origin = `http://localhost`;
 
 	installNodeFetch();
 
-	const headers = new Headers({ "x-rakkas-export": "static" });
 	const clientDir = path.resolve(outDir, "client");
 
 	for (const root of roots) {
@@ -402,20 +400,25 @@ async function crawl(
 			apiRoutes,
 			manifest,
 			async writeFile(name, content) {
-				const fullname = clientDir + name;
-				const dir = path.parse(fullname).dir;
+				try {
+					const fullname = clientDir + name;
+					const dir = path.parse(fullname).dir;
 
-				// eslint-disable-next-line no-console
-				console.log(chalk.gray(name));
+					// eslint-disable-next-line no-console
+					console.log(chalk.gray(name));
 
-				await fs.promises.mkdir(dir, { recursive: true });
-				await fs.promises.writeFile(fullname, content);
+					await fs.promises.mkdir(dir, { recursive: true });
+					await fs.promises.writeFile(fullname, content);
+				} catch (error) {
+					// eslint-disable-next-line no-console
+					console.error(error);
+				}
 			},
 			request: {
 				url: currentUrl,
 				ip: "",
 				method: "GET",
-				headers,
+				headers: new Headers() as any,
 				originalIp: "",
 				originalUrl: currentUrl,
 				type: "empty",
@@ -427,12 +430,6 @@ async function crawl(
 		if (!Array.isArray(replyHeaders)) {
 			replyHeaders = Object.entries(replyHeaders);
 		}
-
-		const exportHeader = replyHeaders.find(
-			(x) => x[0].toLowerCase() === "x-rakkas-export",
-		)?.[1];
-
-		if (exportHeader !== "static") continue;
 
 		if ((response.status || 200) > 399) {
 			// eslint-disable-next-line no-console
