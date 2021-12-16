@@ -25,7 +25,10 @@ export async function loadConfig(configConfig: ConfigConfig): Promise<{
 	configConfig.root = configConfig.root ?? process.cwd();
 	const filename = findConfigFile(configConfig);
 	if (!filename) {
-		return { config: withDefaults({}), deps: [] };
+		return {
+			config: withDefaults({}, configConfig.deploymentTarget),
+			deps: [],
+		};
 	}
 
 	// eslint-disable-next-line no-console
@@ -54,7 +57,7 @@ export async function loadConfig(configConfig: ConfigConfig): Promise<{
 	}
 
 	return {
-		config: withDefaults(loaded),
+		config: withDefaults(loaded, configConfig.deploymentTarget),
 		deps,
 	};
 }
@@ -123,7 +126,10 @@ async function buildFile(filename: string, root: string, collectDeps = true) {
 	};
 }
 
-function withDefaults(config: Config): FullConfig {
+function withDefaults(
+	config: Config,
+	deploymentTarget: RakkasDeploymentTarget,
+): FullConfig {
 	const out: FullConfig = {
 		pagesDir: "pages",
 		pageExtensions: ["jsx", "tsx"],
@@ -131,6 +137,7 @@ function withDefaults(config: Config): FullConfig {
 		apiRoot: "/api",
 		endpointExtensions: ["js", "ts"],
 		trustForwardedOrigin: false,
+		prerender: deploymentTarget === "static" ? ["/"] : [],
 		...config,
 		vite: {
 			logLevel: "warn",

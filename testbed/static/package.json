@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "rakkas dev",
 		"build": "rakkas build -d static",
-		"start": "sirv -p 3000 dist/static",
+		"start": "sirv -p 3000 dist",
 		"check": "run-p e2e test typecheck lint:ts",
 		"e2e": "rakkas with-port \"start-server-and-test 'pnpm start' :\\$PORT/ 'cypress run'\"",
 		"test": "jest --passWithNoTests",
