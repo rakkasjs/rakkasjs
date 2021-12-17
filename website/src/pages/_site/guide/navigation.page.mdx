@@ -29,3 +29,7 @@ You can use `history.back()`, `history.forward()` and `history.go()` to navigate
 The return value of the `useRouter` custom hook from the `rakkasjs` package has a `currentUrl` property. It's a URL object that contains the URL of the currently rendered page. You should always use this property instead of `window.location` because, a) `window` is not available during server-side rendering, and b) you'll get the wrong URL during page transitions: When the user clicks on a `Link`, the URL in the location bar of the browser changes immediately but the old page is still shown while the new one is being loaded.
 
 The `pendingUrl` property of the return value of `useRouter`, if present, contains the URL that the app is transitioning into. You can test for its presence to render some loading animation for example.
+
+## Advanced
+
+Rakkas uses the [`knave-react`](https://github.com/cyco130/knave/tree/main/packages/knave-react) library behind the scenes to provide client-side navigation features. Apart from what's mentioned above, `useCurrentLocation`, `useNavigationState`, `usePendingLocation`, `useNavigationBlocker` are also re-exported from `rakkasjs` and work exactly like described in `knave-react` documentation.

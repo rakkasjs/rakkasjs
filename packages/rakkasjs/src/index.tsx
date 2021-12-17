@@ -1,10 +1,9 @@
 export * from "./lib/types";
 
-import { navigate, StyledLink } from "knave-react";
-
-export { navigate };
+import { StyledLink } from "knave-react";
 
 export {
+	navigate,
 	Link,
 	StyledLink,
 	useCurrentLocation,
@@ -34,8 +33,6 @@ import {
 	PageOptions,
 	LayoutOptions,
 } from "./lib/types";
-
-(globalThis as any).navigate = navigate;
 
 export { setRootContext } from "./root-context";
 
