@@ -570,9 +570,9 @@ async function prerender(
 				} else if (typeof response.body !== "string") {
 					if (response.body instanceof Uint8Array) {
 						response.body = decoder.decode(response.body);
+					} else {
+						response.body = JSON.stringify(response.body);
 					}
-				} else {
-					response.body = JSON.stringify(response.body);
 				}
 
 				const dom = cheerio.load(response.body as string);
