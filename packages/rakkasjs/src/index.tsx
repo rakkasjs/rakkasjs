@@ -1,18 +1,23 @@
 export * from "./lib/types";
 
-import { navigate } from "knave-react";
+import { navigate, StyledLink } from "knave-react";
 
 export { navigate };
 
 export {
 	Link,
-	StyledLink as NavLink,
+	StyledLink,
 	useCurrentLocation,
 	usePendingLocation,
 	useNavigationState,
 	useNavigationBlocker,
 } from "knave-react";
+
+/** @deprecated Use StyledLink */
+export const NavLink = StyledLink;
+
 export { useRouter } from "./lib/useRouter";
+
 import {
 	PageTypes,
 	DefaultPageTypes,

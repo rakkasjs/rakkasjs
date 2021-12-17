@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { defineLayout, NavLink } from "rakkasjs";
+import { defineLayout, StyledLink } from "rakkasjs";
 
 export default defineLayout({
 	Component: function MainLayout({ error, children }) {
@@ -15,14 +15,14 @@ export default defineLayout({
 				<nav>
 					<ul>
 						<li>
-							<NavLink href="/" activeStyle={{ fontWeight: "bold" }}>
+							<StyledLink href="/" activeStyle={{ fontWeight: "bold" }}>
 								Home page
-							</NavLink>
+							</StyledLink>
 						</li>
 						<li>
-							<NavLink href="/other" activeStyle={{ fontWeight: "bold" }}>
+							<StyledLink href="/other" activeStyle={{ fontWeight: "bold" }}>
 								Other page
-							</NavLink>
+							</StyledLink>
 						</li>
 					</ul>
 				</nav>

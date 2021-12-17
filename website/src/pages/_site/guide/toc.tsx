@@ -1,6 +1,7 @@
 const titles = [
 	"What is Rakkas?",
 	"Getting started",
+	"Migration guide",
 	"Pages and routing",
 	"Navigation",
 	"Layouts",

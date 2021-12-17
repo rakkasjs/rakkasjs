@@ -4,9 +4,9 @@ import { SampleViewer } from "./SampleViewer";
 
 Rakkas provides a `Link` component (in the `rakkasjs` package) for SPA-style client-side navigation. It takes exactly the same props as the HTML `<a>` element but intercepts user's click to handle the navigation without reloading the page.
 
-`NavLink` is similar but it accepts `activeClass` and `activeStyle` to apply a different style when the `href` property matches the current URL. It is useful for marking the active item in a navigation menu, for example.
+`StyledLink` is similar but it accepts `activeClass` and `activeStyle` to apply a different style when the `href` property matches the current URL. It is useful for marking the active item in a navigation menu, for example.
 
-Let's add client-side navigation to the previous example by replacing the `<a>` elements with `NavLink` and by adding some inline styling for the active link. Notice how the page refreshes without a full reload now when you click on a link:
+Let's add client-side navigation to the previous example by replacing the `<a>` elements with `StyledLink` and by adding some inline styling for the active link. Notice how the page refreshes without a full reload now when you click on a link:
 
 import navlinkExample from "$examples/navlink/[userName].page.jsx?sample";
 
@@ -18,7 +18,7 @@ import navigateExample from "$examples/navigate/[userName].page.jsx?sample";
 
 <SampleViewer url="/examples/navigate/Fatih" code={navigateExample} />
 
-`NavLink` component also accepts `pendingClass` and `pendingStyle` props. They are applied while the navigation is underway due the user clicking on this link. This feature is useful for giving the user immediate feedback about the fact that their click has been registered and is being processed.
+`StyledLink` component also accepts `pendingClass` and `pendingStyle` props. They are applied while the navigation is underway due the user clicking on this link. This feature is useful for giving the user immediate feedback about the fact that their click has been registered and is being processed.
 
 `navigate` returns a promise that resolves to true when the navigation successfully completes and false if it is aborted (due to another call to navigate, for example). If `navigate` is called with a link that causes a full reload, the promise never resolves or rejects.
 

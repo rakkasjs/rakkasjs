@@ -1,7 +1,7 @@
 // This is the main layout of our app. It renders the header and the footer.
 
 import React from "react";
-import { Link, NavLink, Layout } from "rakkasjs";
+import { Link, StyledLink, Layout } from "rakkasjs";
 import { Helmet } from "react-helmet-async";
 
 // Vite supports CSS modules out of the box!
@@ -22,20 +22,20 @@ const MainLayout: Layout = ({ error, children }) => (
 			<nav className={css.nav}>
 				<ul>
 					<li>
-						{/* <NavLink /> is like <Link /> but it can be styled based on the current route ()which is useful for navigation links). */}
-						<NavLink href="/" activeClass={css.activeLink}>
+						{/* <StyledLink /> is like <Link /> but it can be styled based on the current route ()which is useful for navigation links). */}
+						<StyledLink href="/" activeClass={css.activeLink}>
 							Home
-						</NavLink>
+						</StyledLink>
 					</li>
 					<li>
-						<NavLink href="/about" activeClass={css.activeLink}>
+						<StyledLink href="/about" activeClass={css.activeLink}>
 							About
-						</NavLink>
+						</StyledLink>
 					</li>
 					<li>
-						<NavLink href="/todo" activeClass={css.activeLink}>
+						<StyledLink href="/todo" activeClass={css.activeLink}>
 							Todo
-						</NavLink>
+						</StyledLink>
 					</li>
 				</ul>
 			</nav>

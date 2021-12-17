@@ -1,5 +1,5 @@
 import React from "react";
-import { definePage, DefinePageTypes, NavLink } from "rakkasjs";
+import { definePage, DefinePageTypes, StyledLink } from "rakkasjs";
 import css from "./[pokemon].module.css";
 import { Helmet } from "react-helmet-async";
 
@@ -43,21 +43,24 @@ export default definePage<PokemonStatPageTypes>({
 				<div className={css.title}>
 					<nav>
 						<ul className={css.links}>
-							<NavLink
+							<StyledLink
 								href="/examples/fetch/pikachu"
 								activeClass={css.activeLink}
 							>
 								Pikachu
-							</NavLink>
-							<NavLink
+							</StyledLink>
+							<StyledLink
 								href="/examples/fetch/charizard"
 								activeClass={css.activeLink}
 							>
 								Charizard
-							</NavLink>
-							<NavLink href="/examples/fetch/onix" activeClass={css.activeLink}>
+							</StyledLink>
+							<StyledLink
+								href="/examples/fetch/onix"
+								activeClass={css.activeLink}
+							>
 								Onix
-							</NavLink>
+							</StyledLink>
 						</ul>
 					</nav>
 

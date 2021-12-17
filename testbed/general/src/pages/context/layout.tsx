@@ -1,5 +1,5 @@
 import React from "react";
-import { defineLayout, DefineLayoutTypes, NavLink } from "rakkasjs";
+import { defineLayout, DefineLayoutTypes, StyledLink } from "rakkasjs";
 
 export type OuterLayoutTypes = DefineLayoutTypes<{
 	// eslint-disable-next-line @typescript-eslint/ban-types
@@ -18,19 +18,19 @@ export default defineLayout<OuterLayoutTypes>({
 		return (
 			<>
 				<p>
-					<NavLink
+					<StyledLink
 						activeStyle={{ background: "#333", color: "#fff" }}
 						href="/context/a"
 					>
 						Go to A
-					</NavLink>{" "}
+					</StyledLink>{" "}
 					&nbsp;{" "}
-					<NavLink
+					<StyledLink
 						activeStyle={{ background: "#333", color: "#fff" }}
 						href="/context/b"
 					>
 						Go to B
-					</NavLink>
+					</StyledLink>
 				</p>
 				{children}
 			</>

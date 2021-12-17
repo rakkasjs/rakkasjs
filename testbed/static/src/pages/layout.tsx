@@ -1,5 +1,5 @@
 import React from "react";
-import { defineLayout, DefineLayoutTypes, NavLink } from "rakkasjs";
+import { defineLayout, DefineLayoutTypes, StyledLink } from "rakkasjs";
 import { Helmet } from "react-helmet-async";
 
 export type MainLayoutTypes = DefineLayoutTypes<{
@@ -41,9 +41,9 @@ export default defineLayout<MainLayoutTypes>({
 				<nav>
 					<ul>
 						<li>
-							<NavLink href="/" activeStyle={{ fontWeight: "bold" }}>
+							<StyledLink href="/" activeStyle={{ fontWeight: "bold" }}>
 								Home
-							</NavLink>
+							</StyledLink>
 						</li>
 
 						<li>
@@ -51,12 +51,12 @@ export default defineLayout<MainLayoutTypes>({
 							<ul>
 								{data?.people.map((p) => (
 									<li key={p.id}>
-										<NavLink
+										<StyledLink
 											href={`/profile/${p.id}`}
 											activeStyle={{ fontWeight: "bold" }}
 										>
 											{p.fullName}
-										</NavLink>
+										</StyledLink>
 									</li>
 								))}
 							</ul>

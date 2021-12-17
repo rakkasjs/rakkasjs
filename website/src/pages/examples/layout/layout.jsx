@@ -1,20 +1,20 @@
 import React from "react";
-import { NavLink } from "rakkasjs";
+import { StyledLink } from "rakkasjs";
 
 const MainLayout = ({ children }) => (
 	<div>
 		<header>Shared header</header>
 		<nav>
-			<NavLink href="/examples/layout" activeStyle={{ fontWeight: "bold" }}>
+			<StyledLink href="/examples/layout" activeStyle={{ fontWeight: "bold" }}>
 				Home
-			</NavLink>{" "}
+			</StyledLink>{" "}
 			|{" "}
-			<NavLink
+			<StyledLink
 				href="/examples/layout/about"
 				activeStyle={{ fontWeight: "bold" }}
 			>
 				About
-			</NavLink>
+			</StyledLink>
 		</nav>
 		<hr />
 		<div style={{ padding: "1rem", background: "#ddd" }}>{children}</div>

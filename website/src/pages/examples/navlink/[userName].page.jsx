@@ -1,38 +1,38 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { NavLink } from "rakkasjs";
+import { StyledLink } from "rakkasjs";
 
 const UserProfilePage = ({ params }) => (
 	<div>
-		<Helmet title={`NavLink Example - Rakkas`} />
+		<Helmet title={`StyledLink Example - Rakkas`} />
 		<p>
 			Hello <b>{params.userName}</b>!
 		</p>
 		<nav>
 			<ul>
 				<li>
-					<NavLink
+					<StyledLink
 						href="/examples/navlink/Fatih"
 						activeStyle={{ fontWeight: "bold" }}
 					>
 						Fatih&apos;s profile
-					</NavLink>
+					</StyledLink>
 				</li>
 				<li>
-					<NavLink
+					<StyledLink
 						href="/examples/navlink/Dan"
 						activeStyle={{ fontWeight: "bold" }}
 					>
 						Dan&apos;s profile
-					</NavLink>
+					</StyledLink>
 				</li>
 				<li>
-					<NavLink
+					<StyledLink
 						href="/examples/navlink/Engin"
 						activeStyle={{ fontWeight: "bold" }}
 					>
 						Engin&apos;s profile
-					</NavLink>
+					</StyledLink>
 				</li>
 			</ul>
 		</nav>

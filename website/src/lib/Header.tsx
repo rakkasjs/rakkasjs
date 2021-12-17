@@ -1,6 +1,6 @@
 import { Logomark } from "./Logomark";
 import { Logotype } from "./Logotype";
-import { Link, NavLink } from "rakkasjs";
+import { Link, StyledLink } from "rakkasjs";
 import React, { FC } from "react";
 import css from "./Header.module.css";
 import { GithubLogo } from "$lib/GithubLogo";
@@ -14,23 +14,23 @@ export const Header: FC = () => (
 		<nav className={css.nav}>
 			<ul>
 				<li>
-					<NavLink
+					<StyledLink
 						href="/"
 						activeClass={css.activeLink}
 						pendingClass={css.nextLink}
 					>
 						Home
-					</NavLink>
+					</StyledLink>
 				</li>
 				<li>
-					<NavLink
+					<StyledLink
 						href="/guide"
 						activeClass={css.activeLink}
 						pendingClass={css.nextLink}
 						onCompareUrls={(url) => url.pathname.startsWith("/guide")}
 					>
 						Guide
-					</NavLink>
+					</StyledLink>
 				</li>
 				<li>
 					<a

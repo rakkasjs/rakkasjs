@@ -1,6 +1,6 @@
 import { toc } from "./toc";
 import React from "react";
-import { NavLink, Layout, Link } from "rakkasjs";
+import { StyledLink, Layout, Link } from "rakkasjs";
 import css from "./layout.module.css";
 import { Helmet } from "react-helmet-async";
 
@@ -61,7 +61,7 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 						<ul>
 							{toc.map((item) => (
 								<li key={item.slug}>
-									<NavLink
+									<StyledLink
 										href={"/guide/" + item.slug}
 										activeStyle={{ fontWeight: "bold" }}
 										pendingStyle={{ color: "#f08" }}
@@ -70,7 +70,7 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 										}
 									>
 										{item.title}
-									</NavLink>
+									</StyledLink>
 								</li>
 							))}
 						</ul>
