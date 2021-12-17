@@ -1,0 +1,18 @@
+# Migration guide
+
+## 0.4 to 0.5
+
+- Remove the `@rakkasjs/runner-node` package.
+- Upgrade to `rakkasjs@0.5.0` and `@rakkasjs/cli@0.5.0`.
+- Update your `start` script to `node dist/server` instead of `@rakkasjs/runner-node`.
+- If you were using `rakkas export` to generate a static site:
+  - Change your build command to `rakkas build -d static`.
+  - Serve your static site from `dist` instead of `dist/static`.
+  - `load` functions in static sites will now run like in normal sites instead of caching their results. If you're relying on a slow or ever-changing external API, create internal API endpoints accessed with `GET` method do the downstream fetching there since `GET` API endpoints can now be prerendered.
+- `NavLink` is deprecated, use `StyledLink` instead.
+- Rename `NavLink`'s props as follows:
+  - `currentRouteClass` as `activeClass`
+  - `currentRouteStyle` as `activeStyle`
+  - `nextRouteClass` as `pendingClass`
+  - `nextRouteStyle` as `pendingStyle`
+- Rename `useRouter`'s return value's properties, `current` is now `currentUrl` and `next` is now `pendingUrl`.
