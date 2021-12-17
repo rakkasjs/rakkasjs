@@ -51,27 +51,26 @@
 	}
 
 	.contentWrapper {
-		/* background-color: yellow; */
 		width: 66.666666%;
 		order: 2;
 		padding: 0 1rem;
 	}
 
 	.tocWrapper {
-		/* background-color: red; */
 		width: 33.333333%;
 		order: 1;
 		padding: 0 1rem;
+		position: sticky;
+		top: 2rem;
+		height: calc(100vh - 8rem);
+		overflow-y: auto;
 	}
 
 	.toc2 {
-		/* background-color: red; */
 	}
 
 	.toc {
 		width: 16rem;
-		position: sticky;
-		top: 2rem;
 		margin: auto;
 		margin-top: 0;
 	}
