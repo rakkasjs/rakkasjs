@@ -18,9 +18,13 @@ import * as server from "$output/server.js";
 async function startServer() {
 	installNodeFetch();
 
-	const fileServer = sirv("dist/client", { etag: true, maxAge: 0 });
+	const fileServer =
+		process.env.DISABLE_STATIC_SERVER === "1"
+			? undefined
+			: sirv("dist/client", { etag: true, maxAge: 0 });
 
-	const trustForwardedOrigin = !!process.env.TRUST_FORWARDED_ORIGIN || false;
+	const trustForwardedOrigin =
+		process.env.TRUST_FORWARDED_ORIGIN === "1" || false;
 	const host = process.env.HOST || "localhost";
 	const port = process.env.PORT || 3000;
 
@@ -52,7 +56,7 @@ async function startServer() {
 			});
 		}
 
-		if (req.url === "/") {
+		if (req.url === "/" || !fileServer) {
 			handle();
 		} else {
 			fileServer(req, res, handle);

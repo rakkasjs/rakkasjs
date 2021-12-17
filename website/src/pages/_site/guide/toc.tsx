@@ -16,6 +16,7 @@ const titles = [
 	"Load helpers",
 	"Customization hooks",
 	"Configuration options",
+	"Rendering modes",
 	"Environment variables",
 	"Deployment targets",
 	"Integrations",

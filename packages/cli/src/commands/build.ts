@@ -447,6 +447,8 @@ async function prerender(
 		}
 	> = {};
 
+	const decoder = new TextDecoder("utf-8");
+
 	for (const root of roots) {
 		const currentUrl = new URL(origin + root);
 
@@ -502,10 +504,12 @@ async function prerender(
 					return undefined;
 				}
 
+				const body = await fs.promises.readFile(response.filename);
+
 				return {
 					response: {
 						...response.content,
-						body: await fs.promises.readFile(response.filename),
+						body,
 					},
 					expired: false,
 				};
@@ -551,17 +555,30 @@ async function prerender(
 
 		if (typeof location === "string") addPath(location);
 
-		if (typeof response.body !== "string") {
-			// eslint-disable-next-line no-console
-			console.log(
-				chalk.yellowBright(`Request to ${root} returned unknown body type.`),
-			);
-		} else if (
-			(response.headers as Record<string, string>)?.["x-rakkas-prerender"] !==
-			"no-crawl"
-		) {
-			const dom = cheerio.load(response.body);
-			dom("a[href]").each((_, el) => addPath(el.attribs.href));
+		const contentType = replyHeaders.find(
+			(x) => x[0].toLowerCase() === "content-type",
+		)?.[1];
+
+		if (contentType === "text/html") {
+			const noCrawl = replyHeaders.find(
+				(x) => x[0].toLowerCase() === "x-robots-tag",
+			)?.[1];
+
+			if (!noCrawl) {
+				if (response.body === undefined || response.body === null) {
+					response.body = "";
+				} else if (typeof response.body !== "string") {
+					if (response.body instanceof Uint8Array) {
+						response.body = decoder.decode(response.body);
+					}
+				} else {
+					response.body = JSON.stringify(response.body);
+				}
+
+				const dom = cheerio.load(response.body as string);
+				dom("a[href]").each((_, el) => addPath(el.attribs.href));
+				dom("area[href]").each((_, el) => addPath(el.attribs.href));
+			}
 		}
 	}
 }
