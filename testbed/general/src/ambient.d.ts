@@ -1,9 +1,20 @@
+import "rakkasjs";
+
 declare module "*.module.css" {
 	const styles: { [key: string]: string };
 	export default styles;
 }
 
-interface Document {
-	rakkasHydrate(): void;
-	reloadFocusLayout(value: string): void;
+declare module "rakkasjs" {
+	interface RootContext {
+		locale: string;
+		session: { user: null | { email: string } };
+	}
+}
+
+declare global {
+	interface Document {
+		rakkasHydrate(): void;
+		reloadFocusLayout(value: string): void;
+	}
 }

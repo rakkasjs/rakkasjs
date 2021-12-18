@@ -6,7 +6,7 @@ describe("Layout context", () => {
 
 		cy.contains("Go to B").click();
 		cy.get(".outer").contains("OUTER");
-		cy.get(".inner").contains("INNER-B");
+		cy.get(".inner").contains("INNER-B", { timeout: 20_000 });
 
 		cy.contains("Go to A").click();
 		cy.get(".outer").contains("OUTER");

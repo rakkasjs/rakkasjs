@@ -322,6 +322,7 @@ export async function build(
 
 		const esbuilfOptions: ESBuildOptions = {
 			bundle: true,
+			minify: true,
 			entryPoints: [path.join(serverOutDir, "index.js")],
 			outfile: path.join(outDir, "index.js"),
 			platform: "browser",

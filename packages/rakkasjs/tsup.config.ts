@@ -10,6 +10,7 @@ export default defineConfig({
 	external: [
 		"virtual:rakkasjs:server-hooks",
 		"virtual:rakkasjs:client-hooks",
+		"virtual:rakkasjs:common-hooks",
 		"virtual:rakkasjs:page-imports",
 		"virtual:rakkasjs:api-imports",
 		"virtual:rakkasjs:placeholder",

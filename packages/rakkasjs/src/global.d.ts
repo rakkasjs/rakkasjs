@@ -15,6 +15,10 @@ declare const RAKKAS_BUILD_TARGET:
 
 declare const RAKKAS_BUILD_ID: string;
 
+declare const RAKKAS_LOCALES: string[] | undefined;
+declare const RAKKAS_DETECT_LOCALE: boolean;
+declare const RAKKAS_LOCALE_COOKIE_NAME: string | undefined;
+
 declare module "virtual:rakkasjs:page-imports" {
 	const importer: Record<string, () => Promise<any>>;
 	export default importer;
@@ -50,6 +54,11 @@ declare module "virtual:rakkasjs:client-hooks" {
 	const createLoadHelpers:
 		| undefined
 		| ((rootContext: RootContext) => LoadHelpers | Promise<LoadHelpers>);
+}
+
+declare module "virtual:rakkasjs:common-hooks" {
+	const commonHooks: any;
+	export default commonHooks;
 }
 
 declare module "virtual:rakkasjs:placeholder" {

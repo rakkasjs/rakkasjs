@@ -30,6 +30,7 @@ import {
 	Layout,
 	SimpleLayout,
 	ClientHooks,
+	CommonHooks,
 	PageOptions,
 	LayoutOptions,
 } from "./lib/types";
@@ -150,5 +151,9 @@ export function defineLayout<T extends LayoutTypes = DefaultLayoutTypes>(def: {
 }
 
 export function defineClientHooks(hooks: ClientHooks): ClientHooks {
+	return hooks;
+}
+
+export function defineCommonHooks(hooks: CommonHooks): CommonHooks {
 	return hooks;
 }

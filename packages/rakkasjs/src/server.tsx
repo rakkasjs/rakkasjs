@@ -6,20 +6,24 @@ import {
 	RakkasResponse,
 	RequestHandler,
 } from ".";
-import { HelmetProvider, FilledContext } from "react-helmet-async";
+import { HelmetProvider, FilledContext, Helmet } from "react-helmet-async";
 import devalue from "devalue";
 
 import { makeComponentStack } from "./lib/makeComponentStack";
 import { findRoute, Route } from "./lib/find-route";
 
 import importers from "virtual:rakkasjs:api-imports";
+import commonHooks from "virtual:rakkasjs:common-hooks";
 import {
 	RawRequest,
 	PageRenderOptions,
 	RakkasRequestBodyAndType,
+	CommonHooks,
+	ServePageHook,
 } from "./lib/types";
 import { KnaveServerSideProvider } from "knave-react";
 import { ParamsContext } from "./lib/useRouter";
+import { availableLocales, selectLocale } from "./lib/selectLocale";
 
 export type { Route };
 
@@ -267,6 +271,73 @@ export async function generateResponse(
 		return fetch(parsed.href, fullInit);
 	}
 
+	let locale: string | undefined;
+
+	function detectLanguage(): string {
+		if (!RAKKAS_DETECT_LOCALE) return "en";
+
+		let fromCookie: string | undefined;
+		if (RAKKAS_LOCALE_COOKIE_NAME) {
+			const cookie = request.headers.get("cookie");
+
+			if (cookie) {
+				const match = cookie.match(
+					new RegExp(`(?:^|;)\\s*${RAKKAS_LOCALE_COOKIE_NAME}=([^;]+)`),
+				);
+
+				if (match !== null) {
+					fromCookie = match[1];
+				}
+			}
+		}
+
+		const languages = (request.headers.get("accept-language") || "")
+			.split(",")
+			.filter(Boolean)
+			.map((v) => {
+				const [lang, ...specs] = v.split(";");
+				const q = Number(
+					specs
+						.map((x) => x.trim())
+						.find((s) => s.startsWith("q="))
+						?.slice(2),
+				);
+
+				if (isNaN(q)) {
+					return { lang, q: 1 };
+				}
+
+				return { lang, q };
+			})
+			.sort((a, b) => b.q - a.q)
+			.map((x) => x.lang);
+
+		return selectLocale(fromCookie ? [fromCookie, ...languages] : languages);
+	}
+
+	if (availableLocales) {
+		const selectLocale = (commonHooks as CommonHooks)?.selectLocale;
+
+		if (selectLocale) {
+			const result = selectLocale(request.url, detectLanguage);
+
+			if ("redirect" in result) {
+				return {
+					status: 302,
+					headers: {
+						location: String(result.redirect),
+						vary: "accept-language",
+					},
+				};
+			} else {
+				locale = result.locale;
+				request.url = result.url
+					? new URL(result.url, request.url)
+					: request.url;
+			}
+		}
+	}
+
 	const foundPage = findRoute(
 		decodeURI(request.url.pathname),
 		pageRoutes,
@@ -278,16 +349,20 @@ export async function generateResponse(
 	};
 
 	const serverHooks = await import("virtual:rakkasjs:server-hooks");
-	const { servePage = (req, render) => render(req) } = serverHooks;
+	const { servePage = (req, render) => render(req) } = serverHooks as {
+		servePage: ServePageHook | undefined;
+	};
 
 	let filename = request.url.pathname;
 	if (filename === "/") filename = "";
 
 	async function render(
 		request: RawRequest,
-		context: Record<string, unknown> = {},
+		context: any,
 		options: PageRenderOptions = {},
 	): Promise<RakkasResponse> {
+		if (locale && !context.locale) context.locale = locale;
+
 		const stack = await makeComponentStack({
 			found: foundPage,
 
@@ -314,9 +389,7 @@ export async function generateResponse(
 
 			return {
 				body: html,
-				headers: {
-					"content-type": "text/html",
-				},
+				headers: { "content-type": "text/html", "content-language": locale },
 			};
 		}
 
@@ -326,6 +399,7 @@ export async function generateResponse(
 			<KnaveServerSideProvider url={request.url.href}>
 				<ParamsContext.Provider value={{ params: foundPage.params }}>
 					<HelmetProvider context={helmetContext}>
+						{locale && <Helmet htmlAttributes={{ lang: locale }} />}
 						{stack.content}
 					</HelmetProvider>
 				</ParamsContext.Provider>
@@ -448,7 +522,7 @@ export async function generateResponse(
 		return response;
 	}
 
-	return servePage(request, render);
+	return servePage(request, render, locale);
 }
 
 function parseBody(

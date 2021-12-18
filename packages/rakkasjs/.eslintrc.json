@@ -43,6 +43,7 @@
 					"virtual:rakkasjs:api-imports",
 					"virtual:rakkasjs:server-hooks",
 					"virtual:rakkasjs:client-hooks",
+					"virtual:rakkasjs:common-hooks",
 					"virtual:rakkasjs:placeholder",
 					"./dist"
 				]

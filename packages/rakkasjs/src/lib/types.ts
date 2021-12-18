@@ -436,6 +436,7 @@ export type ServePageHook = (
 		context?: RootContext,
 		options?: PageRenderOptions,
 	) => Promise<RakkasResponse>,
+	locale?: string,
 ) => RakkasResponse | Promise<RakkasResponse>;
 
 export interface PageRenderOptions {
@@ -465,4 +466,16 @@ export interface ClientHooks {
 	createLoadHelpers?(
 		rootContext: RootContext,
 	): LoadHelpers | Promise<LoadHelpers>;
+}
+
+export interface CommonHooks {
+	/** Decode the locale and optionally rewrite the URL.
+	 * If you can't detect the locale from the URL, you can call the detect function to detect it
+	 * from the cookie, accept-language header, navigator.languages, or navigator.language.
+	 * You can also redirect, useful for international landing pages.
+	 */
+	selectLocale?(
+		url: URL,
+		detect: () => string,
+	): { locale: string; url?: URL | string } | { redirect: URL | string };
 }
