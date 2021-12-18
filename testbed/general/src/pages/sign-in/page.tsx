@@ -34,7 +34,7 @@ const LoginPage: Page = function HomePage() {
 						})
 						.then((j) => {
 							console.log("Setting root context");
-							setRootContext({ session: j });
+							setRootContext((old) => ({ ...old, session: j }));
 							console.log("Navigating");
 							navigate("/sign-in/signed-in");
 						});

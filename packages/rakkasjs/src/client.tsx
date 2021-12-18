@@ -9,9 +9,9 @@ import {
 	makeComponentStack,
 	RenderedStackItem,
 } from "./lib/makeComponentStack";
-import { App } from "./app";
+import { App, detectLanguage } from "./app";
 import { findRoute, Route } from "./lib/find-route";
-import { ClientHooks } from "./lib/types";
+import { ClientHooks, CommonHooks } from "./lib/types";
 import { navigate } from "knave-react";
 
 const lastRendered: RenderedStackItem[] =
@@ -32,7 +32,34 @@ export async function startClient(routes?: Route[]) {
 		? await createLoadHelpers($rakkas$rootContext)
 		: {};
 
-	const url = new URL(window.location.href);
+	let url = new URL(window.location.href);
+
+	const commonHooks: CommonHooks | undefined = (
+		await import("virtual:rakkasjs:common-hooks")
+	).default;
+
+	let locale: string | undefined;
+	const selectLocale = commonHooks?.selectLocale;
+	if (selectLocale) {
+		const result = selectLocale(url, detectLanguage);
+
+		if ("redirect" in result) {
+			let r = result.redirect;
+			if (typeof r === "string") {
+				r = new URL(r, url);
+			}
+
+			if (r.origin === location.origin) {
+				history.replaceState({}, "", r.href);
+			} else {
+				location.href = String(result.redirect);
+				return;
+			}
+		} else {
+			url = result.url ? new URL(result.url, url) : url;
+			locale = result.locale;
+		}
+	}
 
 	routes = routes! || window.$rakkas$routes!;
 
@@ -62,7 +89,12 @@ export async function startClient(routes?: Route[]) {
 
 	let rendered = (
 		<HelmetProvider>
-			<App initialStack={stack} routes={routes} helpers={helpers} />
+			<App
+				initialStack={stack}
+				routes={routes}
+				helpers={helpers}
+				locale={locale}
+			/>
 		</HelmetProvider>
 	);
 

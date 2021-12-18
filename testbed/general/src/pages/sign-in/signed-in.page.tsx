@@ -1,9 +1,7 @@
 import React from "react";
-import { definePage, PageTypes } from "rakkasjs";
+import { definePage, DefinePageTypes } from "rakkasjs";
 
-interface IndexPageTypes extends PageTypes {
-	parentContext: { session: { user: null | { email: string } } };
-}
+type IndexPageTypes = DefinePageTypes<{ data: null }>;
 
 export default definePage<IndexPageTypes>({
 	getCacheKey: ({ context }) => context.session,
@@ -16,13 +14,13 @@ export default definePage<IndexPageTypes>({
 			return {
 				status: 301,
 				location: "/sign-in",
-				data: {},
+				data: null,
 			};
 		}
 
 		console.log("Returning");
 		return {
-			data: {},
+			data: null,
 		};
 	},
 

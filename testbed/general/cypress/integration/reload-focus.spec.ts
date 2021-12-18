@@ -9,7 +9,7 @@ describe("Focus on reload", () => {
 			.its("reloadFocusLayout")
 			.then((f) => f("updated"));
 
-		cy.get("strong").contains("updated");
+		cy.document().contains("updated", { timeout: 20_000 });
 		cy.get("textarea").should("have.focus");
 	});
 });

@@ -37,6 +37,12 @@ export interface FullConfig {
 	 * @default false */
 	trustForwardedOrigin: boolean;
 
+	locales?: {
+		available?: string[];
+		detect?: boolean;
+		cookieName?: string;
+	};
+
 	/** Vite configuration (not all options are supported) */
 	vite:
 		| ViteConfig

@@ -1,13 +1,12 @@
-import { RawRequest, RakkasResponse } from "rakkasjs";
+import { RawRequest, RakkasResponse, RootContext } from "rakkasjs";
 
 export async function servePage(
 	req: RawRequest,
 	renderPage: (
 		request: RawRequest,
-		context: Record<string, unknown>,
+		context: RootContext,
 	) => Promise<RakkasResponse>,
+	locale: string,
 ): Promise<RakkasResponse> {
-	return await renderPage(req, {
-		session: { user: null },
-	});
+	return await renderPage(req, { locale, session: { user: null } });
 }
