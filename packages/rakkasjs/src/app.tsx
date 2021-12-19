@@ -6,8 +6,9 @@ import { CommonHooks, LoadHelpers } from "./lib/types";
 import { updateSetRootContext } from "./root-context";
 import { ParamsContext } from "./lib/useRouter";
 import { Helmet } from "react-helmet-async";
-import commonHooks from "virtual:rakkasjs:common-hooks";
-import { availableLocales, selectLocale } from "./lib/selectLocale";
+import * as commonHooks from "virtual:rakkasjs:common-hooks";
+import { detectLanguage } from "./lib/detectBrowserLanguage";
+import { LocaleContext } from "./lib/useLocale";
 
 let unmounted = false;
 
@@ -15,14 +16,11 @@ export const App: FC<{
 	initialStack: StackResult;
 	routes: Route[];
 	helpers: LoadHelpers;
-	locale?: string;
+	locale: string;
 }> = ({ initialStack, routes, helpers, locale }) => {
 	const initialRender = useRef(true);
-	const lastStack = useRef(initialStack);
-	const [rootContextState, setRootContextState] = useState<any>({
-		...$rakkas$rootContext,
-		locale,
-	});
+	const lastRender = useRef({ stack: initialStack, locale });
+	const [rootContextState, setRootContextState] = useState($rakkas$rootContext);
 	const rootContextRef = useRef(rootContextState);
 	rootContextRef.current = rootContextState;
 
@@ -30,44 +28,32 @@ export const App: FC<{
 
 	const render = useCallback(
 		async (signal: AbortSignal) => {
-			if (unmounted) return lastStack.current.content;
+			if (unmounted) return lastRender.current.stack.content;
 
 			const href = location.href;
 			let url = new URL(href);
 			const data = history.state.data;
 
-			let locale: string | undefined;
+			let locale = RAKKAS_DEFAULT_LOCALE;
 
-			if (availableLocales) {
-				const selectLocale = (commonHooks as CommonHooks)?.selectLocale;
+			const extractLocale = (commonHooks.default as CommonHooks)?.extractLocale;
+			if (extractLocale) {
+				const result: any = extractLocale(url);
 
-				if (selectLocale) {
-					const result = selectLocale(url, detectLanguage);
+				if (RAKKAS_DETECT_LOCALE && result.redirect) {
+					const redir =
+						result.redirect[detectLanguage(Object.keys(result.redirect))];
 
-					if ("redirect" in result) {
-						navigate(String(result.redirect), {
-							replace: true,
-							scroll: false,
-							data,
-						});
-
-						return;
-					} else {
-						url = result.url ? new URL(result.url, url) : url;
-					}
-				}
-
-				if (locale && locale !== rootContextRef.current.locale) {
-					// Schedule a rerender and skip this one
-					setRootContextState((old: any) => ({ ...old, locale }));
-
-					navigate(href, {
+					navigate(String(redir), {
 						replace: true,
 						scroll: false,
 						data,
 					});
 
 					return;
+				} else {
+					locale = result.locale;
+					url = result.url ? new URL(result.url, url) : url;
 				}
 			}
 
@@ -84,7 +70,7 @@ export const App: FC<{
 				url,
 				fetch,
 				reload(i) {
-					lastStack.current.rendered[i].cacheKey = "";
+					lastRender.current.stack.rendered[i].cacheKey = "";
 					if (!reloadPending) {
 						reloadPending = true;
 						navigate(href, {
@@ -94,12 +80,21 @@ export const App: FC<{
 						}).then(() => (reloadPending = false));
 					}
 				},
-				previousRender: lastStack.current.rendered,
+				previousRender: {
+					locale: lastRender.current.locale,
+					stack: lastRender.current.stack.rendered,
+				},
 				rootContext: rootContextRef.current,
+				locale,
 				helpers,
 			}))!;
 
 			if (signal.aborted) {
+				return null;
+			}
+
+			if ("location" in stack) {
+				navigate(stack.location, { replace: true });
 				return null;
 			}
 
@@ -127,21 +122,16 @@ export const App: FC<{
 				});
 			}
 
-			const lastRendered = stack.rendered[stack.rendered.length - 1].loaded;
 			initialRender.current = false;
-
-			if ("location" in lastRendered) {
-				navigate(String(lastRendered.location), { replace: true });
-				return null;
-			}
-
-			lastStack.current = stack;
+			lastRender.current = { stack, locale };
 
 			return (
-				<ParamsContext.Provider value={{ params: stack.params }}>
-					{locale && <Helmet htmlAttributes={{ lang: locale }} />}
-					{stack.content}
-				</ParamsContext.Provider>
+				<LocaleContext.Provider value={locale}>
+					<ParamsContext.Provider value={{ params: stack.params }}>
+						{stack.content}
+						<Helmet htmlAttributes={{ lang: locale }} />
+					</ParamsContext.Provider>
+				</LocaleContext.Provider>
 			);
 		},
 		[routes, helpers],
@@ -152,36 +142,12 @@ export const App: FC<{
 			render={render}
 			// skipInitialRender={isDataValid.current.every(Boolean)}
 		>
-			<ParamsContext.Provider value={{ params: initialStack.params }}>
-				{rootContextRef.current.locale && (
-					<Helmet htmlAttributes={{ lang: rootContextRef.current.locale }} />
-				)}
-				{lastStack.current.content}
-			</ParamsContext.Provider>
+			<LocaleContext.Provider value={locale}>
+				<ParamsContext.Provider value={{ params: initialStack.params }}>
+					{lastRender.current.stack.content}
+					<Helmet htmlAttributes={{ lang: locale }} />
+				</ParamsContext.Provider>
+			</LocaleContext.Provider>
 		</Knave>
 	);
 };
-
-export function detectLanguage(): string {
-	if (!RAKKAS_DETECT_LOCALE) return "en";
-
-	let fromCookie: string | undefined;
-
-	if (RAKKAS_LOCALE_COOKIE_NAME) {
-		const cookie = document.cookie;
-
-		if (cookie) {
-			const match = cookie.match(
-				new RegExp(`(?:^|;)\\s*${RAKKAS_LOCALE_COOKIE_NAME}=([^;]+)`),
-			);
-
-			if (match !== null) {
-				fromCookie = match[1];
-			}
-		}
-	}
-
-	const languages = navigator.languages || [navigator.language || "en"];
-
-	return selectLocale(fromCookie ? [fromCookie, ...languages] : languages);
-}

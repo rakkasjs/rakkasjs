@@ -10,7 +10,7 @@ declare global {
 
 	const RAKKAS_BUILD_ID: string;
 
-	const RAKKAS_LOCALES: string[] | undefined;
+	const RAKKAS_DEFAULT_LOCALE: string;
 	const RAKKAS_DETECT_LOCALE: boolean;
 	const RAKKAS_LOCALE_COOKIE_NAME: string | undefined;
 }

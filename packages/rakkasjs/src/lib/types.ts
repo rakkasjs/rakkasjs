@@ -128,6 +128,8 @@ export interface LoadArgs<T extends PageTypes = DefaultPageTypes>
 	extends GetCacheKeyArgs<T> {
 	/** Fetch function to make requests that includes credentials on both the client and the server */
 	fetch: typeof fetch;
+	/** Locale */
+	locale: string;
 	/** Data loading helpers */
 	helpers: LoadHelpers;
 }
@@ -302,20 +304,19 @@ export interface ErrorDescription {
 
 export type PageLoadResult<T = unknown> =
 	| PageLoadSuccessResult<T>
+	| LoadRedirectResult
 	| LoadErrorResult;
 
 export type LayoutLoadResult<
 	T = unknown,
 	C extends Record<string, any> = Record<string, any>,
-> = LayoutLoadSuccessResult<T, C> | LoadErrorResult;
+> = LayoutLoadSuccessResult<T, C> | LoadRedirectResult | LoadErrorResult;
 
 export interface PageLoadSuccessResult<T = unknown> {
 	/**  HTTP status, should be 2xx or 3xx for redirect */
 	status?: number;
 	/**  Data to be passed to the page component */
 	data: T;
-	/** Redirection target */
-	location?: string | URL;
 	/** Should this page be prerendered? */
 	prerender?: boolean;
 	/** Should this page be crawled to discover more pages to pre-render? */
@@ -332,8 +333,17 @@ export interface LayoutLoadSuccessResult<
 	data: T;
 	/** Context to be passed down to nested layouts and pages */
 	context?: C;
-	/** Redirection target */
-	location?: string | URL;
+	/** Should this page be prerendered? */
+	prerender?: boolean;
+	/** Should this page be crawled to discover more pages to pre-render? */
+	crawl?: boolean;
+}
+
+export interface LoadRedirectResult {
+	/** HTTP status, should be 3xx */
+	status?: number;
+	/** Redirect location */
+	redirect: string | URL;
 	/** Should this page be prerendered? */
 	prerender?: boolean;
 	/** Should this page be crawled to discover more pages to pre-render? */
@@ -469,13 +479,13 @@ export interface ClientHooks {
 }
 
 export interface CommonHooks {
-	/** Decode the locale and optionally rewrite the URL.
-	 * If you can't detect the locale from the URL, you can call the detect function to detect it
-	 * from the cookie, accept-language header, navigator.languages, or navigator.language.
-	 * You can also redirect, useful for international landing pages.
+	/** Decode the locale from the URL and optionally rewrite the URL.
+	 * If the URL belongs to an international redirection page, return a redirect object
+	 * with keys as the locales and values as the redirect URLs.
 	 */
-	selectLocale?(
+	extractLocale?(
 		url: URL,
-		detect: () => string,
-	): { locale: string; url?: URL | string } | { redirect: URL | string };
+	):
+		| { locale: string; url?: URL | string }
+		| { redirect: Record<string, URL | string> };
 }

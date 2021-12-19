@@ -15,7 +15,7 @@ declare const RAKKAS_BUILD_TARGET:
 
 declare const RAKKAS_BUILD_ID: string;
 
-declare const RAKKAS_LOCALES: string[] | undefined;
+declare const RAKKAS_DEFAULT_LOCALE: string;
 declare const RAKKAS_DETECT_LOCALE: boolean;
 declare const RAKKAS_LOCALE_COOKIE_NAME: string | undefined;
 

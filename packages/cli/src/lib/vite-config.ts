@@ -95,16 +95,9 @@ export async function makeViteConfig(
 			...viteConfig.define,
 			RAKKAS_BUILD_TARGET: JSON.stringify(deploymentTarget),
 			RAKKAS_BUILD_ID: JSON.stringify(buildId),
-			RAKKAS_LOCALES: config.locales?.available?.length
-				? JSON.stringify(config.locales.available)
-				: "undefined",
-			RAKKAS_DETECT_LOCALE:
-				config.locales?.detect && (config.locales?.available?.length || 0) > 1
-					? JSON.stringify(config.locales.detect)
-					: "false",
-			RAKKAS_LOCALE_COOKIE_NAME: config.locales?.cookieName
-				? JSON.stringify(config.locales.cookieName)
-				: "undefined",
+			RAKKAS_DEFAULT_LOCALE: JSON.stringify(config.locales?.default || "en"),
+			RAKKAS_DETECT_LOCALE: JSON.stringify(!!config.locales?.detect),
+			RAKKAS_LOCALE_COOKIE_NAME: JSON.stringify(config.locales?.cookieName),
 		},
 
 		ssr: {

@@ -241,10 +241,10 @@ export async function rakkasVitePlugin(
 				} else if (
 					id === "virtual:rakkasjs:client-hooks" ||
 					id === "virtual:rakkasjs:server-hooks" ||
-					id === "@rakkasjs/common-hooks"
+					id === "virtual:rakkasjs:common-hooks"
 				) {
 					// This bogus export is for silencing the "Generated an empty chunk" warning
-					return "export const nothing = 1";
+					return "export default null";
 				} else if (id === "virtual:rakkasjs:placeholder") {
 					return `export default () => "Loading..."`;
 				}

@@ -12,6 +12,8 @@ export {
 	useNavigationBlocker,
 } from "knave-react";
 
+export { useLocale } from "./lib/useLocale";
+
 /** @deprecated Use StyledLink */
 export const NavLink = StyledLink;
 

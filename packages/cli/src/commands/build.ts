@@ -369,12 +369,14 @@ export async function build(
 	);
 
 	await prerender(
+		config,
 		outDir,
 		htmlContents,
 		htmlPlaceholder,
 		manifest,
 		config.prerender,
 		pageRoutes,
+		deploymentTarget,
 	);
 
 	if (deploymentTarget === "static") {
@@ -391,6 +393,11 @@ export async function build(
 		);
 
 		await fs.promises.rename(path.join(outDir, "client"), "dist");
+
+		await fs.promises.copyFile(
+			path.resolve(__dirname, "./entries/entry-language-detect.js"),
+			"dist/lang-redir.js",
+		);
 
 		await new Promise<void>((resolve, reject) =>
 			rimraf(outDir, (error) => {
@@ -410,12 +417,14 @@ export async function build(
 }
 
 async function prerender(
+	config: FullConfig,
 	outDir: string,
 	htmlTemplate: string,
 	htmlPlaceholder: string,
 	manifest: Record<string, string[]>,
 	prerender: string[],
 	pageRoutes: Route[],
+	deploymentTarget: RakkasDeploymentTarget,
 ) {
 	if (!prerender.length) return;
 
@@ -560,10 +569,42 @@ async function prerender(
 			(x) => x[0].toLowerCase() === "content-type",
 		)?.[1];
 
-		if (contentType === "text/html") {
-			const noCrawl = replyHeaders.find(
-				(x) => x[0].toLowerCase() === "x-robots-tag",
-			)?.[1];
+		const prerenderHeader = replyHeaders.find(
+			(x) => x[0].toLowerCase() === "x-rakkas-prerender",
+		)?.[1];
+
+		if (prerenderHeader === "language-redirect") {
+			const redirects: Record<string, string> = response.body as any;
+			for (const [, path] of Object.entries(redirects)) {
+				addPath(path);
+			}
+
+			if (deploymentTarget === "static" && config.locales?.detect) {
+				const content = renderLanguageRedirectPage(
+					redirects,
+					config.locales?.default || "en",
+					config.locales?.cookieName,
+				);
+				let name = currentUrl.pathname;
+				if (!name.endsWith("/")) name += "/";
+				name += "/index.html";
+
+				const fullname = clientDir + name;
+				const dir = path.parse(fullname).dir;
+
+				// eslint-disable-next-line no-console
+				console.log(chalk.gray(name));
+
+				await fs.promises.mkdir(dir, { recursive: true });
+				await fs.promises.writeFile(fullname, content);
+
+				prerendered[name] = {
+					content: { headers: response.headers, status: response.status },
+					filename: fullname,
+				};
+			}
+		} else if (contentType === "text/html") {
+			const noCrawl = prerenderHeader === "no-crawl";
 
 			if (!noCrawl) {
 				if (response.body === undefined || response.body === null) {
@@ -606,4 +647,48 @@ async function getBuildId(): Promise<string> {
 			}
 		});
 	});
+}
+
+function renderLanguageRedirectPage(
+	redirects: Record<string, string>,
+	defaultLocale: string,
+	coookieName?: string,
+): string {
+	let anchors = "";
+	let links = "";
+	for (const [lang, url] of Object.entries(redirects)) {
+		let displayName = lang;
+		try {
+			displayName = new (Intl as any).DisplayNames(lang, {
+				type: "language",
+			})
+				.of(lang)
+				.toLocaleUpperCase(lang);
+		} catch {
+			// Do nothing
+		}
+
+		anchors += `<li><a href="${escapeHtml(
+			url,
+		)}" hreflang="${lang}" lang="${lang}">${escapeHtml(displayName)}</a></li>`;
+
+		links += `<link rel="alternate" hreflang="${lang}" href="${escapeHtml(
+			url,
+		)}" />`;
+	}
+
+	return `<!DOCTYPE html><html><head><meta charset="utf-8">${links}</head><body><noscript><ul>${anchors}</ul></noscript><script>RAKKAS_DEFAULT_LOCALE=${JSON.stringify(
+		defaultLocale,
+	)};RAKKAS_LOCALE_COOKIE_NAME=${JSON.stringify(
+		coookieName,
+	)}</script><script src="/lang-redir.js"></script></body></html>`;
+}
+
+function escapeHtml(text: string): string {
+	return text
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
 }

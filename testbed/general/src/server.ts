@@ -6,7 +6,6 @@ export async function servePage(
 		request: RawRequest,
 		context: RootContext,
 	) => Promise<RakkasResponse>,
-	locale: string,
 ): Promise<RakkasResponse> {
-	return await renderPage(req, { locale, session: { user: null } });
+	return await renderPage(req, { session: { user: null } });
 }

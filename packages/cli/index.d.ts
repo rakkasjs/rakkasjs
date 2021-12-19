@@ -37,9 +37,13 @@ export interface FullConfig {
 	 * @default false */
 	trustForwardedOrigin: boolean;
 
+	/** Locale detection settings */
 	locales?: {
-		available?: string[];
+		/** Default locale @default "en" */
+		default?: string;
+		/** Whether to attempt detecting the locale @default false */
 		detect?: boolean;
+		/** Name of the cookie for manually overriding the locale */
 		cookieName?: string;
 	};
 

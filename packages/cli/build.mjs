@@ -80,6 +80,22 @@ async function run() {
 		})
 		.catch(() => process.exit(1));
 
+	console.log("Building language detection client");
+	await esbuild
+		.build({
+			bundle: true,
+			logLevel: "info",
+			entryPoints: ["src/runtime/entry-language-detect.ts"],
+			outdir: "dist/entries",
+			platform: "browser",
+			target: ["esnext"],
+			format: "cjs",
+			plugins: [lateResolvePlugin()],
+			watch: process.argv[2] === "--watch",
+			minify: true,
+		})
+		.catch(() => process.exit(1));
+
 	console.log("Building Vercel runtime");
 	await esbuild
 		.build({
