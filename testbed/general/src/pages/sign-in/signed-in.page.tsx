@@ -13,7 +13,7 @@ export default definePage<IndexPageTypes>({
 			console.log("Redirecting");
 			return {
 				status: 301,
-				location: "/sign-in",
+				redirect: "/sign-in",
 				data: null,
 			};
 		}

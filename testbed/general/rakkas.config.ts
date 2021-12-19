@@ -8,8 +8,10 @@ import { defineConfig } from "@rakkasjs/cli";
 // defineConfig is a helper to ensure IDE code-completion.
 
 export default defineConfig({
+	prerender: ["/locales"],
 	locales: {
-		available: ["en", "fr"],
+		default: "en",
 		detect: true,
+		cookieName: "LOCALE",
 	},
 });

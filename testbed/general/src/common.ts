@@ -1,7 +1,7 @@
 import { defineCommonHooks } from "rakkasjs";
 
 export default defineCommonHooks({
-	selectLocale(url, detect) {
+	extractLocale(url) {
 		if (url.pathname === "/locales/fr/salut") {
 			return {
 				locale: "fr",
@@ -13,12 +13,11 @@ export default defineCommonHooks({
 				url: "/locales/hello",
 			};
 		} else if (url.pathname === "/locales") {
-			const lang = detect();
-
 			return {
-				redirect: lang.startsWith("en")
-					? "/locales/en/hello"
-					: "/locales/fr/salut",
+				redirect: {
+					en: "/locales/en/hello",
+					fr: "/locales/fr/salut",
+				},
 			};
 		} else {
 			return { locale: "en" };

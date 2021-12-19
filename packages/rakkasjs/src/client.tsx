@@ -9,16 +9,19 @@ import {
 	makeComponentStack,
 	RenderedStackItem,
 } from "./lib/makeComponentStack";
-import { App, detectLanguage } from "./app";
+import { App } from "./app";
 import { findRoute, Route } from "./lib/find-route";
-import { ClientHooks, CommonHooks } from "./lib/types";
+import { CommonHooks } from "./lib/types";
 import { navigate } from "knave-react";
+import * as clientHooksImport from "virtual:rakkasjs:client-hooks";
+import * as commonHooksImport from "virtual:rakkasjs:common-hooks";
+import { detectLanguage } from "./lib/detectBrowserLanguage";
 
 const lastRendered: RenderedStackItem[] =
 	(window as any).$rakkas$rendered || [];
 
 export async function startClient(routes?: Route[]) {
-	let clientHooks: ClientHooks = await import("virtual:rakkasjs:client-hooks");
+	let clientHooks = clientHooksImport;
 
 	if ((clientHooks as any).default) clientHooks = (clientHooks as any).default;
 
@@ -34,25 +37,29 @@ export async function startClient(routes?: Route[]) {
 
 	let url = new URL(window.location.href);
 
-	const commonHooks: CommonHooks | undefined = (
-		await import("virtual:rakkasjs:common-hooks")
-	).default;
+	const commonHooks: CommonHooks | undefined = commonHooksImport.default;
 
-	let locale: string | undefined;
-	const selectLocale = commonHooks?.selectLocale;
-	if (selectLocale) {
-		const result = selectLocale(url, detectLanguage);
+	let locale = RAKKAS_DEFAULT_LOCALE;
 
-		if ("redirect" in result) {
-			let r = result.redirect;
-			if (typeof r === "string") {
-				r = new URL(r, url);
+	const extractLocale = commonHooks?.extractLocale;
+	if (extractLocale) {
+		const result: any = extractLocale(url);
+
+		if (RAKKAS_DETECT_LOCALE && result.redirect) {
+			const redir =
+				result.redirect[detectLanguage(Object.keys(result.redirect))];
+
+			const r2 = extractLocale(new URL(redir, location.href));
+
+			if (!("redirect" in r2)) {
+				locale = r2.locale;
+				url = r2.url ? new URL(r2.url, location.href) : url;
 			}
 
-			if (r.origin === location.origin) {
-				history.replaceState({}, "", r.href);
+			if (url.origin === location.origin) {
+				history.replaceState({}, "", url.href);
 			} else {
-				location.href = String(result.redirect);
+				location.href = String(url);
 				return;
 			}
 		} else {
@@ -73,9 +80,12 @@ export async function startClient(routes?: Route[]) {
 		found,
 		url,
 		fetch,
-		previousRender: lastRendered,
+		previousRender: {
+			stack: lastRendered,
+			locale: document.documentElement.lang,
+		},
 		reload(i) {
-			stack.rendered[i].cacheKey = "";
+			(stack as any).rendered[i].cacheKey = "";
 			navigate(url.href, {
 				replace: true,
 				scroll: false,
@@ -84,8 +94,15 @@ export async function startClient(routes?: Route[]) {
 		},
 		rootContext: $rakkas$rootContext,
 		isInitialRender: true,
+		locale,
 		helpers,
 	}))!;
+
+	if ("location" in stack) {
+		// Shouldn't happen, but just in case
+		location.href = stack.location;
+		return;
+	}
 
 	let rendered = (
 		<HelmetProvider>

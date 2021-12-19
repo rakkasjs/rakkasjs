@@ -1,15 +1,17 @@
 import React, { ReactNode } from "react";
-import { definePage, DefinePageTypes, Link } from "rakkasjs";
+import { definePage, DefinePageTypes, Link, useLocale } from "rakkasjs";
 
 type LocalizePageTypes = DefinePageTypes<{ data: never }>;
 
 export default definePage<LocalizePageTypes>({
-	Component: function LocalizePage({ context }) {
+	Component: function LocalizePage() {
+		const locale = useLocale();
+
 		let rendered: ReactNode;
-		if (context.locale === "fr") {
-			rendered = <p>{context.locale}: Salut, le monde!</p>;
+		if (locale === "fr") {
+			rendered = <p>{locale}: Salut, le monde!</p>;
 		} else {
-			rendered = <p>{context.locale}: Hello, world!</p>;
+			rendered = <p>{locale}: Hello, world!</p>;
 		}
 
 		return (

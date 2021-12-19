@@ -46,10 +46,11 @@ interface StackArgs {
 	};
 	url: URL;
 	fetch: typeof fetch;
-	previousRender?: RenderedStackItem[];
+	previousRender?: { locale: string; stack: RenderedStackItem[] };
 	reload(i: number): void;
 	rootContext: Record<string, unknown>;
 	isInitialRender?: boolean;
+	locale: string;
 	helpers: LoadHelpers;
 }
 
@@ -63,6 +64,11 @@ export interface StackResult {
 	crawl: boolean;
 }
 
+export interface RedirectResult {
+	location: string;
+	status: number;
+}
+
 export async function makeComponentStack({
 	found,
 	url,
@@ -72,8 +78,11 @@ export async function makeComponentStack({
 	isInitialRender,
 	rootContext = {},
 	helpers,
-}: StackArgs): Promise<StackResult | null> {
+	locale,
+}: StackArgs): Promise<StackResult | null | RedirectResult> {
 	const { stack, params, match } = found;
+	const previousStack =
+		locale === previousRender?.locale ? previousRender?.stack : undefined;
 
 	let error: ErrorDescription | undefined;
 	const thisRender: RenderedStackItem[] = [];
@@ -89,7 +98,7 @@ export async function makeComponentStack({
 		};
 	}
 
-	if (import.meta.env.SSR && RAKKAS_BUILD_TARGET !== "static") {
+	if (import.meta.env.SSR) {
 		for (const [i, moduleId] of [...stack].reverse().entries()) {
 			const module = await importers[moduleId]();
 
@@ -195,18 +204,26 @@ export async function makeComponentStack({
 
 		if (
 			// No previous render, we're in server side; should reload
-			!previousRender ||
+			!previousStack ||
 			// Different component; should reload
-			!previousRender[i] ||
-			(previousRender[i].name && previousRender[i].name !== moduleId) ||
+			!previousStack[i] ||
+			(previousStack[i].name && previousStack[i].name !== moduleId) ||
 			// Cache key manually invalidated; should reload
-			!previousRender[i].cacheKey ||
+			!previousStack[i].cacheKey ||
 			// Cache key changed; should reload
-			previousRender[i].cacheKey !== cacheKey
+			previousStack[i].cacheKey !== cacheKey
 		) {
 			if (load) {
 				try {
-					loaded = await load({ url, params, match, context, fetch, helpers });
+					loaded = await load({
+						url,
+						params,
+						match,
+						context,
+						fetch,
+						helpers,
+						locale,
+					});
 				} catch (error) {
 					loaded = { status: 500, error: toErrorDescription(error) };
 				}
@@ -217,7 +234,7 @@ export async function makeComponentStack({
 				};
 			}
 		} else {
-			loaded = previousRender![i].loaded;
+			loaded = previousStack![i].loaded;
 		}
 
 		prerender = prerender ?? loaded.prerender;
@@ -245,9 +262,11 @@ export async function makeComponentStack({
 			if (status < 400) status = 500;
 			error = loaded.error;
 			break;
-		} else if ("location" in loaded) {
-			status = loaded.status || 301;
-			break;
+		} else if ("redirect" in loaded) {
+			return {
+				status: loaded.status || 301,
+				location: String(loaded.redirect),
+			};
 		}
 	}
 

@@ -30,7 +30,8 @@
 		".": "./dist/index.mjs",
 		"./server": "./dist/server.mjs",
 		"./client": "./dist/client.mjs",
-		"./placeholder-loader": "./dist/placeholder-loader.mjs"
+		"./placeholder-loader": "./dist/placeholder-loader.mjs",
+		"./language-redirect-client": "./dist/language-redirect-client.mjs"
 	},
 	"dependencies": {
 		"@types/react": "^17.0.37",

@@ -13,7 +13,7 @@ import { makeComponentStack } from "./lib/makeComponentStack";
 import { findRoute, Route } from "./lib/find-route";
 
 import importers from "virtual:rakkasjs:api-imports";
-import commonHooks from "virtual:rakkasjs:common-hooks";
+import * as commonHooks from "virtual:rakkasjs:common-hooks";
 import {
 	RawRequest,
 	PageRenderOptions,
@@ -23,7 +23,8 @@ import {
 } from "./lib/types";
 import { KnaveServerSideProvider } from "knave-react";
 import { ParamsContext } from "./lib/useRouter";
-import { availableLocales, selectLocale } from "./lib/selectLocale";
+import { selectLocale } from "./lib/selectLocale";
+import { LocaleContext } from "./lib/useLocale";
 
 export type { Route };
 
@@ -271,10 +272,12 @@ export async function generateResponse(
 		return fetch(parsed.href, fullInit);
 	}
 
-	let locale: string | undefined;
+	let locale = RAKKAS_DEFAULT_LOCALE;
 
-	function detectLanguage(): string {
-		if (!RAKKAS_DETECT_LOCALE) return "en";
+	function detectLanguage(available: string[]): string {
+		if (prerendering || !RAKKAS_DETECT_LOCALE) {
+			return RAKKAS_DEFAULT_LOCALE;
+		}
 
 		let fromCookie: string | undefined;
 		if (RAKKAS_LOCALE_COOKIE_NAME) {
@@ -312,29 +315,41 @@ export async function generateResponse(
 			.sort((a, b) => b.q - a.q)
 			.map((x) => x.lang);
 
-		return selectLocale(fromCookie ? [fromCookie, ...languages] : languages);
+		return selectLocale(
+			fromCookie ? [fromCookie, ...languages] : languages,
+			available,
+		);
 	}
 
-	if (availableLocales) {
-		const selectLocale = (commonHooks as CommonHooks)?.selectLocale;
+	let filename = request.url.pathname;
+	if (filename === "/") filename = "";
 
-		if (selectLocale) {
-			const result = selectLocale(request.url, detectLanguage);
+	const extractLocale = (commonHooks.default as CommonHooks)?.extractLocale;
 
-			if ("redirect" in result) {
+	if (extractLocale) {
+		const result: any = extractLocale(request.url);
+
+		if (RAKKAS_DETECT_LOCALE && result.redirect) {
+			if (prerendering) {
+				return {
+					status: 300,
+					headers: { "x-rakkas-prerender": "language-redirect" },
+					body: result.redirect,
+				};
+			} else {
+				const lang = detectLanguage(Object.keys(result.redirect));
+
 				return {
 					status: 302,
 					headers: {
-						location: String(result.redirect),
+						location: String(result.redirect[lang]),
 						vary: "accept-language",
 					},
 				};
-			} else {
-				locale = result.locale;
-				request.url = result.url
-					? new URL(result.url, request.url)
-					: request.url;
 			}
+		} else {
+			locale = result.locale;
+			request.url = result.url ? new URL(result.url, request.url) : request.url;
 		}
 	}
 
@@ -353,16 +368,11 @@ export async function generateResponse(
 		servePage: ServePageHook | undefined;
 	};
 
-	let filename = request.url.pathname;
-	if (filename === "/") filename = "";
-
 	async function render(
 		request: RawRequest,
-		context: any,
+		context: any = {},
 		options: PageRenderOptions = {},
 	): Promise<RakkasResponse> {
-		if (locale && !context.locale) context.locale = locale;
-
 		const stack = await makeComponentStack({
 			found: foundPage,
 
@@ -376,6 +386,8 @@ export async function generateResponse(
 
 			rootContext: context,
 
+			locale,
+
 			helpers: options.createLoadHelpers
 				? await options.createLoadHelpers(internalFetch)
 				: {},
@@ -387,22 +399,49 @@ export async function generateResponse(
 				`<script>$rakkas$rootContext=${devalue(context)}</script>`,
 			);
 
-			return {
+			const response = {
 				body: html,
 				headers: { "content-type": "text/html", "content-language": locale },
 			};
+
+			if (RAKKAS_BUILD_TARGET === "static" && prerendering && saveResponse) {
+				await saveResponse(`${filename}/index.html`, response);
+			}
+
+			return response;
+		}
+
+		if ("location" in stack) {
+			const response = {
+				status: stack.status,
+				headers: { location: stack.location },
+				// Insert HTML redirection if pre-rendering
+				body: prerendering
+					? `<html><head><meta http-equiv="refresh" content="0; url=${escapeHtml(
+							stack.location,
+					  )}"></head></html>`
+					: null,
+			};
+
+			if (prerendering && saveResponse) {
+				await saveResponse(`${filename}/index.html`, response);
+			}
+
+			return response;
 		}
 
 		const helmetContext = {};
 
 		let app = (
 			<KnaveServerSideProvider url={request.url.href}>
-				<ParamsContext.Provider value={{ params: foundPage.params }}>
-					<HelmetProvider context={helmetContext}>
-						{locale && <Helmet htmlAttributes={{ lang: locale }} />}
-						{stack.content}
-					</HelmetProvider>
-				</ParamsContext.Provider>
+				<HelmetProvider context={helmetContext}>
+					<ParamsContext.Provider value={{ params: foundPage.params }}>
+						<LocaleContext.Provider value={locale}>
+							{stack.content}
+							<Helmet htmlAttributes={{ lang: locale }} />
+						</LocaleContext.Provider>
+					</ParamsContext.Provider>
+				</HelmetProvider>
 			</KnaveServerSideProvider>
 		);
 
@@ -423,21 +462,6 @@ export async function generateResponse(
 
 		let head = "";
 		const headers: Record<string, string> = { "content-type": "text/html" };
-
-		let location: string | undefined;
-		const lastRendered = stack.rendered[stack.rendered.length - 1].loaded;
-
-		if ("location" in lastRendered) {
-			location = String(lastRendered.location);
-
-			if (prerendering) {
-				head += `<meta http-equiv="refresh" content="0; url=${encodeURI(
-					location,
-				)}">`;
-			}
-
-			headers.location = location;
-		}
 
 		head += `<script>[$rakkas$rootContext,$rakkas$rendered]=${dataScript}</script>`;
 
@@ -564,4 +588,14 @@ function parseBody(
 	}
 
 	return { type: "binary", body: new Uint8Array(bodyBuffer) };
+}
+
+/** Escape HTML */
+function escapeHtml(text: string): string {
+	return text
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
 }

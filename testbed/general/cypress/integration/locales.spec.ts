@@ -33,5 +33,11 @@ describe("Localized URLs", () => {
 			headers: { "Accept-Language": "en-US;" },
 		});
 		cy.url().should("include", "/locales/en/hello");
+
+		cy.setCookie("LOCALE", "fr");
+		cy.visit("/locales", {
+			headers: { "Accept-Language": "en-US;" },
+		});
+		cy.url().should("include", "/locales/fr/salut");
 	});
 });

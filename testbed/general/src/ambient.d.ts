@@ -7,7 +7,6 @@ declare module "*.module.css" {
 
 declare module "rakkasjs" {
 	interface RootContext {
-		locale: string;
 		session: { user: null | { email: string } };
 	}
 }
