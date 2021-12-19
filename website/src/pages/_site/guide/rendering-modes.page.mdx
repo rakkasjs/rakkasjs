@@ -33,3 +33,7 @@ since pre-rendering works by saving the pre-rendered data to the file system, it
 The recommended way of side-stepping this problem is to use file extensions, like `/api/articles.json` and `/api/articles/[articleId].json`. It also helps the static file server get the content types right. In this case the endpoint handlers would be named `/api/articles.json.endpoint.js` and `/api/articles/[articleId].endpoint.js` respectively.
 
 If your entire application is suitable to pre-rendering, you should consider using [`static` as your deployment target](./deployment-targets#static).
+
+### Serverless environments
+
+Note that pre-rendering is performed during the build. The environment will be different than the final deployment environment. You won't have access to features that are only available in the final deployment environment. So, for example, you can't use the Cloudflare Worker's KV store during pre-rendering.
