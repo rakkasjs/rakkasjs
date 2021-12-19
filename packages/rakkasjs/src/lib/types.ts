@@ -317,6 +317,8 @@ export interface PageLoadSuccessResult<T = unknown> {
 	status?: number;
 	/**  Data to be passed to the page component */
 	data: T;
+	/** Value to be returned in the Cache-Control header */
+	cacheControl?: string;
 	/** Should this page be prerendered? */
 	prerender?: boolean;
 	/** Should this page be crawled to discover more pages to pre-render? */
@@ -331,6 +333,8 @@ export interface LayoutLoadSuccessResult<
 	status?: number;
 	/** Data to be passed to the layout component */
 	data: T;
+	/** Value to be returned in the Cache-Control header */
+	cacheControl?: string;
 	/** Context to be passed down to nested layouts and pages */
 	context?: C;
 	/** Should this page be prerendered? */
@@ -344,6 +348,8 @@ export interface LoadRedirectResult {
 	status?: number;
 	/** Redirect location */
 	redirect: string | URL;
+	/** Value to be returned in the Cache-Control header */
+	cacheControl?: string;
 	/** Should this page be prerendered? */
 	prerender?: boolean;
 	/** Should this page be crawled to discover more pages to pre-render? */
@@ -355,6 +361,8 @@ export interface LoadErrorResult {
 	status?: number;
 	// An error object describing the error
 	error: ErrorDescription;
+	/** Value to be returned in the Cache-Control header */
+	cacheControl?: string;
 	/** Should this page be prerendered? */
 	prerender?: boolean;
 	/** Should this page be crawled to discover more pages to pre-render? */

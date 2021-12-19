@@ -62,11 +62,13 @@ export interface StackResult {
 	found: boolean;
 	prerender: boolean;
 	crawl: boolean;
+	cacheControl?: string;
 }
 
 export interface RedirectResult {
 	location: string;
 	status: number;
+	cacheControl?: string;
 }
 
 export async function makeComponentStack({
@@ -98,6 +100,7 @@ export async function makeComponentStack({
 		};
 	}
 
+	let cacheControl: string | undefined;
 	if (import.meta.env.SSR) {
 		for (const [i, moduleId] of [...stack].reverse().entries()) {
 			const module = await importers[moduleId]();
@@ -129,6 +132,8 @@ export async function makeComponentStack({
 					  };
 
 			const { options } = moduleExports;
+
+			cacheControl = cacheControl ?? options?.cacheControl;
 
 			if (!options) continue;
 			if (options.ssr) break;
@@ -266,6 +271,7 @@ export async function makeComponentStack({
 			return {
 				status: loaded.status || 301,
 				location: String(loaded.redirect),
+				cacheControl,
 			};
 		}
 	}
@@ -317,6 +323,7 @@ export async function makeComponentStack({
 		rendered: thisRender.map(({ ...rest }) => rest),
 		params,
 		found: !!match,
+		cacheControl,
 		prerender:
 			prerender ?? (RAKKAS_BUILD_TARGET === "static" && status !== 404),
 		crawl: crawl ?? true,

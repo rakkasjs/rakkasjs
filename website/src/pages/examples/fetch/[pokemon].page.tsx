@@ -28,9 +28,7 @@ export default definePage<PokemonStatPageTypes>({
 			`https://pokeapi.co/api/v2/pokemon/${params.pokemon}`,
 		).then((r) => r.json());
 
-		return {
-			data,
-		};
+		return { data };
 	},
 
 	// Component: ({ data }) => <div> ... </div> could also work but
