@@ -240,10 +240,7 @@ export async function build(
 					"virtual:rakkasjs:server",
 					"virtual:rakkasjs:placeholder-loader",
 				],
-				output:
-					deploymentTarget === "cloudflare-workers"
-						? { format: "es" }
-						: undefined,
+				output: undefined,
 			},
 			emptyOutDir: true,
 		},
@@ -266,6 +263,44 @@ export async function build(
 
 		await fs.promises.copyFile(entry!, path.join(serverOutDir, "index.js"));
 	}
+
+	const pageRoutes: Route[] = (
+		await (0, eval)(
+			`import(${JSON.stringify(
+				path.join(serverOutDir, "virtual_rakkasjs_page-routes.js"),
+			)})`,
+		)
+	).default.default;
+
+	installNodeFetch();
+
+	const htmlContents = dom.html();
+
+	const placeholderLoader = path.join(serverOutDir, "placeholder-loader.js");
+
+	const htmlPlaceholder = await (
+		await (0, eval)(`import(${JSON.stringify(placeholderLoader)})`)
+	).default.default(htmlContents, pageRoutes);
+
+	await fs.promises.unlink(placeholderLoader);
+
+	fs.promises.writeFile(
+		path.join(serverOutDir, "placeholder.js"),
+		`module.exports=${JSON.stringify(htmlPlaceholder)}`,
+		"utf8",
+	);
+
+	await prerender(
+		config,
+		serverOutDir,
+		clientOutDir,
+		htmlContents,
+		htmlPlaceholder,
+		manifest,
+		config.prerender,
+		pageRoutes,
+		deploymentTarget,
+	);
 
 	if (deploymentTarget === "vercel") {
 		// eslint-disable-next-line no-console
@@ -342,43 +377,6 @@ export async function build(
 		);
 	}
 
-	const pageRoutes: Route[] = (
-		await (0, eval)(
-			`import(${JSON.stringify(
-				path.join(outDir, "server/virtual_rakkasjs_page-routes.js"),
-			)})`,
-		)
-	).default.default;
-
-	installNodeFetch();
-
-	const htmlContents = dom.html();
-
-	const placeholderLoader = path.join(outDir, "server/placeholder-loader.js");
-
-	const htmlPlaceholder = await (
-		await (0, eval)(`import(${JSON.stringify(placeholderLoader)})`)
-	).default.default(htmlContents, pageRoutes);
-
-	await fs.promises.unlink(placeholderLoader);
-
-	fs.promises.writeFile(
-		path.join(outDir, "server/placeholder.js"),
-		`module.exports=${JSON.stringify(htmlPlaceholder)}`,
-		"utf8",
-	);
-
-	await prerender(
-		config,
-		outDir,
-		htmlContents,
-		htmlPlaceholder,
-		manifest,
-		config.prerender,
-		pageRoutes,
-		deploymentTarget,
-	);
-
 	if (deploymentTarget === "static") {
 		await fs.promises.mkdir("dist", { recursive: true });
 
@@ -418,7 +416,8 @@ export async function build(
 
 async function prerender(
 	config: FullConfig,
-	outDir: string,
+	serverOutDir: string,
+	clientOutDir: string,
 	htmlTemplate: string,
 	htmlPlaceholder: string,
 	manifest: Record<string, string[]>,
@@ -432,7 +431,7 @@ async function prerender(
 	console.log(chalk.blue("Pre-rendering static routes"));
 
 	const server = await (0, eval)(
-		`import(${JSON.stringify(path.join(outDir, "server/server.js"))})`,
+		`import(${JSON.stringify(path.join(serverOutDir, "server.js"))})`,
 	);
 
 	const handleRequest: typeof HandleRequest = server.handleRequest;
@@ -440,7 +439,7 @@ async function prerender(
 	const apiRoutes: Route[] = (
 		await (0, eval)(
 			`import(${JSON.stringify(
-				path.join(outDir, "server/virtual_rakkasjs_api-routes.js"),
+				path.join(serverOutDir, "virtual_rakkasjs_api-routes.js"),
 			)})`,
 		)
 	).default.default;
@@ -448,7 +447,6 @@ async function prerender(
 	const roots = new Set(prerender);
 	const origin = `http://localhost`;
 
-	const clientDir = path.resolve(outDir, "client");
 	const prerendered: Record<
 		string,
 		{
@@ -472,7 +470,7 @@ async function prerender(
 
 			async saveResponse(name, response) {
 				try {
-					const fullname = clientDir + name;
+					const fullname = clientOutDir + name;
 					const dir = path.parse(fullname).dir;
 
 					const { body, ...bodiless } = response;
@@ -589,7 +587,7 @@ async function prerender(
 				if (!name.endsWith("/")) name += "/";
 				name += "/index.html";
 
-				const fullname = clientDir + name;
+				const fullname = clientOutDir + name;
 				const dir = path.parse(fullname).dir;
 
 				// eslint-disable-next-line no-console

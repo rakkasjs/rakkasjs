@@ -69,13 +69,16 @@ export async function makeViteConfig(
 
 		resolve: {
 			...viteConfig.resolve,
-			dedupe: [
-				...(viteConfig.resolve?.dedupe || []),
-				"react",
-				"react-dom",
-				"react-dom/server",
-				"react-helmet-async",
-			],
+			dedupe:
+				deploymentTarget === "cloudflare-workers"
+					? [
+							...(viteConfig.resolve?.dedupe || []),
+							"react",
+							"react-dom",
+							"react-dom/server",
+							"react-helmet-async",
+					  ]
+					: undefined,
 		},
 		plugins: [
 			...(viteConfig.plugins || []),
@@ -88,6 +91,7 @@ export async function makeViteConfig(
 				apiRoot: config.apiRoot,
 				configDeps,
 				babel: config.babel,
+				removeRequireHook: !!ssr && deploymentTarget === "cloudflare-workers",
 				onConfigChange,
 			}),
 		],

@@ -27,6 +27,7 @@ async function run() {
 		"$output/virtual_rakkasjs_page-routes.js",
 		"$output/rakkas-manifest.json",
 		"$output/html-template.js",
+		"$output/placeholder.js",
 	];
 
 	function lateResolvePlugin() {

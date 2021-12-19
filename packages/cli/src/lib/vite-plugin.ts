@@ -17,6 +17,7 @@ export interface RakkasVitePluginConfig {
 	apiRoot: string;
 	configDeps?: string[];
 	babel?: TransformOptions;
+	removeRequireHook: boolean;
 	onConfigChange?: () => void;
 }
 
@@ -33,6 +34,7 @@ export async function rakkasVitePlugin(
 		configDeps,
 		babel = {},
 		onConfigChange,
+		removeRequireHook,
 	} = config;
 
 	const componentExtensions = pageExtensions.join("|");
@@ -97,6 +99,13 @@ export async function rakkasVitePlugin(
 			enforce: "pre",
 
 			configResolved(config) {
+				if (removeRequireHook) {
+					// This hack is needed to remove a `require` call inserted by this builtin Vite plugin.
+					(config.plugins as any) = config.plugins.filter(
+						(x) => x && x.name !== "vite:ssr-require-hook",
+					);
+				}
+
 				ssr = !!config.build.ssr;
 				command = config.command;
 			},
