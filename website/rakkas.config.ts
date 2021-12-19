@@ -16,6 +16,7 @@ loadLanguages(tsx, bash);
 
 export default defineConfig({
 	pageExtensions: ["jsx", "tsx", "mdx"],
+	prerender: ["/", "/404"],
 	vite: {
 		plugins: [
 			mdx({ rehypePlugins: [rhypePrism] }),

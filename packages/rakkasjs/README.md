@@ -23,19 +23,22 @@ Lightning fast [Next.js](https://nextjs.org) alternative powered by [Vite](https
 
 - ⚡&nbsp; Lightning fast development
 - 🖥️&nbsp; Hassle free server-side rendering
+- 🚀&nbsp; Support for deploying on serverless environments
+- 📄&nbsp; Static site generation
+- 🇺🇳&nbsp; Localizable URLs
+- 🔀&nbsp; Rendering modes (pre-rendering, server-side, client-side)
 - ☸️&nbsp; SPA-style client-side navigation
 - 📁&nbsp; Intuitive file system-based routing
 - ⬇️&nbsp; Simple but effective data fetching system
 - ⚙️&nbsp; API routes to build and organize your backend
-- 📄&nbsp; Static site generation
 
-We're also aiming to support **deploying to serverless environments** and **localizable routes** before we hit 1.0.
+See the [feature comparison with Next.js](https://rakkasjs.org/guide/feature-comparison) for other supported and planned features.
 
-> ### Is Rakkas right for you?
->
-> - Although many features have been implemented, Rakkas is still in development. There _will_ be breaking changes until we hit 1.0. As such, it's not yet ready for production use. If you need a stable React framework try Next.js or [Gatsby](https://www.gatsbyjs.com/).
-> - Rakkas doesn't aim compatibility with Next.js. Check out [Vitext](https://github.com/Aslemammad/vitext) if you want to port a Next.js application to Vite.
-> - Rakkas is somewhat opinionated. If you need more flexibility try [vite-ssr-plugin](https://vite-plugin-ssr.com/).
+## Is Rakkas right for you?
+
+- Although many features have been implemented, Rakkas is still in development. There _will_ be breaking changes until we hit 1.0. As such, it's **not yet ready for production use**. If you need a stable React framework try Next.js or [Gatsby](https://www.gatsbyjs.com/).
+- Rakkas doesn't aim compatibility with Next.js. Check out [Vitext](https://github.com/Aslemammad/vitext) if you want to port a Next.js application to Vite.
+- Rakkas is somewhat opinionated. If you need more flexibility try [vite-ssr-plugin](https://vite-plugin-ssr.com/).
 
 ## Getting started
 
@@ -46,20 +49,18 @@ We're also aiming to support **deploying to serverless environments** and **loca
 
 The easiest way to try Rakkas out on your computer is to use the project initializer:
 
-```sh
+```bash
 # Create the project directory
 mkdir my-app && cd my-app
 # Scaffold the demo app: Follow the prompts for the rest
-npx create-rakkas-app
+npx create-rakkas-app@latest
 ```
 
-`create-rakkas-app` project initializer comes with many features, all off which are optional but we strongly recommend enabling TypeScript on your first project because self-documenting type definitions allow for a smoother learning curve.
-
-Demo project's source code comes with plenty of comments, you may not need to read the guide!
+`create-rakkas-app` project initializer comes with many features, all off which are optional but we strongly recommend enabling TypeScript and the generation of a demo project on your first try because self-documenting type definitions allow for a smoother learning curve and the demo project source code comes with plenty of comments. You may not need this guide!
 
 > 👷 If you prefer a manual setup, you can install `rakkasjs`, `react`, `react-dom`, and `react-helmet-async` as production dependencies, and `@rakkasjs/cli` as a dev dependency:
 >
-> ```sh
+> ```bash
 > npm install --save rakkasjs react react-dom react-helmet-async
 > npm install --save-dev @rakkasjs/cli
 > ```
@@ -71,6 +72,15 @@ Demo project's source code comes with plenty of comments, you may not need to re
 - Logomark: “Flamenco” by [gzz from Noun Project](https://thenounproject.com/term/flamenco/111303) (not affiliated) under [Creative Commons Attribution Generic license (CCBY)](https://creativecommons.org/licenses/by/2.0/)
 
 ## Version history
+
+## 0.5.0
+- Serverless support (Vercel, Netlify, Cloudflare Workers)
+- Improved client-side navigation
+- Improved SSR
+- Partial pre-rendering
+- Client-only pages
+- Localizable URLs
+- `Cache-control` header setting
 
 ## 0.4.0
 - Static site generation

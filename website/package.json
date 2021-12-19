@@ -4,8 +4,8 @@
 	"version": "0.5.0-next.3",
 	"description": "Rakkas.js website",
 	"scripts": {
-		"start": "node dist/server",
-		"build": "rakkas build",
+		"start": "sirv --port 3000 dist",
+		"build": "rakkas build -d static",
 		"dev": "rakkas dev",
 		"prepack": "pnpm build"
 	},
@@ -51,6 +51,7 @@
 		"node-dev": "^7.1.0",
 		"prettier": "^2.5.1",
 		"reprism": "^0.0.11",
+		"sirv": "^1.0.19",
 		"typescript": "^4.5.4",
 		"vite-plugin-mdx": "^3.5.10"
 	}
