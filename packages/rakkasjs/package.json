@@ -1,6 +1,6 @@
 {
 	"name": "rakkasjs",
-	"version": "0.5.0-next.3",
+	"version": "0.5.0-next.5",
 	"description": "Lightning fast Next.js alternative powered by Vite",
 	"scripts": {
 		"prepack": "pnpm build",

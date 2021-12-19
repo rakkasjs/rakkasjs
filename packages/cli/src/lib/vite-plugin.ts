@@ -178,6 +178,14 @@ export async function rakkasVitePlugin(
 					return result;
 				} else if (id === "virtual:rakkasjs:placeholder-loader") {
 					const result = await this.resolve("rakkasjs/placeholder-loader");
+
+					if (result) {
+						const qPos = result.id.indexOf("?");
+						if (qPos >= 0) {
+							result.id = result.id.slice(0, result.id.indexOf("?"));
+						}
+					}
+
 					return result;
 				} else if (id === indexHtmlPath) {
 					return normalizedIndexHtmlPath;
