@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "rakkas-tailwind-css-example",
-	"version": "0.5.0-next.5",
+	"version": "0.5.0-next.6",
 	"description": "Rakkas.js Tailwind CSS example",
 	"scripts": {
 		"dev": "rakkas dev",
@@ -9,13 +9,13 @@
 		"start": "node dist/server"
 	},
 	"dependencies": {
-		"rakkasjs": "0.5.0-next.5",
+		"rakkasjs": "0.5.0-next.6",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-helmet-async": "^1.2.2"
 	},
 	"devDependencies": {
-		"@rakkasjs/cli": "0.5.0-next.5",
+		"@rakkasjs/cli": "0.5.0-next.6",
 		"autoprefixer": "^10.4.0",
 		"postcss": "^8.4.5",
 		"tailwindcss": "^3.0.2",
