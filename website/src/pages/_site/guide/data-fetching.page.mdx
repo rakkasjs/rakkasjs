@@ -76,4 +76,6 @@ There are three types of possible return values:
 
 If you return an error or a redirection result from a layout's load function, the rendering process will stop at that level. Nested layouts and the page will not load or render.
 
+If your return value includes a `cacheControl` property (with a string value), it will be used as the Cache-Control header for the response.
+
 > If you come from **Next.js**, `load` is similar to `getServerSideProps` and `getStaticProps`. But there are important differences: `getServerSideProps` will only run on the server but `load` may run either on the server or the client. So, calling backend functions from `load` is not allowed, all communication must go through an API even during server-side rendering. If you're familiar with `SvelteKit`, it is very similar to how it handles data fetching.
