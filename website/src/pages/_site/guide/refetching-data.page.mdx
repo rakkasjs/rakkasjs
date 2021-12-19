@@ -8,6 +8,7 @@ By default, Rakkas only calls the `load` function under the following circumstan
 - When client-side navigation causes a page or layout change. Only the `load` functions of the page component and those of the newly mounted layout components will be called. If a layout is shared between the previous and next page, it will stay mounted and won't be reloaded.
 - _Only for pages:_ When the URL path or query string (`url.pathname` and `url.search`) changes. Layouts are not affected.
 - _Only during development:_ When a page or layout module is hot reloaded.
+- When the [locale](/guide/localized-routes) changes.
 
 There are three methods for changing the reloading behavior:
 

@@ -19,6 +19,7 @@ const titles = [
 	"Rendering modes",
 	"Environment variables",
 	"Deployment targets",
+	"Localized routes",
 	"Integrations",
 	"Feature comparison",
 	"Credits",

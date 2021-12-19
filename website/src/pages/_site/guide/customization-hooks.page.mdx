@@ -88,3 +88,19 @@ export default defineClientHooks({
 	},
 });
 ```
+
+## Common customization hooks <a id="common"/>
+
+Some hooks need to run in both server and client-side. You can define them in the file `src/common.{js|ts|jsx|tsx}`.
+
+```ts
+import { defineCommonHooks } from "rakkasjs";
+
+export default defineCommonHooks({
+	// You can define common hooks here
+	extractLocale(url) {
+		// You can extract the locale from and optionally rewrite the URL here
+		return { locale: "en" };
+	},
+});
+```

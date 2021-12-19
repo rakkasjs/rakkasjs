@@ -65,16 +65,12 @@ There are three types of possible return values:
    };
    ```
 
-3. **A redirection result** is an object that includes a `location` property which may be either a string or a URL object. A redirection result will abort the rendering of the current page and the user will be redirected to the specified location. The return value must also have a `status` property which should be an integer in the form of 3xx that will be used as the HTTP status of the redirection response when doing server-side rendering.
+3. **A redirection result** is an object that includes a `redirect` property which may be either a string or a URL object. A redirection result will abort the rendering of the current page and the user will be redirected to the specified location. The return value must also have a `status` property which should be an integer in the form of 3xx that will be used as the HTTP status of the redirection response when doing server-side rendering.
 
    ```ts
    return {
-   	location: "/some/other/path",
+   	redirect: "/some/other/path",
    	status: 302,
-   	// You should still return some data
-   	// The page or layout will be rendered
-   	// in the redirect response.
-   	data: "...",
    };
    ```
 
