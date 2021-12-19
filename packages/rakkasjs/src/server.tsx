@@ -414,7 +414,10 @@ export async function generateResponse(
 		if ("location" in stack) {
 			const response = {
 				status: stack.status,
-				headers: { location: stack.location },
+				headers: {
+					location: stack.location,
+					"cache-control": stack.cacheControl,
+				},
 				// Insert HTML redirection if pre-rendering
 				body: prerendering
 					? `<html><head><meta http-equiv="refresh" content="0; url=${escapeHtml(
@@ -532,6 +535,8 @@ export async function generateResponse(
 		if (prerendering && !stack.crawl) {
 			headers["x-rakkas-prerender"] = "no-crawl";
 		}
+
+		if (stack.cacheControl) headers["cache-control"] = stack.cacheControl;
 
 		const response = {
 			status: stack.status,
