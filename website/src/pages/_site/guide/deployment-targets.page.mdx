@@ -23,6 +23,8 @@ If your entire application is [suitable for pre-rendering](./rendering-modes#pre
 
 The default value for the `prerender` configuration option will be set as `["/"]` instead of `[]` and the default value for the `prerender` property of `load` function results and endpoint responses will be set to `true` when using the static deployment target. In other words, pre-rendering will be opt-out instead of opt-in. Pages and API routes that weren't pre-rendered will not be available.
 
+Page redirections will be rendered as HTML pages with a `<meta http-equiv="refresh" content="0; url=...">` tag.
+
 ## Vercel
 
 If you add a `build` or `vercel-build` script to your `package.json` with the content `rakkas build -d vercel`, you can use the Vercel CLI or their [git integration](https://vercel.com/docs/concepts/git) to deploy your app.

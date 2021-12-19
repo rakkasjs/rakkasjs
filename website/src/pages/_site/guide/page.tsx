@@ -4,7 +4,7 @@ import { toc } from "./toc";
 
 export default definePage({
 	load() {
-		return { data: undefined, location: "/guide/" + toc[0].slug, status: 302 };
+		return { data: undefined, redirect: "/guide/" + toc[0].slug, status: 302 };
 	},
 
 	Component: function GuideHomeRedirect() {
