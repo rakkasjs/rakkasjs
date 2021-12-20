@@ -2,7 +2,7 @@
 
 This is an example [`Tailwind CSS`](https://tailwindcss.com/) setup for Rakkas.
 
-[Try it in your browser](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/main/examples/tailwind?file=src%2Fpages%2Fpage.tsx)
+[Try it in your browser](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/v0.4.0/examples/tailwind?file=src%2Fpages%2Fpage.tsx)
 
 You can clone and try it with:
 

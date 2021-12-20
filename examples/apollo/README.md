@@ -2,7 +2,7 @@
 
 This is an example [Apollo GraphQL](https://www.apollographql.com/) setup for Rakkas with full SSR support. It shows how to integrate both with Apollo Client and Apollo Server.
 
-[Try it in your browser](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/main/examples/apollo?file=src%2Fpages%2Fpage.tsx)
+[Try it in your browser](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/v0.4.0/examples/apollo?file=src%2Fpages%2Fpage.tsx)
 
 ...or on your computer:
 

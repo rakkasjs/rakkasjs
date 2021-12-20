@@ -2,7 +2,7 @@
 
 This is an example [`styled-components`](https://styled-components.com/) setup for Rakkas with full SSR support. Other popular CSS-in-JS solutions (like [`emotion`](https://emotion.sh/)) have very similar, and usually simpler setups for SSR.
 
-[Try it in your browser](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/main/examples/styled-components?file=src%2Fpages%2Fpage.tsx)
+[Try it in your browser](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/v0.4.0/examples/styled-components?file=src%2Fpages%2Fpage.tsx)
 
 ...or on your computer:
 
