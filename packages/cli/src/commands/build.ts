@@ -133,12 +133,12 @@ export async function build(
 
 	const buildId = await getBuildId();
 
-	const clientConfig = await makeViteConfig(config, deploymentTarget, buildId, {
+	const getClientConfig = async () => await makeViteConfig(config, deploymentTarget, buildId, {
 		ssr: false,
 	});
 
 	await viteBuild({
-		...clientConfig,
+		...await getClientConfig(),
 
 		build: {
 			outDir: clientOutDir,
