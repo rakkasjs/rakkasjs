@@ -2,7 +2,7 @@ import React, { FC } from "react";
 
 export const GithubLogo: FC = () => (
 	<svg
-		width={24}
+		width="1em"
 		viewBox="0 0 256 250"
 		version="1.1"
 		xmlns="http://www.w3.org/2000/svg"

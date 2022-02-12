@@ -5,6 +5,7 @@ import { Header } from "../../lib/Header";
 import css from "./layout.module.css";
 import { MDXProvider } from "@mdx-js/react";
 import "prism-themes/themes/prism-xonokai.css";
+import { ExternalIcon } from "$lib/ExternalIcon";
 
 const MainLayout: Layout = ({ error, children }) => (
 	<>
@@ -53,7 +54,7 @@ const MainLayout: Layout = ({ error, children }) => (
 
 export default MainLayout;
 
-const MdxLink: typeof Link = forwardRef((props, ref) => {
+const MdxLink: typeof Link = forwardRef(({ children, ...props }, ref) => {
 	const { currentUrl } = useRouter();
 
 	const url =
@@ -64,7 +65,10 @@ const MdxLink: typeof Link = forwardRef((props, ref) => {
 			target={url?.origin === currentUrl.origin ? undefined : "_blank"}
 			{...props}
 			ref={ref}
-		/>
+		>
+			{children}
+			{url?.origin === currentUrl.origin || <ExternalIcon />}
+		</Link>
 	);
 });
 

@@ -77,6 +77,21 @@
 	}
 }
 
+@media (min-width: 1200px) {
+	.latestPost {
+		position: absolute;
+		top: 76px;
+		right: 16px;
+		width: 16rem;
+	}
+}
+
+.latestPost {
+	margin-top: 1rem;
+	border: solid 1px #eee;
+	padding: 1em;
+}
+
 .dict {
 	max-width: 18em;
 	text-align: center;

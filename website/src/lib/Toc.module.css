@@ -1,0 +1,16 @@
+.link {
+	color: inherit;
+}
+
+.active {
+	font-weight: bold;
+	color: #924;
+}
+
+.pending {
+	color: #f08;
+}
+
+.blog {
+	margin-top: 1em;
+}
