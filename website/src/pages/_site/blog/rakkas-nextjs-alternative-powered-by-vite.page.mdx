@@ -1,0 +1,43 @@
+import { BlogPostHeader } from "$lib/BlogPostHeader";
+
+# Rakkas: Next.js alternative powered by Vite
+
+<BlogPostHeader date="October 14, 2021" />
+
+[Rakkas](https://github.com/rakkasjs/rakkasjs), the lightning fast [Next.js](https://nextjs.org) alternative powered by [Vite](https://vitejs.dev), has just released version 0.4.0.
+
+If you're not familiar with Vite, it's an instance of a new class of tools, sometimes called **non-bundlers**, that leverage modern browsers' native EcmaScript modules support to **do away with the bundling** during development. This results in **instant server start** and **much faster updates** than traditional bundlers like [Webpack](https://webpack.js.org), [Rollup](https://rollupjs.org), or [Parcel](https://parceljs.org). These new tools (another example is [Snowpack](https://www.snowpack.dev)) improve developer experience so much that, once you try, you will never want to go back to your old tooling.
+
+Vite (and therefore Rakkas) supports **TypeScript**, **JSX**, **hot module replacement** with **React fast refresh**, **CSS modules**, **PostCSS**, **CSS preprocessors** (just install `sass`, `less`, or `stylus`), and handling of **static assets** out of the box.
+
+**Rakkas** is a **MIT-licensed** [React](https://reactjs.org) framework _similar to_ Next.js, it's not a clone. In fact, if you're familiar with [Svelte](https://svelte.dev) -a user interface framework (like React or Vue)- many of Rakkas's features are inspired by [SvelteKit](https://kit.svelte.dev), Svelte's web application building tool.
+
+Important features of Rakkas are:
+
+- ⚡&nbsp; Lightning fast development server
+- 📁&nbsp; [Intuitive file system-based routing](https://rakkasjs.org/guide/navigation)
+- 🖥️&nbsp; Hassle free server-side rendering
+- 📄&nbsp; [Static site generation](https://rakkasjs.org/guide/static-site-generation) **(NEW!)**
+- ☸️&nbsp; SPA-style [client-side navigation](https://rakkasjs.org/guide/navigation)
+- ⬇️&nbsp; Simple but effective [data fetching system](https://rakkasjs.org/guide/data-fetching)
+- ⚙️&nbsp; [API routes](https://rakkasjs.org/guide/api-routes) to build and organize your backend
+- 📚&nbsp; Extensive [documentation](https://rakkasjs.org/guide)
+
+The file system router maps your source files to web pages. For example, if you want a page `/about`, you just default-export a React component from `src/pages/about.page.jsx` or `src/pages/about/page.jsx`. Route parameters are also encoded in the file name: `src/pages/users/[userName].page.jsx` is rendered for `/users/jane`, `/users/joe`, and so forth. In this case, your component receives a `params` prop and the user name is available as `params.userName`.
+
+Rakkas supports nested [layouts](https://rakkasjs.org/guide/layouts) for elements common to more than one page, like headers, footers, navigation bars etc. Each page or layout can [fetch its own data](https://rakkasjs.org/guide/data-fetching) using an isomorphic `fetch` function. For advanced use cases, you can implement your own [data fetching helper](https://rakkasjs.org/guide/load-helpers) functions or classes. The implementation can be different for the server and the client, opening up the possibility of avoiding the network roundtrip and serialization/deserialization while doing SSR.
+
+[API routes](https://rakkasjs.org/guide/api-routes) have a file system router similar to pages: `/src/api/users.endpoint.js` implements the endpoint `/api/users`. Functions exported from this file handle similarly named HTTP methods (i.e. `get` for `GET`, `post` for `POST` etc.) by taking a request object and returning a response object. You can also define middlewares for impementing abstractions relating to more than one endpoint.
+
+If you're reading this on a Chromium-based desktop browser, [you can try Rakkas online on StackBlitz](https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx). For a full-on experience, Rakkas project generator `create-rakkas-app` comes with lots of features, all optional: **TypeScript**, **ESLint**, **StyleLint**, **Prettier**, **Cypress**, and **jest** (for unit testing and/or API testing). It supports `yarn` and `pnpm` in addition to `npm`. To get started, just create a new project directory and run `npx create-rakkas-app@latest`, then follow the prompt. The optional demo app demonstrates a toy fullstack todo app that communicates via a simple REST API.
+
+If you want to go further, there are integration examples with other popular tools:
+
+- [Styled Components](https://github.com/rakkasjs/rakkasjs/tree/main/examples/styled-components)
+- [Tailwind CSS](https://github.com/rakkasjs/rakkasjs/tree/main/examples/tailwind)
+- [MDX](https://github.com/rakkasjs/rakkasjs/tree/main/examples/mdx)
+- [Apollo GraphQL (both client and server)](https://github.com/rakkasjs/rakkasjs/tree/main/examples/apollo-graphql)
+
+There is also a [RealWorld port](https://github.com/rakkasjs/rakkas-realworld) (Rakkas implementation of the [RealWorld specification](https://github.com/gothinkster/realworld)), a simple but complete fullstack application demonstrating how to approach building a REST API, accessing your database (via [Prisma](https://www.prisma.io)), handling authentication, testing, and more.
+
+Rakkas is still young and is not ready for production yet. But [go ahead and give it a try](https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx) and share your thoughts. [Star us on Github](https://github.com/rakkasjs/rakkasjs/stargazers) and [talk about Rakkas](https://twitter.com/intent/tweet?text=I%20gave%20%23RakkasJS%20a%20try!&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs) if you like what you see. If you have any questions, problems, or suggestions [open a Github issue](https://github.com/rakkasjs/rakkasjs/issues/new). If you want to [contribute](https://github.com/rakkasjs/rakkasjs/blob/main/CONTRIBUTING.md), fork and send a pull request. **All feedback is welcome**, positive or negative.

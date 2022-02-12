@@ -1,17 +1,60 @@
 import { Logomark } from "./Logomark";
 import { Logotype } from "./Logotype";
-import { Link, StyledLink } from "rakkasjs";
-import React, { FC } from "react";
+import { Link, StyledLink, useRouter } from "rakkasjs";
+import React, { FC, useEffect, useRef, useState } from "react";
 import css from "./Header.module.css";
 import { GithubLogo } from "$lib/GithubLogo";
+import { Squash as Hamburger } from "hamburger-react";
+import { HomeIcon } from "$lib/HomeIcon";
+import { GuidIcon } from "$lib/GuideIcon";
+import { ExternalIcon } from "$lib/ExternalIcon";
+import { BlogIcon } from "$lib/BlogIcon";
+import { Toc } from "./Toc";
+import { toc } from "../pages/_site/guide/toc";
 
-export const Header: FC = () => (
-	<header className={css.main}>
-		<Link className={css.logo} href="/">
-			<Logomark height="2em" />
-			<Logotype height="2em" />
-		</Link>
-		<nav className={css.nav}>
+export const Header: FC = () => {
+	const [isOpen, setIsOpen] = useState(false);
+	const burgerRef = useRef<HTMLSpanElement>(null);
+	const sidebarRef = useRef<HTMLDivElement>(null);
+
+	// Close on outside click and escape
+	useEffect(() => {
+		function handleClickOutside(event: MouseEvent) {
+			if (
+				sidebarRef.current &&
+				!sidebarRef.current.contains(event.target as Node) &&
+				burgerRef.current &&
+				!burgerRef.current.contains(event.target as Node)
+			) {
+				setIsOpen(false);
+			}
+		}
+
+		function handleEscape(event: KeyboardEvent) {
+			if (event.key === "Escape") {
+				setIsOpen(false);
+			}
+		}
+
+		document.addEventListener("mousedown", handleClickOutside);
+		document.addEventListener("keydown", handleEscape);
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+			document.removeEventListener("keydown", handleEscape);
+		};
+	}, [sidebarRef]);
+
+	const { currentUrl } = useRouter();
+
+	// Close on navigation
+	useEffect(() => {
+		if (isOpen) setIsOpen(false);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentUrl.href]);
+
+	const nav = (
+		<nav>
 			<ul>
 				<li>
 					<StyledLink
@@ -19,6 +62,9 @@ export const Header: FC = () => (
 						activeClass={css.activeLink}
 						pendingClass={css.nextLink}
 					>
+						<span className={css.icon}>
+							<HomeIcon />
+						</span>{" "}
 						Home
 					</StyledLink>
 				</li>
@@ -29,7 +75,23 @@ export const Header: FC = () => (
 						pendingClass={css.nextLink}
 						onCompareUrls={(url) => url.pathname.startsWith("/guide")}
 					>
+						<span className={css.icon}>
+							<GuidIcon />
+						</span>{" "}
 						Guide
+					</StyledLink>
+				</li>
+				<li>
+					<StyledLink
+						href="/blog"
+						activeClass={css.activeLink}
+						pendingClass={css.nextLink}
+						onCompareUrls={(url) => url.pathname.startsWith("/blog")}
+					>
+						<span className={css.icon}>
+							<BlogIcon />
+						</span>{" "}
+						Blog
 					</StyledLink>
 				</li>
 				<li>
@@ -39,10 +101,54 @@ export const Header: FC = () => (
 						rel="noreferrer"
 						title="Github"
 					>
-						<GithubLogo />
+						<span className={css.icon}>
+							<GithubLogo />
+						</span>{" "}
+						GitHub
+						<ExternalIcon />
 					</a>
 				</li>
 			</ul>
 		</nav>
-	</header>
-);
+	);
+
+	return (
+		<header className={css.main}>
+			<span className={css.burger} ref={burgerRef}>
+				<Hamburger
+					color="#924"
+					toggled={isOpen}
+					toggle={(x) => {
+						setIsOpen(x);
+					}}
+					duration={0.2}
+				/>
+			</span>
+
+			<span className={css.logoContainer}>
+				<Link className={css.logo} href="/">
+					<Logomark height="40px" />
+					<Logotype height="40px" />
+				</Link>
+			</span>
+
+			<span className={css.nav}>{nav}</span>
+
+			{/* TODO: Add search */}
+			<div className={css.search} />
+
+			<aside
+				className={css.sidebar + (isOpen ? " " + css.open : "")}
+				ref={sidebarRef}
+			>
+				{nav}
+				{currentUrl.pathname.startsWith("/guide") && (
+					<>
+						<hr />
+						<Toc toc={toc} />
+					</>
+				)}
+			</aside>
+		</header>
+	);
+};

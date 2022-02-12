@@ -1,9 +1,12 @@
-import { Logomark } from "../../lib/Logomark";
-import { Logotype } from "../../lib/Logotype";
+import { Logomark } from "$lib/Logomark";
+import { Logotype } from "$lib/Logotype";
 import React, { FC } from "react";
 import css from "./page.module.css";
 import { Link } from "rakkasjs";
 import { Helmet } from "react-helmet-async";
+import { ExternalIcon } from "$lib/ExternalIcon";
+import { toc } from "./blog/toc";
+import { BlogPostHeader } from "$lib/BlogPostHeader";
 
 const HomePage: FC = () => (
 	<main className={css.main}>
@@ -34,6 +37,7 @@ const HomePage: FC = () => (
 					rel="noreferrer"
 				>
 					Try it in your browser!
+					<ExternalIcon />
 				</a>
 			</p>
 		</div>
@@ -67,6 +71,13 @@ const HomePage: FC = () => (
 				<p>Build and organize your backend the same way you build your pages</p>
 			</div>
 		</div>
+
+		<aside className={css.latestPost}>
+			<a href={toc[0].slug}>
+				<p>{toc[0].title}</p>
+				<BlogPostHeader date={toc[0].date} />
+			</a>
+		</aside>
 
 		<section className={css.dict}>
 			<i>Turkish</i> <b lang="tr">rakkas</b> [ɾɑkːˈɑs]{" "}

@@ -1,0 +1,78 @@
+import { BlogPostHeader } from "$lib/BlogPostHeader";
+
+# How to get client-side navigation right
+
+<BlogPostHeader date="December 13, 2021" />
+
+How many times have you ctrl-clicked (or cmd-clicked) on a link to open it in a new tab but it opened in the current tab or didn't open at all? How many times have you clicked on a link in a long document and when you clicked back it took you to the top of the document instead of where you had left? Client-side navigation bugs are so widespread that it's hard to believe the technique is almost 20 years old! So I decided to write down all the issues I've ever encountered and build [a library](https://github.com/cyco130/knave) that tries to solve them once and for all.
+
+> Under the hood, Rakkas uses [Knave](https://github.com/cyco130/knave), the client-side navigation library described in this post.
+
+Normally, when you click on a link, your browser loads a new page from the URL specified in the `href` attribute of your link (an `a` or `area` element). **Client-side navigation** refers to the practice of using JavaScript to control page transitions **without a full reload**, which usually results in a snappier user experience. Despite its popularity, many implementations are broken or lacking: history manipulation, scroll restoration, ctrl + click / cmd + click / right click behavior, loading state handling etc. are often buggy or non-existent. In many cases this actually makes the user experience _worse_ than classic navigation by breaking user expectations.
+
+Having appeared in early 2000s, the practice has ushered in the era of Single Page Applications (SPAs). Earliest attempts used the `#hash` part of the URL and the [`window.onhashchange`](https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onhashchange) event. Since it is normally used for scrolling to a specific section of a document, a hash-only navigation doesn't cause a full page reload. Developers took advantage of this to implement client-side navigation with history (back/forward buttons) support. In early 2010s, the [history API](https://developer.mozilla.org/en-US/docs/Web/API/History_API) support landed in popular browsers which allowed using real URL paths instead of hashes.
+
+Despite a whole decade that has passed since the arrival of the history API, there are still a myriad of challenges to be solved when implementing client-side navigation.
+
+## Intercepting history changes
+
+[`window.onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate) event is fired when the user clicks on the back/forward buttons or one of the `back`, `forward` or `go` methods of the `history` API is called. `location` and `history.state` (which is a place you can store extra data about the current location) are updated _before_ the `onpopstate` event is fired.
+
+Unfortunately this event is not fired when `history.pushState` or `history.replaceState` is called. This means that a client-side library solution must provide its own navigation function, because, barring [horrible hacks](https://stackoverflow.com/a/4585031), it has no way to be notified when the user of the library calls these methods.
+
+It's not fired when the user clicks on a link either. This means that we have to listen to the click events to prevent the default behavior and handle the navigation ourselves.
+
+## Dedicated `Link` component vs global click handler
+
+Preventing the browser's default behavior when the user clicks on a link can be achieved in two ways: 1) by providing a dedicated `Link` component that renders an `a` element with an attached an `onclick` handler, or 2) by attaching a global `onclick` handler to the `body` element.
+
+The first approach has the advantage of being **explicit**: There are no surprises. Next.js and React Router both follow this approach. Opting out of client-side navigation is trivial: Just use a plain `a` element.
+
+The second approach is **implicit** but it is easier to use in most cases: Sometimes you don't control the HTML contents of a page. Maybe it was rendered from Markdown residing in a database or a CMS. It may be hard or impossible to control the rendered `a` elements in such cases. SvelteKit uses this second approach. Opting out of client-side navigation is still possible: We can interpret, for instance, the presence of a `rel="external"` attribute as a signal for letting the browser handle the navigation. The downside of the second approach is that one has to be careful about event handling order. If you attach an `onclick` handler to the `a` element, it will run _after_ the global one which may not be what you want. You have to use `{ capture: true }` if you want to alter the click behavior of a link.
+
+**A third, hybrid approach is also possible**: We can implement a `LinkContainer` component that captures the `onclick` events of the `a` elements that it contains. It solves the “pre-rendered HTML that we don't control” problem while remaining fairly explicit.
+
+Whichever approach we choose, a `Link` component is still useful for styling active (or pending) links differently, a nice feature to have in navigation menus for instance.
+
+## Knowing when not to interfere
+
+When listening to `onclick` events, it is important to know when to leave the handling to the browser. The following cases should be considered:
+
+- Was `preventDefault()` called before our handler?
+- Does the `a` element have a `href` attribute at all?
+- Was it a left click? Right click and middle click usually have other functions.
+- Were any of the modifier keys pressed? Ctrl, shift, alt, meta, command etc. keys are used to trigger alternative functions like opening in a new tab or window.
+- Does the `a` element have a `target` attribute whose value is not `_self`?
+- Does the `a` element have a `download` attribute?
+
+If any of these conditions is met, we should let the browser handle the event.
+
+## Pending navigation
+
+Very simple apps can render a new page synchronously but transitioning from one page to another usually has to be asynchronous in real-world use cases. Modern bundlers support code splitting and pages are natural code splitting boundaries. Loading the code for the next page is an asynchronous operation. Also, you usually need to fetch some data before rendering a page. This is also an asynchronous operation.
+
+During classic navigation, most browsers keep showing the old page along with some kind of loading state indicator until the new one loads. This is much more useful than showing a blank loading page. Ideally, a client-side navigation solution should replicate this behavior.
+
+The requirement of supporting asynchronous navigation causes a very subtle complication: Inevitably there will be a moment where `location.href` does not match currently rendered page contents. This may cause mismatches in links with relative URLs: Say you are on page `/foo` and you initiate a client-side navigation to `/foo/bar`. If there is a link whose `href` is `baz` (a relative link), it will be pointing to `/foo/baz` instead of `/baz` while the navigation is underway. One way to solve this problem is to have a [`base` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base) in the document head whose `href` property is always kept in sync with the currently rendered location.
+
+## Scroll restoration
+
+Classic navigation has support for scroll restoration: When the user navigates back or forward, the browser will restore the scroll position. This behavior has to be simulated when using client-side navigation.
+
+Modern browsers have support for `history.scrollRestoration` which can be set to `manual` or `auto`. The former is the default value and means that the browser will not restore the scroll position. You might think that you can set it to `auto` and be done with it. Unfortunately, this is not the case if you have to support asynchronous rendering like we discussed above. The scroll position needs to be restored _after_ the new page has been rendered in its entirety. Consider this scenario: You're at the bottom of a page that has contents that don't fit in the viewport (`/long`). You navigate to a page that does fit (`/short`). When you click back, automatic scroll restoration will try to scroll to the original position but unless you are able to render `/long` synchronously, it will fail because the contents of `/short` will be showing while `/long` is still loading and they fit the page so there's nowhere to scroll to.
+
+This problem severely reduces the usefulness of `history.scrollRestoration`. A decent client-side navigation solution must set it to `manual` and handle scroll restoration manually, _after_ the new page has been fully rendered. One way to approach this is to assign a unique ID to each location, keeping track of it in `history.state` and use it as a `sessionStorage` key to store the scroll position.
+
+One more point to remember when implementing scroll restoration is to be careful about not breaking the normal behavior of `#hash` links.
+
+## Blocking navigation
+
+Classic navigation has limited support for navigation blocking in the form of [`onbeforeunload` event](https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onbeforeunload). When set up correctly, it will show a confirmation dialog before navigating away from the current page. This is useful to remind the user that they might lose unsaved data.
+
+When using client-side navigation, we can show a custom dialog box in some cases. This requires “canceling” the navigation when the user decides to stay on the page. The challenge here is that, when the user clicks the back or forward button, `location.href` is already updated by the time the `onpopstate` event is called. This means that we don't know if we should go back or forward to cancel the navigation. To solve this, we can use `history.state` to keep track of the current location's history index and compare it to the last rendered index in order to compute a delta value to pass to `history.go` for “taking back” the navigation attempt. Then we can show a dialog box to ask the user if they really want to leave the page. If the answer is no, we stop, if the answer is yes, we redo the navigation using `history.go(-delta)`.
+
+We still need an `onbeforeunload` fallback in case the user clicks on a hard link or simply closes the tab.
+
+## Knave
+
+Having failed in finding a simple library that provides all of these features, I've created [`knave`](https://github.com/cyco130/knave), a framework-agnostic client-side navigation library in order to address all of these challenges once and for all. The `knave-react` package contains its React bindings. PRs that implement bindings for other frameworks are welcome.

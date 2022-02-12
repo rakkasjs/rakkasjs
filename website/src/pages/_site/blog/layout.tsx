@@ -5,17 +5,33 @@ import css from "./layout.module.css";
 import { Helmet } from "react-helmet-async";
 import { Toc } from "$lib/Toc";
 
-const GuideLayout: Layout = ({ error, children, url }) => {
+const BlogLayout: Layout = ({ error, children, url }) => {
 	const slug = url.pathname.split("/")[2];
-	const currentIndex = toc.findIndex((item) => "/guide/" + slug === item.slug);
+	const currentIndex = toc.findIndex((item) => "/blog/" + slug === item.slug);
 
 	const prev = toc[currentIndex - 1];
 	const next = toc[currentIndex + 1];
 
 	const prevNext = (
 		<nav className={css.prevNext}>
-			{prev ? <Link href={prev.slug}>←&nbsp;{prev.title}</Link> : "\xa0"}
-			{next ? <Link href={next.slug}>{next.title}&nbsp;→</Link> : "\xa0"}
+			{prev ? (
+				<Link href={prev.slug}>
+					←&nbsp;<small>{prev.date}</small>
+					<br />
+					{prev.title}
+				</Link>
+			) : (
+				"\xa0"
+			)}
+			{next ? (
+				<Link href={next.slug}>
+					<small>{next.date}</small>
+					<br />
+					{next.title}&nbsp;→
+				</Link>
+			) : (
+				"\xa0"
+			)}
 		</nav>
 	);
 
@@ -26,8 +42,8 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 					error
 						? error.message
 						: toc[currentIndex]
-						? toc[currentIndex].title + " - Rakkas Guide"
-						: "Rakkas Guide"
+						? toc[currentIndex].title + " - Rakkas Blog"
+						: "Rakkas Blog"
 				}
 			/>
 
@@ -56,4 +72,4 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 	);
 };
 
-export default GuideLayout;
+export default BlogLayout;

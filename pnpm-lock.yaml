@@ -704,6 +704,7 @@ importers:
       eslint-plugin-only-warn: ^1.0.3
       eslint-plugin-react: ^7.27.1
       eslint-plugin-react-hooks: ^4.3.0
+      hamburger-react: ^2.4.1
       install: ^0.13.0
       node-dev: ^7.1.0
       prettier: ^2.5.1
@@ -721,6 +722,7 @@ importers:
     dependencies:
       '@mdx-js/react': 1.6.22_react@17.0.2
       cookie: 0.4.1
+      hamburger-react: 2.4.1_react@17.0.2
       prism: 4.1.2_react@17.0.2
       prism-themes: 1.9.0
       rakkasjs: link:../packages/rakkasjs
@@ -5856,6 +5858,14 @@ packages:
   /growly/1.3.0:
     resolution: {integrity: sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=}
     dev: true
+
+  /hamburger-react/2.4.1_react@17.0.2:
+    resolution: {integrity: sha512-oqG9CrTVi8wM/dyQQh3JJOOfEiol9ChLOqwtjx+hFyRu0nYfe2ymNmzi2wtfQTDyExUdqETdyACZV9KZ9wpApA==}
+    peerDependencies:
+      react: ^16.8 || ^17
+    dependencies:
+      react: 17.0.2
+    dev: false
 
   /happy-dom/2.24.5:
     resolution: {integrity: sha512-FJw/ZbWWKmn/t67VnoelQ27NhaMwfUUXsBqYFp74LdKZJ3DleSZlA2iAS+DDxYpkQtdOV5MjuBk0t60W9g/new==}
