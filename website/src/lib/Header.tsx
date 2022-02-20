@@ -12,6 +12,8 @@ import { BlogIcon } from "$lib/BlogIcon";
 import { Toc } from "./Toc";
 import { toc as guideToc } from "../pages/_site/guide/toc";
 import { toc as blogToc } from "../pages/_site/blog/toc";
+import { DocSearch } from "@docsearch/react";
+import "@docsearch/css";
 
 export const Header: FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -135,8 +137,11 @@ export const Header: FC = () => {
 
 			<span className={css.nav}>{nav}</span>
 
-			{/* TODO: Add search */}
-			<div className={css.search} />
+			<DocSearch
+				appId="Q8E33NN7EC"
+				apiKey="ea3307404701ddce0c61b918c2fee8d4"
+				indexName="rakkasjs"
+			/>
 
 			<aside
 				className={css.sidebar + (isOpen ? " " + css.open : "")}
