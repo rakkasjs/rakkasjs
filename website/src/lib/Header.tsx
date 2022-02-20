@@ -10,7 +10,8 @@ import { GuidIcon } from "$lib/GuideIcon";
 import { ExternalIcon } from "$lib/ExternalIcon";
 import { BlogIcon } from "$lib/BlogIcon";
 import { Toc } from "./Toc";
-import { toc } from "../pages/_site/guide/toc";
+import { toc as guideToc } from "../pages/_site/guide/toc";
+import { toc as blogToc } from "../pages/_site/blog/toc";
 
 export const Header: FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -145,7 +146,13 @@ export const Header: FC = () => {
 				{currentUrl.pathname.startsWith("/guide") && (
 					<>
 						<hr />
-						<Toc toc={toc} />
+						<Toc toc={guideToc} />
+					</>
+				)}
+				{currentUrl.pathname.startsWith("/blog") && (
+					<>
+						<hr />
+						<Toc toc={blogToc} />
 					</>
 				)}
 			</aside>
