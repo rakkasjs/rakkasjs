@@ -4,8 +4,8 @@
 	"version": "0.5.0",
 	"description": "Rakkas.js workspace root",
 	"scripts": {
-		"check": "pnpm run -r check '--filter=!rakkas-styled-components-testbed'",
-		"dev": "pnpm run -r --filter=./packages '--filter=!create-rakkas-app' --parallel dev",
+		"check": "pnpm run -r --filter=./packages --filter='!rakkas-styled-components-testbed' check",
+		"dev": "pnpm run -r --filter=./packages --filter='!create-rakkas-app' --parallel dev",
 		"build": "pnpm run -r build",
 		"precommit": "lint-staged",
 		"prepare": "husky install",
