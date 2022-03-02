@@ -1,24 +1,25 @@
-import commander from "commander";
-import { build as viteBuild } from "vite";
-import { loadConfig } from "../lib/config";
-import { makeViteConfig } from "../lib/vite-config";
-import cheerio from "cheerio";
-import fs from "fs";
-import path from "path";
-import micromatch from "micromatch";
 import chalk from "chalk";
-import { RakkasDeploymentTarget, FullConfig } from "../..";
-import rimraf from "rimraf";
+import cheerio from "cheerio";
+import { spawn } from "child_process";
+import commander from "commander";
 import { build as esbuild, BuildOptions as ESBuildOptions } from "esbuild";
+import fs from "fs";
+import micromatch from "micromatch";
 import { builtinModules } from "module";
+import { Headers } from "node-fetch";
+import path from "path";
+import { RakkasResponse } from "rakkasjs";
 import type {
 	handleRequest as HandleRequest,
 	Route,
 } from "rakkasjs/dist/server";
+import rimraf from "rimraf";
+import { build as viteBuild } from "vite";
+import { FullConfig, RakkasDeploymentTarget } from "../..";
+import { loadConfig } from "../lib/config";
+import { importJs } from "../lib/importJs";
+import { makeViteConfig } from "../lib/vite-config";
 import { installNodeFetch } from "../runtime/install-node-fetch";
-import { spawn } from "child_process";
-import { Headers } from "node-fetch";
-import { RakkasResponse } from "rakkasjs";
 
 const { createCommand, Option } = commander;
 
@@ -265,11 +266,7 @@ export async function build(
 	}
 
 	const pageRoutes: Route[] = (
-		await (0, eval)(
-			`import(${JSON.stringify(
-				path.join(serverOutDir, "virtual_rakkasjs_page-routes.js"),
-			)})`,
-		)
+		await importJs(path.join(serverOutDir, "virtual_rakkasjs_page-routes.js"))
 	).default.default;
 
 	installNodeFetch();
@@ -279,7 +276,7 @@ export async function build(
 	const placeholderLoader = path.join(serverOutDir, "placeholder-loader.js");
 
 	const htmlPlaceholder = await (
-		await (0, eval)(`import(${JSON.stringify(placeholderLoader)})`)
+		await importJs(placeholderLoader)
 	).default.default(htmlContents, pageRoutes);
 
 	await fs.promises.unlink(placeholderLoader);
@@ -430,18 +427,12 @@ async function prerender(
 	// eslint-disable-next-line no-console
 	console.log(chalk.blue("Pre-rendering static routes"));
 
-	const server = await (0, eval)(
-		`import(${JSON.stringify(path.join(serverOutDir, "server.js"))})`,
-	);
+	const server = await importJs(path.join(serverOutDir, "server.js"));
 
 	const handleRequest: typeof HandleRequest = server.handleRequest;
 
 	const apiRoutes: Route[] = (
-		await (0, eval)(
-			`import(${JSON.stringify(
-				path.join(serverOutDir, "virtual_rakkasjs_api-routes.js"),
-			)})`,
-		)
+		await importJs(path.join(serverOutDir, "virtual_rakkasjs_api-routes.js"))
 	).default.default;
 
 	const roots = new Set(prerender);
