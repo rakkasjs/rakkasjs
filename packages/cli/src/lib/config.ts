@@ -1,7 +1,7 @@
+import chalk from "chalk";
+import { build } from "esbuild";
 import fs from "fs";
 import path from "path";
-import { build } from "esbuild";
-import chalk from "chalk";
 import type {
 	Config,
 	ConfigFactoryInfo,
@@ -9,6 +9,7 @@ import type {
 	RakkasCommand,
 	RakkasDeploymentTarget,
 } from "../..";
+import { importJs } from "./importJs";
 
 export interface ConfigConfig {
 	command: RakkasCommand;
@@ -39,9 +40,7 @@ export async function loadConfig(configConfig: ConfigConfig): Promise<{
 		configConfig.collectDeps,
 	);
 
-	let loaded = await (0, eval)(
-		`import(${JSON.stringify(outfile + "?" + Math.random())})`,
-	);
+	let loaded = await importJs(outfile + "?" + Math.random());
 
 	while (loaded.default) loaded = loaded.default;
 
