@@ -1,6 +1,6 @@
 {
 	"name": "create-rakkas-app",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"description": "Project initializer for Rakkas.js",
 	"scripts": {
 		"prepublishOnly": "pnpm build && sh copy-templates.sh",
