@@ -1,7 +1,0 @@
-# Load helpers
-
-[As discussed before](./data-fetching), Rakkas passes a `fetch` function to the `load` functions of layouts and pages. `fetch` is a web standard but it's not necessarily the most ergonomic tool for making API requests. Serializing/deserializing data, setting the correct headers, handling errors etc. on each request can quickly become cumbersome. It's often more convenient to have a set of functions or classes for communicating with a particular API instead of using `fetch` directly.
-
-Rakkas allows you to create such helper classes or functions. This is done once during initialization on the client-side and once for each request on the server-side by the `createLoadHelpers` [customization hooks](./customization-hooks). The returned object will be passed to the `load` functions as `helpers`.
-
-The server-side version of this hook will receive the same `fetch` function that is passed to the `load` functions as its argument. The returned helpers object has to have the **same interface** on the server and on the client but it is not required that the two versions share the same implementation. This opens up the possibility for implementing client-side helpers by sending requests but the server-side helpers by directly calling, e.g., database functions on the backend.

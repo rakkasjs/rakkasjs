@@ -1,9 +1,0 @@
-{
-	"rootDir": "src",
-	"setupFilesAfterEnv": ["<rootDir>/jest-setup.ts"],
-	"testEnvironment": "jest-environment-jsdom",
-	"transform": {
-		"^.+\\.(js|jsx|ts|tsx)$": "esbuild-jest",
-		"^.+\\.module\\.css$": "jest-css-modules-transform"
-	}
-}

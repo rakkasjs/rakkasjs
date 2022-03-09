@@ -1,9 +1,0 @@
-node_modules
-dist
-coverage
-*.tgz
-*.log
-.vscode
-*.local
-*.local.*
-pnpm-global
