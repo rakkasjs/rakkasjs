@@ -1,0 +1,8 @@
+{
+	"name": "@rakkasjs/test-bed-kitchen-sink",
+	"private": true,
+	"devDependencies": {
+		"rakkasjs": "workspace:*",
+		"vite": "^2.8.6"
+	}
+}
