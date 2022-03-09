@@ -6,7 +6,7 @@ export function injectConfig(): Plugin {
 
 		enforce: "pre",
 
-		config(config) {
+		config() {
 			return {
 				buildSteps: [
 					{

@@ -4,6 +4,7 @@ import { PluginOption } from "vite";
 import { injectConfig } from "./inject-config";
 import { preventViteBuild } from "./prevent-vite-build";
 import vaviteConnect from "@vavite/connect";
+import { apiRoutes } from "./api-routes";
 
 export default function rakkas(): PluginOption[] {
 	return [
@@ -14,5 +15,6 @@ export default function rakkas(): PluginOption[] {
 		}),
 		preventViteBuild(),
 		injectConfig(),
+		apiRoutes(),
 	];
 }

@@ -23,5 +23,6 @@ export default defineConfig([
 		format: ["esm"],
 		platform: "node",
 		target: "node14",
+		external: ["virtual:rakkasjs:api-routes"],
 	},
 ]);
