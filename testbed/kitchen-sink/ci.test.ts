@@ -20,6 +20,8 @@ function testCase(title: string, command?: string) {
 	describe(title, () => {
 		if (command) {
 			beforeAll(async () => {
+				await kill(3000, "tcp");
+
 				spawn(command, {
 					shell: true,
 					stdio: "inherit",
@@ -46,10 +48,6 @@ function testCase(title: string, command?: string) {
 					}, 250);
 				});
 			}, 60_000);
-
-			afterAll(async () => {
-				await kill(3000, "tcp");
-			});
 		}
 
 		test("renders simple API route", async () => {
@@ -74,3 +72,7 @@ function testCase(title: string, command?: string) {
 		});
 	});
 }
+
+afterAll(async () => {
+	await kill(3000, "tcp");
+});
