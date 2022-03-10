@@ -68,12 +68,14 @@ npx create-rakkas-app@latest
 > Then you can start a development server on `localhost:3000` with `npx rakkas dev`, build with `npx rakkas build`, and launch with `node dist/server`.
 
 ## Credits
+
 - [Fatih Aygün](https://github.com/cyco130), under [MIT License](https://opensource.org/licenses/MIT).
 - Logomark: “Flamenco” by [gzz from Noun Project](https://thenounproject.com/term/flamenco/111303) (not affiliated) under [Creative Commons Attribution Generic license (CCBY)](https://creativecommons.org/licenses/by/2.0/)
 
 ## Version history
 
 ## 0.5.0
+
 - Serverless support (Vercel, Netlify, Cloudflare Workers)
 - Improved client-side navigation
 - Improved SSR
@@ -83,10 +85,10 @@ npx create-rakkas-app@latest
 - `Cache-control` header setting
 
 ## 0.4.0
+
 - Static site generation
 - Switch to React automatic JSX runtime
 - Integration examples (Apollo GraphQL, Styled Components, MDX, Tailwind CSS)
 - More options in the project generator
 - Lots of minor features and fixes
 - Much-expanded documentation
-

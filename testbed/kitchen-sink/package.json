@@ -1,8 +1,22 @@
 {
 	"name": "@rakkasjs/test-bed-kitchen-sink",
 	"private": true,
+	"scripts": {
+		"dev": "vite dev -l silent",
+		"build": "rakkas build -l silent",
+		"start": "node dist/server",
+		"ci": "vitest",
+		"test": "pnpm test:typecheck && pnpm test:lint",
+		"test:typecheck": "tsc -p tsconfig.json --noEmit",
+		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
+	},
 	"devDependencies": {
+		"@cyco130/eslint-config": "^1.0.0",
+		"eslint": "^8.10.0",
+		"kill-port": "^1.6.1",
+		"node-fetch": "^3.2.2",
 		"rakkasjs": "workspace:*",
+		"typescript": "^4.6.2",
 		"vite": "^2.8.6"
 	}
 }

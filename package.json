@@ -5,9 +5,14 @@
 		"dev": "pnpm -r --parallel dev --filter ./packages",
 		"build": "pnpm -r build --filter ./packages",
 		"prepare": "husky install",
-		"precommit": "lint-staged"
+		"precommit": "lint-staged",
+		"ci": "cross-env CI=true pnpm -r --stream run ci",
+		"test": "pnpm test:prettier && cross-env CI=true pnpm -r --stream run test",
+		"test:prettier": "prettier --check --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'"
 	},
 	"devDependencies": {
+		"@vitest/ui": "^0.6.0",
+		"cross-env": "^7.0.3",
 		"husky": "^7.0.4",
 		"lint-staged": "^12.3.4",
 		"prettier": "^2.5.1",
