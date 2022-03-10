@@ -51,9 +51,8 @@ export function apiRoutes(): Plugin {
 
 		for (const [baseName, i, endpointFile] of endpointRoutes) {
 			const middlewares = middlewareDirs
-				.filter((dirName) => endpointFile.startsWith(dirName + path.sep))
-				.map((_, mi) => mi)
-				.reverse();
+				.filter((dirName) => endpointFile.startsWith(dirName + "/"))
+				.map((_, mi) => mi);
 
 			exportStatement += `  [${routeToRegExp(
 				"/" + baseName,

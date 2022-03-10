@@ -54,9 +54,8 @@ export function pageRoutes(): Plugin {
 
 		for (const [baseName, i, pageFile] of pageRoutes) {
 			const layouts = layoutDirs
-				.filter((dirName) => pageFile.startsWith(dirName + path.sep))
-				.map((_, mi) => mi)
-				.reverse();
+				.filter((dirName) => pageFile.startsWith(dirName + "/"))
+				.map((_, mi) => mi);
 
 			exportStatement += `  [${routeToRegExp(
 				"/" + baseName,
