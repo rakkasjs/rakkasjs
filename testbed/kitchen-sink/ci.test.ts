@@ -35,7 +35,7 @@ function testCase(title: string, command?: string) {
 								const text = await r.text();
 								if (
 									r.status === 200 &&
-									// TODO: text.includes("This is a shared header.") &&
+									text.includes("This is a shared header.") &&
 									text.includes("Hello world!")
 								) {
 									clearInterval(interval);
