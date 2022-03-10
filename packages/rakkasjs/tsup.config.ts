@@ -23,6 +23,7 @@ export default defineConfig([
 		format: ["esm"],
 		platform: "node",
 		target: "node14",
+		shims: false,
 		external: ["virtual:rakkasjs:api-routes"],
 	},
 	{
@@ -31,6 +32,7 @@ export default defineConfig([
 		},
 		format: ["esm"],
 		platform: "browser",
+		shims: false,
 		dts: true,
 	},
 ]);

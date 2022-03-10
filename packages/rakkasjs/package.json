@@ -39,6 +39,8 @@
 	},
 	"devDependencies": {
 		"@cyco130/eslint-config": "^1.0.0",
+		"@hattip/adapter-node": "0.0.1",
+		"@hattip/core": "0.0.1",
 		"@types/micromatch": "^4.0.2",
 		"eslint": "^8.10.0",
 		"tsup": "^5.11.13",
@@ -46,8 +48,6 @@
 		"vite": "^2.8.6"
 	},
 	"dependencies": {
-		"@hattip/adapter-node": "0.0.1",
-		"@hattip/core": "0.0.1",
 		"@types/node": "^17.0.21",
 		"@vavite/connect": "^1.1.5",
 		"@vavite/multibuild": "^1.1.5",
