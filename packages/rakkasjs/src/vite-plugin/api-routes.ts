@@ -1,8 +1,8 @@
 import { Plugin } from "vite";
-// import micromatch from "micromatch";
+import micromatch from "micromatch";
 import glob from "fast-glob";
 import path from "path";
-import { routeToRegExp } from "./util/route-to-reg-exp";
+import { routeToRegExp, sortRoutes } from "./util/route-utils";
 
 export function apiRoutes(): Plugin {
 	const extPattern = "mjs|js|ts|jsx|tsx";
@@ -11,30 +11,60 @@ export function apiRoutes(): Plugin {
 	const middlewarePattern = `/**/middleware.(${extPattern})`;
 
 	let root: string;
-	// let isMiddleware: (filename: string) => boolean;
-	// let isEndpoint: (filename: string) => boolean;
+	let isMiddleware: (filename: string) => boolean;
+	let isEndpoint: (filename: string) => boolean;
 
 	async function generateRoutesModule(): Promise<string> {
 		const endpointFiles = await glob(root + endpointPattern);
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const middlewareFiles = await glob(root + middlewarePattern);
+		const middlewareFiles = await (
+			await glob(root + middlewarePattern)
+		).sort(/* Long to short */ (a, b) => b.length - a.length);
 
-		let out = "";
+		const middlewareDirs = middlewareFiles.map((f) => path.dirname(f));
 
-		for (const [i, endpointFile] of endpointFiles.entries()) {
-			out += `const e${i} = () => import(${JSON.stringify(endpointFile)});\n`;
+		let middlewareImporters = "";
+
+		for (const [i, middlewareFile] of middlewareFiles.entries()) {
+			middlewareImporters += `const m${i} = () => import(${JSON.stringify(
+				middlewareFile,
+			)});\n`;
 		}
 
-		out += "\nexport default [\n";
+		let endpointImporters = "";
 
 		for (const [i, endpointFile] of endpointFiles.entries()) {
-			const relName = path.relative(root, endpointFile);
-			const baseName = /^(.*)\.api\.(.*)$/.exec(relName)![1];
-			out += `  [${routeToRegExp("/" + baseName)}, [e${i}]],\n`;
+			endpointImporters += `const e${i} = () => import(${JSON.stringify(
+				endpointFile,
+			)});\n`;
 		}
 
-		out += "]";
+		let exportStatement = "export default [\n";
+
+		const endpointRoutes = sortRoutes(
+			endpointFiles.map((endpointFile, i) => {
+				const relName = path.relative(root, endpointFile);
+				const baseName = /^(.*)\.api\.(.*)$/.exec(relName)![1];
+				return [baseName, i, endpointFile] as [string, number, string];
+			}),
+		);
+
+		for (const [baseName, i, endpointFile] of endpointRoutes) {
+			const middlewares = middlewareDirs
+				.filter((dirName) => endpointFile.startsWith(dirName + path.sep))
+				.map((_, mi) => mi)
+				.reverse();
+
+			exportStatement += `  [${routeToRegExp(
+				"/" + baseName,
+			)}, [e${i}, ${middlewares.map((mi) => `m${mi}`)}]],\n`;
+		}
+
+		exportStatement += "]";
+
+		const out = [middlewareImporters, endpointImporters, exportStatement]
+			.filter(Boolean)
+			.join("\n");
 
 		return out;
 	}
@@ -56,8 +86,31 @@ export function apiRoutes(): Plugin {
 
 		configResolved(config) {
 			root = config.root + "/src/routes";
-			// isMiddleware = micromatch.matcher(endpointPattern);
-			// isEndpoint = micromatch.matcher(middlewarePattern);
+			isMiddleware = micromatch.matcher(endpointPattern);
+			isEndpoint = micromatch.matcher(middlewarePattern);
+		},
+
+		configureServer(server) {
+			server.watcher.addListener("all", async (e: string, fn: string) => {
+				if (
+					(isEndpoint(fn) || isMiddleware(fn)) &&
+					(e === "add" || e === "unlink")
+				) {
+					const module = server.moduleGraph.getModuleById(
+						"virtual:rakkasjs:api-routes",
+					);
+
+					if (module) {
+						server.moduleGraph.invalidateModule(module);
+						if (server.ws) {
+							server.ws.send({
+								type: "full-reload",
+								path: "*",
+							});
+						}
+					}
+				}
+			});
 		},
 	};
 }

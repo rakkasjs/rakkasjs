@@ -18,11 +18,19 @@ export default defineConfig([
 	},
 	{
 		entry: {
-			"entries/vavite-handler": "./src/entries/vavite-handler.ts",
+			"runtime/vavite-handler": "./src/runtime/vavite-handler.ts",
 		},
 		format: ["esm"],
 		platform: "node",
 		target: "node14",
 		external: ["virtual:rakkasjs:api-routes"],
+	},
+	{
+		entry: {
+			index: "./src/lib/index.ts",
+		},
+		format: ["esm"],
+		platform: "browser",
+		dts: true,
 	},
 ]);

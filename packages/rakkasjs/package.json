@@ -11,8 +11,9 @@
 		"*.d.ts"
 	],
 	"exports": {
+		".": "./dist/index.mjs",
 		"./vite-plugin": "./dist/vite-plugin.js",
-		"./entries/vavite-handler": "./dist/entries/vavite-handler.mjs"
+		"./runtime/vavite-handler": "./dist/runtime/vavite-handler.mjs"
 	},
 	"scripts": {
 		"build": "tsup",

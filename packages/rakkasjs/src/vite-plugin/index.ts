@@ -9,7 +9,7 @@ import { apiRoutes } from "./api-routes";
 export default function rakkas(): PluginOption[] {
 	return [
 		...vaviteConnect({
-			handlerEntry: "rakkasjs/entries/vavite-handler",
+			handlerEntry: "rakkasjs/runtime/vavite-handler",
 			clientAssetsDir: "dist/client",
 			serveClientAssetsInDev: true,
 		}),

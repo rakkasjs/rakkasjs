@@ -6,12 +6,13 @@ export async function hattipHandler(
 ): Promise<Response | undefined> {
 	const apiRoutes = await import("virtual:rakkasjs:api-routes");
 
-	const url = new URL(req.url);
+	const url = ((ctx as any).url = new URL(req.url));
 
 	for (const [regex, importers] of apiRoutes.default) {
 		const match = regex.exec(url.pathname);
 
 		if (!match) continue;
+		(ctx as any).params = match.groups || {};
 
 		const [endpointImporter, ...middlewareImporters] = importers;
 
@@ -26,7 +27,7 @@ export async function hattipHandler(
 
 		let method = req.method.toLowerCase();
 		if (method === "delete") method = "del";
-		const handler = endpoint[method];
+		const handler = endpoint[method] || endpoint.all;
 		const response = await handler?.(req, ctx);
 		if (response) return response;
 	}
