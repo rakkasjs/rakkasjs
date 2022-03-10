@@ -18,5 +18,11 @@
 		"rakkasjs": "workspace:*",
 		"typescript": "^4.6.2",
 		"vite": "^2.8.6"
+	},
+	"dependencies": {
+		"@types/react": "^17.0.40",
+		"@types/react-dom": "^17.0.13",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2"
 	}
 }

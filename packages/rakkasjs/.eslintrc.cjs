@@ -7,7 +7,10 @@ module.exports = {
 		"import/no-unresolved": [
 			"error",
 			{
-				ignore: ["virtual:rakkasjs:api-routes"],
+				ignore: [
+					"virtual:rakkasjs:api-routes",
+					"virtual:rakkasjs:server-page-routes",
+				],
 			},
 		],
 	},

@@ -14,6 +14,11 @@ export function injectConfig(): Plugin {
 						config: {
 							build: {
 								outDir: "dist/client",
+								rollupOptions: {
+									input: {
+										index: "/virtual:rakkasjs:client-entry",
+									},
+								},
 							},
 						},
 					},

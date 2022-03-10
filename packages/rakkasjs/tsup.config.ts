@@ -19,12 +19,17 @@ export default defineConfig([
 	{
 		entry: {
 			"runtime/vavite-handler": "./src/runtime/vavite-handler.ts",
+			"runtime/client-entry": "./src/runtime/client-entry.tsx",
 		},
 		format: ["esm"],
 		platform: "node",
 		target: "node14",
 		shims: false,
-		external: ["virtual:rakkasjs:api-routes"],
+		external: [
+			"virtual:rakkasjs:api-routes",
+			"virtual:rakkasjs:server-page-routes",
+			"react-dom/server",
+		],
 	},
 	{
 		entry: {
