@@ -15,7 +15,7 @@ export function pageRoutes(): Plugin {
 	let isLayout: (filename: string) => boolean;
 	let isPage: (filename: string) => boolean;
 
-	async function generateRoutesModule(): Promise<string> {
+	async function generateRoutesModule(client?: boolean): Promise<string> {
 		const pageFiles = await glob(routesRoot + pagePattern);
 
 		const layoutFiles = await (
@@ -28,18 +28,24 @@ export function pageRoutes(): Plugin {
 
 		for (const [i, layoutFile] of layoutFiles.entries()) {
 			const relName = path.relative(root, layoutFile);
-			layoutImporters += `const m${i} = [${JSON.stringify(
-				relName,
-			)}, () => import(${JSON.stringify(layoutFile)})];\n`;
+			const importer = `() => import(${JSON.stringify(layoutFile)})`;
+
+			layoutImporters +=
+				`const m${i} = ` +
+				(client ? importer : `[${JSON.stringify(relName)}, ${importer}]`) +
+				";\n";
 		}
 
 		let pageImporters = "";
 
 		for (const [i, pageFile] of pageFiles.entries()) {
 			const relName = path.relative(root, pageFile);
-			pageImporters += `const e${i} = [${JSON.stringify(
-				relName,
-			)}, () => import(${JSON.stringify(pageFile)})];\n`;
+			const importer = `() => import(${JSON.stringify(pageFile)})`;
+
+			pageImporters +=
+				`const e${i} = ` +
+				(client ? importer : `[${JSON.stringify(relName)}, ${importer}]`) +
+				";\n";
 		}
 
 		let exportStatement = "export default [\n";
@@ -75,7 +81,10 @@ export function pageRoutes(): Plugin {
 		name: "rakkasjs:page-router",
 
 		resolveId(id) {
-			if (id === "virtual:rakkasjs:server-page-routes") {
+			if (
+				id === "virtual:rakkasjs:server-page-routes" ||
+				id === "virtual:rakkasjs:client-page-routes"
+			) {
 				return id;
 			}
 		},
@@ -83,6 +92,8 @@ export function pageRoutes(): Plugin {
 		async load(id) {
 			if (id === "virtual:rakkasjs:server-page-routes") {
 				return generateRoutesModule();
+			} else if (id === "virtual:rakkasjs:client-page-routes") {
+				return generateRoutesModule(true);
 			}
 		},
 

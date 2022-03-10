@@ -10,6 +10,8 @@ module.exports = {
 				ignore: [
 					"virtual:rakkasjs:api-routes",
 					"virtual:rakkasjs:server-page-routes",
+					"virtual:rakkasjs:client-page-routes",
+					"virtual:rakkasjs:client-manifest",
 				],
 			},
 		],

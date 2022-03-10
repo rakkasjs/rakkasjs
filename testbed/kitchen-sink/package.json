@@ -6,6 +6,7 @@
 		"build": "rakkas build -l silent",
 		"start": "node dist/server",
 		"ci": "vitest",
+		"ci:local": "TEST_HOST=http://localhost:3000 pnpx vitest run",
 		"test": "pnpm test:typecheck && pnpm test:lint",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit",
 		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
@@ -15,6 +16,7 @@
 		"eslint": "^8.10.0",
 		"kill-port": "^1.6.1",
 		"node-fetch": "^3.2.2",
+		"puppeteer": "^13.5.1",
 		"rakkasjs": "workspace:*",
 		"typescript": "^4.6.2",
 		"vite": "^2.8.6"

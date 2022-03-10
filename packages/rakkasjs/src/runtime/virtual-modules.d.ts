@@ -29,3 +29,20 @@ declare module "virtual:rakkasjs:server-page-routes" {
 
 	export default routes;
 }
+
+declare module "virtual:rakkasjs:client-page-routes" {
+	const routes: Array<[RegExp, [PageImporter, ...LayoutImporter[]]]>;
+
+	type PageImporter = () => Promise<PageModule>;
+	type LayoutImporter = () => Promise<LayoutModule>;
+
+	type PageModule = import("./page-types").PageModule;
+	type LayoutModule = import("./page-types").LayoutModule;
+
+	export default routes;
+}
+
+declare module "virtual:rakkasjs:client-manifest" {
+	const manifest: undefined | import("vite").Manifest;
+	export default manifest;
+}

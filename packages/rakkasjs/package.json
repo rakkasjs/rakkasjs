@@ -56,6 +56,7 @@
 		"@types/react-dom": "^17.0.13",
 		"@vavite/connect": "^1.1.5",
 		"@vavite/multibuild": "^1.1.5",
+		"@vavite/expose-vite-dev-server": "1.1.5",
 		"@vitejs/plugin-react": "^1.2.0",
 		"cac": "^6.7.12",
 		"fast-glob": "^3.2.11",

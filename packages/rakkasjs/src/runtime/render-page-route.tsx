@@ -1,7 +1,11 @@
+/// <reference types="vite/client" />
+
 import { RequestContext } from "../lib";
 import { LayoutModule, PageModule } from "./page-types";
 import React, { ReactNode } from "react";
 import { renderToString } from "react-dom/server";
+import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
+import clientManifest from "virtual:rakkasjs:client-manifest";
 
 export async function renderPageRoute(
 	req: Request,
@@ -30,7 +34,25 @@ export async function renderPageRoute(
 
 		const inner = renderToString(<>{content}</>);
 
-		return new Response(inner, {
+		let scriptPath = "virtual:rakkasjs:client-entry";
+		if (import.meta.env.PROD) {
+			scriptPath = clientManifest![scriptPath].file ?? scriptPath;
+		}
+
+		let html = `<!DOCTYPE html>
+			<html>
+				<head></head>
+				<body>
+					<div id="root">${inner}</div>
+				</body>
+				<script type="module" src=${JSON.stringify("/" + scriptPath)}></script>
+			</html>`;
+
+		if (import.meta.env.DEV) {
+			html = await viteDevServer!.transformIndexHtml(ctx.url.pathname, html);
+		}
+
+		return new Response(html, {
 			headers: { "Content-Type": "text/html; charset=utf-8" },
 		});
 	}

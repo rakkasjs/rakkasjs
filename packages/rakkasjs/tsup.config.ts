@@ -28,7 +28,14 @@ export default defineConfig([
 		external: [
 			"virtual:rakkasjs:api-routes",
 			"virtual:rakkasjs:server-page-routes",
+			"virtual:rakkasjs:client-page-routes",
+			"virtual:rakkasjs:client-manifest",
+			"react",
+			"react/jsx-runtime",
+			"react/jsx-dev-runtime",
+			"react-dom",
 			"react-dom/server",
+			"@vavite/expose-vite-dev-server/vite-dev-server",
 		],
 	},
 	{

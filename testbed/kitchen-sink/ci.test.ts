@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default-member */
 /// <reference types="vite/client" />
 
 import { describe, test, expect, beforeAll, afterAll } from "vitest";
@@ -6,6 +7,7 @@ import fetch from "node-fetch";
 import path from "path";
 // @ts-expect-error: kill-port doesn't ship with types
 import kill from "kill-port";
+import puppeteer, { ElementHandle } from "puppeteer";
 
 const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 
@@ -15,6 +17,14 @@ if (import.meta.env.TEST_HOST) {
 	testCase("development mode", "pnpm dev");
 	testCase("production mode", "pnpm build && pnpm start");
 }
+
+const browser = await puppeteer.launch({
+	// headless: false,
+	defaultViewport: { width: 1200, height: 800 },
+});
+
+const pages = await browser.pages();
+const page = pages[0];
 
 function testCase(title: string, command?: string) {
 	describe(title, () => {
@@ -77,9 +87,30 @@ function testCase(title: string, command?: string) {
 			const json = await response.json();
 			expect(json).toMatchObject({ rest: "aaa/bbb/ccc" });
 		});
+
+		test("renders interactive page", async () => {
+			await page.goto(TEST_HOST + "/");
+			await page.waitForSelector(".hydrated");
+
+			const button: ElementHandle<HTMLButtonElement> | null =
+				await page.waitForSelector("button");
+			expect(button).toBeTruthy();
+
+			await button!.click();
+
+			await page.waitForFunction(
+				() => document.querySelector("button")?.textContent === "Clicked: 1",
+			);
+		});
+	});
+}
+
+if (!import.meta.env.TEST_HOST) {
+	afterAll(async () => {
+		await kill(3000, "tcp");
 	});
 }
 
 afterAll(async () => {
-	await kill(3000, "tcp");
+	await browser.close();
 });
