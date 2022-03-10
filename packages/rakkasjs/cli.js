@@ -1,2 +1,2 @@
-#!/bin/env node
+#!/usr/bin/env node
 require("./dist/cli");

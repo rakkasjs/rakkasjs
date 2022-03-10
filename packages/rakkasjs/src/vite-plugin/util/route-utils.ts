@@ -1,4 +1,7 @@
 export function routeToRegExp(route: string): RegExp {
+	// Backslash to slash
+	route = route.replace(/\\/g, "/");
+
 	let restParamName: string | undefined;
 
 	const restMatch = route.match(/\/\[\.\.\.([a-zA-Z_][a-zA-Z0-9_]*)\]$/);
