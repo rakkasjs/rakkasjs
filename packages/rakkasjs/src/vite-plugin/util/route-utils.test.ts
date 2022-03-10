@@ -27,6 +27,15 @@ describe("routeToRegExp", () => {
 		const re = routeToRegExp("/foo/_bar/baz/index");
 		expect("/foo/baz".match(re)).toBeTruthy();
 	});
+
+	test("matches rest params", () => {
+		const re = routeToRegExp("/foo/[bar]/[baz]/[...qux]");
+		expect("/foo/123/456/aaa/bbb/ccc".match(re)?.groups).toMatchObject({
+			bar: "123",
+			baz: "456",
+			qux: "aaa/bbb/ccc",
+		});
+	});
 });
 
 describe("sortRoutes", () => {
@@ -34,13 +43,15 @@ describe("sortRoutes", () => {
 		expect(
 			sortRoutes([
 				["/foo/[bar]", 1],
-				["/foo/[baz]-[qux]", 2],
-				["/foo/xyz/", 3],
+				["/foo/[bar]/[...qux]", 2],
+				["/foo/[baz]-[qux]", 3],
+				["/foo/xyz/", 4],
 			]),
 		).toMatchObject([
-			["/foo/xyz/", 3],
+			["/foo/xyz/", 4],
 			["/foo/[bar]", 1],
-			["/foo/[baz]-[qux]", 2],
+			["/foo/[baz]-[qux]", 3],
+			["/foo/[bar]/[...qux]", 2],
 		]);
 	});
 });

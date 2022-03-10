@@ -1,34 +1,11 @@
-import { Context, Handler } from "@hattip/core";
+import { Context } from "@hattip/core";
+import { RequestContext } from "../lib";
+import { renderApiRoute } from "./render-api-route";
 
 export async function hattipHandler(
 	req: Request,
 	ctx: Context,
 ): Promise<Response | undefined> {
-	const apiRoutes = await import("virtual:rakkasjs:api-routes");
-
-	const url = ((ctx as any).url = new URL(req.url));
-
-	for (const [regex, importers] of apiRoutes.default) {
-		const match = regex.exec(url.pathname);
-
-		if (!match) continue;
-		(ctx as any).params = match.groups || {};
-
-		const [endpointImporter, ...middlewareImporters] = importers;
-
-		for (const middlewareImporter of middlewareImporters) {
-			const middleware = await middlewareImporter();
-			const response = await middleware.default(req, ctx);
-			if (response) return response;
-		}
-
-		let endpoint: Record<string, Handler> = (await endpointImporter()) as any;
-		if (endpoint.default) endpoint = endpoint.default as any;
-
-		let method = req.method.toLowerCase();
-		if (method === "delete") method = "del";
-		const handler = endpoint[method] || endpoint.all;
-		const response = await handler?.(req, ctx);
-		if (response) return response;
-	}
+	const apiResponse = await renderApiRoute(req, ctx as RequestContext);
+	if (apiResponse) return apiResponse;
 }
