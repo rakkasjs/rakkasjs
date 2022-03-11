@@ -1,8 +1,9 @@
-import { Plugin } from "vite";
+import { Plugin, ResolvedConfig } from "vite";
 import micromatch from "micromatch";
 import glob from "fast-glob";
 import path from "path";
 import { routeToRegExp, sortRoutes } from "./util/route-utils";
+import fs from "fs";
 
 export function pageRoutes(): Plugin {
 	const extPattern = "mjs|js|ts|jsx|tsx";
@@ -10,45 +11,54 @@ export function pageRoutes(): Plugin {
 	const pagePattern = `/**/*.page.(${extPattern})`;
 	const layoutPattern = `/**/layout.(${extPattern})`;
 
-	let root: string;
+	let resolvedConfig: ResolvedConfig;
 	let routesRoot: string;
 	let isLayout: (filename: string) => boolean;
 	let isPage: (filename: string) => boolean;
 
-	async function generateRoutesModule(client?: boolean): Promise<string> {
+	async function generateRoutesModule(
+		client?: boolean,
+		importer?: boolean,
+	): Promise<string> {
 		const pageFiles = await glob(routesRoot + pagePattern);
 
 		const layoutFiles = await (
 			await glob(routesRoot + layoutPattern)
-		).sort(/* Long to short */ (a, b) => b.length - a.length);
+		).sort((a, b) => /* Long to short */ b.length - a.length);
 
 		const layoutDirs = layoutFiles.map((f) => path.dirname(f));
 
 		let layoutImporters = "";
 
 		for (const [i, layoutFile] of layoutFiles.entries()) {
-			const relName = path.relative(root, layoutFile);
+			const relName = path.relative(resolvedConfig.root, layoutFile);
 			const importer = `() => import(${JSON.stringify(layoutFile)})`;
 
 			layoutImporters +=
 				`const m${i} = ` +
-				(client ? importer : `[${JSON.stringify(relName)}, ${importer}]`) +
+				(client
+					? importer
+					: `[${JSON.stringify(relName.replace(/\\/g, "/"))}, ${importer}]`) +
 				";\n";
 		}
 
 		let pageImporters = "";
 
 		for (const [i, pageFile] of pageFiles.entries()) {
-			const relName = path.relative(root, pageFile);
+			const relName = path.relative(resolvedConfig.root, pageFile);
 			const importer = `() => import(${JSON.stringify(pageFile)})`;
 
 			pageImporters +=
 				`const e${i} = ` +
-				(client ? importer : `[${JSON.stringify(relName)}, ${importer}]`) +
+				(client
+					? importer
+					: `[${JSON.stringify(relName.replace(/\\/g, "/"))}, ${importer}]`) +
 				";\n";
 		}
 
-		let exportStatement = "export default [\n";
+		let exportStatement = importer
+			? "globalThis.dummy = [\n"
+			: "export default [\n";
 
 		const pageRoutes = sortRoutes(
 			pageFiles.map((pageFile, i) => {
@@ -83,7 +93,8 @@ export function pageRoutes(): Plugin {
 		resolveId(id) {
 			if (
 				id === "virtual:rakkasjs:server-page-routes" ||
-				id === "virtual:rakkasjs:client-page-routes"
+				id === "virtual:rakkasjs:client-page-routes" ||
+				id === "virtual:rakkasjs:client-pages-importer"
 			) {
 				return id;
 			}
@@ -94,11 +105,29 @@ export function pageRoutes(): Plugin {
 				return generateRoutesModule();
 			} else if (id === "virtual:rakkasjs:client-page-routes") {
 				return generateRoutesModule(true);
+			} else if (id === "virtual:rakkasjs:client-pages-importer") {
+				return generateRoutesModule(true, true);
+			}
+		},
+
+		config(config, env) {
+			if (env.command === "build" && !config.build?.ssr) {
+				return {
+					build: {
+						rollupOptions: {
+							input: {
+								// This dummy entry makes sure that all pages and layouts are pulled into the build.
+								// It's deleted on closeBundle since it's not needed at runtime.
+								rakkasPages: "virtual:rakkasjs:client-pages-importer",
+							},
+						},
+					},
+				};
 			}
 		},
 
 		configResolved(config) {
-			root = config.root;
+			resolvedConfig = config;
 			routesRoot = config.root + "/src/routes";
 			isLayout = micromatch.matcher(pagePattern);
 			isPage = micromatch.matcher(layoutPattern);
@@ -122,6 +151,28 @@ export function pageRoutes(): Plugin {
 					}
 				}
 			});
+		},
+
+		async closeBundle() {
+			if (!(resolvedConfig.build.rollupOptions.input as any)?.rakkasPages) {
+				return;
+			}
+
+			const manifest = JSON.parse(
+				await fs.promises.readFile(
+					path.resolve(resolvedConfig.root, "dist/manifest.json"),
+					"utf-8",
+				),
+			);
+
+			const importerPath =
+				manifest!["virtual:rakkasjs:client-pages-importer"]?.file;
+
+			if (importerPath) {
+				fs.promises.rm(
+					path.resolve(resolvedConfig.root, "dist/client", importerPath),
+				);
+			}
 		},
 	};
 }

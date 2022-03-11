@@ -129,8 +129,9 @@ function testCase(title: string, dev: boolean, command?: string) {
 				await fs.promises.writeFile(filePath, newContent);
 
 				try {
-					await page.waitForFunction(() =>
-						document.body.textContent?.includes("Hot reloadin'!"),
+					await page.waitForFunction(
+						() => document.body.textContent?.includes("Hot reloadin'!"),
+						{ timeout: 60_000 },
 					);
 					await page.waitForFunction(
 						() =>

@@ -1,27 +1,49 @@
 import React, { ReactElement, ReactNode } from "react";
 import { hydrate } from "react-dom";
+import { LayoutModule, PageModule } from "./page-types";
 
 // declare const PAGE_STACK: string[];
 
+declare const $RAKKAS_PAGE_MODULES: string[];
+
 async function startClient() {
-	const routes = await import("virtual:rakkasjs:client-page-routes");
-	const path = location.pathname;
-	for (const [regex, importers] of routes.default) {
-		const match = regex.exec(path);
-		if (!match) continue;
+	const modules: [PageModule, ...LayoutModule[]] = (await Promise.all(
+		$RAKKAS_PAGE_MODULES.map((m) => import(/* vite-ignore */ m)),
+	)) as any;
 
-		// const params = match.groups || {};
+	const content = modules.reduce(
+		(prev, { default: Component }) => <Component children={prev} />,
+		null as ReactNode,
+	);
 
-		const modules = await Promise.all(importers.map((importer) => importer()));
-
-		const content = modules.reduce(
-			(prev, { default: Component }) => <Component children={prev} />,
-			null as ReactNode,
-		);
-
-		hydrate(content as ReactElement, document.getElementById("root"));
-		break;
-	}
+	hydrate(content as ReactElement, document.getElementById("root"));
 }
 
 startClient();
+
+/*
+
+const routes = await import("virtual:rakkasjs:client-page-routes");
+const path = location.pathname;
+
+// let params: Record<string, string>;
+const route = routes.default.find(([re]) => {
+	const match = path.match(re);
+	if (match) {
+		// params = match.groups || {};
+		return true;
+	}
+
+	return false;
+});
+
+if (!route) {
+	// TODO: Handle 404
+	return;
+}
+
+modules = (await Promise.all(
+	route[1].map((importer) => importer()),
+)) as any;
+
+*/

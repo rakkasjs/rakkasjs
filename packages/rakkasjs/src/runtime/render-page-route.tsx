@@ -21,8 +21,6 @@ export async function renderPageRoute(
 
 		ctx.params = match.groups || {};
 
-		// const moduleNames = descriptors.map(([name]) => name);
-
 		const modules = (await Promise.all(
 			descriptors.map(([, importer]) => importer()),
 		)) as [PageModule, ...LayoutModule[]];
@@ -36,16 +34,27 @@ export async function renderPageRoute(
 
 		let scriptPath = "virtual:rakkasjs:client-entry";
 		if (import.meta.env.PROD) {
-			scriptPath = clientManifest![scriptPath].file ?? scriptPath;
+			scriptPath = clientManifest![scriptPath]?.file ?? scriptPath;
 		}
+
+		let head = "";
+
+		// Inject the names of modules
+		const moduleNames = descriptors.map(
+			([name]) => "/" + (clientManifest?.[name]?.file ?? name),
+		);
+
+		head += `<script>window.$RAKKAS_PAGE_MODULES=${safeStringify(
+			moduleNames,
+		)};</script>`;
 
 		let html = `<!DOCTYPE html>
 			<html>
-				<head></head>
+				<head>${head}</head>
 				<body>
 					<div id="root">${inner}</div>
 				</body>
-				<script type="module" src=${JSON.stringify("/" + scriptPath)}></script>
+				<script type="module" src=${safeStringify("/" + scriptPath)}></script>
 			</html>`;
 
 		if (import.meta.env.DEV) {
@@ -58,4 +67,9 @@ export async function renderPageRoute(
 	}
 
 	return;
+}
+
+function safeStringify(obj: any): string {
+	// TODO: Escape HTML
+	return JSON.stringify(obj);
 }
