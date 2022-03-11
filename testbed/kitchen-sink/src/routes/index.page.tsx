@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function HomePage() {
 	const [count, setCount] = useState(0);
@@ -10,6 +10,7 @@ export default function HomePage() {
 			<button onClick={() => setCount((old) => old + 1)}>
 				Clicked: {count}
 			</button>
+			{import.meta.env.DEV && <p>Development mode is active.</p>}
 		</>
 	);
 }

@@ -8,14 +8,15 @@ import path from "path";
 // @ts-expect-error: kill-port doesn't ship with types
 import kill from "kill-port";
 import puppeteer, { ElementHandle } from "puppeteer";
+import fs from "fs";
 
 const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 
 if (import.meta.env.TEST_HOST) {
-	testCase("running server");
+	testCase("running server", process.env.NODE_ENV !== "production");
 } else {
-	testCase("development mode", "pnpm dev");
-	testCase("production mode", "pnpm build && pnpm start");
+	testCase("development mode", true, "pnpm dev");
+	testCase("production mode", false, "pnpm build && pnpm start");
 }
 
 const browser = await puppeteer.launch({
@@ -26,7 +27,7 @@ const browser = await puppeteer.launch({
 const pages = await browser.pages();
 const page = pages[0];
 
-function testCase(title: string, command?: string) {
+function testCase(title: string, dev: boolean, command?: string) {
 	describe(title, () => {
 		if (command) {
 			beforeAll(async () => {
@@ -102,15 +103,51 @@ function testCase(title: string, command?: string) {
 				() => document.querySelector("button")?.textContent === "Clicked: 1",
 			);
 		});
-	});
-}
 
-if (!import.meta.env.TEST_HOST) {
-	afterAll(async () => {
-		await kill(3000, "tcp");
+		if (
+			dev &&
+			// TODO: This test fails on Windows CI. Investigate why and whether it fails on a real machine.
+			process.platform !== "win32"
+		) {
+			test("hot reloads page", async () => {
+				await page.goto(TEST_HOST + "/");
+				await page.waitForSelector(".hydrated");
+
+				const button: ElementHandle<HTMLButtonElement> | null =
+					await page.waitForSelector("button");
+
+				await button!.click();
+
+				await page.waitForFunction(
+					() => document.querySelector("button")?.textContent === "Clicked: 1",
+				);
+
+				const filePath = path.resolve(__dirname, "src/routes/index.page.tsx");
+				const oldContent = await fs.promises.readFile(filePath, "utf8");
+				const newContent = oldContent.replace("Hello world!", "Hot reloadin'!");
+
+				await fs.promises.writeFile(filePath, newContent);
+
+				try {
+					await page.waitForFunction(() =>
+						document.body.textContent?.includes("Hot reloadin'!"),
+					);
+					await page.waitForFunction(
+						() =>
+							document.querySelector("button")?.textContent === "Clicked: 1",
+					);
+				} finally {
+					await fs.promises.writeFile(filePath, oldContent);
+				}
+			}, 60_000);
+		}
 	});
 }
 
 afterAll(async () => {
 	await browser.close();
+
+	if (!import.meta.env.TEST_HOST) {
+		await kill(3000, "tcp");
+	}
 });
