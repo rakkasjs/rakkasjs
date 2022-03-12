@@ -2,6 +2,7 @@ import { BuildOptions, LogLevel } from "vite";
 import { cac } from "cac";
 import multibuild from "@vavite/multibuild";
 import { version } from "../../package.json";
+import pico from "picocolors";
 
 interface GlobalCLIOptions {
 	"--"?: string[];
@@ -85,6 +86,13 @@ cli
 	.option("-w, --watch", `[boolean] rebuilds when modules have changed on disk`)
 	.action(async (root: string, options: BuildOptions & GlobalCLIOptions) => {
 		const buildOptions: BuildOptions = cleanOptions(options);
+
+		// eslint-disable-next-line no-console
+		console.log(
+			pico.black(pico.bgMagenta(" Rakkas ")),
+			pico.magenta(version),
+			"💃\n",
+		);
 
 		await multibuild({
 			root,

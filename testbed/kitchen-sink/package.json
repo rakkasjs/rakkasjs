@@ -1,5 +1,5 @@
 {
-	"name": "@rakkasjs/test-bed-kitchen-sink",
+	"name": "@rakkasjs/testbed-kitchen-sink",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev -l silent",
@@ -24,7 +24,8 @@
 	"dependencies": {
 		"@types/react": "^17.0.40",
 		"@types/react-dom": "^17.0.13",
-		"react": "^17.0.2",
-		"react-dom": "^17.0.2"
+		"react": "^18.0.0-rc.2",
+		"react-dom": "^18.0.0-rc.2",
+		"react-helmet-async": "^1.2.3"
 	}
 }

@@ -142,6 +142,14 @@ function testCase(title: string, dev: boolean, command?: string) {
 				}
 			}, 60_000);
 		}
+
+		test("loads data with suspense", async () => {
+			await page.goto(TEST_HOST + "/suspense");
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Hello world!"),
+			);
+		}, 10_000);
 	});
 }
 

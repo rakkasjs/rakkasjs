@@ -1,22 +1,36 @@
-import React, { ReactElement, ReactNode } from "react";
-import { hydrate } from "react-dom";
-import { LayoutModule, PageModule } from "./page-types";
+/// <reference types="react/next" />
+/// <reference types="react-dom/next" />
 
-// declare const PAGE_STACK: string[];
+import React, { ReactElement } from "react";
+import { hydrateRoot } from "react-dom/client";
+import { HelmetProvider } from "react-helmet-async";
+import { LayoutModule, PageModule } from "./page-types";
+import { SsrCacheContext } from "./ssr-cache";
 
 declare const $RAKKAS_PAGE_MODULES: string[];
+declare const $RAKKAS_SSR_CACHE: Record<string, any>;
 
 async function startClient() {
 	const modules: [PageModule, ...LayoutModule[]] = (await Promise.all(
-		$RAKKAS_PAGE_MODULES.map((m) => import(/* vite-ignore */ m)),
+		$RAKKAS_PAGE_MODULES.map((m) => import(/* @vite-ignore */ m)),
 	)) as any;
 
-	const content = modules.reduce(
+	const content: ReactElement = modules.reduce(
 		(prev, { default: Component }) => <Component children={prev} />,
-		null as ReactNode,
+		null as any as ReactElement,
 	);
 
-	hydrate(content as ReactElement, document.getElementById("root"));
+	hydrateRoot(
+		document.getElementById("root")!,
+		<SsrCacheContext.Provider
+			value={{
+				get: (key) => $RAKKAS_SSR_CACHE[key],
+				set: (key, value) => ($RAKKAS_SSR_CACHE[key] = value),
+			}}
+		>
+			<HelmetProvider>{content}</HelmetProvider>
+		</SsrCacheContext.Provider>,
+	);
 }
 
 startClient();

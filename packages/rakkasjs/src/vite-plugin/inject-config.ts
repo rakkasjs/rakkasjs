@@ -34,6 +34,7 @@ export function injectConfig(): Plugin {
 				],
 
 				ssr: {
+					external: ["react-dom/server.browser"],
 					noExternal: ["rakkasjs"],
 				},
 			} as UserConfig & { ssr: SSROptions };

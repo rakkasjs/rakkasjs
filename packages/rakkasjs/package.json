@@ -36,7 +36,10 @@
 		"ssr"
 	],
 	"peerDependencies": {
-		"vite": "2.8.6"
+		"vite": "2.8.6",
+		"react-helmet-async": "^1.2.3",
+		"react": "^18.0.0-rc.2",
+		"react-dom": "^18.0.0-rc.2"
 	},
 	"devDependencies": {
 		"@cyco130/eslint-config": "^1.0.0",
@@ -44,8 +47,9 @@
 		"@hattip/core": "0.0.1",
 		"@types/micromatch": "^4.0.2",
 		"eslint": "^8.10.0",
-		"react": "^17.0.2",
-		"react-dom": "^17.0.2",
+		"react": "^18.0.0-rc.2",
+		"react-dom": "^18.0.0-rc.2",
+		"react-helmet-async": "^1.2.3",
 		"tsup": "^5.11.13",
 		"typescript": "^4.6.2",
 		"vite": "^2.8.6"
@@ -55,8 +59,8 @@
 		"@types/react": "^17.0.40",
 		"@types/react-dom": "^17.0.13",
 		"@vavite/connect": "^1.1.5",
-		"@vavite/multibuild": "^1.1.5",
 		"@vavite/expose-vite-dev-server": "1.1.5",
+		"@vavite/multibuild": "^1.1.5",
 		"@vitejs/plugin-react": "^1.2.0",
 		"cac": "^6.7.12",
 		"fast-glob": "^3.2.11",

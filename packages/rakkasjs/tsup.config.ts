@@ -18,6 +18,7 @@ export default defineConfig([
 	},
 	{
 		entry: {
+			index: "./src/lib/index.ts",
 			"runtime/vavite-handler": "./src/runtime/vavite-handler.ts",
 			"runtime/client-entry": "./src/runtime/client-entry.tsx",
 		},
@@ -35,16 +36,12 @@ export default defineConfig([
 			"react/jsx-dev-runtime",
 			"react-dom",
 			"react-dom/server",
+			"react-dom/server.browser",
+			"react-helmet-async",
 			"@vavite/expose-vite-dev-server/vite-dev-server",
 		],
-	},
-	{
-		entry: {
-			index: "./src/lib/index.ts",
+		dts: {
+			entry: "./src/lib/index.ts",
 		},
-		format: ["esm"],
-		platform: "browser",
-		shims: false,
-		dts: true,
 	},
 ]);

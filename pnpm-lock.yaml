@@ -17,6 +17,37 @@ importers:
       prettier: 2.5.1
       vitest: 0.6.0_@vitest+ui@0.6.0
 
+  experiment/react18:
+    specifiers:
+      "@cyco130/eslint-config": ^1.0.0
+      "@types/react": ^17.0.40
+      "@types/react-dom": ^17.0.13
+      eslint: ^8.10.0
+      kill-port: ^1.6.1
+      node-fetch: ^3.2.2
+      puppeteer: ^13.5.1
+      rakkasjs: workspace:*
+      react: ^18.0.0-rc.2
+      react-dom: ^18.0.0-rc.2
+      react-helmet-async: ^1.2.3
+      typescript: ^4.6.2
+      vite: ^2.8.6
+    dependencies:
+      "@types/react": 17.0.40
+      "@types/react-dom": 17.0.13
+      react: 18.0.0-rc.2
+      react-dom: 18.0.0-rc.2_react@18.0.0-rc.2
+      react-helmet-async: 1.2.3_bc22c48adf1a4e34a005159413cd72b5
+    devDependencies:
+      "@cyco130/eslint-config": 1.0.0_eslint@8.10.0+typescript@4.6.2
+      eslint: 8.10.0
+      kill-port: 1.6.1
+      node-fetch: 3.2.2
+      puppeteer: 13.5.1
+      rakkasjs: link:../../packages/rakkasjs
+      typescript: 4.6.2
+      vite: 2.8.6
+
   packages/rakkasjs:
     specifiers:
       "@cyco130/eslint-config": ^1.0.0
@@ -35,8 +66,9 @@ importers:
       fast-glob: ^3.2.11
       micromatch: ^4.0.4
       picocolors: ^1.0.0
-      react: ^17.0.2
-      react-dom: ^17.0.2
+      react: ^18.0.0-rc.2
+      react-dom: ^18.0.0-rc.2
+      react-helmet-async: ^1.2.3
       tsup: ^5.11.13
       typescript: ^4.6.2
       vite: ^2.8.6
@@ -58,8 +90,9 @@ importers:
       "@hattip/core": 0.0.1
       "@types/micromatch": 4.0.2
       eslint: 8.10.0
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
+      react: 18.0.0-rc.2
+      react-dom: 18.0.0-rc.2_react@18.0.0-rc.2
+      react-helmet-async: 1.2.3_bc22c48adf1a4e34a005159413cd72b5
       tsup: 5.12.0_typescript@4.6.2
       typescript: 4.6.2
       vite: 2.8.6
@@ -74,15 +107,17 @@ importers:
       node-fetch: ^3.2.2
       puppeteer: ^13.5.1
       rakkasjs: workspace:*
-      react: ^17.0.2
-      react-dom: ^17.0.2
+      react: ^18.0.0-rc.2
+      react-dom: ^18.0.0-rc.2
+      react-helmet-async: ^1.2.3
       typescript: ^4.6.2
       vite: ^2.8.6
     dependencies:
       "@types/react": 17.0.40
       "@types/react-dom": 17.0.13
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
+      react: 18.0.0-rc.2
+      react-dom: 18.0.0-rc.2_react@18.0.0-rc.2
+      react-helmet-async: 1.2.3_bc22c48adf1a4e34a005159413cd72b5
     devDependencies:
       "@cyco130/eslint-config": 1.0.0_eslint@8.10.0+typescript@4.6.2
       eslint: 8.10.0
@@ -404,6 +439,15 @@ packages:
       "@babel/plugin-syntax-jsx": 7.16.7_@babel+core@7.17.5
       "@babel/types": 7.17.0
     dev: false
+
+  /@babel/runtime/7.17.2:
+    resolution:
+      {
+        integrity: sha512-hzeyJyMA1YGdJTuWU0e/j4wKXrU4OMFvY2MSlaI9B7VQb0r5cxTE3EAIS2Q7Tn2RIcDkRvTA/v2JsAEhxe99uw==,
+      }
+    engines: { node: ">=6.9.0" }
+    dependencies:
+      regenerator-runtime: 0.13.9
 
   /@babel/template/7.16.7:
     resolution:
@@ -2745,6 +2789,14 @@ packages:
       side-channel: 1.0.4
     dev: true
 
+  /invariant/2.2.4:
+    resolution:
+      {
+        integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==,
+      }
+    dependencies:
+      loose-envify: 1.4.0
+
   /is-bigint/1.0.4:
     resolution:
       {
@@ -3649,7 +3701,6 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
-    dev: true
 
   /proxy-from-env/1.1.0:
     resolution:
@@ -3709,25 +3760,46 @@ packages:
         integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==,
       }
 
-  /react-dom/17.0.2_react@17.0.2:
+  /react-dom/18.0.0-rc.2_react@18.0.0-rc.2:
     resolution:
       {
-        integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==,
+        integrity: sha512-EvLlgtc/wAzAIXX5V1gnLgeK9B3wAdEGmmrXXKRoRzXM0RNNwGN+6OxQPBlACiGDUYYEOk+GT8f6u+gNWDnTtg==,
       }
     peerDependencies:
-      react: 17.0.2
+      react: ^18.0.0-rc.2
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
-      react: 17.0.2
-      scheduler: 0.20.2
+      react: 18.0.0-rc.2
+      scheduler: 0.21.0-rc.2-next-b9de50d2f-20220308
+
+  /react-fast-compare/3.2.0:
+    resolution:
+      {
+        integrity: sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==,
+      }
+
+  /react-helmet-async/1.2.3_bc22c48adf1a4e34a005159413cd72b5:
+    resolution:
+      {
+        integrity: sha512-mCk2silF53Tq/YaYdkl2sB+/tDoPnaxN7dFS/6ZLJb/rhUY2EWGI5Xj2b4jHppScMqY45MbgPSwTxDchKpZ5Kw==,
+      }
+    peerDependencies:
+      react: ^16.6.0 || ^17.0.0
+      react-dom: ^16.6.0 || ^17.0.0
+    dependencies:
+      "@babel/runtime": 7.17.2
+      invariant: 2.2.4
+      prop-types: 15.8.1
+      react: 18.0.0-rc.2
+      react-dom: 18.0.0-rc.2_react@18.0.0-rc.2
+      react-fast-compare: 3.2.0
+      shallowequal: 1.1.0
 
   /react-is/16.13.1:
     resolution:
       {
         integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==,
       }
-    dev: true
 
   /react-refresh/0.11.0:
     resolution:
@@ -3737,15 +3809,14 @@ packages:
     engines: { node: ">=0.10.0" }
     dev: false
 
-  /react/17.0.2:
+  /react/18.0.0-rc.2:
     resolution:
       {
-        integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==,
+        integrity: sha512-q32FWyA5HvqfRCN0ZOk0gUOpzJGPPh8fqbk8DYQuh4DyiGWiNgN/BxMq3/ScY0SlwDB1HOAMU1lUgtaOr5p2Ng==,
       }
     engines: { node: ">=0.10.0" }
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
 
   /readable-stream/3.6.0:
     resolution:
@@ -3768,6 +3839,12 @@ packages:
     dependencies:
       picomatch: 2.3.1
     dev: true
+
+  /regenerator-runtime/0.13.9:
+    resolution:
+      {
+        integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==,
+      }
 
   /regexp.prototype.flags/1.4.1:
     resolution:
@@ -3902,14 +3979,13 @@ packages:
       }
     dev: true
 
-  /scheduler/0.20.2:
+  /scheduler/0.21.0-rc.2-next-b9de50d2f-20220308:
     resolution:
       {
-        integrity: sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==,
+        integrity: sha512-aBVNOtcCn7k8FUi0lsIY34DZN1SUeuAjAQB6Y55Cxrhtrx9mggUepmF5gTWn7Z2RkEhQtrp7fzmRA/24bxxNJQ==,
       }
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
 
   /semver/6.3.0:
     resolution:
@@ -3928,6 +4004,12 @@ packages:
     dependencies:
       lru-cache: 6.0.0
     dev: true
+
+  /shallowequal/1.1.0:
+    resolution:
+      {
+        integrity: sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==,
+      }
 
   /shebang-command/2.0.0:
     resolution:
