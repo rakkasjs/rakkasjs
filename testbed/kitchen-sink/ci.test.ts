@@ -143,13 +143,19 @@ function testCase(title: string, dev: boolean, command?: string) {
 			}, 60_000);
 		}
 
+		test("sets page title", async () => {
+			await page.goto(TEST_HOST + "/title");
+
+			await page.waitForFunction(() => document.title === "Page title");
+		});
+
 		test("loads data with suspense", async () => {
 			await page.goto(TEST_HOST + "/suspense");
 
 			await page.waitForFunction(() =>
 				document.body.innerText.includes("Hello world!"),
 			);
-		}, 10_000);
+		});
 	});
 }
 

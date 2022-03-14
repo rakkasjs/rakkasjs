@@ -5,8 +5,14 @@ import path from "path";
 import { routeToRegExp, sortRoutes } from "./util/route-utils";
 import fs from "fs";
 
-export function pageRoutes(): Plugin {
-	const extPattern = "mjs|js|ts|jsx|tsx";
+export interface PageRoutesOptions {
+	pageExtensions?: string[];
+}
+
+export function pageRoutes(options: PageRoutesOptions = {}): Plugin {
+	const { pageExtensions = ["tsx", "jsx"] } = options;
+
+	const extPattern = pageExtensions.join("|");
 
 	const pagePattern = `/**/*.page.(${extPattern})`;
 	const layoutPattern = `/**/layout.(${extPattern})`;

@@ -11,7 +11,13 @@ import { pageRoutes } from "./page-routes";
 import { virtualClientEntry } from "./virtual-client-entry";
 import { resolveClientManifest } from "./resolve-client-manifest";
 
-export default function rakkas(): PluginOption[] {
+export interface RakkasOptions {
+	/**
+	 * File extensions for pages and layouts @default ["jsx", "tsx"] */
+	pageExtensions?: string[];
+}
+
+export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 	return [
 		...vaviteConnect({
 			handlerEntry: "rakkasjs/runtime/vavite-handler",
@@ -25,7 +31,9 @@ export default function rakkas(): PluginOption[] {
 		preventViteBuild(),
 		injectConfig(),
 		apiRoutes(),
-		pageRoutes(),
+		pageRoutes({
+			pageExtensions: options.pageExtensions,
+		}),
 		virtualClientEntry(),
 		resolveClientManifest(),
 	];

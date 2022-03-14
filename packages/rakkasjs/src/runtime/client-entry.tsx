@@ -1,24 +1,43 @@
 /// <reference types="react/next" />
 /// <reference types="react-dom/next" />
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, ReactNode } from "react";
 import { hydrateRoot } from "react-dom/client";
-import { HelmetProvider } from "react-helmet-async";
-import { LayoutModule, PageModule } from "./page-types";
+import { LayoutModule } from "./page-types";
 import { SsrCacheContext } from "./ssr-cache";
 
+import { ClientHooksModule } from "./client-hooks";
+import * as reactHelmetAsyncHooks from "./builtin-client-hooks/react-helmet-async";
+
+const hookModules: ClientHooksModule[] = [reactHelmetAsyncHooks];
+
 declare const $RAKKAS_PAGE_MODULES: string[];
+declare const $RAKKAS_PATH_PARAMS: Record<string, string>;
 declare const $RAKKAS_SSR_CACHE: Record<string, any>;
 
+export async function go() {
+	throw new Error("Not implemented");
+}
+
 async function startClient() {
-	const modules: [PageModule, ...LayoutModule[]] = (await Promise.all(
+	const modules: LayoutModule[] = (await Promise.all(
 		$RAKKAS_PAGE_MODULES.map((m) => import(/* @vite-ignore */ m)),
 	)) as any;
 
-	const content: ReactElement = modules.reduce(
-		(prev, { default: Component }) => <Component children={prev} />,
+	const url = new URL(window.location.href);
+
+	let app: ReactNode = modules.reduce(
+		(prev, { default: Component = ({ children }) => <>{children}</> }) => (
+			<Component children={prev} url={url} params={$RAKKAS_PATH_PARAMS} />
+		),
 		null as any as ReactElement,
 	);
+
+	for (const hooks of hookModules) {
+		if (hooks.wrapApp) {
+			app = hooks.wrapApp(app);
+		}
+	}
 
 	hydrateRoot(
 		document.getElementById("root")!,
@@ -28,7 +47,7 @@ async function startClient() {
 				set: (key, value) => ($RAKKAS_SSR_CACHE[key] = value),
 			}}
 		>
-			<HelmetProvider>{content}</HelmetProvider>
+			{app}
 		</SsrCacheContext.Provider>,
 	);
 }

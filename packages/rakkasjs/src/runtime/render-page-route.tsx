@@ -1,19 +1,26 @@
 /// <reference types="vite/client" />
 
 import { RequestContext } from "../lib";
-import { LayoutModule, PageModule } from "./page-types";
+import { LayoutModule } from "./page-types";
 import React, { ReactNode } from "react";
 // @ts-expect-error: React 18 types aren't ready yet
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { SsrCacheContext } from "./ssr-cache";
-import { HelmetProvider, FilledContext } from "react-helmet-async";
+import { CreateServerHooksFn } from "./server-hooks";
+
+// Builtin hooks
+import createReactHelmentServerHooks from "./builtin-server-hooks/react-helmet-async";
+
+const hookFns: CreateServerHooksFn[] = [createReactHelmentServerHooks];
 
 export async function renderPageRoute(
 	req: Request,
 	ctx: RequestContext<Record<string, string>>,
 ): Promise<Response | undefined> {
 	ctx.locals = {};
+
+	const hooksObjects = hookFns.map((fn) => fn(req, ctx));
 
 	const pageRoutes = await import("virtual:rakkasjs:server-page-routes");
 
@@ -25,16 +32,46 @@ export async function renderPageRoute(
 
 		const modules = (await Promise.all(
 			descriptors.map(([, importer]) => importer()),
-		)) as [PageModule, ...LayoutModule[]];
+		)) as LayoutModule[];
 
 		const content = modules.reduce(
-			(prev, { default: Component }) => <Component children={prev} />,
+			(prev, { default: Component = ({ children }) => <>{children}</> }) => (
+				<Component children={prev} params={ctx.params} url={ctx.url} />
+			),
 			null as ReactNode,
 		);
 
-		const moduleNames = descriptors.map(
-			([name]) => "/" + (clientManifest?.[name]?.file ?? name),
-		);
+		const moduleIds = descriptors.map((m) => m[0]);
+
+		let moduleNames: string[];
+		let cssOutput = "";
+
+		if (import.meta.env.DEV) {
+			// No manifest for dev
+			moduleNames = moduleIds.map((id) => "/" + id);
+		} else {
+			moduleNames = moduleIds.map(
+				(id) => "/" + (clientManifest?.[id]?.file || id),
+			);
+
+			const moduleSet = new Set(moduleIds);
+			const cssSet = new Set<string>();
+
+			for (const moduleId of moduleSet) {
+				const manifestEntry = clientManifest?.[moduleId];
+				if (!manifestEntry) continue;
+
+				manifestEntry.imports?.forEach((id) => moduleSet.add(id));
+				manifestEntry.dynamicImports?.forEach((id) => moduleSet.add(id));
+				manifestEntry.css?.forEach((id) => cssSet.add(id));
+			}
+
+			for (const cssFile of cssSet) {
+				cssOutput += `<link rel="stylesheet" href=${safeStringify(
+					"/" + cssFile,
+				)}>`;
+			}
+		}
 
 		let scriptPath = "virtual:rakkasjs:client-entry";
 		if (import.meta.env.PROD) {
@@ -66,14 +103,16 @@ export async function renderPageRoute(
 			},
 		};
 
-		const helmetContext = {};
+		let app: ReactNode = <div id="root">{content}</div>;
+
+		for (const hooks of hooksObjects) {
+			if (hooks.wrapApp) {
+				app = hooks.wrapApp(app);
+			}
+		}
 
 		const html = (
-			<SsrCacheContext.Provider value={cache}>
-				<HelmetProvider context={helmetContext}>
-					<div id="root">{content}</div>
-				</HelmetProvider>
-			</SsrCacheContext.Provider>
+			<SsrCacheContext.Provider value={cache}>{app}</SsrCacheContext.Provider>
 		);
 
 		const reactStream: ReadableStream & { allReady: Promise<void> } =
@@ -84,18 +123,18 @@ export async function renderPageRoute(
 		// https://github.com/mahovich/isbot-fast
 		// await reactStream.allReady;
 
-		let head = `<!DOCTYPE html><html><head>`;
+		let head =
+			`<!DOCTYPE html><html><head>` +
+			cssOutput +
+			`<meta charset="UTF-8" />` +
+			`<meta name="viewport" content="width=device-width, initial-scale=1.0" />` +
+			`<meta http-equiv="X-UA-Compatible" content="ie=edge" />`;
 
-		const { helmet } = helmetContext as FilledContext;
-
-		head +=
-			helmet.base.toString() +
-			helmet.link.toString() +
-			helmet.meta.toString() +
-			helmet.noscript.toString() +
-			helmet.script.toString() +
-			helmet.style.toString() +
-			helmet.title.toString();
+		for (const hooks of hooksObjects) {
+			if (hooks.emitToDocumentHead) {
+				head += hooks.emitToDocumentHead();
+			}
+		}
 
 		if (import.meta.env.DEV) {
 			head +=
@@ -105,7 +144,7 @@ export async function renderPageRoute(
 
 		head += `<script>$RAKKAS_SSR_CACHE=Object.create(null);$RAKKAS_PAGE_MODULES=${safeStringify(
 			moduleNames,
-		)}</script>`;
+		)};$RAKKAS_PATH_PARAMS=${safeStringify(ctx.params)}</script>`;
 
 		head += `</head><body>`;
 
@@ -118,6 +157,15 @@ export async function renderPageRoute(
 
 			async pull(controller) {
 				for await (const chunk of reactStream as any as AsyncIterable<Uint8Array>) {
+					for (const hooks of hooksObjects) {
+						if (hooks.emitBeforeSsrChunk) {
+							const text = hooks.emitBeforeSsrChunk();
+							if (text) {
+								controller.enqueue(textEncoder.encode(text));
+							}
+						}
+					}
+
 					if (cache._hasNewItems) {
 						const newItems = cache._getNewItems();
 						const newItemsString = safeStringify(newItems);
