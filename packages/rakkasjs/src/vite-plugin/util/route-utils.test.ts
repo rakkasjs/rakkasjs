@@ -8,6 +8,12 @@ describe("routeToRegExp", () => {
 		expect(re.exec("/foo/")).toBeTruthy();
 	});
 
+	test("escapes special characters", () => {
+		const re = routeToRegExp("/foo.json");
+		expect(re.exec("/foo.json")).toBeTruthy();
+		expect(re.exec("/fooXjson")).toBeFalsy();
+	});
+
 	test("matches params", () => {
 		const re = routeToRegExp("/foo/[bar]");
 		expect("/foo/123/".match(re)?.groups).toMatchObject({

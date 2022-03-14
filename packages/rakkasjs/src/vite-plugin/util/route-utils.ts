@@ -18,8 +18,13 @@ export function routeToRegExp(route: string): RegExp {
 				.filter((x) => x !== "index" && !x.startsWith("_"))
 				.join("/")
 				.replace(
-					/\[[a-zA-Z_][a-zA-Z0-9_]*]/g,
-					(name) => `(?<${name.slice(1, -1)}>[^/]*)`,
+					// Escape special characters
+					/[\\^$*+?.()|[\]{}]/g,
+					(x) => `\\${x}`,
+				)
+				.replace(
+					/\\\[[a-zA-Z_][a-zA-Z0-9_]*\\]/g,
+					(name) => `(?<${name.slice(2, -2)}>[^/]*)`,
 				) +
 			(restParamName ? `\\/(?<${restParamName}>.*)$` : "\\/?$"),
 	);
