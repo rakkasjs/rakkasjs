@@ -67,7 +67,7 @@ export async function renderPageRoute(
 			}
 
 			for (const cssFile of cssSet) {
-				cssOutput += `<link rel="stylesheet" href=${safeStringify(
+				cssOutput += `<link rel="stylesheet" href=${escapedJson(
 					"/" + cssFile,
 				)}>`;
 			}
@@ -142,9 +142,9 @@ export async function renderPageRoute(
 				`<script type="module" async>${REACT_FAST_REFRESH_PREAMBLE}</script>`;
 		}
 
-		head += `<script>$RAKKAS_SSR_CACHE=Object.create(null);$RAKKAS_PAGE_MODULES=${safeStringify(
+		head += `<script>$RAKKAS_SSR_CACHE=Object.create(null);$RAKKAS_PAGE_MODULES=${escapedJson(
 			moduleNames,
-		)};$RAKKAS_PATH_PARAMS=${safeStringify(ctx.params)}</script>`;
+		)};$RAKKAS_PATH_PARAMS=${escapedJson(ctx.params)}</script>`;
 
 		head += `</head><body>`;
 
@@ -168,7 +168,7 @@ export async function renderPageRoute(
 
 					if (cache._hasNewItems) {
 						const newItems = cache._getNewItems();
-						const newItemsString = safeStringify(newItems);
+						const newItemsString = escapedJson(newItems);
 						controller.enqueue(
 							textEncoder.encode(
 								`<script>Object.assign($RAKKAS_SSR_CACHE,${newItemsString})</script>`,
@@ -193,12 +193,12 @@ export async function renderPageRoute(
 	return;
 }
 
-function safeStringify(obj: any): string {
-	// TODO: Escape HTML
-	return JSON.stringify(obj);
+// Generate escaped JSON to be put in a script tag
+function escapedJson(json: any): string {
+	return JSON.stringify(json).replace(/</g, "\\u003c");
 }
 
-const REACT_FAST_REFRESH_PREAMBLE = `import RefreshRuntime from 'http://localhost:3000/@react-refresh'
+const REACT_FAST_REFRESH_PREAMBLE = `import RefreshRuntime from '/@react-refresh'
 RefreshRuntime.injectIntoGlobalHook(window)
 window.$RefreshReg$ = () => {}
 window.$RefreshSig$ = () => (type) => type
