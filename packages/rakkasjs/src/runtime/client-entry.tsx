@@ -4,16 +4,18 @@
 import React, { ReactElement, ReactNode } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { LayoutModule } from "./page-types";
-import { SsrCacheContext } from "./ssr-cache";
 
 import { ClientHooksModule } from "./client-hooks";
 import * as reactHelmetAsyncHooks from "./builtin-client-hooks/react-helmet-async";
+import * as useQueryAsyncHooks from "./builtin-client-hooks/use-query";
 
-const hookModules: ClientHooksModule[] = [reactHelmetAsyncHooks];
+const hookModules: ClientHooksModule[] = [
+	useQueryAsyncHooks,
+	reactHelmetAsyncHooks,
+];
 
 declare const $RAKKAS_PAGE_MODULES: string[];
 declare const $RAKKAS_PATH_PARAMS: Record<string, string>;
-declare const $RAKKAS_SSR_CACHE: Record<string, any>;
 
 export async function go() {
 	throw new Error("Not implemented");
@@ -39,17 +41,7 @@ async function startClient() {
 		}
 	}
 
-	hydrateRoot(
-		document.getElementById("root")!,
-		<SsrCacheContext.Provider
-			value={{
-				get: (key) => $RAKKAS_SSR_CACHE[key],
-				set: (key, value) => ($RAKKAS_SSR_CACHE[key] = value),
-			}}
-		>
-			{app}
-		</SsrCacheContext.Provider>,
-	);
+	hydrateRoot(document.getElementById("root")!, <>{app}</>);
 }
 
 startClient();

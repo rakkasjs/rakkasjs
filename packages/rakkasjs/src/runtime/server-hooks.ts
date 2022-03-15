@@ -4,9 +4,7 @@ import { RequestContext } from "../lib";
 export interface RakkasServerHooks {
 	wrapApp?(app: ReactNode): ReactNode;
 	emitToDocumentHead?(): string;
-	emitToDocumentBodyBeforeApp?(): string;
 	emitBeforeSsrChunk?(): string;
-	emitToDocumentBodyAfterApp?(): string;
 }
 
 export type CreateServerHooksFn = (

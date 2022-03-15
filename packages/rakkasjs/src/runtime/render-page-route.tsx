@@ -6,13 +6,16 @@ import React, { ReactNode } from "react";
 // @ts-expect-error: React 18 types aren't ready yet
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
-import { SsrCacheContext } from "./ssr-cache";
 import { CreateServerHooksFn } from "./server-hooks";
 
 // Builtin hooks
 import createReactHelmentServerHooks from "./builtin-server-hooks/react-helmet-async";
+import createUseQueryServerHooks from "./builtin-server-hooks/use-query";
 
-const hookFns: CreateServerHooksFn[] = [createReactHelmentServerHooks];
+const hookFns: CreateServerHooksFn[] = [
+	createUseQueryServerHooks,
+	createReactHelmentServerHooks,
+];
 
 export async function renderPageRoute(
 	req: Request,
@@ -78,31 +81,6 @@ export async function renderPageRoute(
 			scriptPath = clientManifest![scriptPath]?.file ?? scriptPath;
 		}
 
-		const cache = {
-			_items: Object.create(null) as Record<string, any>,
-
-			_newItems: Object.create(null) as Record<string, any>,
-
-			_hasNewItems: false,
-
-			_getNewItems() {
-				const items = this._newItems;
-				this._newItems = Object.create(null);
-				this._hasNewItems = false;
-				return items;
-			},
-
-			get(key: string) {
-				return this._items[key];
-			},
-
-			set(key: string, value: any) {
-				this._items[key] = value;
-				this._newItems[key] = value;
-				this._hasNewItems = true;
-			},
-		};
-
 		let app: ReactNode = <div id="root">{content}</div>;
 
 		for (const hooks of hooksObjects) {
@@ -111,12 +89,8 @@ export async function renderPageRoute(
 			}
 		}
 
-		const html = (
-			<SsrCacheContext.Provider value={cache}>{app}</SsrCacheContext.Provider>
-		);
-
 		const reactStream: ReadableStream & { allReady: Promise<void> } =
-			await renderToReadableStream(html, {
+			await renderToReadableStream(app, {
 				bootstrapModules: ["/" + scriptPath],
 			});
 
@@ -142,7 +116,7 @@ export async function renderPageRoute(
 				`<script type="module" async>${REACT_FAST_REFRESH_PREAMBLE}</script>`;
 		}
 
-		head += `<script>$RAKKAS_SSR_CACHE=Object.create(null);$RAKKAS_PAGE_MODULES=${escapedJson(
+		head += `<script>$RAKKAS_PAGE_MODULES=${escapedJson(
 			moduleNames,
 		)};$RAKKAS_PATH_PARAMS=${escapedJson(ctx.params)}</script>`;
 
@@ -166,21 +140,10 @@ export async function renderPageRoute(
 						}
 					}
 
-					if (cache._hasNewItems) {
-						const newItems = cache._getNewItems();
-						const newItemsString = escapedJson(newItems);
-						controller.enqueue(
-							textEncoder.encode(
-								`<script>Object.assign($RAKKAS_SSR_CACHE,${newItemsString})</script>`,
-							),
-						);
-					}
-
 					controller.enqueue(chunk);
 				}
 
 				controller.enqueue(textEncoder.encode("</body></html>"));
-
 				controller.close();
 			},
 		});
