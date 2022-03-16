@@ -16,13 +16,16 @@ declare module "virtual:rakkasjs:api-routes" {
 }
 
 declare module "virtual:rakkasjs:server-page-routes" {
-	const routes: Array<[RegExp, [PageDescription, ...LayoutDescription[]]]>;
+	const routes: Array<
+		[
+			regexp: RegExp,
+			importers: [PageImporter, ...LayoutImporter[]],
+			ids: string[],
+		]
+	>;
 
-	type PageDescription = [name: string, importer: () => Promise<PageModule>];
-	type LayoutDescription = [
-		name: string,
-		importer: () => Promise<LayoutModule>,
-	];
+	type PageImporter = () => Promise<PageModule>;
+	type LayoutImporter = () => Promise<LayoutModule>;
 
 	type PageModule = import("./page-types").PageModule;
 	type LayoutModule = import("./page-types").LayoutModule;
@@ -31,7 +34,9 @@ declare module "virtual:rakkasjs:server-page-routes" {
 }
 
 declare module "virtual:rakkasjs:client-page-routes" {
-	const routes: Array<[RegExp, [PageImporter, ...LayoutImporter[]]]>;
+	const routes: Array<
+		[regexp: RegExp, importers: [PageImporter, ...LayoutImporter[]]]
+	>;
 
 	type PageImporter = () => Promise<PageModule>;
 	type LayoutImporter = () => Promise<LayoutModule>;

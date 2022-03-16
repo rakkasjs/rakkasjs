@@ -3,7 +3,6 @@ import micromatch from "micromatch";
 import glob from "fast-glob";
 import path from "path";
 import { routeToRegExp, sortRoutes } from "./util/route-utils";
-import fs from "fs";
 
 export interface PageRoutesOptions {
 	pageExtensions?: string[];
@@ -22,55 +21,54 @@ export function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 	let isLayout: (filename: string) => boolean;
 	let isPage: (filename: string) => boolean;
 
-	async function generateRoutesModule(
-		client?: boolean,
-		importer?: boolean,
-	): Promise<string> {
-		const pageFiles = await glob(routesRoot + pagePattern);
+	async function generateRoutesModule(client?: boolean): Promise<string> {
+		const pageFiles = (await glob(routesRoot + pagePattern)).map((f) =>
+			path.relative(resolvedConfig.root, f),
+		);
 
-		const layoutFiles = await (
-			await glob(routesRoot + layoutPattern)
-		).sort((a, b) => /* Long to short */ b.length - a.length);
+		const layoutFiles = (await glob(routesRoot + layoutPattern))
+			.sort(/* Long to short */ (a, b) => b.length - a.length)
+			.map((f) => path.relative(resolvedConfig.root, f));
 
 		const layoutDirs = layoutFiles.map((f) => path.dirname(f));
 
 		let layoutImporters = "";
 
 		for (const [i, layoutFile] of layoutFiles.entries()) {
-			const relName = path.relative(resolvedConfig.root, layoutFile);
-			const importer = `() => import(${JSON.stringify(layoutFile)})`;
+			layoutImporters += `const l${i} = () => import(${JSON.stringify(
+				"/" + layoutFile,
+			)});\n`;
+		}
 
-			layoutImporters +=
-				`const m${i} = ` +
-				(client
-					? importer
-					: `[${JSON.stringify(relName.replace(/\\/g, "/"))}, ${importer}]`) +
-				";\n";
+		let layoutNames = "";
+		if (!client) {
+			for (const [i, layoutFile] of layoutFiles.entries()) {
+				layoutNames += `const m${i} = ${JSON.stringify(layoutFile)};\n`;
+			}
 		}
 
 		let pageImporters = "";
 
 		for (const [i, pageFile] of pageFiles.entries()) {
-			const relName = path.relative(resolvedConfig.root, pageFile);
-			const importer = `() => import(${JSON.stringify(pageFile)})`;
-
-			pageImporters +=
-				`const e${i} = ` +
-				(client
-					? importer
-					: `[${JSON.stringify(relName.replace(/\\/g, "/"))}, ${importer}]`) +
-				";\n";
+			pageImporters += `const p${i} = () => import(${JSON.stringify(
+				"/" + pageFile,
+			)});\n`;
 		}
 
-		let exportStatement = importer
-			? "globalThis.dummy = [\n"
-			: "export default [\n";
+		let pageNames = "";
+		if (!client) {
+			for (const [i, pageFile] of pageFiles.entries()) {
+				pageNames += `const r${i} = ${JSON.stringify(pageFile)};\n`;
+			}
+		}
+
+		let exportStatement = "export default [\n";
 
 		const pageRoutes = sortRoutes(
-			pageFiles.map((pageFile, i) => {
-				const relName = path.relative(routesRoot, pageFile);
+			pageFiles.map((endpointFile, i) => {
+				const relName = path.relative(routesRoot, endpointFile);
 				const baseName = /^(.*)\.page\.(.*)$/.exec(relName)![1];
-				return [baseName, i, pageFile] as [string, number, string];
+				return [baseName, i, endpointFile] as [string, number, string];
 			}),
 		);
 
@@ -79,14 +77,29 @@ export function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 				.filter((dirName) => pageFile.startsWith(dirName + "/"))
 				.map((_, mi) => mi);
 
-			exportStatement += `  [${routeToRegExp(
+			let exportElement = `  [${routeToRegExp(
 				"/" + baseName,
-			)}, [e${i}, ${layouts.map((mi) => `m${mi}`)}]],\n`;
+			)}, [p${i}, ${layouts.map((li) => `l${li}`)}]`;
+
+			// Server needs the file names to inject styles and prefetch links
+			if (!client) {
+				exportElement += `, [r${i}, ${layouts.map((li) => `m${li}`)}]`;
+			}
+
+			exportElement += "],\n";
+
+			exportStatement += exportElement;
 		}
 
 		exportStatement += "]";
 
-		const out = [layoutImporters, pageImporters, exportStatement]
+		const out = [
+			layoutImporters,
+			layoutNames,
+			pageImporters,
+			pageNames,
+			exportStatement,
+		]
 			.filter(Boolean)
 			.join("\n");
 
@@ -99,8 +112,7 @@ export function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 		resolveId(id) {
 			if (
 				id === "virtual:rakkasjs:server-page-routes" ||
-				id === "virtual:rakkasjs:client-page-routes" ||
-				id === "virtual:rakkasjs:client-pages-importer"
+				id === "virtual:rakkasjs:client-page-routes"
 			) {
 				return id;
 			}
@@ -111,24 +123,6 @@ export function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 				return generateRoutesModule();
 			} else if (id === "virtual:rakkasjs:client-page-routes") {
 				return generateRoutesModule(true);
-			} else if (id === "virtual:rakkasjs:client-pages-importer") {
-				return generateRoutesModule(true, true);
-			}
-		},
-
-		config(config, env) {
-			if (env.command === "build" && !config.build?.ssr) {
-				return {
-					build: {
-						rollupOptions: {
-							input: {
-								// This dummy entry makes sure that all pages and layouts are pulled into the build.
-								// It's deleted on closeBundle since it's not needed at runtime.
-								rakkasPages: "virtual:rakkasjs:client-pages-importer",
-							},
-						},
-					},
-				};
 			}
 		},
 
@@ -157,28 +151,6 @@ export function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 					}
 				}
 			});
-		},
-
-		async closeBundle() {
-			if (!(resolvedConfig.build.rollupOptions.input as any)?.rakkasPages) {
-				return;
-			}
-
-			const manifest = JSON.parse(
-				await fs.promises.readFile(
-					path.resolve(resolvedConfig.root, "dist/manifest.json"),
-					"utf-8",
-				),
-			);
-
-			const importerPath =
-				manifest!["virtual:rakkasjs:client-pages-importer"]?.file;
-
-			if (importerPath) {
-				fs.promises.rm(
-					path.resolve(resolvedConfig.root, "dist/client", importerPath),
-				);
-			}
 		},
 	};
 }

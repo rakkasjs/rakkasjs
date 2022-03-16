@@ -1,17 +1,17 @@
-import { Context } from "@hattip/core";
-import { RequestContext } from "../lib";
 import { renderPageRoute } from "./render-page-route";
 import { renderApiRoute } from "./render-api-route";
 
 export async function hattipHandler(
 	req: Request,
-	ctx: Context,
+	ctx: any,
 ): Promise<Response | undefined> {
-	(ctx as any).url = new URL(req.url);
+	ctx.url = new URL(req.url);
+	ctx.locals = {};
 
-	const pageResponse = await renderPageRoute(req, ctx as RequestContext);
-	if (pageResponse) return pageResponse;
+	const handlers = [renderPageRoute, renderApiRoute];
 
-	const apiResponse = await renderApiRoute(req, ctx as RequestContext);
-	if (apiResponse) return apiResponse;
+	for (const handler of handlers) {
+		const response = await handler(req, ctx);
+		if (response) return response;
+	}
 }

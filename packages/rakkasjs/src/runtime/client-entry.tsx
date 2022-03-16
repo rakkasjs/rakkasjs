@@ -1,36 +1,46 @@
 /// <reference types="react/next" />
 /// <reference types="react-dom/next" />
 
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactElement, ReactNode, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
-import { LayoutModule } from "./page-types";
 
 import { ClientHooksModule } from "./client-hooks";
 import * as reactHelmetAsyncHooks from "./builtin-client-hooks/react-helmet-async";
 import * as useQueryAsyncHooks from "./builtin-client-hooks/use-query";
+import { findRoute } from "./find-route";
+import { LayoutModule } from "./page-types";
 
 const hookModules: ClientHooksModule[] = [
 	useQueryAsyncHooks,
 	reactHelmetAsyncHooks,
 ];
 
-declare const $RAKKAS_PAGE_MODULES: string[];
-declare const $RAKKAS_PATH_PARAMS: Record<string, string>;
-
 export async function go() {
 	throw new Error("Not implemented");
 }
 
 async function startClient() {
-	const modules: LayoutModule[] = (await Promise.all(
-		$RAKKAS_PAGE_MODULES.map((m) => import(/* @vite-ignore */ m)),
-	)) as any;
+	const clientPageRoutes = await import("virtual:rakkasjs:client-page-routes");
+	const found = findRoute(clientPageRoutes.default, window.location.pathname);
+	if (!found) return;
+
+	const importers = found.route[1];
+
+	const promises = importers.map((importer) =>
+		importer(),
+	) as Promise<LayoutModule>[];
+
+	const modules = await Promise.all(promises);
+
+	const components = modules.map(
+		(m) => m.default || (({ children }: any) => children),
+	);
 
 	const url = new URL(window.location.href);
 
-	let app: ReactNode = modules.reduce(
-		(prev, { default: Component = ({ children }) => <>{children}</> }) => (
-			<Component children={prev} url={url} params={$RAKKAS_PATH_PARAMS} />
+	let app: ReactNode = components.reduce(
+		(prev, Component) => (
+			<Component children={prev} url={url} params={found.params} />
 		),
 		null as any as ReactElement,
 	);
@@ -41,7 +51,7 @@ async function startClient() {
 		}
 	}
 
-	hydrateRoot(document.getElementById("root")!, <>{app}</>);
+	hydrateRoot(document.getElementById("root")!, <StrictMode>{app}</StrictMode>);
 }
 
 startClient();

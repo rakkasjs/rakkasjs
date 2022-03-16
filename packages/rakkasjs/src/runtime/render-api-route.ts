@@ -5,8 +5,6 @@ export async function renderApiRoute(
 	req: Request,
 	ctx: RequestContext<Record<string, string>>,
 ) {
-	ctx.locals = {};
-
 	const apiRoutes = await import("virtual:rakkasjs:api-routes");
 
 	for (const [regex, importers] of apiRoutes.default) {
