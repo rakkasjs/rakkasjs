@@ -23,12 +23,12 @@ export function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 
 	async function generateRoutesModule(client?: boolean): Promise<string> {
 		const pageFiles = (await glob(routesRoot + pagePattern)).map((f) =>
-			path.relative(resolvedConfig.root, f),
+			path.relative(resolvedConfig.root, f).replace(/\\/g, "/"),
 		);
 
 		const layoutFiles = (await glob(routesRoot + layoutPattern))
 			.sort(/* Long to short */ (a, b) => b.length - a.length)
-			.map((f) => path.relative(resolvedConfig.root, f));
+			.map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"));
 
 		const layoutDirs = layoutFiles.map((f) => path.dirname(f));
 
@@ -66,7 +66,9 @@ export function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 
 		const pageRoutes = sortRoutes(
 			pageFiles.map((endpointFile, i) => {
-				const relName = path.relative(routesRoot, endpointFile);
+				const relName = path
+					.relative(routesRoot, endpointFile)
+					.replace(/\\/g, "/");
 				const baseName = /^(.*)\.page\.(.*)$/.exec(relName)![1];
 				return [baseName, i, endpointFile] as [string, number, string];
 			}),
