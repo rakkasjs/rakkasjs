@@ -73,9 +73,9 @@ export function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 		);
 
 		for (const [baseName, i, pageFile] of pageRoutes) {
-			const layouts = layoutDirs
-				.filter((dirName) => pageFile.startsWith(dirName + "/"))
-				.map((_, mi) => mi);
+			const layouts = Array.from(layoutDirs.entries())
+				.filter((entry) => pageFile.startsWith(entry[1] + "/"))
+				.map((entry) => entry[0]);
 
 			let exportElement = `  [${routeToRegExp(
 				"/" + baseName,

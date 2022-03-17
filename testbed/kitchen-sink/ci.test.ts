@@ -156,6 +156,33 @@ function testCase(title: string, dev: boolean, command?: string) {
 				document.body.innerText.includes("Hello world!"),
 			);
 		});
+
+		test("performs client-side navigation", async () => {
+			await page.goto(TEST_HOST + "/nav");
+			await page.waitForSelector(".hydrated");
+
+			const button: ElementHandle<HTMLButtonElement> | null =
+				await page.waitForSelector("button");
+			expect(button).toBeTruthy();
+
+			await button!.click();
+			await page.waitForFunction(
+				() => document.querySelector("button")?.textContent === "State test: 1",
+			);
+
+			const link: ElementHandle<HTMLAnchorElement> | null =
+				await page.waitForSelector("a[href='/nav/a']");
+			expect(link).toBeTruthy();
+
+			link!.click();
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Client-side navigation test page A"),
+			);
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("State test: 1"),
+			);
+		});
 	});
 }
 

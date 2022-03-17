@@ -1,9 +1,9 @@
-import React, { ReactNode } from "react";
+import React, { ReactElement } from "react";
 import { SsrCacheContext } from "../../lib/use-query/use-query";
 
 declare const $RAKKAS_USE_QUERY_SSR_CACHE: Record<string, any>;
 
-export function wrapApp(app: ReactNode): ReactNode {
+export function wrapApp(app: ReactElement): ReactElement {
 	return (
 		<SsrCacheContext.Provider
 			value={{

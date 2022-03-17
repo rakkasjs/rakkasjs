@@ -14,7 +14,7 @@ export function findRoute<T extends [RegExp, ...unknown[]]>(
 	}
 }
 
-interface RouteMatch<T> {
+export interface RouteMatch<T> {
 	route: T;
 	params: Record<string, string>;
 }

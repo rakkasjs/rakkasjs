@@ -1,16 +1,17 @@
 /// <reference types="vite/client" />
 
 import { RequestContext } from "../lib";
-import { LayoutModule } from "./page-types";
-import React, { ReactElement, ReactNode, StrictMode } from "react";
+import React, { StrictMode, Suspense } from "react";
 // @ts-expect-error: React 18 types aren't ready yet
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { CreateServerHooksFn } from "./server-hooks";
+import { App, RouteContext } from "./App";
 
 // Builtin hooks
 import createReactHelmentServerHooks from "./builtin-server-hooks/react-helmet-async";
 import createUseQueryServerHooks from "./builtin-server-hooks/use-query";
+import { LocationContext } from "./client-side-navigation";
 import { findRoute } from "./find-route";
 
 const hookFns: CreateServerHooksFn[] = [
@@ -26,31 +27,28 @@ export async function renderPageRoute(
 
 	const hooksObjects = hookFns.map((fn) => fn(req, ctx));
 
-	const pageRoutes = await import("virtual:rakkasjs:server-page-routes");
-	const found = findRoute(pageRoutes.default, ctx.url.pathname);
+	const routes = (await import("virtual:rakkasjs:server-page-routes")).default;
+
+	const found = findRoute(routes, ctx.url.pathname);
+
 	if (!found) return;
 
-	ctx.params = found.params;
-	const importers = found.route[1];
+	let onRendered: (() => void) | undefined;
+	const renderPromise = new Promise<void>((resolve) => {
+		onRendered = resolve;
+	});
 
-	const promises = importers.map((importer) =>
-		importer(),
-	) as Promise<LayoutModule>[];
-
-	const modules = await Promise.all(promises);
-
-	const components = modules.map(
-		(m) => m.default || (({ children }: any) => children),
+	let app = (
+		<LocationContext.Provider value={ctx.url.href}>
+			<RouteContext.Provider value={{ onRendered, found }}>
+				<Suspense fallback={null}>
+					<App />
+				</Suspense>
+			</RouteContext.Provider>
+		</LocationContext.Provider>
 	);
 
-	let app: ReactNode = components.reduce(
-		(prev, Component) => (
-			<Component children={prev} url={ctx.url} params={ctx.params} />
-		),
-		null as any as ReactElement,
-	);
-
-	const moduleIds = found.route[2].map((m) => m[0]);
+	const moduleIds = found.route[2];
 
 	let cssOutput = "";
 
@@ -89,6 +87,8 @@ export async function renderPageRoute(
 		await renderToReadableStream(<StrictMode>{app}</StrictMode>, {
 			bootstrapModules: ["/" + scriptPath],
 		});
+
+	await renderPromise;
 
 	// https://github.com/mahovich/isbot-fast
 	// await reactStream.allReady;

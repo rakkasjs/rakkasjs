@@ -7,6 +7,9 @@ export function useQuery<T>(
 	const cache = useContext(SsrCacheContext);
 	const item = cache.get(key);
 
+	// TODO: Implement SWR, background fetching etc.
+	// TODO: Use useContextSelector https://github.com/dai-shi/use-context-selector
+
 	if (item) {
 		return item[0]
 			? ({ success: true, value: item[1] } as any)

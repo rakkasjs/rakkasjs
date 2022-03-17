@@ -1,14 +1,14 @@
 /// <reference types="react/next" />
 /// <reference types="react-dom/next" />
 
-import React, { ReactElement, ReactNode, StrictMode } from "react";
+import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot } from "react-dom/client";
-
 import { ClientHooksModule } from "./client-hooks";
+import { App, RouteContext } from "./App";
+
 import * as reactHelmetAsyncHooks from "./builtin-client-hooks/react-helmet-async";
 import * as useQueryAsyncHooks from "./builtin-client-hooks/use-query";
-import { findRoute } from "./find-route";
-import { LayoutModule } from "./page-types";
+import { initialize, LocationContext } from "./client-side-navigation";
 
 const hookModules: ClientHooksModule[] = [
 	useQueryAsyncHooks,
@@ -20,29 +20,16 @@ export async function go() {
 }
 
 async function startClient() {
-	const clientPageRoutes = await import("virtual:rakkasjs:client-page-routes");
-	const found = findRoute(clientPageRoutes.default, window.location.pathname);
-	if (!found) return;
+	initialize();
 
-	const importers = found.route[1];
-
-	const promises = importers.map((importer) =>
-		importer(),
-	) as Promise<LayoutModule>[];
-
-	const modules = await Promise.all(promises);
-
-	const components = modules.map(
-		(m) => m.default || (({ children }: any) => children),
-	);
-
-	const url = new URL(window.location.href);
-
-	let app: ReactNode = components.reduce(
-		(prev, Component) => (
-			<Component children={prev} url={url} params={found.params} />
-		),
-		null as any as ReactElement,
+	let app = (
+		<LocationContext.Provider value={location.href}>
+			<RouteContext.Provider value={{}}>
+				<Suspense fallback={null}>
+					<App />
+				</Suspense>
+			</RouteContext.Provider>
+		</LocationContext.Provider>
 	);
 
 	for (const hooks of hookModules) {

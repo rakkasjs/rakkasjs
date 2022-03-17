@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
+import { ReactElement } from "react";
 
 export interface ClientHooksModule {
 	beforeInitialize?(hydrate: boolean): Promise<void>;
-	wrapApp?(app: ReactNode): ReactNode;
+	wrapApp?(app: ReactElement): ReactElement;
 }

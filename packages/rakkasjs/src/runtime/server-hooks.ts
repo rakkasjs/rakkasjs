@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
+import { ReactElement } from "react";
 import { RequestContext } from "../lib";
 
 export interface RakkasServerHooks {
-	wrapApp?(app: ReactNode): ReactNode;
+	wrapApp?(app: ReactElement): ReactElement;
 	emitToDocumentHead?(): string;
 	emitBeforeSsrChunk?(): string;
 }
