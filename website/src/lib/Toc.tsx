@@ -11,7 +11,7 @@ export function Toc(props: TocProps) {
 
 	return (
 		<nav>
-			<ul>
+			<ul className={css.list}>
 				{toc.map((item) => (
 					<li key={item.slug} className={item.date && css.blog}>
 						<StyledLink

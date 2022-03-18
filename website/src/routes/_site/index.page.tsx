@@ -5,8 +5,8 @@ import css from "./index.module.css";
 import { Link } from "rakkasjs";
 import { Helmet } from "react-helmet-async";
 import { ExternalIcon } from "$lib/ExternalIcon";
-// import { toc } from "./blog/toc";
-// import { BlogPostHeader } from "$lib/BlogPostHeader";
+import { toc } from "./blog/toc";
+import { BlogPostHeader } from "$lib/BlogPostHeader";
 
 const HomePage: FC = () => (
 	<main className={css.main}>
@@ -72,14 +72,12 @@ const HomePage: FC = () => (
 			</div>
 		</div>
 
-		{/*
-			<aside className={css.latestPost}>
-				<a href={toc[0].slug}>
-					<p>{toc[0].title}</p>
-					<BlogPostHeader date={toc[0].date} />
-				</a>
-			</aside>
-		*/}
+		<aside className={css.latestPost}>
+			<a href={toc[0].slug}>
+				<p>{toc[0].title}</p>
+				<BlogPostHeader date={toc[0].date} />
+			</a>
+		</aside>
 
 		<section className={css.dict}>
 			<i>Turkish</i> <b lang="tr">rakkas</b> [ɾɑkːˈɑs]{" "}

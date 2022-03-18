@@ -1,11 +1,11 @@
 import { toc } from "./toc";
 import React from "react";
-import { Layout, Link } from "rakkasjs";
+import { Head, Layout, Link } from "rakkasjs";
 import css from "./layout.module.css";
-import { Helmet } from "react-helmet-async";
 import { Toc } from "$lib/Toc";
 
-const BlogLayout: Layout = ({ error, children, url }) => {
+// TODO: Error handling
+const BlogLayout: Layout = ({ children, url }) => {
 	const slug = url.pathname.split("/")[2];
 	const currentIndex = toc.findIndex((item) => "/blog/" + slug === item.slug);
 
@@ -37,11 +37,9 @@ const BlogLayout: Layout = ({ error, children, url }) => {
 
 	return (
 		<div className={css.wrapper}>
-			<Helmet
+			<Head
 				title={
-					error
-						? error.message
-						: toc[currentIndex]
+					toc[currentIndex]
 						? toc[currentIndex].title + " - Rakkas Blog"
 						: "Rakkas Blog"
 				}
@@ -49,17 +47,11 @@ const BlogLayout: Layout = ({ error, children, url }) => {
 
 			<div className={css.contentWrapper}>
 				<div className={css.content}>
-					{error ? (
-						<h1>{error.message}</h1>
-					) : (
-						<>
-							{prevNext}
+					{prevNext}
 
-							<article>{children}</article>
+					<article>{children}</article>
 
-							{prevNext}
-						</>
-					)}
+					{prevNext}
 				</div>
 			</div>
 
