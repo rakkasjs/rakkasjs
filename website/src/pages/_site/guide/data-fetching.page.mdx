@@ -1,0 +1,81 @@
+import { SampleViewer } from "./SampleViewer";
+
+# Data fetching
+
+Data fetching in React applications is not trivial. There are many solutions of varying quality, ranging from a simple `useEffect` hook to feature-packed libraries. Rakkas pages and layouts being plain React components, you're free to use any of those methods. However, Rakkas offers a **simple and straightforward solution** that works both during **server-side rendering as well as on the client**.
+
+If a page or layout needs to fetch data before rendering, instead of exporting a simple React component, you can default export a page or layout definition using the `definePage` or `defineLayout` function. These functions take a page/layout definition, which is an object with a `Component` prop that defines the React component. It can also have a `load` function that fetches data for your page or layout. Rakkas will call this function before rendering your component. If you return a promise, Rakkas will wait until it resolves. The `data` prop of the (resolved) return value will be passed to the component as `props.data`.
+
+Here's a simple example of data loading that uses the free Pokéapi:
+
+import fetchDefinePageExample from "$examples/fetch/[pokemon].page.tsx?sample";
+
+<SampleViewer
+	url="/examples/fetch/pikachu"
+	code={fetchDefinePageExample}
+	height="35em"
+/>
+
+`load` may run either on the server or on the client: When the page is first loaded, the page will be rendered server-side so it will be called on the server and its return value will be serialized and sent to the client. But during client-side navigation, it will be called on the client-side without hitting the server. This means that there are some rules you have to follow:
+
+- The code in `load` must be able to run both on the server and the browser; you should not call Node-only or browser-only APIs. In particular, `window` and `document` are not available.
+- The returned `data` property must be serializable using [devalue](https://github.com/Rich-Harris/devalue). Check their documentation to see what's allowed.
+
+> The load function is passed the following arguments:
+>
+> #### `url: URL`
+>
+> URL of the page being loaded. You can use it to access, for example, the query string with `url.search` or `url.searchParams`.
+>
+> ---
+>
+> #### `params: Record<string, string>`
+>
+> Path parameters for [dynamic routes](/guide/pages-and-routing#dynamic-routes).
+>
+> ---
+>
+> #### `fetch: function`
+>
+> A function with the same API to the browser's [`fetch` function](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API). When `load` is called on the client, it really _is_ the browser's `fetch`. On the server, it is a special function that is designed to behave just like the client-side `fetch` as closely as possible.
+>
+> ⚠️ **You should fetch your data with this function only**. Using `XMLHttpRequest` will fail during server-side rendering. Global `fetch`, `axios`, and similar libraries available for both browsers and Node will work but only for requests without credentials.
+>
+> ---
+>
+> There are a few more that we'll cover later.
+
+There are three types of possible return values:
+
+1. **A successful result** is an object with a `data` property that will be passed to the page component as `props.data`, and optionally a `status` property which should be an integer in the form of 2xx that will be used as the HTTP status of the response when doing server-side rendering. Default is 200.
+
+   ```js
+   return {
+   	data: "Some data I fetched",
+   	status: 200,
+   };
+   ```
+
+2. **An error result** is an object with an `error` property describing the error. We'll cover error handling more in depth below. For now all you should only know is that it has to have a `message` property. The return value may also have an optional `status` property which should be an integer in the form of 4xx or 5xx that will be used as the HTTP status of the response when doing server-side rendering. Default is 500, indicating a server error. If your `load` function throws or returns a promise that rejects, it will be treated as if it returned an error 500.
+
+   ```ts
+   return {
+   	error: { message: "You are not allowed to see this page" },
+   	status: 403,
+   };
+   ```
+
+3. **A redirection result** is an object that includes a `redirect` property which may be either a string or a URL object. A redirection result will abort the rendering of the current page and the user will be redirected to the specified location. The return value must also have a `status` property which should be an integer in the form of 3xx that will be used as the HTTP status of the redirection response when doing server-side rendering.
+
+   ```ts
+   return {
+   	redirect: "/some/other/path",
+   	status: 302,
+   };
+   ```
+
+If you return an error or a redirection result from a layout's load function, the rendering process will stop at that level. Nested layouts and the page will not load or render.
+
+If your return value includes a `cacheControl` property (with a string value), it will be used as the Cache-Control header for the response.
+
+> If you come from **Next.js**, `load` is similar to `getServerSideProps` and `getStaticProps`. But there are important differences: `getServerSideProps` will only run on the server but `load` may run either on the server or the client. So, calling backend functions from `load` is not allowed, all communication must go through an API even during server-side rendering. If you're familiar with `SvelteKit`, it is very similar to how it handles data fetching.

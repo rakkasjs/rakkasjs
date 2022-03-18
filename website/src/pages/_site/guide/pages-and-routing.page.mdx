@@ -1,0 +1,45 @@
+import { SampleViewer } from "./SampleViewer";
+
+# Pages and routing
+
+In Rakkas, a page is a React component default exported from a module in the `src/pages` directory, named `page.jsx` or anything that matches `*.page.jsx` (or `tsx`, or any other extension included in the `pageExtensions` [configuration option](./configuration-options)).
+
+Rakkas has a file system-based router. The file name determines the URL path. The rules are easy:
+
+| Module name                | URL path      |
+| -------------------------- | ------------- |
+| `src/pages/page.jsx`       | `/`           |
+| `src/pages/about.page.jsx` | `/about`      |
+| `src/pages/about/page.jsx` | also `/about` |
+
+This specific naming convention (`(name.)?page.{extension}`) allows you to have your helper libraries and components next to your page components without accidentally exposing them as routes.
+
+A very simple Rakkas page would look like this:
+
+import helloExample from "$examples/hello/page.jsx?sample";
+
+<SampleViewer
+	filename="src/pages/page.jsx"
+	code={helloExample}
+	url="/examples/hello"
+/>
+
+Rakkas supports [`react-helmet-async`](https://github.com/staylor/react-helmet-async#readme) for managing head tags (`title`, `base`, `meta`, `link`, `script`, `noscript`, and `style`) and attributes for `body`, `html`, and `title` tags.
+
+## Dynamic routes <a id="dynamic-routes"/>
+
+Sometimes you need to encode parameters in the URL path like `/post/1`, `/post/2` etc. Dynamic routes like this are handled using `[square brackets]`. If you have a file named `/src/pages/profile/[userName].page.jsx`, for instance, and you visit `/profile/fatih`, your page component will receive `{ userName: "fatih" }` in `props.params` like in the example below.
+
+import paramsExample from "$examples/params/[userName].page.jsx?sample";
+
+<SampleViewer
+	filename="[userName].page.jsx"
+	code={paramsExample}
+	url="/examples/params/Fatih"
+/>
+
+> Go ahead and can click on the links, they won't take you away from this page.
+
+You can use more than one dynamic parameter like `/user/[userName]/posts/[postId]`. You can even put multiple parameters in a single path segment if you delimit them with `-` or `.`, like `/user-[name]-[surname]/contact-info` (matches `/user-fatih-aygun/contact-info` with `params: { name: "fatih", surname: "aygun" }` for instance).
+
+More specific routes have priority over more generic ones, so you can have both `/products/list` for a specific match and `/products/[productId]` as a catch-all route.

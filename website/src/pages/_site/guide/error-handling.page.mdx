@@ -1,0 +1,15 @@
+import { SampleViewer } from "./SampleViewer";
+
+# Error handling
+
+If a layout or page `load` function returns an error or throws, layouts and pages further nested in the hierarchy will not be called and the innermost layout or page that reported itself as an error handler is rendered with an `error` prop passed to its component.
+
+Layouts are assumed to be able to handle errors while pages are assumed not to be able to handle them. You can override this by passing true or false in `options.canHandleErrors` to `definePage` or `defineLayout`.
+
+404 errors are handled in the same way, as if a page's load function returned an error.
+
+import errorExampleLayout from "$examples/error-handling/layout.tsx?sample";
+import errorExamplePage from "$examples/error-handling/page.tsx?sample";
+
+<SampleViewer code={errorExampleLayout} />
+<SampleViewer url="/examples/error-handling" code={errorExamplePage} />

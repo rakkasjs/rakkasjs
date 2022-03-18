@@ -1,0 +1,7 @@
+# Fast refresh
+
+Fast Refresh is a React feature that allows you to get immediate feedback for changes in your React components. If you edit a file that **only exports React components**, Fast Refresh will update the code only for that file, and re-render your component.
+
+Rakkas extends this concept slightly to allow Fast Refresh on pages and layouts even if they have a load function. The load function will be called again every time you change the source file.
+
+> ⚠️ You should not export any _value_ other than your page or layout definition from page and layout source files. Exporting _types_ is OK.

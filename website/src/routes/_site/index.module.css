@@ -1,0 +1,112 @@
+.main {
+	max-width: 70em;
+	margin: auto;
+}
+
+.banner {
+	text-align: center;
+	margin: auto;
+}
+
+.logo {
+	color: #924;
+}
+
+.logo > * {
+	display: inline-block;
+	margin: 1rem auto;
+	max-width: calc(100% - 4em);
+}
+
+.tagLine {
+	font-style: italic;
+	font-size: 125%;
+	margin-bottom: 3rem;
+}
+
+.cta {
+	display: inline-block;
+	background: #429;
+	color: #fff;
+	padding: 0.5em 1em;
+	font-size: 150%;
+	border-radius: 0.25em;
+	text-decoration: none;
+}
+
+@media (hover: hover) {
+	.cta:hover {
+		background: #61b;
+		color: #fff;
+		text-decoration: none;
+	}
+}
+
+.cards {
+	margin-top: 2rem;
+}
+
+.card {
+	margin-top: 1rem;
+	text-align: center;
+	padding: 1em 2em 2em 2em;
+	background-color: #eee;
+}
+
+.card > h3 {
+	margin: 0;
+}
+
+.card > p {
+	margin: 0;
+	margin-top: 0.5em;
+}
+
+@media (min-width: 900px) {
+	.cards {
+		display: flex;
+		flex-wrap: wrap;
+		margin-top: 3rem;
+		margin-right: -1rem;
+	}
+
+	.card {
+		flex-shrink: 1;
+		width: calc(33.333333% - 1rem);
+		margin-right: 1rem;
+	}
+}
+
+@media (min-width: 1200px) {
+	.latestPost {
+		position: absolute;
+		top: 76px;
+		right: 16px;
+		width: 16rem;
+	}
+}
+
+.latestPost {
+	margin-top: 1rem;
+	border: solid 1px #eee;
+	padding: 1em;
+}
+
+.dict {
+	max-width: 18em;
+	text-align: center;
+	margin: auto;
+	margin-top: 1rem;
+}
+
+.banner hr {
+	margin: 2em 0;
+}
+
+.banner ul {
+	text-align: center;
+	list-style-type: none;
+	margin: auto;
+	margin-top: 1em;
+	padding: 0;
+}

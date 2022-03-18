@@ -1,0 +1,26 @@
+.wrapper {
+	margin-top: 1rem;
+}
+
+.filename {
+	margin-top: 1rem;
+	font-family: monospace;
+	margin-bottom: -1em;
+}
+
+.code {
+	top: 0;
+}
+
+.iframe {
+	display: block;
+	border: solid 1px #ccc;
+	width: 100%;
+	margin-top: 1rem;
+}
+
+.newTabLink {
+	font-size: small;
+	text-align: right;
+	margin-top: 0.5em;
+}

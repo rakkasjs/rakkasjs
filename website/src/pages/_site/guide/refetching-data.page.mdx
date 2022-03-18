@@ -1,0 +1,49 @@
+import { SampleViewer } from "./SampleViewer";
+
+# Refetching data
+
+By default, Rakkas only calls the `load` function under the following circumstances:
+
+- When a page or layout is being rendered on the server side.
+- When client-side navigation causes a page or layout change. Only the `load` functions of the page component and those of the newly mounted layout components will be called. If a layout is shared between the previous and next page, it will stay mounted and won't be reloaded.
+- _Only for pages:_ When the URL path or query string (`url.pathname` and `url.search`) changes. Layouts are not affected.
+- _Only during development:_ When a page or layout module is hot reloaded.
+- When the [locale](/guide/localized-routes) changes.
+
+There are three methods for changing the reloading behavior:
+
+## `getCacheKey` function
+
+You can have a `getCacheKey` function in the object you pass to `definePage` or `defineLayout`. It is passed the same arguments as the `load` function except for `fetch`. Its return value can be anything that can be serialized into JSON. Rakkas will call it every time it has to decide whether to call the `load` function and will only call it if the return value is different than the last time.
+
+For example, you can tell Rakkas to call a page's `load` function only when the URL path changes and not when the query string changes:
+
+import getCacheKeyPage from "$examples/get-cache-key/page.tsx?sample";
+
+<SampleViewer code={getCacheKeyPage} />
+
+Or you can force Rakkas to call your layout's `load` function when the URL path changes:
+
+import getCacheKeyLayout from "$examples/get-cache-key/layout.tsx?sample";
+
+<SampleViewer code={getCacheKeyLayout} />
+
+## `reload` function
+
+Page and layout components are passed a `reload` prop which you can use to manually force Rakkas to call its `load` function and rerender it:
+
+import reloadExample from "$examples/reload/page.tsx?sample";
+
+<SampleViewer url="/examples/reload" code={reloadExample} />
+
+## `useReload` custom hook
+
+Page and layout components are passed a `useReload` function which is a React custom hook used to force a reload under certain conditions:
+
+import useReloadExample from "$examples/reload/use-reload.page.tsx?sample";
+
+<SampleViewer url="/examples/reload/use-reload" code={useReloadExample} />
+
+## Static site generation
+
+`reload` and `useReload` are no-ops on a statically exported page since its data is supposed to be static anyway.
