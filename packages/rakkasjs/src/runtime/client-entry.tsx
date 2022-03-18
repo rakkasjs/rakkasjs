@@ -5,14 +5,16 @@ import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { ClientHooksModule } from "./client-hooks";
 import { App, RouteContext } from "./App";
+import { initialize, LocationContext } from "./client-side-navigation";
 
 import * as reactHelmetAsyncHooks from "./builtin-client-hooks/react-helmet-async";
 import * as useQueryAsyncHooks from "./builtin-client-hooks/use-query";
-import { initialize, LocationContext } from "./client-side-navigation";
+import * as clientSideHooks from "./builtin-client-hooks/client-side";
 
 const hookModules: ClientHooksModule[] = [
 	useQueryAsyncHooks,
 	reactHelmetAsyncHooks,
+	clientSideHooks,
 ];
 
 export async function go() {

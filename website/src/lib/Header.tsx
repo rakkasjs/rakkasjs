@@ -1,6 +1,6 @@
 import { Logomark } from "./Logomark";
 import { Logotype } from "./Logotype";
-import { Link, StyledLink, useLocation } from "rakkasjs";
+import { Link, StyledLink, useLocation, ClientSide } from "rakkasjs";
 import React, { FC, useEffect, useRef, useState } from "react";
 import css from "./Header.module.css";
 import { GithubLogo } from "$lib/GithubLogo";
@@ -11,7 +11,7 @@ import { ExternalIcon } from "$lib/ExternalIcon";
 import { BlogIcon } from "$lib/BlogIcon";
 import { Toc } from "./Toc";
 import { toc as guideToc } from "../pages/_site/guide/toc";
-import { toc as blogToc } from "../pages/_site/blog/toc";
+import { toc as blogToc } from "../routes/_site/blog/toc";
 import { DocSearch } from "@docsearch/react";
 import "@docsearch/css";
 
@@ -138,17 +138,13 @@ export const Header: FC = () => {
 
 			<span className={css.nav}>{nav}</span>
 
-			{/*
-					TODO: DocSearh server-side placeholder
-					width: 160px;
-					@media (max-width: 750px)
-					width: 36px;
-			*/}
-			<DocSearch
-				appId="Q8E33NN7EC"
-				apiKey="ea3307404701ddce0c61b918c2fee8d4"
-				indexName="rakkasjs"
-			/>
+			<ClientSide fallback={<span className={css.docSearchPlaceholder} />}>
+				<DocSearch
+					appId="Q8E33NN7EC"
+					apiKey="ea3307404701ddce0c61b918c2fee8d4"
+					indexName="rakkasjs"
+				/>
+			</ClientSide>
 
 			<aside
 				className={css.sidebar + (isOpen ? " " + css.open : "")}

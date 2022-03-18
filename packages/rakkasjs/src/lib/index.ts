@@ -18,7 +18,9 @@ export {
 
 export { useQuery } from "./use-query/use-query";
 
-// TODO: Implement <ClientSide />
+export type { ClientSideProps } from "./ClientSide";
+export { ClientSide } from "./ClientSide";
+
 // TODO: Implement <Redirect />
 // TODO: Implement <Rewrite />
 // TODO: Implement <ResponseStatus />

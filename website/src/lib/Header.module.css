@@ -95,3 +95,20 @@
 .nextLink {
 	background: #eef;
 }
+
+.docSearchPlaceholder {
+	display: inline-block;
+	width: 36px;
+	padding: 0 8px;
+	margin-left: 16px;
+}
+
+@media (min-width: 751px) {
+	.docSearchPlaceholder {
+		width: 160px;
+	}
+
+	:global(.DocSearch.DocSearch-Button) {
+		width: 160px;
+	}
+}
