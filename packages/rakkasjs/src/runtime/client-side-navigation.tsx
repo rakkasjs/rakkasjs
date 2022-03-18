@@ -248,7 +248,7 @@ function shouldHandleClick(e: MouseEventLike): boolean {
 		!e.shiftKey &&
 		!e.altKey &&
 		!e.ctrlKey &&
-		(!t.target || t.target !== "_self") &&
+		(!t.target || t.target === "_self") &&
 		!t.hasAttribute("download") &&
 		!t.relList.contains("external")
 	);
