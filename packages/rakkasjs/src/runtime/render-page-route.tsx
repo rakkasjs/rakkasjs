@@ -7,12 +7,20 @@ import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { CreateServerHooksFn } from "./server-hooks";
 import { App, RouteContext } from "./App";
+import isBot from "isbot-fast";
+import { LocationContext } from "./client-side-navigation";
+import { findRoute } from "./find-route";
+import {
+	ResponseContext,
+	ResponseContextProps,
+} from "../lib/response-manipulation";
 
 // Builtin hooks
 import createReactHelmentServerHooks from "./builtin-server-hooks/react-helmet-async";
 import createUseQueryServerHooks from "./builtin-server-hooks/use-query";
-import { LocationContext } from "./client-side-navigation";
-import { findRoute } from "./find-route";
+
+// Add Rakkas's static rendering crawler to the bot list
+isBot.extend(["rakkasjs"]);
 
 const hookFns: CreateServerHooksFn[] = [
 	createUseQueryServerHooks,
@@ -38,14 +46,36 @@ export async function renderPageRoute(
 		onRendered = resolve;
 	});
 
+	let redirected: boolean | undefined;
+	let status: number | undefined = undefined;
+	const headers = new Headers({
+		"Content-Type": "text/html; charset=utf-8",
+	});
+
+	function updateHeaders(props: ResponseContextProps) {
+		redirected = redirected ?? props.redirect;
+		status = status ?? props.status;
+
+		if (props.headers) {
+			for (const [key, value] of Object.entries(props.headers)) {
+				const values = Array.isArray(value) ? value : [value];
+				for (const v of values) {
+					headers.append(key, v);
+				}
+			}
+		}
+	}
+
 	let app = (
-		<LocationContext.Provider value={ctx.url.href}>
-			<RouteContext.Provider value={{ onRendered, found }}>
-				<Suspense fallback={null}>
-					<App />
-				</Suspense>
-			</RouteContext.Provider>
-		</LocationContext.Provider>
+		<ResponseContext.Provider value={updateHeaders}>
+			<LocationContext.Provider value={ctx.url.href}>
+				<RouteContext.Provider value={{ onRendered, found }}>
+					<Suspense fallback={null}>
+						<App />
+					</Suspense>
+				</RouteContext.Provider>
+			</LocationContext.Provider>
+		</ResponseContext.Provider>
 	);
 
 	const moduleIds = found.route[2];
@@ -68,7 +98,7 @@ export async function renderPageRoute(
 		}
 
 		for (const cssFile of cssSet) {
-			cssOutput += `<link rel="stylesheet" href=${escapedJson("/" + cssFile)}>`;
+			cssOutput += `<link rel="stylesheet" href=${escapeHtml("/" + cssFile)}>`;
 		}
 	}
 
@@ -85,13 +115,25 @@ export async function renderPageRoute(
 
 	const reactStream: ReadableStream & { allReady: Promise<void> } =
 		await renderToReadableStream(<StrictMode>{app}</StrictMode>, {
+			// TODO: AbortController
 			bootstrapModules: ["/" + scriptPath],
 		});
 
 	await renderPromise;
 
-	// https://github.com/mahovich/isbot-fast
-	// await reactStream.allReady;
+	const userAgent = req.headers.get("user-agent");
+	if (userAgent && isBot(userAgent)) {
+		await reactStream.allReady;
+	} else {
+		await Promise.race([reactStream.allReady, Promise.resolve()]);
+	}
+
+	if (redirected) {
+		return new Response(redirectBody(headers.get("location")!), {
+			status,
+			headers,
+		});
+	}
 
 	let head =
 		`<!DOCTYPE html><html><head>` +
@@ -140,14 +182,16 @@ export async function renderPageRoute(
 		},
 	});
 
-	return new Response(wrapperStream, {
-		headers: { "Content-Type": "text/html; charset=utf-8" },
-	});
+	return new Response(wrapperStream, { status, headers });
 }
 
-// Generate escaped JSON to be put in a script tag
-function escapedJson(json: any): string {
-	return JSON.stringify(json).replace(/</g, "\\u003c");
+function escapeHtml(text: string): string {
+	return text
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#x27;");
 }
 
 const REACT_FAST_REFRESH_PREAMBLE = `import RefreshRuntime from '/@react-refresh'
@@ -155,3 +199,10 @@ RefreshRuntime.injectIntoGlobalHook(window)
 window.$RefreshReg$ = () => {}
 window.$RefreshSig$ = () => (type) => type
 window.__vite_plugin_react_preamble_installed__ = true`;
+
+function redirectBody(href: string) {
+	const escaped = escapeHtml(href);
+
+	// http-equiv="refresh" is useful for static prerendering
+	return `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=${escaped}"></head><body><a href="${escaped}">${escaped}</a></body></html>`;
+}

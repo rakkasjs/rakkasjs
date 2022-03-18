@@ -1,6 +1,7 @@
 import React from "react";
 import { CreateServerHooksFn } from "../server-hooks";
 import { SsrCacheContext } from "../../lib/use-query/use-query";
+import { escapeJson } from "../utils";
 
 const createServerHooks: CreateServerHooksFn = () => {
 	const cache = {
@@ -41,7 +42,7 @@ const createServerHooks: CreateServerHooksFn = () => {
 
 		emitBeforeSsrChunk() {
 			if (cache._hasNewItems) {
-				const newItemsString = escapedJson(cache._getNewItems());
+				const newItemsString = escapeJson(cache._getNewItems());
 				return `<script>Object.assign($RAKKAS_USE_QUERY_SSR_CACHE,${newItemsString})</script>`;
 			}
 
@@ -51,8 +52,3 @@ const createServerHooks: CreateServerHooksFn = () => {
 };
 
 export default createServerHooks;
-
-// TODO: Dedupe these
-function escapedJson(json: any): string {
-	return JSON.stringify(json).replace(/</g, "\\u003c");
-}

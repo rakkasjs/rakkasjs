@@ -36,10 +36,10 @@
 		"ssr"
 	],
 	"peerDependencies": {
-		"vite": "2.8.6",
-		"react-helmet-async": "^1.2.3",
 		"react": "^18.0.0-rc.2",
-		"react-dom": "^18.0.0-rc.2"
+		"react-dom": "^18.0.0-rc.2",
+		"react-helmet-async": "^1.2.3",
+		"vite": "2.8.6"
 	},
 	"devDependencies": {
 		"@cyco130/eslint-config": "^1.0.0",
@@ -47,6 +47,7 @@
 		"@hattip/core": "0.0.1",
 		"@types/micromatch": "^4.0.2",
 		"eslint": "^8.10.0",
+		"isbot-fast": "^1.2.0",
 		"react": "^18.0.0-rc.2",
 		"react-dom": "^18.0.0-rc.2",
 		"react-helmet-async": "^1.2.3",

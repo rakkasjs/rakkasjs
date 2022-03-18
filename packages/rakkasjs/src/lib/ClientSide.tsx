@@ -31,9 +31,4 @@ export function ClientSide(props: ClientSideProps): ReactElement {
 export const ClientSideContext = createContext<{
 	hydrated: boolean;
 	setHydrated: () => void;
-}>({
-	hydrated: false,
-	setHydrated: () => {
-		// Do nothing
-	},
-});
+}>(undefined as any);

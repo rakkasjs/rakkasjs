@@ -21,7 +21,8 @@ export { useQuery } from "./use-query/use-query";
 export type { ClientSideProps } from "./ClientSide";
 export { ClientSide } from "./ClientSide";
 
-// TODO: Implement <Redirect />
-// TODO: Implement <Rewrite />
-// TODO: Implement <ResponseStatus />
-// TODO: Implement <ResponseHeaders />
+export type {
+	ResponseHeadersProps,
+	RedirectProps,
+} from "./response-manipulation";
+export { ResponseHeaders, Redirect } from "./response-manipulation";

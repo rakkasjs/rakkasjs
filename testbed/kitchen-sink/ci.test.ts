@@ -183,6 +183,40 @@ function testCase(title: string, dev: boolean, command?: string) {
 				document.body.innerText.includes("State test: 1"),
 			);
 		});
+
+		test("redirects", async () => {
+			await page.goto(TEST_HOST + "/redirect/shallow");
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Redirected"),
+			);
+
+			await page.goto(TEST_HOST + "/redirect/deep");
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Redirected"),
+			);
+		});
+
+		test("sets redirect status", async () => {
+			let response = await fetch(TEST_HOST + "/redirect/shallow", {
+				headers: { "User-Agent": "rakkasjs-crawler" },
+				redirect: "manual",
+			});
+			expect(response.status).toBe(302);
+
+			response = await fetch(TEST_HOST + "/redirect/deep", {
+				headers: { "User-Agent": "rakkasjs-crawler" },
+				redirect: "manual",
+			});
+			expect(response.status).toBe(302);
+		});
+
+		test("sets status and headers", async () => {
+			const response = await fetch(TEST_HOST + "/response-headers", {
+				headers: { "User-Agent": "rakkasjs-crawler" },
+			});
+			expect(response.status).toBe(400);
+			expect(response.headers.get("X-Custom-Header")).toBe("Custom value");
+		});
 	});
 }
 
