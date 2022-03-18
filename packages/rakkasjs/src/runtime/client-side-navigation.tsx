@@ -225,7 +225,7 @@ function defaultCompareUrls(a: URL, b: URL) {
 }
 
 export interface MouseEventLike {
-	target: EventTarget | null;
+	currentTarget: EventTarget | null;
 	defaultPrevented: boolean;
 	button: number;
 	shiftKey: boolean;
@@ -236,7 +236,7 @@ export interface MouseEventLike {
 }
 
 function shouldHandleClick(e: MouseEventLike): boolean {
-	const t = e.target;
+	const t = e.currentTarget;
 
 	return (
 		(t instanceof HTMLAnchorElement ||

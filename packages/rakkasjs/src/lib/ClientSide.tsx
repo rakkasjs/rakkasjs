@@ -25,7 +25,7 @@ export function ClientSide(props: ClientSideProps): ReactElement {
 		}
 	}, [context]);
 
-	return <>{context.hydrated ? props.children : props.fallback}</>;
+	return <>{context && context.hydrated ? props.children : props.fallback}</>;
 }
 
 export const ClientSideContext = createContext<{
