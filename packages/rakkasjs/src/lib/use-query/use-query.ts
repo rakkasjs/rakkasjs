@@ -27,7 +27,7 @@ export function useQuery<T>(
 	})();
 }
 
-type QueryResult<T> =
+export type QueryResult<T> =
 	| {
 			success: true;
 			value: T;

@@ -26,7 +26,7 @@ export function routeToRegExp(route: string): RegExp {
 					/\\\[[a-zA-Z_][a-zA-Z0-9_]*\\]/g,
 					(name) => `(?<${name.slice(2, -2)}>[^/]*)`,
 				) +
-			(restParamName ? `\\/(?<${restParamName}>.*)$` : "\\/?$"),
+			(restParamName ? `(?<${restParamName}>(\\/.*)?$)` : "\\/?$"),
 	);
 }
 

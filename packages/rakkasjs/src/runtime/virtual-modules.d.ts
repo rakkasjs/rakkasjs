@@ -51,3 +51,18 @@ declare module "virtual:rakkasjs:client-manifest" {
 	const manifest: undefined | import("vite").Manifest;
 	export default manifest;
 }
+
+declare module "virtual:rakkasjs:run-server-side:manifest" {
+	const manifest: Record<
+		string,
+		() => Promise<{
+			$runServerSide$: Array<
+				(
+					closure: any,
+					context: import("../lib").ServerSideContext,
+				) => Promise<any>
+			>;
+		}>
+	>;
+	export default manifest;
+}

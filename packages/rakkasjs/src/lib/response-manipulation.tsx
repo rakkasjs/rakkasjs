@@ -34,7 +34,9 @@ export const Redirect = import.meta.env.SSR
 				<>
 					<script
 						dangerouslySetInnerHTML={{
-							__html: `window.location.href=${escapeJson(props.href)};`,
+							__html: `window.location.href=${escapeJson(
+								JSON.stringify(props.href),
+							)};`,
 						}}
 					/>
 				</>

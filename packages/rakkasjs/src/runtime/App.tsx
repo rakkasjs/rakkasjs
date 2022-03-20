@@ -58,9 +58,6 @@ export function App() {
 
 	const app = lastRoute.last.app;
 
-	// console.log("Resetting", url.pathname);
-	// lastRoute.last = undefined;
-
 	return app;
 }
 

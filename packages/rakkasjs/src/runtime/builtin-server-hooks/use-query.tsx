@@ -1,7 +1,7 @@
 import React from "react";
 import { CreateServerHooksFn } from "../server-hooks";
 import { SsrCacheContext } from "../../lib/use-query/use-query";
-import { escapeJson } from "../utils";
+import devaule from "devalue";
 
 const createServerHooks: CreateServerHooksFn = () => {
 	const cache = {
@@ -37,12 +37,13 @@ const createServerHooks: CreateServerHooksFn = () => {
 		},
 
 		emitToDocumentHead() {
-			return `<script>$RAKKAS_USE_QUERY_SSR_CACHE=Object.create(null);</script>`;
+			const newItemsString = devaule(cache._getNewItems());
+			return `<script>$RAKKAS_USE_QUERY_SSR_CACHE=${newItemsString}</script>`;
 		},
 
 		emitBeforeSsrChunk() {
 			if (cache._hasNewItems) {
-				const newItemsString = escapeJson(cache._getNewItems());
+				const newItemsString = devaule(cache._getNewItems());
 				return `<script>Object.assign($RAKKAS_USE_QUERY_SSR_CACHE,${newItemsString})</script>`;
 			}
 

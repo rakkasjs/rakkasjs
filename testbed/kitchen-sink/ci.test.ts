@@ -86,7 +86,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			const response = await fetch(TEST_HOST + "/api-routes/more/aaa/bbb/ccc");
 			expect(response.status).toBe(200);
 			const json = await response.json();
-			expect(json).toMatchObject({ rest: "aaa/bbb/ccc" });
+			expect(json).toMatchObject({ rest: "/aaa/bbb/ccc" });
 		});
 
 		test("renders interactive page", async () => {
@@ -216,6 +216,26 @@ function testCase(title: string, dev: boolean, command?: string) {
 			});
 			expect(response.status).toBe(400);
 			expect(response.headers.get("X-Custom-Header")).toBe("Custom value");
+		});
+
+		test("runs useServerSideQuery on the server", async () => {
+			await page.goto(TEST_HOST + "/use-ssq");
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Result: 7, SSR: true"),
+			);
+
+			await page.goto(TEST_HOST + "/use-ssq/elsewhere");
+			await page.waitForSelector(".hydrated");
+
+			const link: ElementHandle<HTMLAnchorElement> | null =
+				await page.waitForSelector("a");
+			expect(link).toBeTruthy();
+
+			await link!.click();
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Result: 7, SSR: true"),
+			);
 		});
 	});
 }

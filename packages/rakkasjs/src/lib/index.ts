@@ -11,6 +11,7 @@ export type {
 	StyledLinkProps,
 } from "../runtime/client-side-navigation";
 export {
+	navigate,
 	useLocation,
 	Link,
 	StyledLink,
@@ -26,3 +27,10 @@ export type {
 	RedirectProps,
 } from "./response-manipulation";
 export { ResponseHeaders, Redirect } from "./response-manipulation";
+
+export {
+	useServerSideQuery,
+	useServerSideQuery as useSSQ,
+	ServerSideFunction,
+	ServerSideContext,
+} from "./use-server-side/use-server-side";

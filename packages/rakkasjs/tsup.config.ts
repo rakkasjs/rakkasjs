@@ -31,6 +31,7 @@ export default defineConfig([
 			"virtual:rakkasjs:server-page-routes",
 			"virtual:rakkasjs:client-page-routes",
 			"virtual:rakkasjs:client-manifest",
+			"virtual:rakkasjs:run-server-side:manifest",
 			"react",
 			"react/jsx-runtime",
 			"react/jsx-dev-runtime",

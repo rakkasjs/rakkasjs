@@ -18,6 +18,7 @@ import {
 // Builtin hooks
 import createReactHelmentServerHooks from "./builtin-server-hooks/react-helmet-async";
 import createUseQueryServerHooks from "./builtin-server-hooks/use-query";
+import createUseServerSideServerHooks from "./builtin-server-hooks/use-server-side";
 
 // Add Rakkas's static rendering crawler to the bot list
 isBot.extend(["rakkasjs"]);
@@ -25,6 +26,7 @@ isBot.extend(["rakkasjs"]);
 const hookFns: CreateServerHooksFn[] = [
 	createUseQueryServerHooks,
 	createReactHelmentServerHooks,
+	createUseServerSideServerHooks,
 ];
 
 export async function renderPageRoute(
@@ -34,6 +36,15 @@ export async function renderPageRoute(
 	ctx.locals = {};
 
 	const hooksObjects = hookFns.map((fn) => fn(req, ctx));
+
+	for (const hooks of hooksObjects) {
+		if (hooks.handleRequest) {
+			const response = await hooks.handleRequest();
+			if (response) {
+				return response;
+			}
+		}
+	}
 
 	const routes = (await import("virtual:rakkasjs:server-page-routes")).default;
 

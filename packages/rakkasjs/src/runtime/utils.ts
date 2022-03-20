@@ -1,3 +1,3 @@
-export function escapeJson(json: any): string {
-	return JSON.stringify(json).replace(/</g, "\\u003c");
+export function escapeJson(json: string): string {
+	return json.replace(/</g, "\\u003c");
 }

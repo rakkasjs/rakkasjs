@@ -39,7 +39,13 @@ describe("routeToRegExp", () => {
 		expect("/foo/123/456/aaa/bbb/ccc".match(re)?.groups).toMatchObject({
 			bar: "123",
 			baz: "456",
-			qux: "aaa/bbb/ccc",
+			qux: "/aaa/bbb/ccc",
+		});
+
+		expect("/foo/123/456".match(re)?.groups).toMatchObject({
+			bar: "123",
+			baz: "456",
+			qux: "",
 		});
 	});
 });

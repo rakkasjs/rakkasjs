@@ -2,6 +2,7 @@ import { ReactElement } from "react";
 import { RequestContext } from "../lib";
 
 export interface RakkasServerHooks {
+	handleRequest?(): Response | undefined | Promise<Response | undefined>;
 	wrapApp?(app: ReactElement): ReactElement;
 	emitToDocumentHead?(): string;
 	emitBeforeSsrChunk?(): string;

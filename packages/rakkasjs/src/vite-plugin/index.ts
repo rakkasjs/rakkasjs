@@ -10,6 +10,7 @@ import { apiRoutes } from "./api-routes";
 import { pageRoutes } from "./page-routes";
 import { virtualClientEntry } from "./virtual-client-entry";
 import { resolveClientManifest } from "./resolve-client-manifest";
+import runServerSide from "./run-server-side/run-server-side";
 
 export interface RakkasOptions {
 	/**
@@ -36,5 +37,6 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		}),
 		virtualClientEntry(),
 		resolveClientManifest(),
+		...runServerSide(),
 	];
 }
