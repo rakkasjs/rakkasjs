@@ -12,19 +12,18 @@ interface Test {
 
 const tests: Test[] = [
 	{
-		message: "hoists closure",
+		message: "transforms client-side code",
 		input: `
 			import { useSSQ } from "rakkasjs";
-			import { something } from "server-side";
 			import { alreadyUnused } from "other-server-side";
 
 			const bar = 1;
-
 			function x(foo) {
-				useSSQ(() => foo + bar, { option: "qux" });
+				const baz = 2;
+				useSSQ(() => foo + bar + baz, { option: "qux" });
 				useSSQ(async function (ctx) {
 					const baz = 2;
-					return something(ctx.session.userName);
+					return ctx.session.userName;
 				});
 			}
 		`,
@@ -33,8 +32,9 @@ const tests: Test[] = [
 			import { alreadyUnused } from "other-server-side";
 
 			function x(foo) {
-				useSSQ(["abc123", 0, { foo }], { option: "qux" });
-				useSSQ(["abc123", 1, {}]);
+				const baz = 2;
+				useSSQ(["abc123", 0, [foo, baz]], { option: "qux" });
+				useSSQ(["abc123", 1, []]);
 			};
 		`,
 	},

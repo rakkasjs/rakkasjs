@@ -8,11 +8,11 @@ const createServerHooks: CreateServerHooksFn = (req, ctx) => {
 			// TODO: Build ID
 			if (!ctx.url.pathname.startsWith("/_data/development/")) return undefined;
 
-			const [, , , moduleId, counter, closure] = ctx.url.pathname
+			const [, , , moduleId, counter, ...closure] = ctx.url.pathname
 				.split("/")
 				.map((s) => decodeURIComponent(s));
 
-			const closureContents = parse(closure);
+			const closureContents = closure.map(parse);
 
 			const manifest = await import(
 				"virtual:rakkasjs:run-server-side:manifest"

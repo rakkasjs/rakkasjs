@@ -12,7 +12,7 @@ export function babelTransformClientSideHooks(
 
 	return {
 		visitor: {
-			// Hoist the closure
+			// Capture the closure
 			Expression: {
 				enter(arg, state) {
 					if (
@@ -56,16 +56,7 @@ export function babelTransformClientSideHooks(
 						const replacement = t.arrayExpression([
 							t.stringLiteral(moduleId),
 							t.numericLiteral(counter++),
-							t.objectExpression(
-								closure.map((id) =>
-									t.objectProperty(
-										t.identifier(id),
-										t.identifier(id),
-										false,
-										true,
-									),
-								),
-							),
+							t.arrayExpression(closure.map((id) => t.identifier(id))),
 						]);
 
 						arg.replaceWith(replacement);

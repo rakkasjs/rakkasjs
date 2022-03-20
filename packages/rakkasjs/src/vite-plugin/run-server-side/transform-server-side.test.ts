@@ -12,12 +12,13 @@ interface Test {
 
 const tests: Test[] = [
 	{
-		message: "hoists closure",
+		message: "transforms server-side code",
 		input: `
 			import { useSSQ } from "rakkasjs";
 			const bar = 1;
 			function x(foo) {
-				useSSQ(() => foo + bar, { options: "qux" });
+				const baz = 2;
+				useSSQ(() => foo + bar + baz, { option: "qux" });
 				useSSQ(async function (ctx) {
 					const baz = 2;
 					return ctx.session.userName;
@@ -28,17 +29,18 @@ const tests: Test[] = [
 			import { useSSQ } from "rakkasjs";
 			const bar = 1;
 			function x(foo) {
-				useSSQ(["abc123", 0, { foo }, $runServerSide$[0]], { options: "qux" });
-				useSSQ(["abc123", 1, {}, $runServerSide$[1]]);
+				const baz = 2;
+				useSSQ(["abc123", 0, [foo, baz], $runServerSide$[0]], { option: "qux" });
+				useSSQ(["abc123", 1, [], $runServerSide$[1]]);
 			};
 
 			export const $runServerSide$ = [
 				async ($runServerSideClosure$) => {
-					let { foo } = $runServerSideClosure$;
-					return foo + bar;
+					let [foo, baz] = $runServerSideClosure$;
+					return foo + bar + baz;
 				},
 				async function ($runServerSideClosure$, ctx) {
-					let { } = $runServerSideClosure$;
+					let [] = $runServerSideClosure$;
 					const baz = 2;
 					return ctx.session.userName;
 				}

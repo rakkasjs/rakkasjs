@@ -14,14 +14,14 @@ function useSSQImpl(
 	desc: [
 		moduleId: string,
 		counter: number,
-		closure: any,
+		closure: any[],
 		fn: (...args: any) => any,
 	],
 ): QueryResult<any> {
 	const [moduleId, counter, closure] = desc;
 	const context = useContext(ServerSideContextContext);
 
-	const stringified = stringify(closure);
+	const stringified = closure.map((x) => stringify(x));
 	const key = `$ss:${moduleId}:${counter}:${stringified}`;
 
 	return useQuery(
@@ -29,15 +29,17 @@ function useSSQImpl(
 		// @ts-ignore
 		import.meta.env.SSR
 			? () => desc[3](closure, context)
-			: async () =>
+			: async () => {
+					let closurePath = stringified.map(encodeURIComponent).join("/");
+					if (closurePath) closurePath = "/" + closurePath;
+
 					// TODO: Build ID
-					fetch(
+					return fetch(
 						"/_data/development/" +
 							encodeURIComponent(moduleId) +
 							"/" +
 							counter +
-							"/" +
-							encodeURIComponent(stringified),
+							closurePath,
 					).then(async (r) => {
 						if (!r.ok) {
 							throw new Error(r.statusText);
@@ -46,7 +48,8 @@ function useSSQImpl(
 						const text = await r.text();
 
 						return (0, eval)("(" + text + ")");
-					}),
+					});
+			  },
 	);
 }
 

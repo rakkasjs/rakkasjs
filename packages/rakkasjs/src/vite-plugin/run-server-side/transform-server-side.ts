@@ -53,16 +53,7 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 						const replacement = t.arrayExpression([
 							t.stringLiteral(moduleId),
 							t.numericLiteral(counter),
-							t.objectExpression(
-								closure.map((id) =>
-									t.objectProperty(
-										t.identifier(id),
-										t.identifier(id),
-										false,
-										true,
-									),
-								),
-							),
+							t.arrayExpression(closure.map((id) => t.identifier(id))),
 							t.memberExpression(
 								t.identifier("$runServerSide$"),
 								t.numericLiteral(counter++),
@@ -86,16 +77,7 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 							arg.node.body.body.unshift(
 								t.variableDeclaration("let", [
 									t.variableDeclarator(
-										t.objectPattern(
-											closure.map((name) =>
-												t.objectProperty(
-													t.identifier(name),
-													t.identifier(name),
-													false,
-													true,
-												),
-											),
-										),
+										t.arrayPattern(closure.map((name) => t.identifier(name))),
 										t.identifier("$runServerSideClosure$"),
 									),
 								]),
