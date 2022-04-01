@@ -188,7 +188,7 @@ export async function build(
 
 	const manifest = Object.fromEntries(
 		Object.entries(rawManifest)
-			.map(([name, value]) => {
+			.map(([name, value]): [string, string[]] | undefined => {
 				const relative = path.relative(pagesDir, path.resolve("src", name));
 				if (
 					relative &&
@@ -205,10 +205,13 @@ export async function build(
 						assets.forEach((x) => assetSet.add(x));
 					}
 
-					return [path.join("/", config.pagesDir, relative), [...assetSet]];
+					return [
+						path.join("/", config.pagesDir, relative).replace(/\\/g, "/"),
+						[...assetSet],
+					];
 				}
 			})
-			.filter(Boolean) as Array<[string, string[]]>,
+			.filter((x): x is [string, string[]] => !!x),
 	);
 
 	if (deploymentTarget !== "static") {
