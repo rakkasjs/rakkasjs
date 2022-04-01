@@ -4,6 +4,14 @@ describe("Static content", () => {
 		cy.contains("Rakkas static site generation demo");
 	});
 
+	it("loads a stylesheet with JavaScript disabled", () => {
+		cy.request("/")
+			.its("body")
+			.should("satisfy", (html: string) => {
+				return html.match(/href="\/assets\/page\..+\.css"/);
+			});
+	});
+
 	it("visits a profile page", () => {
 		cy.visit("/profile/3");
 		cy.contains("Lillian Taylor");

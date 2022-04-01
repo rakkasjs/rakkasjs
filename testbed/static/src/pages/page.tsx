@@ -1,6 +1,7 @@
-import React from "react";
 import { definePage, DefinePageTypes } from "rakkasjs";
+import React from "react";
 import { Helmet } from "react-helmet-async";
+import "./styles.css";
 
 export type IndexPageTypes = DefinePageTypes<never>;
 
