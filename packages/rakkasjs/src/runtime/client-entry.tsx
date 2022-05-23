@@ -3,41 +3,29 @@
 
 import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot } from "react-dom/client";
-import { ClientHooksModule } from "./client-hooks";
 import { App, RouteContext } from "./App";
-import {
-	initialize,
-	LocationContext,
-} from "../features/client-side-navigation/implementation";
-
-import * as reactHelmetAsyncHooks from "../features/head/client-hooks";
-import * as useQueryHooks from "../features/use-query/client-hooks";
-import * as clientSideHooks from "../features/client-only/client-hooks";
-
-const hookModules: ClientHooksModule[] = [
-	useQueryHooks,
-	reactHelmetAsyncHooks,
-	clientSideHooks,
-];
+import clientHooks from "./feature-client-hooks";
 
 export async function go() {
 	throw new Error("Not implemented");
 }
 
 async function startClient() {
-	initialize();
+	for (const hooks of clientHooks) {
+		if (hooks.beforeInitialize) {
+			await hooks.beforeInitialize();
+		}
+	}
 
 	let app = (
-		<LocationContext.Provider value={location.href}>
-			<RouteContext.Provider value={{}}>
-				<Suspense fallback={null}>
-					<App />
-				</Suspense>
-			</RouteContext.Provider>
-		</LocationContext.Provider>
+		<RouteContext.Provider value={{}}>
+			<Suspense fallback={null}>
+				<App />
+			</Suspense>
+		</RouteContext.Provider>
 	);
 
-	for (const hooks of hookModules) {
+	for (const hooks of clientHooks) {
 		if (hooks.wrapApp) {
 			app = hooks.wrapApp(app);
 		}

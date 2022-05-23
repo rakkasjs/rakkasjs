@@ -9,8 +9,9 @@ import exposeViteDevServer from "@vavite/expose-vite-dev-server";
 import { virtualClientEntry } from "./virtual-client-entry";
 import { resolveClientManifest } from "./resolve-client-manifest";
 
+// Feature plugins
 import apiRoutes from "../features/api-routes/vite-plugin";
-import pageRoutes from "../features/page-routes/vite-plugin";
+import pageRoutes from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
 
 export interface RakkasOptions {

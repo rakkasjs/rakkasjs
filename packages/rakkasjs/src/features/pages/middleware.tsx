@@ -5,26 +5,14 @@ import React, { StrictMode, Suspense } from "react";
 // @ts-expect-error: React 18 types aren't ready yet
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
-import { CreateServerHooksFn } from "../../runtime/server-hooks";
 import { App, RouteContext } from "../../runtime/App";
 import isBot from "isbot-fast";
-import { LocationContext } from "../client-side-navigation/implementation";
 import { findRoute } from "../../internal/find-route";
 import {
 	ResponseContext,
 	ResponseContextProps,
 } from "../response-manipulation/implementation";
-
-// Builtin hooks
-import createReactHelmentServerHooks from "../head/server-hooks";
-import createUseQueryServerHooks from "../use-query/server-hooks";
-import createUseServerSideServerHooks from "../run-server-side/server-hooks";
-
-const hookFns: CreateServerHooksFn[] = [
-	createUseQueryServerHooks,
-	createReactHelmentServerHooks,
-	createUseServerSideServerHooks,
-];
+import serverHooks from "../../runtime/feature-server-hooks";
 
 export default async function renderPageRoute(
 	req: Request,
@@ -32,7 +20,7 @@ export default async function renderPageRoute(
 ): Promise<Response | undefined> {
 	ctx.locals = {};
 
-	const hooksObjects = hookFns.map((fn) => fn(req, ctx));
+	const hooksObjects = serverHooks.map((fn) => fn(req, ctx));
 
 	for (const hooks of hooksObjects) {
 		if (hooks.handleRequest) {
@@ -77,13 +65,11 @@ export default async function renderPageRoute(
 	let app = (
 		<div id="root">
 			<ResponseContext.Provider value={updateHeaders}>
-				<LocationContext.Provider value={ctx.url.href}>
-					<RouteContext.Provider value={{ onRendered, found }}>
-						<Suspense fallback={null}>
-							<App />
-						</Suspense>
-					</RouteContext.Provider>
-				</LocationContext.Provider>
+				<RouteContext.Provider value={{ onRendered, found }}>
+					<Suspense fallback={null}>
+						<App />
+					</Suspense>
+				</RouteContext.Provider>
 			</ResponseContext.Provider>
 		</div>
 	);
