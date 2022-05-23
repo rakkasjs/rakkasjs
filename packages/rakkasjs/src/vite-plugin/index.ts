@@ -8,10 +8,10 @@ import vaviteConnect from "@vavite/connect";
 import exposeViteDevServer from "@vavite/expose-vite-dev-server";
 import { virtualClientEntry } from "./virtual-client-entry";
 import { resolveClientManifest } from "./resolve-client-manifest";
-import runServerSide from "./run-server-side/run-server-side";
 
-import { apiRoutes } from "../features/api-routes/vite-plugin";
-import { pageRoutes } from "../features/page-routes/vite-plugin";
+import apiRoutes from "../features/api-routes/vite-plugin";
+import pageRoutes from "../features/page-routes/vite-plugin";
+import runServerSide from "../features/run-server-side/vite-plugin";
 
 export interface RakkasOptions {
 	/** File extensions for pages and layouts @default ["jsx","tsx"] */

@@ -18,7 +18,7 @@ import {
 // Builtin hooks
 import createReactHelmentServerHooks from "../../runtime/builtin-server-hooks/react-helmet-async";
 import createUseQueryServerHooks from "../../runtime/builtin-server-hooks/use-query";
-import createUseServerSideServerHooks from "../../runtime/builtin-server-hooks/use-server-side";
+import createUseServerSideServerHooks from "../run-server-side/server-hooks";
 
 const hookFns: CreateServerHooksFn[] = [
 	createUseQueryServerHooks,

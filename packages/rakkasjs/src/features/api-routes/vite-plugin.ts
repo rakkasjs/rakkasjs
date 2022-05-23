@@ -4,7 +4,7 @@ import glob from "fast-glob";
 import path from "path";
 import { routeToRegExp, sortRoutes } from "../../internal/route-utils";
 
-export function apiRoutes(): Plugin {
+export default function apiRoutes(): Plugin {
 	const extPattern = "mjs|js|ts|jsx|tsx";
 
 	const endpointPattern = `/**/*.api.(${extPattern})`;

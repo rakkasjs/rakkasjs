@@ -8,7 +8,7 @@ export interface PageRoutesOptions {
 	pageExtensions?: string[];
 }
 
-export function pageRoutes(options: PageRoutesOptions = {}): Plugin {
+export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 	const { pageExtensions = ["tsx", "jsx"] } = options;
 
 	const extPattern = pageExtensions.join("|");

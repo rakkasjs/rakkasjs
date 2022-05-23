@@ -33,4 +33,4 @@ export {
 	useServerSideQuery as useSSQ,
 	ServerSideFunction,
 	ServerSideContext,
-} from "./use-server-side/use-server-side";
+} from "../features/run-server-side/lib";
