@@ -2,7 +2,7 @@ import { Plugin, ResolvedConfig } from "vite";
 import micromatch from "micromatch";
 import glob from "fast-glob";
 import path from "path";
-import { routeToRegExp, sortRoutes } from "../internal/route-utils";
+import { routeToRegExp, sortRoutes } from "../../internal/route-utils";
 
 export interface PageRoutesOptions {
 	pageExtensions?: string[];

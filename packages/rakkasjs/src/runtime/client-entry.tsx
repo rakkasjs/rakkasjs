@@ -4,7 +4,7 @@
 import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { ClientHooksModule } from "./client-hooks";
-import { App, RouteContext } from "./App";
+import { App, RouteContext } from "../features/page-routes/internal/App";
 import { initialize, LocationContext } from "./client-side-navigation";
 
 import * as reactHelmetAsyncHooks from "./builtin-client-hooks/react-helmet-async";

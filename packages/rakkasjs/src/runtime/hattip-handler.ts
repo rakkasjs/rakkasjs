@@ -1,5 +1,5 @@
 import renderApiRoute from "../features/api-routes/middleware";
-import { renderPageRoute } from "./render-page-route";
+import renderPageRoute from "../features/page-routes/render-page-route";
 
 // TODO: Just export the handlers without composing them
 export async function hattipHandler(

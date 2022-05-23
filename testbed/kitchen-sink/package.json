@@ -5,8 +5,8 @@
 		"dev": "vite dev -l silent",
 		"build": "rakkas build -l silent",
 		"start": "node dist/server",
-		"ci": "vitest",
-		"ci:local": "TEST_HOST=http://localhost:3000 pnpx vitest run",
+		"ci": "vitest run",
+		"ci:local": "TEST_HOST=http://localhost:3000 vitest run",
 		"test": "pnpm test:typecheck && pnpm test:lint",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit",
 		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
@@ -22,10 +22,10 @@
 		"vite": "^2.8.6"
 	},
 	"dependencies": {
-		"@types/react": "^17.0.40",
-		"@types/react-dom": "^17.0.13",
-		"react": "^18.0.0-rc.2",
-		"react-dom": "^18.0.0-rc.2",
+		"@types/react": "^18.0.9",
+		"@types/react-dom": "^18.0.4",
+		"react": "^18.1.0",
+		"react-dom": "^18.1.0",
 		"react-helmet-async": "^1.2.3"
 	}
 }

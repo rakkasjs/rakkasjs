@@ -1,24 +1,24 @@
 /// <reference types="vite/client" />
 
-import { RequestContext } from "../lib";
+import { RequestContext } from "../../lib";
 import React, { StrictMode, Suspense } from "react";
 // @ts-expect-error: React 18 types aren't ready yet
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
-import { CreateServerHooksFn } from "./server-hooks";
-import { App, RouteContext } from "./App";
+import { CreateServerHooksFn } from "../../runtime/server-hooks";
+import { App, RouteContext } from "./internal/App";
 import isBot from "isbot-fast";
-import { LocationContext } from "./client-side-navigation";
-import { findRoute } from "./find-route";
+import { LocationContext } from "../../runtime/client-side-navigation";
+import { findRoute } from "../../internal/find-route";
 import {
 	ResponseContext,
 	ResponseContextProps,
-} from "../lib/response-manipulation";
+} from "../../lib/response-manipulation";
 
 // Builtin hooks
-import createReactHelmentServerHooks from "./builtin-server-hooks/react-helmet-async";
-import createUseQueryServerHooks from "./builtin-server-hooks/use-query";
-import createUseServerSideServerHooks from "./builtin-server-hooks/use-server-side";
+import createReactHelmentServerHooks from "../../runtime/builtin-server-hooks/react-helmet-async";
+import createUseQueryServerHooks from "../../runtime/builtin-server-hooks/use-query";
+import createUseServerSideServerHooks from "../../runtime/builtin-server-hooks/use-server-side";
 
 const hookFns: CreateServerHooksFn[] = [
 	createUseQueryServerHooks,
@@ -26,7 +26,7 @@ const hookFns: CreateServerHooksFn[] = [
 	createUseServerSideServerHooks,
 ];
 
-export async function renderPageRoute(
+export default async function renderPageRoute(
 	req: Request,
 	ctx: RequestContext<Record<string, string>>,
 ): Promise<Response | undefined> {
