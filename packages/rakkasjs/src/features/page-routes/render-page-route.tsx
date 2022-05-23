@@ -13,7 +13,7 @@ import { findRoute } from "../../internal/find-route";
 import {
 	ResponseContext,
 	ResponseContextProps,
-} from "../../lib/response-manipulation";
+} from "../response-manipulation/implementation";
 
 // Builtin hooks
 import createReactHelmentServerHooks from "../head/server-hooks";
