@@ -20,9 +20,6 @@ import createReactHelmentServerHooks from "./builtin-server-hooks/react-helmet-a
 import createUseQueryServerHooks from "./builtin-server-hooks/use-query";
 import createUseServerSideServerHooks from "./builtin-server-hooks/use-server-side";
 
-// Add Rakkas's static rendering crawler to the bot list
-isBot.extend(["rakkasjs"]);
-
 const hookFns: CreateServerHooksFn[] = [
 	createUseQueryServerHooks,
 	createReactHelmentServerHooks,
@@ -78,15 +75,17 @@ export async function renderPageRoute(
 	}
 
 	let app = (
-		<ResponseContext.Provider value={updateHeaders}>
-			<LocationContext.Provider value={ctx.url.href}>
-				<RouteContext.Provider value={{ onRendered, found }}>
-					<Suspense fallback={null}>
-						<App />
-					</Suspense>
-				</RouteContext.Provider>
-			</LocationContext.Provider>
-		</ResponseContext.Provider>
+		<div id="root">
+			<ResponseContext.Provider value={updateHeaders}>
+				<LocationContext.Provider value={ctx.url.href}>
+					<RouteContext.Provider value={{ onRendered, found }}>
+						<Suspense fallback={null}>
+							<App />
+						</Suspense>
+					</RouteContext.Provider>
+				</LocationContext.Provider>
+			</ResponseContext.Provider>
+		</div>
 	);
 
 	const moduleIds = found.route[2];
@@ -165,7 +164,7 @@ export async function renderPageRoute(
 			`<script type="module" async>${REACT_FAST_REFRESH_PREAMBLE}</script>`;
 	}
 
-	head += `</head><body><div id="root">`;
+	head += `</head><body>`;
 
 	const textEncoder = new TextEncoder();
 
@@ -188,7 +187,7 @@ export async function renderPageRoute(
 				controller.enqueue(chunk);
 			}
 
-			controller.enqueue(textEncoder.encode("</div></body></html>"));
+			controller.enqueue(textEncoder.encode("</body></html>"));
 			controller.close();
 		},
 	});

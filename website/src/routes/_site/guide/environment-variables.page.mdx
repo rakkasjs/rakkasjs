@@ -1,0 +1,19 @@
+# Environment variables
+
+<!-- WARNING: Don'r remove seemingly spurious <span>s. They exist to stop Vite from expanding environment variables. -->
+
+For the most part, Rakkas handles environment variables [the same way as Vite](https://vitejs.dev/guide/env-and-mode.html). <code><span>import.meta</span>.env</code> will be expanded **in build-time**. Variables starting with `VITE_` will be exposed to client-side code while the rest will only be exposed to server-side code.
+
+_Runtime_ environment variables can be accessed using **<span>process</span>.env** on the server-side. If your deployment target is `cloudflare-workers`, there's a shim in the runtime code that exposes all `ALL_CAPS` global variables with a string value in the **<span>process</span>.env** object to help with portability.
+
+If you need to access runtime environment variables in client code, you should expose them yourself, e.g., using [`rootContext`](/guide/layout-context#root-context) or [API routes](/guide/api-routes).
+
+## Configuration through environment variables
+
+If you're deployment target is `node`, the generated server supports the following environment variables:
+
+| Variable                 | Description                              |
+| ------------------------ | ---------------------------------------- |
+| `TRUST_FORWARDED_ORIGIN` | Whether to trust `x-forwarded-*` headers |
+| `HOST`                   | Server host                              |
+| `PORT`                   | HTTP port                                |

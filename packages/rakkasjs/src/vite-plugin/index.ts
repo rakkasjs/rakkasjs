@@ -1,7 +1,7 @@
 /// <reference types="@vavite/multibuild/vite-config" />
 
 import { PluginOption } from "vite";
-import react from "@vitejs/plugin-react";
+import react, { Options as ReactPluginOptions } from "@vitejs/plugin-react";
 import { injectConfig } from "./inject-config";
 import { preventViteBuild } from "./prevent-vite-build";
 import vaviteConnect from "@vavite/connect";
@@ -13,9 +13,10 @@ import { resolveClientManifest } from "./resolve-client-manifest";
 import runServerSide from "./run-server-side/run-server-side";
 
 export interface RakkasOptions {
-	/**
-	 * File extensions for pages and layouts @default ["jsx", "tsx"] */
+	/** File extensions for pages and layouts @default ["jsx","tsx"] */
 	pageExtensions?: string[];
+	/** Options passed to @vite/plugin-react */
+	react?: ReactPluginOptions;
 }
 
 export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
@@ -27,7 +28,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		}),
 		exposeViteDevServer(),
 
-		...react(),
+		...react(options.react),
 
 		preventViteBuild(),
 		injectConfig(),

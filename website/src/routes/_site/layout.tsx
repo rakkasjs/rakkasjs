@@ -60,12 +60,12 @@ const MdxLink: typeof Link = forwardRef(({ children, ...props }, ref) => {
 
 	return (
 		<Link
-			target={url?.origin === currentUrl.origin ? undefined : "_blank"}
+			target={!url || url.origin === currentUrl.origin ? undefined : "_blank"}
 			{...props}
 			ref={ref}
 		>
 			{children}
-			{url?.origin === currentUrl.origin || <ExternalIcon />}
+			{!url || url?.origin === currentUrl.origin || <ExternalIcon />}
 		</Link>
 	);
 });

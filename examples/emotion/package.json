@@ -1,0 +1,25 @@
+{
+	"name": "@rakkasjs/example-emotion",
+	"private": true,
+	"scripts": {
+		"dev": "vite --open",
+		"build": "rakkas build",
+		"start": "node dist/server"
+	},
+	"devDependencies": {
+		"@emotion/babel-plugin": "^11.7.2",
+		"@types/react": "^17.0.41",
+		"@types/react-dom": "^17.0.14",
+		"rakkasjs": "0.6.0-next.0",
+		"typescript": "^4.6.2",
+		"vite": "^2.8.6"
+	},
+	"dependencies": {
+		"@emotion/react": "^11.8.2",
+		"@emotion/styled": "^11.8.1",
+		"react": "^18.0.0-rc.3",
+		"react-dom": "^18.0.0-rc.3",
+		"react-helmet-async": "^1.2.3",
+		"zod": "^3.14.2"
+	}
+}

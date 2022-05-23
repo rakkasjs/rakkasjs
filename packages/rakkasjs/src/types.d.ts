@@ -1,4 +1,3 @@
-/*
 declare module "isbot-fast" {
 	interface IsBotFn {
 		(userAgent: string): boolean;
@@ -9,4 +8,3 @@ declare module "isbot-fast" {
 
 	export default isBot;
 }
-*/

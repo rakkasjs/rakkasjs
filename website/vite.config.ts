@@ -19,7 +19,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			$lib: "/src/lib",
-			$examples: "/src/pages/examples",
+			$examples: "/src/routes/examples",
 		},
 	},
 

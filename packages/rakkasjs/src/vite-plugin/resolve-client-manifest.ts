@@ -47,11 +47,13 @@ export function resolveClientManifest(): Plugin {
 
 		async closeBundle() {
 			if (resolvedConfig.build.ssr) return;
+
 			const from = path.resolve(
 				resolvedConfig.root,
 				resolvedConfig.build.outDir,
 				"manifest.json",
 			);
+
 			await fs.promises.rename(
 				from,
 				resolvedConfig.root + "/dist/manifest.json",

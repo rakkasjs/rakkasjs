@@ -2,3 +2,4 @@ packages:
   - "packages/*"
   - "website"
   - "testbed/*"
+  - "examples/*"

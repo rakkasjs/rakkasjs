@@ -1,0 +1,76 @@
+import { BlogPostHeader } from "$lib/BlogPostHeader";
+
+# Rakkas 0.6: React 18, streaming SSR, and Suspense
+
+<!-- TODO: Fix date -->
+
+<BlogPostHeader date="April, 2021" />
+
+💃 [Rakkas](https://github.com/rakkasjs/rakkasjs), the lightning-fast React framework powered by [Vite](https://vitejs.dev), has just released version 0.6.0. It's been almost a year since the first commit and this is the largest and least backwards compatible update so far. The reason is that, with this release, we decided to go all in with the new React 18 features. Gone are the page-centric data fetching functions that ran before the page was rendered (“fetch-then-render”). Instead, we've come up with a novel data fetching custom hook that can be used in any component (“render-as-you-fetch“).
+
+If you're familiar with Next.js, you know how cool `getServerSideProps` is. With it, you can put, say, your database access code right next to your page component without worrying about designing and maintaining a REST/GraphQL/RPC/whatever API. Next.js cleverly strips this function and its imports from the client bundle. During SSR, it's called directly. On the client, Next sends a request to the server instead of calling the function.
+
+We believe we've one-upped the ease of use of this data fetching method. Enter `useServerSideQuery`:
+
+```jsx
+import db from "./my-db-access-lib";
+
+export default function UserCard(props) {
+	const userName = props.userName;
+
+	const userQuery = useServerSideQuery(() => {
+		if (typeof userName !== "string") {
+			throw new Error("Invalid request");
+		}
+
+		return db.user.findOne(userName);
+	});
+
+	return (
+		<div class="card">
+			<img src={userQuery.data.image} />
+			<caption>{userQuery.data.fullName}</caption>
+		</div>
+	);
+}
+```
+
+This is _not_ a page, just an ordinary React component. In Rakkas 0.6 pages aren't special in terms of data fetching anymore. Just like `getServerSideProps`, the function passed to `useServerSideQuery` (`useSSQ` for hort) always runs on the server: On the client, a request is sent to the server instead of calling the function directly. Rakkas performs a transform similar to Next's to strip the function and its imports from the client bundle.
+
+`useSSQ`'s return type is inferred, so, if you're using TypeScript, you get IDE completion just like you would with a local function call. Another nice feature is that, unlike other similar data fetching hooks, `useSSQ` doesn't return loading or error states. Those are handled higher up in the component tree, with Suspense fallbacks and error boundaries respectively. This way, your component code stays clean and focused.
+
+Paired with its sibling `useServerSideMutation`, `useSSQ` let's you write code as if the server-client barrier didn't exist. This is almost too good to be true, surely there must be some caveats to this. And there are indeed.
+
+`useSSQ` “captures” the variables from the surrounding scope. In the above example, when the code runs on the client, `userName` is captured, serialized, and sent to the server. The server then runs the function and the result is serialized and sent back to the client.
+
+Well, server-side code is server-side code no matter where it resides in the source code: _You have to validate_ everything that comes from the client. But with such an easy to use hook, it may not be easy to spot what was captured from the surrounding scope and, therefore, comes from the client, necessitating validation. In this example, a simple type-check is all that's needed. In more complex cases, you will eventually need a validation library, like in any backend.
+
+Also, serialization obviously brings some limitations. Rakkas uses [`@brillout/json-s`](https://github.com/brillout/json-s) to serialize the captured variables and [`devalue`](https://github.com/Rich-Harris/devalue) to serialize the return value. They both support `Date`, `undefined`, `Set`, `Map`, `BigInt`, `RegExp`, `NaN`, and `Infinity` in addition to the standard JSON-serializable types. `devalue` also supports repeated and cyclic references. Captured values and the return value must be serializable with the respective libraries. In particular, functions, arbitrary class instances, DOM elements etc. cannot be serialized by these libraries.
+
+Another thing to consider in this example is that instead of accessing `props.userName` from the server-side function, we extract `userName` and only access that. Doing the former would capture the whole `props` object which may contain unserializable, or at least irrelevant data. This is not just to save a few bytes: By default, Rakkas uses the values of the captured variables as part of the cache key, unintentionally capturing unrelated data may cause unnecessary refetches.
+
+We don't feel these caveats are a showstopper. We're planning to create linter rules to help the programmer spot potential problems. With the help of a such tool, we think the best practices of using `useSSQ` are not harder to follow than React's own Rules of Hooks.
+
+### Circumventing CORS restrictions
+
+One practical application of `useSSQ` that may not be immediately obvious is circumventing CORS restrictions when calling third-party APIs:
+
+```ts
+const result = useServerSideQuery(() =>
+	fetch("https://some.cors.restricted.api.example.com").then((res) =>
+		res.json(),
+	),
+);
+```
+
+This works because the `fetch` call inside `useServerSideQuery` runs on the server-side (Rakkas makes `node-fetch` globally available on Node-based deployment targets) and, as such, is not affected by CORS restrictions. In effect, it creates an ad-hoc CORS proxy.
+
+## Streaming SSR
+
+Rakkas 0.6 also comes with streaming SSR support. It sends chunks of a page's HTML as soon as they are available. This way, the user starts seeing meaningful content as soon as possible instead of waiting in front of a blank screen. If you're worried about streaming SSR interfering with SEO, you'll be relieved to know that Rakkas also implements [dynamic rendering](https://huckabuy.com/technical-seo/dynamic-rendering): It sends fully rendered pages with correct status codes and head tags to bots while streaming HTML to normal browsers.
+
+## Other features
+
+If this is the first time you hear of Rakkas, it has other cool features like lightning-fast development server (courtesy of Vite), deployment on serverless platforms (including Cloudflare Workers - not supported by Next.js), truly localizable URLs, nested layouts, API routes, and more.
+
+Rakkas uses experimental and/or beta features of React and Vite. As this release illustrates, there _will_ be breaking changes until we hit 1.0. As such, it is not recommended for production use. But [go ahead and give it a try](https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx) and share your thoughts. [Star us on Github](https://github.com/rakkasjs/rakkasjs/stargazers) and [talk about Rakkas](https://twitter.com/intent/tweet?text=I%20gave%20%23RakkasJS%20a%20try!&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs) if you like what you see. If you have any questions, problems, or suggestions [open a Github issue](https://github.com/rakkasjs/rakkasjs/issues/new). If you want to [contribute](https://github.com/rakkasjs/rakkasjs/blob/main/CONTRIBUTING.md), fork and send a pull request. Check out the [open issues](https://github.com/rakkasjs/rakkasjs/issues) to see how you can help. **All feedback is welcome**, positive or negative.

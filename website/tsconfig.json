@@ -3,7 +3,7 @@
 		"strict": true,
 		"module": "ES2020",
 		"esModuleInterop": true,
-		"jsx": "react",
+		"jsx": "react-jsx",
 		"target": "es6",
 		"moduleResolution": "node",
 		"types": ["vite/client"],

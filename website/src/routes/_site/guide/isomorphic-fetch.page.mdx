@@ -1,0 +1,19 @@
+import { SampleViewer } from "./SampleViewer";
+
+# Isomorphic fetch
+
+`useServerSideQuery` is great for fetching data from your own server. But sometimes you want to fetch data from a third party API. Instead of going through the whole "client -> your server -> 3rd party API server -> your server -> client" route, it may be more efficient to send the request directly to the third party server if the CORS policy allows it. Rakkas provides the `useQuery` hook to handle this use case and more. In fact, `useServerSideQuery` uses `useQuery` under the hood.
+
+The example below re-implements the previous Pokémon stats example by fetching its data directly from the free [Pokéapi](https://pokeapi.co/).
+
+import useQueryExample from "$examples/use-query/[pokemon].page.tsx?sample";
+
+<SampleViewer
+	url="/examples/use-query/pikachu"
+	code={useQueryExample}
+	height="35em"
+/>
+
+`useQuery` takes a cache key that uniquely identifies the fetched data and a function that performs the actual fetching. The fetcher function must be isomorphic, which means it must be able to run on the server as well as on the client. That means you can't use server-only APIs (database, filesystem etc.) or client-only APIs (`window`, `document`, `localStorage` etc.). Rakkas does make sure that a global `fetch` function is always available, though.
+
+The fetcher function takes a `context` argument. It contains a `fetch` function, which is a function with the same API as the global fetch. It is the same as the global fetch on the client, but on the server there are two differences: First, `context.fetch` **forwards the credentials** (`Cookie` and `Authorization` headers) of the request. Second, **requests to your own API routes are optimized** so that they don't go through the network roundtrip. You should always use `context.fetch` for requests that require credentials and requests to your own API routes.

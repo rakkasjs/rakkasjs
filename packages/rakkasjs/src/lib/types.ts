@@ -4,6 +4,7 @@ export interface RequestContext<P extends Record<string, string> = never>
 	extends Context {
 	url: URL;
 	params: P;
+	fetch: typeof fetch;
 	locals: Locals;
 }
 
