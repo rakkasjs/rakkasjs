@@ -2,7 +2,7 @@ import { Plugin } from "vite";
 import micromatch from "micromatch";
 import glob from "fast-glob";
 import path from "path";
-import { routeToRegExp, sortRoutes } from "./util/route-utils";
+import { routeToRegExp, sortRoutes } from "../../internal/route-utils";
 
 export function apiRoutes(): Plugin {
 	const extPattern = "mjs|js|ts|jsx|tsx";

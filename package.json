@@ -2,8 +2,8 @@
 	"name": "rakkas-workspace-root",
 	"private": "true",
 	"scripts": {
-		"dev": "pnpm run dev -r --parallel --filter './packages/*'",
-		"build": "pnpm run build -r --filter './packages/*'",
+		"dev": "pnpm -r --parallel --filter './packages/*' run dev",
+		"build": "pnpm -r --filter './packages/*' run build",
 		"prepare": "husky install",
 		"precommit": "lint-staged",
 		"ci": "cross-env CI=true pnpm -r --stream run ci",

@@ -1,7 +1,7 @@
 import { Handler } from "@hattip/core";
-import { RequestContext } from "../lib";
+import { RequestContext } from "../../lib";
 
-export async function renderApiRoute(
+export default async function renderApiRoute(
 	req: Request,
 	ctx: RequestContext<Record<string, string>>,
 ) {
