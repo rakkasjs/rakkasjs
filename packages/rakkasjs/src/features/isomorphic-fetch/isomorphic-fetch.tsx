@@ -1,8 +1,9 @@
 import React, { createContext } from "react";
-import { hattipHandler } from "../hattip-handler";
-import { CreateServerHooksFn } from "../server-hooks";
+import { hattipHandler } from "../../runtime/hattip-handler";
+import { CreateServerHooksFn } from "../../runtime/server-hooks";
 
 const createServerHooks: CreateServerHooksFn = (request, ctx) => {
+	// TODO: Move this into a middleware
 	ctx.fetch = async (input, init) => {
 		let url: URL | undefined;
 
@@ -58,6 +59,6 @@ const createServerHooks: CreateServerHooksFn = (request, ctx) => {
 
 export default createServerHooks;
 
-export const IsomorphicFetchContext = createContext<{ fetch: typeof fetch }>({
+const IsomorphicFetchContext = createContext<{ fetch: typeof fetch }>({
 	fetch,
 });
