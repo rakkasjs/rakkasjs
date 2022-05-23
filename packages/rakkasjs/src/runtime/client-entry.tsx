@@ -7,7 +7,7 @@ import { ClientHooksModule } from "./client-hooks";
 import { App, RouteContext } from "../features/page-routes/internal/App";
 import { initialize, LocationContext } from "./client-side-navigation";
 
-import * as reactHelmetAsyncHooks from "./builtin-client-hooks/react-helmet-async";
+import * as reactHelmetAsyncHooks from "../features/head/client-hooks";
 import * as useQueryAsyncHooks from "./builtin-client-hooks/use-query";
 import * as clientSideHooks from "./builtin-client-hooks/client-side";
 

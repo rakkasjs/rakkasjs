@@ -16,7 +16,7 @@ import {
 } from "../../lib/response-manipulation";
 
 // Builtin hooks
-import createReactHelmentServerHooks from "../../runtime/builtin-server-hooks/react-helmet-async";
+import createReactHelmentServerHooks from "../head/server-hooks";
 import createUseQueryServerHooks from "../../runtime/builtin-server-hooks/use-query";
 import createUseServerSideServerHooks from "../run-server-side/server-hooks";
 

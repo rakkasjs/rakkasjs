@@ -1,5 +1,5 @@
 import React from "react";
-import { CreateServerHooksFn } from "../server-hooks";
+import { CreateServerHooksFn } from "../../runtime/server-hooks";
 import { HelmetProvider, FilledContext } from "react-helmet-async";
 
 const createServerHooks: CreateServerHooksFn = () => {

@@ -57,6 +57,8 @@ export const useServerSideQuery: <T>(
 	fn: ServerSideFunction<T>,
 ) => QueryResult<T> = useSSQImpl as any;
 
-export const ServerSideContextContext = createContext<ServerSideContext>(
+const ServerSideContextContext = createContext<ServerSideContext>(
 	undefined as any,
 );
+
+export { useServerSideQuery as useSSQ };
