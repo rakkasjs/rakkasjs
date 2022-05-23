@@ -2,17 +2,6 @@ export * from "./types";
 
 export { Page, Layout, PageProps, LayoutProps } from "../runtime/page-types";
 
-export type {
-	LinkProps,
-	StyledLinkProps,
-} from "../runtime/client-side-navigation";
-export {
-	navigate,
-	useLocation,
-	Link,
-	StyledLink,
-} from "../runtime/client-side-navigation";
-
 export type { ClientSideProps } from "./ClientSide";
 export { ClientSide } from "./ClientSide";
 
@@ -25,3 +14,11 @@ export { ResponseHeaders, Redirect } from "./response-manipulation";
 export * from "../features/head/lib";
 export * from "../features/use-query/lib";
 export * from "../features/run-server-side/lib";
+export {
+	LinkProps,
+	StyledLinkProps,
+	navigate,
+	useLocation,
+	Link,
+	StyledLink,
+} from "../features/client-side-navigation/lib";

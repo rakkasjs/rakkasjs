@@ -5,7 +5,7 @@ import React, {
 	useContext,
 	useLayoutEffect,
 } from "react";
-import { navigate } from "../runtime/client-side-navigation";
+import { navigate } from "../features/client-side-navigation/lib";
 import { escapeJson } from "../runtime/utils";
 
 export interface RedirectProps {

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SsrCacheContext } from "./internal/context";
+import { SsrCacheContext } from "./implementation";
 
 export function useQuery<T>(
 	key: string,

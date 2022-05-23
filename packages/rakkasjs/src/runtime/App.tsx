@@ -1,7 +1,7 @@
 import React, { createContext, ReactElement, useContext } from "react";
-import { useLocation } from "../../../runtime/client-side-navigation";
-import { findRoute, RouteMatch } from "../../../internal/find-route";
-import { LayoutModule } from "../../../runtime/page-types";
+import { useLocation } from "../features/client-side-navigation/lib";
+import { findRoute, RouteMatch } from "../internal/find-route";
+import { LayoutModule } from "./page-types";
 
 export function App() {
 	const { current: href } = useLocation();

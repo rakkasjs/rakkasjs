@@ -6,9 +6,9 @@ import React, { StrictMode, Suspense } from "react";
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { CreateServerHooksFn } from "../../runtime/server-hooks";
-import { App, RouteContext } from "./internal/App";
+import { App, RouteContext } from "../../runtime/App";
 import isBot from "isbot-fast";
-import { LocationContext } from "../../runtime/client-side-navigation";
+import { LocationContext } from "../client-side-navigation/implementation";
 import { findRoute } from "../../internal/find-route";
 import {
 	ResponseContext,

@@ -4,8 +4,11 @@
 import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { ClientHooksModule } from "./client-hooks";
-import { App, RouteContext } from "../features/page-routes/internal/App";
-import { initialize, LocationContext } from "./client-side-navigation";
+import { App, RouteContext } from "./App";
+import {
+	initialize,
+	LocationContext,
+} from "../features/client-side-navigation/implementation";
 
 import * as reactHelmetAsyncHooks from "../features/head/client-hooks";
 import * as useQueryHooks from "../features/use-query/client-hooks";
