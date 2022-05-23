@@ -12,7 +12,7 @@ import {
 
 import * as reactHelmetAsyncHooks from "../features/head/client-hooks";
 import * as useQueryHooks from "../features/use-query/client-hooks";
-import * as clientSideHooks from "./builtin-client-hooks/client-side";
+import * as clientSideHooks from "../features/client-only/client-hooks";
 
 const hookModules: ClientHooksModule[] = [
 	useQueryHooks,

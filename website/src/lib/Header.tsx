@@ -1,6 +1,6 @@
 import { Logomark } from "./Logomark";
 import { Logotype } from "./Logotype";
-import { Link, StyledLink, useLocation, ClientSide } from "rakkasjs";
+import { Link, StyledLink, useLocation, ClientOnly } from "rakkasjs";
 import React, { FC, useEffect, useRef, useState } from "react";
 import css from "./Header.module.css";
 import { GithubLogo } from "$lib/GithubLogo";
@@ -138,13 +138,13 @@ export const Header: FC = () => {
 
 			<span className={css.nav}>{nav}</span>
 
-			<ClientSide fallback={<span className={css.docSearchPlaceholder} />}>
+			<ClientOnly fallback={<span className={css.docSearchPlaceholder} />}>
 				<DocSearch
 					appId="Q8E33NN7EC"
 					apiKey="ea3307404701ddce0c61b918c2fee8d4"
 					indexName="rakkasjs"
 				/>
-			</ClientSide>
+			</ClientOnly>
 
 			<aside
 				className={css.sidebar + (isOpen ? " " + css.open : "")}

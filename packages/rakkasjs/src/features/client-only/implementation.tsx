@@ -6,18 +6,18 @@ import React, {
 	useEffect,
 } from "react";
 
-export interface ClientSideProps {
+export interface ClientOnlyProps {
 	/** Fallback to be rendered during SSR */
 	fallback: ReactNode;
 	/** Content to be rendered on client-side */
 	children: ReactNode;
 }
 
-// TODO: Strip ClientSide component's children out of the SSR bundle
+// TODO: Strip ClientOnly component's children out of the SSR bundle
 
 /** Opt out of server-side rendering */
-export function ClientSide(props: ClientSideProps): ReactElement {
-	const context = useContext(ClientSideContext);
+export function ClientOnly(props: ClientOnlyProps): ReactElement {
+	const context = useContext(ClientOnlyContext);
 
 	useEffect(() => {
 		if (!context.hydrated) {
@@ -28,7 +28,7 @@ export function ClientSide(props: ClientSideProps): ReactElement {
 	return <>{context && context.hydrated ? props.children : props.fallback}</>;
 }
 
-export const ClientSideContext = createContext<{
+export const ClientOnlyContext = createContext<{
 	hydrated: boolean;
 	setHydrated: () => void;
 }>(undefined as any);
