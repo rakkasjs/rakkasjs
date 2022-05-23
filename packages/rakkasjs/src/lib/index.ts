@@ -13,8 +13,6 @@ export {
 	StyledLink,
 } from "../runtime/client-side-navigation";
 
-export { useQuery } from "./use-query/use-query";
-
 export type { ClientSideProps } from "./ClientSide";
 export { ClientSide } from "./ClientSide";
 
@@ -24,5 +22,6 @@ export type {
 } from "./response-manipulation";
 export { ResponseHeaders, Redirect } from "./response-manipulation";
 
-export * from "../features/run-server-side/lib";
 export * from "../features/head/lib";
+export * from "../features/use-query/lib";
+export * from "../features/run-server-side/lib";

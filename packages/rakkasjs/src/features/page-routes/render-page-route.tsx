@@ -17,7 +17,7 @@ import {
 
 // Builtin hooks
 import createReactHelmentServerHooks from "../head/server-hooks";
-import createUseQueryServerHooks from "../../runtime/builtin-server-hooks/use-query";
+import createUseQueryServerHooks from "../use-query/server-hooks";
 import createUseServerSideServerHooks from "../run-server-side/server-hooks";
 
 const hookFns: CreateServerHooksFn[] = [

@@ -1,4 +1,5 @@
-import { useContext, createContext } from "react";
+import { useContext } from "react";
+import { SsrCacheContext } from "./internal/context";
 
 export function useQuery<T>(
 	key: string,
@@ -38,12 +39,3 @@ export type QueryResult<T> =
 			value?: undefined;
 			error: unknown;
 	  };
-
-export interface SsrCache {
-	get(key: string): CacheItem | undefined;
-	set(key: string, value: CacheItem): void;
-}
-
-export type CacheItem = [success: number, value: any];
-
-export const SsrCacheContext = createContext<SsrCache>(undefined as any);

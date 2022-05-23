@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createContext, useContext } from "react";
-import { QueryResult, useQuery } from "../../lib/use-query/use-query";
+import { QueryResult, useQuery } from "../use-query/lib";
 import { stringify } from "@brillout/json-s";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

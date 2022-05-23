@@ -1,6 +1,6 @@
 import React from "react";
-import { CreateServerHooksFn } from "../server-hooks";
-import { SsrCacheContext } from "../../lib/use-query/use-query";
+import { CreateServerHooksFn } from "../../runtime/server-hooks";
+import { SsrCacheContext } from "./internal/context";
 import devaule from "devalue";
 
 const createServerHooks: CreateServerHooksFn = () => {

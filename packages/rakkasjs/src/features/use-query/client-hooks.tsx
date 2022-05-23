@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { SsrCacheContext } from "../../lib/use-query/use-query";
+import { SsrCacheContext } from "./internal/context";
 
 declare const $RAKKAS_USE_QUERY_SSR_CACHE: Record<string, any>;
 
