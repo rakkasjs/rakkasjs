@@ -24,7 +24,7 @@ import helloExample from "$examples/hello/index.page.jsx?sample";
 	url="/examples/hello"
 />
 
-Rakkas uses [`react-helmet-async`](https://github.com/staylor/react-helmet-async#readme) for managing head tags like `title`. The `Head` component is simply `Helmet` reexported, check their documentation for usage examples.
+Rakkas comes with a `Head` component for managing head tags like `title`. It is, in fact, simply `Helmet` from [`react-helmet-async`](https://github.com/staylor/react-helmet-async#readme) bundled and re-exported. Check their documentation for usage examples.
 
 ## Dynamic routes <a id="dynamic-routes"/>
 
@@ -42,7 +42,7 @@ import paramsExample from "$examples/params/[userName].page.jsx?sample";
 
 You can use more than one dynamic parameter like `/user/[userName]/posts/[postId]`. You can even put multiple parameters in a single path segment like `/user-[name]-[surname]/contact-info` (matches `/user-fatih-aygun/contact-info` with `params: { name: "fatih", surname: "aygun" }` for instance).
 
-More specific routes have priority over more generic ones, so you can have both `/products/list` for a specific match and `/products/[productId]` as a catch-all route.
+More specific routes have priority over generic ones, so you can have both `/products/list` for a specific match and `/products/[productId]` as a catch-all route.
 
 ### Spread parameters
 
