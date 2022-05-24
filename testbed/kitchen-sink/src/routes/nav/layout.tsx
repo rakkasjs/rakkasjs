@@ -1,8 +1,10 @@
 import { ReactNode, Suspense, useState } from "react";
-import { StyledLink, StyledLinkProps } from "rakkasjs";
+import { StyledLink, StyledLinkProps, useLocation } from "rakkasjs";
 
 export default function NavLayout({ children }: { children: ReactNode }) {
 	const [clicked, setClicked] = useState(0);
+	const loc = useLocation();
+	const url = new URL(loc.current);
 
 	const linkProps: StyledLinkProps = {
 		activeStyle: {
@@ -19,6 +21,11 @@ export default function NavLayout({ children }: { children: ReactNode }) {
 			<button onClick={() => setClicked((old) => old + 1)}>
 				State test: {clicked}
 			</button>
+
+			<div
+				style={url.searchParams.get("scroll") ? { height: "200vh" } : undefined}
+			/>
+
 			<nav>
 				<ul>
 					<li>

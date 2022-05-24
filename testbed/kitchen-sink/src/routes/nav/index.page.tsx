@@ -1,3 +1,7 @@
 export default function NavHomePAge() {
-	return <p>Client-side navigation test page</p>;
+	return (
+		<div>
+			<p>Client-side navigation test page home</p>
+		</div>
+	);
 }

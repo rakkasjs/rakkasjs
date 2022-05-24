@@ -186,6 +186,41 @@ function testCase(title: string, dev: boolean, command?: string) {
 			);
 		});
 
+		test("restores scroll position", async () => {
+			await page.goto(TEST_HOST + "/nav?scroll=1");
+			await page.waitForSelector(".hydrated");
+
+			// Scroll to the bottom
+			await page.evaluate(() =>
+				document.querySelector("footer")?.scrollIntoView(),
+			);
+			await page.waitForFunction(() => window.scrollY > 0);
+
+			const link: ElementHandle<HTMLAnchorElement> | null =
+				await page.waitForSelector("a[href='/nav/a']");
+			expect(link).toBeTruthy();
+
+			link!.click();
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Client-side navigation test page A"),
+			);
+
+			// Make sure it scrolled to the top
+			const scrollPos = await page.evaluate(() => window.scrollY);
+			expect(scrollPos).toBe(0);
+
+			// Go back to the first page
+			await page.goBack();
+			await page.waitForFunction(() =>
+				document.body.innerText.includes(
+					"Client-side navigation test page home",
+				),
+			);
+
+			// Make sure it scrolls to the bottom
+			await page.waitForFunction(() => window.scrollY > 0);
+		});
+
 		test("redirects", async () => {
 			await page.goto(TEST_HOST + "/redirect/shallow");
 			await page.waitForFunction(() =>

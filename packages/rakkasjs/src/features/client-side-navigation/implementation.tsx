@@ -11,6 +11,8 @@ import React, {
 	useSyncExternalStore,
 } from "react";
 
+let lastRenderedId: string;
+
 export function useLocation() {
 	const staticLocation = useContext(LocationContext);
 
@@ -22,10 +24,34 @@ export function useLocation() {
 
 	const deferredLocation = useDeferredValue(currentLocation);
 
+	useEffect(() => {
+		lastRenderedId = history.state.id;
+		restoreScrollPosition();
+	}, [deferredLocation]);
+
 	return {
 		current: deferredLocation,
 		pending: currentLocation === deferredLocation ? undefined : currentLocation,
 	};
+}
+
+function restoreScrollPosition() {
+	const scrollPosition = sessionStorage.getItem(`rakkas:${history.state?.id}`);
+
+	if (scrollPosition) {
+		const { x, y } = JSON.parse(scrollPosition);
+		scrollTo(x, y);
+	} else {
+		const hash = location.hash;
+		if (hash) {
+			const element = document.querySelector(hash);
+			if (element) {
+				element.scrollIntoView();
+			}
+		} else {
+			scrollTo(0, 0);
+		}
+	}
 }
 
 export interface NavigationOptions {
@@ -69,19 +95,31 @@ function subscribeToLocation(onStoreChange: () => void): () => void {
 }
 
 function getLocationSnapshot(): string {
-	return window.location.href;
+	return location.href;
 }
 
 export function initialize() {
+	history.replaceState(
+		{ id: createUniqueId(), data: null, index: 0 },
+		"",
+		location.href,
+	);
 	addEventListener("popstate", handleNavigation);
 }
 
 async function handleNavigation() {
+	// Save scroll position
+	const scrollPosition = { x: scrollX, y: scrollY };
+	sessionStorage.setItem(
+		`rakkas:${lastRenderedId}`,
+		JSON.stringify(scrollPosition),
+	);
+
 	locationChangeListeners.forEach((listener) => listener());
 }
 
 function createUniqueId(): string {
-	return Math.random().toString(36).substr(2, 9);
+	return Math.random().toString(36).slice(2, 9);
 }
 
 let nextIndex = 0;
