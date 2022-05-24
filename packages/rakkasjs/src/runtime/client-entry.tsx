@@ -1,6 +1,3 @@
-/// <reference types="react/next" />
-/// <reference types="react-dom/next" />
-
 import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { App, RouteContext } from "./App";

@@ -8,3 +8,7 @@ declare module "isbot-fast" {
 
 	export default isBot;
 }
+
+declare module "react-dom/server.browser" {
+	export * from "react-dom/server";
+}

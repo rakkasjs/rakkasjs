@@ -14,16 +14,16 @@
 	"devDependencies": {
 		"@cyco130/eslint-config": "^1.0.0",
 		"eslint": "^8.10.0",
-		"kill-port": "^1.6.1",
+		"kill-port": "^2.0.0",
 		"node-fetch": "^3.2.2",
-		"puppeteer": "^13.5.1",
+		"puppeteer": "^14.1.1",
 		"rakkasjs": "workspace:*",
 		"typescript": "^4.6.2",
-		"vite": "^2.8.6"
+		"vite": "^2.9.9"
 	},
 	"dependencies": {
 		"@types/react": "^18.0.9",
-		"@types/react-dom": "^18.0.4",
+		"@types/react-dom": "^18.0.5",
 		"react": "^18.1.0",
 		"react-dom": "^18.1.0",
 		"react-helmet-async": "^1.2.3"

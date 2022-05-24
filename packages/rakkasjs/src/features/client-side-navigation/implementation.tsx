@@ -1,5 +1,3 @@
-/// <reference types="react/next" />
-
 import React, {
 	AnchorHTMLAttributes,
 	createContext,

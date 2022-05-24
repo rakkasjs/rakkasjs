@@ -2,7 +2,6 @@
 
 import { RequestContext } from "../../lib";
 import React, { StrictMode, Suspense } from "react";
-// @ts-expect-error: React 18 types aren't ready yet
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { App, RouteContext } from "../../runtime/App";
@@ -121,7 +120,12 @@ export default async function renderPageRoute(
 	if (userAgent && isBot(userAgent)) {
 		await reactStream.allReady;
 	} else {
-		await Promise.race([reactStream.allReady, Promise.resolve()]);
+		await Promise.race([
+			reactStream.allReady,
+			new Promise<void>((resolve) => {
+				setTimeout(resolve, SSR_TIMEOUT);
+			}),
+		]);
 	}
 
 	if (redirected) {
@@ -202,3 +206,5 @@ function redirectBody(href: string) {
 	// http-equiv="refresh" is useful for static prerendering
 	return `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=${escaped}"></head><body><a href="${escaped}">${escaped}</a></body></html>`;
 }
+
+const SSR_TIMEOUT = 0;

@@ -31,7 +31,9 @@ function testCase(title: string, dev: boolean, command?: string) {
 	describe(title, () => {
 		if (command) {
 			beforeAll(async () => {
-				await kill(3000, "tcp");
+				await kill(3000, "tcp").catch(() => {
+					// Do nothing
+				});
 
 				spawn(command, {
 					shell: true,
@@ -244,6 +246,8 @@ afterAll(async () => {
 	await browser.close();
 
 	if (!import.meta.env.TEST_HOST) {
-		await kill(3000, "tcp");
+		await kill(3000, "tcp").catch(() => {
+			// Do nothing
+		});
 	}
 });

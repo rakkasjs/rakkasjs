@@ -9,10 +9,10 @@
 	"devDependencies": {
 		"@emotion/babel-plugin": "^11.7.2",
 		"@types/react": "^18.0.9",
-		"@types/react-dom": "^18.0.4",
+		"@types/react-dom": "^18.0.5",
 		"rakkasjs": "0.6.0-next.0",
 		"typescript": "^4.6.2",
-		"vite": "^2.8.6"
+		"vite": "^2.9.9"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.8.2",
@@ -20,6 +20,6 @@
 		"react": "^18.1.0",
 		"react-dom": "^18.1.0",
 		"react-helmet-async": "^1.2.3",
-		"zod": "^3.14.2"
+		"zod": "^3.17.3"
 	}
 }
