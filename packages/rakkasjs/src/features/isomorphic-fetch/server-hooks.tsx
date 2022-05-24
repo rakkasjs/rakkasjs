@@ -3,7 +3,6 @@ import { hattipHandler } from "../../runtime/hattip-handler";
 import { CreateServerHooksFn } from "../../runtime/server-hooks";
 
 const createIsomorphicFetchHooks: CreateServerHooksFn = (request, ctx) => {
-	// TODO: Move this into a middleware
 	ctx.fetch = async (input, init) => {
 		let url: URL | undefined;
 
@@ -59,6 +58,7 @@ const createIsomorphicFetchHooks: CreateServerHooksFn = (request, ctx) => {
 
 export default createIsomorphicFetchHooks;
 
+// TODO: Make this available on useQuery and similar
 const IsomorphicFetchContext = createContext<{ fetch: typeof fetch }>(
 	undefined as any,
 );
