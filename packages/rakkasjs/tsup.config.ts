@@ -38,7 +38,6 @@ export default defineConfig([
 			"react-dom",
 			"react-dom/server",
 			"react-dom/server.browser",
-			"react-helmet-async",
 			"@vavite/expose-vite-dev-server/vite-dev-server",
 		],
 		dts: {

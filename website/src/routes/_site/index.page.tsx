@@ -1,18 +1,17 @@
 import { Logomark } from "$lib/Logomark";
 import { Logotype } from "$lib/Logotype";
-import React, { FC } from "react";
+import { FC } from "react";
 import css from "./index.module.css";
-import { Link } from "rakkasjs";
-import { Helmet } from "react-helmet-async";
+import { Link, Head } from "rakkasjs";
 import { ExternalIcon } from "$lib/ExternalIcon";
 import { toc } from "./blog/toc";
 import { BlogPostHeader } from "$lib/BlogPostHeader";
 
 const HomePage: FC = () => (
 	<main className={css.main}>
-		<Helmet>
+		<Head>
 			<title>Rakkas</title>
-		</Helmet>
+		</Head>
 
 		<div className={css.banner}>
 			<div className={css.logo}>

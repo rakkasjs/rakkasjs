@@ -1,8 +1,7 @@
 import { toc } from "./toc";
 import React from "react";
-import { Layout, Link } from "rakkasjs";
+import { Layout, Link, Head } from "rakkasjs";
 import css from "./layout.module.css";
-import { Helmet } from "react-helmet-async";
 import { Toc } from "$lib/Toc";
 
 // TODO: Handle errors
@@ -23,7 +22,7 @@ const GuideLayout: Layout = ({ children, url }) => {
 
 	return (
 		<div className={css.wrapper}>
-			<Helmet
+			<Head
 				title={
 					toc[currentIndex]
 						? toc[currentIndex].title + " - Rakkas Guide"

@@ -38,7 +38,6 @@
 	"peerDependencies": {
 		"react": "^18.1.0",
 		"react-dom": "^18.1.0",
-		"react-helmet-async": "^1.2.3",
 		"vite": "2.8.6"
 	},
 	"devDependencies": {
