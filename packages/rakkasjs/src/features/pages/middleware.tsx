@@ -36,11 +36,6 @@ export default async function renderPageRoute(
 
 	if (!found) return;
 
-	let onRendered: (() => void) | undefined;
-	const renderPromise = new Promise<void>((resolve) => {
-		onRendered = resolve;
-	});
-
 	let redirected: boolean | undefined;
 	let status: number | undefined = undefined;
 	const headers = new Headers({
@@ -61,13 +56,30 @@ export default async function renderPageRoute(
 		}
 	}
 
-	let app = (
+	let app = <App />;
+	for (const hooks of hooksObjects) {
+		if (hooks.wrapApp) {
+			app = hooks.wrapApp(app);
+		}
+	}
+
+	let resolveRenderPromise: () => void;
+	const renderPromise = new Promise<void>(
+		(resolve) => (resolveRenderPromise = resolve),
+	);
+
+	app = (
 		<div id="root">
 			<ResponseContext.Provider value={updateHeaders}>
-				<RouteContext.Provider value={{ onRendered, found }}>
-					<Suspense fallback={null}>
-						<App />
-					</Suspense>
+				<RouteContext.Provider
+					value={{
+						onRendered() {
+							resolveRenderPromise();
+						},
+						found,
+					}}
+				>
+					<Suspense>{app}</Suspense>
 				</RouteContext.Provider>
 			</ResponseContext.Provider>
 		</div>
@@ -102,12 +114,6 @@ export default async function renderPageRoute(
 		scriptPath = clientManifest![scriptPath]?.file ?? scriptPath;
 	}
 
-	for (const hooks of hooksObjects) {
-		if (hooks.wrapApp) {
-			app = hooks.wrapApp(app);
-		}
-	}
-
 	const reactStream: ReadableStream & { allReady: Promise<void> } =
 		await renderToReadableStream(<StrictMode>{app}</StrictMode>, {
 			// TODO: AbortController
@@ -120,12 +126,13 @@ export default async function renderPageRoute(
 	if (userAgent && isBot(userAgent)) {
 		await reactStream.allReady;
 	} else {
-		await Promise.race([
-			reactStream.allReady,
-			new Promise<void>((resolve) => {
-				setTimeout(resolve, SSR_TIMEOUT);
-			}),
-		]);
+		await Promise.resolve();
+		// await Promise.race([
+		// 	reactStream.allReady,
+		// 	new Promise<void>((resolve) => {
+		// 		setTimeout(resolve, SSR_TIMEOUT);
+		// 	}),
+		// ]);
 	}
 
 	if (redirected) {
@@ -207,4 +214,4 @@ function redirectBody(href: string) {
 	return `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=${escaped}"></head><body><a href="${escaped}">${escaped}</a></body></html>`;
 }
 
-const SSR_TIMEOUT = 0;
+// const SSR_TIMEOUT = 0;

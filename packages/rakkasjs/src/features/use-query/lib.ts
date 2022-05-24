@@ -1,41 +1,47 @@
-import { useContext } from "react";
+import { useContext, useState, useSyncExternalStore } from "react";
 import { SsrCacheContext } from "./implementation";
 
 export function useQuery<T>(
 	key: string,
 	fn: () => T | Promise<T>,
 ): QueryResult<T> {
+	const [, setInvalidator] = useState(0);
+
 	const cache = useContext(SsrCacheContext);
-	const item = cache.get(key);
+
+	const item = useSyncExternalStore(
+		() =>
+			cache.subscribe(key, () => {
+				setInvalidator((i) => (i + 1) & 0xffffffff);
+			}),
+		() => cache.get(key),
+		() => cache.get(key),
+	);
 
 	// TODO: Implement SWR, background fetching etc.
 	// TODO: Use useContextSelector https://github.com/dai-shi/use-context-selector
 
 	if (item) {
-		return item[0]
-			? ({ success: true, value: item[1] } as any)
-			: ({ success: false, error: item[1] } as any);
+		if (item[0] instanceof Promise) {
+			throw item[0];
+		}
+
+		return {
+			value: item[0],
+			async refetch() {
+				cache.set(key, Promise.resolve(fn()));
+			},
+			refetching: item[2] !== undefined,
+		};
 	}
 
-	throw (async () => {
-		try {
-			const value = await fn();
-			cache.set(key, [1, value]);
-		} catch (error) {
-			// TODO: Don't leak server errors
-			cache.set(key, [0, error]);
-		}
-	})();
+	const promise = Promise.resolve(fn());
+	cache.set(key, promise);
+	throw promise;
 }
 
-export type QueryResult<T> =
-	| {
-			success: true;
-			value: T;
-			error?: undefined;
-	  }
-	| {
-			success: false;
-			value?: undefined;
-			error: unknown;
-	  };
+export interface QueryResult<T> {
+	value: T;
+	refetch(): void;
+	refetching: boolean;
+}

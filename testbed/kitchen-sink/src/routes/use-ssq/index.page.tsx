@@ -9,10 +9,6 @@ export default function UseSsq() {
 		ssr: import.meta.env.SSR,
 	}));
 
-	if (!result.success) {
-		return <p>Error</p>;
-	}
-
 	return (
 		<p>
 			Result: {result.value.result}, SSR: {String(result.value.ssr)}

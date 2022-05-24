@@ -1,7 +1,7 @@
 import React from "react";
 import { CreateServerHooksFn } from "../../runtime/server-hooks";
 import { SsrCacheContext } from "./implementation";
-import devaule from "devalue";
+import devalue from "devalue";
 
 const createServerHooks: CreateServerHooksFn = () => {
 	const cache = {
@@ -22,10 +22,16 @@ const createServerHooks: CreateServerHooksFn = () => {
 			return this._items[key];
 		},
 
-		set(key: string, value: any) {
-			this._items[key] = value;
-			this._newItems[key] = value;
-			this._hasNewItems = true;
+		set(key: string, promise: Promise<any>) {
+			this._items[key] = [promise];
+			promise.then((value) => {
+				this._items[key] = this._newItems[key] = [value];
+				this._hasNewItems = true;
+			});
+		},
+
+		subscribe() {
+			throw new Error("Cannot subscribe on the server");
 		},
 	};
 
@@ -37,13 +43,13 @@ const createServerHooks: CreateServerHooksFn = () => {
 		},
 
 		emitToDocumentHead() {
-			const newItemsString = devaule(cache._getNewItems());
+			const newItemsString = devalue(cache._getNewItems());
 			return `<script>$RAKKAS_USE_QUERY_SSR_CACHE=${newItemsString}</script>`;
 		},
 
 		emitBeforeSsrChunk() {
 			if (cache._hasNewItems) {
-				const newItemsString = devaule(cache._getNewItems());
+				const newItemsString = devalue(cache._getNewItems());
 				return `<script>Object.assign($RAKKAS_USE_QUERY_SSR_CACHE,${newItemsString})</script>`;
 			}
 

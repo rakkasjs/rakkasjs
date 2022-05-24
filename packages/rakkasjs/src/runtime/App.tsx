@@ -13,47 +13,10 @@ export function App() {
 	const url = new URL(href);
 
 	if (!lastRoute.last || lastRoute.last.pathname !== url.pathname) {
-		throw (async () => {
-			let found = lastRoute.found;
-
-			if (!found) {
-				const routes = (await import("virtual:rakkasjs:client-page-routes"))
-					.default;
-
-				found = findRoute(routes, url.pathname);
-
-				if (!found) {
-					// TODO: Handle 404
-					throw new Error("Page not found");
-				}
-			}
-
-			const importers = found.route[1];
-
-			const promises = importers.map((importer) =>
-				importer(),
-			) as Promise<LayoutModule>[];
-
-			const modules = await Promise.all(promises);
-
-			const components = modules.map(
-				(m) => m.default || (({ children }: any) => children),
-			);
-
-			const app = components.reduce(
-				(prev, Component) => (
-					<Component children={prev} url={url} params={found!.params} />
-				),
-				null as any as ReactElement,
-			);
-
-			lastRoute.last = {
-				pathname: url.pathname,
-				app,
-			};
-
+		throw loadRoute(url, lastRoute.found).then((route) => {
+			lastRoute.last = route;
 			lastRoute.onRendered?.();
-		})();
+		});
 	}
 
 	const app = lastRoute.last.app;
@@ -61,7 +24,9 @@ export function App() {
 	return app;
 }
 
-export const RouteContext = createContext<{
+export const RouteContext = createContext<RouteContextContent>({});
+
+interface RouteContextContent {
 	found?: RouteMatch<
 		| typeof import("virtual:rakkasjs:client-page-routes").default[0]
 		| typeof import("virtual:rakkasjs:server-page-routes").default[0]
@@ -71,4 +36,47 @@ export const RouteContext = createContext<{
 		app: ReactElement;
 	};
 	onRendered?(): void;
-}>({});
+}
+
+export async function loadRoute(
+	url: URL,
+	lastFound?: RouteContextContent["found"],
+) {
+	let found = lastFound;
+
+	if (!found) {
+		const routes = (await import("virtual:rakkasjs:client-page-routes"))
+			.default;
+
+		found = findRoute(routes, url.pathname);
+
+		if (!found) {
+			// TODO: Handle 404
+			throw new Error("Page not found");
+		}
+	}
+
+	const importers = found.route[1];
+
+	const promises = importers.map((importer) =>
+		importer(),
+	) as Promise<LayoutModule>[];
+
+	const modules = await Promise.all(promises);
+
+	const components = modules.map(
+		(m) => m.default || (({ children }: any) => children),
+	);
+
+	const app = components.reduce(
+		(prev, Component) => (
+			<Component children={prev} url={url} params={found!.params} />
+		),
+		null as any as ReactElement,
+	);
+
+	return {
+		pathname: url.pathname,
+		app,
+	};
+}

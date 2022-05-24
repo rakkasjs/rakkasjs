@@ -1,6 +1,6 @@
 import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot } from "react-dom/client";
-import { App, RouteContext } from "./App";
+import { App, loadRoute, RouteContext } from "./App";
 import clientHooks from "./feature-client-hooks";
 
 export async function go() {
@@ -14,19 +14,21 @@ async function startClient() {
 		}
 	}
 
-	let app = (
-		<RouteContext.Provider value={{}}>
-			<Suspense fallback={null}>
-				<App />
-			</Suspense>
-		</RouteContext.Provider>
-	);
+	const route = await loadRoute(new URL(window.location.href));
+
+	let app = <App />;
 
 	for (const hooks of clientHooks) {
 		if (hooks.wrapApp) {
 			app = hooks.wrapApp(app);
 		}
 	}
+
+	app = (
+		<RouteContext.Provider value={{ last: route }}>
+			<Suspense>{app}</Suspense>
+		</RouteContext.Provider>
+	);
 
 	hydrateRoot(document.getElementById("root")!, <StrictMode>{app}</StrictMode>);
 }

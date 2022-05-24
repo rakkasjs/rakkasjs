@@ -1,6 +1,7 @@
 import React, { createContext } from "react";
 import { hattipHandler } from "../../runtime/hattip-handler";
 import { CreateServerHooksFn } from "../../runtime/server-hooks";
+import { runHandler } from "@hattip/core";
 
 const createIsomorphicFetchHooks: CreateServerHooksFn = (request, ctx) => {
 	ctx.fetch = async (input, init) => {
@@ -35,12 +36,13 @@ const createIsomorphicFetchHooks: CreateServerHooksFn = (request, ctx) => {
 			newRequest.headers.delete("authorization");
 		}
 
-		let response: Response | undefined;
+		let response: Response | undefined | null;
 
 		if (sameOrigin) {
-			response = await hattipHandler(newRequest, {
+			response = await runHandler(hattipHandler, newRequest, {
 				ip: ctx.ip,
 				waitUntil: ctx.waitUntil,
+				next: () => fetch(newRequest),
 			});
 		}
 
