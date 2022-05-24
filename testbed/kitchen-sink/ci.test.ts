@@ -221,6 +221,26 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.waitForFunction(() => window.scrollY > 0);
 		});
 
+		test("handles relative links correctly during transitions", async () => {
+			await page.goto(TEST_HOST + "/nav");
+			await page.waitForSelector(".hydrated");
+
+			const link: ElementHandle<HTMLAnchorElement> | null =
+				await page.waitForSelector("a[href='/nav/a']");
+			expect(link).toBeTruthy();
+
+			link!.click();
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Navigating to"),
+			);
+
+			const x = await page.evaluate(
+				() =>
+					(document.getElementById("relative-link") as HTMLAnchorElement).href,
+			);
+			expect(x).toBe(TEST_HOST + "/relative");
+		});
+
 		test("redirects", async () => {
 			await page.goto(TEST_HOST + "/redirect/shallow");
 			await page.waitForFunction(() =>

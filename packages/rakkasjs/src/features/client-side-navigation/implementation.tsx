@@ -25,6 +25,7 @@ export function useLocation() {
 	const deferredLocation = useDeferredValue(currentLocation);
 
 	useEffect(() => {
+		base.href = deferredLocation;
 		lastRenderedId = history.state.id;
 		restoreScrollPosition();
 	}, [deferredLocation]);
@@ -98,12 +99,22 @@ function getLocationSnapshot(): string {
 	return location.href;
 }
 
+let base: HTMLBaseElement;
+
 export function initialize() {
+	base = document.head.querySelector("base")!;
+	if (!base) {
+		base = document.createElement("base");
+		document.head.insertBefore(base, document.head.firstChild);
+	}
+	base.href = location.href;
+
 	history.replaceState(
 		{ id: createUniqueId(), data: null, index: 0 },
 		"",
 		location.href,
 	);
+
 	addEventListener("popstate", handleNavigation);
 }
 
