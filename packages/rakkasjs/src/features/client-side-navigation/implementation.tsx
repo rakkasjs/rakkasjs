@@ -12,6 +12,8 @@ import React, {
 } from "react";
 
 let lastRenderedId: string;
+let navigationPromise: Promise<void> | undefined;
+let navigationResolve: (() => void) | undefined;
 
 export function useLocation() {
 	const staticLocation = useContext(LocationContext);
@@ -28,6 +30,10 @@ export function useLocation() {
 		base.href = deferredLocation;
 		lastRenderedId = history.state.id;
 		restoreScrollPosition();
+
+		navigationResolve?.();
+		navigationPromise = undefined;
+		navigationResolve = undefined;
 	}, [deferredLocation]);
 
 	return {
@@ -61,12 +67,17 @@ export interface NavigationOptions {
 	data?: any;
 }
 
-export async function navigate(to: string, options?: NavigationOptions) {
+export async function navigate(
+	to: string,
+	options?: NavigationOptions,
+): Promise<boolean> {
 	const url = new URL(to, location.href);
 
 	if (url.origin !== location.origin) {
 		location.href = url.href;
-		return;
+		return new Promise<boolean>(() => {
+			// Never resolves
+		});
 	}
 
 	const { replace, data } = options || {};
@@ -79,7 +90,15 @@ export async function navigate(to: string, options?: NavigationOptions) {
 		history.pushState({ id, data, index }, "", to);
 	}
 
-	return handleNavigation();
+	navigationPromise =
+		navigationPromise ||
+		new Promise<void>((resolve) => {
+			navigationResolve = resolve;
+		});
+
+	handleNavigation();
+
+	return navigationPromise.then(() => url.href === location.href);
 }
 
 if (typeof window !== "undefined") {

@@ -5,29 +5,29 @@ export default function UseQueryPage() {
 	return (
 		<div>
 			<h1>Here we go!</h1>
-			<SuspendedDisplay id="1" />
+			<SuspendedDisplay />
+			<SuspendedDisplay />
 		</div>
 	);
 }
 
-function SuspendedDisplay({ id }: { id: string }) {
+function SuspendedDisplay() {
 	return (
 		<Suspense fallback={<p>Loading...</p>}>
-			<TimeDisplay id={id} />
+			<TimeDisplay />
 		</Suspense>
 	);
 }
 
-function TimeDisplay(props: { id: string }) {
+function TimeDisplay() {
 	const result = useQuery("time", async () => {
 		// Wait a second
-		await new Promise((resolve) => setTimeout(resolve, 5000));
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 		return new Date().toISOString();
 	});
 
 	return (
 		<div>
-			<span style={{ color: "red" }}>{props.id}</span>
 			<p>
 				{result.value}
 				{result.refetching && " (refetching)"}

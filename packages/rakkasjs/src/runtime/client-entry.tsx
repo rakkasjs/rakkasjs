@@ -16,7 +16,11 @@ async function startClient() {
 
 	const route = await loadRoute(new URL(window.location.href));
 
-	let app = <App />;
+	let app = (
+		<StrictMode>
+			<App />
+		</StrictMode>
+	);
 
 	for (const hooks of clientHooks) {
 		if (hooks.wrapApp) {
@@ -30,7 +34,7 @@ async function startClient() {
 		</RouteContext.Provider>
 	);
 
-	hydrateRoot(document.getElementById("root")!, <StrictMode>{app}</StrictMode>);
+	hydrateRoot(document.getElementById("root")!, app);
 }
 
 startClient();

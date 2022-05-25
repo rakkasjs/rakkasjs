@@ -23,11 +23,12 @@ export function wrapApp(app: ReactElement): ReactElement {
 					});
 				},
 				subscribe(key, fn) {
-					$RAKKAS_USE_QUERY_SSR_CACHE[key]![1] ||= new Set();
-					$RAKKAS_USE_QUERY_SSR_CACHE[key]![1]!.add(fn);
+					const subscribers = ($RAKKAS_USE_QUERY_SSR_CACHE[key]![1] ||=
+						new Set());
+					subscribers.add(fn);
 
 					return () => {
-						$RAKKAS_USE_QUERY_SSR_CACHE[key]![1]!.delete(fn);
+						subscribers.delete(fn);
 					};
 				},
 			}}
