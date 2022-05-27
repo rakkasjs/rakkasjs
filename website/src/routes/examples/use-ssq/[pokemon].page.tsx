@@ -20,10 +20,6 @@ export default function PokemonStatsPage(props: PageProps<Params>) {
 		return db.pokemon.findOne(pokemon);
 	});
 
-	if (!query.success) {
-		return <div>Error: {query.error}</div>;
-	}
-
 	return (
 		<div className={css.wrapper}>
 			<Head title="useServerSideQuery Example - Rakkas" />

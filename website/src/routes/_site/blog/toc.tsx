@@ -1,8 +1,8 @@
 const posts = [
 	[
-		"Rakkas 0.6: React 18, streaming SSR, and Suspense",
+		"Rakkas 0.6: Streaming SSR with Suspense and useServerSideQuery",
 		// TODO: Set publish date
-		"April, 2022",
+		"June 24, 2022",
 	],
 	["Three cool Rakkas features that Next.js lacks", "December 20, 2021"],
 	["How to get client-side navigation right", "December 13, 2021"],

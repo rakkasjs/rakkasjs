@@ -23,7 +23,19 @@ npx create-rakkas-app@latest
 > npm install --save-dev vite rakkasjs
 > ```
 >
-> Then you can start a development server on `localhost:3000` with `npx rakkas dev`, build with `npx rakkas build`, and launch with `node dist/server`.
+> Then create a `src/routes/index.page.jsx` file like this:
+>
+> ```jsx
+> export default function HomePage() {
+> 	return <h1>Hello world!</h1>;
+> }
+> ```
+>
+> Now you can:
+>
+> - Start a development server with `npx rakkas dev`
+> - Build with `npx rakkas build`
+> - Launch with `node dist/server`
 
 ## Project structure
 

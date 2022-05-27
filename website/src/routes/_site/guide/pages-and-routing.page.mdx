@@ -28,7 +28,7 @@ Rakkas comes with a `Head` component for managing head tags like `title`. It is,
 
 ## Dynamic routes <a id="dynamic-routes"/>
 
-Often you need to encode parameters in the URL path like `/post/1`, `/post/2` etc. Dynamic routes like this are handled using `[square brackets]`. If you have a file named `/src/routes/profile/[userName].page.jsx`, for instance, and you visit `/profile/fatih`, your page component will receive `{ userName: "fatih" }` in `props.params` like in the example below.
+Often you need to encode parameters in the URL path like `/post/1`, `/post/2` etc. Dynamic routes like this are handled using square brackets (`[]`). If you have a file named `/src/routes/profile/[userName].page.jsx`, for instance, and you visit `/profile/fatih`, your page component will receive `{ userName: "fatih" }` in `props.params` like in the example below.
 
 import paramsExample from "$examples/params/[userName].page.jsx?sample";
 
