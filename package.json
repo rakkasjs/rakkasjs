@@ -6,12 +6,13 @@
 		"build": "pnpm -r --filter \"./packages/*\" run build",
 		"prepare": "husky install",
 		"precommit": "lint-staged",
-		"ci": "cross-env CI=true pnpm -r --stream run ci",
-		"test": "pnpm test:prettier && cross-env CI=true pnpm -r --stream run test",
+		"test": "pnpm run test:prettier && pnpm run test:packages && pnpm run ci",
+		"ecosystem-ci": "pnpm run test:packages && pnpm run ci",
+		"ci": "pnpm -r --stream run ci",
+		"test:packages": "pnpm -r --stream run test",
 		"test:prettier": "prettier --check --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'"
 	},
 	"devDependencies": {
-		"cross-env": "^7.0.3",
 		"husky": "^8.0.1",
 		"lint-staged": "^12.4.2",
 		"prettier": "^2.5.1",

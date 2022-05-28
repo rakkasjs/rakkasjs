@@ -3,14 +3,12 @@ lockfileVersion: 5.4
 importers:
   .:
     specifiers:
-      cross-env: ^7.0.3
       husky: ^8.0.1
       lint-staged: ^12.4.2
       prettier: ^2.5.1
       typescript: ^4.7.2
       vitest: ^0.12.9
     devDependencies:
-      cross-env: 7.0.3
       husky: 8.0.1
       lint-staged: 12.4.2
       prettier: 2.6.2
@@ -2825,17 +2823,6 @@ packages:
     engines: { node: ">=0.10.0" }
     dependencies:
       capture-stack-trace: 1.0.1
-    dev: true
-
-  /cross-env/7.0.3:
-    resolution:
-      {
-        integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==,
-      }
-    engines: { node: ">=10.14", npm: ">=6", yarn: ">=1" }
-    hasBin: true
-    dependencies:
-      cross-spawn: 7.0.3
     dev: true
 
   /cross-fetch/3.1.5:
