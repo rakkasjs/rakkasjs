@@ -1,39 +1,113 @@
 import React, { ReactElement } from "react";
-import { CacheItem, SsrCacheContext } from "./implementation";
+import {
+	CacheItem,
+	DEFAULT_EVICTION_TIME,
+	QueryCacheContext,
+} from "./implementation";
 
-declare const $RAKKAS_USE_QUERY_SSR_CACHE: Record<
-	string,
-	CacheItem | undefined
->;
+// Rakkas Suspense Cache
+declare const $RSC: Record<string, any>;
+
+const queryCache: Record<string, CacheItem | undefined> = Object.create(null);
 
 export function wrapApp(app: ReactElement): ReactElement {
 	return (
-		<SsrCacheContext.Provider
+		<QueryCacheContext.Provider
 			value={{
-				get: (key) => $RAKKAS_USE_QUERY_SSR_CACHE[key],
-				set: (key, promise) => {
-					$RAKKAS_USE_QUERY_SSR_CACHE[key] ||= [promise] as any;
-					$RAKKAS_USE_QUERY_SSR_CACHE[key]![2] = promise;
-					$RAKKAS_USE_QUERY_SSR_CACHE[key]![1]?.forEach((fn) => fn());
+				has(key) {
+					return key in queryCache || key in $RSC;
+				},
 
-					promise.then((value) => {
-						$RAKKAS_USE_QUERY_SSR_CACHE[key]![0] = value;
-						$RAKKAS_USE_QUERY_SSR_CACHE[key]![1]?.forEach((fn) => fn());
-						$RAKKAS_USE_QUERY_SSR_CACHE[key]!.length = 2;
-					});
+				get: (key) => {
+					if (!queryCache[key] && key in $RSC) {
+						queryCache[key] = {
+							value: $RSC[key],
+							subscribers: new Set(),
+							date: Date.now(),
+							hydrated: true,
+							evictionTime: DEFAULT_EVICTION_TIME,
+						};
+
+						delete $RSC[key];
+					}
+
+					return queryCache[key];
+				},
+
+				set: (key, valueOrPromise, evictionTime) => {
+					if (valueOrPromise instanceof Promise) {
+						queryCache[key] ||= {
+							date: Date.now(),
+							hydrated: false,
+							subscribers: new Set(),
+							evictionTime,
+						};
+						queryCache[key] = {
+							...queryCache[key]!,
+							promise: valueOrPromise,
+						};
+
+						valueOrPromise.then((value) => {
+							queryCache[key] = {
+								...queryCache[key]!,
+								value,
+								hydrated: false,
+								date: Date.now(),
+							};
+							delete queryCache[key]!.promise;
+
+							queryCache[key]!.subscribers.forEach((subscriber) =>
+								subscriber(),
+							);
+						});
+					} else {
+						queryCache[key] ||= {
+							date: Date.now(),
+							hydrated: false,
+							subscribers: new Set(),
+							evictionTime,
+						};
+						queryCache[key] = {
+							...queryCache[key]!,
+							value: valueOrPromise,
+							hydrated: false,
+							date: Date.now(),
+						};
+						delete queryCache[key]!.promise;
+					}
+
+					queryCache[key]!.subscribers.forEach((subscriber) => subscriber());
 				},
 				subscribe(key, fn) {
-					const subscribers = ($RAKKAS_USE_QUERY_SSR_CACHE[key]![1] ||=
-						new Set());
-					subscribers.add(fn);
+					queryCache[key] ||= {
+						subscribers: new Set(),
+						date: Date.now(),
+						hydrated: false,
+						evictionTime: DEFAULT_EVICTION_TIME,
+					};
+					queryCache[key]!.subscribers.add(fn);
+					if (queryCache[key]!.evictionTimeout !== undefined) {
+						clearTimeout(queryCache[key]!.evictionTimeout);
+						delete queryCache[key]!.evictionTimeout;
+					}
 
 					return () => {
-						subscribers.delete(fn);
+						if (!queryCache[key]) return;
+						queryCache[key]!.subscribers.delete(fn);
+						if (queryCache[key]!.subscribers.size === 0) {
+							if (queryCache[key]!.evictionTime === 0) {
+								delete queryCache[key];
+							} else if (isFinite(queryCache[key]!.evictionTime)) {
+								queryCache[key]!.evictionTimeout = setTimeout(() => {
+									delete queryCache[key];
+								}, queryCache[key]!.evictionTime);
+							}
+						}
 					};
 				},
 			}}
 		>
 			{app}
-		</SsrCacheContext.Provider>
+		</QueryCacheContext.Provider>
 	);
 }

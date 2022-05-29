@@ -5,7 +5,7 @@ export interface RakkasServerHooks {
 	handleRequest?(): Response | undefined | Promise<Response | undefined>;
 	wrapApp?(app: ReactElement): ReactElement;
 	emitToDocumentHead?(): string;
-	emitBeforeSsrChunk?(): string;
+	emitBeforeSsrChunk?(): string | undefined;
 }
 
 export type CreateServerHooksFn = (

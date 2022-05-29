@@ -20,11 +20,17 @@ function SuspendedDisplay() {
 }
 
 function TimeDisplay() {
-	const result = useQuery("time", async () => {
-		// Wait a second
-		await new Promise((resolve) => setTimeout(resolve, 1000));
-		return new Date().toISOString();
-	});
+	const result = useQuery(
+		"time",
+		async () => {
+			// Wait a second
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+			return new Date().toISOString();
+		},
+		{
+			staleTime: 10_000,
+		},
+	);
 
 	return (
 		<div>

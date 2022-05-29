@@ -1,6 +1,6 @@
 import React from "react";
 import { CreateServerHooksFn } from "../../runtime/server-hooks";
-import { SsrCacheContext } from "./implementation";
+import { CacheItem, QueryCacheContext } from "./implementation";
 import devalue from "devalue";
 
 const createServerHooks: CreateServerHooksFn = () => {
@@ -18,16 +18,33 @@ const createServerHooks: CreateServerHooksFn = () => {
 			return items;
 		},
 
-		get(key: string) {
-			return this._items[key];
+		has(key: string) {
+			return key in this._items;
 		},
 
-		set(key: string, promise: Promise<any>) {
-			this._items[key] = [promise];
-			promise.then((value) => {
-				this._items[key] = this._newItems[key] = [value];
+		get(key: string): CacheItem | undefined {
+			if (!this.has(key)) {
+				return undefined;
+			}
+
+			const content = this._items[key];
+			const result =
+				content instanceof Promise ? { promise: content } : { value: content };
+
+			return result as any;
+		},
+
+		set(key: string, valueOrPromise: Promise<any>) {
+			this._items[key] = valueOrPromise;
+			if (valueOrPromise instanceof Promise) {
+				valueOrPromise.then((value) => {
+					this._items[key] = this._newItems[key] = value;
+					this._hasNewItems = true;
+				});
+			} else {
+				this._newItems[key] = valueOrPromise;
 				this._hasNewItems = true;
-			});
+			}
 		},
 
 		subscribe() {
@@ -38,22 +55,22 @@ const createServerHooks: CreateServerHooksFn = () => {
 	return {
 		wrapApp: (app) => {
 			return (
-				<SsrCacheContext.Provider value={cache}>{app}</SsrCacheContext.Provider>
+				<QueryCacheContext.Provider value={cache}>
+					{app}
+				</QueryCacheContext.Provider>
 			);
 		},
 
 		emitToDocumentHead() {
 			const newItemsString = devalue(cache._getNewItems());
-			return `<script>$RAKKAS_USE_QUERY_SSR_CACHE=${newItemsString}</script>`;
+			return `<script>$RSC=${newItemsString}</script>`;
 		},
 
 		emitBeforeSsrChunk() {
 			if (cache._hasNewItems) {
 				const newItemsString = devalue(cache._getNewItems());
-				return `<script>Object.assign($RAKKAS_USE_QUERY_SSR_CACHE,${newItemsString})</script>`;
+				return `<script>Object.assign($RSC,${newItemsString})</script>`;
 			}
-
-			return "";
 		},
 	};
 };

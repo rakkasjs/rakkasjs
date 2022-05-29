@@ -1,61 +1,132 @@
 import {
 	createContext,
 	useContext,
-	useState,
+	useEffect,
 	useSyncExternalStore,
 } from "react";
 
-export interface SsrCache {
+export interface CacheItem {
+	value?: any;
+	promise?: Promise<any>;
+	date: number;
+	subscribers: Set<() => void>;
+	hydrated: boolean;
+	evictionTime: number;
+	evictionTimeout?: ReturnType<typeof setTimeout>;
+}
+
+export interface QueryCache {
+	has(key: string): boolean;
 	get(key: string): CacheItem | undefined;
-	set(key: string, value: Promise<any>): void;
+	set(key: string, value: any, evictionTime: number): void;
 	subscribe(key: string, fn: () => void): () => void;
 }
 
-export type CacheItem = [
-	value: any,
-	subscribers?: Set<() => void>,
-	promise?: Promise<any>,
-];
+export const QueryCacheContext = createContext<QueryCache>(undefined as any);
 
-export const SsrCacheContext = createContext<SsrCache>(undefined as any);
+export interface UseQueryOptions {
+	/**
+	 * Time in milliseconds after which the value will be evicted from the
+	 * cache when there are no subscribers. Use 0 for immediate eviction and
+	 * `Infinity` to disable. @default 300_000 (5 minutes)
+	 * */
+	evictionTime?: number;
+	/**
+	 * Time in milliseconds after which a cached value will be considered
+	 * stale. @default 0 (always refetch in the background on mount)
+	 */
+	staleTime?: number;
+}
+
+export const DEFAULT_EVICTION_TIME = 5 * 60 * 1000;
+
+export function useQuery<T>(
+	key: undefined,
+	fn: () => T | Promise<T>,
+	options?: UseQueryOptions,
+): undefined;
 
 export function useQuery<T>(
 	key: string,
 	fn: () => T | Promise<T>,
-): QueryResult<T> {
-	const [, setInvalidator] = useState(0);
+	options?: UseQueryOptions,
+): QueryResult<T>;
 
-	const cache = useContext(SsrCacheContext);
+export function useQuery<T>(
+	key: string | undefined,
+	fn: () => T | Promise<T>,
+	options: UseQueryOptions = {},
+): QueryResult<T> | undefined {
+	const { evictionTime = DEFAULT_EVICTION_TIME, staleTime = 0 } = options;
+
+	const cache = useContext(QueryCacheContext);
 
 	const item = useSyncExternalStore(
-		() =>
-			cache.subscribe(key, () => {
-				setInvalidator((i) => (i + 1) & 0xffffffff);
-			}),
-		() => cache.get(key),
-		() => cache.get(key),
+		(onStoreChange) => {
+			if (key !== undefined) {
+				return cache.subscribe(key, () => {
+					onStoreChange();
+				});
+			} else {
+				return () => {
+					// Do nothing
+				};
+			}
+		},
+		() => (key === undefined ? undefined : cache.get(key)),
+		() => (key === undefined ? undefined : cache.get(key)),
 	);
 
-	// TODO: Implement SWR, background fetching etc.
-	// TODO: Use useContextSelector https://github.com/dai-shi/use-context-selector
-
-	if (item) {
-		if (item[0] instanceof Promise) {
-			throw item[0];
+	useEffect(() => {
+		if (item === undefined) {
+			return;
 		}
 
+		if (
+			!import.meta.env.SSR &&
+			staleTime <= Date.now() - item.date &&
+			!item.promise
+		) {
+			const promiseOrValue = fn();
+			cache.set(key!, promiseOrValue, evictionTime);
+		}
+	}, [key]);
+
+	if (key === undefined) {
+		return;
+	}
+
+	function refetch() {
+		const item = cache.get(key!);
+		if (!item?.promise) {
+			cache.set(key!, fn(), evictionTime);
+		}
+	}
+
+	if (item && "value" in item) {
 		return {
-			value: item[0],
-			async refetch() {
-				cache.set(key, Promise.resolve(fn()));
-			},
-			refetching: item[2] !== undefined,
+			value: item.value,
+			refetching: !!item.promise,
+			refetch,
 		};
 	}
 
-	const promise = Promise.resolve(fn());
-	cache.set(key, promise);
-	throw promise;
+	if (item?.promise) {
+		throw item.promise;
+	}
+
+	const result = fn();
+	cache.set(key, result, evictionTime);
+
+	if (result instanceof Promise) {
+		throw result;
+	}
+
+	return {
+		value: result,
+		refetch,
+		refetching: false,
+	};
 }
 
 export interface QueryResult<T> {
