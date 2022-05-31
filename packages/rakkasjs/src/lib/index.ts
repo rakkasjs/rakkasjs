@@ -8,3 +8,4 @@ export * from "../features/run-server-side/lib";
 export * from "../features/client-side-navigation/lib";
 export * from "../features/client-only/lib";
 export * from "../features/response-manipulation/lib";
+export * from "../features/error-boundary/lib";

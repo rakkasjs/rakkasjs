@@ -9,6 +9,7 @@ import {
 
 export interface CacheItem {
 	value?: any;
+	error?: any;
 	promise?: Promise<any>;
 	date: number;
 	subscribers: Set<() => void>;
@@ -96,6 +97,12 @@ export function useQuery<T>(
 
 	if (key === undefined) {
 		return;
+	}
+
+	if (!import.meta.env.SSR && item && "error" in item) {
+		const error = item.error;
+
+		throw error;
 	}
 
 	function refetch() {

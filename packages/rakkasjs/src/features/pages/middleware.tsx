@@ -114,13 +114,19 @@ export default async function renderPageRoute(
 		scriptPath = clientManifest![scriptPath]?.file ?? scriptPath;
 	}
 
-	const reactStream: ReadableStream & { allReady: Promise<void> } =
-		await renderToReadableStream(<StrictMode>{app}</StrictMode>, {
+	const reactStream = await renderToReadableStream(
+		<StrictMode>{app}</StrictMode>,
+		{
 			// TODO: AbortController
 			bootstrapModules: ["/" + scriptPath],
-		});
+			onError(error) {
+				// TODO: Set status code
+				console.error(error);
+			},
+		},
+	);
 
-	await renderPromise;
+	await renderPromise.catch((error) => console.error(error));
 
 	const userAgent = req.headers.get("user-agent");
 	if (userAgent && isBot(userAgent)) {

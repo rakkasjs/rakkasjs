@@ -11,6 +11,8 @@ const createServerHooks: CreateServerHooksFn = () => {
 
 		_hasNewItems: false,
 
+		_errorItems: new Set<string>(),
+
 		_getNewItems() {
 			const items = this._newItems;
 			this._newItems = Object.create(null);
@@ -23,6 +25,10 @@ const createServerHooks: CreateServerHooksFn = () => {
 		},
 
 		get(key: string): CacheItem | undefined {
+			if (this._errorItems.has(key)) {
+				throw new Error("Errored out");
+			}
+
 			if (!this.has(key)) {
 				return undefined;
 			}
@@ -37,10 +43,17 @@ const createServerHooks: CreateServerHooksFn = () => {
 		set(key: string, valueOrPromise: Promise<any>) {
 			this._items[key] = valueOrPromise;
 			if (valueOrPromise instanceof Promise) {
-				valueOrPromise.then((value) => {
-					this._items[key] = this._newItems[key] = value;
-					this._hasNewItems = true;
-				});
+				valueOrPromise.then(
+					(value) => {
+						this._items[key] = this._newItems[key] = value;
+						this._hasNewItems = true;
+					},
+					(error) => {
+						console.error(error);
+						delete this._items[key];
+						this._errorItems.add(key);
+					},
+				);
 			} else {
 				this._newItems[key] = valueOrPromise;
 				this._hasNewItems = true;

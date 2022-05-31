@@ -70,6 +70,7 @@ importers:
       prettier: ^2.5.1
       react: ^18.1.0
       react-dom: ^18.1.0
+      react-error-boundary: ^3.1.4
       react-helmet-async: ^1.2.3
       tsup: ^6.0.1
       typescript: ^4.7.2
@@ -102,6 +103,7 @@ importers:
       prettier: 2.6.2
       react: 18.1.0
       react-dom: 18.1.0_react@18.1.0
+      react-error-boundary: 3.1.4_react@18.1.0
       react-helmet-async: 1.3.0_ef5jwxihqo6n7gxfmzogljlgcm
       tsup: 6.0.1_typescript@4.7.2
       typescript: 4.7.2
@@ -3245,7 +3247,6 @@ packages:
     cpu: [x64]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-android-64/0.14.41:
@@ -3280,7 +3281,6 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-android-arm64/0.14.41:
@@ -3315,7 +3315,6 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-darwin-64/0.14.41:
@@ -3350,7 +3349,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-darwin-arm64/0.14.41:
@@ -3385,7 +3383,6 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-freebsd-64/0.14.41:
@@ -3420,7 +3417,6 @@ packages:
     cpu: [arm64]
     os: [freebsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-freebsd-arm64/0.14.41:
@@ -3455,7 +3451,6 @@ packages:
     cpu: [ia32]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-32/0.14.41:
@@ -3490,7 +3485,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-64/0.14.41:
@@ -3525,7 +3519,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-arm/0.14.41:
@@ -3560,7 +3553,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-arm64/0.14.41:
@@ -3595,7 +3587,6 @@ packages:
     cpu: [mips64el]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-mips64le/0.14.41:
@@ -3630,7 +3621,6 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-ppc64le/0.14.41:
@@ -3654,7 +3644,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-riscv64/0.14.41:
@@ -3678,7 +3667,6 @@ packages:
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-linux-s390x/0.14.41:
@@ -3713,7 +3701,6 @@ packages:
     cpu: [x64]
     os: [netbsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-netbsd-64/0.14.41:
@@ -3748,7 +3735,6 @@ packages:
     cpu: [x64]
     os: [openbsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-openbsd-64/0.14.41:
@@ -3783,7 +3769,6 @@ packages:
     cpu: [x64]
     os: [sunos]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-sunos-64/0.14.41:
@@ -3818,7 +3803,6 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-windows-32/0.14.41:
@@ -3853,7 +3837,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-windows-64/0.14.41:
@@ -3888,7 +3871,6 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /esbuild-windows-arm64/0.14.41:
@@ -3959,7 +3941,6 @@ packages:
       esbuild-windows-32: 0.14.39
       esbuild-windows-64: 0.14.39
       esbuild-windows-arm64: 0.14.39
-    dev: true
 
   /esbuild/0.14.41:
     resolution:
@@ -4722,7 +4703,6 @@ packages:
     engines: { node: ^8.16.0 || ^10.6.0 || >=11.0.0 }
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /function-bind/1.1.1:
@@ -6442,7 +6422,6 @@ packages:
       }
     engines: { node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1 }
     hasBin: true
-    dev: true
 
   /natural-compare/1.4.0:
     resolution: { integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc= }
@@ -7011,7 +6990,6 @@ packages:
       nanoid: 3.3.4
       picocolors: 1.0.0
       source-map-js: 1.0.2
-    dev: true
 
   /prelude-ls/1.2.1:
     resolution:
@@ -7216,6 +7194,19 @@ packages:
       loose-envify: 1.4.0
       react: 18.1.0
       scheduler: 0.22.0
+
+  /react-error-boundary/3.1.4_react@18.1.0:
+    resolution:
+      {
+        integrity: sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==,
+      }
+    engines: { node: ">=10", npm: ">=6" }
+    peerDependencies:
+      react: ">=16.13.1"
+    dependencies:
+      "@babel/runtime": 7.18.0
+      react: 18.1.0
+    dev: true
 
   /react-fast-compare/3.2.0:
     resolution:
@@ -7567,7 +7558,6 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /rollup/2.75.0:
     resolution:
@@ -7851,7 +7841,6 @@ packages:
         integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==,
       }
     engines: { node: ">=0.10.0" }
-    dev: true
 
   /source-map/0.5.7:
     resolution: { integrity: sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w= }
@@ -8820,7 +8809,6 @@ packages:
       rollup: 2.74.1
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /vitest/0.12.9:
     resolution:
