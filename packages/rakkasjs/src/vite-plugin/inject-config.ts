@@ -28,6 +28,13 @@ export function injectConfig(): Plugin {
 							build: {
 								outDir: "dist/server",
 								ssr: true,
+								// rollupOptions: {
+								// 	output: {
+								// 		chunkFileNames(info) {
+								// 			return "assets/[name].[hash].mjs";
+								// 		},
+								// 	},
+								// },
 							},
 						},
 					},
@@ -35,7 +42,11 @@ export function injectConfig(): Plugin {
 
 				ssr: {
 					external: ["react-dom/server.browser"],
-					noExternal: ["rakkasjs"],
+					noExternal: [
+						"rakkasjs",
+						"rakkasjs/runtime/vavite-handler",
+						"rakkasjs/runtime/client-entry",
+					],
 				},
 			} as UserConfig & { ssr: SSROptions };
 		},

@@ -1,4 +1,4 @@
-import { BuildOptions, LogLevel } from "vite";
+import { BuildOptions, LogLevel, ResolvedConfig } from "vite";
 import { cac } from "cac";
 import multibuild from "@vavite/multibuild";
 import { version } from "../../package.json";
@@ -87,22 +87,45 @@ cli
 	.action(async (root: string, options: BuildOptions & GlobalCLIOptions) => {
 		const buildOptions: BuildOptions = cleanOptions(options);
 
-		// eslint-disable-next-line no-console
-		console.log(
-			pico.black(pico.bgMagenta(" Rakkas ")),
-			pico.magenta(version),
-			"💃\n",
-		);
+		let config: ResolvedConfig;
 
-		await multibuild({
-			root,
-			base: options.base,
-			mode: options.mode,
-			configFile: options.config,
-			logLevel: options.logLevel,
-			clearScreen: options.clearScreen,
-			build: buildOptions,
-		});
+		await multibuild(
+			{
+				root,
+				base: options.base,
+				mode: options.mode,
+				configFile: options.config,
+				logLevel: options.logLevel,
+				clearScreen: options.clearScreen,
+				build: buildOptions,
+			},
+			{
+				onInitialConfigResolved(resolvedConfig) {
+					config = resolvedConfig;
+					config.logger.info(
+						pico.black(pico.bgMagenta(" Rakkas ")) +
+							" " +
+							pico.magenta(version) +
+							" 💃",
+					);
+				},
+				onStartBuildStep(info) {
+					config.logger.info(
+						"\n" +
+							pico.magenta("rakkas") +
+							": Building " +
+							info.currentStep.name +
+							" (" +
+							pico.green(
+								`${info.currentStepIndex + 1}` +
+									"/" +
+									`${info.buildSteps.length}`,
+							) +
+							")",
+					);
+				},
+			},
+		);
 	});
 
 cli.help();

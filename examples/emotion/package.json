@@ -1,5 +1,6 @@
 {
 	"name": "@rakkasjs/example-emotion",
+	"type": "module",
 	"private": true,
 	"scripts": {
 		"dev": "vite --open",
@@ -12,7 +13,7 @@
 		"@types/react-dom": "^18.0.5",
 		"rakkasjs": "0.6.0-next.0",
 		"typescript": "^4.7.2",
-		"vite": "2.9.9"
+		"vite": "3.0.0-alpha.9"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.8.2",

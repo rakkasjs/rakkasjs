@@ -174,6 +174,10 @@ function testCase(title: string, dev: boolean, command?: string) {
 				),
 			);
 
+			await page.waitForFunction(() => {
+				return (window as any).RESOLVE_QUERY !== undefined;
+			});
+
 			await page.evaluate(() => {
 				(window as any).RESOLVE_QUERY();
 			});

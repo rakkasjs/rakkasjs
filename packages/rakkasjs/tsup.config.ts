@@ -5,13 +5,13 @@ export default defineConfig([
 		entry: {
 			cli: "./src/cli/index.ts",
 		},
-		format: ["cjs"],
+		format: ["esm"],
 		platform: "node",
 		target: "node14",
 	},
 	{
 		entry: { "vite-plugin": "./src/vite-plugin/index.ts" },
-		format: ["cjs"],
+		format: ["esm"],
 		platform: "node",
 		target: "node14",
 		dts: true,

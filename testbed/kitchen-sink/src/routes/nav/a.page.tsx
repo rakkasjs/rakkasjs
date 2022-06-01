@@ -6,8 +6,11 @@ export default function NavHomePAge() {
 			return;
 		}
 
-		await new Promise((resolve) => {
-			(window as any).RESOLVE_QUERY = resolve;
+		await new Promise<void>((resolve) => {
+			(window as any).RESOLVE_QUERY = () => {
+				resolve();
+				delete (window as any).RESOLVE_QUERY;
+			};
 		});
 	});
 

@@ -1,6 +1,7 @@
 {
 	"name": "@rakkasjs/testbed-kitchen-sink",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"dev": "vite dev -l silent --port 3000",
 		"build": "rakkas build -l silent",
@@ -19,7 +20,7 @@
 		"puppeteer": "^14.1.1",
 		"rakkasjs": "workspace:*",
 		"typescript": "^4.7.2",
-		"vite": "2.9.9"
+		"vite": "3.0.0-alpha.9"
 	},
 	"dependencies": {
 		"@types/react": "^18.0.9",

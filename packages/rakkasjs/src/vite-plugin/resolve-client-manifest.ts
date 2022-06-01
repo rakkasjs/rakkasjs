@@ -56,10 +56,11 @@ export function resolveClientManifest(): Plugin {
 				"manifest.json",
 			);
 
-			await fs.promises.rename(
-				from,
-				resolvedConfig.root + "/dist/manifest.json",
-			);
+			await fs.promises
+				.rename(from, resolvedConfig.root + "/dist/manifest.json")
+				.catch(() => {
+					// Just ignore
+				});
 		},
 	};
 }
