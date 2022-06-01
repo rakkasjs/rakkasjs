@@ -1,43 +1,64 @@
 import { useQuery, ErrorBoundary } from "rakkasjs";
-import { Suspense } from "react";
+import { Suspense, useRef } from "react";
 
 export default function UseQueryPage() {
+	const resolverRef = useRef<() => void>();
+
 	return (
 		<div>
 			<h1>useQuery error handling</h1>
-			<ErrorBoundary
-				fallbackRender={(props) => {
-					return (
-						<div>
-							<p>Error!</p>
+			<div id="content">
+				<ErrorBoundary
+					fallbackRender={(props) => {
+						return (
+							<div>
+								<p>Error!</p>
+								<p>
+									<button onClick={() => props.resetErrorBoundary()}>
+										Retry
+									</button>
+								</p>
+							</div>
+						);
+					}}
+				>
+					<Suspense
+						fallback={
 							<p>
-								<button onClick={() => props.resetErrorBoundary()}>
-									Retry
+								Loading...{" "}
+								<button
+									onClick={() => {
+										resolverRef.current!();
+									}}
+								>
+									Resolve
 								</button>
 							</p>
-						</div>
-					);
-				}}
-			>
-				<Suspense fallback={<p>Loading...</p>}>
-					<ThrowingQuery />
-				</Suspense>
-			</ErrorBoundary>
+						}
+					>
+						<ThrowingQuery
+							onSetResolver={(resolver) => (resolverRef.current = resolver)}
+						/>
+					</Suspense>
+				</ErrorBoundary>
+			</div>
 		</div>
 	);
 }
 
 let attempt = 0;
 
-function ThrowingQuery() {
+function ThrowingQuery(props: { onSetResolver(resolver: () => void): void }) {
 	const result = useQuery("eee", async () => {
 		attempt++;
 
-		await new Promise((resolve) => setTimeout(resolve, 1000));
-
-		if (attempt === 1) {
-			throw new Error("This is an error");
+		if (import.meta.env.SSR || attempt < 2) {
+			throw new Error("Force client render");
 		}
+
+		await new Promise<void>((resolve) => {
+			props.onSetResolver(resolve);
+		});
 
 		return "Hello world";
 	});

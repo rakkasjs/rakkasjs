@@ -106,12 +106,10 @@ function testCase(title: string, dev: boolean, command?: string) {
 			);
 		});
 
-		if (
-			dev &&
-			// TODO: This test fails on Windows CI. Investigate why and whether it fails on a real machine.
-			process.platform !== "win32"
-		) {
-			test("hot reloads page", async () => {
+		// TODO: This test fails on Windows CI. Investigate why and whether it fails on a real machine.
+		test.skipIf(!dev || process.platform === "win32")(
+			"hot reloads page",
+			async () => {
 				await page.goto(TEST_HOST + "/");
 				await page.waitForSelector(".hydrated");
 
@@ -142,21 +140,14 @@ function testCase(title: string, dev: boolean, command?: string) {
 				} finally {
 					await fs.promises.writeFile(filePath, oldContent);
 				}
-			}, 60_000);
-		}
+			},
+			60_000,
+		);
 
 		test("sets page title", async () => {
 			await page.goto(TEST_HOST + "/title");
 
 			await page.waitForFunction(() => document.title === "Page title");
-		});
-
-		test("loads data with suspense", async () => {
-			await page.goto(TEST_HOST + "/suspense");
-
-			await page.waitForFunction(() =>
-				document.body.innerText.includes("Hello world!"),
-			);
 		});
 
 		test("performs client-side navigation", async () => {
@@ -178,6 +169,16 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 			link!.click();
 			await page.waitForFunction(() =>
+				document.body.innerText.includes(
+					"Navigating to: http://localhost:3000/nav/a",
+				),
+			);
+
+			await page.evaluate(() => {
+				(window as any).RESOLVE_QUERY();
+			});
+
+			await page.waitForFunction(() =>
 				document.body.innerText.includes("Client-side navigation test page A"),
 			);
 
@@ -197,12 +198,13 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.waitForFunction(() => window.scrollY > 0);
 
 			const link: ElementHandle<HTMLAnchorElement> | null =
-				await page.waitForSelector("a[href='/nav/a']");
+				await page.waitForSelector("a[href='/nav/b']");
 			expect(link).toBeTruthy();
 
 			link!.click();
+
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Client-side navigation test page A"),
+				document.body.innerText.includes("Client-side navigation test page B"),
 			);
 
 			// Make sure it scrolled to the top
@@ -273,6 +275,53 @@ function testCase(title: string, dev: boolean, command?: string) {
 			});
 			expect(response.status).toBe(400);
 			expect(response.headers.get("X-Custom-Header")).toBe("Custom value");
+		});
+
+		test("fetches data with useQuery", async () => {
+			await page.goto(TEST_HOST + "/use-query");
+
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("SSR value"),
+			);
+
+			const button = await page.waitForSelector("button");
+			expect(button).toBeTruthy();
+
+			await button!.click();
+			await page.waitForFunction(() =>
+				document
+					.getElementById("content")
+					?.innerText.includes("SSR value (refetching)"),
+			);
+
+			await button!.click();
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("Client value"),
+			);
+		});
+
+		test("handles errors in useQuery", async () => {
+			await page.goto(TEST_HOST + "/use-query/error");
+
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("Error!"),
+			);
+
+			let button = await page.waitForSelector("button");
+			expect(button).toBeTruthy();
+			await button!.click();
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("Loading..."),
+			);
+
+			button = await page.waitForSelector("button");
+			expect(button).toBeTruthy();
+
+			await button!.click();
+
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("Hello world"),
+			);
 		});
 
 		test("runs useServerSideQuery on the server", async () => {

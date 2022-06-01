@@ -42,6 +42,7 @@ export interface UseQueryOptions {
 }
 
 export const DEFAULT_EVICTION_TIME = 5 * 60 * 1000;
+const DEFAULT_STALE_TIME = 100;
 
 export function useQuery<T>(
 	key: undefined,
@@ -60,7 +61,10 @@ export function useQuery<T>(
 	fn: () => T | Promise<T>,
 	options: UseQueryOptions = {},
 ): QueryResult<T> | undefined {
-	const { evictionTime = DEFAULT_EVICTION_TIME, staleTime = 0 } = options;
+	const {
+		evictionTime = DEFAULT_EVICTION_TIME,
+		staleTime = DEFAULT_STALE_TIME,
+	} = options;
 
 	const cache = useContext(QueryCacheContext);
 
@@ -81,6 +85,8 @@ export function useQuery<T>(
 	);
 
 	useEffect(() => {
+		const item = key ? cache.get(key) : undefined;
+
 		if (item === undefined) {
 			return;
 		}
@@ -88,11 +94,14 @@ export function useQuery<T>(
 		if (
 			!import.meta.env.SSR &&
 			staleTime <= Date.now() - item.date &&
-			!item.promise
+			!item.promise &&
+			!item.hydrated
 		) {
 			const promiseOrValue = fn();
 			cache.set(key!, promiseOrValue, evictionTime);
 		}
+
+		item.hydrated = false;
 	}, [key]);
 
 	if (key === undefined) {

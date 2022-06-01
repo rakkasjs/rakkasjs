@@ -11,7 +11,7 @@ const createServerHooks: CreateServerHooksFn = () => {
 
 		_hasNewItems: false,
 
-		_errorItems: new Set<string>(),
+		_errorItems: Object.create(null) as Record<string, unknown>,
 
 		_getNewItems() {
 			const items = this._newItems;
@@ -25,8 +25,8 @@ const createServerHooks: CreateServerHooksFn = () => {
 		},
 
 		get(key: string): CacheItem | undefined {
-			if (this._errorItems.has(key)) {
-				throw new Error("Errored out");
+			if (key in this._errorItems) {
+				throw this._errorItems[key];
 			}
 
 			if (!this.has(key)) {
@@ -49,9 +49,8 @@ const createServerHooks: CreateServerHooksFn = () => {
 						this._hasNewItems = true;
 					},
 					(error) => {
-						console.error(error);
 						delete this._items[key];
-						this._errorItems.add(key);
+						this._errorItems[key] = error;
 					},
 				);
 			} else {

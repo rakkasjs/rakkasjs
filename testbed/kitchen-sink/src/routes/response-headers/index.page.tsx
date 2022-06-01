@@ -10,8 +10,8 @@ export default function DeepHeaders() {
 }
 
 function Inner() {
-	useQuery("...", async () => {
-		await new Promise((resolve) => setTimeout(resolve, 500));
+	useQuery("response-headers", async () => {
+		// Redirect
 	});
 
 	return (

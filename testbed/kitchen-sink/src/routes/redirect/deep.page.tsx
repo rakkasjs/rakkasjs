@@ -10,8 +10,8 @@ export default function DeepRedirect() {
 }
 
 function Inner() {
-	useQuery("...", async () => {
-		await new Promise((resolve) => setTimeout(resolve, 500));
+	useQuery("redirect/deep", async () => {
+		// Do nothing
 	});
 
 	return <Redirect href="/redirect/target" />;
