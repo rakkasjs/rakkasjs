@@ -51,7 +51,7 @@ const createIsomorphicFetchHooks: CreateServerHooksFn = (request, ctx) => {
 
 	return {
 		wrapApp: (app) => (
-			<IsomorphicFetchContext.Provider value={{ fetch: ctx.fetch }}>
+			<IsomorphicFetchContext.Provider value={ctx.fetch}>
 				{app}
 			</IsomorphicFetchContext.Provider>
 		),
@@ -60,7 +60,6 @@ const createIsomorphicFetchHooks: CreateServerHooksFn = (request, ctx) => {
 
 export default createIsomorphicFetchHooks;
 
-// TODO: Make this available on useQuery and similar
-const IsomorphicFetchContext = createContext<{ fetch: typeof fetch }>(
-	undefined as any,
+export const IsomorphicFetchContext = createContext<undefined | typeof fetch>(
+	undefined,
 );

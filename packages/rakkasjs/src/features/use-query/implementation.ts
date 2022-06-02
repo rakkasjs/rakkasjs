@@ -6,6 +6,7 @@ import {
 	useEffect,
 	useSyncExternalStore,
 } from "react";
+import { IsomorphicFetchContext } from "../isomorphic-fetch/server-hooks";
 
 export interface CacheItem {
 	value?: any;
@@ -70,27 +71,33 @@ export interface UseQueryOptions {
 export const DEFAULT_EVICTION_TIME = 5 * 60 * 1000;
 const DEFAULT_STALE_TIME = 100;
 
+export interface QueryContext {
+	fetch: typeof fetch;
+}
+
+export type QueryFn<T> = (ctx: QueryContext) => T | Promise<T>;
+
 export function useQuery<T>(
 	key: undefined,
-	fn: () => T | Promise<T>,
+	fn: QueryFn<T>,
 	options?: UseQueryOptions,
 ): undefined;
 
 export function useQuery<T>(
 	key: string,
-	fn: () => T | Promise<T>,
+	fn: QueryFn<T>,
 	options?: UseQueryOptions,
 ): QueryResult<T>;
 
 export function useQuery<T>(
 	key: string | undefined,
-	fn: () => T | Promise<T>,
+	fn: QueryFn<T>,
 	options: UseQueryOptions,
 ): QueryResult<T> | undefined;
 
 export function useQuery<T>(
 	key: string | undefined,
-	fn: () => T | Promise<T>,
+	fn: QueryFn<T>,
 	options: UseQueryOptions = {},
 ): QueryResult<T> | undefined {
 	const result = useQueryBase(key, fn, options);
@@ -101,25 +108,25 @@ export function useQuery<T>(
 
 function useQueryBase<T>(
 	key: undefined,
-	fn: () => T | Promise<T>,
+	fn: QueryFn<T>,
 	options?: UseQueryOptions,
 ): undefined;
 
 function useQueryBase<T>(
 	key: string,
-	fn: () => T | Promise<T>,
+	fn: QueryFn<T>,
 	options?: UseQueryOptions,
 ): QueryResult<T>;
 
 function useQueryBase<T>(
 	key: string | undefined,
-	fn: () => T | Promise<T>,
+	fn: QueryFn<T>,
 	options: UseQueryOptions,
 ): QueryResult<T> | undefined;
 
 function useQueryBase<T>(
 	key: string | undefined,
-	fn: () => T | Promise<T>,
+	fn: QueryFn<T>,
 	options: UseQueryOptions = {},
 ): QueryResult<T> | undefined {
 	const {
@@ -145,6 +152,10 @@ function useQueryBase<T>(
 		() => (key === undefined ? undefined : cache.get(key)),
 	);
 
+	const fetchFn =
+		useContext(IsomorphicFetchContext) || ((...args) => fetch(...args));
+	const ctx = { fetch: fetchFn };
+
 	useEffect(() => {
 		const item = key ? cache.get(key) : undefined;
 
@@ -158,7 +169,7 @@ function useQueryBase<T>(
 			!item.promise &&
 			!item.hydrated
 		) {
-			const promiseOrValue = fn();
+			const promiseOrValue = fn(ctx);
 			cache.set(key!, promiseOrValue, evictionTime);
 		}
 
@@ -178,7 +189,7 @@ function useQueryBase<T>(
 	function refetch() {
 		const item = cache.get(key!);
 		if (!item?.promise) {
-			cache.set(key!, fn(), evictionTime);
+			cache.set(key!, fn(ctx), evictionTime);
 		}
 	}
 
@@ -195,7 +206,7 @@ function useQueryBase<T>(
 		throw item.promise;
 	}
 
-	const result = fn();
+	const result = fn(ctx);
 	cache.set(key, result, evictionTime);
 
 	if (result instanceof Promise) {
