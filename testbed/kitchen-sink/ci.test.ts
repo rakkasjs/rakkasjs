@@ -349,6 +349,14 @@ function testCase(title: string, dev: boolean, command?: string) {
 			);
 		});
 
+		test("useQuery refetches on interval", async () => {
+			await page.goto(TEST_HOST + "/use-query/interval");
+
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("2"),
+			);
+		});
+
 		test("runs useServerSideQuery on the server", async () => {
 			await page.goto(TEST_HOST + "/use-ssq");
 			await page.waitForFunction(() =>

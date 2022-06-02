@@ -52,6 +52,19 @@ export interface UseQueryOptions {
 	 * @default true
 	 */
 	refetchOnWindowFocus?: boolean | "always";
+	/**
+	 * Continuously refetch every `refetchInterval` milliseconds. Set to false
+	 * to disable.
+	 *
+	 * @default false
+	 */
+	refetchInterval?: number | false;
+	/**
+	 * Perform continuous refetching even when the window is in the background.
+	 *
+	 * @default false
+	 */
+	refetchIntervalInBackground?: boolean;
 }
 
 export const DEFAULT_EVICTION_TIME = 5 * 60 * 1000;
@@ -208,8 +221,12 @@ function useRefetch<T>(
 	queryResult: QueryResult<T> | undefined,
 	options: UseQueryOptions,
 ) {
-	const { refetchOnWindowFocus = true, staleTime = DEFAULT_STALE_TIME } =
-		options;
+	const {
+		refetchOnWindowFocus = true,
+		refetchInterval = false,
+		refetchIntervalInBackground = false,
+		staleTime = DEFAULT_STALE_TIME,
+	} = options;
 
 	// Refetch on window focus
 	useEffect(() => {
@@ -233,4 +250,22 @@ function useRefetch<T>(
 			window.removeEventListener("focus", handleVisibilityChange);
 		};
 	}, [refetchOnWindowFocus, queryResult]);
+
+	// Refetch on interval
+	useEffect(() => {
+		if (!refetchInterval || !queryResult) return;
+
+		const id = setInterval(() => {
+			if (
+				refetchIntervalInBackground ||
+				document.visibilityState === "visible"
+			) {
+				queryResult.refetch();
+			}
+		}, refetchInterval);
+
+		return () => {
+			clearInterval(id);
+		};
+	}, [refetchInterval, refetchIntervalInBackground, queryResult]);
 }
