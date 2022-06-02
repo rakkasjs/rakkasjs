@@ -4,7 +4,7 @@ import { Suspense, useRef } from "react";
 export default function UseQueryPage() {
 	return (
 		<div>
-			<h1>Here we go!</h1>
+			<h1>useQuery</h1>
 			<div id="content">
 				<Suspense fallback={<p>Loading...</p>}>
 					<UseQueryDisplay />

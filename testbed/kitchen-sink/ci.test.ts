@@ -328,6 +328,27 @@ function testCase(title: string, dev: boolean, command?: string) {
 			);
 		});
 
+		test("useQuery refetches on focus", async () => {
+			await page.goto(TEST_HOST + "/use-query");
+			await page.waitForSelector(".hydrated");
+
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("SSR value"),
+			);
+
+			await new Promise((resolve) => setTimeout(resolve, 200));
+
+			await page.evaluate(() => {
+				document.dispatchEvent(new Event("visibilitychange"));
+			});
+
+			await page.waitForFunction(() =>
+				document
+					.getElementById("content")
+					?.innerText.includes("SSR value (refetching)"),
+			);
+		});
+
 		test("runs useServerSideQuery on the server", async () => {
 			await page.goto(TEST_HOST + "/use-ssq");
 			await page.waitForFunction(() =>

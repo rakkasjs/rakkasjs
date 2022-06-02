@@ -31,14 +31,27 @@ export interface UseQueryOptions {
 	/**
 	 * Time in milliseconds after which the value will be evicted from the
 	 * cache when there are no subscribers. Use 0 for immediate eviction and
-	 * `Infinity` to disable. @default 300_000 (5 minutes)
-	 * */
+	 * `Infinity` to disable.
+	 *
+	 * @default 300_000 (5 minutes)
+	 */
 	evictionTime?: number;
 	/**
 	 * Time in milliseconds after which a cached value will be considered
-	 * stale. @default 0 (always refetch in the background on mount)
+	 * stale.
+	 *
+	 * @default 0 (always refetch in the background on mount)
 	 */
 	staleTime?: number;
+	/**
+	 * Refetch the query when the window gains focus. If set to `true`, the
+	 * query will be refetched on window focus if it is stale. If set to
+	 * `"always"`, the query will be refetched on window focus regardless of
+	 * staleness. `false` disables this behavior.
+	 *
+	 * @default true
+	 */
+	refetchOnWindowFocus?: boolean | "always";
 }
 
 export const DEFAULT_EVICTION_TIME = 5 * 60 * 1000;
@@ -57,6 +70,41 @@ export function useQuery<T>(
 ): QueryResult<T>;
 
 export function useQuery<T>(
+	key: string | undefined,
+	fn: () => T | Promise<T>,
+	options: UseQueryOptions,
+): QueryResult<T> | undefined;
+
+export function useQuery<T>(
+	key: string | undefined,
+	fn: () => T | Promise<T>,
+	options: UseQueryOptions = {},
+): QueryResult<T> | undefined {
+	const result = useQueryBase(key, fn, options);
+	useRefetch(result, options);
+
+	return result;
+}
+
+function useQueryBase<T>(
+	key: undefined,
+	fn: () => T | Promise<T>,
+	options?: UseQueryOptions,
+): undefined;
+
+function useQueryBase<T>(
+	key: string,
+	fn: () => T | Promise<T>,
+	options?: UseQueryOptions,
+): QueryResult<T>;
+
+function useQueryBase<T>(
+	key: string | undefined,
+	fn: () => T | Promise<T>,
+	options: UseQueryOptions,
+): QueryResult<T> | undefined;
+
+function useQueryBase<T>(
 	key: string | undefined,
 	fn: () => T | Promise<T>,
 	options: UseQueryOptions = {},
@@ -126,6 +174,7 @@ export function useQuery<T>(
 			value: item.value,
 			refetching: !!item.promise,
 			refetch,
+			date: item.date,
 		};
 	}
 
@@ -144,6 +193,7 @@ export function useQuery<T>(
 		value: result,
 		refetch,
 		refetching: false,
+		date: item?.date ?? Date.now(),
 	};
 }
 
@@ -151,4 +201,36 @@ export interface QueryResult<T> {
 	value: T;
 	refetch(): void;
 	refetching: boolean;
+	date: number;
+}
+
+function useRefetch<T>(
+	queryResult: QueryResult<T> | undefined,
+	options: UseQueryOptions,
+) {
+	const { refetchOnWindowFocus = true, staleTime = DEFAULT_STALE_TIME } =
+		options;
+
+	// Refetch on window focus
+	useEffect(() => {
+		if (!queryResult || !refetchOnWindowFocus) return;
+
+		function handleVisibilityChange() {
+			if (
+				document.visibilityState === "visible" &&
+				(refetchOnWindowFocus === "always" ||
+					staleTime <= Date.now() - queryResult!.date)
+			) {
+				queryResult!.refetch();
+			}
+		}
+
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+		window.addEventListener("focus", handleVisibilityChange);
+
+		return () => {
+			document.removeEventListener("visibilitychange", handleVisibilityChange);
+			window.removeEventListener("focus", handleVisibilityChange);
+		};
+	}, [refetchOnWindowFocus, queryResult]);
 }
