@@ -1,4 +1,4 @@
-import { Handler } from "@hattip/core";
+import { compose, Handler } from "@hattip/core";
 import { RequestContext } from "../../lib";
 
 export default async function renderApiRoute(
@@ -15,20 +15,23 @@ export default async function renderApiRoute(
 
 		const [endpointImporter, ...middlewareImporters] = importers;
 
-		for (const middlewareImporter of middlewareImporters) {
-			const middleware = await middlewareImporter();
-			const response = await middleware.default(req, ctx);
-			if (response) return response;
-		}
-
 		let endpoint: Record<string, Handler> = (await endpointImporter()) as any;
 		if (endpoint.default) endpoint = endpoint.default as any;
 
 		let method = req.method.toLowerCase();
 		if (method === "delete") method = "del";
-		const handler = endpoint[method] || endpoint.all;
+		const endpointHandler = endpoint[method] || endpoint.all;
 
-		const response = await handler?.(req, ctx);
-		if (response) return response;
+		if (!endpointHandler) return null;
+
+		const middlewares = await Promise.all(
+			middlewareImporters.map((importer) =>
+				importer().then((module) => module.default),
+			),
+		);
+
+		const handler = compose(...middlewares, endpointHandler, ctx.next);
+
+		return handler(req, ctx);
 	}
 }

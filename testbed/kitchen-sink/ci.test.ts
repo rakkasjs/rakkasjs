@@ -75,6 +75,12 @@ function testCase(title: string, dev: boolean, command?: string) {
 			expect(response.status).toBe(200);
 			const text = await response.text();
 			expect(text).toEqual("Hello from middleware");
+
+			const response2 = await fetch(TEST_HOST + "/api-routes/simple?modify=1");
+			expect(response2.status).toBe(200);
+			const text2 = await response2.text();
+			expect(text2).toEqual("Hello from API route");
+			expect(response2.headers.get("x-middleware")).toEqual("1");
 		});
 
 		test("renders params", async () => {
