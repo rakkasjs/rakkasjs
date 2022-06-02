@@ -49,13 +49,12 @@ export const Header: FC = () => {
 	}, [sidebarRef]);
 
 	const { current } = useLocation();
-	const currentUrl = new URL(current);
 
 	// Close on navigation
 	useEffect(() => {
 		if (isOpen) setIsOpen(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentUrl.href]);
+	}, [current.href]);
 
 	const nav = (
 		<nav>
@@ -151,13 +150,13 @@ export const Header: FC = () => {
 				ref={sidebarRef}
 			>
 				{nav}
-				{currentUrl.pathname.startsWith("/guide") && (
+				{current.pathname.startsWith("/guide") && (
 					<>
 						<hr />
 						<Toc toc={guideToc} />
 					</>
 				)}
-				{currentUrl.pathname.startsWith("/blog") && (
+				{current.pathname.startsWith("/blog") && (
 					<>
 						<hr />
 						<Toc toc={blogToc} />

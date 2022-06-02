@@ -4,13 +4,11 @@ import { findRoute, RouteMatch } from "../internal/find-route";
 import { LayoutModule } from "./page-types";
 
 export function App() {
-	const { current: href } = useLocation();
+	const { current: url } = useLocation();
 
 	// TODO: Warn when a page doesn't export a default component
 
 	const lastRoute = useContext(RouteContext);
-
-	const url = new URL(href);
 
 	if (!lastRoute.last || lastRoute.last.pathname !== url.pathname) {
 		throw loadRoute(url, lastRoute.found).then((route) => {

@@ -3,8 +3,7 @@ import { StyledLink, StyledLinkProps, useLocation } from "rakkasjs";
 
 export default function NavLayout({ children }: { children: ReactNode }) {
 	const [clicked, setClicked] = useState(0);
-	const loc = useLocation();
-	const url = new URL(loc.current);
+	const { current: url } = useLocation();
 
 	const linkProps: StyledLinkProps = {
 		activeStyle: {

@@ -15,7 +15,8 @@ export default function MainLayout({ children }: { children: ReactNode }) {
 			{children}
 			<hr />
 			<footer>
-				This is a shared footer.{pending && <p>Navigating to: {pending}</p>}
+				This is a shared footer.
+				{pending && <p>Navigating to: {pending.href}</p>}
 			</footer>
 		</>
 	);

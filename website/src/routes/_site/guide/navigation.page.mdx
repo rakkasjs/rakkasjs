@@ -24,4 +24,4 @@ import navigateExample from "$examples/navigate/[userName].page.jsx?sample";
 
 The return value of the `useLocation` custom hook from the `rakkasjs` package has the `current` and `pending` properties. You should always use these properties instead of `window.location` because, a) `window` is not available during server-side rendering, and b) you'll get the wrong URL during page transitions: When the user clicks on a `Link`, the URL in the location bar of the browser changes immediately but the old page is still shown while the new one is being loaded.
 
-The `pending` property contains the URL that the app is transitioning into. You can test for its presence to render some loading animation for example.
+The `pending` property contains the URL that the app is transitioning into. You can test if it's defined to render some loading animation for example.

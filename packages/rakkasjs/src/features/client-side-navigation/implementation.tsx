@@ -7,6 +7,7 @@ import React, {
 	useContext,
 	useDeferredValue,
 	useEffect,
+	useMemo,
 	useState,
 	useSyncExternalStore,
 } from "react";
@@ -15,7 +16,12 @@ let lastRenderedId: string;
 let navigationPromise: Promise<void> | undefined;
 let navigationResolve: (() => void) | undefined;
 
-export function useLocation() {
+export interface UseLocationResult {
+	current: Readonly<URL>;
+	pending: Readonly<URL> | undefined;
+}
+
+export function useLocation(): UseLocationResult {
 	const staticLocation = useContext(LocationContext);
 
 	const currentLocation = useSyncExternalStore(
@@ -36,9 +42,18 @@ export function useLocation() {
 		navigationResolve = undefined;
 	}, [deferredLocation]);
 
+	const current = useMemo(() => new URL(deferredLocation), [deferredLocation]);
+	const pending = useMemo(
+		() =>
+			currentLocation === deferredLocation
+				? undefined
+				: new URL(currentLocation),
+		[currentLocation, deferredLocation],
+	);
+
 	return {
-		current: deferredLocation,
-		pending: currentLocation === deferredLocation ? undefined : currentLocation,
+		current,
+		pending,
 	};
 }
 

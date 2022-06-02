@@ -20,7 +20,6 @@ const MainLayout: Layout = ({ children }) => (
 		<div className={css.main}>
 			<MDXProvider
 				components={{
-					// @ts-expect-error: Some kind of typing incompatibility
 					a: MdxLink,
 					// eslint-disable-next-line react/display-name
 					table: (props) => (
@@ -54,19 +53,18 @@ export default MainLayout;
 
 const MdxLink: typeof Link = forwardRef(({ children, ...props }, ref) => {
 	const { current } = useLocation();
-	const currentUrl = new URL(current);
 
 	const url =
-		props.href === undefined ? undefined : new URL(props.href, currentUrl);
+		props.href === undefined ? undefined : new URL(props.href, current);
 
 	return (
 		<Link
-			target={!url || url.origin === currentUrl.origin ? undefined : "_blank"}
+			target={!url || url.origin === current.origin ? undefined : "_blank"}
 			{...props}
 			ref={ref}
 		>
 			{children}
-			{!url || url?.origin === currentUrl.origin || <ExternalIcon />}
+			{!url || url?.origin === current.origin || <ExternalIcon />}
 		</Link>
 	);
 });
