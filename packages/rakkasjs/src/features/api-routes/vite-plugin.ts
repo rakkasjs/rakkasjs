@@ -21,7 +21,9 @@ export default function apiRoutes(): Plugin {
 			await glob(root + middlewarePattern)
 		).sort(/* Long to short */ (a, b) => b.length - a.length);
 
-		const middlewareDirs = middlewareFiles.map((f) => path.dirname(f));
+		const middlewareDirs = middlewareFiles.map(
+			(f, i) => [i, path.dirname(f)] as const,
+		);
 
 		let middlewareImporters = "";
 
@@ -51,8 +53,8 @@ export default function apiRoutes(): Plugin {
 
 		for (const [baseName, i, endpointFile] of endpointRoutes) {
 			const middlewares = middlewareDirs
-				.filter((dirName) => endpointFile.startsWith(dirName + "/"))
-				.map((_, mi) => mi);
+				.filter(([, dirName]) => endpointFile.startsWith(dirName + "/"))
+				.map(([mi]) => mi);
 
 			exportStatement += `  [${routeToRegExp(
 				"/" + baseName,
