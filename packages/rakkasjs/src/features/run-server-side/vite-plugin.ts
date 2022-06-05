@@ -21,7 +21,7 @@ export default function runServerSide(): PluginOption[] {
 					ssr: {
 						noExternal: ["virtual:rakkasjs:run-server-side:manifest"],
 					},
-				} as any;
+				};
 			},
 
 			resolveId(id) {
@@ -35,7 +35,7 @@ export default function runServerSide(): PluginOption[] {
 					if (resolvedConfig.command === "serve") {
 						return `export default new Proxy({}, { get: (_, name) => () => import("/" + name) });`;
 					} else if (!moduleManifest) {
-						throw new Error("[rakkasjs:run-server-side] Cannot find manifest");
+						return `throw new Error("[virtual:rakkasjs:run-server-side:manifest]: Module manifest is not available on the client");`;
 					}
 
 					let code = "export default {";
