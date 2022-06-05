@@ -1,8 +1,8 @@
 import { defineConfig } from "vite";
 import rakkas from "rakkasjs/vite-plugin";
-import mdx from "vite-plugin-mdx";
 import fs from "fs";
 import path from "path";
+import mdx from "@cyco130/vite-plugin-mdx";
 
 // @ts-expect-error: No typings
 import { highlight, loadLanguages } from "reprism";
@@ -12,8 +12,9 @@ import tsx from "reprism/languages/typescript.js";
 import bash from "reprism/languages/bash.js";
 // @ts-expect-error: No typings
 import rhypePrism from "@mapbox/rehype-prism";
+import remarkGfm from "remark-gfm";
 
-loadLanguages(tsx, bash);
+loadLanguages(tsx.default, bash.default);
 
 export default defineConfig({
 	resolve: {
@@ -23,12 +24,20 @@ export default defineConfig({
 		},
 	},
 
+	// TODO: Remove these if https://github.com/vitejs/vite/pull/8454 gets merged
+	ssr: {
+		noExternal: ["sanitize.css", "@docsearch/css"],
+	},
+
 	plugins: [
+		mdx({
+			remarkPlugins: [remarkGfm],
+			rehypePlugins: [rhypePrism],
+		}),
+
 		rakkas({
 			pageExtensions: ["jsx", "tsx", "mdx"],
 		}),
-
-		mdx({ rehypePlugins: [rhypePrism] }),
 
 		{
 			name: "code-sample-loader",

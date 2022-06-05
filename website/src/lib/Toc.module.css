@@ -2,6 +2,20 @@
 	padding: 0 1rem;
 }
 
+.heading {
+	font-family: mpact, Haettenschweiler, "Franklin Gothic Bold", Charcoal,
+		"Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", "sans serif";
+	text-transform: uppercase;
+	text-align: center;
+	background: #f0f0f0;
+	padding: 0.25rem 1rem;
+	margin-bottom: 0.5rem;
+}
+
+.heading:not(:first-child) {
+	margin-top: 1rem;
+}
+
 .link {
 	color: inherit;
 }

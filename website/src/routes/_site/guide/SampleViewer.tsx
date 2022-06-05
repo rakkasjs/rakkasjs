@@ -21,27 +21,6 @@ export const SampleViewer: FC<SampleViewerProps> = ({
 
 	return (
 		<div className={css.wrapper}>
-			{filename && (
-				<figcaption className={css.filename}>
-					<code>
-						<a
-							href={
-								"https://github.com/rakkasjs/rakkasjs/blob/main/website/src/pages/examples/" +
-								realName
-							}
-							target="_blank"
-							rel="noreferrer"
-						>
-							{filename}
-						</a>
-					</code>
-				</figcaption>
-			)}
-
-			{code && (
-				<div dangerouslySetInnerHTML={{ __html: code }} className={css.code} />
-			)}
-
 			{url && (
 				<>
 					<figcaption className={css.filename}>
@@ -69,6 +48,27 @@ export const SampleViewer: FC<SampleViewerProps> = ({
 						)}
 					</p>
 				</>
+			)}
+
+			{filename && (
+				<figcaption className={css.filename}>
+					<code>
+						<a
+							href={
+								"https://github.com/rakkasjs/rakkasjs/blob/main/website/src/pages/examples/" +
+								realName
+							}
+							target="_blank"
+							rel="noreferrer"
+						>
+							{filename}
+						</a>
+					</code>
+				</figcaption>
+			)}
+
+			{code && (
+				<div dangerouslySetInnerHTML={{ __html: code }} className={css.code} />
 			)}
 		</div>
 	);

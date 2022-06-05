@@ -1,0 +1,47 @@
+import { SampleViewer } from "./SampleViewer";
+
+# `useServerSideQuery`
+
+`useServerSideQuery` (`useSSQ` for short) is Rakkas's novel data fetching solution. You can think of it as Next.js's `getServerSideProps` on steroids. It lets you write code as if the server-client barrier didn't exist: You can call filesystem APIs, perform database queries, or call third-party APIs that require private keys or have CORS disabled. You can put any type of server-side code **right in your component**. Rakkas will strip this server-side code and its imports from the client bundle.
+
+Like `useQuery`, `useSSQ` takes a query key and a query function. When it's executed on the server, the query function is called directly. But when it's executed on the client, Rakkas serializes all the values used in the query function body and sends them to the server. The server then deserializes the values, runs the query function, and serializes the return value to be sent back to the client. Unlike `getServerSideProps`, it can be used in _any_ React component, not just pages. It also provides type inference.
+
+Here's a re-implementation of the example in the previous page that fetches its data directly from a (mock) database:
+
+import useSSQExample from "$examples/use-ssq/[pokemon].page.tsx?sample";
+
+<SampleViewer
+	url="/examples/use-ssq/pikachu"
+	code={useSSQExample}
+	height="35em"
+/>
+
+## Caveats
+
+`useServerSideQuery` is very powerful but there are a few important points to keep in mind:
+
+First of all, `useServerSideQuery` is not a normal function. It's more like a macro that is processed by Rakkas's code transforms. The function argument must be defined inline, passing functions defined elsewhere (`useSSQ(someFunc)`) will not work.{/* TODO: createServerSideFunction */}
+
+When it runs on the client, variables from the surrounding scope that you use in the server-side function are captured, serialized, and sent to the server. Since anyone can send any request to the server, **you have to validate everything** that comes from the surrounding scope. In the example above, we make sure that the `pokemon` variable is indeed a string. More complex data will require more complex validation. In essence, each use of `useServerSideQuery` creates an API endpoint so you should treat the server-side function as such and validate all user input.
+
+> TODO: We're planning to create an ESLint rule to enforce safe practices for useServerSideQuery.
+
+{/* TODO: Add a GitHub issue for safe useSSQ rule */}
+
+Also note that instead of referencing `props.params.pokemon`, which would cause the whole `props` object to be captured and serialized, we destructure it and reference only the part we're actually interested in. This is not just to save a few bytes: By default, Rakkas uses the values of the captured variables as part of the cache key, unintentionally capturing irrelevant data may cause unnecessary refetches.
+
+Rakkas uses [`@brillout/json-s`](https://github.com/brillout/json-s) to serialize the captured values and [devalue](https://github.com/Rich-Harris/devalue) to serialize the return value. They both support `Date`, `undefined`, `Set`, `Map`, `BigInt`, `RegExp`, `NaN`, and `Infinity` in addition to standard JSON-serializable types. `devalue` also supports repeated and cyclic references. Captured values and the return value must be serializable with the respective libraries. In particular, functions, arbitrary class instances, DOM elements etc. cannot be serialized properly.
+
+## Circumventing CORS restrictions
+
+One very handy use of `useSSQ` is to easily circumvent CORS restrictions when calling third-party APIs:
+
+```ts
+const result = useServerSideQuery(() =>
+	fetch("https://some.cors.restricted.api.example.com").then((res) =>
+		res.json(),
+	),
+);
+```
+
+This works because the `fetch` call inside `useServerSideQuery` runs on the server-side which is not affected by CORS restrictions. In effect, it creates an ad-hoc CORS proxy.

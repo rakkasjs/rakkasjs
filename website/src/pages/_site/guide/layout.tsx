@@ -1,11 +1,9 @@
 import { toc } from "./toc";
-import React from "react";
-import { Layout, Link } from "rakkasjs";
+import { Head, Layout, Link } from "rakkasjs";
 import css from "./layout.module.css";
-import { Helmet } from "react-helmet-async";
 import { Toc } from "$lib/Toc";
 
-const GuideLayout: Layout = ({ error, children, url }) => {
+const GuideLayout: Layout = ({ children, url }) => {
 	const slug = url.pathname.split("/")[2];
 	const currentIndex = toc.findIndex((item) => "/guide/" + slug === item.slug);
 
@@ -21,11 +19,9 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 
 	return (
 		<div className={css.wrapper}>
-			<Helmet
+			<Head
 				title={
-					error
-						? error.message
-						: toc[currentIndex]
+					toc[currentIndex]
 						? toc[currentIndex].title + " - Rakkas Guide"
 						: "Rakkas Guide"
 				}
@@ -33,17 +29,11 @@ const GuideLayout: Layout = ({ error, children, url }) => {
 
 			<div className={css.contentWrapper}>
 				<div className={css.content}>
-					{error ? (
-						<h1>{error.message}</h1>
-					) : (
-						<>
-							{prevNext}
+					{prevNext}
 
-							<article>{children}</article>
+					<article>{children}</article>
 
-							{prevNext}
-						</>
-					)}
+					{prevNext}
 				</div>
 			</div>
 

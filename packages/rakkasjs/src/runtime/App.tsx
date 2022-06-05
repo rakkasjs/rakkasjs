@@ -11,10 +11,15 @@ export function App() {
 	const lastRoute = useContext(RouteContext);
 
 	if (!lastRoute.last || lastRoute.last.pathname !== url.pathname) {
-		throw loadRoute(url, lastRoute.found).then((route) => {
-			lastRoute.last = route;
-			lastRoute.onRendered?.();
-		});
+		// TODO: Error handling
+		throw loadRoute(url, lastRoute.found)
+			.then((route) => {
+				lastRoute.last = route;
+				lastRoute.onRendered?.();
+			})
+			.catch((err) => {
+				console.error(err);
+			});
 	}
 
 	const app = lastRoute.last.app;
@@ -56,7 +61,7 @@ export async function loadRoute(
 
 	const importers = found.route[1];
 
-	const promises = importers.map((importer) =>
+	const promises = importers.map(async (importer) =>
 		importer(),
 	) as Promise<LayoutModule>[];
 

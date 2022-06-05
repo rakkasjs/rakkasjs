@@ -39,7 +39,7 @@ This is _not_ a page, just an ordinary React component. In Rakkas 0.6 pages aren
 
 `useSSQ`'s return type is inferred, so, if you're using TypeScript, you get IDE completion just like you would with a local function call. Another nice feature is that, unlike other similar data fetching hooks, `useSSQ` doesn't return loading or error states. Those are handled higher up in the component tree, with Suspense fallbacks and error boundaries respectively. This way, your component code stays clean and focused.
 
-Paired with its sibling `useServerSideMutation`, `useSSQ` let's you write code as if the server-client barrier didn't exist. This is almost too good to be true, surely there must be some caveats to this. And there are indeed.
+Paired with its sibling `useServerSideMutation`, `useSSQ` lets you write code as if the server-client barrier didn't exist. This is almost too good to be true, surely there must be some caveats to this. And there are indeed.
 
 `useSSQ` “captures” the variables from the surrounding scope. In the above example, when the code runs on the client, `userName` is captured, serialized, and sent to the server. The server then runs the function and the result is serialized and sent back to the client.
 

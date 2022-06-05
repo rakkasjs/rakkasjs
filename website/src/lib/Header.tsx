@@ -10,7 +10,7 @@ import { GuidIcon } from "$lib/GuideIcon";
 import { ExternalIcon } from "$lib/ExternalIcon";
 import { BlogIcon } from "$lib/BlogIcon";
 import { Toc } from "./Toc";
-import { toc as guideToc } from "../pages/_site/guide/toc";
+import { toc as guideToc } from "../routes/_site/guide/toc";
 import { toc as blogToc } from "../routes/_site/blog/toc";
 import { DocSearch } from "@docsearch/react";
 import "@docsearch/css";

@@ -3,7 +3,7 @@ import React from "react";
 import css from "./Toc.module.css";
 
 export interface TocProps {
-	toc: Array<{ slug: string; title: string; date?: string }>;
+	toc: Array<string | { slug: string; title: string; date?: string }>;
 }
 
 export function Toc(props: TocProps) {
@@ -12,25 +12,31 @@ export function Toc(props: TocProps) {
 	return (
 		<nav>
 			<ul className={css.list}>
-				{toc.map((item) => (
-					<li key={item.slug} className={item.date && css.blog}>
-						<StyledLink
-							href={item.slug}
-							className={css.link}
-							activeClass={css.active}
-							pendingClass={css.pending}
-							onCompareUrls={(url, href) => url.pathname === href.pathname}
-						>
-							{item.date && (
-								<>
-									<small>{item.date}</small>
-									<br />
-								</>
-							)}
-							{item.title}
-						</StyledLink>
-					</li>
-				))}
+				{toc.map((item) =>
+					typeof item === "string" ? (
+						<li key={item} className={css.heading}>
+							{item}
+						</li>
+					) : (
+						<li key={item.slug} className={item.date && css.blog}>
+							<StyledLink
+								href={item.slug}
+								className={css.link}
+								activeClass={css.active}
+								pendingClass={css.pending}
+								onCompareUrls={(url, href) => url.pathname === href.pathname}
+							>
+								{item.date && (
+									<>
+										<small>{item.date}</small>
+										<br />
+									</>
+								)}
+								{item.title}
+							</StyledLink>
+						</li>
+					),
+				)}
 			</ul>
 		</nav>
 	);

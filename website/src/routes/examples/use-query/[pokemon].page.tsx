@@ -17,20 +17,21 @@ interface Data {
 }
 
 export default function PokemonStatPage({ params }: PageProps<Params>) {
-	// Cache key for the data to be fetched
+	// Unique key for the data to be fetched
 	const key = `pokemon:${params.pokemon}`;
 
-	const fetched = useQuery(key, async () => {
+	const { value } = useQuery(key, async (ctx) => {
 		// Fetch pokémon data from the Pokéapi
-		const data: Data = await fetch(
-			`https://pokeapi.co/api/v2/pokemon/${params.pokemon}`,
-		).then((r) => {
-			if (!r.ok) throw new Error(r.statusText);
-			return r.json();
-		});
+		const data: Data = await ctx
+			.fetch(`https://pokeapi.co/api/v2/pokemon/${params.pokemon}`)
+			.then((r) => {
+				if (!r.ok) throw new Error(r.statusText);
+				return r.json();
+			});
 
 		// Pokéapi returns a lot of data, we only need the sprite and stats.
-		// Let's pluck it to avoid unnecessary data serialization.
+		// Let's pluck it to avoid unnecessary data serialization in case this
+		// is a server-side render.
 		return {
 			sprites: {
 				front_default: data.sprites?.front_default,
@@ -42,10 +43,6 @@ export default function PokemonStatPage({ params }: PageProps<Params>) {
 			})),
 		};
 	});
-
-	if (!fetched.success) {
-		return <div>Error: {fetched.error}</div>;
-	}
 
 	return (
 		<div className={css.wrapper}>
@@ -76,7 +73,7 @@ export default function PokemonStatPage({ params }: PageProps<Params>) {
 
 				<p>
 					<img
-						src={fetched.value.sprites && fetched.value.sprites.front_default}
+						src={value.sprites && value.sprites.front_default}
 						className={css.image}
 						height={96}
 					/>
@@ -85,7 +82,7 @@ export default function PokemonStatPage({ params }: PageProps<Params>) {
 
 			<h3>Stats</h3>
 			<ul className={css.stats}>
-				{fetched.value.stats.map((s) => (
+				{value.stats.map((s) => (
 					<li className={css.stat} key={s.stat.name}>
 						<h4>{s.stat.name}</h4>
 						Base: {s.base_stat}

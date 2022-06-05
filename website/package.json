@@ -23,7 +23,7 @@
 		"ssr"
 	],
 	"dependencies": {
-		"@mdx-js/react": "^1.6.22",
+		"@mdx-js/react": "^2.1.1",
 		"cookie": "^0.5.0",
 		"hamburger-react": "^2.4.1",
 		"prism": "^4.1.2",
@@ -33,13 +33,13 @@
 		"sanitize.css": "^13.0.0"
 	},
 	"devDependencies": {
+		"@cyco130/vite-plugin-mdx": "^0.0.0",
 		"@docsearch/css": "^3.0.0-alpha.50",
 		"@docsearch/react": "^3.0.0-alpha.50",
 		"@mapbox/rehype-prism": "^0.8.0",
-		"@mdx-js/mdx": "^1.6.22",
+		"@rollup/pluginutils": "^4.2.1",
 		"@types/cookie": "^0.5.1",
-		"@types/mdx-js__react": "^1.5.5",
-		"@types/react": "^18.0.9",
+		"@types/react": "^18.0.10",
 		"@types/react-dom": "^18.0.5",
 		"@typescript-eslint/eslint-plugin": "^5.26.0",
 		"@typescript-eslint/parser": "^5.26.0",
@@ -52,10 +52,12 @@
 		"node-dev": "^7.1.0",
 		"prettier": "^2.5.1",
 		"rakkasjs": "workspace:*",
+		"remark-gfm": "^3.0.1",
 		"reprism": "^0.0.11",
 		"sirv": "^2.0.2",
+		"source-map": "^0.7.4",
 		"typescript": "^4.7.2",
-		"vite": "3.0.0-alpha.9",
-		"vite-plugin-mdx": "^3.5.10"
+		"vfile": "^5.3.2",
+		"vite": "3.0.0-alpha.9"
 	}
 }

@@ -3,5 +3,10 @@ import { Redirect } from "rakkasjs";
 import { toc } from "./toc";
 
 export default function GuideHomeRedirect() {
-	return <Redirect href={toc[0].slug} />;
+	const first = toc[1];
+	if (typeof first === "string") {
+		throw new Error("Invalid TOC entry");
+	}
+
+	return <Redirect href={first.slug} />;
 }

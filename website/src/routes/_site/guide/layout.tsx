@@ -10,8 +10,14 @@ const GuideLayout: Layout = ({ children, url }) => {
 	const slug = url.pathname.split("/")[2];
 	const currentIndex = toc.findIndex((item) => "/guide/" + slug === item.slug);
 
-	const prev = toc[currentIndex - 1];
-	const next = toc[currentIndex + 1];
+	const prev =
+		typeof toc[currentIndex - 1] === "string"
+			? toc[currentIndex - 2]
+			: toc[currentIndex - 1];
+	const next =
+		typeof toc[currentIndex + 1] === "string"
+			? toc[currentIndex + 2]
+			: toc[currentIndex + 1];
 
 	const prevNext = (
 		<nav className={css.prevNext}>

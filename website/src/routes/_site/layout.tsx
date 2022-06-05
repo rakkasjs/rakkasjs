@@ -20,6 +20,8 @@ const MainLayout: Layout = ({ children }) => (
 		<div className={css.main}>
 			<MDXProvider
 				components={{
+					// TODO: Typing problem
+					// @ts-expect-error: To fix
 					a: MdxLink,
 					// eslint-disable-next-line react/display-name
 					table: (props) => (
@@ -56,6 +58,8 @@ const MdxLink: typeof Link = forwardRef(({ children, ...props }, ref) => {
 
 	const url =
 		props.href === undefined ? undefined : new URL(props.href, current);
+
+	console.log(url);
 
 	return (
 		<Link

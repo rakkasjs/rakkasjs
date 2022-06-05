@@ -13,7 +13,10 @@ export default function PokemonStatsPage(props: PageProps<Params>) {
 	} = props;
 
 	const query = useServerSideQuery(() => {
+		// This function's body runs on the server!
 		if (typeof pokemon !== "string") {
+			// This is server-side code, we should validate
+			// every input parameter.
 			throw new Error("Invalid request");
 		}
 

@@ -12,7 +12,7 @@ import navlinkExample from "$examples/navlink/[userName].page.jsx?sample";
 
 <SampleViewer code={navlinkExample} url="/examples/navlink/Fatih" />
 
-For programmatic navigation, you can use `history.back()`, `history.forward()` and `history.go()` to navigate back and forward in the browser history but _you can't_ use `history.pushState()` or `history.replaceState()` because Rakkas would have no way of knowing they were called. It provides the `navigate` function for this purpose:
+For **programmatic navigation**, you can use `history.back()`, `history.forward()` and `history.go()` to navigate back and forward in the browser history but _you can't_ use `history.pushState()` or `history.replaceState()` because Rakkas would have no way of knowing they were called. It provides the `navigate` function for this purpose:
 
 import navigateExample from "$examples/navigate/[userName].page.jsx?sample";
 
