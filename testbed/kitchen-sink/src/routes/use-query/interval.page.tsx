@@ -33,7 +33,7 @@ function UseQueryDisplay() {
 
 	return (
 		<div>
-			<p>Counter: {result.value}</p>
+			<p>Counter: {result.data}</p>
 		</div>
 	);
 }

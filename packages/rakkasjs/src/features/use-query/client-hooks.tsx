@@ -1,7 +1,7 @@
 import React, { ReactElement, ReactNode } from "react";
 import {
 	CacheItem,
-	DEFAULT_EVICTION_TIME,
+	DEFAULT_CACHE_TIME,
 	QueryCacheContext,
 } from "./implementation";
 
@@ -48,7 +48,7 @@ const cache = {
 				subscribers: new Set(),
 				date: Date.now(),
 				hydrated: true,
-				evictionTime: DEFAULT_EVICTION_TIME,
+				cacheTime: DEFAULT_CACHE_TIME,
 			};
 
 			delete $RSC[key];
@@ -57,17 +57,18 @@ const cache = {
 		return queryCache[key];
 	},
 
-	set(key: string, valueOrPromise: any, evictionTime: number) {
+	set(key: string, valueOrPromise: any, cacheTime: number) {
 		if (valueOrPromise instanceof Promise) {
 			queryCache[key] ||= {
 				date: Date.now(),
 				hydrated: false,
 				subscribers: new Set(),
-				evictionTime,
+				cacheTime,
 			};
 			queryCache[key] = {
 				...queryCache[key]!,
 				promise: valueOrPromise,
+				cacheTime: Math.max(queryCache[key]!.cacheTime, cacheTime),
 			};
 
 			valueOrPromise.then(
@@ -93,7 +94,7 @@ const cache = {
 				date: Date.now(),
 				hydrated: false,
 				subscribers: new Set(),
-				evictionTime,
+				cacheTime,
 			};
 			queryCache[key] = {
 				...queryCache[key]!,
@@ -111,7 +112,7 @@ const cache = {
 			subscribers: new Set(),
 			date: Date.now(),
 			hydrated: false,
-			evictionTime: DEFAULT_EVICTION_TIME,
+			cacheTime: DEFAULT_CACHE_TIME,
 		};
 		queryCache[key]!.subscribers.add(fn);
 		if (queryCache[key]!.evictionTimeout !== undefined) {
@@ -125,12 +126,12 @@ const cache = {
 			if (queryCache[key]!.subscribers.size === 0) {
 				delete queryCache[key]!.error;
 
-				if (queryCache[key]!.evictionTime === 0) {
+				if (queryCache[key]!.cacheTime === 0) {
 					delete queryCache[key];
-				} else if (isFinite(queryCache[key]!.evictionTime)) {
+				} else if (isFinite(queryCache[key]!.cacheTime)) {
 					queryCache[key]!.evictionTimeout = setTimeout(() => {
 						delete queryCache[key];
-					}, queryCache[key]!.evictionTime);
+					}, queryCache[key]!.cacheTime);
 				}
 			}
 		};

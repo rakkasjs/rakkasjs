@@ -63,5 +63,5 @@ function ThrowingQuery(props: { onSetResolver(resolver: () => void): void }) {
 		return "Hello world";
 	});
 
-	return <p>{result.value}</p>;
+	return <p>{result.data}</p>;
 }

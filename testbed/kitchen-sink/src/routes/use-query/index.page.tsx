@@ -32,10 +32,10 @@ function UseQueryDisplay() {
 	return (
 		<div>
 			<p>
-				{result.value}
-				{result.refetching && " (refetching)"}
+				{result.data}
+				{result.isRefetching && " (refetching)"}
 			</p>
-			{result.refetching ? (
+			{result.isRefetching ? (
 				<button onClick={() => resolverRef.current!()}>Resolve</button>
 			) : (
 				<button onClick={() => result.refetch()}>Refetch</button>

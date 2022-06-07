@@ -15,14 +15,14 @@ export interface CacheItem {
 	date: number;
 	subscribers: Set<() => void>;
 	hydrated: boolean;
-	evictionTime: number;
+	cacheTime: number;
 	evictionTimeout?: ReturnType<typeof setTimeout>;
 }
 
 export interface QueryCache {
 	has(key: string): boolean;
 	get(key: string): CacheItem | undefined;
-	set(key: string, value: any, evictionTime: number): void;
+	set(key: string, value: any, cacheTime: number): void;
 	subscribe(key: string, fn: () => void): () => void;
 }
 
@@ -36,7 +36,7 @@ export interface UseQueryOptions {
 	 *
 	 * @default 300_000 (5 minutes)
 	 */
-	evictionTime?: number;
+	cacheTime?: number;
 	/**
 	 * Time in milliseconds after which a cached value will be considered
 	 * stale.
@@ -68,7 +68,7 @@ export interface UseQueryOptions {
 	refetchIntervalInBackground?: boolean;
 }
 
-export const DEFAULT_EVICTION_TIME = 5 * 60 * 1000;
+export const DEFAULT_CACHE_TIME = 5 * 60 * 1000;
 const DEFAULT_STALE_TIME = 100;
 
 export interface QueryContext {
@@ -129,10 +129,8 @@ function useQueryBase<T>(
 	fn: QueryFn<T>,
 	options: UseQueryOptions = {},
 ): QueryResult<T> | undefined {
-	const {
-		evictionTime = DEFAULT_EVICTION_TIME,
-		staleTime = DEFAULT_STALE_TIME,
-	} = options;
+	const { cacheTime = DEFAULT_CACHE_TIME, staleTime = DEFAULT_STALE_TIME } =
+		options;
 
 	const cache = useContext(QueryCacheContext);
 
@@ -170,7 +168,7 @@ function useQueryBase<T>(
 			!item.hydrated
 		) {
 			const promiseOrValue = fn(ctx);
-			cache.set(key!, promiseOrValue, evictionTime);
+			cache.set(key!, promiseOrValue, cacheTime);
 		}
 
 		item.hydrated = false;
@@ -189,16 +187,16 @@ function useQueryBase<T>(
 	function refetch() {
 		const item = cache.get(key!);
 		if (!item?.promise) {
-			cache.set(key!, fn(ctx), evictionTime);
+			cache.set(key!, fn(ctx), cacheTime);
 		}
 	}
 
 	if (item && "value" in item) {
 		return {
-			value: item.value,
-			refetching: !!item.promise,
+			data: item.value,
+			isRefetching: !!item.promise,
 			refetch,
-			date: item.date,
+			dataUpdatedAt: item.date,
 		};
 	}
 
@@ -207,25 +205,25 @@ function useQueryBase<T>(
 	}
 
 	const result = fn(ctx);
-	cache.set(key, result, evictionTime);
+	cache.set(key, result, cacheTime);
 
 	if (result instanceof Promise) {
 		throw result;
 	}
 
 	return {
-		value: result,
+		data: result,
 		refetch,
-		refetching: false,
-		date: item?.date ?? Date.now(),
+		isRefetching: false,
+		dataUpdatedAt: item?.date ?? Date.now(),
 	};
 }
 
 export interface QueryResult<T> {
-	value: T;
+	data: T;
 	refetch(): void;
-	refetching: boolean;
-	date: number;
+	isRefetching: boolean;
+	dataUpdatedAt: number;
 }
 
 function useRefetch<T>(
@@ -247,7 +245,7 @@ function useRefetch<T>(
 			if (
 				document.visibilityState === "visible" &&
 				(refetchOnWindowFocus === "always" ||
-					staleTime <= Date.now() - queryResult!.date)
+					staleTime <= Date.now() - queryResult!.dataUpdatedAt)
 			) {
 				queryResult!.refetch();
 			}
