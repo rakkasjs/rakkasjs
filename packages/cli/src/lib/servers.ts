@@ -1,5 +1,6 @@
 import { createServer as createViteServer, ViteDevServer } from "vite";
 import { createServer as createHttpServer } from "http";
+import { resolveHttpsConfig } from "../lib/https";
 import { makeViteConfig } from "../lib/vite-config";
 import { encode } from "html-entities";
 import { htmlTemplate } from "../lib/html-template";
@@ -11,16 +12,43 @@ export interface ServersConfig {
 	config: FullConfig;
 	deps?: string[];
 	onReload?: () => void;
+	https?: true;
 }
 
 export async function createServers({
 	config,
 	deps: configDeps,
+	https,
 	onReload,
 }: ServersConfig) {
 	let vite: ViteDevServer;
 
-	const http = createHttpServer({}, async (req, res) => {
+	// Default server is HTTP
+	let server = createHttpServer;
+	if (https) {
+		// @ts-ignore
+		server = (await import('http2')).createSecureServer
+	}
+
+	const viteConfig = await makeViteConfig(config, "node", "dev", {
+		configDeps,
+		onConfigChange: onReload,
+	});
+
+	const httpsOptions = await resolveHttpsConfig(
+		viteConfig?.server?.https,
+		viteConfig.cacheDir
+	)
+
+	let serverConfig = {}
+	if (https && httpsOptions) {
+		serverConfig = {
+			...serverConfig,
+			...httpsOptions
+		}
+	}
+
+	const http = server(serverConfig, async (req, res) => {
 		const url = req.url || "/";
 		const viteConfig = await makeViteConfig(config, "node", "dev", {
 			configDeps,
