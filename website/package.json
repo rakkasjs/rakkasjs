@@ -2,8 +2,6 @@
 	"private": true,
 	"type": "module",
 	"name": "@rakkasjs/website",
-	"version": "0.5.1",
-	"description": "Rakkas.js website",
 	"scripts": {
 		"--start": "sirv --port 3000 dist",
 		"--build": "rakkas build -d static",

@@ -59,8 +59,6 @@ const MdxLink: typeof Link = forwardRef(({ children, ...props }, ref) => {
 	const url =
 		props.href === undefined ? undefined : new URL(props.href, current);
 
-	console.log(url);
-
 	return (
 		<Link
 			target={!url || url.origin === current.origin ? undefined : "_blank"}

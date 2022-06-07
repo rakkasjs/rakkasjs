@@ -11,10 +11,10 @@ const titles = [
 	"## Data fetching",
 	"useQuery",
 	"useServerSideQuery",
-	"Isomorphic fetch",
-	"Refetching data",
+	"Refetching",
 	"Error handling",
 
+	"## Misc",
 	"Fast refresh",
 	"API routes",
 	"Load helpers",

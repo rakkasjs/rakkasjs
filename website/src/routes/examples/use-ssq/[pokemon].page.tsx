@@ -52,7 +52,7 @@ export default function PokemonStatsPage(props: PageProps<Params>) {
 
 				<p>
 					<img
-						src={query.value.sprites && query.value.sprites.front_default}
+						src={query.data.sprites && query.data.sprites.front_default}
 						className={css.image}
 						height={96}
 					/>
@@ -61,7 +61,7 @@ export default function PokemonStatsPage(props: PageProps<Params>) {
 
 			<h3>Stats</h3>
 			<ul className={css.stats}>
-				{query.value.stats.map((s) => (
+				{query.data.stats.map((s) => (
 					<li className={css.stat} key={s.stat.name}>
 						<h4>{s.stat.name}</h4>
 						Base: {s.base_stat}

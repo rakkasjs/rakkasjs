@@ -7,7 +7,7 @@ interface Params {
 }
 
 // Type for the Pokéapi data, just the bits we actually use
-interface Data {
+interface Pokemon {
 	sprites?: { front_default?: string };
 	stats: Array<{
 		stat: { name: string };
@@ -20,9 +20,9 @@ export default function PokemonStatPage({ params }: PageProps<Params>) {
 	// Unique key for the data to be fetched
 	const key = `pokemon:${params.pokemon}`;
 
-	const { value } = useQuery(key, async (ctx) => {
+	const { data } = useQuery(key, async (ctx) => {
 		// Fetch pokémon data from the Pokéapi
-		const data: Data = await ctx
+		const pokemon: Pokemon = await ctx
 			.fetch(`https://pokeapi.co/api/v2/pokemon/${params.pokemon}`)
 			.then((r) => {
 				if (!r.ok) throw new Error(r.statusText);
@@ -34,9 +34,9 @@ export default function PokemonStatPage({ params }: PageProps<Params>) {
 		// is a server-side render.
 		return {
 			sprites: {
-				front_default: data.sprites?.front_default,
+				front_default: pokemon.sprites?.front_default,
 			},
-			stats: data.stats.map((stat) => ({
+			stats: pokemon.stats.map((stat) => ({
 				stat: { name: stat.stat.name },
 				base_stat: stat.base_stat,
 				effort: stat.effort,
@@ -73,7 +73,7 @@ export default function PokemonStatPage({ params }: PageProps<Params>) {
 
 				<p>
 					<img
-						src={value.sprites && value.sprites.front_default}
+						src={data.sprites && data.sprites.front_default}
 						className={css.image}
 						height={96}
 					/>
@@ -82,7 +82,7 @@ export default function PokemonStatPage({ params }: PageProps<Params>) {
 
 			<h3>Stats</h3>
 			<ul className={css.stats}>
-				{value.stats.map((s) => (
+				{data.stats.map((s) => (
 					<li className={css.stat} key={s.stat.name}>
 						<h4>{s.stat.name}</h4>
 						Base: {s.base_stat}

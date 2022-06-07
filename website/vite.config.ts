@@ -33,6 +33,7 @@ export default defineConfig({
 		mdx({
 			remarkPlugins: [remarkGfm],
 			rehypePlugins: [rhypePrism],
+			providerImportSource: "@mdx-js/react",
 		}),
 
 		rakkas({

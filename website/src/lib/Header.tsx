@@ -14,6 +14,7 @@ import { toc as guideToc } from "../routes/_site/guide/toc";
 import { toc as blogToc } from "../routes/_site/blog/toc";
 import { DocSearch } from "@docsearch/react";
 import "@docsearch/css";
+import { ReferenceIcon } from "$lib/ReferenceIcon";
 
 export const Header: FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -82,6 +83,19 @@ export const Header: FC = () => {
 							<GuidIcon />
 						</span>{" "}
 						Guide
+					</StyledLink>
+				</li>
+				<li>
+					<StyledLink
+						href="/reference"
+						activeClass={css.activeLink}
+						pendingClass={css.nextLink}
+						onCompareUrls={(url) => url.pathname.startsWith("/reference")}
+					>
+						<span className={css.icon}>
+							<ReferenceIcon />
+						</span>{" "}
+						Reference
 					</StyledLink>
 				</li>
 				<li>
