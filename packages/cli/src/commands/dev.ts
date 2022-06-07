@@ -19,17 +19,25 @@ export default function devCommand() {
 			"development server host",
 			process.env.HOST || "localhost",
 		)
+		.option(
+			"-s, --secure",
+			"Use HTTPS server"
+		)
 		.option("-o, --open", "open in browser")
 		.description("Start a development server")
 		.action(startServer);
 }
 
-async function startServer(opts: { port: string; host: string; open?: true }) {
+async function startServer(opts: { port: string; host: string; open?: true, secure?: true }) {
 	installNodeFetch();
 
 	const port = Number(opts.port);
 	if (!Number.isInteger(port)) {
 		throw new Error(`Invalid port number ${opts.port}`);
+	}
+
+	if (opts.secure) {
+		console.log(chalk.green("Using HTTPS server"));
 	}
 
 	const host = opts.host;
@@ -66,19 +74,21 @@ async function startServer(opts: { port: string; host: string; open?: true }) {
 		config,
 		deps,
 		onReload: reload,
+		https: opts.secure
 	});
 
 	http.listen({ port, host }).on("listening", async () => {
+		const url = opts.secure ? `https://${host}:${port}` : `http://${host}:${port}`
 		// eslint-disable-next-line no-console
 		console.log(
 			chalk.green("Server listening on"),
-			chalk.whiteBright(`http://${host}:${port}`),
+			chalk.whiteBright(url),
 		);
 
 		if (opts.open) {
 			// eslint-disable-next-line no-console
 			console.log(chalk.blue("Launching the browser"));
-			await open(`http://${host}:${port}`);
+			await open(url);
 		}
 	});
 }
