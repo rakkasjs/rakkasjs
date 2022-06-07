@@ -1,9 +1,13 @@
 import React, { createContext } from "react";
 import { hattipHandler } from "../../runtime/hattip-handler";
-import { CreateServerHooksFn } from "../../runtime/server-hooks";
+import type { RakkasServerHooks } from "../../runtime/server-hooks";
 import { runHandler } from "@hattip/core";
+import type { RequestContext } from "../../lib";
 
-const createIsomorphicFetchHooks: CreateServerHooksFn = (request, ctx) => {
+export default function createIsomorphicFetchHooks(
+	request: Request,
+	ctx: RequestContext<Record<string, string>>,
+): RakkasServerHooks {
 	ctx.fetch = async (input, init) => {
 		let url: URL | undefined;
 
@@ -56,9 +60,7 @@ const createIsomorphicFetchHooks: CreateServerHooksFn = (request, ctx) => {
 			</IsomorphicFetchContext.Provider>
 		),
 	};
-};
-
-export default createIsomorphicFetchHooks;
+}
 
 export const IsomorphicFetchContext = createContext<undefined | typeof fetch>(
 	undefined,

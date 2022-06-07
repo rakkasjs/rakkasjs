@@ -1,4 +1,4 @@
-import { Plugin, SSROptions, UserConfig } from "vite";
+import { Plugin } from "vite";
 
 export function injectConfig(): Plugin {
 	return {
@@ -6,7 +6,7 @@ export function injectConfig(): Plugin {
 
 		enforce: "pre",
 
-		config() {
+		config(_, env) {
 			return {
 				buildSteps: [
 					{
@@ -28,13 +28,6 @@ export function injectConfig(): Plugin {
 							build: {
 								outDir: "dist/server",
 								ssr: true,
-								// rollupOptions: {
-								// 	output: {
-								// 		chunkFileNames(info) {
-								// 			return "assets/[name].[hash].mjs";
-								// 		},
-								// 	},
-								// },
 							},
 						},
 					},
@@ -42,25 +35,21 @@ export function injectConfig(): Plugin {
 
 				ssr: {
 					external: ["react-dom/server.browser"],
-					noExternal: [
-						"rakkasjs",
-						"rakkasjs/runtime/vavite-handler",
-						"rakkasjs/runtime/client-entry",
-					],
+					noExternal: ["rakkasjs"],
 				},
 
 				optimizeDeps: {
-					include: ["rakkasjs"],
+					include:
+						env.command === "serve" ? ["rakkasjs", "react", "react-dom"] : [],
 					exclude: [
 						"virtual:rakkasjs:client-manifest",
 						"virtual:rakkasjs:client-page-routes",
 						"virtual:rakkasjs:api-routes",
 						"virtual:rakkasjs:run-server-side:manifest",
 						"virtual:rakkasjs:server-page-routes",
-						"rakkasjs/runtime/vavite-handler",
 					],
 				},
-			} as UserConfig & { ssr: SSROptions };
+			};
 		},
 	};
 }

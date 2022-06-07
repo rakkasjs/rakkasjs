@@ -3,11 +3,7 @@ import { hydrateRoot } from "react-dom/client";
 import { App, loadRoute, RouteContext } from "./App";
 import clientHooks from "./feature-client-hooks";
 
-export async function go() {
-	throw new Error("Not implemented");
-}
-
-async function startClient() {
+export async function startClient() {
 	for (const hooks of clientHooks) {
 		if (hooks.beforeInitialize) {
 			await hooks.beforeInitialize();
@@ -36,8 +32,6 @@ async function startClient() {
 
 	hydrateRoot(document.getElementById("root")!, app);
 }
-
-startClient();
 
 /*
 

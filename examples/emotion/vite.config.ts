@@ -1,4 +1,4 @@
-import { defineConfig, UserConfig, SSROptions } from "vite";
+import { defineConfig } from "vite";
 import rakkas from "rakkasjs/vite-plugin";
 
 export default defineConfig({

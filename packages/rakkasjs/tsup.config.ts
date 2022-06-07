@@ -7,24 +7,18 @@ export default defineConfig([
 		},
 		format: ["esm"],
 		platform: "node",
-		target: "node14",
 	},
 	{
 		entry: { "vite-plugin": "./src/vite-plugin/index.ts" },
 		format: ["esm"],
 		platform: "node",
-		target: "node14",
 		dts: true,
 	},
 	{
-		entry: {
-			index: "./src/lib/index.ts",
-			"runtime/vavite-handler": "./src/runtime/vavite-handler.ts",
-			"runtime/client-entry": "./src/runtime/client-entry.tsx",
-		},
+		entry: ["./src/lib/client.ts"],
+		target: "node14",
 		format: ["esm"],
 		platform: "node",
-		target: "node14",
 		shims: false,
 		external: [
 			"virtual:rakkasjs:api-routes",
@@ -43,5 +37,30 @@ export default defineConfig([
 		dts: {
 			entry: "./src/lib/index.ts",
 		},
+	},
+	{
+		entry: ["./src/lib/server.ts"],
+		format: ["esm"],
+		platform: "node",
+		shims: false,
+		external: [
+			"virtual:rakkasjs:api-routes",
+			"virtual:rakkasjs:server-page-routes",
+			"virtual:rakkasjs:client-page-routes",
+			"virtual:rakkasjs:client-manifest",
+			"virtual:rakkasjs:run-server-side:manifest",
+			"react",
+			"react/jsx-runtime",
+			"react/jsx-dev-runtime",
+			"react-dom",
+			"react-dom/server",
+			"react-dom/server.browser",
+			"@vavite/expose-vite-dev-server/vite-dev-server",
+		],
+	},
+	{
+		entry: ["./src/lib/node-adapter.ts"],
+		format: ["esm"],
+		platform: "node",
 	},
 ]);

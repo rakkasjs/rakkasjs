@@ -9,3 +9,6 @@ export * from "../features/client-side-navigation/lib";
 export * from "../features/client-only/lib";
 export * from "../features/response-manipulation/lib";
 export * from "../features/error-boundary/lib";
+
+export type { startClient } from "../runtime/client-entry";
+export type { hattipHandler } from "../runtime/hattip-handler";

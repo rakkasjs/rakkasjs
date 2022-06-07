@@ -14,8 +14,13 @@ export function virtualClientEntry(): Plugin {
 
 		async load(id) {
 			if (id === "virtual:rakkasjs:client-entry") {
-				return `import "rakkasjs/runtime/client-entry"`;
+				return MODULE_CONTENTS;
 			}
 		},
 	};
 }
+
+const MODULE_CONTENTS = `
+	import { startClient } from "rakkasjs";
+	startClient();
+`;

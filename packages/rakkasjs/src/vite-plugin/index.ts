@@ -13,6 +13,7 @@ import { resolveClientManifest } from "./resolve-client-manifest";
 import apiRoutes from "../features/api-routes/vite-plugin";
 import pageRoutes from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
+import { virtualNodeHandlerEntry } from "./virtual-node-handler-entry";
 
 export interface RakkasOptions {
 	/** File extensions for pages and layouts @default ["jsx","tsx"] */
@@ -25,7 +26,7 @@ export interface RakkasOptions {
 
 export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 	const nodeHandlerEntry =
-		options.nodeHandlerEntry || "rakkasjs/runtime/vavite-handler";
+		options.nodeHandlerEntry || "/virtual:rakkasjs:node-handler-entry";
 
 	return [
 		...vaviteConnect({
@@ -43,6 +44,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		pageRoutes({
 			pageExtensions: options.pageExtensions,
 		}),
+		virtualNodeHandlerEntry(),
 		virtualClientEntry(),
 		resolveClientManifest(),
 		...runServerSide(),
