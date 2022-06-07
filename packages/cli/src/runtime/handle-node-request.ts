@@ -69,7 +69,7 @@ export async function handleNodeRequest({
 			ip,
 			url: new URL(req.url || "/", `${proto}://${host}`),
 			method: req.method || "GET",
-			headers: new Headers(req.headers as Record<string, string>),
+			headers: new Headers(sanitizeHeaders(req.headers as Record<string, string>)),
 			type,
 			body,
 			originalIp: req.socket.remoteAddress!,
@@ -103,4 +103,14 @@ export async function handleNodeRequest({
 	} else {
 		res.end(JSON.stringify(response.body));
 	}
+}
+
+export function sanitizeHeaders(headers: Record<string, string>) {
+	return Object.fromEntries(
+		Object.entries(headers).map(([key, val]) => {
+			if (!key.startsWith(":")) return [key, val];
+			if (key === ":authority") return ["host", val];
+			return [key.slice(1), val];
+		})
+		)
 }
