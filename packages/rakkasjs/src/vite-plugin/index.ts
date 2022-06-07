@@ -19,12 +19,17 @@ export interface RakkasOptions {
 	pageExtensions?: string[];
 	/** Options passed to @vite/plugin-react */
 	react?: ReactPluginOptions;
+
+	nodeHandlerEntry?: string;
 }
 
 export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
+	const nodeHandlerEntry =
+		options.nodeHandlerEntry || "rakkasjs/runtime/vavite-handler";
+
 	return [
 		...vaviteConnect({
-			handlerEntry: "rakkasjs/runtime/vavite-handler",
+			handlerEntry: nodeHandlerEntry,
 			clientAssetsDir: "dist/client",
 			serveClientAssetsInDev: true,
 		}),

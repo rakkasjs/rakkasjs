@@ -48,6 +48,18 @@ export function injectConfig(): Plugin {
 						"rakkasjs/runtime/client-entry",
 					],
 				},
+
+				optimizeDeps: {
+					include: ["rakkasjs"],
+					exclude: [
+						"virtual:rakkasjs:client-manifest",
+						"virtual:rakkasjs:client-page-routes",
+						"virtual:rakkasjs:api-routes",
+						"virtual:rakkasjs:run-server-side:manifest",
+						"virtual:rakkasjs:server-page-routes",
+						"rakkasjs/runtime/vavite-handler",
+					],
+				},
 			} as UserConfig & { ssr: SSROptions };
 		},
 	};
