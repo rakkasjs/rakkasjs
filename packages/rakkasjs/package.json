@@ -23,10 +23,11 @@
 		"build": "tsup",
 		"dev": "tsup --watch",
 		"prepack": "rm -rf dist && pnpm build",
-		"test": "pnpm test:typecheck && pnpm test:lint && pnpm test:unit",
+		"test": "pnpm test:typecheck && pnpm test:lint && pnpm test:unit && pnpm test:package",
 		"test:unit": "vitest run",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit",
-		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
+		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist",
+		"test:package": "publint"
 	},
 	"description": "Lightning fast Next.js alternative powered by Vite",
 	"license": "MIT",
