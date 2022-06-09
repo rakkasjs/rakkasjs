@@ -5,8 +5,10 @@ const titles = [
 
 	"## Basics",
 	"Pages and routing",
-	"Navigation",
+	"Client-side navigation",
+	"Fast refresh",
 	"Layouts",
+	"Static assets",
 
 	"## Data fetching",
 	"useQuery",
@@ -14,23 +16,30 @@ const titles = [
 	"Refetching",
 	"Error handling",
 
-	"## Misc",
-	"Fast refresh",
-	"API routes",
-	"Load helpers",
-	"Customization hooks",
-	"Configuration options",
-	"Rendering modes",
+	"## Customization",
+	"Configuration",
+	"Common hooks",
+	"Server-side hooks",
+	"Client-side hooks",
 	"Environment variables",
-	"Deployment targets",
+
+	"## Deployment",
+	"Node",
+	"Static hosting",
+	"Cloudflare Workers",
+	"Vercel",
+	"Netlify",
+
+	"## Advanced",
+	"API routes",
+	"SEO and rendering modes",
 	"Localized routes",
+
+	"## Miscelaneous",
 	"Integrations",
 	"Feature comparison",
-	"Credits",
-
 	"Migration guide",
-	"Serving static files",
-	"Styling",
+	"Credits",
 ];
 
 export const toc = titles.map((title) => {

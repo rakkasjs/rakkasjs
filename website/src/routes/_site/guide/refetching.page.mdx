@@ -24,18 +24,6 @@ For example, you can tell Rakkas to call a page's `load` function only when the 
 
 -- SAMPLE --
 
-{/\*
-import getCacheKeyPage from "$examples/get-cache-key/page.tsx?sample";
-
-<SampleViewer code={getCacheKeyPage} />
-
-Or you can force Rakkas to call your layout's `load` function when the URL path changes:
-
-import getCacheKeyLayout from "$examples/get-cache-key/layout.tsx?sample";
-
-<SampleViewer code={getCacheKeyLayout} />
-*/}
-
 ## `reload` function
 
 Page and layout components are passed a `reload` prop which you can use to manually force Rakkas to call its `load` function and rerender it:
@@ -45,9 +33,6 @@ Page and layout components are passed a `reload` prop which you can use to manua
 Page and layout components are passed a `useReload` function which is a React custom hook used to force a reload under certain conditions:
 
 -- SAMPLE --
-
-{/\*
-\*/}
 
 ## Static site generation
 

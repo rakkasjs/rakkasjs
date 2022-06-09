@@ -1,7 +1,5 @@
 # Fast refresh
 
-Fast Refresh is a React feature that allows you to get immediate feedback for changes in your React components. If you edit a file that **only exports React components**, Fast Refresh will update the code only for that file, and re-render your component.
+Rakkas supports Fast Refresh which allows you to edit your components and get immediate feedback for your changes without having to reload the page. Function components will be updated without losing their state (class components _will_ lose their state).
 
-> ⚠️ You should not export any _value_ other than your page or layout component from page and layout source files. Exporting _types_ is OK.
-
-Fast Refresh doesn't preserve state for class components.
+Fast Refresh only works on files that **only export React components**. Exporting any other value will fall back to a full reload. Exporting _types_ is OK.

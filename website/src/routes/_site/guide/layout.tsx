@@ -1,23 +1,20 @@
 import { toc } from "./toc";
 import React from "react";
-import { Layout, Link, Head } from "rakkasjs";
+import { Link, Head, LayoutProps } from "rakkasjs";
 import css from "./layout.module.css";
 import { Toc } from "$lib/Toc";
 
 // TODO: Handle errors
 
-const GuideLayout: Layout = ({ children, url }) => {
+export default function GuideLayout({ children, url }: LayoutProps) {
 	const slug = url.pathname.split("/")[2];
-	const currentIndex = toc.findIndex((item) => "/guide/" + slug === item.slug);
+	const currentIndex = toc.findIndex(
+		(item) => typeof item !== "string" && "/guide/" + slug === item.slug,
+	);
 
-	const prev =
-		typeof toc[currentIndex - 1] === "string"
-			? toc[currentIndex - 2]
-			: toc[currentIndex - 1];
-	const next =
-		typeof toc[currentIndex + 1] === "string"
-			? toc[currentIndex + 2]
-			: toc[currentIndex + 1];
+	const current = findItem(currentIndex)!;
+	const prev = findItem(currentIndex - 1, -1);
+	const next = findItem(currentIndex + 1, +1);
 
 	const prevNext = (
 		<nav className={css.prevNext}>
@@ -30,9 +27,7 @@ const GuideLayout: Layout = ({ children, url }) => {
 		<div className={css.wrapper}>
 			<Head
 				title={
-					toc[currentIndex]
-						? toc[currentIndex].title + " - Rakkas Guide"
-						: "Rakkas Guide"
+					toc[currentIndex] ? current.title + " - Rakkas Guide" : "Rakkas Guide"
 				}
 			/>
 
@@ -53,6 +48,34 @@ const GuideLayout: Layout = ({ children, url }) => {
 			</div>
 		</div>
 	);
-};
+}
 
-export default GuideLayout;
+function findItem(index: number, direction = 0) {
+	const current = toc[index];
+
+	if (typeof current === "string") {
+		const next = toc[index + direction];
+		if (typeof next === "string") throw new Error("Empty TOC section");
+		if (direction === 1) {
+			return {
+				title: current + ": " + next.title,
+				slug: next.slug,
+			};
+		} else if (direction === -1) {
+			let i = index - 1;
+			while (typeof toc[i] !== "string") {
+				i--;
+				if (i < 0) return undefined;
+			}
+			const title = toc[i];
+			return {
+				title: title + ": " + next.title,
+				slug: next.slug,
+			};
+		}
+
+		return next;
+	} else {
+		return current;
+	}
+}

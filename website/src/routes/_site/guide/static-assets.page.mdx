@@ -1,0 +1,48 @@
+# Static Assets
+
+> 💡 The information on this page has been adapted from [Vite documentation](https://vitejs.dev/guide/assets.html).
+
+## Importing asset URLs
+
+You can obtain the runtime public URL of a static asset by simply importing it:
+
+```js
+import imgUrl from "./img.png";
+
+function MyImage() {
+	return <img src={imgUrl} />;
+}
+```
+
+For example, `imgUrl` will be `/src/img.png` during development, and become `/assets/img.2d8efhg.png` in the production build.
+
+Import can be either using absolute public paths (based on project root during dev) or relative paths.
+
+- `url()` references in CSS are handled the same way.
+- Common image, media, and font filetypes are detected as assets automatically. You can extend the internal list using Vite's [`assetsInclude` option](/config/#assetsinclude).
+- Referenced assets are included as part of the build assets graph, will get hashed file names, and can be processed by Vite plugins for optimization.
+- Assets smaller in bytes than the [`assetsInlineLimit` option](/config/#build-assetsinlinelimit) will be inlined as base64 data URLs.
+- Assets that are not included in the internal list or in `assetsInclude`, can be explicitly imported as an URL using the `?url` suffix.
+
+### Importing asset contents
+
+Assets can be imported as strings using the `?raw` suffix.
+
+```js
+import shaderString from "./shader.glsl?raw";
+```
+
+## The `public` Directory
+
+If you have assets that are:
+
+- Never referenced in source code (e.g. `robots.txt`)
+- Must retain the exact same file name (without hashing)
+- ...or you simply don't want to have to import an asset first just to get its URL
+
+Then you can place the asset in the `public` directory under your project root. Assets in this directory will be served at root path `/` during dev, and copied to the root of the dist directory as-is.
+
+Note that:
+
+- You should always reference `public` assets using root absolute path - for example, `public/icon.png` should be referenced in source code as `/icon.png`.
+- Assets in `public` cannot be imported from JavaScript.
