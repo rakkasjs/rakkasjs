@@ -6,7 +6,7 @@ import {
 	useEffect,
 	useSyncExternalStore,
 } from "react";
-import { IsomorphicFetchContext } from "../isomorphic-fetch/server-hooks";
+import { IsomorphicFetchContext } from "../isomorphic-fetch/implementation";
 
 export interface CacheItem {
 	value?: any;

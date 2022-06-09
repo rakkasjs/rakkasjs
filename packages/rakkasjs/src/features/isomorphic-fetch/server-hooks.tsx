@@ -1,8 +1,9 @@
-import React, { createContext } from "react";
+import React from "react";
 import { hattipHandler } from "../../runtime/hattip-handler";
 import type { RakkasServerHooks } from "../../runtime/server-hooks";
 import { runHandler } from "@hattip/core";
 import type { RequestContext } from "../../lib";
+import { IsomorphicFetchContext } from "./implementation";
 
 export default function createIsomorphicFetchHooks(
 	request: Request,
@@ -61,7 +62,3 @@ export default function createIsomorphicFetchHooks(
 		),
 	};
 }
-
-export const IsomorphicFetchContext = createContext<undefined | typeof fetch>(
-	undefined,
-);

@@ -1,6 +1,11 @@
-export * from "./types";
+export type { Locals, RequestContext } from "./types";
 
-export { Page, Layout, PageProps, LayoutProps } from "../runtime/page-types";
+export type {
+	Page,
+	Layout,
+	PageProps,
+	LayoutProps,
+} from "../runtime/page-types";
 
 export * from "../features/head/lib";
 export * from "../features/use-query/lib";

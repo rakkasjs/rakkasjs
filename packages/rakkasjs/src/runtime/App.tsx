@@ -2,6 +2,7 @@ import React, { createContext, ReactElement, useContext } from "react";
 import { useLocation } from "../features/client-side-navigation/lib";
 import { findRoute, RouteMatch } from "../internal/find-route";
 import { LayoutModule } from "./page-types";
+import prodRoutes from "virtual:rakkasjs:client-page-routes";
 
 export function App() {
 	const { current: url } = useLocation();
@@ -48,8 +49,10 @@ export async function loadRoute(
 	let found = lastFound;
 
 	if (!found) {
-		const routes = (await import("virtual:rakkasjs:client-page-routes"))
-			.default;
+		const routes = import.meta.env.PROD
+			? prodRoutes
+			: // We should dynamically import in dev to allow hot reloading
+			  (await import("virtual:rakkasjs:client-page-routes")).default;
 
 		found = findRoute(routes, url.pathname);
 
