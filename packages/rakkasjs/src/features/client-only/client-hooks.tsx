@@ -1,7 +1,7 @@
 import React, { ReactElement, useReducer } from "react";
 import { ClientOnlyContext } from "./implementation";
 
-export function wrapApp(app: ReactElement): ReactElement {
+export function onRender(app: ReactElement): ReactElement {
 	return <ClientOnlyWrapper>{app}</ClientOnlyWrapper>;
 }
 

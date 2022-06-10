@@ -45,6 +45,15 @@ export interface UseQueryOptions {
 	 */
 	staleTime?: number;
 	/**
+	 * Refetch the query when the component is mounted. If set to `true`, a stale
+	 * query will be refetched when the component is mounted. If set to `"always"`,
+	 * the query will be refetched when the component is mounted regardless of
+	 * staleness. `false` disables this behavior.
+	 *
+	 * @default true
+	 */
+	refetchOnMount?: boolean | "always";
+	/**
 	 * Refetch the query when the window gains focus. If set to `true`, the
 	 * query will be refetched on window focus if it is stale. If set to
 	 * `"always"`, the query will be refetched on window focus regardless of
@@ -76,19 +85,17 @@ export interface UseQueryOptions {
 	 * @default false
 	 */
 	refetchOnReconnect?: boolean | "always";
-	/**
-	 * Refetch the query when the component is mounted. If set to `true`, a stale
-	 * query will be refetched when the component is mounted. If set to `"always"`,
-	 * the query will be refetched when the component is mounted regardless of
-	 * staleness. `false` disables this behavior.
-	 *
-	 * @default true
-	 */
-	refetchOnMount?: boolean | "always";
 }
 
-export const DEFAULT_CACHE_TIME = 5 * 60 * 1000;
-const DEFAULT_STALE_TIME = 100;
+export const DEFAULT_QUERY_OPTIONS: Required<UseQueryOptions> = {
+	cacheTime: 5 * 60 * 1000,
+	staleTime: 100,
+	refetchOnMount: false,
+	refetchOnWindowFocus: false,
+	refetchInterval: false,
+	refetchIntervalInBackground: false,
+	refetchOnReconnect: false,
+};
 
 export interface QueryContext {
 	fetch: typeof fetch;
@@ -119,40 +126,19 @@ export function useQuery<T>(
 	fn: QueryFn<T>,
 	options: UseQueryOptions = {},
 ): QueryResult<T> | undefined {
-	const result = useQueryBase(key, fn, options);
-	useRefetch(result, options);
+	const fullOptions = { ...DEFAULT_QUERY_OPTIONS, ...options };
+	const result = useQueryBase(key, fn, fullOptions);
+	useRefetch(result, fullOptions);
 
 	return result;
 }
 
 function useQueryBase<T>(
-	key: undefined,
-	fn: QueryFn<T>,
-	options?: UseQueryOptions,
-): undefined;
-
-function useQueryBase<T>(
-	key: string,
-	fn: QueryFn<T>,
-	options?: UseQueryOptions,
-): QueryResult<T>;
-
-function useQueryBase<T>(
 	key: string | undefined,
 	fn: QueryFn<T>,
-	options: UseQueryOptions,
-): QueryResult<T> | undefined;
-
-function useQueryBase<T>(
-	key: string | undefined,
-	fn: QueryFn<T>,
-	options: UseQueryOptions = {},
+	options: Required<UseQueryOptions>,
 ): QueryResult<T> | undefined {
-	const {
-		cacheTime = DEFAULT_CACHE_TIME,
-		staleTime = DEFAULT_STALE_TIME,
-		refetchOnMount = true,
-	} = options;
+	const { cacheTime, staleTime, refetchOnMount } = options;
 
 	const cache = useContext(QueryCacheContext);
 
@@ -251,14 +237,14 @@ export interface QueryResult<T> {
 
 function useRefetch<T>(
 	queryResult: QueryResult<T> | undefined,
-	options: UseQueryOptions,
+	options: Required<UseQueryOptions>,
 ) {
 	const {
-		refetchOnWindowFocus = false,
-		refetchInterval = false,
-		refetchIntervalInBackground = false,
-		staleTime = DEFAULT_STALE_TIME,
-		refetchOnReconnect = false,
+		refetchOnWindowFocus,
+		refetchInterval,
+		refetchIntervalInBackground,
+		staleTime,
+		refetchOnReconnect,
 	} = options;
 
 	// Refetch on window focus

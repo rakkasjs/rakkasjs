@@ -6,9 +6,10 @@ export function virtualClientEntry(): Plugin {
 
 		enforce: "pre",
 
-		resolveId(id) {
+		async resolveId(id) {
 			if (id === "/virtual:rakkasjs:client-entry") {
-				return "virtual:rakkasjs:client-entry";
+				const userEntry = await this.resolve("/src/client");
+				return userEntry ?? "virtual:rakkasjs:client-entry";
 			}
 		},
 

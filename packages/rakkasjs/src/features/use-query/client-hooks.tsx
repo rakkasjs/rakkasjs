@@ -1,7 +1,7 @@
 import React, { ReactElement, ReactNode } from "react";
 import {
 	CacheItem,
-	DEFAULT_CACHE_TIME,
+	DEFAULT_QUERY_OPTIONS,
 	QueryCacheContext,
 } from "./implementation";
 
@@ -24,7 +24,7 @@ export function resetErrors() {
 	subscribers.forEach((subscriber) => subscriber());
 }
 
-export function wrapApp(app: ReactElement): ReactElement {
+export function onRender(app: ReactElement): ReactElement {
 	return <Wrapper>{app}</Wrapper>;
 }
 
@@ -48,7 +48,7 @@ const cache = {
 				subscribers: new Set(),
 				date: Date.now(),
 				hydrated: true,
-				cacheTime: DEFAULT_CACHE_TIME,
+				cacheTime: DEFAULT_QUERY_OPTIONS.cacheTime,
 			};
 
 			delete $RSC[key];
@@ -57,7 +57,11 @@ const cache = {
 		return queryCache[key];
 	},
 
-	set(key: string, valueOrPromise: any, cacheTime = DEFAULT_CACHE_TIME) {
+	set(
+		key: string,
+		valueOrPromise: any,
+		cacheTime = DEFAULT_QUERY_OPTIONS.cacheTime,
+	) {
 		if (valueOrPromise instanceof Promise) {
 			queryCache[key] ||= {
 				date: Date.now(),
@@ -112,7 +116,7 @@ const cache = {
 			subscribers: new Set(),
 			date: Date.now(),
 			hydrated: false,
-			cacheTime: DEFAULT_CACHE_TIME,
+			cacheTime: DEFAULT_QUERY_OPTIONS.cacheTime,
 		};
 		queryCache[key]!.subscribers.add(fn);
 		if (queryCache[key]!.evictionTimeout !== undefined) {
