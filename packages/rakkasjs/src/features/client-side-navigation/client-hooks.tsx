@@ -1,15 +1,18 @@
-import React, { ReactElement } from "react";
+import React from "react";
+import { defineClientHooks } from "../../runtime/client-hooks";
 import { initialize, LocationContext } from "./implementation";
 
-export function onBeforeStart() {
-	initialize();
-}
+export default defineClientHooks({
+	onBeforeStart() {
+		initialize();
+	},
 
-export function onRender(app: ReactElement): ReactElement {
-	return (
-		// eslint-disable-next-line ssr-friendly/no-dom-globals-in-react-fc
-		<LocationContext.Provider value={location.href}>
-			{app}
-		</LocationContext.Provider>
-	);
-}
+	onRender(app) {
+		return (
+			// eslint-disable-next-line ssr-friendly/no-dom-globals-in-react-fc
+			<LocationContext.Provider value={location.href}>
+				{app}
+			</LocationContext.Provider>
+		);
+	},
+});

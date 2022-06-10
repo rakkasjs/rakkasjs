@@ -1,9 +1,12 @@
 import React, { ReactElement, useReducer } from "react";
+import { defineClientHooks } from "../../runtime/client-hooks";
 import { ClientOnlyContext } from "./implementation";
 
-export function onRender(app: ReactElement): ReactElement {
-	return <ClientOnlyWrapper>{app}</ClientOnlyWrapper>;
-}
+export default defineClientHooks({
+	onRender(app) {
+		return <ClientOnlyWrapper>{app}</ClientOnlyWrapper>;
+	},
+});
 
 function ClientOnlyWrapper(props: { children: ReactElement }) {
 	const [hydrated, setHydrated] = useReducer(() => true, false);

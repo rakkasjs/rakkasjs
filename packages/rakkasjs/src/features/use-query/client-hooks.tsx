@@ -1,9 +1,16 @@
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactNode } from "react";
+import { defineClientHooks } from "../../runtime/client-hooks";
 import {
 	CacheItem,
 	DEFAULT_QUERY_OPTIONS,
 	QueryCacheContext,
 } from "./implementation";
+
+export default defineClientHooks({
+	onRender(app) {
+		return <Wrapper>{app}</Wrapper>;
+	},
+});
 
 // Rakkas Suspense Cache
 declare const $RSC: Record<string, any>;
@@ -22,10 +29,6 @@ export function resetErrors() {
 	}
 
 	subscribers.forEach((subscriber) => subscriber());
-}
-
-export function onRender(app: ReactElement): ReactElement {
-	return <Wrapper>{app}</Wrapper>;
 }
 
 function Wrapper({ children }: { children: ReactNode }) {

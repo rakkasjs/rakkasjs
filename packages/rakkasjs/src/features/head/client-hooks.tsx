@@ -1,6 +1,9 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import { HelmetProvider } from "react-helmet-async";
+import { defineClientHooks } from "../../runtime/client-hooks";
 
-export function onRender(app: ReactElement): ReactElement {
-	return <HelmetProvider>{app}</HelmetProvider>;
-}
+export default defineClientHooks({
+	onRender(app) {
+		return <HelmetProvider>{app}</HelmetProvider>;
+	},
+});
