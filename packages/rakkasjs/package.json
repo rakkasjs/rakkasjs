@@ -54,6 +54,7 @@
 		"eslint": "^8.17.0",
 		"isbot-fast": "^1.2.0",
 		"prettier": "^2.5.1",
+		"publint": "^0.0.1",
 		"react": "^18.1.0",
 		"react-dom": "^18.1.0",
 		"react-error-boundary": "^3.1.4",
