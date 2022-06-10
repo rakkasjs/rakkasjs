@@ -17,17 +17,21 @@ export default function UseQueryPage() {
 function UseQueryDisplay() {
 	const resolverRef = useRef<() => void>();
 
-	const result = useQuery("use-query", async () => {
-		if (import.meta.env.SSR) {
-			return "SSR value";
-		} else {
-			await new Promise<void>((resolve) => {
-				resolverRef.current = resolve;
-			});
+	const result = useQuery(
+		"use-query",
+		async () => {
+			if (import.meta.env.SSR) {
+				return "SSR value";
+			} else {
+				await new Promise<void>((resolve) => {
+					resolverRef.current = resolve;
+				});
 
-			return "Client value";
-		}
-	});
+				return "Client value";
+			}
+		},
+		{ refetchOnWindowFocus: true },
+	);
 
 	return (
 		<div>

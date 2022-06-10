@@ -57,7 +57,7 @@ const cache = {
 		return queryCache[key];
 	},
 
-	set(key: string, valueOrPromise: any, cacheTime: number) {
+	set(key: string, valueOrPromise: any, cacheTime = DEFAULT_CACHE_TIME) {
 		if (valueOrPromise instanceof Promise) {
 			queryCache[key] ||= {
 				date: Date.now(),

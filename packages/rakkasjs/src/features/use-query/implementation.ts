@@ -22,7 +22,7 @@ export interface CacheItem {
 export interface QueryCache {
 	has(key: string): boolean;
 	get(key: string): CacheItem | undefined;
-	set(key: string, value: any, cacheTime: number): void;
+	set(key: string, value: any, cacheTime?: number): void;
 	subscribe(key: string, fn: () => void): () => void;
 }
 
@@ -316,4 +316,26 @@ function useRefetch<T>(
 			window.removeEventListener("online", handleReconnect);
 		};
 	}, [refetchOnReconnect, queryResult]);
+}
+
+export interface QueryClient {
+	getQueryData(key: string): any;
+	setQueryData(key: string, data: any): void;
+}
+
+export function useQueryClient(): QueryClient {
+	const cache = useContext(QueryCacheContext);
+
+	return {
+		getQueryData(key: string) {
+			return cache.get(key)?.value;
+		},
+
+		setQueryData(key: string, data: any) {
+			if (data instanceof Promise) {
+				throw new TypeError("data must be synchronous");
+			}
+			cache.set(key, data);
+		},
+	};
 }

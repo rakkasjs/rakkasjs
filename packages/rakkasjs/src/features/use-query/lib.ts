@@ -3,5 +3,6 @@ export type {
 	QueryResult,
 	QueryFn,
 	QueryContext,
+	QueryClient,
 } from "./implementation";
-export { useQuery } from "./implementation";
+export { useQuery, useQueryClient } from "./implementation";

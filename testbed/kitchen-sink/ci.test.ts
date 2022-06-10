@@ -364,6 +364,17 @@ function testCase(title: string, dev: boolean, command?: string) {
 			);
 		});
 
+		test("queryClient.setQueryData works", async () => {
+			await page.goto(TEST_HOST + "/use-query/set-query-data");
+
+			await page.waitForFunction(
+				() =>
+					document.body.innerText.includes("AAA") &&
+					document.body.innerText.includes("BBB") &&
+					document.body.innerText.includes("CCC"),
+			);
+		});
+
 		test("runs useServerSideQuery on the server", async () => {
 			await page.goto(TEST_HOST + "/use-ssq");
 			await page.waitForFunction(() =>
