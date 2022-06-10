@@ -31,6 +31,7 @@
 		"sanitize.css": "^13.0.0"
 	},
 	"devDependencies": {
+		"@cyco130/eslint-config": "^1.0.0",
 		"@cyco130/vite-plugin-mdx": "^0.0.0",
 		"@docsearch/css": "^3.0.0-alpha.50",
 		"@docsearch/react": "^3.0.0-alpha.50",
@@ -39,13 +40,7 @@
 		"@types/cookie": "^0.5.1",
 		"@types/react": "^18.0.12",
 		"@types/react-dom": "^18.0.5",
-		"@typescript-eslint/eslint-plugin": "^5.27.1",
-		"@typescript-eslint/parser": "^5.27.1",
 		"eslint": "^8.17.0",
-		"eslint-plugin-import": "^2.25.3",
-		"eslint-plugin-only-warn": "^1.0.3",
-		"eslint-plugin-react": "^7.27.1",
-		"eslint-plugin-react-hooks": "^4.3.0",
 		"install": "^0.13.0",
 		"node-dev": "^7.1.0",
 		"prettier": "^2.5.1",
