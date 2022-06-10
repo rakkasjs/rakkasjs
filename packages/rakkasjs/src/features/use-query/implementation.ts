@@ -76,6 +76,15 @@ export interface UseQueryOptions {
 	 * @default false
 	 */
 	refetchOnReconnect?: boolean | "always";
+	/**
+	 * Refetch the query when the component is mounted. If set to `true`, a stale
+	 * query will be refetched when the component is mounted. If set to `"always"`,
+	 * the query will be refetched when the component is mounted regardless of
+	 * staleness. `false` disables this behavior.
+	 *
+	 * @default true
+	 */
+	refetchOnMount?: boolean | "always";
 }
 
 export const DEFAULT_CACHE_TIME = 5 * 60 * 1000;
@@ -139,8 +148,11 @@ function useQueryBase<T>(
 	fn: QueryFn<T>,
 	options: UseQueryOptions = {},
 ): QueryResult<T> | undefined {
-	const { cacheTime = DEFAULT_CACHE_TIME, staleTime = DEFAULT_STALE_TIME } =
-		options;
+	const {
+		cacheTime = DEFAULT_CACHE_TIME,
+		staleTime = DEFAULT_STALE_TIME,
+		refetchOnMount = true,
+	} = options;
 
 	const cache = useContext(QueryCacheContext);
 
@@ -172,8 +184,8 @@ function useQueryBase<T>(
 		}
 
 		if (
-			!import.meta.env.SSR &&
-			staleTime <= Date.now() - item.date &&
+			refetchOnMount &&
+			(refetchOnMount === "always" || staleTime <= Date.now() - item.date) &&
 			!item.promise &&
 			!item.hydrated
 		) {
