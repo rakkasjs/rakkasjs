@@ -148,6 +148,7 @@ export default async function renderPageRoute(
 		});
 	}
 
+	// TODO: Customize HTML document
 	let head =
 		`<!DOCTYPE html><html><head>` +
 		cssOutput +
@@ -213,6 +214,7 @@ window.$RefreshReg$ = () => {}
 window.$RefreshSig$ = () => (type) => type
 window.__vite_plugin_react_preamble_installed__ = true`;
 
+// TODO: Customize redirect document
 function redirectBody(href: string) {
 	const escaped = escapeHtml(href);
 
