@@ -16,11 +16,11 @@
 		"@cyco130/eslint-config": "^2.0.0",
 		"eslint": "^8.17.0",
 		"kill-port": "^2.0.0",
-		"node-fetch": "^3.2.2",
+		"node-fetch": "^3.2.6",
 		"puppeteer": "^14.3.0",
 		"rakkasjs": "workspace:*",
 		"typescript": "^4.7.3",
-		"vite": "3.0.0-alpha.9"
+		"vite": "3.0.0-alpha.10"
 	},
 	"dependencies": {
 		"@types/react": "^18.0.12",
