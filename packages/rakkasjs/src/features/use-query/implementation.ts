@@ -41,7 +41,7 @@ export interface UseQueryOptions {
 	 * Time in milliseconds after which a cached value will be considered
 	 * stale.
 	 *
-	 * @default 0 (always refetch in the background on mount)
+	 * @default 100
 	 */
 	staleTime?: number;
 	/**
@@ -50,7 +50,7 @@ export interface UseQueryOptions {
 	 * `"always"`, the query will be refetched on window focus regardless of
 	 * staleness. `false` disables this behavior.
 	 *
-	 * @default true
+	 * @default false
 	 */
 	refetchOnWindowFocus?: boolean | "always";
 	/**
@@ -66,6 +66,16 @@ export interface UseQueryOptions {
 	 * @default false
 	 */
 	refetchIntervalInBackground?: boolean;
+	/**
+	 * Refetch the query when the internet connection is restored. If set to
+	 * `true`, a stale query will be refetched when the internet connection is
+	 * restored. If set to `"always"`, the query will be refetched when the
+	 * internet connection is restored regardless of staleness. `false` disables
+	 * this behavior.
+	 *
+	 * @default false
+	 */
+	refetchOnReconnect?: boolean | "always";
 }
 
 export const DEFAULT_CACHE_TIME = 5 * 60 * 1000;
@@ -172,6 +182,7 @@ function useQueryBase<T>(
 		}
 
 		item.hydrated = false;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [key]);
 
 	if (key === undefined) {
@@ -231,10 +242,11 @@ function useRefetch<T>(
 	options: UseQueryOptions,
 ) {
 	const {
-		refetchOnWindowFocus = true,
+		refetchOnWindowFocus = false,
 		refetchInterval = false,
 		refetchIntervalInBackground = false,
 		staleTime = DEFAULT_STALE_TIME,
+		refetchOnReconnect = false,
 	} = options;
 
 	// Refetch on window focus
@@ -258,7 +270,7 @@ function useRefetch<T>(
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
 			window.removeEventListener("focus", handleVisibilityChange);
 		};
-	}, [refetchOnWindowFocus, queryResult]);
+	}, [refetchOnWindowFocus, queryResult, staleTime]);
 
 	// Refetch on interval
 	useEffect(() => {
@@ -277,4 +289,19 @@ function useRefetch<T>(
 			clearInterval(id);
 		};
 	}, [refetchInterval, refetchIntervalInBackground, queryResult]);
+
+	// Refetch on reconnect
+	useEffect(() => {
+		if (!refetchOnReconnect || !queryResult) return;
+
+		function handleReconnect() {
+			queryResult!.refetch();
+		}
+
+		window.addEventListener("online", handleReconnect);
+
+		return () => {
+			window.removeEventListener("online", handleReconnect);
+		};
+	}, [refetchOnReconnect, queryResult]);
 }

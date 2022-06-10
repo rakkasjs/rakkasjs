@@ -31,7 +31,7 @@
 		"sanitize.css": "^13.0.0"
 	},
 	"devDependencies": {
-		"@cyco130/eslint-config": "^1.0.0",
+		"@cyco130/eslint-config": "^2.0.0",
 		"@cyco130/vite-plugin-mdx": "^0.0.0",
 		"@docsearch/css": "^3.0.0-alpha.50",
 		"@docsearch/react": "^3.0.0-alpha.50",

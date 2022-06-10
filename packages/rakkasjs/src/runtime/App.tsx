@@ -76,7 +76,9 @@ export async function loadRoute(
 
 	const app = components.reduce(
 		(prev, Component) => (
-			<Component children={prev} url={url} params={found!.params} />
+			<Component url={url} params={found!.params}>
+				{prev}
+			</Component>
 		),
 		null as any as ReactElement,
 	);

@@ -13,7 +13,7 @@
 		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
 	},
 	"devDependencies": {
-		"@cyco130/eslint-config": "^1.0.0",
+		"@cyco130/eslint-config": "^2.0.0",
 		"eslint": "^8.17.0",
 		"kill-port": "^2.0.0",
 		"node-fetch": "^3.2.2",
