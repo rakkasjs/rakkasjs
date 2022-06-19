@@ -21,13 +21,13 @@
 		"ssr"
 	],
 	"dependencies": {
-		"@mdx-js/react": "^2.1.1",
+		"@mdx-js/react": "^2.1.2",
 		"cookie": "^0.5.0",
 		"hamburger-react": "^2.4.1",
 		"prism": "^4.1.2",
 		"prism-themes": "^1.9.0",
-		"react": "^18.1.0",
-		"react-dom": "^18.1.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
 		"sanitize.css": "^13.0.0"
 	},
 	"devDependencies": {
@@ -38,19 +38,19 @@
 		"@mapbox/rehype-prism": "^0.8.0",
 		"@rollup/pluginutils": "^4.2.1",
 		"@types/cookie": "^0.5.1",
-		"@types/react": "^18.0.12",
+		"@types/react": "^18.0.14",
 		"@types/react-dom": "^18.0.5",
-		"eslint": "^8.17.0",
+		"eslint": "^8.18.0",
 		"install": "^0.13.0",
 		"node-dev": "^7.1.0",
-		"prettier": "^2.5.1",
+		"prettier": "^2.7.1",
 		"rakkasjs": "workspace:*",
 		"remark-gfm": "^3.0.1",
 		"reprism": "^0.0.11",
 		"sirv": "^2.0.2",
 		"source-map": "^0.7.4",
-		"typescript": "^4.7.3",
-		"vfile": "^5.3.2",
-		"vite": "3.0.0-alpha.10"
+		"typescript": "^4.7.4",
+		"vfile": "^5.3.4",
+		"vite": "3.0.0-alpha.13"
 	}
 }

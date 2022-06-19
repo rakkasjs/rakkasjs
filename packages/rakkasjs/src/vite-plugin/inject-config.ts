@@ -6,7 +6,7 @@ export function injectConfig(): Plugin {
 
 		enforce: "pre",
 
-		config(_, env) {
+		config() {
 			return {
 				buildSteps: [
 					{
@@ -39,14 +39,15 @@ export function injectConfig(): Plugin {
 				},
 
 				optimizeDeps: {
-					include:
-						env.command === "serve" ? ["rakkasjs", "react", "react-dom"] : [],
+					include: ["react", "react-dom", "react-dom/client"],
 					exclude: [
+						"rakkasjs",
 						"virtual:rakkasjs:client-manifest",
 						"virtual:rakkasjs:client-page-routes",
 						"virtual:rakkasjs:api-routes",
 						"virtual:rakkasjs:run-server-side:manifest",
 						"virtual:rakkasjs:server-page-routes",
+						"@vavite/expose-vite-dev-server",
 					],
 				},
 			};
