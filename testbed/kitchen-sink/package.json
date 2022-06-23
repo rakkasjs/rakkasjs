@@ -15,12 +15,12 @@
 	"devDependencies": {
 		"@cyco130/eslint-config": "^2.0.0",
 		"eslint": "^8.18.0",
-		"kill-port": "^2.0.0",
+		"kill-port": "^2.0.1",
 		"node-fetch": "^3.2.6",
 		"puppeteer": "^14.4.1",
 		"rakkasjs": "workspace:*",
 		"typescript": "^4.7.4",
-		"vite": "3.0.0-alpha.13"
+		"vite": "^3.0.0-beta.1"
 	},
 	"dependencies": {
 		"@types/react": "^18.0.14",

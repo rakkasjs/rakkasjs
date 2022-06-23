@@ -13,7 +13,7 @@
 		"@types/react-dom": "^18.0.5",
 		"rakkasjs": "0.6.0-next.5",
 		"typescript": "^4.7.4",
-		"vite": "3.0.0-alpha.13"
+		"vite": "^3.0.0-beta.1"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.9.3",
