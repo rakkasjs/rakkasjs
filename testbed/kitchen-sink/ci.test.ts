@@ -2,13 +2,14 @@
 /// <reference types="vite/client" />
 
 import { describe, test, expect, beforeAll, afterAll } from "vitest";
-import { spawn } from "child_process";
+import { spawn, ChildProcess } from "child_process";
 import fetch from "node-fetch";
 import path from "path";
-// @ts-expect-error: kill-port doesn't ship with types
-import kill from "kill-port";
+import psTree from "ps-tree";
 import puppeteer, { ElementHandle } from "puppeteer";
 import fs from "fs";
+import { promisify } from "util";
+import { kill } from "process";
 
 const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 
@@ -30,18 +31,28 @@ const page = pages[0];
 function testCase(title: string, dev: boolean, command?: string) {
 	describe(title, () => {
 		if (command) {
-			beforeAll(async () => {
-				await kill(3000, "tcp").catch(() => {
-					// Do nothing
-				});
+			let cp: ChildProcess | undefined;
 
-				spawn(command, {
+			beforeAll(async () => {
+				cp = spawn(command, {
 					shell: true,
 					stdio: "inherit",
 					cwd: path.resolve(__dirname),
 				});
 
-				await new Promise<void>((resolve) => {
+				await new Promise<void>((resolve, reject) => {
+					cp!.on("error", (error) => {
+						cp = undefined;
+						reject(error);
+					});
+
+					cp!.on("exit", (code) => {
+						if (code !== 0) {
+							cp = undefined;
+							reject(new Error(`Process exited with code ${code}`));
+						}
+					});
+
 					const interval = setInterval(() => {
 						fetch(TEST_HOST + "/")
 							.then(async (r) => {
@@ -61,6 +72,23 @@ function testCase(title: string, dev: boolean, command?: string) {
 					}, 250);
 				});
 			}, 60_000);
+
+			afterAll(async () => {
+				if (!cp || cp.exitCode || !cp.pid) {
+					return;
+				}
+
+				const tree = await promisify(psTree)(cp.pid);
+				const pids = [cp.pid, ...tree.map((p) => +p.PID)];
+
+				for (const pid of pids) {
+					kill(+pid, "SIGINT");
+				}
+
+				await new Promise((resolve) => {
+					cp!.on("exit", resolve);
+				});
+			});
 		}
 
 		test("renders simple API route", async () => {
@@ -399,10 +427,4 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 afterAll(async () => {
 	await browser.close();
-
-	if (!import.meta.env.TEST_HOST) {
-		await kill(3000, "tcp").catch(() => {
-			// Do nothing
-		});
-	}
 });

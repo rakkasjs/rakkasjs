@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { RequestContext } from "../lib";
+import type { RequestContext } from "@hattip/compose";
 
 export interface RakkasServerHooks {
 	handleRequest?(): Response | undefined | Promise<Response | undefined>;
@@ -8,10 +8,7 @@ export interface RakkasServerHooks {
 	emitBeforeSsrChunk?(): string | undefined;
 }
 
-export type CreateServerHooksFn = (
-	request: Request,
-	ctx: RequestContext<Record<string, string>>,
-) => RakkasServerHooks;
+export type CreateServerHooksFn = (ctx: RequestContext) => RakkasServerHooks;
 
 export interface ServerHooksModule {
 	default: CreateServerHooksFn;

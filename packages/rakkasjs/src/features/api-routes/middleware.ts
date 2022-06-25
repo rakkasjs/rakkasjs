@@ -1,10 +1,10 @@
-import { compose, Handler } from "@hattip/core";
-import { RequestContext } from "../../lib";
+import {
+	composePartial,
+	RequestHandler,
+	RequestContext,
+} from "@hattip/compose";
 
-export default async function renderApiRoute(
-	req: Request,
-	ctx: RequestContext<Record<string, string>>,
-) {
+export default async function renderApiRoute(ctx: RequestContext) {
 	const apiRoutes = await import("virtual:rakkasjs:api-routes");
 
 	for (const [regex, importers] of apiRoutes.default) {
@@ -15,14 +15,15 @@ export default async function renderApiRoute(
 
 		const [endpointImporter, ...middlewareImporters] = importers;
 
-		let endpoint: Record<string, Handler> = (await endpointImporter()) as any;
+		let endpoint: Record<string, RequestHandler> =
+			(await endpointImporter()) as any;
 		if (endpoint.default) endpoint = endpoint.default as any;
 
-		let method = req.method.toLowerCase();
+		let method = ctx.method.toLowerCase();
 		if (method === "delete") method = "del";
 		const endpointHandler = endpoint[method] || endpoint.all;
 
-		if (!endpointHandler) return null;
+		if (!endpointHandler) return;
 
 		const middlewares = await Promise.all(
 			middlewareImporters.map((importer) =>
@@ -30,8 +31,8 @@ export default async function renderApiRoute(
 			),
 		);
 
-		const handler = compose(...middlewares, endpointHandler, ctx.next);
+		const handler = composePartial([...middlewares, endpointHandler], ctx.next);
 
-		return handler(req, ctx);
+		return handler(ctx);
 	}
 }

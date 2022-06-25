@@ -2,7 +2,7 @@ import { CreateServerHooksFn } from "../../runtime/server-hooks";
 import { parse } from "@brillout/json-s";
 import devalue from "devalue";
 
-const createServerHooks: CreateServerHooksFn = (req, ctx) => {
+const createServerHooks: CreateServerHooksFn = (ctx) => {
 	return {
 		async handleRequest() {
 			// TODO: Build ID

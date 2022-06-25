@@ -1,6 +1,5 @@
 /// <reference types="vite/client" />
 
-import { RequestContext } from "../../lib";
 import React, { StrictMode, Suspense } from "react";
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
@@ -12,14 +11,14 @@ import {
 	ResponseContextProps,
 } from "../response-manipulation/implementation";
 import serverHooks from "../../runtime/feature-server-hooks";
+import { RequestContext } from "@hattip/compose";
 
 export default async function renderPageRoute(
-	req: Request,
-	ctx: RequestContext<Record<string, string>>,
+	ctx: RequestContext,
 ): Promise<Response | undefined> {
 	ctx.locals = {};
 
-	const hooksObjects = serverHooks.map((fn) => fn(req, ctx));
+	const hooksObjects = serverHooks.map((fn) => fn(ctx));
 
 	for (const hooks of hooksObjects) {
 		if (hooks.handleRequest) {
@@ -128,7 +127,7 @@ export default async function renderPageRoute(
 
 	await renderPromise.catch((error) => console.error(error));
 
-	const userAgent = req.headers.get("user-agent");
+	const userAgent = ctx.request.headers.get("user-agent");
 	if (userAgent && isBot(userAgent)) {
 		await reactStream.allReady;
 	} else {

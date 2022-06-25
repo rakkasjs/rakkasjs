@@ -22,7 +22,7 @@ export function virtualNodeHandlerEntry(): Plugin {
 
 const MODULE_CONTENTS = `
 	import { hattipHandler } from "rakkasjs";
-	import { createListener } from "rakkasjs/node-adapter";
+	import { createMiddleware } from "rakkasjs/node-adapter";
 
-	export default createListener(hattipHandler);
+	export default createMiddleware(hattipHandler);
 `;

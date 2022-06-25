@@ -1,13 +1,11 @@
 import React from "react";
-import { hattipHandler } from "../../runtime/hattip-handler";
-import type { RakkasServerHooks } from "../../runtime/server-hooks";
-import { runHandler } from "@hattip/core";
-import type { RequestContext } from "../../lib";
 import { IsomorphicFetchContext } from "./implementation";
+import { hattipHandler } from "../../runtime/hattip-handler";
+import type { RequestContext } from "@hattip/compose";
+import type { RakkasServerHooks } from "../../runtime/server-hooks";
 
 export default function createIsomorphicFetchHooks(
-	request: Request,
-	ctx: RequestContext<Record<string, string>>,
+	ctx: RequestContext,
 ): RakkasServerHooks {
 	ctx.fetch = async (input, init) => {
 		let url: URL | undefined;
@@ -26,12 +24,12 @@ export default function createIsomorphicFetchHooks(
 			(newRequest.credentials === "same-origin" && sameOrigin);
 
 		if (includeCredentials) {
-			const cookie = request.headers.get("cookie");
+			const cookie = ctx.request.headers.get("cookie");
 			if (cookie !== null) {
 				newRequest.headers.set("cookie", cookie);
 			}
 
-			const authorization = request.headers.get("authorization");
+			const authorization = ctx.request.headers.get("authorization");
 			if (authorization !== null) {
 				newRequest.headers.set("authorization", authorization);
 			}
@@ -44,10 +42,12 @@ export default function createIsomorphicFetchHooks(
 		let response: Response | undefined | null;
 
 		if (sameOrigin) {
-			response = await runHandler(hattipHandler, newRequest, {
+			response = await hattipHandler({
+				request: newRequest,
 				ip: ctx.ip,
 				waitUntil: ctx.waitUntil,
-				next: () => fetch(newRequest),
+				passThrough: ctx.passThrough,
+				platform: ctx.platform,
 			});
 		}
 
