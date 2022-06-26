@@ -21,6 +21,8 @@ const tests: Test[] = [
 
 			const bar = 1;
 
+			function outside() {}
+
 			function serverOnlyFn() {
 				serverSideFn();
 			}
@@ -35,6 +37,7 @@ const tests: Test[] = [
 					sharedFn();
 					return ctx.session.userName;
 				});
+				useSSQ(outside);
 			}
 		`,
 		output: `
@@ -47,6 +50,7 @@ const tests: Test[] = [
 				sharedFn();
 				useSSQ(["abc123", 0, [foo, baz]], { option: "qux" });
 				useSSQ(["abc123", 1, []]);
+				useSSQ(["abc123", 2, []]);
 			};
 		`,
 	},

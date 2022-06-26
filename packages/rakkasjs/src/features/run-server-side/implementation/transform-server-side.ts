@@ -1,122 +1,125 @@
 import { PluginItem, NodePath } from "@babel/core";
 import * as t from "@babel/types";
+import { isRunServerSideCall } from "./is-run-server-side-call";
 
 export function babelTransformServerSideHooks(moduleId: string): PluginItem {
-	const newNodes = new Set<NodePath>();
-	const removedPaths: NodePath[] = [];
-	const removedNodes: t.Expression[] = [];
 	let counter = 0;
 
 	return {
 		visitor: {
-			// Hoist the closure
-			Expression: {
-				enter(arg, state) {
-					if (
-						arg.parentPath.isCallExpression() &&
-						arg.node === arg.parentPath.node.arguments[0] &&
-						!t.isNullLiteral(arg.node)
-					) {
-						const callee = arg.parentPath.node.callee;
-						if (!t.isIdentifier(callee)) return;
-						const binding = arg.parentPath.scope.getBinding(callee.name);
-						if (
-							binding &&
-							binding.path.isImportSpecifier() &&
-							t.isIdentifier(binding.path.node.imported) &&
-							[
-								"useServerSideQuery",
-								"useServerSideMutation",
-								"useSSQ",
-								"useSSM",
-							].includes(binding.path.node.imported.name) &&
-							binding.path.parentPath.isImportDeclaration() &&
-							binding.path.parentPath.node.source.value === "rakkasjs" &&
-							!newNodes.has(arg)
-						) {
-							newNodes.add(arg);
-							arg.node.extra = arg.node.extra || {};
-							arg.node.extra.hoistMe = true;
-							state._runServerSide = new Set<string>();
-							state._parentScope = arg.parentPath.scope;
-						}
-					}
-				},
-
-				exit(arg, state) {
-					if (arg.node.extra?.hoistMe) {
-						removedPaths.push(arg);
-						removedNodes.push(arg.node);
-
-						const closure = Array.from(state._runServerSide as Set<string>);
-
-						const replacement = t.arrayExpression([
-							t.stringLiteral(moduleId),
-							t.numericLiteral(counter),
-							t.arrayExpression(closure.map((id) => t.identifier(id))),
-							t.memberExpression(
-								t.identifier("$runServerSide$"),
-								t.numericLiteral(counter++),
-								true,
-							),
-						]);
-
-						if (
-							t.isArrowFunctionExpression(arg.node) ||
-							t.isFunctionExpression(arg.node)
-						) {
-							arg.node.async = true;
-							arg.node.params.unshift(t.identifier("$runServerSideClosure$"));
-
-							if (t.isExpression(arg.node.body)) {
-								arg.node.body = t.blockStatement([
-									t.returnStatement(arg.node.body),
-								]);
-							}
-
-							arg.node.body.body.unshift(
-								t.variableDeclaration("let", [
-									t.variableDeclarator(
-										t.arrayPattern(closure.map((name) => t.identifier(name))),
-										t.identifier("$runServerSideClosure$"),
-									),
-								]),
-							);
-						}
-
-						arg.replaceWith(replacement);
-
-						delete state._runServerSide;
-						delete state._parentScope;
-					}
-				},
-			},
-
-			Identifier: {
-				enter(identifier, state) {
-					if (state._runServerSide) {
-						if (
-							!state._parentScope.bindings[
-								identifier.node.name
-							]?.referencePaths.includes(identifier)
-						) {
-							return;
-						}
-
-						state._runServerSide.add(identifier.node.name);
-					}
-				},
-			},
-
 			Program: {
 				exit(program) {
-					if (removedNodes.length) {
+					const hoisted: t.Expression[] = [];
+
+					program.traverse({
+						CallExpression: {
+							exit(call) {
+								if (!isRunServerSideCall(call)) {
+									return;
+								}
+
+								let fn = call.get("arguments.0") as NodePath<
+									t.ArrowFunctionExpression | t.FunctionExpression
+								>;
+
+								if (
+									!t.isArrowFunctionExpression(fn) &&
+									!t.isFunctionExpression(fn)
+								) {
+									fn = fn.replaceWith(
+										t.arrowFunctionExpression(
+											[t.restElement(t.identifier("$runServerSideArgs$"))],
+											t.callExpression(fn.node, [
+												t.spreadElement(t.identifier("$runServerSideArgs$")),
+											]),
+										),
+									)[0];
+								}
+
+								const body = fn.get("body") as NodePath<t.BlockStatement>;
+								const identifiers = new Set<NodePath<t.Identifier>>();
+
+								body.traverse({
+									Identifier: {
+										exit(identifier) {
+											const binding = fn.scope.parent.getBinding(
+												identifier.node.name,
+											);
+
+											if (
+												program.scope
+													.getBinding(identifier.node.name)
+													?.referencePaths.includes(identifier)
+											) {
+												return;
+											}
+
+											if (
+												binding?.path.get("id") === identifier ||
+												binding?.referencePaths.includes(identifier)
+											) {
+												identifiers.add(identifier);
+											}
+										},
+									},
+								});
+
+								const ids = [...identifiers];
+
+								const replacement = t.arrayExpression([
+									t.stringLiteral(moduleId),
+									t.numericLiteral(counter),
+									t.arrayExpression(
+										ids.map((id) => t.identifier(id.node.name)),
+									),
+									t.memberExpression(
+										t.identifier("$runServerSide$"),
+										t.numericLiteral(counter++),
+										true,
+									),
+								]);
+
+								if (
+									t.isArrowFunctionExpression(fn.node) ||
+									t.isFunctionExpression(fn.node)
+								) {
+									fn.node.async = true;
+									fn.node.params.unshift(
+										t.identifier("$runServerSideClosure$"),
+									);
+
+									if (t.isExpression(fn.node.body)) {
+										fn.node.body = t.blockStatement([
+											t.returnStatement(fn.node.body),
+										]);
+									}
+
+									fn.node.body.body.unshift(
+										t.variableDeclaration("let", [
+											t.variableDeclarator(
+												t.arrayPattern(
+													ids.map((id) => t.identifier(id.node.name)),
+												),
+												t.identifier("$runServerSideClosure$"),
+											),
+										]),
+									);
+								}
+
+								hoisted.push(fn.node);
+
+								fn.replaceWith(replacement);
+							},
+						},
+					});
+
+					if (hoisted.length) {
 						program.node.body.push(
 							t.exportNamedDeclaration(
 								t.variableDeclaration("const", [
 									t.variableDeclarator(
 										t.identifier("$runServerSide$"),
-										t.arrayExpression(removedNodes),
+										t.arrayExpression(hoisted),
 									),
 								]),
 							),

@@ -16,6 +16,9 @@ const tests: Test[] = [
 		input: `
 			import { useSSQ } from "rakkasjs";
 			const bar = 1;
+
+			function outside() {}
+
 			function x(foo) {
 				const baz = 2;
 				useSSQ(() => foo + bar + baz, { option: "qux" });
@@ -23,15 +26,18 @@ const tests: Test[] = [
 					const baz = 2;
 					return ctx.session.userName;
 				});
+				useSSQ(outside);
 			}
 		`,
 		output: `
 			import { useSSQ } from "rakkasjs";
 			const bar = 1;
+			function outside() {}
 			function x(foo) {
 				const baz = 2;
 				useSSQ(["abc123", 0, [foo, baz], $runServerSide$[0]], { option: "qux" });
 				useSSQ(["abc123", 1, [], $runServerSide$[1]]);
+				useSSQ(["abc123", 2, [], $runServerSide$[2]]);
 			};
 
 			export const $runServerSide$ = [
@@ -43,6 +49,10 @@ const tests: Test[] = [
 					let [] = $runServerSideClosure$;
 					const baz = 2;
 					return ctx.session.userName;
+				},
+				async ($runServerSideClosure$, ...$runServerSideArgs$) => {
+					let [] = $runServerSideClosure$;
+					return outside(...$runServerSideArgs$);
 				}
 			]
 		`,
