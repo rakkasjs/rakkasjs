@@ -1,7 +1,7 @@
 import React from "react";
 import { IsomorphicFetchContext } from "./implementation";
-import { hattipHandler } from "../../runtime/hattip-handler";
-import type { ServerHooks } from "../../runtime/hattip-entry";
+import hattipHandler from "virtual:rakkasjs:hattip-entry";
+import type { ServerHooks } from "../../runtime/hattip-handler";
 
 const isomorphicFetchServerHooks: ServerHooks = {
 	middleware: {

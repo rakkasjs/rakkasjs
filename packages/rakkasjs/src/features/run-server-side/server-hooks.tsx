@@ -1,4 +1,4 @@
-import type { ServerHooks } from "../../runtime/hattip-entry";
+import type { ServerHooks } from "../../runtime/hattip-handler";
 import { parse } from "@brillout/json-s";
 import devalue from "devalue";
 

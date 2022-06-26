@@ -1,7 +1,7 @@
 import React from "react";
 import { CacheItem, QueryCacheContext } from "./implementation";
 import devalue from "devalue";
-import { ServerHooks } from "../../runtime/hattip-entry";
+import { ServerHooks } from "../../runtime/hattip-handler";
 
 const useQueryServerHooks: ServerHooks = {
 	createPageHooks() {

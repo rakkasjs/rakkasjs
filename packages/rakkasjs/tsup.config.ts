@@ -79,6 +79,7 @@ export default defineConfig([
 		platform: "node",
 		shims: false,
 		external: [
+			"virtual:rakkasjs:hattip-entry",
 			"virtual:rakkasjs:api-routes",
 			"virtual:rakkasjs:server-page-routes",
 			"virtual:rakkasjs:client-page-routes",
@@ -98,5 +99,6 @@ export default defineConfig([
 		entry: ["./src/lib/node-adapter.ts"],
 		format: ["esm"],
 		platform: "node",
+		dts: true,
 	},
 ]);

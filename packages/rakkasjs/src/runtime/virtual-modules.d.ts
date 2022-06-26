@@ -66,3 +66,8 @@ declare module "virtual:rakkasjs:run-server-side:manifest" {
 	>;
 	export default manifest;
 }
+
+declare module "virtual:rakkasjs:hattip-entry" {
+	const handler: import("@hattip/core").HattipHandler;
+	export default manifest;
+}

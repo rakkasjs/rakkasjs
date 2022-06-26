@@ -13,24 +13,20 @@ import { resolveClientManifest } from "./resolve-client-manifest";
 import apiRoutes from "../features/api-routes/vite-plugin";
 import pageRoutes from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
-import { virtualNodeHandlerEntry } from "./virtual-node-handler-entry";
+import { virtualHattipEntry } from "./virtual-hattip-entry";
+import { virtualNodeEntry } from "./virtual-node-entry";
 
 export interface RakkasOptions {
 	/** File extensions for pages and layouts @default ["jsx","tsx"] */
 	pageExtensions?: string[];
 	/** Options passed to @vite/plugin-react */
 	react?: ReactPluginOptions;
-
-	nodeHandlerEntry?: string;
 }
 
 export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
-	const nodeHandlerEntry =
-		options.nodeHandlerEntry || "/virtual:rakkasjs:node-handler-entry";
-
 	return [
 		...vaviteConnect({
-			handlerEntry: nodeHandlerEntry,
+			handlerEntry: "/virtual:rakkasjs:node-entry",
 			clientAssetsDir: "dist/client",
 			serveClientAssetsInDev: true,
 		}),
@@ -44,7 +40,8 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		pageRoutes({
 			pageExtensions: options.pageExtensions,
 		}),
-		virtualNodeHandlerEntry(),
+		virtualNodeEntry(),
+		virtualHattipEntry(),
 		virtualClientEntry(),
 		resolveClientManifest(),
 		...runServerSide(),

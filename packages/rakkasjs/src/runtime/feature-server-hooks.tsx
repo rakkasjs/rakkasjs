@@ -3,7 +3,7 @@ import useQueryServerHooks from "../features/use-query/server-hooks";
 import useServerSideServerHooks from "../features/run-server-side/server-hooks";
 import isomorphicFetchServerHooks from "../features/isomorphic-fetch/server-hooks";
 import clientSideNavigationServerHooks from "../features/client-side-navigation/server-hooks";
-import { ServerHooks } from "./hattip-entry";
+import { ServerHooks } from "./hattip-handler";
 
 const serverHooks: ServerHooks[] = [
 	headServerHooks,

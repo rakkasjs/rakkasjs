@@ -1,3 +1,3 @@
 /* eslint-disable import/export */
 export * from ".";
-export { hattipHandler } from "../runtime/hattip-handler";
+export { createRequestHandler } from "../runtime/hattip-handler";

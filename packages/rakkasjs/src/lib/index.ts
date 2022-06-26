@@ -16,4 +16,8 @@ export * from "../features/response-manipulation/lib";
 export * from "../features/error-boundary/lib";
 
 export type { startClient } from "../runtime/client-entry";
-export type { hattipHandler } from "../runtime/hattip-handler";
+export type {
+	createRequestHandler,
+	ServerHooks,
+	PageHooks,
+} from "../runtime/hattip-handler";

@@ -1,5 +1,5 @@
 import React from "react";
-import type { ServerHooks } from "../../runtime/hattip-entry";
+import type { ServerHooks } from "../../runtime/hattip-handler";
 import { HelmetProvider, FilledContext } from "react-helmet-async";
 
 const headServerHooks: ServerHooks = {
