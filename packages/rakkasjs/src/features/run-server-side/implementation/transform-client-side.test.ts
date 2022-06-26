@@ -15,24 +15,36 @@ const tests: Test[] = [
 		message: "transforms client-side code",
 		input: `
 			import { useSSQ } from "rakkasjs";
+			import { sharedFn } from "shared-module";
+			import { serverSideFn } from "server-side-module";
 			import { alreadyUnused } from "other-server-side";
 
 			const bar = 1;
+
+			function serverOnlyFn() {
+				serverSideFn();
+			}
+
 			function x(foo) {
 				const baz = 2;
+				sharedFn();
 				useSSQ(() => foo + bar + baz, { option: "qux" });
 				useSSQ(async function (ctx) {
 					const baz = 2;
+					serverOnlyFn();
+					sharedFn();
 					return ctx.session.userName;
 				});
 			}
 		`,
 		output: `
 			import { useSSQ } from "rakkasjs";
+			import { sharedFn } from "shared-module";
 			import { alreadyUnused } from "other-server-side";
 
 			function x(foo) {
 				const baz = 2;
+				sharedFn();
 				useSSQ(["abc123", 0, [foo, baz]], { option: "qux" });
 				useSSQ(["abc123", 1, []]);
 			};
