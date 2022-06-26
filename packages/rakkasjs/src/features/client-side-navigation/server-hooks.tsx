@@ -1,15 +1,19 @@
 import React from "react";
-import { CreateServerHooksFn } from "../../runtime/server-hooks";
+import type { ServerHooks } from "../../runtime/hattip-entry";
 import { LocationContext } from "./implementation";
 
-const createClientSideNavigationServerHooks: CreateServerHooksFn = (ctx) => ({
-	wrapApp(app) {
-		return (
-			<LocationContext.Provider value={ctx.url.href}>
-				{app}
-			</LocationContext.Provider>
-		);
+const clientSideNavigationServerHooks: ServerHooks = {
+	createPageHooks(ctx) {
+		return {
+			wrapApp(app) {
+				return (
+					<LocationContext.Provider value={ctx.url.href}>
+						{app}
+					</LocationContext.Provider>
+				);
+			},
+		};
 	},
-});
+};
 
-export default createClientSideNavigationServerHooks;
+export default clientSideNavigationServerHooks;

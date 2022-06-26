@@ -18,16 +18,7 @@ export default async function renderPageRoute(
 ): Promise<Response | undefined> {
 	ctx.locals = {};
 
-	const hooksObjects = serverHooks.map((fn) => fn(ctx));
-
-	for (const hooks of hooksObjects) {
-		if (hooks.handleRequest) {
-			const response = await hooks.handleRequest();
-			if (response) {
-				return response;
-			}
-		}
-	}
+	const hooksObjects = serverHooks.map((hook) => hook.createPageHooks?.(ctx));
 
 	const routes = (await import("virtual:rakkasjs:server-page-routes")).default;
 
@@ -57,7 +48,7 @@ export default async function renderPageRoute(
 
 	let app = <App />;
 	for (const hooks of hooksObjects) {
-		if (hooks.wrapApp) {
+		if (hooks?.wrapApp) {
 			app = hooks.wrapApp(app);
 		}
 	}
@@ -156,7 +147,7 @@ export default async function renderPageRoute(
 		`<meta http-equiv="X-UA-Compatible" content="ie=edge" />`;
 
 	for (const hooks of hooksObjects) {
-		if (hooks.emitToDocumentHead) {
+		if (hooks?.emitToDocumentHead) {
 			head += hooks.emitToDocumentHead();
 		}
 	}
@@ -179,7 +170,7 @@ export default async function renderPageRoute(
 		async pull(controller) {
 			for await (const chunk of reactStream as any as AsyncIterable<Uint8Array>) {
 				for (const hooks of hooksObjects) {
-					if (hooks.emitBeforeSsrChunk) {
+					if (hooks?.emitBeforeSsrChunk) {
 						const text = hooks.emitBeforeSsrChunk();
 						if (text) {
 							controller.enqueue(textEncoder.encode(text));

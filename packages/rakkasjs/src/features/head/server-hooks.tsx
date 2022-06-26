@@ -1,30 +1,32 @@
 import React from "react";
-import { CreateServerHooksFn } from "../../runtime/server-hooks";
+import type { ServerHooks } from "../../runtime/hattip-entry";
 import { HelmetProvider, FilledContext } from "react-helmet-async";
 
-const createServerHooks: CreateServerHooksFn = () => {
-	const helmetContext = {};
+const headServerHooks: ServerHooks = {
+	createPageHooks() {
+		const helmetContext = {};
 
-	return {
-		wrapApp: (app) => {
-			return <HelmetProvider context={helmetContext}>{app}</HelmetProvider>;
-		},
+		return {
+			wrapApp: (app) => {
+				return <HelmetProvider context={helmetContext}>{app}</HelmetProvider>;
+			},
 
-		emitToDocumentHead() {
-			const { helmet } = helmetContext as FilledContext;
+			emitToDocumentHead() {
+				const { helmet } = helmetContext as FilledContext;
 
-			return (
-				// TODO: Prioritize SEO head tags: https://github.com/staylor/react-helmet-async#prioritizing-tags-for-seo
-				helmet.title.toString() +
-				helmet.meta.toString() +
-				helmet.base.toString() +
-				helmet.link.toString() +
-				helmet.style.toString() +
-				helmet.script.toString() +
-				helmet.noscript.toString()
-			);
-		},
-	};
+				return (
+					// TODO: Prioritize SEO head tags: https://github.com/staylor/react-helmet-async#prioritizing-tags-for-seo
+					helmet.title.toString() +
+					helmet.meta.toString() +
+					helmet.base.toString() +
+					helmet.link.toString() +
+					helmet.style.toString() +
+					helmet.script.toString() +
+					helmet.noscript.toString()
+				);
+			},
+		};
+	},
 };
 
-export default createServerHooks;
+export default headServerHooks;

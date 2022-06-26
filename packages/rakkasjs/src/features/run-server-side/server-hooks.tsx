@@ -1,10 +1,10 @@
-import { CreateServerHooksFn } from "../../runtime/server-hooks";
+import type { ServerHooks } from "../../runtime/hattip-entry";
 import { parse } from "@brillout/json-s";
 import devalue from "devalue";
 
-const createServerHooks: CreateServerHooksFn = (ctx) => {
-	return {
-		async handleRequest() {
+const runServerSideServerHooks: ServerHooks = {
+	middleware: {
+		beforeApiRoutes: async (ctx) => {
 			// TODO: Build ID
 			if (!ctx.url.pathname.startsWith("/_data/development/")) return undefined;
 
@@ -31,7 +31,7 @@ const createServerHooks: CreateServerHooksFn = (ctx) => {
 
 			return new Response(devalue(result));
 		},
-	};
+	},
 };
 
-export default createServerHooks;
+export default runServerSideServerHooks;
