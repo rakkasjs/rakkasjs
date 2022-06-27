@@ -1,6 +1,8 @@
+import React from "react";
 import type { ServerHooks } from "../../runtime/hattip-handler";
 import { parse } from "@brillout/json-s";
 import devalue from "devalue";
+import { ServerSideContextImpl } from "./implementation/lib-impl";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
@@ -31,6 +33,18 @@ const runServerSideServerHooks: ServerHooks = {
 
 			return new Response(devalue(result));
 		},
+	},
+
+	createPageHooks() {
+		return {
+			wrapApp(app) {
+				return (
+					<ServerSideContextImpl.Provider value={{}}>
+						{app}
+					</ServerSideContextImpl.Provider>
+				);
+			},
+		};
 	},
 };
 
