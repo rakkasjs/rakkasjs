@@ -51,6 +51,6 @@
 		"source-map": "^0.7.4",
 		"typescript": "^4.7.4",
 		"vfile": "^5.3.4",
-		"vite": "^3.0.0-beta.2"
+		"vite": "^3.0.0-beta.3"
 	}
 }
