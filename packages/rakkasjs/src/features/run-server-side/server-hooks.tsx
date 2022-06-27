@@ -14,7 +14,17 @@ const runServerSideServerHooks: ServerHooks = {
 				.split("/")
 				.map((s) => decodeURIComponent(s));
 
-			const closureContents = closure.map(parse);
+			let closureContents: unknown[];
+
+			if (ctx.method === "POST") {
+				const text = await ctx.request.text();
+				closureContents = parse(text) as unknown[];
+				if (!Array.isArray(closureContents)) {
+					throw new TypeError();
+				}
+			} else {
+				closureContents = closure.map(parse);
+			}
 
 			const manifest = await import(
 				"virtual:rakkasjs:run-server-side:manifest"

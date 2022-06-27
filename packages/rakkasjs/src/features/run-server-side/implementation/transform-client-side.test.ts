@@ -14,7 +14,7 @@ const tests: Test[] = [
 	{
 		message: "transforms client-side code",
 		input: `
-			import { useSSQ } from "rakkasjs";
+			import { useSSQ, runSSM } from "rakkasjs";
 			import { sharedFn } from "shared-module";
 			import { serverSideFn } from "server-side-module";
 			import { alreadyUnused } from "other-server-side";
@@ -38,10 +38,11 @@ const tests: Test[] = [
 					return ctx.session.userName;
 				});
 				useSSQ(outside);
+				runSSM(() => { void baz; })
 			}
 		`,
 		output: `
-			import { useSSQ } from "rakkasjs";
+			import { useSSQ, runSSM } from "rakkasjs";
 			import { sharedFn } from "shared-module";
 			import { alreadyUnused } from "other-server-side";
 
@@ -51,6 +52,7 @@ const tests: Test[] = [
 				useSSQ(["abc123", 0, [foo, baz]], { option: "qux" });
 				useSSQ(["abc123", 1, []]);
 				useSSQ(["abc123", 2, []]);
+				runSSM(["abc123", 3, [baz]]);
 			};
 		`,
 	},

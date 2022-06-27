@@ -1,7 +1,10 @@
 /* eslint-disable import/export */
 export * from ".";
-export { createRequestHandler } from "../runtime/hattip-handler";
 export {
 	useSSQ,
 	useServerSideQuery,
+	runSSM,
+	runServerSideMutation,
 } from "../features/run-server-side/lib-server";
+
+export { createRequestHandler } from "../runtime/hattip-handler";

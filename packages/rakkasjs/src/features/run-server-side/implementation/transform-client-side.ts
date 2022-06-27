@@ -1,6 +1,10 @@
 import { PluginItem, NodePath } from "@babel/core";
 import * as t from "@babel/types";
-import { isRunServerSideCall } from "./is-run-server-side-call";
+import {
+	getAlreadyUnreferenced,
+	isRunServerSideCall,
+	removeUnreferenced,
+} from "./transform-utils";
 
 export function babelTransformClientSideHooks(
 	moduleId: string,
@@ -11,15 +15,7 @@ export function babelTransformClientSideHooks(
 			Program: {
 				exit(program) {
 					let counter = 0;
-					const alreadyUnreferenced = new Set<string>();
-
-					for (const [name, binding] of Object.entries(
-						program.scope.bindings,
-					)) {
-						if (!binding.referenced) {
-							alreadyUnreferenced.add(name);
-						}
-					}
+					const alreadyUnreferenced = getAlreadyUnreferenced(program);
 
 					program.traverse({
 						CallExpression: {
@@ -47,7 +43,7 @@ export function babelTransformClientSideHooks(
 								}
 
 								const body = fn.get("body") as NodePath<t.BlockStatement>;
-								const identifiers = new Set<NodePath<t.Identifier>>();
+								const identifiers = new Set<string>();
 
 								body.traverse({
 									Identifier: {
@@ -68,7 +64,7 @@ export function babelTransformClientSideHooks(
 												binding?.path.get("id") === identifier ||
 												binding?.referencePaths.includes(identifier)
 											) {
-												identifiers.add(identifier);
+												identifiers.add(identifier.node.name);
 											}
 										},
 									},
@@ -81,7 +77,7 @@ export function babelTransformClientSideHooks(
 										t.stringLiteral(moduleId),
 										t.numericLiteral(counter++),
 										t.arrayExpression(
-											[...identifiers].map((id) => t.identifier(id.node.name)),
+											[...identifiers].map((id) => t.identifier(id)),
 										),
 									]),
 								);
@@ -93,31 +89,7 @@ export function babelTransformClientSideHooks(
 						return;
 					}
 
-					for (;;) {
-						program.scope.crawl();
-						let removed = false;
-						for (const [name, binding] of Object.entries(
-							program.scope.bindings,
-						)) {
-							if (binding.referenced || alreadyUnreferenced.has(name)) {
-								continue;
-							}
-
-							const parent = binding.path.parentPath;
-							if (
-								parent?.isImportDeclaration() &&
-								parent.node.specifiers.length === 1
-							) {
-								parent.remove();
-							} else {
-								binding.path.remove();
-							}
-
-							removed = true;
-						}
-
-						if (!removed) break;
-					}
+					removeUnreferenced(program, alreadyUnreferenced);
 				},
 			},
 		},

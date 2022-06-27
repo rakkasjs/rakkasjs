@@ -14,7 +14,7 @@ const tests: Test[] = [
 	{
 		message: "transforms server-side code",
 		input: `
-			import { useSSQ } from "rakkasjs";
+			import { useSSQ, runSSM } from "rakkasjs";
 			const bar = 1;
 
 			function outside() {}
@@ -27,6 +27,7 @@ const tests: Test[] = [
 					return ctx.session.userName;
 				});
 				useSSQ(outside);
+				runSSM(() => { void 0; });
 			}
 		`,
 		output: `
@@ -38,6 +39,7 @@ const tests: Test[] = [
 				useSSQ(["abc123", 0, [foo, baz], $runServerSide$[0]], { option: "qux" });
 				useSSQ(["abc123", 1, [], $runServerSide$[1]]);
 				useSSQ(["abc123", 2, [], $runServerSide$[2]]);
+				null;
 			};
 
 			export const $runServerSide$ = [
@@ -53,7 +55,11 @@ const tests: Test[] = [
 				async ($runServerSideClosure$, ...$runServerSideArgs$) => {
 					let [] = $runServerSideClosure$;
 					return outside(...$runServerSideArgs$);
-				}
+				},
+				async ($runServerSideClosure$) => {
+					let [] = $runServerSideClosure$;
+					void 0;
+				},
 			]
 		`,
 	},
@@ -69,7 +75,8 @@ for (const test of tests) {
 			plugins: [babelTransformServerSideHooks("abc123")],
 		});
 
-		expect(trim(result?.code || "")).to.equal(trim(test.output));
+		const output = trim(result?.code || "");
+		expect(output).to.equal(trim(test.output));
 	});
 }
 

@@ -422,6 +422,25 @@ function testCase(title: string, dev: boolean, command?: string) {
 				document.body.innerText.includes("Result: 7, SSR: true"),
 			);
 		});
+
+		test("runs runServerSideMutation on the server", async () => {
+			await page.goto(TEST_HOST + "/run-ssm");
+			await page.waitForSelector(".hydrated");
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Not fetched"),
+			);
+
+			const btn: ElementHandle<HTMLButtonElement> | null =
+				await page.waitForSelector("button");
+			expect(btn).toBeTruthy();
+
+			await btn!.click();
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Computed on the server: 7"),
+			);
+		});
 	});
 }
 

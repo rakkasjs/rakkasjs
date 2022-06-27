@@ -1,6 +1,10 @@
 import { PluginItem, NodePath } from "@babel/core";
 import * as t from "@babel/types";
-import { isRunServerSideCall } from "./is-run-server-side-call";
+import {
+	getAlreadyUnreferenced,
+	isRunServerSideCall,
+	removeUnreferenced,
+} from "./transform-utils";
 
 export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 	let counter = 0;
@@ -9,6 +13,7 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 		visitor: {
 			Program: {
 				exit(program) {
+					const alreadyUnreferenced = getAlreadyUnreferenced(program);
 					const hoisted: t.Expression[] = [];
 
 					program.traverse({
@@ -37,7 +42,7 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 								}
 
 								const body = fn.get("body") as NodePath<t.BlockStatement>;
-								const identifiers = new Set<NodePath<t.Identifier>>();
+								const identifiers = new Set<string>();
 
 								body.traverse({
 									Identifier: {
@@ -58,7 +63,7 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 												binding?.path.get("id") === identifier ||
 												binding?.referencePaths.includes(identifier)
 											) {
-												identifiers.add(identifier);
+												identifiers.add(identifier.node.name);
 											}
 										},
 									},
@@ -69,9 +74,7 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 								const replacement = t.arrayExpression([
 									t.stringLiteral(moduleId),
 									t.numericLiteral(counter),
-									t.arrayExpression(
-										ids.map((id) => t.identifier(id.node.name)),
-									),
+									t.arrayExpression(ids.map((id) => t.identifier(id))),
 									t.memberExpression(
 										t.identifier("$runServerSide$"),
 										t.numericLiteral(counter++),
@@ -97,9 +100,7 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 									fn.node.body.body.unshift(
 										t.variableDeclaration("let", [
 											t.variableDeclarator(
-												t.arrayPattern(
-													ids.map((id) => t.identifier(id.node.name)),
-												),
+												t.arrayPattern(ids.map((id) => t.identifier(id))),
 												t.identifier("$runServerSideClosure$"),
 											),
 										]),
@@ -109,6 +110,15 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 								hoisted.push(fn.node);
 
 								fn.replaceWith(replacement);
+
+								if (
+									(call.node.callee as t.Identifier).name === "runSSM" ||
+									(call.node.callee as t.Identifier).name ===
+										"runServerSideMutation"
+								) {
+									call.parentPath.replaceWith(t.nullLiteral());
+									return;
+								}
 							},
 						},
 					});
@@ -125,6 +135,8 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 							),
 						);
 					}
+
+					removeUnreferenced(program, alreadyUnreferenced);
 				},
 			},
 		},

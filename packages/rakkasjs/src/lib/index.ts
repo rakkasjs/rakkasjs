@@ -18,6 +18,8 @@ export * from "../features/run-server-side/lib-common";
 export type {
 	useSSQ,
 	useServerSideQuery,
+	runSSM,
+	runServerSideMutation,
 } from "../features/run-server-side/lib-client";
 
 export type { startClient } from "../runtime/client-entry";

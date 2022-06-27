@@ -52,3 +52,44 @@ export function isRunServerSideCall(
 
 	return false;
 }
+
+export function getAlreadyUnreferenced(program: NodePath<t.Program>) {
+	const alreadyUnreferenced = new Set<string>();
+
+	for (const [name, binding] of Object.entries(program.scope.bindings)) {
+		if (!binding.referenced) {
+			alreadyUnreferenced.add(name);
+		}
+	}
+
+	return alreadyUnreferenced;
+}
+
+export function removeUnreferenced(
+	program: NodePath<t.Program>,
+	alreadyUnreferenced: Set<string>,
+) {
+	for (;;) {
+		program.scope.crawl();
+		let removed = false;
+		for (const [name, binding] of Object.entries(program.scope.bindings)) {
+			if (binding.referenced || alreadyUnreferenced.has(name)) {
+				continue;
+			}
+
+			const parent = binding.path.parentPath;
+			if (
+				parent?.isImportDeclaration() &&
+				parent.node.specifiers.length === 1
+			) {
+				parent.remove();
+			} else {
+				binding.path.remove();
+			}
+
+			removed = true;
+		}
+
+		if (!removed) break;
+	}
+}
