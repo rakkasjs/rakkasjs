@@ -7,5 +7,6 @@ declare module "@hattip/compose" {
 		params: Record<string, string>;
 		fetch: typeof fetch;
 		locals: import(".").Locals;
+		hooks: import(".").ServerHooks[];
 	}
 }

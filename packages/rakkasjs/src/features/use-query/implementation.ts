@@ -6,7 +6,7 @@ import {
 	useEffect,
 	useSyncExternalStore,
 } from "react";
-import { IsomorphicFetchContext } from "../isomorphic-fetch/implementation";
+import { IsomorphicContext } from "../../runtime/isomorphic-context";
 
 export interface CacheItem {
 	value?: any;
@@ -158,9 +158,7 @@ function useQueryBase<T>(
 		() => (key === undefined ? undefined : cache.get(key)),
 	);
 
-	const fetchFn =
-		useContext(IsomorphicFetchContext) || ((...args) => fetch(...args));
-	const ctx = { fetch: fetchFn };
+	const ctx = useContext(IsomorphicContext);
 
 	useEffect(() => {
 		const item = key ? cache.get(key) : undefined;

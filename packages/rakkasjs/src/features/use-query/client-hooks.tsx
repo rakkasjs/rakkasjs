@@ -7,7 +7,7 @@ import {
 } from "./implementation";
 
 export default defineClientHooks({
-	onRender(app) {
+	wrapApp(app) {
 		return <Wrapper>{app}</Wrapper>;
 	},
 });

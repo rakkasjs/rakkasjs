@@ -1,5 +1,3 @@
-import React from "react";
-import { IsomorphicFetchContext } from "./implementation";
 import hattipHandler from "virtual:rakkasjs:hattip-entry";
 import type { ServerHooks } from "../../runtime/hattip-handler";
 
@@ -57,11 +55,9 @@ const isomorphicFetchServerHooks: ServerHooks = {
 
 	createPageHooks(ctx) {
 		return {
-			wrapApp: (app) => (
-				<IsomorphicFetchContext.Provider value={ctx.fetch}>
-					{app}
-				</IsomorphicFetchContext.Provider>
-			),
+			augmentQueryContext(queryContext) {
+				queryContext.fetch = ctx.fetch;
+			},
 		};
 	},
 };

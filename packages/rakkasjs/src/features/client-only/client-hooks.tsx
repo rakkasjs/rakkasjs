@@ -3,7 +3,7 @@ import { defineClientHooks } from "../../runtime/client-hooks";
 import { ClientOnlyContext } from "./implementation";
 
 export default defineClientHooks({
-	onRender(app) {
+	wrapApp(app) {
 		return <ClientOnlyWrapper>{app}</ClientOnlyWrapper>;
 	},
 });

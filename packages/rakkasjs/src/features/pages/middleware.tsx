@@ -10,15 +10,17 @@ import {
 	ResponseContext,
 	ResponseContextProps,
 } from "../response-manipulation/implementation";
-import serverHooks from "../../runtime/feature-server-hooks";
 import { RequestContext } from "@hattip/compose";
+import { IsomorphicContext } from "../../runtime/isomorphic-context";
+import { QueryContext } from "../use-query/implementation";
+import { ServerSideContext } from "../../runtime/hattip-handler";
 
 export default async function renderPageRoute(
 	ctx: RequestContext,
 ): Promise<Response | undefined> {
 	ctx.locals = {};
 
-	const hooksObjects = serverHooks.map((hook) => hook.createPageHooks?.(ctx));
+	const pageHooks = ctx.hooks.map((hook) => hook.createPageHooks?.(ctx));
 
 	const routes = (await import("virtual:rakkasjs:server-page-routes")).default;
 
@@ -46,8 +48,22 @@ export default async function renderPageRoute(
 		}
 	}
 
-	let app = <App />;
-	for (const hooks of hooksObjects) {
+	const queryContext: QueryContext = {} as any;
+
+	for (const hook of pageHooks) {
+		hook?.augmentQueryContext?.(queryContext);
+	}
+
+	let app = (
+		<ServerSideContext.Provider value={ctx}>
+			<IsomorphicContext.Provider value={queryContext}>
+				<App />
+			</IsomorphicContext.Provider>
+		</ServerSideContext.Provider>
+	);
+
+	const reversePageHooks = [...pageHooks].reverse();
+	for (const hooks of reversePageHooks) {
 		if (hooks?.wrapApp) {
 			app = hooks.wrapApp(app);
 		}
@@ -146,7 +162,7 @@ export default async function renderPageRoute(
 		`<meta name="viewport" content="width=device-width, initial-scale=1.0" />` +
 		`<meta http-equiv="X-UA-Compatible" content="ie=edge" />`;
 
-	for (const hooks of hooksObjects) {
+	for (const hooks of pageHooks) {
 		if (hooks?.emitToDocumentHead) {
 			head += hooks.emitToDocumentHead();
 		}
@@ -169,7 +185,7 @@ export default async function renderPageRoute(
 
 		async pull(controller) {
 			for await (const chunk of reactStream as any as AsyncIterable<Uint8Array>) {
-				for (const hooks of hooksObjects) {
+				for (const hooks of pageHooks) {
 					if (hooks?.emitBeforeSsrChunk) {
 						const text = hooks.emitBeforeSsrChunk();
 						if (text) {

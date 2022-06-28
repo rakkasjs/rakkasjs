@@ -3,11 +3,11 @@ import { defineClientHooks } from "../../runtime/client-hooks";
 import { initialize, LocationContext } from "./implementation";
 
 export default defineClientHooks({
-	onBeforeStart() {
+	beforeStart() {
 		initialize();
 	},
 
-	onRender(app) {
+	wrapApp(app) {
 		return (
 			// eslint-disable-next-line ssr-friendly/no-dom-globals-in-react-fc
 			<LocationContext.Provider value={location.href}>

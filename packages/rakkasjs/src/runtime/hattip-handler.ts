@@ -1,7 +1,8 @@
 import { compose, RequestContext, RequestHandlerStack } from "@hattip/compose";
-import { ReactElement } from "react";
+import { createContext, ReactElement } from "react";
 import renderApiRoute from "../features/api-routes/middleware";
 import renderPageRoute from "../features/pages/middleware";
+import { QueryContext } from "../lib";
 import serverHooks from "./feature-server-hooks";
 
 export interface ServerHooks {
@@ -10,37 +11,44 @@ export interface ServerHooks {
 		beforeApiRoutes?: RequestHandlerStack;
 		beforeNotFound?: RequestHandlerStack;
 	};
-	createPageHooks?: (ctx: RequestContext) => PageHooks;
+	createPageHooks?(ctx: RequestContext): PageHooks;
 }
 
 export interface PageHooks {
 	wrapApp?(app: ReactElement): ReactElement;
 	emitToDocumentHead?(): string;
 	emitBeforeSsrChunk?(): string | undefined;
+	augmentQueryContext?(ctx: QueryContext): void | Promise<void>;
 }
 
-export function createRequestHandler(hooks: ServerHooks = {}) {
+export const ServerSideContext = createContext<RequestContext>(
+	undefined as any,
+);
+
+export function createRequestHandler(userHooks: ServerHooks = {}) {
+	const hooks = [...serverHooks, userHooks];
+
 	return compose(
 		[
-			init,
+			init(hooks),
 
-			serverHooks.map((hook) => hook.middleware?.beforePages),
-			hooks.middleware?.beforePages,
+			hooks.map((hook) => hook.middleware?.beforePages),
 			renderPageRoute,
 
-			serverHooks.map((hook) => hook.middleware?.beforeApiRoutes),
-			hooks.middleware?.beforeApiRoutes,
+			hooks.map((hook) => hook.middleware?.beforeApiRoutes),
 			renderApiRoute,
 
-			serverHooks.map((hook) => hook.middleware?.beforeNotFound),
-			hooks.middleware?.beforeNotFound,
+			hooks.map((hook) => hook.middleware?.beforeNotFound),
 		].flat(),
 	);
 }
 
-function init(ctx: RequestContext) {
-	const { url, method } = ctx.request;
-	ctx.url = new URL(url);
-	ctx.method = method;
-	ctx.locals = {};
+function init(hooks: ServerHooks[]) {
+	return (ctx: RequestContext) => {
+		const { url, method } = ctx.request;
+		ctx.url = new URL(url);
+		ctx.method = method;
+		ctx.locals = {};
+		ctx.hooks = hooks;
+	};
 }

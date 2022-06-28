@@ -1,8 +1,10 @@
 import { ReactElement } from "react";
+import { QueryContext } from "../lib";
 
 export interface ClientHooks {
-	onBeforeStart?(): void | Promise<void>;
-	onRender?(app: ReactElement): ReactElement;
+	beforeStart?(): void | Promise<void>;
+	wrapApp?(app: ReactElement): ReactElement;
+	augmentQueryContext?(ctx: QueryContext): void;
 }
 
 export function defineClientHooks(hooks: ClientHooks): ClientHooks {

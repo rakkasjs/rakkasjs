@@ -1,39 +1,49 @@
-import React, { ReactElement, StrictMode, Suspense } from "react";
+import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { DEFAULT_QUERY_OPTIONS } from "../features/use-query/implementation";
-import { UseQueryOptions } from "../lib";
+import { UseQueryOptions, QueryContext } from "../lib";
 import { App, loadRoute, RouteContext } from "./App";
+import { ClientHooks } from "./client-hooks";
 import featureHooks from "./feature-client-hooks";
+import { IsomorphicContext } from "./isomorphic-context";
 
 export interface StartClientOptions {
 	defaultQueryOptions?: UseQueryOptions;
-	onRender?: (app: ReactElement) => ReactElement;
+	hooks?: ClientHooks;
 }
 
 export async function startClient(options: StartClientOptions = {}) {
 	Object.assign(DEFAULT_QUERY_OPTIONS, options.defaultQueryOptions);
 
-	const clientHooks = featureHooks;
+	const clientHooks = options.hooks
+		? [...featureHooks, options.hooks]
+		: featureHooks;
 
 	for (const hooks of clientHooks) {
-		if (hooks.onBeforeStart) {
-			await hooks.onBeforeStart();
+		if (hooks.beforeStart) {
+			await hooks.beforeStart();
+		}
+	}
+
+	const queryContext: QueryContext = {} as any;
+	for (const hooks of clientHooks) {
+		hooks.augmentQueryContext?.(queryContext);
+	}
+
+	let app = (
+		<IsomorphicContext.Provider value={queryContext}>
+			<App />
+		</IsomorphicContext.Provider>
+	);
+
+	const reverseHooks = [...clientHooks].reverse();
+	for (const hooks of reverseHooks) {
+		if (hooks.wrapApp) {
+			app = hooks.wrapApp(app);
 		}
 	}
 
 	const route = await loadRoute(new URL(window.location.href));
-
-	let app = <App />;
-
-	if (options.onRender) {
-		app = options.onRender(app);
-	}
-
-	for (const hooks of clientHooks) {
-		if (hooks.onRender) {
-			app = hooks.onRender(app);
-		}
-	}
 
 	app = (
 		<StrictMode>
@@ -45,30 +55,3 @@ export async function startClient(options: StartClientOptions = {}) {
 
 	hydrateRoot(document.getElementById("root")!, app);
 }
-
-/*
-
-const routes = await import("virtual:rakkasjs:client-page-routes");
-const path = location.pathname;
-
-// let params: Record<string, string>;
-const route = routes.default.find(([re]) => {
-	const match = path.match(re);
-	if (match) {
-		// params = match.groups || {};
-		return true;
-	}
-
-	return false;
-});
-
-if (!route) {
-	// TODO: Handle 404
-	return;
-}
-
-modules = (await Promise.all(
-	route[1].map((importer) => importer()),
-)) as any;
-
-*/

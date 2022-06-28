@@ -1,8 +1,6 @@
-import React from "react";
 import type { ServerHooks } from "../../runtime/hattip-handler";
 import { parse } from "@brillout/json-s";
 import devalue from "devalue";
-import { ServerSideContextImpl } from "./implementation/lib-impl";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
@@ -39,22 +37,10 @@ const runServerSideServerHooks: ServerHooks = {
 			const fn = module.$runServerSide$[Number(counter)];
 
 			// TODO: Server-side context
-			const result = await fn(closureContents, {});
+			const result = await fn(closureContents, ctx);
 
 			return new Response(devalue(result));
 		},
-	},
-
-	createPageHooks() {
-		return {
-			wrapApp(app) {
-				return (
-					<ServerSideContextImpl.Provider value={{}}>
-						{app}
-					</ServerSideContextImpl.Provider>
-				);
-			},
-		};
 	},
 };
 
