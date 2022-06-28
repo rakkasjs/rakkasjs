@@ -1,4 +1,4 @@
-import { runServerSideMutation } from "rakkasjs";
+import * as rakkas from "rakkasjs";
 import { useState } from "react";
 
 export default function RunSsmPage() {
@@ -12,7 +12,7 @@ export default function RunSsmPage() {
 			<p>
 				<button
 					onClick={async () => {
-						const result = await runServerSideMutation(() => {
+						const result = await rakkas.runServerSideMutation(() => {
 							return import.meta.env.SSR
 								? `Computed on the server: ${a + b}`
 								: `Computed on the client: ${a + b}`;

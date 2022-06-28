@@ -14,6 +14,7 @@ const RUN_SERVER_SIDE_FUNCTION_NAMES = [
 
 export function isRunServerSideCall(
 	expr: NodePath,
+	nameRef: { name?: string },
 ): expr is NodePath<t.CallExpression> {
 	if (!expr.isCallExpression()) {
 		return false;
@@ -22,6 +23,7 @@ export function isRunServerSideCall(
 	const callee = expr.node.callee;
 	if (t.isIdentifier(callee)) {
 		const binding = expr.parentPath.scope.getBinding(callee.name);
+		nameRef.name = (binding?.path.node as any)?.imported?.name;
 		return !!(
 			binding &&
 			binding.path.isImportSpecifier() &&
@@ -38,6 +40,8 @@ export function isRunServerSideCall(
 		}
 
 		const binding = expr.parentPath.scope.getBinding(callee.object.name);
+
+		nameRef.name = (callee.property as any)?.name;
 
 		return !!(
 			binding &&

@@ -19,7 +19,8 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 					program.traverse({
 						CallExpression: {
 							exit(call) {
-								if (!isRunServerSideCall(call)) {
+								const nameRef: { name?: string } = {};
+								if (!isRunServerSideCall(call, nameRef)) {
 									return;
 								}
 
@@ -112,9 +113,8 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 								fn.replaceWith(replacement);
 
 								if (
-									(call.node.callee as t.Identifier).name === "runSSM" ||
-									(call.node.callee as t.Identifier).name ===
-										"runServerSideMutation"
+									nameRef.name === "runSSM" ||
+									nameRef.name === "runServerSideMutation"
 								) {
 									call.parentPath.replaceWith(t.nullLiteral());
 									return;

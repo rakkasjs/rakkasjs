@@ -20,7 +20,8 @@ export function babelTransformClientSideHooks(
 					program.traverse({
 						CallExpression: {
 							exit(call) {
-								if (!isRunServerSideCall(call)) {
+								const nameRef: { name?: string } = {};
+								if (!isRunServerSideCall(call, nameRef)) {
 									return;
 								}
 
