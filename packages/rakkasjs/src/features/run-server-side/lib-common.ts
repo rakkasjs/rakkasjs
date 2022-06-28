@@ -1,6 +1,6 @@
-import { RequestContext } from "@hattip/compose";
+import type { RequestContext } from "@hattip/compose";
 import { useContext } from "react";
-import { ServerSideContext } from "../../runtime/hattip-handler";
+import { ServerSideContext } from "../../runtime/isomorphic-context";
 import { UseQueryOptions } from "../use-query/implementation";
 
 export function useServerSideContext() {

@@ -43,7 +43,7 @@ export async function startClient(options: StartClientOptions = {}) {
 		}
 	}
 
-	const route = await loadRoute(new URL(window.location.href));
+	const route = await loadRoute(new URL(window.location.href), undefined, true);
 
 	app = (
 		<StrictMode>

@@ -3,6 +3,7 @@ import { useLocation } from "../features/client-side-navigation/lib";
 import { findRoute, RouteMatch } from "../internal/find-route";
 import { LayoutModule } from "./page-types";
 import prodRoutes from "virtual:rakkasjs:client-page-routes";
+import { Default404 } from "../features/pages/Default404";
 
 export function App() {
 	const { current: url } = useLocation();
@@ -45,6 +46,7 @@ interface RouteContextContent {
 export async function loadRoute(
 	url: URL,
 	lastFound?: RouteContextContent["found"],
+	try404 = false,
 ) {
 	let found = lastFound;
 
@@ -54,11 +56,34 @@ export async function loadRoute(
 			: // We should dynamically import in dev to allow hot reloading
 			  (await import("virtual:rakkasjs:client-page-routes")).default;
 
-		found = findRoute(routes, url.pathname);
+		let pathname = url.pathname;
+		found = findRoute(routes, pathname);
 
-		if (!found) {
-			// TODO: Handle 404
-			throw new Error("Page not found");
+		while (!found) {
+			if (!try404) {
+				// Always try a full reload before showing a 404 page
+				// the route may be file or an API route.
+				window.location.reload();
+				await new Promise(() => {
+					// Wait forever
+				});
+			}
+
+			if (!pathname.endsWith("/")) {
+				pathname += "/";
+			}
+
+			found = findRoute(routes, pathname + "%24404");
+
+			if (pathname === "/") {
+				found = {
+					params: {},
+					route: [/^\/$/, [async () => ({ default: Default404 })], []],
+				};
+			}
+
+			// Throw away the last path segment
+			pathname = pathname.split("/").slice(0, -2).join("/") || "/";
 		}
 	}
 

@@ -1,5 +1,5 @@
 import { compose, RequestContext, RequestHandlerStack } from "@hattip/compose";
-import { createContext, ReactElement } from "react";
+import { ReactElement } from "react";
 import renderApiRoute from "../features/api-routes/middleware";
 import renderPageRoute from "../features/pages/middleware";
 import { QueryContext } from "../lib";
@@ -21,10 +21,6 @@ export interface PageHooks {
 	augmentQueryContext?(ctx: QueryContext): void | Promise<void>;
 }
 
-export const ServerSideContext = createContext<RequestContext>(
-	undefined as any,
-);
-
 export function createRequestHandler(userHooks: ServerHooks = {}) {
 	const hooks = [...serverHooks, userHooks];
 
@@ -39,6 +35,8 @@ export function createRequestHandler(userHooks: ServerHooks = {}) {
 			renderApiRoute,
 
 			hooks.map((hook) => hook.middleware?.beforeNotFound),
+			notFound,
+			renderPageRoute,
 		].flat(),
 	);
 }
@@ -51,4 +49,8 @@ function init(hooks: ServerHooks[]) {
 		ctx.locals = {};
 		ctx.hooks = hooks;
 	};
+}
+
+function notFound(ctx: RequestContext) {
+	ctx.notFound = true;
 }

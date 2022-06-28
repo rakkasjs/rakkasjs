@@ -11,9 +11,12 @@ import {
 	ResponseContextProps,
 } from "../response-manipulation/implementation";
 import { RequestContext } from "@hattip/compose";
-import { IsomorphicContext } from "../../runtime/isomorphic-context";
+import {
+	IsomorphicContext,
+	ServerSideContext,
+} from "../../runtime/isomorphic-context";
 import { QueryContext } from "../use-query/implementation";
-import { ServerSideContext } from "../../runtime/hattip-handler";
+import { Default404 } from "./Default404";
 
 export default async function renderPageRoute(
 	ctx: RequestContext,
@@ -24,12 +27,37 @@ export default async function renderPageRoute(
 
 	const routes = (await import("virtual:rakkasjs:server-page-routes")).default;
 
-	const found = findRoute(routes, ctx.url.pathname);
+	let {
+		url: { pathname },
+	} = ctx;
 
-	if (!found) return;
+	let found = findRoute(routes, pathname);
+
+	if (!found && !ctx.notFound) return;
+
+	while (!found) {
+		if (!pathname.endsWith("/")) {
+			pathname += "/";
+		}
+
+		found = findRoute(routes, pathname + "%24404");
+		if (found) {
+			break;
+		}
+
+		if (pathname === "/") {
+			found = {
+				params: {},
+				route: [/^\/$/, [async () => ({ default: Default404 })], []],
+			};
+		}
+
+		// Throw away the last path segment
+		pathname = pathname.split("/").slice(0, -2).join("/") || "/";
+	}
 
 	let redirected: boolean | undefined;
-	let status: number | undefined = undefined;
+	let status: number | undefined = ctx.notFound ? 404 : undefined;
 	const headers = new Headers({
 		"Content-Type": "text/html; charset=utf-8",
 	});
@@ -227,5 +255,3 @@ function redirectBody(href: string) {
 	// http-equiv="refresh" is useful for static prerendering
 	return `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=${escaped}"></head><body><a href="${escaped}">${escaped}</a></body></html>`;
 }
-
-// const SSR_TIMEOUT = 0;

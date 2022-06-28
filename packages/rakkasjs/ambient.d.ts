@@ -8,5 +8,6 @@ declare module "@hattip/compose" {
 		fetch: typeof fetch;
 		locals: import(".").Locals;
 		hooks: import(".").ServerHooks[];
+		notFound?: boolean;
 	}
 }

@@ -16,6 +16,11 @@ export function routeToRegExp(route: string): RegExp {
 			route
 				.split("/")
 				.filter((x) => x !== "index" && !x.startsWith("_"))
+				.map((x) => {
+					const escaped = encodeURIComponent(x);
+					// Unescape [ and ]
+					return escaped.replace(/%5B/g, "[").replace(/%5D/g, "]");
+				})
 				.join("/")
 				.replace(
 					// Escape special characters

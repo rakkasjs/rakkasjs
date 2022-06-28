@@ -441,6 +441,33 @@ function testCase(title: string, dev: boolean, command?: string) {
 				document.body.innerText.includes("Computed on the server: 7"),
 			);
 		});
+
+		test("handles 404", async () => {
+			const response = await fetch(TEST_HOST + "/not-found");
+			expect(response.status).toBe(404);
+			const body = await response.text();
+			expect(body).to.contain("Not Found");
+		});
+
+		test("handles 404 with layout", async () => {
+			const response = await fetch(TEST_HOST + "/404/deep");
+			expect(response.status).toBe(404);
+			const body = await response.text();
+			expect(body).to.contain("Deep 404");
+		});
+
+		test("handles 404 with client-side nav", async () => {
+			await page.goto(TEST_HOST + "/404/deep/found");
+			await page.waitForSelector(".hydrated");
+			const link: ElementHandle<HTMLAnchorElement> | null =
+				await page.waitForSelector("a");
+			expect(link).toBeTruthy();
+
+			await link!.click();
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Deep 404"),
+			);
+		});
 	});
 }
 
