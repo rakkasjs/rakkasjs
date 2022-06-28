@@ -9,6 +9,7 @@ export type {
 
 export * from "../features/head/lib";
 export * from "../features/use-query/lib";
+export * from "../features/use-mutation/lib";
 export * from "../features/client-side-navigation/lib";
 export * from "../features/client-only/lib";
 export * from "../features/response-manipulation/lib";

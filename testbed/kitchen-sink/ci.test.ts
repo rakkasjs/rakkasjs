@@ -497,6 +497,44 @@ function testCase(title: string, dev: boolean, command?: string) {
 				document.body.innerText.includes("Internal Error"),
 			);
 		});
+
+		test("mutates with useMutation", async () => {
+			await page.goto(TEST_HOST + "/use-mutation");
+			await page.waitForSelector(".hydrated");
+
+			const btn: ElementHandle<HTMLButtonElement> | null =
+				await page.waitForSelector("button");
+			expect(btn).toBeTruthy();
+
+			await btn!.click();
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Loading"),
+			);
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Done"),
+			);
+		});
+
+		test("handles useMutation error", async () => {
+			await page.goto(TEST_HOST + "/use-mutation?error");
+			await page.waitForSelector(".hydrated");
+
+			const btn: ElementHandle<HTMLButtonElement> | null =
+				await page.waitForSelector("button");
+			expect(btn).toBeTruthy();
+
+			await btn!.click();
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Loading"),
+			);
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Error"),
+			);
+		});
 	});
 }
 
