@@ -3,7 +3,7 @@ import { useLocation } from "../features/client-side-navigation/lib";
 import { findRoute, RouteMatch } from "../internal/find-route";
 import { LayoutModule } from "./page-types";
 import prodRoutes from "virtual:rakkasjs:client-page-routes";
-import { Default404 } from "../features/pages/Default404";
+import { Default404Page } from "../features/pages/Default404Page";
 
 export function App() {
 	const { current: url } = useLocation();
@@ -12,6 +12,10 @@ export function App() {
 
 	const lastRoute = useContext(RouteContext);
 
+	if ("error" in lastRoute) {
+		throw lastRoute.error;
+	}
+
 	if (!lastRoute.last || lastRoute.last.pathname !== url.pathname) {
 		// TODO: Error handling
 		throw loadRoute(url, lastRoute.found)
@@ -19,8 +23,8 @@ export function App() {
 				lastRoute.last = route;
 				lastRoute.onRendered?.();
 			})
-			.catch((err) => {
-				console.error(err);
+			.catch((error) => {
+				lastRoute.error = error;
 			});
 	}
 
@@ -41,6 +45,7 @@ interface RouteContextContent {
 		app: ReactElement;
 	};
 	onRendered?(): void;
+	error?: unknown;
 }
 
 export async function loadRoute(
@@ -78,7 +83,7 @@ export async function loadRoute(
 			if (pathname === "/") {
 				found = {
 					params: {},
-					route: [/^\/$/, [async () => ({ default: Default404 })], []],
+					route: [/^\/$/, [async () => ({ default: Default404Page })], []],
 				};
 			}
 

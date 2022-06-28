@@ -138,18 +138,26 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 		configureServer(server) {
 			server.watcher.addListener("all", async (e: string, fn: string) => {
 				if ((isPage(fn) || isLayout(fn)) && (e === "add" || e === "unlink")) {
-					const module = server.moduleGraph.getModuleById(
+					const serverModule = server.moduleGraph.getModuleById(
 						"virtual:rakkasjs:server-page-routes",
 					);
+					const clientModule = server.moduleGraph.getModuleById(
+						"virtual:rakkasjs:client-page-routes",
+					);
 
-					if (module) {
-						server.moduleGraph.invalidateModule(module);
-						if (server.ws) {
-							server.ws.send({
-								type: "full-reload",
-								path: "*",
-							});
-						}
+					if (serverModule) {
+						server.moduleGraph.invalidateModule(serverModule);
+					}
+
+					if (clientModule) {
+						server.moduleGraph.invalidateModule(clientModule);
+					}
+
+					if (server.ws && (serverModule || clientModule)) {
+						server.ws.send({
+							type: "full-reload",
+							path: "*",
+						});
 					}
 				}
 			});

@@ -453,6 +453,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			const response = await fetch(TEST_HOST + "/404/deep");
 			expect(response.status).toBe(404);
 			const body = await response.text();
+			expect(body).to.contain("This is a shared header.");
 			expect(body).to.contain("Deep 404");
 		});
 
@@ -466,6 +467,34 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await link!.click();
 			await page.waitForFunction(() =>
 				document.body.innerText.includes("Deep 404"),
+			);
+		});
+
+		test("handles error", async () => {
+			const response = await fetch(TEST_HOST + "/error", {
+				headers: { "User-Agent": "rakkasjs-crawler" },
+			});
+			expect(response.status).toBe(500);
+		});
+
+		test("handles error with message", async () => {
+			await page.goto(TEST_HOST + "/error");
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Internal Error"),
+			);
+		});
+
+		test("handles error with client-side nav", async () => {
+			await page.goto(TEST_HOST + "/error/intro");
+			await page.waitForSelector(".hydrated");
+			const link: ElementHandle<HTMLAnchorElement> | null =
+				await page.waitForSelector("a");
+			expect(link).toBeTruthy();
+
+			await link!.click();
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Internal Error"),
 			);
 		});
 	});

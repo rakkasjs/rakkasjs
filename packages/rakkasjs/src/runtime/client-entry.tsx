@@ -1,11 +1,12 @@
 import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { DEFAULT_QUERY_OPTIONS } from "../features/use-query/implementation";
-import { UseQueryOptions, QueryContext } from "../lib";
+import { UseQueryOptions, QueryContext, ErrorBoundary } from "../lib";
 import { App, loadRoute, RouteContext } from "./App";
 import { ClientHooks } from "./client-hooks";
 import featureHooks from "./feature-client-hooks";
 import { IsomorphicContext } from "./isomorphic-context";
+import ErrorComponent from "virtual:rakkasjs:error-page";
 
 export interface StartClientOptions {
 	defaultQueryOptions?: UseQueryOptions;
@@ -48,7 +49,11 @@ export async function startClient(options: StartClientOptions = {}) {
 	app = (
 		<StrictMode>
 			<RouteContext.Provider value={{ last: route }}>
-				<Suspense>{app}</Suspense>
+				<Suspense>
+					<ErrorBoundary FallbackComponent={ErrorComponent}>
+						{app}
+					</ErrorBoundary>
+				</Suspense>
 			</RouteContext.Provider>
 		</StrictMode>
 	);

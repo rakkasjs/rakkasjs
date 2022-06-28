@@ -15,6 +15,7 @@ import pageRoutes from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
 import { virtualHattipEntry } from "./virtual-hattip-entry";
 import { virtualNodeEntry } from "./virtual-node-entry";
+import { virtualErrorPage } from "./virtual-error-page";
 
 export interface RakkasOptions {
 	/** File extensions for pages and layouts @default ["jsx","tsx"] */
@@ -43,6 +44,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		virtualNodeEntry(),
 		virtualHattipEntry(),
 		virtualClientEntry(),
+		virtualErrorPage(),
 		resolveClientManifest(),
 		...runServerSide(),
 	];

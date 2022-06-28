@@ -1,0 +1,1 @@
+export { DefaultErrorPage } from "./DefaultErrorPage";

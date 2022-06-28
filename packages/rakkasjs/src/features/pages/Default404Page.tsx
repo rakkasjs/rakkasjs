@@ -1,7 +1,7 @@
 import React from "react";
 import { Head } from "../head/lib";
 
-export function Default404() {
+export function Default404Page() {
 	return import.meta.env.DEV ? (
 		<>
 			<Head title="Not Found" />

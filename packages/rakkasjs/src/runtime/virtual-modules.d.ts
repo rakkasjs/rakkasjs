@@ -71,3 +71,10 @@ declare module "virtual:rakkasjs:hattip-entry" {
 	const handler: import("@hattip/core").HattipHandler;
 	export default manifest;
 }
+
+declare module "virtual:rakkasjs:error-page" {
+	const ErrorComponent: import("React").ComponentType<
+		import("react-error-boundary").FallbackProps
+	>;
+	export default ErrorComponent;
+}

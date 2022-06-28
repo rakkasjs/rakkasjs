@@ -16,9 +16,9 @@ import {
 	ServerSideContext,
 } from "../../runtime/isomorphic-context";
 import { QueryContext } from "../use-query/implementation";
-import { Default404 } from "./Default404";
+import { Default404Page } from "./Default404Page";
 
-export default async function renderPageRoute(
+export default async function doRenderPageRoute(
 	ctx: RequestContext,
 ): Promise<Response | undefined> {
 	ctx.locals = {};
@@ -48,7 +48,7 @@ export default async function renderPageRoute(
 		if (pathname === "/") {
 			found = {
 				params: {},
-				route: [/^\/$/, [async () => ({ default: Default404 })], []],
+				route: [/^\/$/, [async () => ({ default: Default404Page })], []],
 			};
 		}
 
@@ -98,9 +98,12 @@ export default async function renderPageRoute(
 	}
 
 	let resolveRenderPromise: () => void;
-	const renderPromise = new Promise<void>(
-		(resolve) => (resolveRenderPromise = resolve),
-	);
+	let rejectRenderPromise: (err: unknown) => void;
+
+	const renderPromise = new Promise<void>((resolve, reject) => {
+		resolveRenderPromise = resolve;
+		rejectRenderPromise = reject;
+	});
 
 	app = (
 		<div id="root">
@@ -154,25 +157,30 @@ export default async function renderPageRoute(
 			// TODO: AbortController
 			bootstrapModules: ["/" + scriptPath],
 			onError(error) {
-				// TODO: Set status code
-				console.error(error);
+				status = 500;
+				rejectRenderPromise(error);
 			},
 		},
 	);
 
-	await renderPromise.catch((error) => console.error(error));
+	try {
+		await renderPromise;
 
-	const userAgent = ctx.request.headers.get("user-agent");
-	if (userAgent && isBot(userAgent)) {
-		await reactStream.allReady;
-	} else {
-		await Promise.resolve();
-		// await Promise.race([
-		// 	reactStream.allReady,
-		// 	new Promise<void>((resolve) => {
-		// 		setTimeout(resolve, SSR_TIMEOUT);
-		// 	}),
-		// ]);
+		const userAgent = ctx.request.headers.get("user-agent");
+		if (userAgent && isBot(userAgent)) {
+			await reactStream.allReady;
+		} else {
+			await Promise.resolve();
+			// await Promise.race([
+			// 	reactStream.allReady,
+			// 	new Promise<void>((resolve) => {
+			// 		setTimeout(resolve, SSR_TIMEOUT);
+			// 	}),
+			// ]);
+		}
+	} catch (error) {
+		console.error(error);
+		status = 500;
 	}
 
 	if (redirected) {

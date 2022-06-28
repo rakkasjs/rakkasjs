@@ -47,6 +47,7 @@ export function injectConfig(): Plugin {
 						"virtual:rakkasjs:api-routes",
 						"virtual:rakkasjs:run-server-side:manifest",
 						"virtual:rakkasjs:server-page-routes",
+						"virtual:rakkasjs:error-page",
 						"@vavite/expose-vite-dev-server",
 					],
 				},
