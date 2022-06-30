@@ -33,7 +33,7 @@ function useSSQImpl(
 					if (closurePath) closurePath = "/" + closurePath;
 
 					const url =
-						"/_data/development/" +
+						`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
 						moduleId +
 						"/" +
 						counter +

@@ -9,6 +9,7 @@ export default function HomePage() {
 			<button onClick={() => setClicked((old) => old + 1)}>
 				Clicked: {clicked}
 			</button>
+			<p>Build ID: {import.meta.env.RAKKAS_BUILD_ID}</p>
 		</div>
 	);
 }

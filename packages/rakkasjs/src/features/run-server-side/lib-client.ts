@@ -35,9 +35,11 @@ function sendRequest(
 	let response: Promise<Response>;
 
 	if (usePostMethod) {
-		// TODO: Build ID
 		response = fetch(
-			"/_data/development/" + encodeURIComponent(moduleId) + "/" + counter,
+			`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
+				encodeURIComponent(moduleId) +
+				"/" +
+				counter,
 			{
 				method: "POST",
 				body: "[" + stringified.join(",") + "]",
@@ -49,9 +51,8 @@ function sendRequest(
 			.join("/");
 		if (closurePath) closurePath = "/" + closurePath;
 
-		// TODO: Build ID
 		response = fetch(
-			"/_data/development/" +
+			`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
 				encodeURIComponent(moduleId) +
 				"/" +
 				counter +

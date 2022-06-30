@@ -1,3 +1,4 @@
+import { spawn } from "child_process";
 import { Plugin } from "vite";
 
 export interface InjectConfigOptions {
@@ -10,7 +11,12 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 
 		enforce: "pre",
 
-		config() {
+		async config(_, env) {
+			if (!process.env.RAKKAS_BUILD_ID) {
+				process.env.RAKKAS_BUILD_ID =
+					env.command === "serve" ? "development" : await getBuildId();
+			}
+
 			return {
 				buildSteps: [
 					{
@@ -61,6 +67,8 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 					],
 				},
 
+				envPrefix: "RAKKAS_",
+
 				api: {
 					rakkas: {
 						prerender: options.prerender,
@@ -78,4 +86,28 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 			}
 		},
 	};
+}
+
+async function getBuildId(): Promise<string> {
+	return await new Promise<string>((resolve) => {
+		const git = spawn("git", ["rev-parse", "HEAD"], {
+			stdio: ["ignore", "pipe", "ignore"],
+		});
+
+		git.stdout.setEncoding("utf8");
+		let output = "";
+
+		git.stdout.on("data", (data) => {
+			output += data;
+		});
+
+		git.on("close", (code) => {
+			if (code === 0) {
+				resolve(output.trim().slice(0, 11));
+			} else {
+				// Return a random hash if git fails
+				resolve(Math.random().toString(36).substring(2, 15));
+			}
+		});
+	});
 }

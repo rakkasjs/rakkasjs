@@ -5,8 +5,12 @@ import devalue from "devalue";
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
 		beforeApiRoutes: async (ctx) => {
-			// TODO: Build ID
-			if (!ctx.url.pathname.startsWith("/_data/development/")) return undefined;
+			if (
+				!ctx.url.pathname.startsWith(
+					`/_data/${import.meta.env.RAKKAS_BUILD_ID}/`,
+				)
+			)
+				return undefined;
 
 			const [, , , moduleId, counter, ...closure] = ctx.url.pathname.split("/");
 
