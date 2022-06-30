@@ -7,7 +7,7 @@
 		"prepare": "husky install",
 		"precommit": "lint-staged",
 		"test": "pnpm run test:prettier && pnpm run test:packages && pnpm run ci",
-		"ci": "pnpm -r --stream run ci",
+		"ci": "pnpm -r --stream --workspace-concurrency=1 run ci",
 		"test:packages": "pnpm -r --stream run test",
 		"test:prettier": "prettier --check --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'"
 	},

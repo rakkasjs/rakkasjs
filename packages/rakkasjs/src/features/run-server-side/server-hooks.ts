@@ -12,22 +12,26 @@ const runServerSideServerHooks: ServerHooks = {
 
 			let closureContents: unknown[];
 
-			if (ctx.method === "POST") {
-				const text = await ctx.request.text();
-				closureContents = parse(text) as unknown[];
-				if (!Array.isArray(closureContents)) {
-					throw new TypeError();
+			try {
+				if (ctx.method === "POST") {
+					const text = await ctx.request.text();
+					closureContents = parse(text) as unknown[];
+					if (!Array.isArray(closureContents)) {
+						return new Response("Parse error", { status: 400 });
+					}
+				} else {
+					closure.length = closure.length - 1;
+					closureContents = closure.map((s) => parse(atob(s)));
 				}
-			} else {
-				closure.length = closure.length - 1;
-				closureContents = closure.map((s) => parse(atob(s)));
+			} catch (e) {
+				return new Response("Parse error", { status: 400 });
 			}
 
 			const manifest = await import(
 				"virtual:rakkasjs:run-server-side:manifest"
 			);
 
-			const importer = manifest.default[moduleId];
+			const importer = manifest.default[decodeURIComponent(moduleId)];
 			if (!importer) return;
 
 			const module = await importer();

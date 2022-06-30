@@ -36,23 +36,32 @@ function sendRequest(
 
 	if (usePostMethod) {
 		// TODO: Build ID
-		response = fetch("/_data/development/" + moduleId + "/" + counter, {
-			method: "POST",
-			body: "[" + stringified.join(",") + "]",
-		});
+		response = fetch(
+			"/_data/development/" + encodeURIComponent(moduleId) + "/" + counter,
+			{
+				method: "POST",
+				body: "[" + stringified.join(",") + "]",
+			},
+		);
 	} else {
 		let closurePath = stringified.map(btoa).join("/");
 		if (closurePath) closurePath = "/" + closurePath;
 
 		// TODO: Build ID
 		response = fetch(
-			"/_data/development/" + moduleId + "/" + counter + closurePath + "/d.js",
+			"/_data/development/" +
+				encodeURIComponent(moduleId) +
+				"/" +
+				counter +
+				closurePath +
+				"/d.js",
 		);
 	}
 
 	return response.then(async (r) => {
 		if (!r.ok) {
-			throw new Error(r.statusText);
+			const message = await r.text();
+			throw new Error(message || r.statusText);
 		}
 
 		const text = await r.text();
