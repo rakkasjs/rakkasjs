@@ -55,6 +55,11 @@ export interface ResponseHeadersProps {
 	status?: number;
 	/** The headers to set */
 	headers?: Record<string, string | string[]>;
+	/**
+	 * Time to hold the render stream before returning the response. Set to
+	 * true to hold until the page is fully rendered.
+	 */
+	hold?: number | true;
 }
 
 // @ts-ignore
@@ -62,7 +67,11 @@ export const ResponseHeaders = import.meta.env.SSR
 	? function ResponseHeaders(props: ResponseHeadersProps): ReactElement {
 			const response = useContext(ResponseContext);
 
-			response({ status: props.status, headers: props.headers });
+			response({
+				status: props.status,
+				headers: props.headers,
+				hold: props.hold,
+			});
 
 			return <></>;
 	  }
@@ -75,6 +84,7 @@ export interface ResponseContextProps {
 	redirect?: boolean;
 	status?: number;
 	headers?: Record<string, string | string[]>;
+	hold?: number | true;
 }
 
 export const ResponseContext = createContext<

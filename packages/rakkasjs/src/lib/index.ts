@@ -5,6 +5,9 @@ export type {
 	Layout,
 	PageProps,
 	LayoutProps,
+	PreloadContext,
+	PreloadResult,
+	PreloadFunction,
 } from "../runtime/page-types";
 
 export * from "../features/head/lib";

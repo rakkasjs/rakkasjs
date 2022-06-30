@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import React, { StrictMode, Suspense } from "react";
+import React, { Fragment, StrictMode, Suspense } from "react";
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { App, RouteContext } from "../../runtime/App";
@@ -61,10 +61,14 @@ export default async function doRenderPageRoute(
 	const headers = new Headers({
 		"Content-Type": "text/html; charset=utf-8",
 	});
+	let hold = 0 as number | true;
 
 	function updateHeaders(props: ResponseContextProps) {
 		redirected = redirected ?? props.redirect;
 		status = status ?? props.status;
+		if (props.hold !== undefined) {
+			hold = props.hold;
+		}
 
 		if (props.headers) {
 			for (const [key, value] of Object.entries(props.headers)) {
@@ -83,11 +87,13 @@ export default async function doRenderPageRoute(
 	}
 
 	let app = (
-		<ServerSideContext.Provider value={ctx}>
-			<IsomorphicContext.Provider value={queryContext}>
-				<App />
-			</IsomorphicContext.Provider>
-		</ServerSideContext.Provider>
+		<>
+			<ServerSideContext.Provider value={ctx}>
+				<IsomorphicContext.Provider value={queryContext}>
+					<App />
+				</IsomorphicContext.Provider>
+			</ServerSideContext.Provider>
+		</>
 	);
 
 	const reversePageHooks = [...pageHooks].reverse();
@@ -165,18 +171,20 @@ export default async function doRenderPageRoute(
 
 	try {
 		await renderPromise;
+		await new Promise<void>((resolve) => {
+			setTimeout(resolve, 0);
+		});
 
 		const userAgent = ctx.request.headers.get("user-agent");
-		if (userAgent && isBot(userAgent)) {
+		if (hold === true || (userAgent && isBot(userAgent))) {
 			await reactStream.allReady;
-		} else {
-			await Promise.resolve();
-			// await Promise.race([
-			// 	reactStream.allReady,
-			// 	new Promise<void>((resolve) => {
-			// 		setTimeout(resolve, SSR_TIMEOUT);
-			// 	}),
-			// ]);
+		} else if (hold > 0) {
+			await Promise.race([
+				reactStream.allReady,
+				new Promise<void>((resolve) => {
+					setTimeout(resolve, hold as number);
+				}),
+			]);
 		}
 	} catch (error) {
 		console.error(error);

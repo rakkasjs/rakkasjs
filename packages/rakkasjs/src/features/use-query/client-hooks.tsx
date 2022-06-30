@@ -2,11 +2,16 @@ import React, { ReactNode } from "react";
 import { defineClientHooks } from "../../runtime/client-hooks";
 import {
 	CacheItem,
+	createQueryClient,
 	DEFAULT_QUERY_OPTIONS,
 	QueryCacheContext,
 } from "./implementation";
 
 export default defineClientHooks({
+	augmentQueryContext(ctx) {
+		ctx.queryClient = createQueryClient(cache);
+	},
+
 	wrapApp(app) {
 		return <Wrapper>{app}</Wrapper>;
 	},

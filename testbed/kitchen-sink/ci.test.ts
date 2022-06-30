@@ -10,6 +10,7 @@ import puppeteer, { ElementHandle } from "puppeteer";
 import fs from "fs";
 import { promisify } from "util";
 import { kill } from "process";
+import { load } from "cheerio";
 
 const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 
@@ -123,6 +124,17 @@ function testCase(title: string, dev: boolean, command?: string) {
 			expect(response.status).toBe(200);
 			const json = await response.json();
 			expect(json).toMatchObject({ rest: "/aaa/bbb/ccc" });
+		});
+
+		test("renders preloaded data", async () => {
+			const response = await fetch(TEST_HOST + "/");
+			expect(response.status).toBe(200);
+
+			const html = await response.text();
+			const dom = load(html);
+
+			expect(dom("p#metadata").text()).toBe("Metadata: 2");
+			expect(dom("title").text()).toBe("The page title");
 		});
 
 		test("renders interactive page", async () => {

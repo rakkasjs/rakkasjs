@@ -1,5 +1,9 @@
 import React from "react";
-import { CacheItem, QueryCacheContext } from "./implementation";
+import {
+	CacheItem,
+	createQueryClient,
+	QueryCacheContext,
+} from "./implementation";
 import devalue from "devalue";
 import { ServerHooks } from "../../runtime/hattip-handler";
 
@@ -74,6 +78,10 @@ const useQueryServerHooks: ServerHooks = {
 						{app}
 					</QueryCacheContext.Provider>
 				);
+			},
+
+			augmentQueryContext(ctx) {
+				ctx.queryClient = createQueryClient(cache);
 			},
 
 			emitToDocumentHead() {

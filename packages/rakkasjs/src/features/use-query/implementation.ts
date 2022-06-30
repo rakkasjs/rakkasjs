@@ -99,6 +99,7 @@ export const DEFAULT_QUERY_OPTIONS: Required<UseQueryOptions> = {
 
 export interface QueryContext {
 	fetch: typeof fetch;
+	queryClient: QueryClient;
 }
 
 export type QueryFn<T> = (ctx: QueryContext) => T | Promise<T>;
@@ -308,8 +309,12 @@ export interface QueryClient {
 }
 
 export function useQueryClient(): QueryClient {
-	const cache = useContext(QueryCacheContext);
+	const ctx = useContext(IsomorphicContext);
 
+	return ctx.queryClient;
+}
+
+export function createQueryClient(cache: QueryCache): QueryClient {
 	return {
 		getQueryData(key: string) {
 			return cache.get(key)?.value;

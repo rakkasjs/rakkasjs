@@ -44,11 +44,16 @@ export async function startClient(options: StartClientOptions = {}) {
 		}
 	}
 
-	const route = await loadRoute(new URL(window.location.href), undefined, true);
+	const url = new URL(window.location.href);
+	const route = await loadRoute(url, undefined, true, queryContext).catch(
+		(error) => {
+			return { error };
+		},
+	);
 
 	app = (
 		<StrictMode>
-			<RouteContext.Provider value={{ last: route }}>
+			<RouteContext.Provider value={"error" in route ? route : { last: route }}>
 				<Suspense>
 					<ErrorBoundary FallbackComponent={ErrorComponent}>
 						{app}
