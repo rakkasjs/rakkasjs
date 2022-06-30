@@ -44,7 +44,9 @@ function sendRequest(
 			},
 		);
 	} else {
-		let closurePath = stringified.map(btoa).join("/");
+		let closurePath = stringified
+			.map((s) => btoa(s).replace(/\//g, "_").replace(/\+/g, "-"))
+			.join("/");
 		if (closurePath) closurePath = "/" + closurePath;
 
 		// TODO: Build ID

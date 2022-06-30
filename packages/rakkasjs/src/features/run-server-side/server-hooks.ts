@@ -21,7 +21,7 @@ const runServerSideServerHooks: ServerHooks = {
 					}
 				} else {
 					closure.length = closure.length - 1;
-					closureContents = closure.map((s) => parse(atob(s)));
+					closureContents = closure.map((s) => parse(decodeBase64(s)));
 				}
 			} catch (e) {
 				return new Response("Parse error", { status: 400 });
@@ -48,3 +48,13 @@ const runServerSideServerHooks: ServerHooks = {
 };
 
 export default runServerSideServerHooks;
+
+export function decodeBase64(s: string) {
+	s = s.replace(/_/g, "/").replace(/-/g, "+");
+
+	if (typeof Buffer !== "undefined") {
+		return Buffer.from(s, "base64").toString("utf8");
+	} else {
+		return atob(s);
+	}
+}

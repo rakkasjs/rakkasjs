@@ -29,7 +29,7 @@ function useSSQImpl(
 		() =>
 			Promise.resolve(fn(closure, ctx)).then(async (result) => {
 				if (process.env.RAKKAS_PRERENDER === "true") {
-					let closurePath = stringified.map(btoa).join("/");
+					let closurePath = stringified.map(encodeBase64).join("/");
 					if (closurePath) closurePath = "/" + closurePath;
 
 					const url =
@@ -63,3 +63,15 @@ export const useServerSideQuery: <T>(
 ) => QueryResult<T> = useSSQImpl as any;
 
 export { useServerSideQuery as useSSQ, runServerSideMutation as runSSM };
+
+function encodeBase64(str: string) {
+	let encoded: string;
+
+	if (typeof Buffer !== "undefined") {
+		encoded = Buffer.from(str).toString("base64");
+	} else {
+		encoded = btoa(str);
+	}
+
+	return encoded.replace(/\//g, "_").replace(/\+/g, "-");
+}
