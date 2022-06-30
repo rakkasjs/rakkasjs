@@ -8,9 +8,7 @@ const runServerSideServerHooks: ServerHooks = {
 			// TODO: Build ID
 			if (!ctx.url.pathname.startsWith("/_data/development/")) return undefined;
 
-			const [, , , moduleId, counter, ...closure] = ctx.url.pathname
-				.split("/")
-				.map((s) => decodeURIComponent(s));
+			const [, , , moduleId, counter, ...closure] = ctx.url.pathname.split("/");
 
 			let closureContents: unknown[];
 
@@ -21,7 +19,8 @@ const runServerSideServerHooks: ServerHooks = {
 					throw new TypeError();
 				}
 			} else {
-				closureContents = closure.map(parse);
+				closure.length = closure.length - 1;
+				closureContents = closure.map((s) => parse(atob(s)));
 			}
 
 			const manifest = await import(

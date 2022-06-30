@@ -5,6 +5,7 @@ import {
 	useServerSideContext,
 	UseServerSideQueryOptions,
 } from "./lib-common";
+import devalue from "devalue";
 
 function useSSQImpl(
 	desc: [
@@ -16,14 +17,38 @@ function useSSQImpl(
 	options: UseServerSideQueryOptions = {},
 ): QueryResult<any> {
 	const { key: userKey, usePostMethod, ...useQueryOptions } = options;
-	const context = useServerSideContext();
+	const ctx = useServerSideContext();
 	const [moduleId, counter, closure, fn] = desc;
 
 	const stringified = closure.map((x) => stringify(x));
 	const key = userKey ?? `$ss:${moduleId}:${counter}:${stringified}`;
 	void usePostMethod;
 
-	return useQuery(key, () => fn(closure, context), useQueryOptions);
+	return useQuery(
+		key,
+		() =>
+			Promise.resolve(fn(closure, ctx)).then(async (result) => {
+				if (process.env.RAKKAS_PRERENDER === "true") {
+					let closurePath = stringified.map(btoa).join("/");
+					if (closurePath) closurePath = "/" + closurePath;
+
+					const url =
+						"/_data/development/" +
+						moduleId +
+						"/" +
+						counter +
+						closurePath +
+						"/d.js";
+
+					await (ctx.platform as any).prerender(
+						url,
+						new Response(devalue(result)),
+					);
+				}
+				return result;
+			}),
+		useQueryOptions,
+	);
 }
 
 export const runServerSideMutation: <T>(

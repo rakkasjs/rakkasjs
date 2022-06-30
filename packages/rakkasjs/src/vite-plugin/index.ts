@@ -22,9 +22,22 @@ export interface RakkasOptions {
 	pageExtensions?: string[];
 	/** Options passed to @vite/plugin-react */
 	react?: ReactPluginOptions;
+	/**
+	 * Paths to start crawling when prerendering static pages.
+	 * `true` is the same as `["/"]` a nd `false` is the same as `[]`.
+	 * @default false
+	 */
+	prerender?: string[] | boolean;
 }
 
 export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
+	let { prerender = [] } = options;
+	if (prerender === true) {
+		prerender = ["/"];
+	} else if (prerender === false) {
+		prerender = [];
+	}
+
 	return [
 		...vaviteConnect({
 			handlerEntry: "/virtual:rakkasjs:node-entry",
@@ -36,7 +49,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		...react(options.react),
 
 		preventViteBuild(),
-		injectConfig(),
+		injectConfig({ prerender }),
 		apiRoutes(),
 		pageRoutes({
 			pageExtensions: options.pageExtensions,

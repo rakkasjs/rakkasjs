@@ -1,6 +1,10 @@
 import { Plugin } from "vite";
 
-export function injectConfig(): Plugin {
+export interface InjectConfigOptions {
+	prerender: string[];
+}
+
+export function injectConfig(options: InjectConfigOptions): Plugin {
 	return {
 		name: "rakkasjs:inject-config",
 
@@ -16,7 +20,7 @@ export function injectConfig(): Plugin {
 								outDir: "dist/client",
 								rollupOptions: {
 									input: {
-										rakkasClientEntry: "/virtual:rakkasjs:client-entry",
+										index: "/virtual:rakkasjs:client-entry",
 									},
 								},
 							},
@@ -28,6 +32,11 @@ export function injectConfig(): Plugin {
 							build: {
 								outDir: "dist/server",
 								ssr: true,
+							},
+							rollupOptions: {
+								input: {
+									"hattip-entry": "virtual:rakkasjs:hattip-entry",
+								},
 							},
 						},
 					},
@@ -51,7 +60,22 @@ export function injectConfig(): Plugin {
 						"@vavite/expose-vite-dev-server",
 					],
 				},
+
+				api: {
+					rakkas: {
+						prerender: options.prerender,
+					},
+				},
 			};
+		},
+
+		configResolved(config) {
+			if (config.command === "build" && config.build.ssr) {
+				config.build.rollupOptions.input = {
+					index: "/virtual:vavite-connect-server",
+					hattip: "virtual:rakkasjs:hattip-entry",
+				};
+			}
 		},
 	};
 }

@@ -1,10 +1,8 @@
-import { BuildOptions, LogLevel, ResolvedConfig } from "vite";
+import { BuildOptions, LogLevel } from "vite";
 import { cac } from "cac";
-import multibuild from "@vavite/multibuild";
 import { version } from "../../package.json";
-import pico from "picocolors";
 
-interface GlobalCLIOptions {
+export interface GlobalCLIOptions {
 	"--"?: string[];
 	c?: boolean | string;
 	config?: string;
@@ -20,12 +18,12 @@ interface GlobalCLIOptions {
 	mode?: string;
 }
 
-const cli = cac();
+const cli = cac("rakkas");
 
 /**
  * removing global flags before passing as command specific sub-configs
  */
-function cleanOptions<Options extends GlobalCLIOptions>(
+export function cleanOptions<Options extends GlobalCLIOptions>(
 	options: Options,
 ): Omit<Options, keyof GlobalCLIOptions> {
 	const ret = { ...options };
@@ -46,14 +44,16 @@ function cleanOptions<Options extends GlobalCLIOptions>(
 }
 
 cli
-	.command("build [root]")
 	.option("-c, --config <file>", `[string] use specified config file`)
 	.option("--base <path>", `[string] public base path (default: /)`)
 	.option("-l, --logLevel <level>", `[string] info | warn | error | silent`)
 	.option("--clearScreen", `[boolean] allow/disable clear screen when logging`)
 	.option("-d, --debug [feat]", `[string | boolean] show debug logs`)
 	.option("-f, --filter <filter>", `[string] filter debug logs`)
-	.option("-m, --mode <mode>", `[string] set env mode`)
+	.option("-m, --mode <mode>", `[string] set env mode`);
+
+cli
+	.command("build [root]", "Build for production")
 	.option("--target <target>", `[string] transpile target (default: 'modules')`)
 	.option("--outDir <dir>", `[string] output directory (default: dist)`)
 	.option(
@@ -84,49 +84,20 @@ cli
 		`[boolean] force empty outDir when it's outside of root`,
 	)
 	.option("-w, --watch", `[boolean] rebuilds when modules have changed on disk`)
-	.action(async (root: string, options: BuildOptions & GlobalCLIOptions) => {
-		const buildOptions: BuildOptions = cleanOptions(options);
+	.action((root: string, options: BuildOptions & GlobalCLIOptions) =>
+		import("./build").then(({ build }) => build(root, options)),
+	);
 
-		let config: ResolvedConfig;
-
-		await multibuild(
-			{
-				root,
-				base: options.base,
-				mode: options.mode,
-				configFile: options.config,
-				logLevel: options.logLevel,
-				clearScreen: options.clearScreen,
-				build: buildOptions,
-			},
-			{
-				onInitialConfigResolved(resolvedConfig) {
-					config = resolvedConfig;
-					config.logger.info(
-						pico.black(pico.bgMagenta(" Rakkas ")) +
-							" " +
-							pico.magenta(version) +
-							" 💃",
-					);
-				},
-				onStartBuildStep(info) {
-					config.logger.info(
-						"\n" +
-							pico.magenta("rakkas") +
-							": Building " +
-							info.currentStep.name +
-							" (" +
-							pico.green(
-								`${info.currentStepIndex + 1}` +
-									"/" +
-									`${info.buildSteps.length}`,
-							) +
-							")",
-					);
-				},
-			},
-		);
-	});
+cli
+	.command("prerender [root]", "Prerender static pages of an already built app")
+	.option(
+		"-p, --path <path>",
+		`[boolean] force empty outDir when it's outside of root`,
+		{ type: [String] },
+	)
+	.action((root: string, options: any) =>
+		import("./prerender").then(({ prerender }) => prerender(root, options)),
+	);
 
 cli.help();
 cli.version(version);

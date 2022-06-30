@@ -36,24 +36,17 @@ function sendRequest(
 
 	if (usePostMethod) {
 		// TODO: Build ID
-		response = fetch(
-			"/_data/development/" + encodeURIComponent(moduleId) + "/" + counter,
-			{
-				method: "POST",
-				body: "[" + stringified.join(",") + "]",
-			},
-		);
+		response = fetch("/_data/development/" + moduleId + "/" + counter, {
+			method: "POST",
+			body: "[" + stringified.join(",") + "]",
+		});
 	} else {
-		let closurePath = stringified.map(encodeURIComponent).join("/");
+		let closurePath = stringified.map(btoa).join("/");
 		if (closurePath) closurePath = "/" + closurePath;
 
 		// TODO: Build ID
 		response = fetch(
-			"/_data/development/" +
-				encodeURIComponent(moduleId) +
-				"/" +
-				counter +
-				closurePath,
+			"/_data/development/" + moduleId + "/" + counter + closurePath + "/d.js",
 		);
 	}
 

@@ -29,6 +29,8 @@ export function createRequestHandler(userHooks: ServerHooks = {}) {
 			init(hooks),
 
 			hooks.map((hook) => hook.middleware?.beforePages),
+
+			process.env.RAKKAS_PRERENDER === "true" && prerender,
 			renderPageRoute,
 
 			hooks.map((hook) => hook.middleware?.beforeApiRoutes),
@@ -53,4 +55,12 @@ function init(hooks: ServerHooks[]) {
 
 function notFound(ctx: RequestContext) {
 	ctx.notFound = true;
+}
+
+async function prerender(ctx: RequestContext) {
+	if (ctx.method !== "GET") return;
+
+	const response = await ctx.next();
+	await (ctx.platform as any).prerender(ctx.url.pathname, response.clone());
+	return response;
 }
