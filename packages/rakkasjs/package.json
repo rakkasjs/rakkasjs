@@ -65,7 +65,7 @@
 	},
 	"dependencies": {
 		"@babel/core": "^7.18.5",
-		"@babel/types": "^7.18.4",
+		"@babel/types": "^7.18.7",
 		"@hattip/adapter-node": "^0.0.8",
 		"@hattip/compose": "^0.0.8",
 		"@hattip/core": "^0.0.8",
