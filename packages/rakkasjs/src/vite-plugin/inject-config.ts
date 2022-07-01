@@ -89,7 +89,7 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 }
 
 async function getBuildId(): Promise<string> {
-	return await new Promise<string>((resolve) => {
+	return await new Promise<string>((resolve, reject) => {
 		const git = spawn("git", ["rev-parse", "HEAD"], {
 			stdio: ["ignore", "pipe", "ignore"],
 		});
@@ -101,13 +101,17 @@ async function getBuildId(): Promise<string> {
 			output += data;
 		});
 
+		git.on("error", (err) => reject(err));
+
 		git.on("close", (code) => {
 			if (code === 0) {
 				resolve(output.trim().slice(0, 11));
 			} else {
-				// Return a random hash if git fails
-				resolve(Math.random().toString(36).substring(2, 15));
+				reject(new Error());
 			}
 		});
+	}).catch(() => {
+		// Return a random hash if git fails
+		return Math.random().toString(36).substring(2, 15);
 	});
 }
