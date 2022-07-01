@@ -53,6 +53,8 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 					noExternal: ["rakkasjs"],
 				},
 
+				appType: "custom",
+
 				optimizeDeps: {
 					include: ["react", "react-dom", "react-dom/client"],
 					exclude: [
