@@ -7,6 +7,7 @@ import path from "path";
 import { GlobalCLIOptions } from ".";
 import { version } from "../../package.json";
 import { load } from "cheerio";
+import { pathToFileURL } from "url";
 
 export interface PrerenderOptions {
 	path?: string[];
@@ -58,7 +59,8 @@ export async function doPrerender(
 	installNodeFetch();
 
 	process.env.RAKKAS_PRERENDER = "true";
-	const { default: handler } = (await import(outDir + "/server/hattip.js")) as {
+	const fileUrl = pathToFileURL(outDir + "/server/hattip.js").href;
+	const { default: handler } = (await import(fileUrl)) as {
 		default: HattipHandler;
 	};
 
