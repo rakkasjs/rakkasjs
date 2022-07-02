@@ -4,7 +4,7 @@ import { QueryContext } from "../lib";
 export interface ClientHooks {
 	beforeStart?(): void | Promise<void>;
 	wrapApp?(app: ReactElement): ReactElement;
-	augmentQueryContext?(ctx: QueryContext): void;
+	extendQueryContext?(ctx: QueryContext): void;
 }
 
 export function defineClientHooks(hooks: ClientHooks): ClientHooks {

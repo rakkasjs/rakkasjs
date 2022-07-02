@@ -57,20 +57,27 @@ export default async function doRenderPageRoute(
 	}
 
 	let redirected: boolean | undefined;
-	let status: number | undefined = ctx.notFound ? 404 : undefined;
+	let status: number = ctx.notFound ? 404 : 200;
 	const headers = new Headers({
 		"Content-Type": "text/html; charset=utf-8",
 	});
 	let hold = 0 as number | true;
 
 	function updateHeaders(props: ResponseContextProps) {
-		redirected = redirected ?? props.redirect;
-		status = status ?? props.status;
-		if (props.hold !== undefined) {
-			hold = props.hold;
+		if (props.status) {
+			status =
+				typeof props.status === "function"
+					? props.status(status)
+					: props.status;
 		}
 
-		if (props.headers) {
+		if (props.throttleRenderStream !== undefined) {
+			hold = props.throttleRenderStream;
+		}
+
+		if (typeof props.headers === "function") {
+			props.headers(headers);
+		} else if (props.headers) {
 			for (const [key, value] of Object.entries(props.headers)) {
 				const values = Array.isArray(value) ? value : [value];
 				for (const v of values) {
@@ -78,12 +85,17 @@ export default async function doRenderPageRoute(
 				}
 			}
 		}
+
+		if (props.redirect) {
+			redirected = redirected ?? props.redirect;
+			reactStream.cancel();
+		}
 	}
 
 	const queryContext: QueryContext = {} as any;
 
 	for (const hook of pageHooks) {
-		hook?.augmentQueryContext?.(queryContext);
+		hook?.extendQueryContext?.(queryContext);
 	}
 
 	let app = (

@@ -9,17 +9,17 @@ import { version } from "../../package.json";
 import { load } from "cheerio";
 import { pathToFileURL } from "url";
 
-export interface PrerenderOptions {
-	path?: string[];
+export interface RenderOptions {
+	root?: string;
 }
 
-export async function prerender(
-	root: string,
-	options: PrerenderOptions & GlobalCLIOptions,
+export async function render(
+	paths: string[],
+	options: RenderOptions & GlobalCLIOptions,
 ) {
 	const config = await resolveConfig(
 		{
-			root,
+			root: options.root,
 			base: options.base,
 			mode: options.mode,
 			configFile: options.config,
@@ -40,21 +40,22 @@ export async function prerender(
 	config.logger.info(
 		"\n" +
 			pico.magenta("rakkas") +
-			": Prerendering static routes (" +
+			": Rendering static routes (" +
 			pico.green("1/1") +
 			")",
 	);
 
-	await doPrerender(config, options.path ?? ["/"]);
+	await doRender(config, paths ?? ["/"]);
 }
 
-export async function doPrerender(
+export async function doRender(
 	config: ResolvedConfig,
 	defaultPaths: string[] = [],
 ) {
 	const outDir = path.resolve(config!.root, config!.build.outDir);
 	const pathNames: string[] = (config as any).api?.rakkas?.prerender || [];
 	pathNames.push(...defaultPaths);
+	const origin = "http://localhost";
 
 	installNodeFetch();
 
@@ -68,8 +69,16 @@ export async function doPrerender(
 	const files = new Map<string, number>();
 	const dirs = new Set<string>();
 
+	function crawl(href: string) {
+		const url = new URL(href, origin);
+		if (url.origin !== origin) {
+			return;
+		}
+		paths.add(url.pathname);
+	}
+
 	for (const currentPath of paths) {
-		const request = new Request("http://localhost" + currentPath, {
+		const request = new Request(origin + currentPath, {
 			headers: { "User-Agent": "rakkasjs-crawler" },
 		});
 
@@ -83,7 +92,13 @@ export async function doPrerender(
 				// Do nothing
 			},
 			platform: {
-				async prerender(pathname: string, response: Response) {
+				async render(pathname: string, response: Response) {
+					const directive = response.headers.get("x-rakkas-crawler");
+
+					if (directive === "skip") {
+						return;
+					}
+
 					const isPage =
 						response.headers.get("content-type")?.split(";")[0] === "text/html";
 
@@ -106,18 +121,24 @@ export async function doPrerender(
 							dirs.add(dirname);
 						}
 
-						if (isPage) {
+						let body: string;
+
+						if (isPage && directive !== "no-crawl") {
 							const html = await response.text();
 							const dom = load(html);
 							dom("a[href]").each((_, el) => {
-								paths.add(el.attribs.href);
+								crawl(el.attribs.href);
 							});
 							dom("area[href]").each((_, el) => {
-								paths.add(el.attribs.href);
+								crawl(el.attribs.href);
 							});
-							await fs.promises.writeFile(filename, html);
+							body = html;
 						} else {
-							await fs.promises.writeFile(filename, response.body as any);
+							body = response.body as any;
+						}
+
+						if (directive !== "crawl-only") {
+							await fs.promises.writeFile(filename, body);
 						}
 
 						files.set(pathname, response.status);

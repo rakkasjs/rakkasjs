@@ -9,7 +9,7 @@ import { findRoute, RouteMatch } from "../internal/find-route";
 import { Layout, PreloadContext, PreloadResult } from "./page-types";
 import prodRoutes from "virtual:rakkasjs:client-page-routes";
 import { Default404Page } from "../features/pages/Default404Page";
-import { QueryContext } from "../lib";
+import { QueryContext, Redirect, ResponseHeaders } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 
 export function App() {
@@ -139,7 +139,11 @@ export async function loadRoute(
 	app = (
 		<>
 			{preloaded.map((result, i) => (
-				<Fragment key={i}>{result?.seo || null}</Fragment>
+				<Fragment key={i}>
+					{result?.head}
+					{result?.headers && <ResponseHeaders {...result?.headers} />}
+					{result?.redirect && <Redirect {...result?.redirect} />}
+				</Fragment>
 			))}
 
 			{app}

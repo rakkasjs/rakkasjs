@@ -20,6 +20,6 @@ export default function HomePage(props: PageProps<never, { key: number }>) {
 HomePage.preload = async (): Promise<PreloadResult> => {
 	return {
 		meta: { key: 2 },
-		seo: <Head title="The page title" />,
+		head: <Head title="The page title" />,
 	};
 };

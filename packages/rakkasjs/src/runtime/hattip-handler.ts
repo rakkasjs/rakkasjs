@@ -18,7 +18,7 @@ export interface PageHooks {
 	wrapApp?(app: ReactElement): ReactElement;
 	emitToDocumentHead?(): string;
 	emitBeforeSsrChunk?(): string | undefined;
-	augmentQueryContext?(ctx: QueryContext): void | Promise<void>;
+	extendQueryContext?(ctx: QueryContext): void | Promise<void>;
 }
 
 export function createRequestHandler(userHooks: ServerHooks = {}) {
@@ -61,6 +61,6 @@ async function prerender(ctx: RequestContext) {
 	if (ctx.method !== "GET") return;
 
 	const response = await ctx.next();
-	await (ctx.platform as any).prerender(ctx.url.pathname, response.clone());
+	await (ctx.platform as any).render(ctx.url.pathname, response.clone());
 	return response;
 }

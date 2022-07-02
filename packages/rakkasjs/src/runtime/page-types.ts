@@ -1,5 +1,10 @@
 import { ComponentType, ReactNode } from "react";
-import { QueryClient, QueryContext } from "../lib";
+import {
+	QueryClient,
+	QueryContext,
+	RedirectProps,
+	ResponseHeadersProps,
+} from "../lib";
 
 export interface PreloadContext<P = Record<string, string>>
 	extends QueryContext {
@@ -9,8 +14,10 @@ export interface PreloadContext<P = Record<string, string>>
 }
 
 export interface PreloadResult {
-	seo?: ReactNode;
 	meta?: Record<string, unknown>;
+	head?: ReactNode;
+	headers?: ResponseHeadersProps;
+	redirect?: RedirectProps;
 }
 
 export type PreloadFunction = (

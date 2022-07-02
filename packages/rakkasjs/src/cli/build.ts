@@ -2,7 +2,7 @@ import { BuildOptions, ResolvedConfig } from "vite";
 import multibuild from "@vavite/multibuild";
 import { version } from "../../package.json";
 import pico from "picocolors";
-import { doPrerender } from "./prerender";
+import { doRender } from "./render";
 import { cleanOptions, GlobalCLIOptions } from ".";
 
 export async function build(
@@ -62,6 +62,6 @@ export async function build(
 
 	if (paths!.length) {
 		logStep(total!, "Prerendering static routes");
-		await doPrerender(config!);
+		await doRender(config!);
 	}
 }

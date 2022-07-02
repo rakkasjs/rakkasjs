@@ -28,7 +28,7 @@ export async function startClient(options: StartClientOptions = {}) {
 
 	const queryContext: QueryContext = {} as any;
 	for (const hooks of clientHooks) {
-		hooks.augmentQueryContext?.(queryContext);
+		hooks.extendQueryContext?.(queryContext);
 	}
 
 	let app = (

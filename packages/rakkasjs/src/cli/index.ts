@@ -89,14 +89,12 @@ cli
 	);
 
 cli
-	.command("prerender [root]", "Prerender static pages of an already built app")
-	.option(
-		"-p, --path <path>",
-		`[boolean] force empty outDir when it's outside of root`,
-		{ type: [String] },
-	)
-	.action((root: string, options: any) =>
-		import("./prerender").then(({ prerender }) => prerender(root, options)),
+	.command("render [...paths]", "Render static pages of an already built app")
+	.option("-r, --root <root>", "Project root")
+	.action((paths: string[], options: any) =>
+		import("./render").then(({ render: prerender }) =>
+			prerender(options.root, options),
+		),
 	);
 
 cli.help();

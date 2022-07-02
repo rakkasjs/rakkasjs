@@ -52,14 +52,15 @@ export const Redirect = import.meta.env.SSR
 
 export interface ResponseHeadersProps {
 	/** Status code */
-	status?: number;
+	status?: number | ((currentStatus: number) => number);
 	/** The headers to set */
-	headers?: Record<string, string | string[]>;
+	headers?: Record<string, string | string[]> | ((headers: Headers) => void);
 	/**
 	 * Time to hold the render stream before returning the response. Set to
-	 * true to hold until the page is fully rendered.
+	 * true to hold until the page is fully rendered, effectively disabling
+	 * streaming.
 	 */
-	hold?: number | true;
+	throttleRenderStream?: number | true;
 }
 
 // @ts-ignore
@@ -70,7 +71,7 @@ export const ResponseHeaders = import.meta.env.SSR
 			response({
 				status: props.status,
 				headers: props.headers,
-				hold: props.hold,
+				throttleRenderStream: props.throttleRenderStream,
 			});
 
 			return <></>;
@@ -82,9 +83,9 @@ export const ResponseHeaders = import.meta.env.SSR
 
 export interface ResponseContextProps {
 	redirect?: boolean;
-	status?: number;
-	headers?: Record<string, string | string[]>;
-	hold?: number | true;
+	status?: number | ((currentStatus: number) => number);
+	headers?: Record<string, string | string[]> | ((headers: Headers) => void);
+	throttleRenderStream?: number | true;
 }
 
 export const ResponseContext = createContext<

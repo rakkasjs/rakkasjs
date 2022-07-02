@@ -80,7 +80,7 @@ const useQueryServerHooks: ServerHooks = {
 				);
 			},
 
-			augmentQueryContext(ctx) {
+			extendQueryContext(ctx) {
 				ctx.queryClient = createQueryClient(cache);
 			},
 
