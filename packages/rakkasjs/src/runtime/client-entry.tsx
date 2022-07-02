@@ -26,7 +26,9 @@ export async function startClient(options: StartClientOptions = {}) {
 		}
 	}
 
-	const pageContext: PageContext = {} as any;
+	const url = new URL(window.location.href);
+
+	const pageContext: PageContext = { url } as any;
 	for (const hooks of clientHooks) {
 		hooks.extendPageContext?.(pageContext);
 	}
@@ -44,7 +46,6 @@ export async function startClient(options: StartClientOptions = {}) {
 		}
 	}
 
-	const url = new URL(window.location.href);
 	const route = await loadRoute(url, undefined, true, pageContext).catch(
 		(error) => {
 			return { error };

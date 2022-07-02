@@ -20,9 +20,14 @@ declare module "virtual:rakkasjs:server-page-routes" {
 		[
 			regexp: RegExp,
 			importers: [PageImporter, ...LayoutImporter[]],
+			guards: PageRouteGuard[],
 			ids: string[],
 		]
 	>;
+
+	type PageRouteGuard = (
+		ctx: import("../features/use-query/implementation").PageContext,
+	) => boolean;
 
 	type PageImporter = () => Promise<PageModule>;
 	type LayoutImporter = () => Promise<LayoutModule>;
@@ -35,8 +40,16 @@ declare module "virtual:rakkasjs:server-page-routes" {
 
 declare module "virtual:rakkasjs:client-page-routes" {
 	const routes: Array<
-		[regexp: RegExp, importers: [PageImporter, ...LayoutImporter[]]]
+		[
+			regexp: RegExp,
+			importers: [PageImporter, ...LayoutImporter[]],
+			guards: PageRouteGuard[],
+		]
 	>;
+
+	type PageRouteGuard = (
+		ctx: import("../features/use-query/implementation").PageContext,
+	) => boolean;
 
 	type PageImporter = () => Promise<PageModule>;
 	type LayoutImporter = () => Promise<LayoutModule>;

@@ -16,6 +16,9 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 	const pagePattern = `/**/*.page.(${extPattern})`;
 	const layoutPattern = `/**/layout.(${extPattern})`;
 
+	const jsPattern = "mjs|js|ts|jsx|tsx";
+	const guardPattern = `/**/$guard.(${jsPattern})`;
+
 	let resolvedConfig: ResolvedConfig;
 	let routesRoot: string;
 	let isLayout: (filename: string) => boolean;
@@ -45,6 +48,20 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 			for (const [i, layoutFile] of layoutFiles.entries()) {
 				layoutNames += `const m${i} = ${JSON.stringify(layoutFile)};\n`;
 			}
+		}
+
+		const guardFiles = (await glob(routesRoot + guardPattern))
+			.sort(/* short to kong  */ (a, b) => a.length - b.length)
+			.map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"));
+
+		const guardDirs = guardFiles.map((f) => path.dirname(f));
+
+		let guardImporters = "";
+
+		for (const [i, guardFile] of guardFiles.entries()) {
+			guardImporters += `import g${i} from ${JSON.stringify(
+				"/" + guardFile,
+			)};\n`;
 		}
 
 		let pageImporters = "";
@@ -79,9 +96,15 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 				.filter((entry) => pageFile.startsWith(entry[1] + "/"))
 				.map((entry) => entry[0]);
 
+			const guards = Array.from(guardDirs.entries())
+				.filter((entry) => pageFile.startsWith(entry[1] + "/"))
+				.map((entry) => entry[0]);
+
 			let exportElement = `  [${routeToRegExp(
 				"/" + baseName,
-			)}, [p${i}, ${layouts.map((li) => `l${li}`)}]`;
+			)}, [p${i}, ${layouts.map((li) => `l${li}`)}], [${guards.map(
+				(gi) => `g${gi}`,
+			)}]`;
 
 			// Server needs the file names to inject styles and prefetch links
 			if (!client) {
@@ -99,6 +122,7 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 			layoutImporters,
 			layoutNames,
 			pageImporters,
+			guardImporters,
 			pageNames,
 			exportStatement,
 		]

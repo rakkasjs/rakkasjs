@@ -99,6 +99,7 @@ export const DEFAULT_QUERY_OPTIONS: Required<UseQueryOptions> = {
 };
 
 export interface PageContext {
+	url: URL;
 	fetch: typeof fetch;
 	queryClient: QueryClient;
 	requestContext?: RequestContext;

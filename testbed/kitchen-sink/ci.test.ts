@@ -567,6 +567,20 @@ function testCase(title: string, dev: boolean, command?: string) {
 				document.body.innerText.includes("Error"),
 			);
 		});
+
+		test("route guards work", async () => {
+			await page.goto(TEST_HOST + "/guard");
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Not Found"),
+			);
+
+			await page.goto(TEST_HOST + "/guard?allow");
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Found!"),
+			);
+		});
 	});
 }
 

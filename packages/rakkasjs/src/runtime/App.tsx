@@ -71,7 +71,7 @@ export async function loadRoute(
 			  (await import("virtual:rakkasjs:client-page-routes")).default;
 
 		let pathname = url.pathname;
-		found = findRoute(routes, pathname);
+		found = findRoute(routes, pathname, pageContext);
 
 		while (!found) {
 			if (!try404) {
@@ -92,7 +92,7 @@ export async function loadRoute(
 			if (pathname === "/") {
 				found = {
 					params: {},
-					route: [/^\/$/, [async () => ({ default: Default404Page })], []],
+					route: [/^\/$/, [async () => ({ default: Default404Page })], [], []],
 				};
 			}
 

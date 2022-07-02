@@ -31,7 +31,13 @@ export default async function doRenderPageRoute(
 		url: { pathname },
 	} = ctx;
 
-	let found = findRoute(routes, pathname);
+	const pageContext: PageContext = { url: ctx.url } as any;
+
+	for (const hook of pageHooks) {
+		hook?.extendPageContext?.(pageContext);
+	}
+
+	let found = findRoute(routes, pathname, pageContext);
 
 	if (!found && !ctx.notFound) return;
 
@@ -48,7 +54,7 @@ export default async function doRenderPageRoute(
 		if (pathname === "/") {
 			found = {
 				params: {},
-				route: [/^\/$/, [async () => ({ default: Default404Page })], []],
+				route: [/^\/$/, [async () => ({ default: Default404Page })], [], []],
 			};
 		}
 
@@ -90,12 +96,6 @@ export default async function doRenderPageRoute(
 			redirected = redirected ?? props.redirect;
 			reactStream.cancel();
 		}
-	}
-
-	const pageContext: PageContext = {} as any;
-
-	for (const hook of pageHooks) {
-		hook?.extendPageContext?.(pageContext);
 	}
 
 	let app = (
@@ -140,7 +140,7 @@ export default async function doRenderPageRoute(
 		</div>
 	);
 
-	const moduleIds = found.route[2];
+	const moduleIds = found.route[3];
 
 	let cssOutput = "";
 
