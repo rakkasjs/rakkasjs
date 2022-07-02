@@ -15,7 +15,7 @@ import {
 	IsomorphicContext,
 	ServerSideContext,
 } from "../../runtime/isomorphic-context";
-import { QueryContext } from "../use-query/implementation";
+import { PageContext } from "../use-query/implementation";
 import { Default404Page } from "./Default404Page";
 
 export default async function doRenderPageRoute(
@@ -92,16 +92,16 @@ export default async function doRenderPageRoute(
 		}
 	}
 
-	const queryContext: QueryContext = {} as any;
+	const pageContext: PageContext = {} as any;
 
 	for (const hook of pageHooks) {
-		hook?.extendQueryContext?.(queryContext);
+		hook?.extendPageContext?.(pageContext);
 	}
 
 	let app = (
 		<>
 			<ServerSideContext.Provider value={ctx}>
-				<IsomorphicContext.Provider value={queryContext}>
+				<IsomorphicContext.Provider value={pageContext}>
 					<App />
 				</IsomorphicContext.Provider>
 			</ServerSideContext.Provider>

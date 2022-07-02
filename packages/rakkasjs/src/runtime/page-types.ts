@@ -1,13 +1,13 @@
 import { ComponentType, ReactNode } from "react";
 import {
 	QueryClient,
-	QueryContext,
+	PageContext,
 	RedirectProps,
 	ResponseHeadersProps,
 } from "../lib";
 
 export interface PreloadContext<P = Record<string, string>>
-	extends QueryContext {
+	extends PageContext {
 	queryClient: QueryClient;
 	url: URL;
 	params: P;

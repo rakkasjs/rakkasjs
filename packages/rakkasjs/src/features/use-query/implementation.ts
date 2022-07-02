@@ -98,13 +98,13 @@ export const DEFAULT_QUERY_OPTIONS: Required<UseQueryOptions> = {
 	refetchOnReconnect: false,
 };
 
-export interface QueryContext {
+export interface PageContext {
 	fetch: typeof fetch;
 	queryClient: QueryClient;
 	requestContext?: RequestContext;
 }
 
-export type QueryFn<T> = (ctx: QueryContext) => T | Promise<T>;
+export type QueryFn<T> = (ctx: PageContext) => T | Promise<T>;
 
 export function useQuery<T>(
 	key: undefined,

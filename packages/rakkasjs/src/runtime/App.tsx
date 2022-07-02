@@ -9,7 +9,7 @@ import { findRoute, RouteMatch } from "../internal/find-route";
 import { Layout, PreloadContext, PreloadResult } from "./page-types";
 import prodRoutes from "virtual:rakkasjs:client-page-routes";
 import { Default404Page } from "../features/pages/Default404Page";
-import { QueryContext, Redirect, ResponseHeaders } from "../lib";
+import { PageContext, Redirect, ResponseHeaders } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 
 export function App() {
@@ -18,7 +18,7 @@ export function App() {
 	// TODO: Warn when a page doesn't export a default component
 
 	const lastRoute = useContext(RouteContext);
-	const queryContext = useContext(IsomorphicContext);
+	const pageContext = useContext(IsomorphicContext);
 
 	if ("error" in lastRoute) {
 		throw lastRoute.error;
@@ -26,7 +26,7 @@ export function App() {
 
 	if (!lastRoute.last || lastRoute.last.pathname !== url.pathname) {
 		// TODO: Error handling
-		throw loadRoute(url, lastRoute.found, false, queryContext)
+		throw loadRoute(url, lastRoute.found, false, pageContext)
 			.then((route) => {
 				lastRoute.last = route;
 				lastRoute.onRendered?.();
@@ -60,7 +60,7 @@ export async function loadRoute(
 	url: URL,
 	lastFound: RouteContextContent["found"],
 	try404: boolean,
-	queryContext: QueryContext,
+	pageContext: PageContext,
 ) {
 	let found = lastFound;
 
@@ -104,7 +104,7 @@ export async function loadRoute(
 	const importers = found.route[1];
 
 	const preloadContext: PreloadContext = {
-		...queryContext,
+		...pageContext,
 		url,
 		params: found.params,
 	};

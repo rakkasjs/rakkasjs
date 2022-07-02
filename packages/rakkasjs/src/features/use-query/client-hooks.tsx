@@ -8,7 +8,7 @@ import {
 } from "./implementation";
 
 export default defineClientHooks({
-	extendQueryContext(ctx) {
+	extendPageContext(ctx) {
 		ctx.queryClient = createQueryClient(cache);
 	},
 

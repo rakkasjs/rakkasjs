@@ -51,8 +51,8 @@ const runServerSideServerHooks: ServerHooks = {
 	},
 	createPageHooks(requestContext) {
 		return {
-			extendQueryContext(queryContext) {
-				queryContext.requestContext = requestContext;
+			extendPageContext(pageContext) {
+				pageContext.requestContext = requestContext;
 			},
 		};
 	},

@@ -1,7 +1,7 @@
 import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { DEFAULT_QUERY_OPTIONS } from "../features/use-query/implementation";
-import { UseQueryOptions, QueryContext, ErrorBoundary } from "../lib";
+import { UseQueryOptions, PageContext, ErrorBoundary } from "../lib";
 import { App, loadRoute, RouteContext } from "./App";
 import { ClientHooks } from "./client-hooks";
 import featureHooks from "./feature-client-hooks";
@@ -26,13 +26,13 @@ export async function startClient(options: StartClientOptions = {}) {
 		}
 	}
 
-	const queryContext: QueryContext = {} as any;
+	const pageContext: PageContext = {} as any;
 	for (const hooks of clientHooks) {
-		hooks.extendQueryContext?.(queryContext);
+		hooks.extendPageContext?.(pageContext);
 	}
 
 	let app = (
-		<IsomorphicContext.Provider value={queryContext}>
+		<IsomorphicContext.Provider value={pageContext}>
 			<App />
 		</IsomorphicContext.Provider>
 	);
@@ -45,7 +45,7 @@ export async function startClient(options: StartClientOptions = {}) {
 	}
 
 	const url = new URL(window.location.href);
-	const route = await loadRoute(url, undefined, true, queryContext).catch(
+	const route = await loadRoute(url, undefined, true, pageContext).catch(
 		(error) => {
 			return { error };
 		},

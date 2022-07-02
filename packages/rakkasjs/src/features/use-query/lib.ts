@@ -2,7 +2,7 @@ export type {
 	UseQueryOptions,
 	QueryResult,
 	QueryFn,
-	QueryContext,
+	PageContext,
 	QueryClient,
 } from "./implementation";
 export { useQuery, useQueryClient } from "./implementation";

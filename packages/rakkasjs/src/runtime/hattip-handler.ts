@@ -2,7 +2,7 @@ import { compose, RequestContext, RequestHandlerStack } from "@hattip/compose";
 import { ReactElement } from "react";
 import renderApiRoute from "../features/api-routes/middleware";
 import renderPageRoute from "../features/pages/middleware";
-import { QueryContext } from "../lib";
+import { PageContext } from "../lib";
 import serverHooks from "./feature-server-hooks";
 
 export interface ServerHooks {
@@ -18,7 +18,7 @@ export interface PageHooks {
 	wrapApp?(app: ReactElement): ReactElement;
 	emitToDocumentHead?(): string;
 	emitBeforeSsrChunk?(): string | undefined;
-	extendQueryContext?(ctx: QueryContext): void | Promise<void>;
+	extendPageContext?(ctx: PageContext): void | Promise<void>;
 }
 
 export function createRequestHandler(userHooks: ServerHooks = {}) {

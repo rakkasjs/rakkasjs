@@ -55,8 +55,8 @@ const isomorphicFetchServerHooks: ServerHooks = {
 
 	createPageHooks(ctx) {
 		return {
-			extendQueryContext(queryContext) {
-				queryContext.fetch = ctx.fetch;
+			extendPageContext(pageContext) {
+				pageContext.fetch = ctx.fetch;
 			},
 		};
 	},
