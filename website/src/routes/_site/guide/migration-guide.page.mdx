@@ -4,26 +4,29 @@
 
 > This is the largest update so far with a lot of breaking changes. The whole data fetching system has been redesigned to use React Suspense and streaming SSR. We apologize for the inconvenience but we feel the changes are justified because they take the developer experience to a whole new level.
 
+- Upgrade to `rakkasjs@0.6.0`.
 - `@rakkasjs/cli` package is not needed anymore, remove it from your `package.json`.
 - `rakkasjs` package is now a development dependency, move it from `dependencies` to `devDependencies` in your `package.json`.
 - `vite` is not bundled with Rakkas anymore, install it into your project as a development dependency (`npm install -D vite`).
 - Upgrade `react` and `react-dom` to version 18.
+- If you have any references to `rakkasjs/vite-types` in your code or `tsconfig.json`, replace them with `vite/client`.
+- Rename your `pages` directory to `routes` and move your `api` directory under `routes` as `routes/api`.
+- Rename your `page.{jsx,tsx}` files to `index.page.{jsx,tsx}`.
+- Use `useLocation` instead of `useRouter` and other navigation hooks.
+- `definePage` and `defineLayout` don't exist anymore. Replace them with (depending on the use case)
+  - Plain components
+  - `useQuery` calls
+  - `preload` functions
+  - `Redirect` or `ResponseHeaders` components
+- Use plain React context instead of the old layout context mechanism.
+- Use the `Head` component from `rakkasjs` instead of `Helmet` from `react-helmet-async`.
+- Consider using `useServerSideQuery`, `useServerSideMutation`, and page `action` functions instead of API routes for data fetching.
+- Rename your `*.endpoint.{js,ts}` files as `*.api.{js,ts}` and `endpoint.{js,ts}` as `index.api.{js,ts}`.
+- Use standard `Request` and `Response` types instead of `RakkasRequest` and `RakkasResponse` in your API routes and middleware.
 - TODO: add `rakkas dev` command.
 - TODO: document new cloud adapters.
 - TODO: document new static adapter.
 - TODO: document `rakkas.config.js` to `vite.config.js` migration.
-- Rename your `page.{jsx,tsx}` files to `index.page.{jsx,tsx}`.
-- If you have any references to `rakkasjs/vite-types` in your code or `tsconfig.json`, replace them with `vite/client`.
-- Rename your `pages` directory to `routes` and move your `api` directory under `routes` as `routes/api`.
-- Rename your `*.endpoint.{js,ts}` files as `*.api.{js,ts}` and `endpoint.{js,ts}` as `index.api.{js,ts}`.
-- Use the `Head` component from `rakkasjs` instead of `Helmet` from `react-helmet-async`.
-- `definePage` and `defineLayout` don't exist anymore:
-  - Replace your load functions with `useQuery` calls.
-  - Use the `Redirect` component to perform redirects.
-  - Use the `ResponseHeaders` component to set response status and headers.
-  - Use plain React context instead of the old layout context mechanism.
-  - Use the `ClientOnly` component to opt out of SSR.
-- Use `useLocation` instead of `useRouter` and other navigation hooks.
 
 ## 0.4 to 0.5
 
