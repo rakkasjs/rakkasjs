@@ -175,7 +175,9 @@ export default async function doRenderPageRoute(
 			// TODO: AbortController
 			bootstrapModules: ["/" + scriptPath],
 			onError(error) {
-				status = 500;
+				if (!redirected) {
+					status = 500;
+				}
 				rejectRenderPromise(error);
 			},
 		},
@@ -202,8 +204,10 @@ export default async function doRenderPageRoute(
 			]);
 		}
 	} catch (error) {
-		console.error(error);
-		status = 500;
+		if (!redirected) {
+			console.error(error);
+			status = 500;
+		}
 	}
 
 	if (redirected) {

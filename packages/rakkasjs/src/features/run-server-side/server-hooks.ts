@@ -49,6 +49,13 @@ const runServerSideServerHooks: ServerHooks = {
 			return new Response(devalue(result));
 		},
 	},
+	createPageHooks(requestContext) {
+		return {
+			extendQueryContext(queryContext) {
+				queryContext.requestContext = requestContext;
+			},
+		};
+	},
 };
 
 export default runServerSideServerHooks;

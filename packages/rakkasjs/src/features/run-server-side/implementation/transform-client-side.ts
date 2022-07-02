@@ -25,7 +25,13 @@ export function babelTransformClientSideHooks(
 									return;
 								}
 
-								let fn = call.get("arguments.0") as NodePath<
+								const argNo =
+									nameRef.name === "runSSQ" ||
+									nameRef.name === "runServerSideQuery"
+										? 1
+										: 0;
+
+								let fn = call.get(`arguments.${argNo}`) as NodePath<
 									t.ArrowFunctionExpression | t.FunctionExpression
 								>;
 

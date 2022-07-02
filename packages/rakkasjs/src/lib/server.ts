@@ -3,6 +3,8 @@ export * from ".";
 export {
 	useSSQ,
 	useServerSideQuery,
+	runSSQ,
+	runServerSideQuery,
 	runSSM,
 	runServerSideMutation,
 } from "../features/run-server-side/lib-server";

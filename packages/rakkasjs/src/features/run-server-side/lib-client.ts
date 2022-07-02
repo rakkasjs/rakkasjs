@@ -1,12 +1,25 @@
 import { QueryResult, useQuery } from "../use-query/lib";
 import { stringify } from "@brillout/json-s";
 import { ServerSideFunction, UseServerSideQueryOptions } from "./lib-common";
+import type { RequestContext } from "@hattip/compose";
 
 function runSSMImpl(desc: [moduleId: string, counter: number, closure: any[]]) {
 	const [moduleId, counter, closure] = desc;
 	const stringified = closure.map((x) => stringify(x));
 
 	return sendRequest(moduleId, counter, stringified, true);
+}
+
+function runSSQImpl(
+	_: RequestContext,
+	desc: [moduleId: string, counter: number, closure: any[]],
+	usePostMethod = false,
+): any {
+	const [moduleId, counter, closure] = desc;
+
+	const stringified = closure.map((x) => stringify(x));
+
+	return sendRequest(moduleId, counter, stringified, usePostMethod);
 }
 
 function useSSQImpl(
@@ -82,4 +95,13 @@ export const useServerSideQuery: <T>(
 	options?: UseServerSideQueryOptions,
 ) => QueryResult<T> = useSSQImpl as any;
 
-export { useServerSideQuery as useSSQ, runServerSideMutation as runSSM };
+export const runServerSideQuery: <T>(
+	context: RequestContext | undefined,
+	fn: ServerSideFunction<T>,
+) => Promise<T> = runSSQImpl as any;
+
+export {
+	useServerSideQuery as useSSQ,
+	runServerSideMutation as runSSM,
+	runServerSideQuery as runSSQ,
+};

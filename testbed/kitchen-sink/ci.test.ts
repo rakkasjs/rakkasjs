@@ -435,6 +435,26 @@ function testCase(title: string, dev: boolean, command?: string) {
 			);
 		});
 
+		test("runs runServerSideQuery on the server", async () => {
+			await page.goto(TEST_HOST + "/run-ssq");
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Result: 7, SSR: true"),
+			);
+
+			await page.goto(TEST_HOST + "/run-ssq/elsewhere");
+			await page.waitForSelector(".hydrated");
+
+			const link: ElementHandle<HTMLAnchorElement> | null =
+				await page.waitForSelector("a");
+			expect(link).toBeTruthy();
+
+			await link!.click();
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Result: 7, SSR: true"),
+			);
+		});
+
 		test("runs runServerSideMutation on the server", async () => {
 			await page.goto(TEST_HOST + "/run-ssm");
 			await page.waitForSelector(".hydrated");

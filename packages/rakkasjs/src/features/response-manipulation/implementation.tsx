@@ -3,7 +3,7 @@ import React, {
 	createContext,
 	ReactElement,
 	useContext,
-	useLayoutEffect,
+	useInsertionEffect,
 } from "react";
 import { navigate } from "../client-side-navigation/lib";
 import { escapeJson } from "../../runtime/utils";
@@ -43,7 +43,7 @@ export const Redirect = import.meta.env.SSR
 			);
 	  }
 	: function Redirect(props: RedirectProps): ReactElement {
-			useLayoutEffect(() => {
+			useInsertionEffect(() => {
 				navigate(props.href, { replace: true });
 			});
 

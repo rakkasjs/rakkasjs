@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 
+import type { RequestContext } from "@hattip/compose";
 import {
 	createContext,
 	useContext,
@@ -100,6 +101,7 @@ export const DEFAULT_QUERY_OPTIONS: Required<UseQueryOptions> = {
 export interface QueryContext {
 	fetch: typeof fetch;
 	queryClient: QueryClient;
+	requestContext?: RequestContext;
 }
 
 export type QueryFn<T> = (ctx: QueryContext) => T | Promise<T>;

@@ -25,6 +25,8 @@ export type {
 	useServerSideQuery,
 	runSSM,
 	runServerSideMutation,
+	runServerSideQuery,
+	runSSQ,
 } from "../features/run-server-side/lib-client";
 
 export type { startClient } from "../runtime/client-entry";

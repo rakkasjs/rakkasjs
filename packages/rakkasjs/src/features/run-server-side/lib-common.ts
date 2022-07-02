@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { ServerSideContext } from "../../runtime/isomorphic-context";
 import { UseQueryOptions } from "../use-query/implementation";
 
-export function useServerSideContext() {
+export function useRequestContext() {
 	return useContext(ServerSideContext);
 }
 
