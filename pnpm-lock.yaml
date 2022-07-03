@@ -42,6 +42,29 @@ importers:
       typescript: 4.7.4
       vite: 3.0.0-beta.5
 
+  examples/todo:
+    specifiers:
+      "@types/react": ^18.0.14
+      "@types/react-dom": ^18.0.5
+      rakkasjs: 0.6.0-next.6
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      typescript: ^4.7.4
+      vite: ^3.0.0-beta.5
+      vite-tsconfig-paths: ^3.5.0
+      zod: ^3.17.3
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      zod: 3.17.3
+    devDependencies:
+      "@types/react": 18.0.14
+      "@types/react-dom": 18.0.5
+      rakkasjs: link:../../packages/rakkasjs
+      typescript: 4.7.4
+      vite: 3.0.0-beta.5
+      vite-tsconfig-paths: 3.5.0_vite@3.0.0-beta.5
+
   packages/rakkasjs:
     specifiers:
       "@babel/core": ^7.18.5
@@ -757,6 +780,13 @@ packages:
     resolution:
       {
         integrity: sha512-mDgMMNFSKyN9Fy0G4yQTcWwQ1BXUE65D3i3RXPX44xD5AuIU4QQDQBi+DKiEDCS6L6nEa2frC2lCUa/ob700Aw==,
+      }
+    dev: true
+
+  /@cush/relative/1.0.0:
+    resolution:
+      {
+        integrity: sha512-RpfLEtTlyIxeNPGKcokS+p3BZII/Q3bYxryFRglh5H3A3T8q9fsLYm72VYAMEOOIBLEa8o93kFLiBDUWKrwXZA==,
       }
     dev: true
 
@@ -4431,6 +4461,13 @@ packages:
       is-glob: 4.0.3
     dev: true
 
+  /glob-regex/0.3.2:
+    resolution:
+      {
+        integrity: sha512-m5blUd3/OqDTWwzBBtWBPrGlAzatRywHameHeekAZyZrskYouOGdNB8T/q6JucucvJXtOuyHIn0/Yia7iDasDw==,
+      }
+    dev: true
+
   /glob/7.1.6:
     resolution:
       {
@@ -4524,6 +4561,13 @@ packages:
       ignore: 5.2.0
       merge2: 1.4.1
       slash: 3.0.0
+    dev: true
+
+  /globrex/0.1.2:
+    resolution:
+      {
+        integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==,
+      }
     dev: true
 
   /gonzales-pe/4.3.0:
@@ -5558,7 +5602,6 @@ packages:
       }
     engines: { node: ">=6" }
     hasBin: true
-    dev: false
 
   /jsonfile/4.0.0:
     resolution:
@@ -7897,6 +7940,18 @@ packages:
       symbol-observable: 1.2.0
     dev: false
 
+  /recrawl-sync/2.2.2:
+    resolution:
+      {
+        integrity: sha512-E2sI4F25Fu2nrfV+KsnC7/qfk/spQIYXlonfQoS4rwxeNK5BjxnLPbWiRXHVXPwYBOTWtPX5765kTm/zJiL+LQ==,
+      }
+    dependencies:
+      "@cush/relative": 1.0.0
+      glob-regex: 0.3.2
+      slash: 3.0.0
+      tslib: 1.14.1
+    dev: true
+
   /refractor/3.6.0:
     resolution:
       {
@@ -9040,6 +9095,17 @@ packages:
       strip-bom: 3.0.0
     dev: true
 
+  /tsconfig-paths/4.0.0:
+    resolution:
+      {
+        integrity: sha512-SLBg2GBKlR6bVtMgJJlud/o3waplKtL7skmLkExomIiaAtLGtVsoXIqP3SYdjbcH9lq/KVv7pMZeCBpLYOit6Q==,
+      }
+    dependencies:
+      json5: 2.2.1
+      minimist: 1.2.6
+      strip-bom: 3.0.0
+    dev: true
+
   /tslib/1.14.1:
     resolution:
       {
@@ -9552,6 +9618,23 @@ packages:
       is-buffer: 2.0.5
       unist-util-stringify-position: 3.0.2
       vfile-message: 3.1.2
+    dev: true
+
+  /vite-tsconfig-paths/3.5.0_vite@3.0.0-beta.5:
+    resolution:
+      {
+        integrity: sha512-NKIubr7gXgh/3uniQaOytSg+aKWPrjquP6anAy+zCWEn6h9fB8z2/qdlfQrTgZWaXJ2pHVlllrSdRZltHn9P4g==,
+      }
+    peerDependencies:
+      vite: ">2.0.0-0"
+    dependencies:
+      debug: 4.3.4
+      globrex: 0.1.2
+      recrawl-sync: 2.2.2
+      tsconfig-paths: 4.0.0
+      vite: 3.0.0-beta.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /vite/2.9.13:

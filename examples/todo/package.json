@@ -1,0 +1,23 @@
+{
+	"name": "@rakkasjs/example-todo",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "vite --open",
+		"build": "rakkas build",
+		"start": "node dist/server"
+	},
+	"devDependencies": {
+		"@types/react": "^18.0.14",
+		"@types/react-dom": "^18.0.5",
+		"rakkasjs": "0.6.0-next.6",
+		"typescript": "^4.7.4",
+		"vite": "^3.0.0-beta.5",
+		"vite-tsconfig-paths": "^3.5.0"
+	},
+	"dependencies": {
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"zod": "^3.17.3"
+	}
+}
