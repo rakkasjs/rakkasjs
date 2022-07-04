@@ -68,7 +68,17 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 
 				optimizeDeps: {
 					include: ["react", "react-dom", "react-dom/client"],
-					exclude: ["rakkasjs"],
+					// TODO: Remove this when https://github.com/vitejs/vite/pull/8917 is merged
+					exclude: [
+						"rakkasjs",
+						"virtual:rakkasjs:client-manifest",
+						"virtual:rakkasjs:client-page-routes",
+						"virtual:rakkasjs:api-routes",
+						"virtual:rakkasjs:run-server-side:manifest",
+						"virtual:rakkasjs:server-page-routes",
+						"virtual:rakkasjs:error-page",
+						"@vavite/expose-vite-dev-server",
+					],
 				},
 
 				envPrefix: "RAKKAS_",
