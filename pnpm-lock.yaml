@@ -26,7 +26,7 @@ importers:
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.7.4
-      vite: ^3.0.0-beta.5
+      vite: ^3.0.0-beta.6
       zod: ^3.17.3
     dependencies:
       "@emotion/react": 11.9.3_luyos4mouogwq6z3wafb3re4ce
@@ -40,7 +40,7 @@ importers:
       "@types/react-dom": 18.0.5
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.7.4
-      vite: 3.0.0-beta.5
+      vite: 3.0.0-beta.6
 
   examples/todo:
     specifiers:
@@ -50,7 +50,7 @@ importers:
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.7.4
-      vite: ^3.0.0-beta.5
+      vite: ^3.0.0-beta.6
       vite-tsconfig-paths: ^3.5.0
       zod: ^3.17.3
     dependencies:
@@ -62,8 +62,8 @@ importers:
       "@types/react-dom": 18.0.5
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.7.4
-      vite: 3.0.0-beta.5
-      vite-tsconfig-paths: 3.5.0_vite@3.0.0-beta.5
+      vite: 3.0.0-beta.6
+      vite-tsconfig-paths: 3.5.0_vite@3.0.0-beta.6
 
   packages/rakkasjs:
     specifiers:
@@ -101,7 +101,7 @@ importers:
       react-helmet-async: ^1.3.0
       tsup: ^6.1.2
       typescript: ^4.7.4
-      vite: ^3.0.0-beta.5
+      vite: ^3.0.0-beta.6
     dependencies:
       "@babel/core": 7.18.6
       "@babel/types": 7.18.7
@@ -112,10 +112,10 @@ importers:
       "@types/node": 18.0.0
       "@types/react": 18.0.14
       "@types/react-dom": 18.0.5
-      "@vavite/connect": 1.3.3_vite@3.0.0-beta.5
-      "@vavite/expose-vite-dev-server": 1.3.3_vite@3.0.0-beta.5
-      "@vavite/multibuild": 1.3.3_vite@3.0.0-beta.5
-      "@vitejs/plugin-react": 2.0.0-beta.0_vite@3.0.0-beta.5
+      "@vavite/connect": 1.3.3_vite@3.0.0-beta.6
+      "@vavite/expose-vite-dev-server": 1.3.3_vite@3.0.0-beta.6
+      "@vavite/multibuild": 1.3.3_vite@3.0.0-beta.6
+      "@vitejs/plugin-react": 2.0.0-beta.0_vite@3.0.0-beta.6
       cac: 6.7.12
       cheerio: 1.0.0-rc.12
       fast-glob: 3.2.11
@@ -138,7 +138,7 @@ importers:
       react-helmet-async: 1.3.0_biqbaboplfbrettd7655fr4n2y
       tsup: 6.1.2_typescript@4.7.4
       typescript: 4.7.4
-      vite: 3.0.0-beta.5
+      vite: 3.0.0-beta.6
 
   testbed/kitchen-sink:
     specifiers:
@@ -155,7 +155,7 @@ importers:
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.7.4
-      vite: ^3.0.0-beta.5
+      vite: ^3.0.0-beta.6
     dependencies:
       "@types/react": 18.0.14
       "@types/react-dom": 18.0.5
@@ -171,7 +171,7 @@ importers:
       puppeteer: 15.2.0
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.7.4
-      vite: 3.0.0-beta.5
+      vite: 3.0.0-beta.6
 
   testbed/static:
     specifiers:
@@ -188,7 +188,7 @@ importers:
       react-dom: ^18.2.0
       sirv-cli: ^2.0.2
       typescript: ^4.7.4
-      vite: ^3.0.0-beta.5
+      vite: ^3.0.0-beta.6
     dependencies:
       "@types/react": 18.0.14
       "@types/react-dom": 18.0.5
@@ -204,7 +204,7 @@ importers:
       puppeteer: 15.2.0
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.7.4
-      vite: 3.0.0-beta.5
+      vite: 3.0.0-beta.6
 
   website:
     specifiers:
@@ -238,7 +238,7 @@ importers:
       source-map: ^0.7.4
       typescript: ^4.7.4
       vfile: ^5.3.4
-      vite: ^3.0.0-beta.5
+      vite: ^3.0.0-beta.6
     dependencies:
       "@mdx-js/react": 2.1.2_react@18.2.0
       cookie: 0.5.0
@@ -271,7 +271,7 @@ importers:
       source-map: 0.7.4
       typescript: 4.7.4
       vfile: 5.3.4
-      vite: 3.0.0-beta.5
+      vite: 3.0.0-beta.6
 
 packages:
   /@algolia/autocomplete-core/1.6.3:
@@ -1683,7 +1683,7 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@vavite/connect/1.3.3_vite@3.0.0-beta.5:
+  /@vavite/connect/1.3.3_vite@3.0.0-beta.6:
     resolution:
       {
         integrity: sha512-73vqRNZAkCIoMekoPs/dBhhxfhNyS2NHqNgjyWb/0NPAaOYXVI7QcQHl4Ikhjrw41yeoLzu8W6jMDif7Qv0HVQ==,
@@ -1692,10 +1692,10 @@ packages:
       vite: ^2.8.1
     dependencies:
       "@types/node": 17.0.45
-      vite: 3.0.0-beta.5
+      vite: 3.0.0-beta.6
     dev: false
 
-  /@vavite/expose-vite-dev-server/1.3.3_vite@3.0.0-beta.5:
+  /@vavite/expose-vite-dev-server/1.3.3_vite@3.0.0-beta.6:
     resolution:
       {
         integrity: sha512-CMVJknzxaNuxBD1OGA18a78X3skqtKSez50zn7v0ShqjFsahYtXAh4vCOwYnfY8MPXsT+aHVi1zrt1oFzQQLkA==,
@@ -1703,10 +1703,10 @@ packages:
     peerDependencies:
       vite: ^2.8.1
     dependencies:
-      vite: 3.0.0-beta.5
+      vite: 3.0.0-beta.6
     dev: false
 
-  /@vavite/multibuild/1.3.3_vite@3.0.0-beta.5:
+  /@vavite/multibuild/1.3.3_vite@3.0.0-beta.6:
     resolution:
       {
         integrity: sha512-zFKMWy1dYI2NNInpCDXdMXfsxgScQ+sNJq0qaxs50joPU1s3xZaekERFLp+bLDUClarAgfumYNF9B4sLtsQ1bA==,
@@ -1717,10 +1717,10 @@ packages:
       "@types/node": 17.0.45
       cac: 6.7.12
       picocolors: 1.0.0
-      vite: 3.0.0-beta.5
+      vite: 3.0.0-beta.6
     dev: false
 
-  /@vitejs/plugin-react/2.0.0-beta.0_vite@3.0.0-beta.5:
+  /@vitejs/plugin-react/2.0.0-beta.0_vite@3.0.0-beta.6:
     resolution:
       {
         integrity: sha512-Tx6shZAW/1n89IJ56gejZuBSJZ80ap+ErNKFGKFh7NbHxJeZOmt/+uRRn7edvaJ1e2R/eo3NbF0alxCbqm9XVg==,
@@ -1735,7 +1735,7 @@ packages:
       "@babel/plugin-transform-react-jsx-self": 7.18.6_@babel+core@7.18.6
       "@babel/plugin-transform-react-jsx-source": 7.18.6_@babel+core@7.18.6
       react-refresh: 0.14.0
-      vite: 3.0.0-beta.5
+      vite: 3.0.0-beta.6
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -9740,7 +9740,7 @@ packages:
       vfile-message: 3.1.2
     dev: true
 
-  /vite-tsconfig-paths/3.5.0_vite@3.0.0-beta.5:
+  /vite-tsconfig-paths/3.5.0_vite@3.0.0-beta.6:
     resolution:
       {
         integrity: sha512-NKIubr7gXgh/3uniQaOytSg+aKWPrjquP6anAy+zCWEn6h9fB8z2/qdlfQrTgZWaXJ2pHVlllrSdRZltHn9P4g==,
@@ -9752,7 +9752,7 @@ packages:
       globrex: 0.1.2
       recrawl-sync: 2.2.2
       tsconfig-paths: 4.0.0
-      vite: 3.0.0-beta.5
+      vite: 3.0.0-beta.6
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -9784,10 +9784,10 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vite/3.0.0-beta.5:
+  /vite/3.0.0-beta.6:
     resolution:
       {
-        integrity: sha512-SfesZuCME4fEmLy4hgsJAg55HRiTgDhH3oPM44XePrdKP5FqYvDkzpSWl6ldDOJYTskKWafGyyuYfXoxodv40Q==,
+        integrity: sha512-jAxxCGXs6oIO3dFh7gwDEP9RqFzYY+ULDWawS1dd3HfM4FCr8rkOnLljDoBBIDdTNM8M7pDzdoYSmpPEOJqyZQ==,
       }
     engines: { node: ">=14.18.0" }
     hasBin: true
