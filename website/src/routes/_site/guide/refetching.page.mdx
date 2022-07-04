@@ -1,10 +1,12 @@
-import { SampleViewer } from "./SampleViewer";
+---
+title: Refetching
+---
 
-# Refetching
+import { SampleViewer } from "./SampleViewer";
 
 `useQuery` and `useServerSideQuery` return a `QueryResult` object. Apart from the `data` property, it also has a `refetch` method that can be used to refetch the data on demand:
 
-import refetchExample from "$examples/refetch/index.page.tsx?sample";
+import refetchExample from "examples/refetch/index.page.tsx?sample";
 
 <SampleViewer url="/examples/refetch" code={refetchExample} />
 

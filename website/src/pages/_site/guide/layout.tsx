@@ -1,7 +1,7 @@
 import { toc } from "./toc";
 import { Head, Layout, Link } from "rakkasjs";
 import css from "./layout.module.css";
-import { Toc } from "$lib/Toc";
+import { Toc } from "lib/Toc";
 
 const GuideLayout: Layout = ({ children, url }) => {
 	const slug = url.pathname.split("/")[2];

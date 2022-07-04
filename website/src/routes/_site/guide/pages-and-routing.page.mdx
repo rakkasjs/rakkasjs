@@ -1,6 +1,8 @@
-import { SampleViewer } from "./SampleViewer";
+---
+title: Pages and routing
+---
 
-# Pages and routing
+import { SampleViewer } from "./SampleViewer";
 
 In Rakkas, a page is a React component default exported from a module in the `src/routes` directory with a name that matches `*.page.jsx` (or `tsx`, or any other extension included in the `pageExtensions` [configuration option](./configuration-options)).
 
@@ -16,7 +18,7 @@ This specific naming convention (`<name>.page.{extension}`) allows you to have y
 
 A very simple Rakkas page would look like this:
 
-import helloExample from "$examples/hello/index.page.jsx?sample";
+import helloExample from "examples/hello/index.page.jsx?sample";
 
 <SampleViewer
 	filename="src/routes/index.page.jsx"
@@ -26,13 +28,13 @@ import helloExample from "$examples/hello/index.page.jsx?sample";
 
 Rakkas comes with a `Head` component for managing head tags like `title`. It is, in fact, simply `Helmet` from [`react-helmet-async`](https://github.com/staylor/react-helmet-async#readme) bundled and re-exported. Check their documentation for usage examples.
 
-## Dynamic routes <a id="dynamic-routes"/>
+## Dynamic routes
 
 Often you need to encode parameters in the URL path like `/post/1`, `/post/2` etc. Dynamic routes like this are handled using square brackets (`[]`). If you have a file named `/src/routes/profile/[userName].page.jsx`, for instance, and you visit `/profile/fatih`, your page component will receive `{ userName: "fatih" }` in `props.params` like in the example below.
 
 > Go ahead and click on the links, they won't take you away from this page.
 
-import paramsExample from "$examples/params/[userName].page.jsx?sample";
+import paramsExample from "examples/params/[userName].page.jsx?sample";
 
 <SampleViewer
 	filename="[userName].page.jsx"

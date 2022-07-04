@@ -14,10 +14,6 @@
 	color: #924;
 }
 
-.search {
-	width: 48px;
-}
-
 .sidebar {
 	position: fixed;
 	width: 296px;
@@ -35,16 +31,6 @@
 	left: 0px;
 }
 
-.icon {
-	display: inline-block;
-	min-width: 1.5em;
-	text-align: center;
-}
-
-.icon svg {
-	vertical-align: -0.125em;
-}
-
 .nav {
 	display: none;
 }
@@ -60,10 +46,6 @@
 
 	.nav {
 		display: block;
-	}
-
-	.search {
-		display: none;
 	}
 }
 

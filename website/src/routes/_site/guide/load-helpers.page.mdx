@@ -1,4 +1,6 @@
-# Load helpers
+---
+title: Load helpers
+---
 
 [As discussed before](./data-fetching), Rakkas passes a `fetch` function to the `load` functions of layouts and pages. `fetch` is a web standard but it's not necessarily the most ergonomic tool for making API requests. Serializing/deserializing data, setting the correct headers, handling errors etc. on each request can quickly become cumbersome. It's often more convenient to have a set of functions or classes for communicating with a particular API instead of using `fetch` directly.
 

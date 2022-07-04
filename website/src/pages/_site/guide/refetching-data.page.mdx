@@ -18,13 +18,13 @@ You can have a `getCacheKey` function in the object you pass to `definePage` or 
 
 For example, you can tell Rakkas to call a page's `load` function only when the URL path changes and not when the query string changes:
 
-import getCacheKeyPage from "$examples/get-cache-key/page.tsx?sample";
+import getCacheKeyPage from "examples/get-cache-key/page.tsx?sample";
 
 <SampleViewer code={getCacheKeyPage} />
 
 Or you can force Rakkas to call your layout's `load` function when the URL path changes:
 
-import getCacheKeyLayout from "$examples/get-cache-key/layout.tsx?sample";
+import getCacheKeyLayout from "examples/get-cache-key/layout.tsx?sample";
 
 <SampleViewer code={getCacheKeyLayout} />
 
@@ -32,7 +32,7 @@ import getCacheKeyLayout from "$examples/get-cache-key/layout.tsx?sample";
 
 Page and layout components are passed a `reload` prop which you can use to manually force Rakkas to call its `load` function and rerender it:
 
-import reloadExample from "$examples/reload/page.tsx?sample";
+import reloadExample from "examples/reload/page.tsx?sample";
 
 <SampleViewer url="/examples/reload" code={reloadExample} />
 
@@ -40,7 +40,7 @@ import reloadExample from "$examples/reload/page.tsx?sample";
 
 Page and layout components are passed a `useReload` function which is a React custom hook used to force a reload under certain conditions:
 
-import useReloadExample from "$examples/reload/use-reload.page.tsx?sample";
+import useReloadExample from "examples/reload/use-reload.page.tsx?sample";
 
 <SampleViewer url="/examples/reload/use-reload" code={useReloadExample} />
 

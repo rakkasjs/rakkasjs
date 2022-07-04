@@ -1,12 +1,14 @@
-import { SampleViewer } from "./SampleViewer";
+---
+title: Customization hooks
+---
 
-# Customization hooks
+import { SampleViewer } from "./SampleViewer";
 
 You can customize the behavior of a Rakkas app by defining customization hooks in the files `src/server.js` or `src/client.js` for the server and the client respectively. You can also use the extensions `.jsx`, `.ts`, or `.tsx`.
 
 > Customization hooks are not related to React hooks.
 
-## Server-side customization hooks <a id="server-side"/>
+## Server-side customization hooks
 
 You can fully customize the way Rakkas renders and serves a page by exporting a `servePage` function from the file `src/server.{js|ts|jsx|tsx}`. It can be useful for the following purposes:
 
@@ -58,7 +60,7 @@ export const servePage: ServePageHook = async (request, renderPage) => {
 };
 ```
 
-## Client-side customization hooks <a id="client-side"/>
+## Client-side customization hooks
 
 You can customize the client-side behavior of Rakkas by exporting certain hooks from the file `src/client.{js|ts|jsx|tsx}`. It can be useful for the following purposes:
 
@@ -89,7 +91,7 @@ export default defineClientHooks({
 });
 ```
 
-## Common customization hooks <a id="common"/>
+## Common customization hooks
 
 Some hooks need to run in both server and client-side. You can define them in the file `src/common.{js|ts|jsx|tsx}`.
 

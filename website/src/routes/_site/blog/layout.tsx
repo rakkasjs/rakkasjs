@@ -1,14 +1,15 @@
 import { toc } from "./toc";
-import React from "react";
 import { Head, Layout, Link } from "rakkasjs";
 import css from "./layout.module.css";
-import { Toc } from "$lib/Toc";
+import { Toc } from "lib/Toc";
+import { BlogPostHeader } from "lib/BlogPostHeader";
 
 // TODO: Error handling
 const BlogLayout: Layout = ({ children, url }) => {
 	const slug = url.pathname.split("/")[2];
-	const currentIndex = toc.findIndex((item) => "/blog/" + slug === item.slug);
+	const currentIndex = toc.findIndex((item) => slug === item.slug);
 
+	const current = toc[currentIndex];
 	const prev = toc[currentIndex - 1];
 	const next = toc[currentIndex + 1];
 
@@ -36,26 +37,28 @@ const BlogLayout: Layout = ({ children, url }) => {
 	);
 
 	return (
-		<div className={css.wrapper}>
+		<div>
 			<Head
-				title={
-					toc[currentIndex]
-						? toc[currentIndex].title + " - Rakkas Blog"
-						: "Rakkas Blog"
-				}
+				title={current ? current.title + " - Rakkas Blog" : "Rakkas Blog"}
 			/>
 
 			<div className={css.contentWrapper}>
 				<div className={css.content}>
 					{prevNext}
 
-					<article>{children}</article>
+					{current && (
+						<article>
+							<h1>{current.title}</h1>
+							<BlogPostHeader date={current.date} />
+							{children}
+						</article>
+					)}
 
 					{prevNext}
 				</div>
 			</div>
 
-			<div className={css.tocWrapper}>
+			<div>
 				<aside className={css.toc}>
 					<Toc toc={toc} />
 				</aside>

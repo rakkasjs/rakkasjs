@@ -1,11 +1,11 @@
 import { defineConfig } from "vite";
 import rakkas from "rakkasjs/vite-plugin";
-import fs from "fs";
-import path from "path";
+import sampleLoader from "./vite-plugins/sample-loader";
+import frontmatterLoader from "./vite-plugins/frontmatter-loader";
 import mdx from "@cyco130/vite-plugin-mdx";
 
 // @ts-expect-error: No typings
-import { highlight, loadLanguages } from "reprism";
+import { loadLanguages } from "reprism";
 // @ts-expect-error: No typings
 import tsx from "reprism/languages/typescript.js";
 // @ts-expect-error: No typings
@@ -13,14 +13,15 @@ import bash from "reprism/languages/bash.js";
 // @ts-expect-error: No typings
 import rhypePrism from "@mapbox/rehype-prism";
 import remarkGfm from "remark-gfm";
+import remarkFm from "remark-frontmatter";
 
 loadLanguages(tsx.default, bash.default);
 
 export default defineConfig({
 	resolve: {
 		alias: {
-			$lib: "/src/lib",
-			$examples: "/src/routes/examples",
+			lib: "/src/lib",
+			examples: "/src/routes/examples",
 		},
 	},
 
@@ -30,8 +31,10 @@ export default defineConfig({
 	},
 
 	plugins: [
+		frontmatterLoader(),
+
 		mdx({
-			remarkPlugins: [remarkGfm],
+			remarkPlugins: [remarkFm, remarkGfm],
 			rehypePlugins: [rhypePrism],
 			providerImportSource: "@mdx-js/react",
 		}),
@@ -40,32 +43,6 @@ export default defineConfig({
 			pageExtensions: ["jsx", "tsx", "mdx"],
 		}),
 
-		{
-			name: "code-sample-loader",
-
-			enforce: "pre",
-
-			async resolveId(id, importer) {
-				if (id.endsWith("?sample")) {
-					const resolved = await this.resolve(id.slice(0, -7), importer, {
-						skipSelf: true,
-					});
-					if (resolved) return resolved.id + "?sample";
-				}
-			},
-
-			async load(id) {
-				if (id.endsWith("?sample")) {
-					const filename = id.slice(0, -7);
-					const content = fs.readFileSync(filename, "utf8");
-
-					return {
-						code: `export default {file: ${JSON.stringify(
-							path.relative("src/pages/examples", filename),
-						)}, code: ${JSON.stringify(highlight(content, "typescript"))}}`,
-					};
-				}
-			},
-		},
+		sampleLoader(),
 	],
 });

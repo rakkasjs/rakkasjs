@@ -16,7 +16,7 @@ This specific naming convention (`(name.)?page.{extension}`) allows you to have 
 
 A very simple Rakkas page would look like this:
 
-import helloExample from "$examples/hello/page.jsx?sample";
+import helloExample from "examples/hello/page.jsx?sample";
 
 <SampleViewer
 	filename="src/pages/page.jsx"
@@ -30,7 +30,7 @@ Rakkas supports [`react-helmet-async`](https://github.com/staylor/react-helmet-a
 
 Sometimes you need to encode parameters in the URL path like `/post/1`, `/post/2` etc. Dynamic routes like this are handled using `[square brackets]`. If you have a file named `/src/pages/profile/[userName].page.jsx`, for instance, and you visit `/profile/fatih`, your page component will receive `{ userName: "fatih" }` in `props.params` like in the example below.
 
-import paramsExample from "$examples/params/[userName].page.jsx?sample";
+import paramsExample from "examples/params/[userName].page.jsx?sample";
 
 <SampleViewer
 	filename="[userName].page.jsx"

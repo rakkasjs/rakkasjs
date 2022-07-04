@@ -1,63 +1,102 @@
-const titles = [
-	"## Introduction",
-	"What is Rakkas?",
-	"Getting started",
+const imports: Record<string, { default: { title: string } }> =
+	import.meta.glob("./*.page.mdx", {
+		eager: true,
+		query: "frontmatter",
+	});
 
-	"## Basics",
-	"Pages and routing",
-	"Client-side navigation",
-	"Fast refresh",
-	"Layouts",
-	"Static assets",
-
-	"## Data fetching",
-	"useQuery",
-	"useServerSideQuery",
-	"Refetching",
-	"Error handling",
-
-	"## Customization",
-	"Configuration",
-	"Common hooks",
-	"Server-side hooks",
-	"Client-side hooks",
-	"Environment variables",
-
-	"## Deployment",
-	"Node",
-	"Static hosting",
-	"Cloudflare Workers",
-	"Vercel",
-	"Netlify",
-
-	"## Advanced",
-	"API routes",
-	"SEO and rendering modes",
-	"Localized routes",
-
-	"## Miscelaneous",
-	"Integrations",
-	"Feature comparison",
-	"Migration guide",
-	"Credits",
+const sections: Array<[section: string, slugs: string[]]> = [
+	[
+		// Section
+		"Introduction",
+		[
+			// Slugs
+			"what-is-rakkas",
+			"getting-started",
+		],
+	],
+	[
+		// Section
+		"Basics",
+		[
+			// Slugs
+			"pages-and-routing",
+			"client-side-navigation",
+			"fast-refresh",
+			"layouts",
+			"static-assets",
+		],
+	],
+	[
+		// Section
+		"Data fetching",
+		[
+			// Slugs
+			"use-query",
+			"use-server-side-query",
+			"refetching",
+			"error-handling",
+		],
+	],
+	[
+		// Section
+		"Customization",
+		[
+			// Slugs
+			"configuration",
+			"common-hooks",
+			"server-side-hooks",
+			"client-side-hooks",
+			"environment-variables",
+		],
+	],
+	[
+		// Section
+		"Deployment",
+		[
+			// Slugs
+			"node",
+			"static-hosting",
+			"cloudflare-workers",
+			"vercel",
+			"netlify",
+		],
+	],
+	[
+		// Section
+		"Advanced",
+		[
+			// Slugs
+			"api-routes",
+			"seo-and-rendering-modes",
+			"localized-routes",
+		],
+	],
+	[
+		// Section
+		"Miscelaneous",
+		[
+			// Slugs
+			"integrations",
+			"feature-comparison",
+			"migration-guide",
+			"credits",
+		],
+	],
 ];
 
-export const toc = titles.map((title) => {
-	if (title.startsWith("## ")) {
-		return title.slice(3);
-	}
+export const toc = sections
+	.map(([section, slugs]) =>
+		slugs.map((slug) => ({
+			section,
+			slug,
+			...imports[`./${slug}.page.mdx`]?.default,
+		})),
+	)
+	.flat()
+	.filter((item) => {
+		if (!item.title) {
+			console.warn(`${item.section}: ${item.slug} has no title`);
+		}
 
-	const slug =
-		"/guide/" +
-		title
-			.replace(/([a-z])([A-Z])/g, "$1 $2")
-			.split("")
-			.map((x) => (x === " " ? "-" : x.toLowerCase()))
-			.filter((x) => (x >= "a" && x <= "z") || x === "-")
-			.join("");
-
-	return {
-		slug,
-		title,
-	};
-});
+		return !!item.title;
+	});

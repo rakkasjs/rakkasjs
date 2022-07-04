@@ -1,4 +1,6 @@
-# Deployment targets
+---
+title: Deployment targets
+---
 
 Rakkas has first-class support for deploying on Node, Vercel, Netlify, and Cloudflare Workers, as well as static file servers. The `build` CLI command accepts a `--deployment-target` option (`-d` for short) to specify the deployment target. Its value can be `node`, `static`, `vercel`, `netlify`, or `cloudflare-workers`. The default value is `node`.
 
@@ -17,7 +19,7 @@ You can customize the runtime behavior of the server with the following environm
 
 The server can serve the client assets on its own (using [`sirv`](https://github.com/lukeed/sirv)) but if you choose to use your reverse proxy (e.g. NGINX) to serve them instead, they reside in the `dist/client` directory. In this case you may set the `DISABLE_STATIC_SERVER` environment variable to `1` to disable the static asset server which may reduce the start-up time of the server and its memory footprint.
 
-## Static <a id="static"/>
+## Static
 
 If your entire application is [suitable for pre-rendering](./rendering-modes#pre-rendering), you can build a static site with `rakkas build -d static`. The generated site will be in the `dist` directory, so you can preview it with, e.g., `npx sirv dist`. A static site doesn't need a Node.js server, you can serve it from a CDN or a static file server like **Github pages**.
 

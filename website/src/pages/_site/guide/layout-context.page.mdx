@@ -8,9 +8,9 @@ A Rakkas layout is not just a simple wrapper component, it also acts as data fet
 
 Let's say you have two pages, `/widget/[widgetId]/view` and `/widget/[widgetId]/edit` which views and edits a widget respectively. Both pages will need the contents of the widget. You can achieve this, without duplicating your code in both pages, by creating a layout `/widget/[widgetId]/layout.jsx` that fetches the widget data and passes it down to the pages using the `context` mechanism. You don't even have to define a component for your layout if it's only used for data fetching:
 
-import contextExampleLayout from "$examples/widget/[widgetId]/layout.tsx?sample";
-import contextExampleView from "$examples/widget/[widgetId]/view.page.tsx?sample";
-import contextExampleEdit from "$examples/widget/[widgetId]/edit.page.tsx?sample";
+import contextExampleLayout from "examples/widget/[widgetId]/layout.tsx?sample";
+import contextExampleView from "examples/widget/[widgetId]/view.page.tsx?sample";
+import contextExampleEdit from "examples/widget/[widgetId]/edit.page.tsx?sample";
 
 <SampleViewer
 	filename="pages/widget/[widgetId]/layout.tsx"

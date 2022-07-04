@@ -4,9 +4,9 @@ import { SampleViewer } from "./SampleViewer";
 
 Not many websites consist of completely independent pages. This very guide (which was made with Rakkas, of course - so meta!), for instance, has a header, a footer, and a navigation menu that are common to all pages. Rakkas provides a nested layout system to handle this use case and more. If you create a file named `layout.jsx` (or `tsx`, or any other extension included in the `pageExtensions` [configuration option](./configuration-options)) that default exports a React component, pages in the same directory and pages or nested layouts in its subdirectories will be wrapped by the layout.
 
-import layoutExampleLayout from "$examples/layout/layout.jsx?sample";
-import layoutExampleHome from "$examples/layout/page.jsx?sample";
-import layoutExampleAbout from "$examples/layout/about.page.jsx?sample";
+import layoutExampleLayout from "examples/layout/layout.jsx?sample";
+import layoutExampleHome from "examples/layout/page.jsx?sample";
+import layoutExampleAbout from "examples/layout/about.page.jsx?sample";
 
 <SampleViewer filename="pages/layout.jsx" code={layoutExampleLayout} />
 <SampleViewer filename="pages/page.jsx" code={layoutExampleHome} />

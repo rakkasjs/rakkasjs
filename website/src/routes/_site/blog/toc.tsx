@@ -1,24 +1,28 @@
-const posts = [
-	[
-		"Rakkas 0.6: Streaming SSR with Suspense and useServerSideQuery",
-		// TODO: Set publish date
-		"June 24, 2022",
-	],
-	["Three cool Rakkas features that Next.js lacks", "December 20, 2021"],
-	["How to get client-side navigation right", "December 13, 2021"],
-	["Rakkas: Next.js alternative powered by Vite", "October 14, 2021"],
-];
+const imports: Record<string, { default: { title: string; date: string } }> =
+	import.meta.glob("./*.page.mdx", {
+		eager: true,
+		query: "frontmatter",
+	});
 
-export const toc = posts.map((post) => {
-	const slug =
-		"/blog/" +
-		post[0]
-			.split("")
-			.map((x) => (x === " " ? "-" : x.toLowerCase()))
-			.filter(
-				(x) => (x >= "a" && x <= "z") || (x >= "0" && x <= "9") || x === "-",
-			)
-			.join("");
-
-	return { slug, title: post[0], date: post[1] };
-});
+export const toc = Object.entries(imports)
+	.sort(
+		(a, b) =>
+			new Date(b[1].default.date).getTime() -
+			new Date(a[1].default.date).getTime(),
+	)
+	.map(
+		([
+			slug,
+			{
+				default: { title, date },
+			},
+		]) => ({
+			slug: slug.slice(2, -9),
+			title,
+			date: new Date(date).toLocaleDateString(["en-US"], {
+				month: "long",
+				day: "numeric",
+				year: "numeric",
+			}),
+		}),
+	);

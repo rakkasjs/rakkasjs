@@ -1,20 +1,14 @@
 import { Logomark } from "./Logomark";
 import { Logotype } from "./Logotype";
 import { Link, StyledLink, useLocation, ClientOnly } from "rakkasjs";
-import React, { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import css from "./Header.module.css";
-import { GithubLogo } from "$lib/GithubLogo";
 import { Squash as Hamburger } from "hamburger-react";
-import { HomeIcon } from "$lib/HomeIcon";
-import { GuidIcon } from "$lib/GuideIcon";
-import { ExternalIcon } from "$lib/ExternalIcon";
-import { BlogIcon } from "$lib/BlogIcon";
 import { Toc } from "./Toc";
 import { toc as guideToc } from "../routes/_site/guide/toc";
 import { toc as blogToc } from "../routes/_site/blog/toc";
 import { DocSearch } from "@docsearch/react";
 import "@docsearch/css";
-import { ReferenceIcon } from "$lib/ReferenceIcon";
 
 export const Header: FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -66,9 +60,6 @@ export const Header: FC = () => {
 						activeClass={css.activeLink}
 						pendingClass={css.nextLink}
 					>
-						<span className={css.icon}>
-							<HomeIcon />
-						</span>{" "}
 						Home
 					</StyledLink>
 				</li>
@@ -79,9 +70,6 @@ export const Header: FC = () => {
 						pendingClass={css.nextLink}
 						onCompareUrls={(url) => url.pathname.startsWith("/guide")}
 					>
-						<span className={css.icon}>
-							<GuidIcon />
-						</span>{" "}
 						Guide
 					</StyledLink>
 				</li>
@@ -92,9 +80,6 @@ export const Header: FC = () => {
 						pendingClass={css.nextLink}
 						onCompareUrls={(url) => url.pathname.startsWith("/reference")}
 					>
-						<span className={css.icon}>
-							<ReferenceIcon />
-						</span>{" "}
 						Reference
 					</StyledLink>
 				</li>
@@ -105,11 +90,13 @@ export const Header: FC = () => {
 						pendingClass={css.nextLink}
 						onCompareUrls={(url) => url.pathname.startsWith("/blog")}
 					>
-						<span className={css.icon}>
-							<BlogIcon />
-						</span>{" "}
 						Blog
 					</StyledLink>
+				</li>
+				<li>
+					<a href="/chat" title="Chat" target="_blank" rel="noreferrer">
+						Chat
+					</a>
 				</li>
 				<li>
 					<a
@@ -118,11 +105,7 @@ export const Header: FC = () => {
 						rel="noreferrer"
 						title="Github"
 					>
-						<span className={css.icon}>
-							<GithubLogo />
-						</span>{" "}
 						GitHub
-						<ExternalIcon />
 					</a>
 				</li>
 			</ul>

@@ -1,10 +1,12 @@
-import { SampleViewer } from "./SampleViewer";
+---
+title: useQuery
+---
 
-# `useQuery`
+import { SampleViewer } from "./SampleViewer";
 
 `useQuery` is a data fetching hook that uses [Suspense](https://reactjs.org/docs/react-api.html#reactsuspense) and has an API inspired by [react-query](https://react-query.tanstack.com). It can be used when you want to fetch some data from your own endpoints or from a third-party API that allows [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). CORS is necessary because `useQuery` may run on the client. Here's an example that uses the free [Pokéapi](https://pokeapi.co/):
 
-import useQueryExample from "$examples/use-query/[pokemon].page.tsx?sample";
+import useQueryExample from "examples/use-query/[pokemon].page.tsx?sample";
 
 <SampleViewer
 	url="/examples/use-query/pikachu"

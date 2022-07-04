@@ -10,7 +10,7 @@
 		"skipLibCheck": true,
 		"baseUrl": "./src",
 		"paths": {
-			"$lib/*": ["lib/*"]
+			"examples": ["examples/*"]
 		}
 	}
 }

@@ -8,13 +8,13 @@ Rakkas provides a `Link` component (in the `rakkasjs` package) for SPA-style cli
 
 Let's add client-side navigation to the previous example by replacing the `<a>` elements with `StyledLink` and by adding some inline styling for the active link. Notice how the page refreshes without a full reload now when you click on a link:
 
-import navlinkExample from "$examples/navlink/[userName].page.jsx?sample";
+import navlinkExample from "examples/navlink/[userName].page.jsx?sample";
 
 <SampleViewer code={navlinkExample} url="/examples/navlink/Fatih" />
 
 For programmatic navigation, use the `navigate` function exported from the `rakkasjs` package:
 
-import navigateExample from "$examples/navigate/[userName].page.jsx?sample";
+import navigateExample from "examples/navigate/[userName].page.jsx?sample";
 
 <SampleViewer url="/examples/navigate/Fatih" code={navigateExample} />
 

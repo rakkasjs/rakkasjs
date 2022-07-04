@@ -1,4 +1,6 @@
-# Rendering modes
+---
+title: Rendering modes
+---
 
 By default, Rakkas renders your page on the server and sends the rendered HTML to the client where the client-side application takes over and “hydrates” the page to make it interactive. When you use [client-side navigation](./navigation), only the code needed to render the new page will be fetched from the server (if it's not already in the cache) and the page will be rendered on the client. If you need new data to render the page, you fetch it in your [`load` function](./data-fetching), possibly sending one or more requests to your server ([API endpoints](./api-routes)) or other servers.
 
@@ -14,7 +16,7 @@ Please note that the placeholder nodes **will not be hydrated** so they cannot b
 
 In production mode, the placeholder HTML will be generated **once during the build** and the same HTML will be used for all pages. In development mode, it will be regenerated every time a page is requested.
 
-## Pre-rendering <a id="pre-rendering"/>
+## Pre-rendering
 
 Instead of generating on-demand, you can chose to render some of your routes upfront during the build which may speed up response times. It works by setting the `prerender` property in the configuration to an array of paths to be pre-rendered. During the build, Rakkas will render those pages into static HTML unless their `load` functions return `prerender: false`. Rakkas will also crawl the `a` and `area` elements in each page to discover more pages to pre-render unless the `load` function returns `crawl: false`.
 

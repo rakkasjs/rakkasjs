@@ -220,6 +220,7 @@ importers:
       "@types/react-dom": ^18.0.5
       cookie: ^0.5.0
       eslint: ^8.18.0
+      gray-matter: ^4.0.3
       hamburger-react: ^2.5.0
       install: ^0.13.0
       node-dev: ^7.4.3
@@ -229,6 +230,7 @@ importers:
       rakkasjs: workspace:*
       react: ^18.2.0
       react-dom: ^18.2.0
+      remark-frontmatter: ^4.0.1
       remark-gfm: ^3.0.1
       reprism: ^0.0.11
       sanitize.css: ^13.0.0
@@ -257,10 +259,12 @@ importers:
       "@types/react": 18.0.14
       "@types/react-dom": 18.0.5
       eslint: 8.18.0
+      gray-matter: 4.0.3
       install: 0.13.0
       node-dev: 7.4.3
       prettier: 2.7.1
       rakkasjs: link:../packages/rakkasjs
+      remark-frontmatter: 4.0.1
       remark-gfm: 3.0.1
       reprism: 0.0.11
       sirv: 2.0.2
@@ -1932,6 +1936,15 @@ packages:
     dependencies:
       normalize-path: 3.0.0
       picomatch: 2.3.1
+    dev: true
+
+  /argparse/1.0.10:
+    resolution:
+      {
+        integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==,
+      }
+    dependencies:
+      sprintf-js: 1.0.3
     dev: true
 
   /argparse/2.0.1:
@@ -4100,6 +4113,15 @@ packages:
     dependencies:
       reusify: 1.0.4
 
+  /fault/2.0.1:
+    resolution:
+      {
+        integrity: sha512-WtySTkS4OKev5JtpHXnib4Gxiurzh5NCGvWrFaZ34m6JehfTUhKZvn9njTfw48t6JumVQOmrKqpmGcdwxnhqBQ==,
+      }
+    dependencies:
+      format: 0.2.2
+    dev: true
+
   /fbjs/0.8.18:
     resolution:
       {
@@ -4226,6 +4248,14 @@ packages:
       {
         integrity: sha512-0sQoMh9s0BYsm+12Huy/rkKxVu4R1+r96YX5cG44rHV0pQ6iC3Q+mkoMFaGWObMFYQxCVT+ssG1ksneA2MI9KQ==,
       }
+    dev: true
+
+  /format/0.2.2:
+    resolution:
+      {
+        integrity: sha512-wzsgA6WOq+09wrU1tsJ09udeR/YZRaeArL9e1wPbFg3GG2yDnC2ldKpxs4xunpFF9DgqCqOIra3bc1HWrJ37Ww==,
+      }
+    engines: { node: ">=0.4.x" }
     dev: true
 
   /formdata-polyfill/4.0.10:
@@ -4630,6 +4660,19 @@ packages:
       {
         integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==,
       }
+    dev: true
+
+  /gray-matter/4.0.3:
+    resolution:
+      {
+        integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==,
+      }
+    engines: { node: ">=6.0" }
+    dependencies:
+      js-yaml: 3.14.1
+      kind-of: 6.0.3
+      section-matter: 1.0.0
+      strip-bom-string: 1.0.0
     dev: true
 
   /growly/1.3.0:
@@ -5539,6 +5582,17 @@ packages:
         integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==,
       }
 
+  /js-yaml/3.14.1:
+    resolution:
+      {
+        integrity: sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==,
+      }
+    hasBin: true
+    dependencies:
+      argparse: 1.0.10
+      esprima: 4.0.1
+    dev: true
+
   /js-yaml/4.1.0:
     resolution:
       {
@@ -5630,6 +5684,14 @@ packages:
       }
     dependencies:
       json-buffer: 3.0.0
+    dev: true
+
+  /kind-of/6.0.3:
+    resolution:
+      {
+        integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==,
+      }
+    engines: { node: ">=0.10.0" }
     dev: true
 
   /kleur/3.0.3:
@@ -6010,6 +6072,15 @@ packages:
       - supports-color
     dev: true
 
+  /mdast-util-frontmatter/1.0.0:
+    resolution:
+      {
+        integrity: sha512-7itKvp0arEVNpCktOET/eLFAYaZ+0cNjVtFtIPxgQ5tV+3i+D4SDDTjTzPWl44LT59PC+xdx+glNTawBdF98Mw==,
+      }
+    dependencies:
+      micromark-extension-frontmatter: 1.0.0
+    dev: true
+
   /mdast-util-gfm-autolink-literal/1.0.2:
     resolution:
       {
@@ -6227,6 +6298,17 @@ packages:
       micromark-util-symbol: 1.0.1
       micromark-util-types: 1.0.2
       uvu: 0.5.4
+    dev: true
+
+  /micromark-extension-frontmatter/1.0.0:
+    resolution:
+      {
+        integrity: sha512-EXjmRnupoX6yYuUJSQhrQ9ggK0iQtQlpi6xeJzVD5xscyAI+giqco5fdymayZhJMbIFecjnE2yz85S9NzIgQpg==,
+      }
+    dependencies:
+      fault: 2.0.1
+      micromark-util-character: 1.1.0
+      micromark-util-symbol: 1.0.1
     dev: true
 
   /micromark-extension-gfm-autolink-literal/1.0.3:
@@ -8029,6 +8111,18 @@ packages:
       rc: 1.2.8
     dev: true
 
+  /remark-frontmatter/4.0.1:
+    resolution:
+      {
+        integrity: sha512-38fJrB0KnmD3E33a5jZC/5+gGAC2WKNiPw1/fdXJvijBlhA7RCsvJklrYJakS0HedninvaCYW8lQGf9C918GfA==,
+      }
+    dependencies:
+      "@types/mdast": 3.0.10
+      mdast-util-frontmatter: 1.0.0
+      micromark-extension-frontmatter: 1.0.0
+      unified: 10.1.2
+    dev: true
+
   /remark-gfm/3.0.1:
     resolution:
       {
@@ -8299,6 +8393,17 @@ packages:
       }
     dependencies:
       loose-envify: 1.4.0
+
+  /section-matter/1.0.0:
+    resolution:
+      {
+        integrity: sha512-vfD3pmTzGpufjScBh50YHKzEu2lxBWhVEHsNGoEXmCmn2hKGfeNLYMzCJpe8cD7gqX7TJluOVpBkAequ6dgMmA==,
+      }
+    engines: { node: ">=4" }
+    dependencies:
+      extend-shallow: 2.0.1
+      kind-of: 6.0.3
+    dev: true
 
   /semiver/1.1.0:
     resolution:
@@ -8595,6 +8700,13 @@ packages:
       through: 2.3.8
     dev: true
 
+  /sprintf-js/1.0.3:
+    resolution:
+      {
+        integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==,
+      }
+    dev: true
+
   /stream-combiner/0.0.4:
     resolution:
       {
@@ -8764,6 +8876,14 @@ packages:
     engines: { node: ">=12" }
     dependencies:
       ansi-regex: 6.0.1
+    dev: true
+
+  /strip-bom-string/1.0.0:
+    resolution:
+      {
+        integrity: sha512-uCC2VHvQRYu+lMh4My/sFNmF2klFymLX1wHJeXnbEJERpV/ZsVuonzerjfrGpIGF7LBVa1O7i9kjiWvJiFck8g==,
+      }
+    engines: { node: ">=0.10.0" }
     dev: true
 
   /strip-bom/3.0.0:

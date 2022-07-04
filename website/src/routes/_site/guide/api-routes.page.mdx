@@ -1,6 +1,8 @@
-import { SampleViewer } from "./SampleViewer";
+---
+title: API routes
+---
 
-# API routes
+import { SampleViewer } from "./SampleViewer";
 
 You can build your backend API with Rakkas using **endpoints and middlewares** that are analogous to pages and layouts respectively.
 
@@ -70,13 +72,13 @@ A middleware function receives a `RakkasRequest` just like an endpoint handler a
 
 The `context` property is a way to pass data from a middleware function to nested middleware functions or endpoint handlers. For example, you can create a cookie parsing middleware like this:
 
-import middlewareExample from "$examples/middleware.ts?sample";
+import middlewareExample from "examples/middleware.ts?sample";
 
 <SampleViewer code={middlewareExample} />
 
 And you can access the cookies like this:
 
-import endpointExample from "$examples/endpoint.ts?sample";
+import endpointExample from "examples/endpoint.ts?sample";
 
 <SampleViewer code={endpointExample} />
 

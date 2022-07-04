@@ -1,6 +1,8 @@
-import { SampleViewer } from "./SampleViewer";
+---
+title: Client-side navigation
+---
 
-# Client-side navigation
+import { SampleViewer } from "./SampleViewer";
 
 Rakkas provides a `Link` component (in the `rakkasjs` package) for SPA-style client-side navigation. It takes exactly the same props as the HTML `<a>` element but intercepts user's click to handle the navigation without reloading the page.
 
@@ -8,13 +10,13 @@ Rakkas provides a `Link` component (in the `rakkasjs` package) for SPA-style cli
 
 Let's add client-side navigation to the previous example by replacing the `<a>` elements with `StyledLink` and by adding some inline styling for the active link. Notice how the page refreshes without a full reload now when you click on a link:
 
-import navlinkExample from "$examples/navlink/[userName].page.jsx?sample";
+import navlinkExample from "examples/navlink/[userName].page.jsx?sample";
 
 <SampleViewer code={navlinkExample} url="/examples/navlink/Fatih" />
 
 For **programmatic navigation**, you can use `history.back()`, `history.forward()` and `history.go()` to navigate back and forward in the browser history but _you can't_ use `history.pushState()` or `history.replaceState()` because Rakkas would have no way of knowing they were called. It provides the `navigate` function for this purpose:
 
-import navigateExample from "$examples/navigate/[userName].page.jsx?sample";
+import navigateExample from "examples/navigate/[userName].page.jsx?sample";
 
 <SampleViewer url="/examples/navigate/Fatih" code={navigateExample} />
 

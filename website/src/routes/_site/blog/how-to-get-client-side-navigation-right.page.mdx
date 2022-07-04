@@ -1,8 +1,9 @@
-import { BlogPostHeader } from "$lib/BlogPostHeader";
+---
+title: How to get client-side navigation right
+date: 2021-12-13
+---
 
-# How to get client-side navigation right
-
-<BlogPostHeader date="December 13, 2021" />
+import { BlogPostHeader } from "lib/BlogPostHeader";
 
 How many times have you ctrl-clicked (or cmd-clicked) on a link to open it in a new tab but it opened in the current tab or didn't open at all? How many times have you clicked on a link in a long document and when you clicked back it took you to the top of the document instead of where you had left? Client-side navigation bugs are so widespread that it's hard to believe the technique is almost 20 years old! So I decided to write down all the issues I've ever encountered and build [a library](https://github.com/cyco130/knave) that tries to solve them once and for all.
 

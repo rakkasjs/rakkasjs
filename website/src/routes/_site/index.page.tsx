@@ -1,11 +1,11 @@
-import { Logomark } from "$lib/Logomark";
-import { Logotype } from "$lib/Logotype";
+import { Logomark } from "lib/Logomark";
+import { Logotype } from "lib/Logotype";
 import { FC } from "react";
 import css from "./index.module.css";
 import { Link, Head } from "rakkasjs";
-import { ExternalIcon } from "$lib/ExternalIcon";
+import { ExternalIcon } from "lib/ExternalIcon";
 import { toc } from "./blog/toc";
-import { BlogPostHeader } from "$lib/BlogPostHeader";
+import { BlogPostHeader } from "lib/BlogPostHeader";
 
 function HomePage() {
 	return (

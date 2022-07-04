@@ -112,7 +112,7 @@ export async function loadRoute(
 	const promises = importers.map(async (importer) =>
 		importer().then(async (module) => [
 			module.default,
-			await module.default.preload?.(preloadContext),
+			await module.default?.preload?.(preloadContext),
 		]),
 	) as Promise<[Layout, PreloadResult | undefined]>[];
 

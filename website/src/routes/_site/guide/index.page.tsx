@@ -1,12 +1,12 @@
-import React from "react";
 import { Redirect } from "rakkasjs";
 import { toc } from "./toc";
 
-export default function GuideHomeRedirect() {
-	const first = toc[1];
-	if (typeof first === "string") {
-		throw new Error("Invalid TOC entry");
-	}
+console.log("Coming");
 
-	return <Redirect href={first.slug} />;
+export default function GuideHomeRedirect() {
+	const first = toc[0];
+
+	console.log(first);
+
+	return <Redirect href={"/guide/" + first.slug} />;
 }

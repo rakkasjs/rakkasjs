@@ -1,10 +1,10 @@
 import React, { forwardRef } from "react";
 import { Layout, Link, useLocation, Head } from "rakkasjs";
-import { Header } from "$lib/Header";
+import { Header } from "lib/Header";
 import css from "./layout.module.css";
 import { MDXProvider } from "@mdx-js/react";
 import "prism-themes/themes/prism-xonokai.css";
-import { ExternalIcon } from "$lib/ExternalIcon";
+import { ExternalIcon } from "lib/ExternalIcon";
 
 // TODO: Handle errors
 
