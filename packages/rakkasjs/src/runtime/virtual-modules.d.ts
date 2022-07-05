@@ -20,14 +20,10 @@ declare module "virtual:rakkasjs:server-page-routes" {
 		[
 			regexp: RegExp,
 			importers: [PageImporter, ...LayoutImporter[]],
-			guards: PageRouteGuard[],
+			guards: import("./page-types").PageRouteGuard[],
 			ids: string[],
 		]
 	>;
-
-	type PageRouteGuard = (
-		ctx: import("../features/use-query/implementation").PageContext,
-	) => boolean;
 
 	type PageImporter = () => Promise<PageModule>;
 	type LayoutImporter = () => Promise<LayoutModule>;

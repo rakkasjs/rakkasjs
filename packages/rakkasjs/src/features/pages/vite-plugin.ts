@@ -23,6 +23,7 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 	let routesRoot: string;
 	let isLayout: (filename: string) => boolean;
 	let isPage: (filename: string) => boolean;
+	let isGuard: (filename: string) => boolean;
 
 	async function generateRoutesModule(client?: boolean): Promise<string> {
 		const pageFiles = (await glob(routesRoot + pagePattern)).map((f) =>
@@ -157,11 +158,15 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 			routesRoot = config.root + "/src/routes";
 			isLayout = micromatch.matcher(pagePattern);
 			isPage = micromatch.matcher(layoutPattern);
+			isGuard = micromatch.matcher(guardPattern);
 		},
 
 		configureServer(server) {
 			server.watcher.addListener("all", async (e: string, fn: string) => {
-				if ((isPage(fn) || isLayout(fn)) && (e === "add" || e === "unlink")) {
+				if (
+					(isPage(fn) || isLayout(fn) || isGuard(fn)) &&
+					(e === "add" || e === "unlink")
+				) {
 					const serverModule = server.moduleGraph.getModuleById(
 						"virtual:rakkasjs:server-page-routes",
 					);

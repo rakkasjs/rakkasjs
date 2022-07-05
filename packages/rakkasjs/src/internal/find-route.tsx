@@ -1,4 +1,5 @@
 import { PageContext } from "../lib";
+import { PageRouteGuard } from "../runtime/page-types";
 
 export function findRoute<T extends [RegExp, ...unknown[]]>(
 	routes: T[],
@@ -9,12 +10,14 @@ export function findRoute<T extends [RegExp, ...unknown[]]>(
 		const re = route[0];
 		const match = path.match(re);
 		if (!match) continue;
+		const params = match.groups || {};
 
 		if (pageContext) {
-			const guards = route[2] as Array<(ctx: PageContext) => boolean>;
+			const guards = route[2] as Array<PageRouteGuard>;
 			let guarded = false;
+			const guardContext = { ...pageContext, params };
 			for (const guard of guards) {
-				if (!guard(pageContext)) {
+				if (!guard(guardContext)) {
 					guarded = true;
 					break;
 				}
@@ -27,7 +30,7 @@ export function findRoute<T extends [RegExp, ...unknown[]]>(
 
 		return {
 			route,
-			params: match.groups || {},
+			params,
 		};
 	}
 }

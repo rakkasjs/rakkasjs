@@ -77,3 +77,13 @@ export interface PreloadResult<M = Record<string, unknown>> {
 	/** Redirection */
 	redirect?: RedirectProps;
 }
+
+interface PageRouteGuardContext<P = Record<string, string>>
+	extends PageContext {
+	params: P;
+}
+
+/** Type for the default export of page guards */
+export type PageRouteGuard<P = Record<string, string>> = (
+	ctx: PageRouteGuardContext<P>,
+) => boolean;

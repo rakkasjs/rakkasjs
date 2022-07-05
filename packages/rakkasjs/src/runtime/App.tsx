@@ -105,7 +105,6 @@ export async function loadRoute(
 
 	const preloadContext: PreloadContext = {
 		...pageContext,
-		url,
 		params: found.params,
 	};
 
