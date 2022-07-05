@@ -18,17 +18,34 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 
 	const jsPattern = "mjs|js|ts|jsx|tsx";
 	const guardPattern = `/**/$guard.(${jsPattern})`;
+	const singlePageGuardPattern = `/**/*.guard.(${jsPattern})`;
 
 	let resolvedConfig: ResolvedConfig;
 	let routesRoot: string;
 	let isLayout: (filename: string) => boolean;
 	let isPage: (filename: string) => boolean;
 	let isGuard: (filename: string) => boolean;
+	let isSinglePageGuard: (filename: string) => boolean;
 
 	async function generateRoutesModule(client?: boolean): Promise<string> {
 		const pageFiles = (await glob(routesRoot + pagePattern)).map((f) =>
 			path.relative(resolvedConfig.root, f).replace(/\\/g, "/"),
 		);
+
+		let pageImporters = "";
+
+		for (const [i, pageFile] of pageFiles.entries()) {
+			pageImporters += `const p${i} = () => import(${JSON.stringify(
+				"/" + pageFile,
+			)});\n`;
+		}
+
+		let pageNames = "";
+		if (!client) {
+			for (const [i, pageFile] of pageFiles.entries()) {
+				pageNames += `const r${i} = ${JSON.stringify(pageFile)};\n`;
+			}
+		}
 
 		const layoutFiles = (await glob(routesRoot + layoutPattern))
 			.sort(/* Long to short */ (a, b) => b.length - a.length)
@@ -65,19 +82,22 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 			)};\n`;
 		}
 
-		let pageImporters = "";
+		const singlePageGuardFiles = (
+			await glob(routesRoot + singlePageGuardPattern)
+		).map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"));
 
-		for (const [i, pageFile] of pageFiles.entries()) {
-			pageImporters += `const p${i} = () => import(${JSON.stringify(
-				"/" + pageFile,
-			)});\n`;
-		}
+		let singlePageGuardImporters = "";
 
-		let pageNames = "";
-		if (!client) {
-			for (const [i, pageFile] of pageFiles.entries()) {
-				pageNames += `const r${i} = ${JSON.stringify(pageFile)};\n`;
-			}
+		const guardedPageIndices = new Set<number>();
+		for (const [, singlePageGuardFile] of singlePageGuardFiles.entries()) {
+			const baseName = /^(.*)guard\.(.*)$/.exec(singlePageGuardFile)![1];
+			const pageIndex = pageFiles.findIndex((f) => f.startsWith(baseName));
+			if (pageIndex < 0) continue;
+
+			singlePageGuardImporters += `import s${pageIndex} from ${JSON.stringify(
+				"/" + singlePageGuardFile,
+			)};\n`;
+			guardedPageIndices.add(pageIndex);
 		}
 
 		let exportStatement = "export default [\n";
@@ -105,7 +125,13 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 				"/" + baseName,
 			)}, [p${i}, ${layouts.map((li) => `l${li}`)}], [${guards.map(
 				(gi) => `g${gi}`,
-			)}]`;
+			)}`;
+
+			if (guardedPageIndices.has(i)) {
+				exportElement += `, s${i}`;
+			}
+
+			exportElement += "]";
 
 			// Server needs the file names to inject styles and prefetch links
 			if (!client) {
@@ -124,6 +150,7 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 			layoutNames,
 			pageImporters,
 			guardImporters,
+			singlePageGuardImporters,
 			pageNames,
 			exportStatement,
 		]
@@ -159,13 +186,17 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 			isLayout = micromatch.matcher(pagePattern);
 			isPage = micromatch.matcher(layoutPattern);
 			isGuard = micromatch.matcher(guardPattern);
+			isSinglePageGuard = micromatch.matcher(singlePageGuardPattern);
 		},
 
 		configureServer(server) {
 			server.watcher.addListener("all", async (e: string, fn: string) => {
+				const isGuardFile = isGuard(fn) || isSinglePageGuard(fn);
+
 				if (
-					(isPage(fn) || isLayout(fn) || isGuard(fn)) &&
-					(e === "add" || e === "unlink")
+					((isPage(fn) || isLayout(fn) || isGuardFile) &&
+						(e === "add" || e === "unlink")) ||
+					(isGuardFile && e === "change")
 				) {
 					const serverModule = server.moduleGraph.getModuleById(
 						"virtual:rakkasjs:server-page-routes",

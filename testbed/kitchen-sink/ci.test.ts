@@ -575,8 +575,17 @@ function testCase(title: string, dev: boolean, command?: string) {
 				document.body.innerText.includes("Not Found"),
 			);
 
-			await page.goto(TEST_HOST + "/guard?allow");
+			await page.goto(TEST_HOST + "/guard?allow-outer");
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Not Found"),
+			);
 
+			await page.goto(TEST_HOST + "/guard?allow-inner");
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Not Found"),
+			);
+
+			await page.goto(TEST_HOST + "/guard?allow-outer&allow-inner");
 			await page.waitForFunction(() =>
 				document.body.innerText.includes("Found!"),
 			);
