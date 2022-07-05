@@ -52,7 +52,7 @@ export const Header: FC = () => {
 	}, [current.href]);
 
 	const nav = (
-		<nav>
+		<nav className={css.nav}>
 			<ul>
 				<li>
 					<StyledLink
@@ -71,16 +71,6 @@ export const Header: FC = () => {
 						onCompareUrls={(url) => url.pathname.startsWith("/guide")}
 					>
 						Guide
-					</StyledLink>
-				</li>
-				<li>
-					<StyledLink
-						href="/reference"
-						activeClass={css.activeLink}
-						pendingClass={css.nextLink}
-						onCompareUrls={(url) => url.pathname.startsWith("/reference")}
-					>
-						Reference
 					</StyledLink>
 				</li>
 				<li>
@@ -132,7 +122,7 @@ export const Header: FC = () => {
 				</Link>
 			</span>
 
-			<span className={css.nav}>{nav}</span>
+			<span className={css.topNav}>{nav}</span>
 
 			<ClientOnly fallback={<span className={css.docSearchPlaceholder} />}>
 				<DocSearch

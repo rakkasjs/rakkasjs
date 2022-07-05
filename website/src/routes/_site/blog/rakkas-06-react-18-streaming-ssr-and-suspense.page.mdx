@@ -74,7 +74,7 @@ Of course API routes are still available to allow you to implement REST, GraphQL
 
 ### Preloading data
 
-Even though we said that in Rakkas 0.6 pages and layouts are not very special in terms of data fetching anymore, you can still have a `preload` function to start fetching before rendering early to avoid late discovery of data dependencies and waterfalls. `preload` also provides a way to inject SEO-critical title and meta tags into the page.
+Even though we said that in Rakkas 0.6 pages and layouts are not very special in terms of data fetching anymore, you can still have a `preload` function to start fetching early to avoid late discovery of data dependencies and waterfalls. `preload` also provides a way to inject SEO-critical title and meta tags into the page even when streaming.
 
 ## Streaming SSR
 
@@ -88,7 +88,7 @@ The new Rakkas version is built on [HatTip](https://github.com/hattipjs/hattip),
 
 ## Other features
 
-If this is the first time you hear of Rakkas, it has other cool features like lightning-fast development server (courtesy of Vite), truly localizable URLs, nested layouts, and more.
+If this is the first time you hear of Rakkas, it has other cool features like lightning-fast development server (courtesy of Vite), truly localizable URLs, nested layouts, out-of-the-box MDX support, and more.
 
 Rakkas uses experimental and/or beta features of React and Vite. As such, expect breaking changes until we hit 1.0. But [go ahead and give it a try](https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx) and share your thoughts. [Star us on Github](https://github.com/rakkasjs/rakkasjs/stargazers) and [talk about Rakkas](https://twitter.com/intent/tweet?text=I%20gave%20%23RakkasJS%20a%20try!&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs) if you like what you see. Also feel free to [follow me on Twitter](https://twitter.com/cyco130) for updates.
 

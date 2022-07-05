@@ -35,6 +35,7 @@ const sections: Array<[section: string, slugs: string[]]> = [
 			"use-server-side-query",
 			"refetching",
 			"error-handling",
+			"preload-function",
 		],
 	],
 	[
@@ -43,9 +44,9 @@ const sections: Array<[section: string, slugs: string[]]> = [
 		[
 			// Slugs
 			"configuration",
-			"common-hooks",
 			"server-side-hooks",
 			"client-side-hooks",
+			"common-hooks",
 			"environment-variables",
 		],
 	],
@@ -67,7 +68,8 @@ const sections: Array<[section: string, slugs: string[]]> = [
 		[
 			// Slugs
 			"api-routes",
-			"seo-and-rendering-modes",
+			"route-guards",
+			"seo",
 			"localized-routes",
 		],
 	],
