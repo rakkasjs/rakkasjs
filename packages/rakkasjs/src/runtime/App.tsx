@@ -20,13 +20,14 @@ export function App() {
 	const lastRoute = useContext(RouteContext);
 	const pageContext = useContext(IsomorphicContext);
 
+	pageContext.url = new URL(url);
+
 	if ("error" in lastRoute) {
 		throw lastRoute.error;
 	}
 
-	if (!lastRoute.last || lastRoute.last.pathname !== url.pathname) {
-		// TODO: Error handling
-		throw loadRoute(url, lastRoute.found, false, pageContext)
+	if (!lastRoute.last || lastRoute.last.pathname !== pageContext.url.pathname) {
+		throw loadRoute(pageContext, lastRoute.found, false)
 			.then((route) => {
 				lastRoute.last = route;
 				lastRoute.onRendered?.();
@@ -57,10 +58,9 @@ interface RouteContextContent {
 }
 
 export async function loadRoute(
-	url: URL,
+	pageContext: PageContext,
 	lastFound: RouteContextContent["found"],
 	try404: boolean,
-	pageContext: PageContext,
 ) {
 	let found = lastFound;
 
@@ -70,7 +70,7 @@ export async function loadRoute(
 			: // We should dynamically import in dev to allow hot reloading
 			  (await import("virtual:rakkasjs:client-page-routes")).default;
 
-		let pathname = url.pathname;
+		let pathname = pageContext.url.pathname;
 		found = findRoute(routes, pathname, pageContext);
 
 		while (!found) {
@@ -128,7 +128,11 @@ export async function loadRoute(
 
 	let app = components.reduce(
 		(prev, Component) => (
-			<Component url={url} params={found!.params} meta={preloadedData}>
+			<Component
+				url={pageContext.url}
+				params={found!.params}
+				meta={preloadedData}
+			>
 				{prev}
 			</Component>
 		),
@@ -150,7 +154,7 @@ export async function loadRoute(
 	);
 
 	return {
-		pathname: url.pathname,
+		pathname: pageContext.url.pathname,
 		app,
 	};
 }

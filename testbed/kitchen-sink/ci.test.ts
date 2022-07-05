@@ -589,6 +589,11 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.waitForFunction(() =>
 				document.body.innerText.includes("Found!"),
 			);
+
+			await page.goto(TEST_HOST + "/guard?allow-outer&rewrite");
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Rewritten!"),
+			);
 		});
 	});
 }
