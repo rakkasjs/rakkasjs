@@ -19,8 +19,8 @@
 		"vitest": "^0.16.0"
 	},
 	"dependencies": {
-		"vite": "^3.0.0-beta.6",
-		"@vitejs/plugin-react": "^2.0.0-beta.0"
+		"vite": "^3.0.0-beta.9",
+		"@vitejs/plugin-react": "^2.0.0-beta.1"
 	},
 	"--": "Uncomment the next option to test against a local Vite repo",
 	"--pnpm": {

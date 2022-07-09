@@ -49,18 +49,19 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 				],
 
 				ssr: {
-					external: [
-						"react-dom/server.browser",
-						"virtual:rakkasjs:client-manifest",
-						"virtual:rakkasjs:client-page-routes",
-						"virtual:rakkasjs:api-routes",
-						"virtual:rakkasjs:run-server-side:manifest",
-						"virtual:rakkasjs:server-page-routes",
-						"virtual:rakkasjs:error-page",
-					],
+					external: ["react-dom/server.browser"],
 					noExternal: ["rakkasjs"],
 					optimizeDeps: {
-						exclude: ["rakkasjs"],
+						exclude: [
+							"rakkasjs",
+							"virtual:rakkasjs:client-manifest",
+							"virtual:rakkasjs:client-page-routes",
+							"virtual:rakkasjs:api-routes",
+							"virtual:rakkasjs:run-server-side:manifest",
+							"virtual:rakkasjs:server-page-routes",
+							"virtual:rakkasjs:error-page",
+							"@vavite/expose-vite-dev-server",
+						],
 					},
 				},
 

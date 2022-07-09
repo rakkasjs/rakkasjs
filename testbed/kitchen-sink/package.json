@@ -21,7 +21,7 @@
 		"puppeteer": "^15.2.0",
 		"rakkasjs": "workspace:*",
 		"typescript": "^4.7.4",
-		"vite": "^3.0.0-beta.6"
+		"vite": "^3.0.0-beta.9"
 	},
 	"dependencies": {
 		"@types/react": "^18.0.14",
