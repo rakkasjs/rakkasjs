@@ -7,6 +7,7 @@ import { ClientHooks } from "./client-hooks";
 import featureHooks from "./feature-client-hooks";
 import { IsomorphicContext } from "./isomorphic-context";
 import ErrorComponent from "virtual:rakkasjs:error-page";
+import commonHooks from "virtual:rakkasjs:common-hooks";
 
 export interface StartClientOptions {
 	defaultQueryOptions?: UseQueryOptions;
@@ -32,6 +33,7 @@ export async function startClient(options: StartClientOptions = {}) {
 	for (const hooks of clientHooks) {
 		hooks.extendPageContext?.(pageContext);
 	}
+	commonHooks.extendPageContext?.(pageContext);
 
 	let app = (
 		<IsomorphicContext.Provider value={pageContext}>
@@ -44,6 +46,10 @@ export async function startClient(options: StartClientOptions = {}) {
 		if (hooks.wrapApp) {
 			app = hooks.wrapApp(app);
 		}
+	}
+
+	if (commonHooks.wrapApp) {
+		app = commonHooks.wrapApp(app);
 	}
 
 	const route = await loadRoute(pageContext, undefined, true).catch((error) => {

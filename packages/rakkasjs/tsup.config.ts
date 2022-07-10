@@ -56,6 +56,7 @@ export default defineConfig([
 		shims: false,
 		external: [
 			"virtual:rakkasjs:hattip-entry",
+			"virtual:rakkasjs:common-hooks",
 			"virtual:rakkasjs:api-routes",
 			"virtual:rakkasjs:server-page-routes",
 			"virtual:rakkasjs:client-page-routes",
@@ -82,6 +83,7 @@ export default defineConfig([
 		shims: false,
 		external: [
 			"virtual:rakkasjs:hattip-entry",
+			"virtual:rakkasjs:common-hooks",
 			"virtual:rakkasjs:api-routes",
 			"virtual:rakkasjs:server-page-routes",
 			"virtual:rakkasjs:client-page-routes",

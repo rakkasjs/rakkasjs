@@ -68,6 +68,12 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 			resolveName: false,
 		}),
 		virtualDefaultEntry({
+			entry: "/src/common-hooks",
+			virtualName: "common-hooks",
+			defaultContent: DEFAULT_COMMON_HOOKS_CONTENTS,
+			resolveName: false,
+		}),
+		virtualDefaultEntry({
 			entry: "/src/routes/$error",
 			virtualName: "error-page",
 			defaultContent: DEFAULT_ERROR_PAGE_CONTENTS,
@@ -91,6 +97,10 @@ const DEFAULT_HATTIP_ENTRY_CONTENTS = `
 const DEFAULT_CLIENT_ENTRY_CONTENTS = `
 	import { startClient } from "rakkasjs";
 	startClient();
+`;
+
+const DEFAULT_COMMON_HOOKS_CONTENTS = `
+	export default {};
 `;
 
 const DEFAULT_ERROR_PAGE_CONTENTS = `

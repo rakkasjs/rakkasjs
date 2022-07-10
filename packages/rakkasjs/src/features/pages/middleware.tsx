@@ -17,6 +17,7 @@ import {
 } from "../../runtime/isomorphic-context";
 import { PageContext } from "../use-query/implementation";
 import { Default404Page } from "./Default404Page";
+import commonHooks from "virtual:rakkasjs:common-hooks";
 
 export default async function doRenderPageRoute(
 	ctx: RequestContext,
@@ -36,6 +37,7 @@ export default async function doRenderPageRoute(
 	for (const hook of pageHooks) {
 		hook?.extendPageContext?.(pageContext);
 	}
+	commonHooks.extendPageContext?.(pageContext);
 
 	let found = findRoute(routes, pathname, pageContext);
 
@@ -113,6 +115,10 @@ export default async function doRenderPageRoute(
 		if (hooks?.wrapApp) {
 			app = hooks.wrapApp(app);
 		}
+	}
+
+	if (commonHooks.wrapApp) {
+		app = commonHooks.wrapApp(app);
 	}
 
 	let resolveRenderPromise: () => void;
