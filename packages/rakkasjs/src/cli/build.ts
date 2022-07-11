@@ -4,6 +4,7 @@ import { version } from "../../package.json";
 import pico from "picocolors";
 import { doRender } from "./render";
 import { cleanOptions, GlobalCLIOptions } from ".";
+import { RakkasAdapter } from "../vite-plugin/adapters";
 
 export async function build(
 	root: string,
@@ -13,7 +14,9 @@ export async function build(
 
 	let config: ResolvedConfig;
 	let total: number;
+	let viteSteps: number;
 	let paths: string[];
+	let adapter: RakkasAdapter;
 
 	function logStep(index: number, name: string) {
 		config.logger.info(
@@ -47,9 +50,13 @@ export async function build(
 						" 💃",
 				);
 
-				total = config.buildSteps?.length || 1;
+				total = viteSteps = config.buildSteps?.length || 1;
 				paths = (config as any).api?.rakkas?.prerender || [];
 				if (paths.length) {
+					total += 1;
+				}
+				adapter = (config as any).api?.rakkas?.adapter as RakkasAdapter;
+				if (adapter.bundle) {
 					total += 1;
 				}
 			},
@@ -60,8 +67,15 @@ export async function build(
 		},
 	);
 
+	let step = viteSteps! + 1;
+
 	if (paths!.length) {
-		logStep(total!, "Prerendering static routes");
+		logStep(step++, "Prerendering static routes");
 		await doRender(config!);
+	}
+
+	if (adapter!.bundle) {
+		logStep(step++, `Bundling for ${adapter!.name}`);
+		await adapter!.bundle(config!.root);
 	}
 }

@@ -1,8 +1,10 @@
 import { spawn } from "child_process";
 import { Plugin } from "vite";
+import { RakkasAdapter } from "./adapters";
 
 export interface InjectConfigOptions {
 	prerender: string[];
+	adapter: RakkasAdapter;
 }
 
 export function injectConfig(options: InjectConfigOptions): Plugin {
@@ -87,6 +89,7 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 				api: {
 					rakkas: {
 						prerender: options.prerender,
+						adapter: options.adapter,
 					},
 				},
 			};

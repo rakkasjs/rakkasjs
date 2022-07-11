@@ -15,10 +15,15 @@ import { load } from "cheerio";
 const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 
 if (import.meta.env.TEST_HOST) {
-	testCase("running server", process.env.NODE_ENV !== "production");
+	testCase("Running on existing server", process.env.NODE_ENV !== "production");
 } else {
-	testCase("development mode", true, "pnpm dev");
-	testCase("production mode", false, "pnpm build && pnpm start");
+	testCase("Development Mode", true, "pnpm dev");
+	testCase("Production Mode", false, "pnpm build && pnpm start");
+	testCase(
+		"Miniflare",
+		false,
+		"miniflare -m dist/server/cloudflare-workers-bundle.js -p 3000",
+	);
 }
 
 const browser = await puppeteer.launch({

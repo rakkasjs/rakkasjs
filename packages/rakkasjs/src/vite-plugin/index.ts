@@ -13,26 +13,40 @@ import { virtualDefaultEntry } from "./virtual-default-entry";
 import apiRoutes from "../features/api-routes/vite-plugin";
 import pageRoutes from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
+import { adapters, RakkasAdapter } from "./adapters";
 
 export interface RakkasOptions {
-	/** File extensions for pages and layouts @default ["jsx","tsx"] */
-	pageExtensions?: string[];
 	/** Options passed to @vite/plugin-react */
 	react?: ReactPluginOptions;
+	/** File extensions for pages and layouts @default ["jsx","tsx"] */
+	pageExtensions?: string[];
 	/**
 	 * Paths to start crawling when prerendering static pages.
-	 * `true` is the same as `["/"]` a nd `false` is the same as `[]`.
+	 * `true` is the same as `["/"]` and `false` is the same as `[]`.
 	 * @default false
 	 */
 	prerender?: string[] | boolean;
+	adapter?:
+		| "node"
+		| "cloudflare-workers"
+		| "vercel"
+		| "vercel-edge"
+		| "netlify"
+		| "netlify-edge"
+		| "deno"
+		| RakkasAdapter;
 }
 
 export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
-	let { prerender = [] } = options;
+	let { prerender = [], adapter = "node" } = options;
 	if (prerender === true) {
 		prerender = ["/"];
 	} else if (prerender === false) {
 		prerender = [];
+	}
+
+	if (typeof adapter === "string") {
+		adapter = adapters[adapter];
 	}
 
 	return [
@@ -46,7 +60,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		...react(options.react),
 
 		preventViteBuild(),
-		injectConfig({ prerender }),
+		injectConfig({ prerender, adapter }),
 		apiRoutes(),
 		pageRoutes({
 			pageExtensions: options.pageExtensions,
