@@ -61,7 +61,7 @@ interface UseMutationSuccessResult<T, V> {
 	reset(): void;
 }
 
-type UseMutationResult<T, V> =
+export type UseMutationResult<T, V> =
 	| UseMutationIdleResult<T, V>
 	| UseMutationLoadingResult<T, V>
 	| UseMutationErrorResult<T, V>

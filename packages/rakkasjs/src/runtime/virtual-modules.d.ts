@@ -66,6 +66,7 @@ declare module "virtual:rakkasjs:run-server-side:manifest" {
 				(
 					closure: any,
 					context: import("../lib").ServerSideContext,
+					vars?: any,
 				) => Promise<any>
 			>;
 		}>

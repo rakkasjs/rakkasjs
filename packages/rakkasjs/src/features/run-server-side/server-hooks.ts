@@ -15,14 +15,20 @@ const runServerSideServerHooks: ServerHooks = {
 			const [, , , moduleId, counter, ...closure] = ctx.url.pathname.split("/");
 
 			let closureContents: unknown[];
+			let vars: unknown;
 
 			try {
 				if (ctx.method === "POST") {
 					const text = await ctx.request.text();
-					closureContents = parse(text) as unknown[];
+					const data = parse(text) as [unknown[], unknown];
+					if (!Array.isArray(data)) {
+						return new Response("Parse error", { status: 400 });
+					}
+					closureContents = data[0];
 					if (!Array.isArray(closureContents)) {
 						return new Response("Parse error", { status: 400 });
 					}
+					vars = data[1];
 				} else {
 					closure.length = closure.length - 1;
 					closureContents = closure.map((s) => parse(decodeBase64(s)));
@@ -44,7 +50,7 @@ const runServerSideServerHooks: ServerHooks = {
 			const fn = module.$runServerSide$[Number(counter)];
 
 			// TODO: Server-side context
-			const result = await fn(closureContents, ctx);
+			const result = await fn(closureContents, ctx, vars);
 
 			return new Response(devalue(result));
 		},

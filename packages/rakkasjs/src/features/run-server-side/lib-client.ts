@@ -2,13 +2,11 @@ import { QueryResult, useQuery } from "../use-query/lib";
 import { stringify } from "@brillout/json-s";
 import { ServerSideFunction, UseServerSideQueryOptions } from "./lib-common";
 import type { RequestContext } from "@hattip/compose";
-
-function runSSMImpl(desc: [moduleId: string, counter: number, closure: any[]]) {
-	const [moduleId, counter, closure] = desc;
-	const stringified = closure.map((x) => stringify(x));
-
-	return sendRequest(moduleId, counter, stringified, true);
-}
+import {
+	useMutation,
+	UseMutationOptions,
+	UseMutationResult,
+} from "../use-mutation/lib";
 
 function runSSQImpl(
 	_: RequestContext,
@@ -39,11 +37,28 @@ function useSSQImpl(
 	);
 }
 
+function runSSMImpl(
+	desc: [moduleId: string, counter: number, closure: any[], vars?: any],
+) {
+	const [moduleId, counter, closure, vars] = desc;
+	const stringified = closure.map((x) => stringify(x));
+
+	return sendRequest(moduleId, counter, stringified, true, vars);
+}
+
+function useSSMImpl(
+	desc: [moduleId: string, counter: number, closure: any[]],
+	options?: UseMutationOptions<any, any>,
+) {
+	return useMutation((vars) => runSSMImpl([...desc, vars]), options);
+}
+
 function sendRequest(
 	moduleId: string,
 	counter: number,
 	stringified: string[],
 	usePostMethod: boolean,
+	vars?: any,
 ) {
 	let response: Promise<Response>;
 
@@ -55,7 +70,12 @@ function sendRequest(
 				counter,
 			{
 				method: "POST",
-				body: "[" + stringified.join(",") + "]",
+				body:
+					"[[" +
+					stringified.join(",") +
+					"]" +
+					(vars !== undefined ? "," + stringify(vars) : "") +
+					"]",
 			},
 		);
 	} else {
@@ -86,10 +106,6 @@ function sendRequest(
 	});
 }
 
-export const runServerSideMutation: <T>(
-	fn: ServerSideFunction<T>,
-) => Promise<T> = runSSMImpl as any;
-
 export const useServerSideQuery: <T>(
 	fn: ServerSideFunction<T>,
 	options?: UseServerSideQueryOptions,
@@ -100,8 +116,18 @@ export const runServerSideQuery: <T>(
 	fn: ServerSideFunction<T>,
 ) => Promise<T> = runSSQImpl as any;
 
+export const runServerSideMutation: <T>(
+	fn: ServerSideFunction<T>,
+) => Promise<T> = runSSMImpl as any;
+
+export const useServerSideMutation: <T, V>(
+	fn: (context: RequestContext, vars: V) => T | Promise<T>,
+	options?: UseMutationOptions<T, V>,
+) => UseMutationResult<T, V> = useSSMImpl as any;
+
 export {
+	runServerSideQuery as runSSQ,
 	useServerSideQuery as useSSQ,
 	runServerSideMutation as runSSM,
-	runServerSideQuery as runSSQ,
+	useServerSideMutation as useSSM,
 };

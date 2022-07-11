@@ -7,6 +7,8 @@ export {
 	runServerSideQuery,
 	runSSM,
 	runServerSideMutation,
+	useSSM,
+	useServerSideMutation,
 } from "../features/run-server-side/lib-client";
 
 export { startClient } from "../runtime/client-entry";

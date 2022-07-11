@@ -7,6 +7,7 @@ import {
 } from "./lib-common";
 import devalue from "devalue";
 import { RequestContext } from "@hattip/compose";
+import { UseMutationOptions, UseMutationResult } from "../use-mutation/lib";
 
 function runSSQImpl(
 	ctx: RequestContext,
@@ -90,6 +91,13 @@ export const runServerSideMutation: <T>(
 	throw new Error("runServerSideMutation is not available on the server-side");
 };
 
+export const useServerSideMutation: <T, V>(
+	fn: (context: RequestContext, vars: V) => T | Promise<T>,
+	options?: UseMutationOptions<T, V>,
+) => UseMutationResult<T, V> = (() => {
+	// No op
+}) as any;
+
 export const useServerSideQuery: <T>(
 	fn: ServerSideFunction<T>,
 	options?: UseServerSideQueryOptions,
@@ -101,9 +109,10 @@ export const runServerSideQuery: <T>(
 ) => Promise<T> = runSSQImpl as any;
 
 export {
+	runServerSideQuery as runSSQ,
 	useServerSideQuery as useSSQ,
 	runServerSideMutation as runSSM,
-	runServerSideQuery as runSSQ,
+	useServerSideMutation as useSSM,
 };
 
 function encodeBase64(str: string) {

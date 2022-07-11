@@ -474,6 +474,25 @@ function testCase(title: string, dev: boolean, command?: string) {
 			);
 		});
 
+		test("runs useServerSideMutation on the server", async () => {
+			await page.goto(TEST_HOST + "/use-ssm");
+			await page.waitForSelector(".hydrated");
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Not fetched"),
+			);
+
+			const btn: ElementHandle<HTMLButtonElement> | null =
+				await page.waitForSelector("button");
+			expect(btn).toBeTruthy();
+
+			await btn!.click();
+
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Computed on the server: 14"),
+			);
+		});
+
 		test("handles 404", async () => {
 			const response = await fetch(TEST_HOST + "/not-found");
 			expect(response.status).toBe(404);

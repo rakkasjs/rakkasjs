@@ -63,6 +63,30 @@ const tests: Test[] = [
 			]
 		`,
 	},
+	{
+		message: "passes useSSM vars",
+		input: `
+			import { useSSM } from "rakkasjs";
+
+			function x(foo) {
+				useSSM((ctx, vars) => { console.log(vars, foo) });
+			}
+		`,
+		output: `
+			import { useSSM } from "rakkasjs";
+
+			function x(foo) {
+				useSSM(["abc123", 0, [foo], $runServerSide$[0]]);
+			}
+
+			export const $runServerSide$ = [
+				async ($runServerSideClosure$, ctx, vars) => {
+					let [foo] = $runServerSideClosure$;
+					console.log(vars, foo)
+				},
+			]
+		`,
+	},
 ];
 
 for (const test of tests) {
