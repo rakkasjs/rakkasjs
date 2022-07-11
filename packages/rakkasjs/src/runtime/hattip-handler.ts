@@ -3,6 +3,7 @@ import { ReactElement } from "react";
 import renderApiRoute from "../features/api-routes/middleware";
 import renderPageRoute from "../features/pages/middleware";
 import { PageContext } from "../lib";
+import { BeforeRouteResult } from "./common-hooks";
 import serverHooks from "./feature-server-hooks";
 
 export interface ServerHooks {
@@ -15,10 +16,11 @@ export interface ServerHooks {
 }
 
 export interface PageHooks {
+	extendPageContext?(ctx: PageContext): void | Promise<void>;
+	beforeRoute?(ctx: PageContext, url: URL): BeforeRouteResult;
 	wrapApp?(app: ReactElement): ReactElement;
 	emitToDocumentHead?(): string;
 	emitBeforeSsrChunk?(): string | undefined;
-	extendPageContext?(ctx: PageContext): void | Promise<void>;
 }
 
 export function createRequestHandler(userHooks: ServerHooks = {}) {

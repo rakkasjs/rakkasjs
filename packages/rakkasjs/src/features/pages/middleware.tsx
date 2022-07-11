@@ -1,11 +1,11 @@
 /// <reference types="vite/client" />
 
-import React, { Fragment, StrictMode, Suspense } from "react";
+import React, { StrictMode, Suspense } from "react";
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { App, RouteContext } from "../../runtime/App";
 import isBot from "isbot-fast";
-import { findRoute } from "../../internal/find-route";
+import { findRoute, RouteMatch } from "../../internal/find-route";
 import {
 	ResponseContext,
 	ResponseContextProps,
@@ -18,6 +18,14 @@ import {
 import { PageContext } from "../use-query/implementation";
 import { Default404Page } from "./Default404Page";
 import commonHooks from "virtual:rakkasjs:common-hooks";
+import {
+	LayoutImporter,
+	PageImporter,
+	PageRouteGuard,
+} from "../../runtime/page-types";
+import { BeforeRouteResult } from "../../lib";
+
+const pageContextMap = new WeakMap<Request, PageContext>();
 
 export default async function doRenderPageRoute(
 	ctx: RequestContext,
@@ -32,36 +40,82 @@ export default async function doRenderPageRoute(
 		url: { pathname },
 	} = ctx;
 
-	const pageContext: PageContext = { url: ctx.url } as any;
+	let pageContext = pageContextMap.get(ctx.request);
 
-	for (const hook of pageHooks) {
-		hook?.extendPageContext?.(pageContext);
+	if (!pageContext) {
+		pageContext = { url: ctx.url } as any as PageContext;
+
+		for (const hook of pageHooks) {
+			hook?.extendPageContext?.(pageContext);
+		}
+		commonHooks.extendPageContext?.(pageContext);
+
+		pageContextMap.set(ctx.request, pageContext);
 	}
-	commonHooks.extendPageContext?.(pageContext);
 
-	let found = findRoute(routes, pathname, pageContext);
+	let found:
+		| RouteMatch<
+				[
+					regexp: RegExp,
+					importers: [PageImporter, ...LayoutImporter[]],
+					guards: PageRouteGuard<Record<string, string>>[],
+					ids: string[],
+				]
+		  >
+		| undefined;
 
-	if (!found && !ctx.notFound) return;
+	const beforeRouteHandlers: Array<
+		(ctx: PageContext, url: URL) => BeforeRouteResult
+	> = [
+		...pageHooks.map((hook) => hook?.beforeRoute),
+		commonHooks.beforeRoute,
+	].filter(Boolean) as any;
 
-	while (!found) {
-		if (!pathname.endsWith("/")) {
-			pathname += "/";
+	if (ctx.notFound) {
+		do {
+			if (!pathname.endsWith("/")) {
+				pathname += "/";
+			}
+
+			found = findRoute(routes, pathname + "%24404");
+			if (found) {
+				break;
+			}
+
+			if (pathname === "/") {
+				found = {
+					params: {},
+					route: [/^\/$/, [async () => ({ default: Default404Page })], [], []],
+				};
+			}
+
+			// Throw away the last path segment
+			pathname = pathname.split("/").slice(0, -2).join("/") || "/";
+		} while (!found);
+	} else {
+		for (const hook of beforeRouteHandlers) {
+			const result = hook(pageContext, pageContext.url);
+
+			if (!result) continue;
+
+			if ("redirect" in result) {
+				const location = String(result.redirect);
+				return new Response(redirectBody(location), {
+					status: result.status ?? result.permanent ? 301 : 302,
+					headers: {
+						location: new URL(location, ctx.url.origin).href,
+						"content-type": "text/html; charset=utf-8",
+					},
+				});
+			} else {
+				// Rewrite
+				pageContext.url = new URL(result.rewrite, pageContext.url);
+			}
 		}
+		pathname = pageContext.url.pathname;
 
-		found = findRoute(routes, pathname + "%24404");
-		if (found) {
-			break;
-		}
-
-		if (pathname === "/") {
-			found = {
-				params: {},
-				route: [/^\/$/, [async () => ({ default: Default404Page })], [], []],
-			};
-		}
-
-		// Throw away the last path segment
-		pathname = pathname.split("/").slice(0, -2).join("/") || "/";
+		found = findRoute(routes, pathname, pageContext);
+		if (!found) return;
 	}
 
 	let redirected: boolean | undefined;
@@ -101,13 +155,11 @@ export default async function doRenderPageRoute(
 	}
 
 	let app = (
-		<>
-			<ServerSideContext.Provider value={ctx}>
-				<IsomorphicContext.Provider value={pageContext}>
-					<App />
-				</IsomorphicContext.Provider>
-			</ServerSideContext.Provider>
-		</>
+		<ServerSideContext.Provider value={ctx}>
+			<IsomorphicContext.Provider value={pageContext}>
+				<App beforeRouteHandlers={beforeRouteHandlers} />
+			</IsomorphicContext.Provider>
+		</ServerSideContext.Provider>
 	);
 
 	const reversePageHooks = [...pageHooks].reverse();

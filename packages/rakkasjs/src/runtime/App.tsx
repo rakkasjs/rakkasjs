@@ -9,10 +9,19 @@ import { findRoute, RouteMatch } from "../internal/find-route";
 import { Layout, PreloadContext, PreloadResult } from "./page-types";
 import prodRoutes from "virtual:rakkasjs:client-page-routes";
 import { Default404Page } from "../features/pages/Default404Page";
-import { PageContext, Redirect, ResponseHeaders } from "../lib";
+import {
+	BeforeRouteResult,
+	PageContext,
+	Redirect,
+	ResponseHeaders,
+} from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 
-export function App() {
+export interface AppProps {
+	beforeRouteHandlers: Array<(ctx: PageContext, url: URL) => BeforeRouteResult>;
+}
+
+export function App(props: AppProps) {
 	const { current: url } = useLocation();
 
 	// TODO: Warn when a page doesn't export a default component
@@ -27,7 +36,12 @@ export function App() {
 	}
 
 	if (!lastRoute.last || lastRoute.last.pathname !== pageContext.url.pathname) {
-		throw loadRoute(pageContext, lastRoute.found, false)
+		throw loadRoute(
+			pageContext,
+			lastRoute.found,
+			false,
+			props.beforeRouteHandlers,
+		)
 			.then((route) => {
 				lastRoute.last = route;
 				lastRoute.onRendered?.();
@@ -61,10 +75,35 @@ export async function loadRoute(
 	pageContext: PageContext,
 	lastFound: RouteContextContent["found"],
 	try404: boolean,
+	beforeRouteHandlers: Array<(ctx: PageContext, url: URL) => BeforeRouteResult>,
 ) {
 	let found = lastFound;
+	const { pathname: originalPathname } = pageContext.url;
 
 	if (!found) {
+		for (const hook of beforeRouteHandlers) {
+			const result = hook(pageContext, pageContext.url);
+
+			if (!result) continue;
+
+			if ("redirect" in result) {
+				const location = String(result.redirect);
+				return {
+					pathname: originalPathname,
+					app: (
+						<Redirect
+							href={location}
+							status={result.status}
+							permanent={result.permanent}
+						/>
+					),
+				};
+			} else {
+				// Rewrite
+				pageContext.url = new URL(result.rewrite, pageContext.url);
+			}
+		}
+
 		const routes = import.meta.env.PROD
 			? prodRoutes
 			: // We should dynamically import in dev to allow hot reloading
@@ -76,7 +115,7 @@ export async function loadRoute(
 		while (!found) {
 			if (!try404) {
 				// Always try a full reload before showing a 404 page
-				// the route may be file or an API route.
+				// the route may be a static file or an API route.
 				window.location.reload();
 				await new Promise(() => {
 					// Wait forever
@@ -154,7 +193,7 @@ export async function loadRoute(
 	);
 
 	return {
-		pathname: pageContext.url.pathname,
+		pathname: originalPathname,
 		app,
 	};
 }

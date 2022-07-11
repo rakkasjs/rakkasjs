@@ -19,17 +19,14 @@ declare module "virtual:rakkasjs:server-page-routes" {
 	const routes: Array<
 		[
 			regexp: RegExp,
-			importers: [PageImporter, ...LayoutImporter[]],
+			importers: [
+				import("./page-types").PageImporter,
+				...import("./page-types").LayoutImporter[],
+			],
 			guards: import("./page-types").PageRouteGuard[],
 			ids: string[],
 		]
 	>;
-
-	type PageImporter = () => Promise<PageModule>;
-	type LayoutImporter = () => Promise<LayoutModule>;
-
-	type PageModule = import("./page-types").PageModule;
-	type LayoutModule = import("./page-types").LayoutModule;
 
 	export default routes;
 }

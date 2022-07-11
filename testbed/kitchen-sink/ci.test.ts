@@ -595,6 +595,66 @@ function testCase(title: string, dev: boolean, command?: string) {
 				document.body.innerText.includes("Rewritten!"),
 			);
 		});
+
+		test("beforeRoute redirect works on the server", async () => {
+			const r = await fetch(TEST_HOST + "/before-route/redirect", {
+				redirect: "manual",
+			});
+			expect(r.status).toBe(302);
+			expect(r.headers.get("location")).toBe(
+				TEST_HOST + "/before-route/redirected",
+			);
+		});
+
+		test("beforeRoute redirect works on the client", async () => {
+			await page.goto(TEST_HOST + "/before-route/redirect");
+			await page.waitForSelector(".hydrated");
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Redirected"),
+			);
+		});
+
+		test("beforeRoute redirect works with client-side navigation", async () => {
+			await page.goto(TEST_HOST + "/before-route/links");
+			await page.waitForSelector(".hydrated");
+
+			const link: ElementHandle<HTMLAnchorElement> | null =
+				await page.waitForSelector("a[href='/before-route/redirect']");
+			expect(link).toBeTruthy();
+
+			await link!.click();
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Redirected"),
+			);
+		});
+
+		test("beforeRoute rewrite works on the server", async () => {
+			const r = await fetch(TEST_HOST + "/before-route/rewrite");
+			const text = await r.text();
+			expect(text).toContain("Rewritten");
+		});
+
+		test("beforeRoute rewrite works on the client", async () => {
+			await page.goto(TEST_HOST + "/before-route/rewrite");
+			await page.waitForSelector(".hydrated");
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Rewritten"),
+			);
+		});
+
+		test("beforeRoute rewrite works with client-side navigation", async () => {
+			await page.goto(TEST_HOST + "/before-route/links");
+			await page.waitForSelector(".hydrated");
+
+			const link: ElementHandle<HTMLAnchorElement> | null =
+				await page.waitForSelector("a[href='/before-route/rewrite']");
+			expect(link).toBeTruthy();
+
+			await link!.click();
+			await page.waitForFunction(() =>
+				document.body.innerText.includes("Rewritten"),
+			);
+		});
 	});
 }
 

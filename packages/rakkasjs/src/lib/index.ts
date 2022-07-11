@@ -10,7 +10,7 @@ export type {
 	PreloadFunction,
 } from "../runtime/page-types";
 
-export { CommonHooks, defineCommonHooks } from "../runtime/common-hooks";
+export * from "../runtime/common-hooks";
 
 export * from "../features/head/lib";
 export * from "../features/use-query/lib";

@@ -6,6 +6,10 @@ import {
 	ResponseHeadersProps,
 } from "../lib";
 
+export type PageImporter = () => Promise<PageModule>;
+
+export type LayoutImporter = () => Promise<LayoutModule>;
+
 export interface PageModule {
 	default: Page;
 }
