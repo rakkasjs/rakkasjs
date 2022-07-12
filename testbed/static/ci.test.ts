@@ -120,9 +120,9 @@ describe(TEST_HOST, () => {
 		await page.goto(TEST_HOST + "/");
 		await page.waitForSelector(".hydrated");
 
-		const link: ElementHandle<HTMLAnchorElement> = (await page.waitForSelector(
+		const link = (await page.waitForSelector(
 			"a[href='/json']",
-		))!;
+		)) as ElementHandle<HTMLAnchorElement>;
 
 		expect(link).toBeTruthy();
 		await link.click();

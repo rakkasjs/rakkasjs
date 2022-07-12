@@ -225,8 +225,9 @@ function testCase(title: string, dev: boolean, command?: string) {
 				() => document.querySelector("button")?.textContent === "State test: 1",
 			);
 
-			const link: ElementHandle<HTMLAnchorElement> | null =
-				await page.waitForSelector("a[href='/nav/a']");
+			const link = (await page.waitForSelector(
+				"a[href='/nav/a']",
+			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 
 			link!.click();
@@ -263,8 +264,9 @@ function testCase(title: string, dev: boolean, command?: string) {
 			);
 			await page.waitForFunction(() => window.scrollY > 0);
 
-			const link: ElementHandle<HTMLAnchorElement> | null =
-				await page.waitForSelector("a[href='/nav/b']");
+			const link = (await page.waitForSelector(
+				"a[href='/nav/b']",
+			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 
 			link!.click();
@@ -293,8 +295,9 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.goto(TEST_HOST + "/nav");
 			await page.waitForSelector(".hydrated");
 
-			const link: ElementHandle<HTMLAnchorElement> | null =
-				await page.waitForSelector("a[href='/nav/a']");
+			const link = (await page.waitForSelector(
+				"a[href='/nav/a']",
+			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 
 			link!.click();
@@ -439,8 +442,9 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.goto(TEST_HOST + "/use-ssq/elsewhere");
 			await page.waitForSelector(".hydrated");
 
-			const link: ElementHandle<HTMLAnchorElement> | null =
-				await page.waitForSelector("a");
+			const link = (await page.waitForSelector(
+				"a",
+			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 
 			await link!.click();
@@ -459,8 +463,9 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.goto(TEST_HOST + "/run-ssq/elsewhere");
 			await page.waitForSelector(".hydrated");
 
-			const link: ElementHandle<HTMLAnchorElement> | null =
-				await page.waitForSelector("a");
+			const link = (await page.waitForSelector(
+				"a",
+			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 
 			await link!.click();
@@ -526,8 +531,9 @@ function testCase(title: string, dev: boolean, command?: string) {
 		test("handles 404 with client-side nav", async () => {
 			await page.goto(TEST_HOST + "/404/deep/found");
 			await page.waitForSelector(".hydrated");
-			const link: ElementHandle<HTMLAnchorElement> | null =
-				await page.waitForSelector("a");
+			const link = (await page.waitForSelector(
+				"a",
+			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 
 			await link!.click();
@@ -554,8 +560,9 @@ function testCase(title: string, dev: boolean, command?: string) {
 		test("handles error with client-side nav", async () => {
 			await page.goto(TEST_HOST + "/error/intro");
 			await page.waitForSelector(".hydrated");
-			const link: ElementHandle<HTMLAnchorElement> | null =
-				await page.waitForSelector("a");
+			const link = (await page.waitForSelector(
+				"a",
+			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 
 			await link!.click();
@@ -652,8 +659,9 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.goto(TEST_HOST + "/before-route/links");
 			await page.waitForSelector(".hydrated");
 
-			const link: ElementHandle<HTMLAnchorElement> | null =
-				await page.waitForSelector("a[href='/before-route/redirect']");
+			const link = (await page.waitForSelector(
+				"a[href='/before-route/redirect']",
+			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 
 			await link!.click();
@@ -680,8 +688,9 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.goto(TEST_HOST + "/before-route/links");
 			await page.waitForSelector(".hydrated");
 
-			const link: ElementHandle<HTMLAnchorElement> | null =
-				await page.waitForSelector("a[href='/before-route/rewrite']");
+			const link = (await page.waitForSelector(
+				"a[href='/before-route/rewrite']",
+			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 
 			await link!.click();
