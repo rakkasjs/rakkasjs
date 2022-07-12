@@ -19,6 +19,12 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 					env.command === "serve" ? "development" : await getBuildId();
 			}
 
+			if (options.adapter.disableStreaming) {
+				process.env.RAKKAS_DISABLE_STREAMING = "true";
+			} else {
+				delete process.env.RAKKAS_DISABLE_STREAMING;
+			}
+
 			return {
 				buildSteps: [
 					{

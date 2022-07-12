@@ -231,10 +231,11 @@ function testCase(title: string, dev: boolean, command?: string) {
 			expect(link).toBeTruthy();
 
 			link!.click();
-			await page.waitForFunction(() =>
-				document.body.innerText.includes(
-					"Navigating to: http://localhost:3000/nav/a",
-				),
+			await page.waitForFunction(
+				(host: string) =>
+					document.body.innerText.includes(`Navigating to: ${host}/nav/a`),
+				{},
+				TEST_HOST,
 			);
 
 			await page.waitForFunction(() => {
@@ -348,6 +349,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 		test("fetches data with useQuery", async () => {
 			await page.goto(TEST_HOST + "/use-query");
+			await page.waitForSelector(".hydrated");
 
 			await page.waitForFunction(() =>
 				document.getElementById("content")?.innerText.includes("SSR value"),
@@ -371,6 +373,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 		test("handles errors in useQuery", async () => {
 			await page.goto(TEST_HOST + "/use-query/error");
+			await page.waitForSelector(".hydrated");
 
 			await page.waitForFunction(() =>
 				document.getElementById("content")?.innerText.includes("Error!"),
@@ -416,6 +419,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 		test("useQuery refetches on interval", async () => {
 			await page.goto(TEST_HOST + "/use-query/interval");
+			await page.waitForSelector(".hydrated");
 
 			await page.waitForFunction(() =>
 				document.getElementById("content")?.innerText.includes("2"),

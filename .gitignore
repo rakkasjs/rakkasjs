@@ -130,3 +130,6 @@ dist
 # Local files
 *.local.*
 
+
+# Local Netlify folder
+.netlify

@@ -6,6 +6,8 @@
 		"dev": "vite dev --port 3000",
 		"build": "rakkas build",
 		"build:cfw": "cross-env RAKKAS_TARGET=cloudflare-workers rakkas build",
+		"build:netlify": "cross-env RAKKAS_TARGET=netlify rakkas build",
+		"build:netlify-edge": "cross-env RAKKAS_TARGET=netlify-edge rakkas build",
 		"start": "node dist/server",
 		"ci": "vitest run --reporter=verbose --no-threads",
 		"ci:local": "TEST_HOST=http://localhost:3000 pnpm run ci",
@@ -15,6 +17,8 @@
 	},
 	"devDependencies": {
 		"@cyco130/eslint-config": "^2.0.0",
+		"@hattip/adapter-netlify-edge": "^0.0.10",
+		"@hattip/adapter-netlify-functions": "^0.0.10",
 		"@types/ps-tree": "^1.1.2",
 		"cross-env": "^7.0.3",
 		"eslint": "^8.19.0",
@@ -28,7 +32,7 @@
 		"wrangler": "^2.0.17"
 	},
 	"dependencies": {
-		"@hattip/adapter-cloudflare-workers": "^0.0.9",
+		"@hattip/adapter-cloudflare-workers": "^0.0.10",
 		"@types/react": "^18.0.15",
 		"@types/react-dom": "^18.0.6",
 		"cheerio": "1.0.0-rc.12",
