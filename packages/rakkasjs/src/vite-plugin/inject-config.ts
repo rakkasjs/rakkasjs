@@ -22,7 +22,7 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 			if (options.adapter.disableStreaming) {
 				process.env.RAKKAS_DISABLE_STREAMING = "true";
 			} else {
-				delete process.env.RAKKAS_DISABLE_STREAMING;
+				process.env.RAKKAS_DISABLE_STREAMING = "false";
 			}
 
 			return {

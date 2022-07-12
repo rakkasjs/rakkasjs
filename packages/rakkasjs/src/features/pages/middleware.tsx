@@ -124,7 +124,7 @@ export default async function doRenderPageRoute(
 		"Content-Type": "text/html; charset=utf-8",
 	});
 
-	let hold = import.meta.env.RAKKAS_DISABLE_STREAMING ? true : 0;
+	let hold = import.meta.env.RAKKAS_DISABLE_STREAMING === "true" ? true : 0;
 
 	function updateHeaders(props: ResponseContextProps) {
 		if (props.status) {
