@@ -157,6 +157,7 @@ importers:
     specifiers:
       "@cyco130/eslint-config": ^2.0.0
       "@hattip/adapter-cloudflare-workers": ^0.0.10
+      "@hattip/adapter-deno": ^0.0.10
       "@hattip/adapter-netlify-edge": ^0.0.10
       "@hattip/adapter-netlify-functions": ^0.0.10
       "@hattip/adapter-vercel-edge": ^0.0.10
@@ -179,6 +180,7 @@ importers:
       wrangler: ^2.0.17
     dependencies:
       "@hattip/adapter-cloudflare-workers": 0.0.10
+      "@hattip/adapter-deno": 0.0.10
       "@hattip/adapter-vercel-edge": 0.0.10
       "@types/react": 18.0.15
       "@types/react-dom": 18.0.6
@@ -1118,6 +1120,15 @@ packages:
     resolution:
       {
         integrity: sha512-ytCHse4T2Blpefi/ZhvceQdZSkxi5HsLQnDllArQ08HM9vk8ms+22ZeHxD13kIEh28yy0AW4fUesB9HlUHWxNg==,
+      }
+    dependencies:
+      "@hattip/core": 0.0.10
+    dev: false
+
+  /@hattip/adapter-deno/0.0.10:
+    resolution:
+      {
+        integrity: sha512-/z/VvvFrP1dIGH7gnS0xkz1n7/G7v3HMRSfSTb3Q7RZrosnLkTLfOgn6vPlGE/bk+JB8CDusw6ljSeMke3DZMw==,
       }
     dependencies:
       "@hattip/core": 0.0.10

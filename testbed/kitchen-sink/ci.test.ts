@@ -193,7 +193,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 				try {
 					await page.waitForFunction(
-						() => document.body.textContent?.includes("Hot reloadin'!"),
+						() => document.body?.textContent?.includes("Hot reloadin'!"),
 						{ timeout: 60_000 },
 					);
 					await page.waitForFunction(
@@ -233,7 +233,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			link!.click();
 			await page.waitForFunction(
 				(host: string) =>
-					document.body.innerText.includes(`Navigating to: ${host}/nav/a`),
+					document.body?.innerText.includes(`Navigating to: ${host}/nav/a`),
 				{},
 				TEST_HOST,
 			);
@@ -247,11 +247,11 @@ function testCase(title: string, dev: boolean, command?: string) {
 			});
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Client-side navigation test page A"),
+				document.body?.innerText.includes("Client-side navigation test page A"),
 			);
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("State test: 1"),
+				document.body?.innerText.includes("State test: 1"),
 			);
 		});
 
@@ -273,7 +273,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			link!.click();
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Client-side navigation test page B"),
+				document.body?.innerText.includes("Client-side navigation test page B"),
 			);
 
 			// Make sure it scrolled to the top
@@ -283,7 +283,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			// Go back to the first page
 			await page.goBack();
 			await page.waitForFunction(() =>
-				document.body.innerText.includes(
+				document.body?.innerText.includes(
 					"Client-side navigation test page home",
 				),
 			);
@@ -303,7 +303,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 			link!.click();
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Navigating to"),
+				document.body?.innerText.includes("Navigating to"),
 			);
 
 			const x = await page.evaluate(
@@ -316,12 +316,12 @@ function testCase(title: string, dev: boolean, command?: string) {
 		test("redirects", async () => {
 			await page.goto(TEST_HOST + "/redirect/shallow");
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Redirected"),
+				document.body?.innerText.includes("Redirected"),
 			);
 
 			await page.goto(TEST_HOST + "/redirect/deep");
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Redirected"),
+				document.body?.innerText.includes("Redirected"),
 			);
 		});
 
@@ -431,16 +431,16 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 			await page.waitForFunction(
 				() =>
-					document.body.innerText.includes("AAA") &&
-					document.body.innerText.includes("BBB") &&
-					document.body.innerText.includes("CCC"),
+					document.body?.innerText.includes("AAA") &&
+					document.body?.innerText.includes("BBB") &&
+					document.body?.innerText.includes("CCC"),
 			);
 		});
 
 		test("runs useServerSideQuery on the server", async () => {
 			await page.goto(TEST_HOST + "/use-ssq");
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Result: 7, SSR: true"),
+				document.body?.innerText.includes("Result: 7, SSR: true"),
 			);
 
 			await page.goto(TEST_HOST + "/use-ssq/elsewhere");
@@ -454,14 +454,14 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await link!.click();
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Result: 7, SSR: true"),
+				document.body?.innerText.includes("Result: 7, SSR: true"),
 			);
 		});
 
 		test("runs runServerSideQuery on the server", async () => {
 			await page.goto(TEST_HOST + "/run-ssq");
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Result: 7, SSR: true"),
+				document.body?.innerText.includes("Result: 7, SSR: true"),
 			);
 
 			await page.goto(TEST_HOST + "/run-ssq/elsewhere");
@@ -475,7 +475,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await link!.click();
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Result: 7, SSR: true"),
+				document.body?.innerText.includes("Result: 7, SSR: true"),
 			);
 		});
 
@@ -484,7 +484,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.waitForSelector(".hydrated");
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Not fetched"),
+				document.body?.innerText.includes("Not fetched"),
 			);
 
 			const btn: ElementHandle<HTMLButtonElement> | null =
@@ -494,7 +494,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await btn!.click();
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Computed on the server: 7"),
+				document.body?.innerText.includes("Computed on the server: 7"),
 			);
 		});
 
@@ -503,7 +503,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.waitForSelector(".hydrated");
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Not fetched"),
+				document.body?.innerText.includes("Not fetched"),
 			);
 
 			const btn: ElementHandle<HTMLButtonElement> | null =
@@ -513,7 +513,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await btn!.click();
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Computed on the server: 14"),
+				document.body?.innerText.includes("Computed on the server: 14"),
 			);
 		});
 
@@ -542,7 +542,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 			await link!.click();
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Deep 404"),
+				document.body?.innerText.includes("Deep 404"),
 			);
 		});
 
@@ -557,7 +557,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.goto(TEST_HOST + "/error");
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Internal Error"),
+				document.body?.innerText.includes("Internal Error"),
 			);
 		});
 
@@ -571,7 +571,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 			await link!.click();
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Internal Error"),
+				document.body?.innerText.includes("Internal Error"),
 			);
 		});
 
@@ -586,11 +586,11 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await btn!.click();
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Loading"),
+				document.body?.innerText.includes("Loading"),
 			);
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Done"),
+				document.body?.innerText.includes("Done"),
 			);
 		});
 
@@ -605,11 +605,11 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await btn!.click();
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Loading"),
+				document.body?.innerText.includes("Loading"),
 			);
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Error"),
+				document.body?.innerText.includes("Error"),
 			);
 		});
 
@@ -617,27 +617,27 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.goto(TEST_HOST + "/guard");
 
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Not Found"),
+				document.body?.innerText.includes("Not Found"),
 			);
 
 			await page.goto(TEST_HOST + "/guard?allow-outer");
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Not Found"),
+				document.body?.innerText.includes("Not Found"),
 			);
 
 			await page.goto(TEST_HOST + "/guard?allow-inner");
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Not Found"),
+				document.body?.innerText.includes("Not Found"),
 			);
 
 			await page.goto(TEST_HOST + "/guard?allow-outer&allow-inner");
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Found!"),
+				document.body?.innerText.includes("Found!"),
 			);
 
 			await page.goto(TEST_HOST + "/guard?allow-outer&rewrite");
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Rewritten!"),
+				document.body?.innerText.includes("Rewritten!"),
 			);
 		});
 
@@ -655,7 +655,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.goto(TEST_HOST + "/before-route/redirect");
 			await page.waitForSelector(".hydrated");
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Redirected"),
+				document.body?.innerText.includes("Redirected"),
 			);
 		});
 
@@ -670,7 +670,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 			await link!.click();
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Redirected"),
+				document.body?.innerText.includes("Redirected"),
 			);
 		});
 
@@ -684,7 +684,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.goto(TEST_HOST + "/before-route/rewrite");
 			await page.waitForSelector(".hydrated");
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Rewritten"),
+				document.body?.innerText.includes("Rewritten"),
 			);
 		});
 
@@ -699,7 +699,7 @@ function testCase(title: string, dev: boolean, command?: string) {
 
 			await link!.click();
 			await page.waitForFunction(() =>
-				document.body.innerText.includes("Rewritten"),
+				document.body?.innerText.includes("Rewritten"),
 			);
 		});
 	});

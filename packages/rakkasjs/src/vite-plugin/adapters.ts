@@ -3,7 +3,7 @@ import fs from "fs";
 import cloudflareWorkers from "@hattip/bundler-cloudflare-workers";
 import { bundle as netlify } from "@hattip/bundler-netlify";
 import { bundle as vercel } from "@hattip/bundler-vercel";
-// import deno from "@hattip/bundler-deno";
+import deno from "@hattip/bundler-deno";
 
 export interface RakkasAdapter {
 	name: string;
@@ -71,10 +71,10 @@ export const adapters: Record<string, RakkasAdapter> = {
 		name: "vercel-edge",
 
 		async bundle(root) {
-			let entry = findEntry(root, "src/entry-vercel");
+			let entry = findEntry(root, "src/entry-vercel-edge");
 
 			if (!entry) {
-				entry = path.resolve(root, "dist/server/entry-vercel.js");
+				entry = path.resolve(root, "dist/server/entry-vercel-edge.js");
 				await fs.promises.writeFile(entry, VERCEL_EDGE_ENTRY);
 			}
 
@@ -118,7 +118,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 		name: "netlify-edge",
 
 		async bundle(root) {
-			let entry = findEntry(root, "src/entry-netlify");
+			let entry = findEntry(root, "src/entry-netlify-edge");
 
 			if (!entry) {
 				entry = path.resolve(root, "dist/server/entry-netlify-edge.js");
@@ -140,6 +140,30 @@ export const adapters: Record<string, RakkasAdapter> = {
 
 	deno: {
 		name: "deno",
+
+		async bundle(root) {
+			let input = findEntry(root, "src/entry-deno");
+
+			if (!input) {
+				input = path.resolve(root, "dist/server/entry-deno.js");
+				await fs.promises.writeFile(input, DENO_ENTRY);
+			}
+
+			await generateStaticAssetManifest(root);
+
+			((deno as any).default as typeof deno)(
+				{
+					input,
+					output: path.resolve(root, "dist/deno/mod.js"),
+					staticDir: "dist/client",
+				},
+				(options) => {
+					options.define = options.define || {};
+					options.define["process.env.NODE_ENV"] = '"production"';
+					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
+				},
+			);
+		},
 	},
 };
 
@@ -194,7 +218,6 @@ const CLOUDFLARE_WORKERS_ENTRY = `
 			for (const [key, value] of Object.entries(env)) {
 				if (typeof value === "string") process.env[key] = value;
 			}
-			console.log(process.env)
 			return handler(req, env, ctx);
 		}
 	};
@@ -216,14 +239,11 @@ const NETLIFY_EDGE_ENTRY = `
 
 	export default adapter((ctx) => {
 		const path = new URL(ctx.request.url).pathname;
-		console.log(path, staticFiles.has(path))
 		if (staticFiles.has(path) || staticFiles.has(path + "/index.html")) {
-			console.log("Passthrough");
 			ctx.passThrough();
 			return new Response("Ugly", { status: 404 });
 		}
 
-		console.log("Handler");
 		return handler(ctx);
 	});
 `;
@@ -243,4 +263,31 @@ const VERCEL_EDGE_ENTRY = `
 	import handler from "./hattip.js";
 
 	export default adapter(handler);
+`;
+
+const DENO_ENTRY = `
+	globalThis.process = { env: Deno.env.toObject() };
+
+	import * as path from "https://deno.land/std@0.144.0/path/mod.ts";
+	import { serve, serveDir, createRequestHandler } from "@hattip/adapter-deno";
+	import handler from "./hattip.js";
+	import staticFiles from "./static-manifest.js";
+
+	const staticDir = path.join(path.dirname(path.fromFileUrl(import.meta.url)), "static");
+
+	const denoHandler = createRequestHandler(handler);
+
+	serve(
+		async (request, connInfo) => {
+			const path = new URL(request.url).pathname;
+			if (staticFiles.has(path) || staticFiles.has(path + "/index.html")) {
+				return serveDir(request, { fsRoot: staticDir });
+			}
+
+			return denoHandler(request, connInfo);
+		},
+		{
+			port: Number(process.env.PORT) || 3000,
+		},
+	);
 `;
