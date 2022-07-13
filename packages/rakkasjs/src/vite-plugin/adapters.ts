@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import cloudflareWorkers from "@hattip/bundler-cloudflare-workers";
 import { bundle as netlify } from "@hattip/bundler-netlify";
-// import { bundleServerlessFunction as vercelServerless } from "@hattip/bundler-vercel";
+import { bundle as vercel } from "@hattip/bundler-vercel";
 // import deno from "@hattip/bundler-deno";
 
 export interface RakkasAdapter {
@@ -44,10 +44,49 @@ export const adapters: Record<string, RakkasAdapter> = {
 
 	vercel: {
 		name: "vercel",
+
+		disableStreaming: true,
+
+		async bundle(root) {
+			let entry = findEntry(root, "src/entry-vercel");
+
+			if (!entry) {
+				entry = path.resolve(root, "dist/server/entry-vercel.js");
+				await fs.promises.writeFile(entry, VERCEL_ENTRY);
+			}
+
+			vercel({
+				serverlessEntry: entry,
+				staticDir: path.resolve(root, "dist/client"),
+				manipulateEsbuildOptions(options) {
+					options.define = options.define || {};
+					options.define["process.env.NODE_ENV"] = '"production"';
+					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
+				},
+			});
+		},
 	},
 
 	"vercel-edge": {
 		name: "vercel-edge",
+
+		async bundle(root) {
+			let entry = findEntry(root, "src/entry-vercel");
+
+			if (!entry) {
+				entry = path.resolve(root, "dist/server/entry-vercel.js");
+				await fs.promises.writeFile(entry, VERCEL_EDGE_ENTRY);
+			}
+
+			vercel({
+				edgeEntry: entry,
+				staticDir: path.resolve(root, "dist/client"),
+				manipulateEsbuildOptions(options) {
+					options.define = options.define || {};
+					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
+				},
+			});
+		},
 	},
 
 	netlify: {
@@ -66,6 +105,11 @@ export const adapters: Record<string, RakkasAdapter> = {
 			netlify({
 				functionEntry: entry,
 				staticDir: path.resolve(root, "dist/client"),
+				manipulateEsbuildOptions(options) {
+					options.define = options.define || {};
+					options.define["process.env.NODE_ENV"] = '"production"';
+					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
+				},
 			});
 		},
 	},
@@ -182,4 +226,21 @@ const NETLIFY_EDGE_ENTRY = `
 		console.log("Handler");
 		return handler(ctx);
 	});
+`;
+
+const VERCEL_ENTRY = `
+	import { createMiddleware } from "rakkasjs/node-adapter";
+	import handler from "./hattip.js";
+
+	export default createMiddleware(handler, { origin: "", trustProxy: true });
+`;
+
+const VERCEL_EDGE_ENTRY = `
+	import { ReadableStream } from 'web-streams-polyfill/ponyfill';
+	Object.assign(globalThis, { ReadableStream });
+
+	import adapter from "@hattip/adapter-vercel-edge";
+	import handler from "./hattip.js";
+
+	export default adapter(handler);
 `;

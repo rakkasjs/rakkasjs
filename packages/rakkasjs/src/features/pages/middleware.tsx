@@ -299,31 +299,32 @@ export default async function doRenderPageRoute(
 
 	const textEncoder = new TextEncoder();
 
-	const wrapperStream = new ReadableStream({
-		start(controller) {
-			controller.enqueue(textEncoder.encode(head));
-		},
+	const { readable, writable } = new TransformStream();
 
-		async pull(controller) {
-			for await (const chunk of reactStream as any as AsyncIterable<Uint8Array>) {
-				for (const hooks of pageHooks) {
-					if (hooks?.emitBeforeSsrChunk) {
-						const text = hooks.emitBeforeSsrChunk();
-						if (text) {
-							controller.enqueue(textEncoder.encode(text));
-						}
+	const writer = writable.getWriter();
+
+	async function pipe() {
+		writer.write(textEncoder.encode(head));
+		for await (const chunk of reactStream as any) {
+			for (const hooks of pageHooks) {
+				if (hooks?.emitBeforeSsrChunk) {
+					const text = hooks.emitBeforeSsrChunk();
+					if (text) {
+						writer.write(textEncoder.encode(text));
 					}
 				}
-
-				controller.enqueue(chunk);
 			}
 
-			controller.enqueue(textEncoder.encode("</body></html>"));
-			controller.close();
-		},
-	});
+			writer.write(chunk);
+		}
 
-	return new Response(wrapperStream, { status, headers });
+		writer.write(textEncoder.encode("</body></html>"));
+		await writer.close();
+	}
+
+	ctx.waitUntil(pipe());
+
+	return new Response(readable, { status, headers });
 }
 
 function escapeHtml(text: string): string {

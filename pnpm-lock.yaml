@@ -159,6 +159,7 @@ importers:
       "@hattip/adapter-cloudflare-workers": ^0.0.10
       "@hattip/adapter-netlify-edge": ^0.0.10
       "@hattip/adapter-netlify-functions": ^0.0.10
+      "@hattip/adapter-vercel-edge": ^0.0.10
       "@types/ps-tree": ^1.1.2
       "@types/react": ^18.0.15
       "@types/react-dom": ^18.0.6
@@ -174,14 +175,17 @@ importers:
       react-dom: ^18.2.0
       typescript: ^4.7.4
       vite: ^3.0.0-beta.9
+      web-streams-polyfill: ^3.2.1
       wrangler: ^2.0.17
     dependencies:
       "@hattip/adapter-cloudflare-workers": 0.0.10
+      "@hattip/adapter-vercel-edge": 0.0.10
       "@types/react": 18.0.15
       "@types/react-dom": 18.0.6
       cheerio: 1.0.0-rc.12
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      web-streams-polyfill: 3.2.1
     devDependencies:
       "@cyco130/eslint-config": 2.0.0_4x5o4skxv6sl53vpwefgt23khm
       "@hattip/adapter-netlify-edge": 0.0.10
@@ -1148,6 +1152,15 @@ packages:
     dependencies:
       "@hattip/core": 0.0.10
       "@hattip/polyfills": 0.0.10
+
+  /@hattip/adapter-vercel-edge/0.0.10:
+    resolution:
+      {
+        integrity: sha512-ZD1MDe9vmjeh6IgtVXCsxpU/78GnCJHXjuSz9l16+PorrEmcts2jK1XOfOxZt+Oe/tfUjA2Hf1uY3qLuhSyddw==,
+      }
+    dependencies:
+      "@hattip/core": 0.0.10
+    dev: false
 
   /@hattip/bundler-cloudflare-workers/0.0.10:
     resolution:
@@ -10831,7 +10844,6 @@ packages:
         integrity: sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==,
       }
     engines: { node: ">= 8" }
-    dev: true
 
   /webidl-conversions/3.0.1:
     resolution:

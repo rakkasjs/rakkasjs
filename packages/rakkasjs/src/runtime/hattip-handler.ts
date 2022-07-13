@@ -33,7 +33,13 @@ export function createRequestHandler(userHooks: ServerHooks = {}) {
 			hooks.map((hook) => hook.middleware?.beforePages),
 
 			process.env.RAKKAS_PRERENDER === "true" && prerender,
-			renderPageRoute,
+			async (ctx: RequestContext) => {
+				try {
+					return await renderPageRoute(ctx);
+				} catch (error) {
+					console.error(error);
+				}
+			},
 
 			hooks.map((hook) => hook.middleware?.beforeApiRoutes),
 			renderApiRoute,
@@ -52,6 +58,8 @@ function init(hooks: ServerHooks[]) {
 		ctx.method = method;
 		ctx.locals = {};
 		ctx.hooks = hooks;
+
+		// console.log(`${method} ${url}`);
 	};
 }
 
