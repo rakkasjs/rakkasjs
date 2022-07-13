@@ -1,0 +1,91 @@
+---
+title: "Rakkas 0.6: React 18, API-less data fetching, and more"
+date: 2022-07-04
+---
+
+{/* TODO: Fix date */}
+
+💃 [Rakkas](https://github.com/rakkasjs/rakkasjs), the lightning-fast React framework powered by [Vite](https://vitejs.dev), has just released version 0.6.0. First release since December, this is the largest and least backwards compatible update so far. But we believe the quantity and the quality of the new features justify the number of breaking changes. Read on and see if you agree.
+
+## React 18
+
+Rakkas 0.6 was redesigned from the ground up to be compatible with React 18. It supports the new **Concurrent Mode**, **Streaming SSR**, and **Suspense for data fetching**.
+
+**Streaming SSR** means that Rakkas apps, when doing server-side rendering (SSR), now send chunks of a page's HTML as soon as they are available instead of waiting until everything is fully rendered. This way, the user starts seeing meaningful content as soon as possible instead of waiting in front of a blank screen. Streaming SSR integrates seamlessly with Suspense and the new data fetching system we'll describe below.
+
+If you're worried about streaming SSR interfering with SEO, you'll be relieved to know that Rakkas also implements [dynamic rendering](https://huckabuy.com/technical-seo/dynamic-rendering): It sends fully rendered pages with correct status codes, HTTP headers, and head tags to search bots while streaming HTML to normal browsers. In any case, you can opt out of streaming on a global, per-route, or per-request basis without giving up Suspense-based data fetching.
+
+## New data fetching system
+
+Instead of the page-centric data fetching functions that ran before the page was rendered (“fetch-then-render”), Rakkas 0.6 adopts a Suspense-based data fetching system (“render-as-you-fetch“). The new system comes in the form of `useQuery` and `useMutation` hooks that implement a Suspense-only subset of the [react-query](https://react-query.tanstack.com) API.
+
+### API-less data fetching
+
+If you're familiar with Next.js, you know how cool `getServerSideProps` is. With it, you can put, say, your database access code right next to your page component without worrying about implementing and maintaining a REST/GraphQL/RPC/whatever API. Next.js cleverly strips this function and its imports from the client bundle. During SSR, it's called directly. On the client, Next sends a request to the server instead of calling the function.
+
+We believe we've one-upped the ease of use of this data fetching method. Enter `useServerSideQuery`:
+
+```jsx
+import db from "./my-db-access-lib";
+
+export default function UserCard(props) {
+	const userName = props.userName;
+
+	const userQuery = useServerSideQuery(() => {
+		if (typeof userName !== "string") {
+			// This is server-side code,
+			// always validate user input!
+			throw new Error("Invalid request");
+		}
+
+		return db.user.findOne(userName);
+	});
+
+	return (
+		<div class="card">
+			<img src={userQuery.data.image} />
+			<caption>{userQuery.data.fullName}</caption>
+		</div>
+	);
+}
+```
+
+This isn't a page, just an ordinary React component that you can use in many pages. In Rakkas 0.6 pages aren't very special in terms of data fetching anymore. Just like `getServerSideProps`, the function passed to `useServerSideQuery` (`useSSQ` for short) always runs on the server: On the client, a request is sent to the server instead of calling the function directly. Rakkas performs a code transform similar to Next's to strip the function and its imports from the client bundle.
+
+`useSSQ`'s return type is inferred, so, if you're using TypeScript, you get IDE completion just like you would with a local function call. Another nice feature is that, unlike other similar data fetching hooks, `useSSQ` doesn't return loading or error states. Those are handled higher up in the component tree, with Suspense fallbacks and error boundaries respectively. This way, your component code stays clean and focused.
+
+One practical application of `useSSQ` that may not be immediately obvious is circumventing CORS restrictions when calling third-party APIs:
+
+```ts
+const result = useServerSideQuery(() =>
+	fetch("https://some.cors.restricted.api.example.com").then((res) =>
+		res.json(),
+	),
+);
+```
+
+This works because the `fetch` call inside `useServerSideQuery` runs on the server-side (Rakkas makes `fetch` globally available on all deployment targets) and, as such, is not affected by CORS restrictions. In effect, it creates an ad-hoc CORS proxy.
+
+Paired with its sibling `useServerSideMutation` (and lower level `runServerSideQuery` and `runServerSideMutation`), `useSSQ` lets you write code as if the server-client barrier didn't exist. But of course API routes are still available to allow you to implement REST, GraphQL, RPC etc. endpoints that you can access via `useQuery` and `useMutation` or other methods if you prefer to stick with traditional data fetching.
+
+### Avoiding waterfalls
+
+Even though we said that in Rakkas 0.6 pages and layouts are not very special in terms of data fetching anymore, you can still have a `preload` function to start fetching early. `preload` functions of a page and its parent layouts all run in parallel to avoid late discovery of data dependencies and waterfalls. `preload` also provides a way to inject SEO-critical title and meta tags into the page even when streaming.
+
+## Other new features
+
+Rakkas 0.6 is now built on [HatTip](https://github.com/hattipjs/hattip), an HTTP server library that abstracts away the differences between various JavaScript runtimes building on the web standards like `Request`, `Response`, and streams. Rakkas already ran on Node, Vercel Serverless Functions, Netlify Functions, and Cloudflare Workers. HatTip integration adds support for **Vercel Edge**, and **Netlify Edge**. There's also preliminary support for Deno (including **Deno Deploy**). Bun support is work in progress.
+
+HatTip also makes it possible to integrate with **Express** or other Connect-compatible Node.js server frameworks: Now you can use Express middleware and routes in your Rakkas app or build your app as an Express middleware to be used in other Express apps.
+
+The new **route guards** feature allows you to do things like making some routes available to logged in users only. **Catch-all routes** and better **404 handling** are also among the new features.
+
+Rakkas 0.6 also comes with out-of-the-box support for [MDX](https://mdxjs.com/).
+
+## Conclusion
+
+If this is the first time you hear of Rakkas, it has other cool features like lightning-fast development server (courtesy of Vite), file system routing, truly localizable URLs, nested layouts, static site generation, and more.
+
+Rakkas uses experimental and/or beta features of React and Vite. As such, expect breaking changes until we hit 1.0. But [go ahead and give it a try](https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx) and share your thoughts. [Star us on Github](https://github.com/rakkasjs/rakkasjs/stargazers), [join our Discord server](https://rakkasjs.org/chat), and [follow me on Twitter](https://twitter.com/cyco130) for updates.
+
+If you have any questions, problems, or suggestions [open a Github issue](https://github.com/rakkasjs/rakkasjs/issues/new). If you want to [contribute](https://github.com/rakkasjs/rakkasjs/blob/main/CONTRIBUTING.md), fork and send a pull request. Check out the [open issues](https://github.com/rakkasjs/rakkasjs/issues) to see how you can help. As always, **all feedback is welcome**.

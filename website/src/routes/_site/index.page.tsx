@@ -1,6 +1,5 @@
 import { Logomark } from "lib/Logomark";
 import { Logotype } from "lib/Logotype";
-import { FC } from "react";
 import css from "./index.module.css";
 import { Link, Head } from "rakkasjs";
 import { ExternalIcon } from "lib/ExternalIcon";
@@ -75,7 +74,7 @@ function HomePage() {
 			</div>
 
 			<aside className={css.latestPost}>
-				<a href={toc[0].slug}>
+				<a href={"/blog/" + toc[0].slug}>
 					<p>{toc[0].title}</p>
 					<BlogPostHeader date={toc[0].date} />
 				</a>
