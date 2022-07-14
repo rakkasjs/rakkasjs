@@ -54,7 +54,7 @@ if (import.meta.env.TEST_HOST) {
 		testCase(
 			"Netlify functions",
 			false,
-			"pnpm build:netlify && cross-env BROWSER=none netlify dev -d netlify/static -op 3000",
+			"pnpm build:netlify && netlify dev -d netlify/static -op 3000",
 		);
 	}
 
@@ -62,7 +62,7 @@ if (import.meta.env.TEST_HOST) {
 		testCase(
 			"Netlify edge",
 			false,
-			"pnpm build:netlify-edge && cross-env BROWSER=none netlify dev -d netlify/static -op 3000",
+			"pnpm build:netlify-edge && netlify dev -d netlify/static -op 3000",
 		);
 	}
 
@@ -93,6 +93,10 @@ function testCase(title: string, dev: boolean, command?: string) {
 					shell: true,
 					stdio: "inherit",
 					cwd: path.resolve(__dirname),
+					env: {
+						...process.env,
+						BROWSER: "none",
+					},
 				});
 
 				await new Promise<void>((resolve, reject) => {
