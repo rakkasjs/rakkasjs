@@ -89,10 +89,13 @@ cli
 	);
 
 cli
-	.command("render [...paths]", "Render static pages of an already built app")
+	.command(
+		"prerender [...paths]",
+		"Prerender static pages of an already built app",
+	)
 	.option("-r, --root <root>", "Project root")
 	.action((paths: string[], options: any) =>
-		import("./render").then(({ render: prerender }) =>
+		import("./prerender").then(({ prerender }) =>
 			prerender(options.root, options),
 		),
 	);

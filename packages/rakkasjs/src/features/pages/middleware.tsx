@@ -25,8 +25,9 @@ import {
 	PageImporter,
 	PageModule,
 	PageRouteGuard,
-	PreloadContext,
 	PreloadResult,
+	PrerenderResult,
+	ServerSidePageContext,
 } from "../../runtime/page-types";
 import { BeforeRouteResult } from "../../lib";
 
@@ -159,10 +160,10 @@ export default async function doRenderPageRoute(
 	}
 
 	const importers = found.route[1];
-	const preloadContext: PreloadContext = {
+	const preloadContext = {
 		...pageContext,
 		params: found.params,
-	};
+	} as ServerSidePageContext;
 
 	const stack = (
 		(await Promise.all(
@@ -220,6 +221,22 @@ export default async function doRenderPageRoute(
 		const headers = await m.headers?.(preloadContext, meta);
 		if (headers) {
 			updateHeaders(headers);
+		}
+
+		if (process.env.RAKKAS_PRERENDER === "true") {
+			let prerender: PrerenderResult = { links: [] };
+			for (const m of modules) {
+				const value = await m.prerender?.(preloadContext, meta);
+				if (value) {
+					prerender = {
+						...prerender,
+						...value,
+						links: [...prerender.links!, ...(value.links ?? [])],
+					};
+				}
+			}
+
+			(ctx as any).platform.prerenderOptions = prerender;
 		}
 	}
 

@@ -2,7 +2,7 @@ import { BuildOptions, ResolvedConfig } from "vite";
 import multibuild from "@vavite/multibuild";
 import { version } from "../../package.json";
 import pico from "picocolors";
-import { doRender } from "./render";
+import { doPrerender } from "./prerender";
 import { cleanOptions, GlobalCLIOptions } from ".";
 import { RakkasAdapter } from "../vite-plugin/adapters";
 
@@ -71,7 +71,7 @@ export async function build(
 
 	if (paths!.length) {
 		logStep(step++, "Prerendering static routes");
-		await doRender(config!);
+		await doPrerender(config!);
 	}
 
 	if (adapter!.bundle) {

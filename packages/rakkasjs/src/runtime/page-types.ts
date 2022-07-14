@@ -14,11 +14,13 @@ export type LayoutImporter = () => Promise<LayoutModule>;
 export interface PageModule {
 	default: Page;
 	headers?: HeadersFunction;
+	prerender?: PrerenderFunction;
 }
 
 export interface LayoutModule {
 	default: Layout;
 	headers?: HeadersFunction;
+	prerender?: PrerenderFunction;
 }
 
 /** A page component */
@@ -102,7 +104,21 @@ export type PageRouteGuard<P = Record<string, string>> = (
 	ctx: PageRouteGuardContext<P>,
 ) => boolean;
 
-type HeadersFunction<M = Record<string, unknown>> = (
-	context: PreloadContext,
+export type HeadersFunction<M = Record<string, unknown>> = (
+	context: ServerSidePageContext,
 	meta: M,
 ) => ResponseHeadersProps | Promise<ResponseHeadersProps>;
+
+export type PrerenderFunction<M = Record<string, unknown>> = (
+	context: ServerSidePageContext,
+	meta: M,
+) => PrerenderResult | Promise<PrerenderResult>;
+
+export interface PrerenderResult {
+	/** Should this page be prerendered? Defaults to true */
+	shouldPrerender?: boolean;
+	/** Should the prerenderer crawl this page? Defaults to the value of prerender */
+	shouldCrawl?: boolean;
+	/** More links to prerender */
+	links?: (URL | string)[];
+}

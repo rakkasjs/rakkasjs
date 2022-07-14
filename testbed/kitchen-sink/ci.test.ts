@@ -717,6 +717,29 @@ function testCase(title: string, dev: boolean, command?: string) {
 			expect(r.headers.get("X-Test-1")).toBe("1234");
 			expect(r.headers.get("X-Test-2")).toBe("GET");
 		});
+
+		if (!dev) {
+			describe("Static prerendering", () => {
+				test.each([
+					{ url: "/prerender/bar", shouldPrerender: false },
+					{ url: "/prerender/bar-crawled", shouldPrerender: true },
+					{ url: "/prerender/foo", shouldPrerender: true },
+					{ url: "/prerender/foo-crawled", shouldPrerender: true },
+					{ url: "/prerender/not-crawled", shouldPrerender: false },
+					{ url: "/prerender/not-prerendered", shouldPrerender: false },
+				])("$url", async ({ url, shouldPrerender }) => {
+					const response = await fetch(TEST_HOST + url);
+					expect(response.status).toBe(200);
+					const text = await response.text();
+
+					if (shouldPrerender) {
+						expect(text).toContain("This page was prerendered.");
+					} else {
+						expect(text).toContain("This page was dynamically rendered.");
+					}
+				});
+			});
+		}
 	});
 }
 

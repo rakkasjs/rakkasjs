@@ -71,6 +71,10 @@ async function prerender(ctx: RequestContext) {
 	if (ctx.method !== "GET") return;
 
 	const response = await ctx.next();
-	await (ctx.platform as any).render(ctx.url.pathname, response.clone());
+	await (ctx.platform as any).render(
+		ctx.url.pathname,
+		response.clone(),
+		(ctx.platform as any).prerenderOptions,
+	);
 	return response;
 }

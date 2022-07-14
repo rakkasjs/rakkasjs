@@ -35,7 +35,11 @@ function runSSQImpl(
 				closurePath +
 				"/d.js";
 
-			await (ctx.platform as any).render(url, new Response(devalue(result)));
+			await (ctx.platform as any).render(
+				url,
+				new Response(devalue(result)),
+				(ctx.platform as any).prerenderOptions,
+			);
 		}
 		return result;
 	});
@@ -77,6 +81,7 @@ function useSSQImpl(
 					await (ctx!.platform as any).render(
 						url,
 						new Response(devalue(result)),
+						(ctx!.platform as any).prerenderOptions,
 					);
 				}
 				return result;

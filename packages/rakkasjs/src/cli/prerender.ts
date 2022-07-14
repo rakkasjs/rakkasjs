@@ -8,12 +8,13 @@ import { GlobalCLIOptions } from ".";
 import { version } from "../../package.json";
 import { load } from "cheerio";
 import { pathToFileURL } from "url";
+import { PrerenderResult } from "../runtime/page-types";
 
 export interface RenderOptions {
 	root?: string;
 }
 
-export async function render(
+export async function prerender(
 	paths: string[],
 	options: RenderOptions & GlobalCLIOptions,
 ) {
@@ -45,10 +46,10 @@ export async function render(
 			")",
 	);
 
-	await doRender(config, paths ?? ["/"]);
+	await doPrerender(config, paths ?? ["/"]);
 }
 
-export async function doRender(
+export async function doPrerender(
 	config: ResolvedConfig,
 	defaultPaths: string[] = [],
 ) {
@@ -69,7 +70,7 @@ export async function doRender(
 	const files = new Map<string, number>();
 	const dirs = new Set<string>();
 
-	function crawl(href: string) {
+	function crawl(href: URL | string) {
 		const url = new URL(href, origin);
 		if (url.origin !== origin) {
 			return;
@@ -92,10 +93,20 @@ export async function doRender(
 				// Do nothing
 			},
 			platform: {
-				async render(pathname: string, response: Response) {
-					const directive = response.headers.get("x-rakkas-crawler");
+				async render(
+					pathname: string,
+					response: Response,
+					options: PrerenderResult,
+				) {
+					const {
+						shouldPrerender = true,
+						shouldCrawl = shouldPrerender,
+						links = [],
+					} = options;
 
-					if (directive === "skip") {
+					links.forEach(crawl);
+
+					if (!shouldPrerender && !shouldCrawl) {
 						return;
 					}
 
@@ -123,7 +134,7 @@ export async function doRender(
 
 						let body: string;
 
-						if (isPage && directive !== "no-crawl") {
+						if (isPage && shouldCrawl) {
 							const html = await response.text();
 							const dom = load(html);
 							dom("a[href]").each((_, el) => {
@@ -137,18 +148,22 @@ export async function doRender(
 							body = response.body as any;
 						}
 
-						if (directive !== "crawl-only") {
+						if (shouldPrerender) {
 							await fs.promises.writeFile(filename, body);
+							files.set(pathname, response.status);
+						} else {
+							files.set(pathname, -1);
 						}
-
-						files.set(pathname, response.status);
 					}
 				},
 			},
 		});
 	}
 
-	const fileNames = [...files.keys()].sort();
+	const fileNames = [...files.entries()]
+		.filter(([, v]) => v !== -1)
+		.map((f) => f[0])
+		.sort();
 
 	if (fileNames.length > 0) {
 		config.logger.info(

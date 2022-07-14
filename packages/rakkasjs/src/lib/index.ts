@@ -9,6 +9,9 @@ export type {
 	PreloadResult,
 	PreloadFunction,
 	ServerSidePageContext,
+	HeadersFunction,
+	PrerenderFunction,
+	PrerenderResult,
 } from "../runtime/page-types";
 
 export * from "../runtime/common-hooks";
