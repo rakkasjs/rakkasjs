@@ -3,7 +3,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev --port 3000",
+		"dev": "rakkas --port 3000",
 		"build": "rakkas build",
 		"build:cfw": "cross-env RAKKAS_TARGET=cloudflare-workers rakkas build",
 		"build:netlify": "cross-env RAKKAS_TARGET=netlify rakkas build",

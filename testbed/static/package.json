@@ -3,7 +3,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev --port 3000",
+		"dev": "rakkas --port 3000",
 		"build": "rakkas build",
 		"start": "sirv dist/client --port 3000",
 		"ci": "vitest run --reporter=verbose",

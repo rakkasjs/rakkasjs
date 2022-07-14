@@ -9,7 +9,8 @@
 	"files": [
 		"dist",
 		"cli.js",
-		"*.d.ts"
+		"*.d.ts",
+		"vite-license.md"
 	],
 	"exports": {
 		".": {

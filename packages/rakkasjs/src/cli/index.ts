@@ -1,4 +1,4 @@
-import { BuildOptions, LogLevel } from "vite";
+import { BuildOptions, ServerOptions, LogLevel } from "vite";
 import { cac } from "cac";
 import { version } from "../../package.json";
 
@@ -51,6 +51,24 @@ cli
 	.option("-d, --debug [feat]", `[string | boolean] show debug logs`)
 	.option("-f, --filter <filter>", `[string] filter debug logs`)
 	.option("-m, --mode <mode>", `[string] set env mode`);
+
+cli
+	.command("[root]", "Start a dev server")
+	.alias("dev")
+	.alias("serve")
+	.option("--host [host]", `[string] specify hostname`)
+	.option("--port <port>", `[number] specify port`)
+	.option("--https", `[boolean] use TLS + HTTP/2`)
+	.option("--open [path]", `[boolean | string] open browser on startup`)
+	.option("--cors", `[boolean] enable CORS`)
+	.option("--strictPort", `[boolean] exit if specified port is already in use`)
+	.option(
+		"--force",
+		`[boolean] force the optimizer to ignore the cache and re-bundle`,
+	)
+	.action(async (root: string, options: ServerOptions & GlobalCLIOptions) =>
+		import("./serve").then(({ serve }) => serve(root, options)),
+	);
 
 cli
 	.command("build [root]", "Build for production")
