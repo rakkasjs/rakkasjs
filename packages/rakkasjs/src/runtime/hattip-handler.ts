@@ -33,6 +33,7 @@ export function createRequestHandler(userHooks: ServerHooks = {}) {
 			hooks.map((hook) => hook.middleware?.beforePages),
 
 			process.env.RAKKAS_PRERENDER === "true" && prerender,
+
 			async (ctx: RequestContext) => {
 				try {
 					return await renderPageRoute(ctx);

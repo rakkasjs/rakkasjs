@@ -279,9 +279,13 @@ const DENO_ENTRY = `
 
 	serve(
 		async (request, connInfo) => {
-			const path = new URL(request.url).pathname;
-			if (staticFiles.has(path) || staticFiles.has(path + "/index.html")) {
+			const url = new URL(request.url);
+			const path = url.pathname;
+			if (staticFiles.has(path)) {
 				return serveDir(request, { fsRoot: staticDir });
+			} else if (staticFiles.has(path + "/index.html")) {
+				url.pathname = path + "/index.html";
+				return serveDir(new Request(url, request), { fsRoot: staticDir });
 			}
 
 			return denoHandler(request, connInfo);

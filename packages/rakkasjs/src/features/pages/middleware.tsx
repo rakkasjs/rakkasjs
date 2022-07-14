@@ -138,7 +138,10 @@ export default async function doRenderPageRoute(
 					: props.status;
 		}
 
-		if (props.throttleRenderStream !== undefined) {
+		if (
+			import.meta.env.RAKKAS_DISABLE_STREAMING !== "true" &&
+			props.throttleRenderStream !== undefined
+		) {
 			hold = props.throttleRenderStream;
 		}
 
@@ -377,7 +380,8 @@ export default async function doRenderPageRoute(
 		}
 
 		writer.write(textEncoder.encode("</body></html>"));
-		await writer.close();
+
+		writer.close();
 	}
 
 	const pipePromise = pipe();
