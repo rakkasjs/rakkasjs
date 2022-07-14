@@ -30,15 +30,6 @@ PreloadPage.preload = (ctx) => {
 		// it is guaranteed to be rendered on the server when rendered in the
 		// preload function.
 		head: <Head title="Preload example" />,
-		// Set response headers. Unlike the ResponseHeaders component, headers
-		// and status set this way are guaranteed to take effect even when
-		// streaming the response.
-		headers: {
-			status: 200,
-			headers: {
-				"Cache-Control": "public, max-age=0",
-			},
-		},
 		// Some custom metadata passed to page and layout components
 		meta: {
 			// Pages and inner layouts will overwrite their parents' meta

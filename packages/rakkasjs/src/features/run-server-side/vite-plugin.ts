@@ -1,5 +1,5 @@
 import { PluginOption, ResolvedConfig } from "vite";
-import { transformAsync } from "@babel/core";
+import { PluginItem, transformAsync } from "@babel/core";
 import { babelTransformServerSideHooks } from "./implementation/transform-server-side";
 import { babelTransformClientSideHooks } from "./implementation/transform-client-side";
 
@@ -61,40 +61,46 @@ export default function runServerSide(): PluginOption[] {
 			},
 
 			async transform(code, id, options) {
-				if (
-					!id.startsWith(resolvedConfig.root) ||
-					!code.match(
-						/\buseServerSideQuery|useServerSideMutation|useSSQ|useSSM|runServerSideQuery|runServerSideMutation|runSSQ|runSSM\b/,
-					) ||
-					(!code.includes(`"rakkasjs"`) && !code.includes(`'rakkasjs'`))
-				) {
-					return;
-				}
-
-				let moduleId: string;
-				if (resolvedConfig.command === "serve") {
-					moduleId = id.slice(resolvedConfig.root.length + 1);
-				} else if (moduleManifest) {
-					moduleId = moduleManifest[id];
-				} else {
-					moduleId = (idCounter++).toString(36);
-				}
-
+				const plugins: PluginItem[] = [];
 				const ref = { current: false };
+				let moduleId: string;
 
-				// Parse with babel
-				const result = await transformAsync(code, {
-					filename: id,
-					code: true,
-					plugins: [
+				if (
+					id.startsWith(resolvedConfig.root) &&
+					code.match(
+						/\buseServerSideQuery|useServerSideMutation|useSSQ|useSSM|runServerSideQuery|runServerSideMutation|runSSQ|runSSM\b/,
+					) &&
+					code.includes(`"rakkasjs"`) &&
+					!code.includes(`'rakkasjs'`)
+				) {
+					if (resolvedConfig.command === "serve") {
+						moduleId = id.slice(resolvedConfig.root.length + 1);
+					} else if (moduleManifest) {
+						moduleId = moduleManifest[id];
+					} else {
+						moduleId = (idCounter++).toString(36);
+					}
+
+					plugins.push(
 						options?.ssr
 							? babelTransformServerSideHooks(moduleId)
 							: babelTransformClientSideHooks(moduleId, ref),
-					],
+					);
+				}
+
+				if (!plugins.length) {
+					return;
+				}
+
+				// Transform with babel
+				const result = await transformAsync(code, {
+					filename: id,
+					code: true,
+					plugins,
 				});
 
 				if (ref.current) {
-					moduleIdMap[id] = moduleId;
+					moduleIdMap[id] = moduleId!;
 				}
 
 				if (result) {

@@ -1,6 +1,6 @@
 /// <reference types="@vavite/multibuild/vite-config" />
 
-import { PluginOption } from "vite";
+import { PluginOption, ResolvedConfig } from "vite";
 import react, { Options as ReactPluginOptions } from "@vitejs/plugin-react";
 import { injectConfig } from "./inject-config";
 import { preventViteBuild } from "./prevent-vite-build";
@@ -14,6 +14,7 @@ import apiRoutes from "../features/api-routes/vite-plugin";
 import pageRoutes from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
 import { adapters, RakkasAdapter } from "./adapters";
+import { babelTransformClientSidePages } from "../features/run-server-side/implementation/transform-client-page";
 
 export interface RakkasOptions {
 	/** Options passed to @vite/plugin-react */
@@ -49,6 +50,8 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		adapter = adapters[adapter];
 	}
 
+	let resolvedConfig: ResolvedConfig;
+
 	return [
 		...vaviteConnect({
 			handlerEntry: "/virtual:rakkasjs:node-entry",
@@ -56,8 +59,6 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 			serveClientAssetsInDev: true,
 		}),
 		exposeViteDevServer(),
-
-		...react(options.react),
 
 		preventViteBuild(),
 		injectConfig({ prerender, adapter }),
@@ -94,6 +95,37 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		}),
 		resolveClientManifest(),
 		...runServerSide(),
+		{
+			name: "rakkasjs:resolve-config",
+			configResolved(config) {
+				resolvedConfig = config;
+			},
+		},
+		...react({
+			...options.react,
+			babel(id, opts) {
+				const inputOptions =
+					typeof options.react?.babel === "function"
+						? options.react.babel(id, opts)
+						: options.react?.babel;
+
+				if (
+					!opts?.ssr &&
+					((resolvedConfig as any).api.rakkas.isPage(id) ||
+						(resolvedConfig as any).api.rakkas.isLayout(id))
+				) {
+					return {
+						...inputOptions,
+						plugins: [
+							babelTransformClientSidePages(),
+							...(inputOptions?.plugins ?? []),
+						],
+					};
+				} else {
+					return inputOptions || {};
+				}
+			},
+		}),
 	];
 }
 

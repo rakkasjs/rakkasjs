@@ -187,6 +187,11 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 			isPage = micromatch.matcher(layoutPattern);
 			isGuard = micromatch.matcher(guardPattern);
 			isSinglePageGuard = micromatch.matcher(singlePageGuardPattern);
+
+			// This is ugly but it's the easiest way to pass some info
+			// to the Babel transform
+			(config as any).api.rakkas.isPage = isPage;
+			(config as any).api.rakkas.isLayout = isLayout;
 		},
 
 		configureServer(server) {

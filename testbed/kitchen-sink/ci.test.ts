@@ -17,22 +17,30 @@ const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 if (import.meta.env.TEST_HOST) {
 	testCase("Running on existing server", process.env.NODE_ENV !== "production");
 } else {
+	testCase("Development Mode", true, "pnpm dev");
+	testCase("Production Mode", false, "pnpm build && pnpm start");
+
+	const include = (process.env.INCLUDE_TESTS ?? "").split(",").filter(Boolean);
+
 	const nodeVersions = process.versions.node.split(".");
 	const nodeVersionMajor = +nodeVersions[0];
 	const nodeVersionMinor = +nodeVersions[1];
 
-	testCase("Development Mode", true, "pnpm dev");
-	testCase("Production Mode", false, "pnpm build && pnpm start");
+	const all = include.includes("all");
 
-	if (
-		nodeVersionMajor >= 17 ||
-		(nodeVersionMajor >= 16 && nodeVersionMinor >= 7)
-	) {
-		testCase(
-			"Miniflare",
-			false,
-			"miniflare -m dist/server/cloudflare-workers-bundle.js -p 3000",
-		);
+	if (all || include.includes("miniflare")) {
+		if (
+			nodeVersionMajor >= 17 ||
+			(nodeVersionMajor >= 16 && nodeVersionMinor >= 7)
+		) {
+			testCase(
+				"Miniflare",
+				false,
+				"miniflare -m dist/server/cloudflare-workers-bundle.js -p 3000",
+			);
+		} else {
+			console.warn("Skipping Miniflare test because of Node version");
+		}
 	}
 }
 
@@ -701,6 +709,13 @@ function testCase(title: string, dev: boolean, command?: string) {
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Rewritten"),
 			);
+		});
+
+		test("headers function works", async () => {
+			const r = await fetch(TEST_HOST + "/headers");
+			expect(r.status).toBe(400);
+			expect(r.headers.get("X-Test-1")).toBe("1234");
+			expect(r.headers.get("X-Test-2")).toBe("GET");
 		});
 	});
 }

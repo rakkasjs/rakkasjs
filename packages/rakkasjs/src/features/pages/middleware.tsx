@@ -1,12 +1,13 @@
 /// <reference types="vite/client" />
 
-import React, { StrictMode, Suspense } from "react";
+import React, { Fragment, StrictMode, Suspense } from "react";
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { App, RouteContext } from "../../runtime/App";
 import isBot from "isbot-fast";
 import { findRoute, RouteMatch } from "../../internal/find-route";
 import {
+	Redirect,
 	ResponseContext,
 	ResponseContextProps,
 } from "../response-manipulation/implementation";
@@ -20,8 +21,12 @@ import { Default404Page } from "./Default404Page";
 import commonHooks from "virtual:rakkasjs:common-hooks";
 import {
 	LayoutImporter,
+	LayoutModule,
 	PageImporter,
+	PageModule,
 	PageRouteGuard,
+	PreloadContext,
+	PreloadResult,
 } from "../../runtime/page-types";
 import { BeforeRouteResult } from "../../lib";
 
@@ -30,8 +35,6 @@ const pageContextMap = new WeakMap<Request, PageContext>();
 export default async function doRenderPageRoute(
 	ctx: RequestContext,
 ): Promise<Response | undefined> {
-	ctx.locals = {};
-
 	const pageHooks = ctx.hooks.map((hook) => hook.createPageHooks?.(ctx));
 
 	const routes = (await import("virtual:rakkasjs:server-page-routes")).default;
@@ -155,10 +158,41 @@ export default async function doRenderPageRoute(
 		}
 	}
 
+	const importers = found.route[1];
+	const preloadContext: PreloadContext = {
+		...pageContext,
+		params: found.params,
+	};
+
+	const stack = (
+		(await Promise.all(
+			importers.map((i) =>
+				i().then(async (m) => [m, await m.default?.preload?.(preloadContext)]),
+			),
+		)) as [
+			[PageModule, PreloadResult | undefined],
+			...[LayoutModule, PreloadResult | undefined][],
+		]
+	).reverse();
+
+	const modules = stack.map((s) => s[0]);
+	const preloaded = stack.map((s) => s[1]);
+
+	const meta: any = {};
+	preloaded.forEach((p) => Object.assign(meta, p?.meta));
+
+	const preloadNode = preloaded.map((result, i) => (
+		<Fragment key={i}>
+			{result?.head}
+			{result?.redirect && <Redirect {...result?.redirect} />}
+		</Fragment>
+	));
+
 	let app = (
 		<ServerSideContext.Provider value={ctx}>
 			<IsomorphicContext.Provider value={pageContext}>
-				<App beforeRouteHandlers={beforeRouteHandlers} />
+				{preloadNode}
+				<App beforeRouteHandlers={beforeRouteHandlers} ssrMeta={meta} />
 			</IsomorphicContext.Provider>
 		</ServerSideContext.Provider>
 	);
@@ -181,6 +215,13 @@ export default async function doRenderPageRoute(
 		resolveRenderPromise = resolve;
 		rejectRenderPromise = reject;
 	});
+
+	for (const m of modules) {
+		const headers = await m.headers?.(preloadContext, meta);
+		if (headers) {
+			updateHeaders(headers);
+		}
+	}
 
 	app = (
 		<div id="root">
@@ -252,7 +293,7 @@ export default async function doRenderPageRoute(
 		if (hold === true || (userAgent && isBot(userAgent))) {
 			await reactStream.allReady;
 			await new Promise<void>((resolve) => {
-				setTimeout(resolve, 100);
+				setTimeout(resolve, 0);
 			});
 		} else if (hold > 0) {
 			await Promise.race([
@@ -322,7 +363,13 @@ export default async function doRenderPageRoute(
 		await writer.close();
 	}
 
-	ctx.waitUntil(pipe());
+	const pipePromise = pipe();
+
+	if (hold === true) {
+		await pipePromise;
+	} else {
+		ctx.waitUntil(pipePromise);
+	}
 
 	return new Response(readable, { status, headers });
 }

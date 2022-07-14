@@ -2,6 +2,7 @@ import React, {
 	createContext,
 	Fragment,
 	ReactElement,
+	ReactNode,
 	useContext,
 } from "react";
 import { useLocation } from "../features/client-side-navigation/lib";
@@ -9,16 +10,12 @@ import { findRoute, RouteMatch } from "../internal/find-route";
 import { Layout, PreloadContext, PreloadResult } from "./page-types";
 import prodRoutes from "virtual:rakkasjs:client-page-routes";
 import { Default404Page } from "../features/pages/Default404Page";
-import {
-	BeforeRouteResult,
-	PageContext,
-	Redirect,
-	ResponseHeaders,
-} from "../lib";
+import { BeforeRouteResult, PageContext, Redirect } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 
 export interface AppProps {
 	beforeRouteHandlers: Array<(ctx: PageContext, url: URL) => BeforeRouteResult>;
+	ssrMeta?: any;
 }
 
 export function App(props: AppProps) {
@@ -41,6 +38,7 @@ export function App(props: AppProps) {
 			lastRoute.found,
 			false,
 			props.beforeRouteHandlers,
+			props.ssrMeta,
 		)
 			.then((route) => {
 				lastRoute.last = route;
@@ -76,6 +74,7 @@ export async function loadRoute(
 	lastFound: RouteContextContent["found"],
 	try404: boolean,
 	beforeRouteHandlers: Array<(ctx: PageContext, url: URL) => BeforeRouteResult>,
+	ssrMeta?: any,
 ) {
 	let found = lastFound;
 	const { pathname: originalPathname } = pageContext.url;
@@ -154,24 +153,35 @@ export async function loadRoute(
 		]),
 	) as Promise<[Layout, PreloadResult | undefined]>[];
 
-	const results = await Promise.all(promises);
+	const layoutStack = await Promise.all(promises);
 
-	const preloaded = results.map((r) => r[1]).reverse();
+	let meta: any;
+	let preloadNode: ReactNode;
 
-	const preloadedData: any = {};
-	preloaded.forEach((p) => Object.assign(preloadedData, p?.meta));
+	if (import.meta.env.SSR) {
+		meta = ssrMeta;
+		preloadNode = null;
+	} else {
+		const preloaded = layoutStack.map((r) => r[1]).reverse();
 
-	const components = results.map(
+		meta = {};
+		preloaded.forEach((p) => Object.assign(meta, p?.meta));
+
+		preloadNode = preloaded.map((result, i) => (
+			<Fragment key={i}>
+				{result?.head}
+				{result?.redirect && <Redirect {...result?.redirect} />}
+			</Fragment>
+		));
+	}
+
+	const components = layoutStack.map(
 		(m) => m[0] || (({ children }: any) => children),
 	);
 
 	let app = components.reduce(
 		(prev, Component) => (
-			<Component
-				url={pageContext.url}
-				params={found!.params}
-				meta={preloadedData}
-			>
+			<Component url={pageContext.url} params={found!.params} meta={meta}>
 				{prev}
 			</Component>
 		),
@@ -180,14 +190,7 @@ export async function loadRoute(
 
 	app = (
 		<>
-			{preloaded.map((result, i) => (
-				<Fragment key={i}>
-					{result?.head}
-					{result?.headers && <ResponseHeaders {...result?.headers} />}
-					{result?.redirect && <Redirect {...result?.redirect} />}
-				</Fragment>
-			))}
-
+			{preloadNode}
 			{app}
 		</>
 	);

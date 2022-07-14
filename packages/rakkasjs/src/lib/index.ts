@@ -8,6 +8,7 @@ export type {
 	PreloadContext,
 	PreloadResult,
 	PreloadFunction,
+	ServerSidePageContext,
 } from "../runtime/page-types";
 
 export * from "../runtime/common-hooks";

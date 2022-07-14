@@ -4,6 +4,7 @@ import {
 	PageContext,
 	RedirectProps,
 	ResponseHeadersProps,
+	RequestContext,
 } from "../lib";
 
 export type PageImporter = () => Promise<PageModule>;
@@ -12,10 +13,12 @@ export type LayoutImporter = () => Promise<LayoutModule>;
 
 export interface PageModule {
 	default: Page;
+	headers?: HeadersFunction;
 }
 
 export interface LayoutModule {
 	default: Layout;
+	headers?: HeadersFunction;
 }
 
 /** A page component */
@@ -70,14 +73,21 @@ export interface PreloadContext<P = Record<string, string>>
 	params: P;
 }
 
+/**
+ * Arguments passed to server-side page functions like `headers`,
+ * `prerender`, and `action`
+ */
+export type ServerSidePageContext<P = Record<string, string>> =
+	PreloadContext<P> & {
+		requestContext: RequestContext;
+	};
+
 /** The expected return type of a preload function */
 export interface PreloadResult<M = Record<string, unknown>> {
 	/** Metadata passed to page and layou components */
 	meta?: Partial<M>;
 	/** Head tags rendered for the page */
 	head?: ReactNode;
-	/** Response headers and status code */
-	headers?: ResponseHeadersProps;
 	/** Redirection */
 	redirect?: RedirectProps;
 }
@@ -91,3 +101,8 @@ export interface PageRouteGuardContext<P = Record<string, string>>
 export type PageRouteGuard<P = Record<string, string>> = (
 	ctx: PageRouteGuardContext<P>,
 ) => boolean;
+
+type HeadersFunction<M = Record<string, unknown>> = (
+	context: PreloadContext,
+	meta: M,
+) => ResponseHeadersProps | Promise<ResponseHeadersProps>;
