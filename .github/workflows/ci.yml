@@ -42,5 +42,10 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Install Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
       - name: Run CI tests
         run: pnpm run ci

@@ -168,6 +168,7 @@ importers:
       cross-env: ^7.0.3
       eslint: ^8.19.0
       miniflare: ^2.6.0
+      netlify: ^11.0.2
       node-fetch: ^3.2.7
       ps-tree: ^1.2.0
       puppeteer: ^15.3.2
@@ -185,6 +186,7 @@ importers:
       "@types/react": 18.0.15
       "@types/react-dom": 18.0.6
       cheerio: 1.0.0-rc.12
+      netlify: 11.0.2
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       web-streams-polyfill: 3.2.1
@@ -1580,6 +1582,13 @@ packages:
       - utf-8-validate
     dev: true
 
+  /@netlify/open-api/2.11.0:
+    resolution:
+      {
+        integrity: sha512-ni6R1xdR8EtH0iB8ixGt9ocuboW+Q8eN4ilTX8lfNHS6Y6Q2S+O/aB2n1BnAgv39wopeQsQ2meL9vfEePURl7w==,
+      }
+    dev: false
+
   /@nodelib/fs.scandir/2.1.5:
     resolution:
       {
@@ -2684,7 +2693,6 @@ packages:
     dependencies:
       function-bind: 1.1.1
       get-intrinsic: 1.1.2
-    dev: true
 
   /callsites/3.1.0:
     resolution:
@@ -3313,7 +3321,6 @@ packages:
         integrity: sha512-Vr3mLBA8qWmcuschSLAOogKgQ/Jwxulv3RNE4FXnYWRGujzrRWQI4m12fQqRkwX06C0KanhLr4hK+GydchZsaA==,
       }
     engines: { node: ">= 12" }
-    dev: true
 
   /dateformat/3.0.3:
     resolution:
@@ -4908,7 +4915,6 @@ packages:
     dependencies:
       node-domexception: 1.0.0
       web-streams-polyfill: 3.2.1
-    dev: true
 
   /figures/3.2.0:
     resolution:
@@ -5019,7 +5025,6 @@ packages:
     engines: { node: ">=12.20.0" }
     dependencies:
       fetch-blob: 3.2.0
-    dev: true
 
   /from/0.1.7:
     resolution:
@@ -5149,7 +5154,6 @@ packages:
       function-bind: 1.1.1
       has: 1.0.3
       has-symbols: 1.0.3
-    dev: true
 
   /get-package-type/0.1.0:
     resolution:
@@ -5522,7 +5526,6 @@ packages:
         integrity: sha512-l3LCuF6MgDNwTDKkdYGEihYjt5pRPbEg46rtlmnSPlUbgmB8LOIrKJbYYFBSbnPaJexMKtiPO8hmeRjRz2Td+A==,
       }
     engines: { node: ">= 0.4" }
-    dev: true
 
   /has-tostringtag/1.0.0:
     resolution:
@@ -6683,6 +6686,13 @@ packages:
       p-locate: 4.1.0
     dev: true
 
+  /lodash.camelcase/4.3.0:
+    resolution:
+      {
+        integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==,
+      }
+    dev: false
+
   /lodash.merge/4.6.2:
     resolution:
       {
@@ -7094,6 +7104,13 @@ packages:
         integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==,
       }
     engines: { node: ">= 8" }
+
+  /micro-api-client/3.3.0:
+    resolution:
+      {
+        integrity: sha512-y0y6CUB9RLVsy3kfgayU28746QrNMpSm9O/AYGNsBgOkJr/X/Jk0VLGoO8Ude7Bpa8adywzF+MzXNZRFRsNPhg==,
+      }
+    dev: false
 
   /micromark-core-commonmark/1.0.6:
     resolution:
@@ -7812,6 +7829,22 @@ packages:
       "@types/node": 14.18.21
     dev: true
 
+  /netlify/11.0.2:
+    resolution:
+      {
+        integrity: sha512-dOgKAADwP0qQ9iHmbB4erimtpW0YczJtQLrnYGBTFElstG2Y9sj+ZRFlIUvJhVLOOdzFy4j+x9Zmn9dUoD1e0A==,
+      }
+    engines: { node: ^12.20.0 || ^14.14.0 || >=16.0.0 }
+    dependencies:
+      "@netlify/open-api": 2.11.0
+      lodash.camelcase: 4.3.0
+      micro-api-client: 3.3.0
+      node-fetch: 3.2.7
+      omit.js: 2.0.2
+      p-wait-for: 4.1.0
+      qs: 6.11.0
+    dev: false
+
   /node-dev/7.4.3:
     resolution:
       {
@@ -7836,7 +7869,6 @@ packages:
         integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==,
       }
     engines: { node: ">=10.5.0" }
-    dev: true
 
   /node-fetch-native/0.1.4:
     resolution:
@@ -7879,7 +7911,6 @@ packages:
       data-uri-to-buffer: 4.0.0
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
-    dev: true
 
   /node-forge/1.3.1:
     resolution:
@@ -8019,7 +8050,6 @@ packages:
       {
         integrity: sha512-z+cPxW0QGUp0mcqcsgQyLVRDoXFQbXOwBaqyF7VIgI4TWNQsDHrBpUQslRmIfAoYWdYzs6UlKJtB2XJpTaNSpQ==,
       }
-    dev: true
 
   /object-keys/1.1.1:
     resolution:
@@ -8087,6 +8117,13 @@ packages:
       define-properties: 1.1.4
       es-abstract: 1.20.1
     dev: true
+
+  /omit.js/2.0.2:
+    resolution:
+      {
+        integrity: sha512-hJmu9D+bNB40YpL9jYebQl4lsTW6yEHRTroJzNLqQJYHm7c+NQnJGfZmIWh8S3q3KoaxV1aLhV6B3+0N0/kyJg==,
+      }
+    dev: false
 
   /once/1.4.0:
     resolution:
@@ -8234,6 +8271,14 @@ packages:
       aggregate-error: 3.1.0
     dev: true
 
+  /p-timeout/5.1.0:
+    resolution:
+      {
+        integrity: sha512-auFDyzzzGZZZdHz3BtET9VEz0SE/uMEAx7uWfGPucfzEwwe/xH0iVeZibQmANYE/hp9T2+UUZT5m+BKyrDp3Ew==,
+      }
+    engines: { node: ">=12" }
+    dev: false
+
   /p-try/1.0.0:
     resolution:
       {
@@ -8249,6 +8294,16 @@ packages:
       }
     engines: { node: ">=6" }
     dev: true
+
+  /p-wait-for/4.1.0:
+    resolution:
+      {
+        integrity: sha512-i8nE5q++9h8oaQHWltS1Tnnv4IoMDOlqN7C0KFG2OdbK0iFJIt6CROZ8wfBM+K4Pxqfnq4C4lkkpXqTEpB5DZw==,
+      }
+    engines: { node: ">=12" }
+    dependencies:
+      p-timeout: 5.1.0
+    dev: false
 
   /package-json/4.0.1:
     resolution:
@@ -8786,6 +8841,16 @@ packages:
       - supports-color
       - utf-8-validate
     dev: true
+
+  /qs/6.11.0:
+    resolution:
+      {
+        integrity: sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==,
+      }
+    engines: { node: ">=0.6" }
+    dependencies:
+      side-channel: 1.0.4
+    dev: false
 
   /queue-microtask/1.2.3:
     resolution:
@@ -9488,7 +9553,6 @@ packages:
       call-bind: 1.0.2
       get-intrinsic: 1.1.2
       object-inspect: 1.12.2
-    dev: true
 
   /sigmund/1.0.1:
     resolution:

@@ -17,18 +17,25 @@ const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 if (import.meta.env.TEST_HOST) {
 	testCase("Running on existing server", process.env.NODE_ENV !== "production");
 } else {
-	testCase("Development Mode", true, "pnpm dev");
-	testCase("Production Mode", false, "pnpm build && pnpm start");
+	if (process.env.INCLUDE_TESTS ?? "all" === "all") {
+		process.env.INCLUDE_TESTS = "dev,prod,miniflare,netlify,netlify-edge,deno";
+	}
 
-	const include = (process.env.INCLUDE_TESTS ?? "").split(",").filter(Boolean);
+	const include = process.env.INCLUDE_TESTS!.split(",").filter(Boolean);
+
+	if (include.includes("dev")) {
+		testCase("Development Mode", true, "pnpm dev");
+	}
+
+	if (include.includes("prod")) {
+		testCase("Production Mode", false, "pnpm build && pnpm start");
+	}
 
 	const nodeVersions = process.versions.node.split(".");
 	const nodeVersionMajor = +nodeVersions[0];
 	const nodeVersionMinor = +nodeVersions[1];
 
-	const all = include.includes("all");
-
-	if (all || include.includes("miniflare")) {
+	if (include.includes("miniflare")) {
 		if (
 			nodeVersionMajor >= 17 ||
 			(nodeVersionMajor >= 16 && nodeVersionMinor >= 7)
@@ -41,6 +48,30 @@ if (import.meta.env.TEST_HOST) {
 		} else {
 			console.warn("Skipping Miniflare test because of Node version");
 		}
+	}
+
+	if (include.includes("netlify")) {
+		testCase(
+			"Netlify functions",
+			false,
+			"pnpm build:netlify && cross-env BROWSER=none netlify dev -d netlify/static -op 3000",
+		);
+	}
+
+	if (include.includes("netlify-edge")) {
+		testCase(
+			"Netlify edge",
+			false,
+			"pnpm build:netlify-edge && cross-env BROWSER=none netlify dev -d netlify/static -op 3000",
+		);
+	}
+
+	if (include.includes("deno")) {
+		testCase(
+			"Deno",
+			false,
+			"pnpm build:deno && deno run --allow-read --allow-net --allow-env dist/deno/mod.js",
+		);
 	}
 }
 

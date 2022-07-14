@@ -8,8 +8,8 @@
 		"build:cfw": "cross-env RAKKAS_TARGET=cloudflare-workers rakkas build",
 		"build:netlify": "cross-env RAKKAS_TARGET=netlify rakkas build",
 		"build:netlify-edge": "cross-env RAKKAS_TARGET=netlify-edge rakkas build",
-		"build:vercel": "cp -R dist/vercel .vercel/output",
-		"build:vercel-serverless": "cross-env RAKKAS_TARGET=vercel rakkas build",
+		"build:deno": "cross-env RAKKAS_TARGET=deno rakkas build",
+		"build:vercel": "cross-env RAKKAS_TARGET=vercel rakkas build",
 		"build:vercel-edge": "cross-env RAKKAS_TARGET=vercel-edge rakkas build",
 		"start": "node dist/server",
 		"ci": "vitest run --reporter=verbose --no-threads",
@@ -41,6 +41,7 @@
 		"@types/react": "^18.0.15",
 		"@types/react-dom": "^18.0.6",
 		"cheerio": "1.0.0-rc.12",
+		"netlify": "^11.0.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"web-streams-polyfill": "^3.2.1"

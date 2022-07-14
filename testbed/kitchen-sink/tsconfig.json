@@ -9,5 +9,6 @@
 		"moduleResolution": "Node",
 		"resolveJsonModule": true,
 		"jsx": "react-jsx"
-	}
+	},
+	"exclude": ["dist", "netlify", ".vercel", ".netlify"]
 }
