@@ -126,13 +126,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-# Local files
-*.local.*
-
-
-# Local folders
-.netlify
-.vercel
-testbed/kitchen-sink/netlify
-packages/create-rakkas-app/templates

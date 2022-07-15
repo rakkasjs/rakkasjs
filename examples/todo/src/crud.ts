@@ -16,7 +16,7 @@ let todoItems: TodoItem[] = [
 	},
 	{
 		id: 2,
-		text: "Learn Rakkas.JS",
+		text: "Learn Rakkas",
 		done: false,
 	},
 ];

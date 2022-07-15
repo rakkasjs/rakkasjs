@@ -26,7 +26,7 @@ export default function TodoPage() {
 		<main>
 			<h1>Todo</h1>
 
-			<p>This is a simple TODO application that demonstrates data fetching.</p>
+			<p>This is a simple todo application that demonstrates data fetching.</p>
 
 			<ul className={css.todoList}>
 				{data.map((todo) => (
