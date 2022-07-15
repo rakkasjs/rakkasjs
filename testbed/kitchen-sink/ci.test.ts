@@ -121,7 +121,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					});
 
 					const interval = setInterval(() => {
-						fetch(TEST_HOST + "/")
+						fetch(host + "/")
 							.then(async (r) => {
 								const text = await r.text();
 								if (
@@ -159,19 +159,19 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		}
 
 		test("renders simple API route", async () => {
-			const response = await fetch(TEST_HOST + "/api-routes/simple");
+			const response = await fetch(host + "/api-routes/simple");
 			expect(response.status).toBe(200);
 			const text = await response.text();
 			expect(text).toEqual("Hello from API route");
 		});
 
 		test("runs middleware", async () => {
-			const response = await fetch(TEST_HOST + "/api-routes/simple?abort=1");
+			const response = await fetch(host + "/api-routes/simple?abort=1");
 			expect(response.status).toBe(200);
 			const text = await response.text();
 			expect(text).toEqual("Hello from middleware");
 
-			const response2 = await fetch(TEST_HOST + "/api-routes/simple?modify=1");
+			const response2 = await fetch(host + "/api-routes/simple?modify=1");
 			expect(response2.status).toBe(200);
 			const text2 = await response2.text();
 			expect(text2).toEqual("Hello from API route");
@@ -179,21 +179,21 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("renders params", async () => {
-			const response = await fetch(TEST_HOST + "/api-routes/param-value");
+			const response = await fetch(host + "/api-routes/param-value");
 			expect(response.status).toBe(200);
 			const json = await response.json();
 			expect(json).toMatchObject({ param: "param-value" });
 		});
 
 		test("renders spread params", async () => {
-			const response = await fetch(TEST_HOST + "/api-routes/more/aaa/bbb/ccc");
+			const response = await fetch(host + "/api-routes/more/aaa/bbb/ccc");
 			expect(response.status).toBe(200);
 			const json = await response.json();
 			expect(json).toMatchObject({ rest: "/aaa/bbb/ccc" });
 		});
 
 		test("renders preloaded data", async () => {
-			const response = await fetch(TEST_HOST + "/");
+			const response = await fetch(host + "/");
 			expect(response.status).toBe(200);
 
 			const html = await response.text();
@@ -204,7 +204,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("renders interactive page", async () => {
-			await page.goto(TEST_HOST + "/");
+			await page.goto(host + "/");
 			await page.waitForSelector(".hydrated");
 
 			const button: ElementHandle<HTMLButtonElement> | null =
@@ -220,7 +220,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 		if (dev) {
 			test("hot reloads page", async () => {
-				await page.goto(TEST_HOST + "/");
+				await page.goto(host + "/");
 				await page.waitForSelector(".hydrated");
 
 				const button: ElementHandle<HTMLButtonElement> | null =
@@ -258,13 +258,13 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		}
 
 		test("sets page title", async () => {
-			await page.goto(TEST_HOST + "/title");
+			await page.goto(host + "/title");
 
 			await page.waitForFunction(() => document.title === "Page title");
 		});
 
 		test("performs client-side navigation", async () => {
-			await page.goto(TEST_HOST + "/nav");
+			await page.goto(host + "/nav");
 			await page.waitForSelector(".hydrated");
 
 			const button: ElementHandle<HTMLButtonElement> | null =
@@ -286,7 +286,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				(host: string) =>
 					document.body?.innerText.includes(`Navigating to: ${host}/nav/a`),
 				{},
-				TEST_HOST,
+				host,
 			);
 
 			await page.waitForFunction(() => {
@@ -307,7 +307,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("restores scroll position", async () => {
-			await page.goto(TEST_HOST + "/nav?scroll=1");
+			await page.goto(host + "/nav?scroll=1");
 			await page.waitForSelector(".hydrated");
 
 			// Scroll to the bottom
@@ -344,7 +344,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("handles relative links correctly during transitions", async () => {
-			await page.goto(TEST_HOST + "/nav");
+			await page.goto(host + "/nav");
 			await page.waitForSelector(".hydrated");
 
 			const link = (await page.waitForSelector(
@@ -361,29 +361,29 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				() =>
 					(document.getElementById("relative-link") as HTMLAnchorElement).href,
 			);
-			expect(x).toBe(TEST_HOST + "/relative");
+			expect(x).toBe(host + "/relative");
 		});
 
 		test("redirects", async () => {
-			await page.goto(TEST_HOST + "/redirect/shallow");
+			await page.goto(host + "/redirect/shallow");
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Redirected"),
 			);
 
-			await page.goto(TEST_HOST + "/redirect/deep");
+			await page.goto(host + "/redirect/deep");
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Redirected"),
 			);
 		});
 
 		test("sets redirect status", async () => {
-			let response = await fetch(TEST_HOST + "/redirect/shallow", {
+			let response = await fetch(host + "/redirect/shallow", {
 				headers: { "User-Agent": "rakkasjs-crawler" },
 				redirect: "manual",
 			});
 			expect(response.status).toBe(302);
 
-			response = await fetch(TEST_HOST + "/redirect/deep", {
+			response = await fetch(host + "/redirect/deep", {
 				headers: { "User-Agent": "rakkasjs-crawler" },
 				redirect: "manual",
 			});
@@ -391,7 +391,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("sets status and headers", async () => {
-			const response = await fetch(TEST_HOST + "/response-headers", {
+			const response = await fetch(host + "/response-headers", {
 				headers: { "User-Agent": "rakkasjs-crawler" },
 			});
 			expect(response.status).toBe(400);
@@ -399,7 +399,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("fetches data with useQuery", async () => {
-			await page.goto(TEST_HOST + "/use-query");
+			await page.goto(host + "/use-query");
 			await page.waitForSelector(".hydrated");
 
 			await page.waitForFunction(() =>
@@ -423,7 +423,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("handles errors in useQuery", async () => {
-			await page.goto(TEST_HOST + "/use-query/error");
+			await page.goto(host + "/use-query/error");
 			await page.waitForSelector(".hydrated");
 
 			await page.waitForFunction(() =>
@@ -448,7 +448,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("useQuery refetches on focus", async () => {
-			await page.goto(TEST_HOST + "/use-query");
+			await page.goto(host + "/use-query");
 			await page.waitForSelector(".hydrated");
 
 			await page.waitForFunction(() =>
@@ -469,7 +469,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("useQuery refetches on interval", async () => {
-			await page.goto(TEST_HOST + "/use-query/interval");
+			await page.goto(host + "/use-query/interval");
 			await page.waitForSelector(".hydrated");
 
 			await page.waitForFunction(() =>
@@ -478,7 +478,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("queryClient.setQueryData works", async () => {
-			await page.goto(TEST_HOST + "/use-query/set-query-data");
+			await page.goto(host + "/use-query/set-query-data");
 
 			await page.waitForFunction(
 				() =>
@@ -489,12 +489,12 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("runs useServerSideQuery on the server", async () => {
-			await page.goto(TEST_HOST + "/use-ssq");
+			await page.goto(host + "/use-ssq");
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Result: 7, SSR: true"),
 			);
 
-			await page.goto(TEST_HOST + "/use-ssq/elsewhere");
+			await page.goto(host + "/use-ssq/elsewhere");
 			await page.waitForSelector(".hydrated");
 
 			const link = (await page.waitForSelector(
@@ -510,12 +510,12 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("runs runServerSideQuery on the server", async () => {
-			await page.goto(TEST_HOST + "/run-ssq");
+			await page.goto(host + "/run-ssq");
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Result: 7, SSR: true"),
 			);
 
-			await page.goto(TEST_HOST + "/run-ssq/elsewhere");
+			await page.goto(host + "/run-ssq/elsewhere");
 			await page.waitForSelector(".hydrated");
 
 			const link = (await page.waitForSelector(
@@ -531,7 +531,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("runs runServerSideMutation on the server", async () => {
-			await page.goto(TEST_HOST + "/run-ssm");
+			await page.goto(host + "/run-ssm");
 			await page.waitForSelector(".hydrated");
 
 			await page.waitForFunction(() =>
@@ -550,7 +550,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("runs useServerSideMutation on the server", async () => {
-			await page.goto(TEST_HOST + "/use-ssm");
+			await page.goto(host + "/use-ssm");
 			await page.waitForSelector(".hydrated");
 
 			await page.waitForFunction(() =>
@@ -569,14 +569,14 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("handles 404", async () => {
-			const response = await fetch(TEST_HOST + "/not-found");
+			const response = await fetch(host + "/not-found");
 			expect(response.status).toBe(404);
 			const body = await response.text();
 			expect(body).to.contain("Not Found");
 		});
 
 		test("handles 404 with layout", async () => {
-			const response = await fetch(TEST_HOST + "/404/deep");
+			const response = await fetch(host + "/404/deep");
 			expect(response.status).toBe(404);
 			const body = await response.text();
 			expect(body).to.contain("This is a shared header.");
@@ -584,7 +584,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("handles 404 with client-side nav", async () => {
-			await page.goto(TEST_HOST + "/404/deep/found");
+			await page.goto(host + "/404/deep/found");
 			await page.waitForSelector(".hydrated");
 			const link = (await page.waitForSelector(
 				"a",
@@ -598,14 +598,14 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("handles error", async () => {
-			const response = await fetch(TEST_HOST + "/error", {
+			const response = await fetch(host + "/error", {
 				headers: { "User-Agent": "rakkasjs-crawler" },
 			});
 			expect(response.status).toBe(500);
 		});
 
 		test("handles error with message", async () => {
-			await page.goto(TEST_HOST + "/error");
+			await page.goto(host + "/error");
 
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Internal Error"),
@@ -613,7 +613,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("handles error with client-side nav", async () => {
-			await page.goto(TEST_HOST + "/error/intro");
+			await page.goto(host + "/error/intro");
 			await page.waitForSelector(".hydrated");
 			const link = (await page.waitForSelector(
 				"a",
@@ -627,7 +627,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("mutates with useMutation", async () => {
-			await page.goto(TEST_HOST + "/use-mutation");
+			await page.goto(host + "/use-mutation");
 			await page.waitForSelector(".hydrated");
 
 			const btn: ElementHandle<HTMLButtonElement> | null =
@@ -646,7 +646,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("handles useMutation error", async () => {
-			await page.goto(TEST_HOST + "/use-mutation?error");
+			await page.goto(host + "/use-mutation?error");
 			await page.waitForSelector(".hydrated");
 
 			const btn: ElementHandle<HTMLButtonElement> | null =
@@ -665,45 +665,43 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("route guards work", async () => {
-			await page.goto(TEST_HOST + "/guard");
+			await page.goto(host + "/guard");
 
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Not Found"),
 			);
 
-			await page.goto(TEST_HOST + "/guard?allow-outer");
+			await page.goto(host + "/guard?allow-outer");
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Not Found"),
 			);
 
-			await page.goto(TEST_HOST + "/guard?allow-inner");
+			await page.goto(host + "/guard?allow-inner");
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Not Found"),
 			);
 
-			await page.goto(TEST_HOST + "/guard?allow-outer&allow-inner");
+			await page.goto(host + "/guard?allow-outer&allow-inner");
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Found!"),
 			);
 
-			await page.goto(TEST_HOST + "/guard?allow-outer&rewrite");
+			await page.goto(host + "/guard?allow-outer&rewrite");
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Rewritten!"),
 			);
 		});
 
 		test("beforeRoute redirect works on the server", async () => {
-			const r = await fetch(TEST_HOST + "/before-route/redirect", {
+			const r = await fetch(host + "/before-route/redirect", {
 				redirect: "manual",
 			});
 			expect(r.status).toBe(302);
-			expect(r.headers.get("location")).toBe(
-				TEST_HOST + "/before-route/redirected",
-			);
+			expect(r.headers.get("location")).toBe(host + "/before-route/redirected");
 		});
 
 		test("beforeRoute redirect works on the client", async () => {
-			await page.goto(TEST_HOST + "/before-route/redirect");
+			await page.goto(host + "/before-route/redirect");
 			await page.waitForSelector(".hydrated");
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Redirected"),
@@ -711,7 +709,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("beforeRoute redirect works with client-side navigation", async () => {
-			await page.goto(TEST_HOST + "/before-route/links");
+			await page.goto(host + "/before-route/links");
 			await page.waitForSelector(".hydrated");
 
 			const link = (await page.waitForSelector(
@@ -726,13 +724,13 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("beforeRoute rewrite works on the server", async () => {
-			const r = await fetch(TEST_HOST + "/before-route/rewrite");
+			const r = await fetch(host + "/before-route/rewrite");
 			const text = await r.text();
 			expect(text).toContain("Rewritten");
 		});
 
 		test("beforeRoute rewrite works on the client", async () => {
-			await page.goto(TEST_HOST + "/before-route/rewrite");
+			await page.goto(host + "/before-route/rewrite");
 			await page.waitForSelector(".hydrated");
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Rewritten"),
@@ -740,7 +738,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("beforeRoute rewrite works with client-side navigation", async () => {
-			await page.goto(TEST_HOST + "/before-route/links");
+			await page.goto(host + "/before-route/links");
 			await page.waitForSelector(".hydrated");
 
 			const link = (await page.waitForSelector(
@@ -755,7 +753,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("headers function works", async () => {
-			const r = await fetch(TEST_HOST + "/headers");
+			const r = await fetch(host + "/headers");
 			expect(r.status).toBe(400);
 			expect(r.headers.get("X-Test-1")).toBe("1234");
 			expect(r.headers.get("X-Test-2")).toBe("GET");
@@ -771,7 +769,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					{ url: "/prerender/not-crawled", shouldPrerender: false },
 					{ url: "/prerender/not-prerendered", shouldPrerender: false },
 				])("$url", async ({ url, shouldPrerender }) => {
-					const response = await fetch(TEST_HOST + url);
+					const response = await fetch(host + url);
 					expect(response.status).toBe(200);
 					const text = await response.text();
 
