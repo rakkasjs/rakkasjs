@@ -12,7 +12,7 @@ import { promisify } from "util";
 import { kill } from "process";
 import { load } from "cheerio";
 
-const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
+const TEST_HOST = import.meta.env.TEST_HOST || "http://127.0.0.1:3000";
 
 if (import.meta.env.TEST_HOST) {
 	testCase("Running on existing server", process.env.NODE_ENV !== "production");
