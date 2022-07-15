@@ -4,6 +4,8 @@ importers:
   .:
     specifiers:
       "@vitejs/plugin-react": ^2.0.0
+      cross-env: ^7.0.3
+      crossenv: 0.0.2-security
       husky: ^8.0.1
       lint-staged: ^13.0.3
       prettier: ^2.7.1
@@ -14,6 +16,8 @@ importers:
       "@vitejs/plugin-react": 2.0.0_vite@3.0.0
       vite: 3.0.0
     devDependencies:
+      cross-env: 7.0.3
+      crossenv: 0.0.2-security
       husky: 8.0.1
       lint-staged: 13.0.3
       prettier: 2.7.1
@@ -5726,6 +5730,13 @@ packages:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  /crossenv/0.0.2-security:
+    resolution:
+      {
+        integrity: sha512-Zet/ldwzo70I+vUnjM9yHCWo2iqK/RM2s2VnZDNPE/fN062UXYXGqu9Hd7HlhNVhnYGclPcjNoySWhug5lctHw==,
+      }
+    dev: true
 
   /crypto-random-string/1.0.0:
     resolution:
