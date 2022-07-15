@@ -12,10 +12,14 @@ import { promisify } from "util";
 import { kill } from "process";
 import { load } from "cheerio";
 
-const TEST_HOST = import.meta.env.TEST_HOST || "http://127.0.0.1:3000";
+const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 
 if (import.meta.env.TEST_HOST) {
-	testCase("Running on existing server", process.env.NODE_ENV !== "production");
+	testCase(
+		"Running on existing server",
+		process.env.NODE_ENV !== "production",
+		TEST_HOST,
+	);
 } else {
 	if ((process.env.INCLUDE_TESTS ?? "all") === "all") {
 		process.env.INCLUDE_TESTS = "dev,prod,miniflare,netlify,netlify-edge,deno";
@@ -24,11 +28,11 @@ if (import.meta.env.TEST_HOST) {
 	const include = process.env.INCLUDE_TESTS!.split(",").filter(Boolean);
 
 	if (include.includes("dev")) {
-		testCase("Development Mode", true, "pnpm dev");
+		testCase("Development Mode", true, TEST_HOST, "pnpm dev");
 	}
 
 	if (include.includes("prod")) {
-		testCase("Production Mode", false, "pnpm build && pnpm start");
+		testCase("Production Mode", false, TEST_HOST, "pnpm build && pnpm start");
 	}
 
 	const nodeVersions = process.versions.node.split(".");
@@ -43,6 +47,7 @@ if (import.meta.env.TEST_HOST) {
 			testCase(
 				"Miniflare",
 				false,
+				TEST_HOST,
 				"miniflare -m dist/server/cloudflare-workers-bundle.js -p 3000",
 			);
 		} else {
@@ -54,6 +59,7 @@ if (import.meta.env.TEST_HOST) {
 		testCase(
 			"Netlify functions",
 			false,
+			TEST_HOST,
 			"pnpm build:netlify && netlify dev -d netlify/static -op 3000",
 		);
 	}
@@ -62,6 +68,7 @@ if (import.meta.env.TEST_HOST) {
 		testCase(
 			"Netlify edge",
 			false,
+			TEST_HOST,
 			"pnpm build:netlify-edge && netlify dev -d netlify/static -op 3000",
 		);
 	}
@@ -70,6 +77,7 @@ if (import.meta.env.TEST_HOST) {
 		testCase(
 			"Deno",
 			false,
+			"127.0.0.1",
 			"pnpm build:deno && deno run --allow-read --allow-net --allow-env dist/deno/mod.js",
 		);
 	}
@@ -83,7 +91,7 @@ const browser = await puppeteer.launch({
 const pages = await browser.pages();
 const page = pages[0];
 
-function testCase(title: string, dev: boolean, command?: string) {
+function testCase(title: string, dev: boolean, host: string, command?: string) {
 	describe(title, () => {
 		if (command) {
 			let cp: ChildProcess | undefined;
