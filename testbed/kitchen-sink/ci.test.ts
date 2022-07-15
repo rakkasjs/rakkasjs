@@ -77,7 +77,7 @@ if (import.meta.env.TEST_HOST) {
 		testCase(
 			"Deno",
 			false,
-			"127.0.0.1",
+			"http://127.0.0.1:3000",
 			"pnpm build:deno && deno run --allow-read --allow-net --allow-env dist/deno/mod.js",
 		);
 	}
