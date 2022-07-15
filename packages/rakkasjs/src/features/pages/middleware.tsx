@@ -4,7 +4,7 @@ import React, { Fragment, StrictMode, Suspense } from "react";
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { App, RouteContext } from "../../runtime/App";
-import isBot from "isbot-fast";
+import { isBot } from "../../runtime/isbot";
 import { findRoute, RouteMatch } from "../../internal/find-route";
 import {
 	Redirect,

@@ -99,7 +99,6 @@ importers:
       devalue: ^2.0.1
       eslint: ^8.19.0
       fast-glob: ^3.2.11
-      isbot-fast: ^1.2.0
       micromatch: ^4.0.5
       picocolors: ^1.0.0
       prettier: ^2.7.1
@@ -114,6 +113,7 @@ importers:
     dependencies:
       "@babel/core": 7.18.6
       "@babel/types": 7.18.8
+      "@brillout/json-s": 0.4.6
       "@hattip/adapter-node": 0.0.10
       "@hattip/bundler-cloudflare-workers": 0.0.10
       "@hattip/bundler-deno": 0.0.10
@@ -131,23 +131,21 @@ importers:
       "@vitejs/plugin-react": 2.0.0_vite@3.0.0
       cac: 6.7.12
       cheerio: 1.0.0-rc.12
+      devalue: 2.0.1
       fast-glob: 3.2.11
       micromatch: 4.0.5
       picocolors: 1.0.0
+      react-error-boundary: 3.1.4_react@18.2.0
     devDependencies:
-      "@brillout/json-s": 0.4.6
       "@cyco130/eslint-config": 2.0.0_4x5o4skxv6sl53vpwefgt23khm
       "@types/babel__core": 7.1.19
       "@types/micromatch": 4.0.2
       "@types/prettier": 2.6.3
-      devalue: 2.0.1
       eslint: 8.19.0
-      isbot-fast: 1.2.0
       prettier: 2.7.1
       publint: 0.1.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      react-error-boundary: 3.1.4_react@18.2.0
       react-helmet-async: 1.3.0_biqbaboplfbrettd7655fr4n2y
       tsup: 6.1.3_typescript@4.7.4
       typescript: 4.7.4
@@ -852,7 +850,7 @@ packages:
       {
         integrity: sha512-mDgMMNFSKyN9Fy0G4yQTcWwQ1BXUE65D3i3RXPX44xD5AuIU4QQDQBi+DKiEDCS6L6nEa2frC2lCUa/ob700Aw==,
       }
-    dev: true
+    dev: false
 
   /@bugsnag/browser/7.17.0:
     resolution:
@@ -6340,7 +6338,7 @@ packages:
       {
         integrity: sha512-I2TiqT5iWBEyB8GRfTDP0hiLZ0YeDJZ+upDxjBfOC2lebO5LezQMv7QvIUTzdb64jQyAKLf1AHADtGN+jw6v8Q==,
       }
-    dev: true
+    dev: false
 
   /devtools-protocol/0.0.1011705:
     resolution:
@@ -10655,14 +10653,6 @@ packages:
         integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==,
       }
     dev: false
-
-  /isbot-fast/1.2.0:
-    resolution:
-      {
-        integrity: sha512-twjuQzy2gKMDVfKGQyQqrx6Uy4opu/fiVUTTpdqtFsd7OQijIp5oXvb27n5EemYXaijh5fomndJt/SPRLsEdSg==,
-      }
-    engines: { node: ">=6.0.0" }
-    dev: true
 
   /iserror/0.0.2:
     resolution:
@@ -15124,7 +15114,7 @@ packages:
     dependencies:
       "@babel/runtime": 7.18.6
       react: 18.2.0
-    dev: true
+    dev: false
 
   /react-fast-compare/3.2.0:
     resolution:
