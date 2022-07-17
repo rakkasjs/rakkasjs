@@ -16,11 +16,13 @@ let lastRenderedId: string;
 let navigationPromise: Promise<void> | undefined;
 let navigationResolve: (() => void) | undefined;
 
+/** Return value of useLocation */
 export interface UseLocationResult {
 	current: Readonly<URL>;
 	pending: Readonly<URL> | undefined;
 }
 
+/** Hook to get the navigation state */
 export function useLocation(): UseLocationResult {
 	const staticLocation = useContext(LocationContext);
 
@@ -76,12 +78,22 @@ function restoreScrollPosition() {
 	}
 }
 
+/** Navigation options */
 export interface NavigationOptions {
+	/** Replace the current history entry */
 	replace?: boolean;
+	/** Restore scroll position (or scroll to top) */
 	scroll?: boolean;
+	/** Data to be passed to the history entry */
 	data?: any;
 }
 
+/**
+ * Navigate, using client-side navigation if possible.
+ * @param to URL to navigate to
+ * @param options Navigation options
+ * @returns Whether the navigation was completed or cancelled
+ */
 export async function navigate(
 	to: string,
 	options?: NavigationOptions,
@@ -114,10 +126,6 @@ export async function navigate(
 	handleNavigation();
 
 	return navigationPromise.then(() => url.href === location.href);
-}
-
-if (typeof window !== "undefined") {
-	(window as any).navigate = navigate;
 }
 
 export const LocationContext = createContext<string | undefined>(undefined);
@@ -171,13 +179,19 @@ let nextIndex = 0;
 
 // TODO: Implement onNavigationEnd
 
+/** {@link Link} props */
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+	/** Data to be passed to the history entry */
 	historyState?: any;
-	noScroll?: boolean;
+	/** Whether to replace the current history entry */
 	replaceState?: boolean;
+	/** Whether to disable scroll position restoration (or scroll to top) */
+	noScroll?: boolean;
+	/** Called when navigation starts */
 	onNavigationStart?: () => void;
 }
 
+/** Link component for client-side navigation */
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 	(
 		{
@@ -215,6 +229,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 
 Link.displayName = "Link";
 
+/** {@link StyledLink} props */
 export interface StyledLinkProps extends LinkProps {
 	/** Class to be added if `href` matches the current URL */
 	activeClass?: string;

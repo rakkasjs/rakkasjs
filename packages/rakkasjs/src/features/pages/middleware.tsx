@@ -70,10 +70,7 @@ export default async function doRenderPageRoute(
 
 	const beforeRouteHandlers: Array<
 		(ctx: PageContext, url: URL) => BeforeRouteResult
-	> = [
-		...pageHooks.map((hook) => hook?.beforeRoute),
-		commonHooks.beforeRoute,
-	].filter(Boolean) as any;
+	> = [commonHooks.beforeRoute].filter(Boolean) as any;
 
 	if (ctx.notFound) {
 		do {

@@ -106,20 +106,56 @@ function sendRequest(
 	});
 }
 
+/**
+ * Hook for running a piece of code on the server to fetch data. The callback
+ * will always run on the server. When the hook is rendered on the client,
+ * Rakkas will send a request to the server. You can think of this hook as a
+ * convenience wrapper around {@link useQuery} and {@link runServerSideQuery}.
+ *
+ * @param fn The function to run on the server
+ * @param options Options for the query
+ */
 export const useServerSideQuery: <T>(
 	fn: ServerSideFunction<T>,
 	options?: UseServerSideQueryOptions,
 ) => QueryResult<T> = useSSQImpl as any;
 
+/**
+ * Runs a piece of code on the server. The callback will always run the server.
+ * When the hook is rendered on the client, Rakkas will send a request to the
+ * server.
+ *
+ * @param context The request context
+ * @param fn The function to run on the server
+ * @param options Options for the query
+ */
 export const runServerSideQuery: <T>(
 	context: RequestContext | undefined,
 	fn: ServerSideFunction<T>,
 ) => Promise<T> = runSSQImpl as any;
 
+/**
+ * Runs a piece of code on the server. The callback will always run the server.
+ * When the hook is rendered on the client, Rakkas will send a request to the
+ * server. The difference between this and {@link runServerSideQuery} is that
+ * `runServerSideMutation` can only run on the client and, as such, it doesn't
+ * need a request context argument.
+ *
+ * @param fn The function to run on the server
+ */
 export const runServerSideMutation: <T>(
 	fn: ServerSideFunction<T>,
 ) => Promise<T> = runSSMImpl as any;
 
+/**
+ * Hook for running a piece of code on the server to modify some data. When the
+ * hook is rendered, Rakkas will send a request to the server and the callback
+ * will always run on the server. You can think of this hook as a convenience
+ * wrapper around {@link useMutation} and {@link runServerSideMutation}.
+ *
+ * @param fn The function to run on the server
+ * @param options Options for the mutation
+ */
 export const useServerSideMutation: <T, V>(
 	fn: (context: RequestContext, vars: V) => T | Promise<T>,
 	options?: UseMutationOptions<T, V>,

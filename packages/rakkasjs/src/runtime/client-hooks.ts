@@ -1,11 +1,19 @@
 import { ReactElement } from "react";
 import { PageContext } from "../lib";
-import { BeforeRouteResult } from "./common-hooks";
 
+/** Client-side customization hooks */
 export interface ClientHooks {
+	/** Called before the client starts */
 	beforeStart?(): void | Promise<void>;
-	beforeRoute?(ctx: PageContext, url: URL): BeforeRouteResult;
+	/**
+	 * This is called before the page is rendered. It's used for adding custom
+	 * data to the page context.
+	 */
 	extendPageContext?(ctx: PageContext): void;
+	/**
+	 * This hook is intended for wrapping the React app with provider
+	 * components on the client only.
+	 */
 	wrapApp?(app: ReactElement): ReactElement;
 }
 

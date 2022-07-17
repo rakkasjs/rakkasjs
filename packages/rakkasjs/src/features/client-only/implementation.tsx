@@ -6,6 +6,7 @@ import React, {
 	useEffect,
 } from "react";
 
+/** {@link ClientOnly} props */
 export interface ClientOnlyProps {
 	/** Fallback to be rendered during SSR */
 	fallback: ReactNode;
@@ -15,7 +16,7 @@ export interface ClientOnlyProps {
 
 // TODO: Strip ClientOnly component's children out of the SSR bundle
 
-/** Opt out of server-side rendering */
+/** Component for opting out of server-side rendering */
 export function ClientOnly(props: ClientOnlyProps): ReactElement {
 	const context = useContext(ClientOnlyContext);
 

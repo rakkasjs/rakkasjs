@@ -1,4 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 export type { RequestContext } from "@hattip/compose";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+/** An object for putting stuff local to your app. */
 export interface Locals {}

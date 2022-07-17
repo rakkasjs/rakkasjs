@@ -22,7 +22,6 @@ export * from "../features/use-mutation/lib";
 export * from "../features/client-side-navigation/lib";
 export * from "../features/client-only/lib";
 export * from "../features/response-manipulation/lib";
-export * from "../features/pages/lib";
 export * from "../features/error-boundary/lib";
 
 export * from "../features/run-server-side/lib-common";
@@ -37,10 +36,14 @@ export type {
 	useSSM,
 } from "../features/run-server-side/lib-client";
 
-export type { startClient } from "../runtime/client-entry";
+export type {
+	startClient,
+	ClientHooks,
+	StartClientOptions,
+} from "../runtime/client-entry";
 
 export type {
 	createRequestHandler,
 	ServerHooks,
-	PageHooks,
+	PageRequestHooks as PageHooks,
 } from "../runtime/hattip-handler";

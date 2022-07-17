@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Head, PageProps, PreloadResult } from "rakkasjs";
+import { Head, Page } from "rakkasjs";
 
-export default function HomePage(props: PageProps<never, { key: number }>) {
+const HomePage: Page<never, { key: number }> = (props) => {
 	const [count, setCount] = useState(0);
 
 	return (
@@ -15,11 +15,13 @@ export default function HomePage(props: PageProps<never, { key: number }>) {
 			{import.meta.env.DEV && <p>Development mode is active.</p>}
 		</>
 	);
-}
+};
 
-HomePage.preload = async (): Promise<PreloadResult> => {
+HomePage.preload = async () => {
 	return {
 		meta: { key: 2 },
 		head: <Head title="The page title" />,
 	};
 };
+
+export default HomePage;

@@ -29,6 +29,7 @@ export interface QueryCache {
 
 export const QueryCacheContext = createContext<QueryCache>(undefined as any);
 
+/** useQuery options */
 export interface UseQueryOptions {
 	/**
 	 * Time in milliseconds after which the value will be evicted from the
@@ -98,15 +99,30 @@ export const DEFAULT_QUERY_OPTIONS: Required<UseQueryOptions> = {
 	refetchOnReconnect: false,
 };
 
+/** Context within which the page is being rendered */
 export interface PageContext {
+	/** URL */
 	url: URL;
+	/** Isomorphic fetch function */
 	fetch: typeof fetch;
+	/** Query client used by useQuery */
 	queryClient: QueryClient;
+	/** Request context, only defined on the server */
 	requestContext?: RequestContext;
 }
 
+/** Function passed to useQuery */
 export type QueryFn<T> = (ctx: PageContext) => T | Promise<T>;
 
+/**
+ * Fetches data
+ *
+ * @template T      Type of data
+ * @param key       Query key. Queries with the same key are considered identical. Pass undefined to disable the query.
+ * @param fn        Query function that does the actual data fetching
+ * @param [options] Query options
+ * @returns query   Query result
+ */
 export function useQuery<T>(
 	key: undefined,
 	fn: QueryFn<T>,
@@ -230,10 +246,15 @@ function useQueryBase<T>(
 	};
 }
 
+/** Return value of useQuery */
 export interface QueryResult<T> {
+	/** Fetched data */
 	data: T;
+	/** Refetch the data */
 	refetch(): void;
+	/** Is the data being refetched? */
 	isRefetching: boolean;
+	/** Update date of the last return data */
 	dataUpdatedAt: number;
 }
 
@@ -306,11 +327,18 @@ function useRefetch<T>(
 	}, [refetchOnReconnect, queryResult]);
 }
 
+/** Query client that manages the cache used by useQuery */
 export interface QueryClient {
+	/** Get the data cached for the given key */
 	getQueryData(key: string): any;
+	/**
+	 * Set the data associated for the given key.
+	 * You can also pass a promise here.
+	 */
 	setQueryData(key: string, data: any): void;
 }
 
+/** Access the query client that manages the cache used by useQuery */
 export function useQueryClient(): QueryClient {
 	const ctx = useContext(IsomorphicContext);
 

@@ -3,26 +3,48 @@ import { ReactElement } from "react";
 import renderApiRoute from "../features/api-routes/middleware";
 import renderPageRoute from "../features/pages/middleware";
 import { PageContext } from "../lib";
-import { BeforeRouteResult } from "./common-hooks";
 import serverHooks from "./feature-server-hooks";
 
+/** Server-side customization hooks */
 export interface ServerHooks {
+	/**
+	 * Hattip middleware handlers to insert at various stages of the request
+	 * processing chain
+	 */
 	middleware?: {
+		/** Middlewares to be run before mathcing pages */
 		beforePages?: RequestHandlerStack;
+		/** Middlewares to be run before matching API routes */
 		beforeApiRoutes?: RequestHandlerStack;
+		/** Middlewares to be run before not-found handling */
 		beforeNotFound?: RequestHandlerStack;
 	};
-	createPageHooks?(ctx: RequestContext): PageHooks;
+	/** Create server-side page rendering hooks */
+	createPageHooks?(ctx: RequestContext): PageRequestHooks;
 }
 
-export interface PageHooks {
+/** Hooks for customizing the page rendering on the server */
+export interface PageRequestHooks {
+	/**
+	 * This is called before the page is rendered. It's used for adding custom
+	 * data to the page context.
+	 */
 	extendPageContext?(ctx: PageContext): void | Promise<void>;
-	beforeRoute?(ctx: PageContext, url: URL): BeforeRouteResult;
+	/**
+	 * This hook is intended for wrapping the React app with provider
+	 * components on the server only.
+	 */
 	wrapApp?(app: ReactElement): ReactElement;
+	/** Write to the document's head section */
 	emitToDocumentHead?(): string;
+	/** Emit a chunk of HTML before each time React emits a chunk */
 	emitBeforeSsrChunk?(): string | undefined;
 }
 
+/**
+ * Creates a HatTip request handler. Call this to create a HatTip request
+ * handler and fefault export it from your HatTip entry.
+ */
 export function createRequestHandler(userHooks: ServerHooks = {}) {
 	const hooks = [...serverHooks, userHooks];
 

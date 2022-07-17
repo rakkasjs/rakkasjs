@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, {
 	createContext,
@@ -7,17 +8,25 @@ import React, {
 } from "react";
 import { navigate } from "../client-side-navigation/lib";
 import { escapeJson } from "../../runtime/utils";
+import type { CommonHooks, PreloadFunction } from "../../lib";
 
+/** {@link Redirect} props */
 export interface RedirectProps {
 	/** The URL to redirect to */
 	href: string;
-	/** Whether the redirect is permanent */
+	/** Whether the redirect is permanent @default false */
 	permanent?: boolean;
 	/** The status code to use (hes precedence over `permanent`) */
 	status?: number;
 }
 
 // @ts-ignore
+/**
+ * Component for redirecting the user to a different URL. Handling redirections
+ * in {@link CommonHooks.beforeRoute beforeRoute hook} or in the
+ * {@link PreloadFunction preload function} function results in better SEO so
+ * it's recommended over using this component.
+ */
 export const Redirect = import.meta.env.SSR
 	? function Redirect(props: RedirectProps): ReactElement {
 			const redirect = useContext(ResponseContext);
@@ -50,6 +59,7 @@ export const Redirect = import.meta.env.SSR
 			return null as any;
 	  };
 
+/** {@link ResponseHeader} props */
 export interface ResponseHeadersProps {
 	/** Status code */
 	status?: number | ((currentStatus: number) => number);
@@ -64,6 +74,12 @@ export interface ResponseHeadersProps {
 }
 
 // @ts-ignore
+/**
+ * Component for setting response status, respnse headers, and throttling the
+ * SSR stream. Exporting a {@link HeadersFunction headers()} function from your
+ * pages or layouts usually works better for SEO and is recommended over this
+ * component.
+ */
 export const ResponseHeaders = import.meta.env.SSR
 	? function ResponseHeaders(props: ResponseHeadersProps): ReactElement {
 			const response = useContext(ResponseContext);
