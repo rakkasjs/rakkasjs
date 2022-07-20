@@ -16,6 +16,7 @@
 	],
 	"exports": {
 		".": {
+			"types": "./dist/index.d.ts",
 			"browser": "./dist/client.js",
 			"default": "./dist/server.js"
 		},
