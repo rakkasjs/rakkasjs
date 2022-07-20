@@ -205,6 +205,10 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 		test("renders interactive page", async () => {
 			await page.goto(host + "/");
+
+			// Wait a little to allow for dependency optimization
+			await new Promise((resolve) => setTimeout(resolve, 1_000));
+
 			await page.waitForSelector(".hydrated");
 
 			const button: ElementHandle<HTMLButtonElement> | null =
