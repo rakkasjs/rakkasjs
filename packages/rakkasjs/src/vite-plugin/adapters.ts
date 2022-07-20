@@ -151,7 +151,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 
 			await generateStaticAssetManifest(root);
 
-			((deno as any).default as typeof deno)(
+			deno(
 				{
 					input,
 					output: path.resolve(root, "dist/deno/mod.js"),
