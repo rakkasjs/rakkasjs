@@ -25,7 +25,7 @@
 		"TODO"
 	],
 	"devDependencies": {
-		"@cyco130/eslint-config": "^2.0.0",
+		"@cyco130/eslint-config": "^2.1.1",
 		"@types/inquirer": "^8.2.1",
 		"@types/mkdirp": "^1.0.2",
 		"@types/node": "^18.0.5",

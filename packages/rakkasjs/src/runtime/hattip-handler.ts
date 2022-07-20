@@ -2,8 +2,27 @@ import { compose, RequestContext, RequestHandlerStack } from "@hattip/compose";
 import { ReactElement } from "react";
 import renderApiRoute from "../features/api-routes/middleware";
 import renderPageRoute from "../features/pages/middleware";
-import { PageContext } from "../lib";
+import { ServerSideLocals, PageContext } from "../lib";
 import serverHooks from "./feature-server-hooks";
+
+declare module "@hattip/compose" {
+	interface RequestContextExtensions {
+		/** Request URL */
+		url: URL;
+		/** Request method */
+		method: string;
+		/** Dynamic path parameters */
+		params: Record<string, string>;
+		/** Isomorphic fetch function */
+		fetch: typeof fetch;
+		/** Server-side customiization hooks */
+		hooks: ServerHooks[];
+		/** Set to true when searching for a not found page */
+		notFound?: boolean;
+		/** Application-specific stuff */
+		locals: ServerSideLocals;
+	}
+}
 
 /** Server-side customization hooks */
 export interface ServerHooks {

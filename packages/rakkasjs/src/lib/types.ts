@@ -2,4 +2,7 @@
 export type { RequestContext } from "@hattip/compose";
 
 /** An object for putting stuff local to your app. */
-export interface Locals {}
+export interface ServerSideLocals {}
+
+/** An object for putting stuff local to your app. */
+export interface PageLocals {}

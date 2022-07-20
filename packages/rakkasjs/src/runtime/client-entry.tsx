@@ -40,6 +40,7 @@ export async function startClient(options: StartClientOptions = {}) {
 
 	const pageContext: PageContext = {
 		url: new URL(window.location.href),
+		locals: {},
 	} as any;
 	for (const hooks of clientHooks) {
 		hooks.extendPageContext?.(pageContext);

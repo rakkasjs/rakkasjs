@@ -7,6 +7,7 @@ import {
 	useEffect,
 	useSyncExternalStore,
 } from "react";
+import { PageLocals } from "../../lib";
 import { IsomorphicContext } from "../../runtime/isomorphic-context";
 
 export interface CacheItem {
@@ -109,6 +110,8 @@ export interface PageContext {
 	queryClient: QueryClient;
 	/** Request context, only defined on the server */
 	requestContext?: RequestContext;
+	/** Application-specific stuff */
+	locals: PageLocals;
 }
 
 /** Function passed to useQuery */

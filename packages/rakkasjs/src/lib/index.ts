@@ -1,4 +1,4 @@
-export type { Locals, RequestContext } from "./types";
+export type { ServerSideLocals, PageLocals, RequestContext } from "./types";
 
 export type {
 	Page,

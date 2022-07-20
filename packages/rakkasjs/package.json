@@ -22,6 +22,13 @@
 		"./node-adapter": "./dist/node-adapter.js",
 		"./vite-plugin": "./dist/vite-plugin.js"
 	},
+	"typesVersions": {
+		"*": {
+			"*": [
+				"dist/*.d.ts"
+			]
+		}
+	},
 	"scripts": {
 		"build": "tsup",
 		"dev": "tsup --watch",
@@ -49,7 +56,7 @@
 	},
 	"devDependencies": {
 		"@brillout/json-s": "^0.4.6",
-		"@cyco130/eslint-config": "^2.0.0",
+		"@cyco130/eslint-config": "^2.1.1",
 		"@types/babel__core": "^7.1.19",
 		"@types/micromatch": "^4.0.2",
 		"@types/prettier": "^2.6.3",
@@ -66,14 +73,14 @@
 	"dependencies": {
 		"@babel/core": "^7.18.5",
 		"@babel/types": "^7.18.8",
-		"@hattip/adapter-node": "^0.0.10",
-		"@hattip/bundler-cloudflare-workers": "^0.0.10",
-		"@hattip/bundler-deno": "^0.0.10",
-		"@hattip/bundler-netlify": "^0.0.10",
-		"@hattip/bundler-vercel": "^0.0.10",
-		"@hattip/compose": "^0.0.10",
-		"@hattip/core": "^0.0.10",
-		"@hattip/polyfills": "^0.0.10",
+		"@hattip/adapter-node": "^0.0.12",
+		"@hattip/bundler-cloudflare-workers": "^0.0.12",
+		"@hattip/bundler-deno": "^0.0.12",
+		"@hattip/bundler-netlify": "^0.0.12",
+		"@hattip/bundler-vercel": "^0.0.12",
+		"@hattip/compose": "^0.0.12",
+		"@hattip/core": "^0.0.12",
+		"@hattip/polyfills": "^0.0.12",
 		"@types/node": "^18.0.5",
 		"@types/react": "^18.0.15",
 		"@types/react-dom": "^18.0.6",
