@@ -71,7 +71,7 @@ export function createRequestHandler(userHooks: ServerHooks = {}) {
 		[
 			init(hooks),
 
-			hooks.map((hook) => hook.middleware?.beforePages),
+			hooks.map((hook) => hook.middleware?.beforePages).flat(),
 
 			process.env.RAKKAS_PRERENDER === "true" && prerender,
 
@@ -83,10 +83,10 @@ export function createRequestHandler(userHooks: ServerHooks = {}) {
 				}
 			},
 
-			hooks.map((hook) => hook.middleware?.beforeApiRoutes),
+			hooks.map((hook) => hook.middleware?.beforeApiRoutes).flat(),
 			renderApiRoute,
 
-			hooks.map((hook) => hook.middleware?.beforeNotFound),
+			hooks.map((hook) => hook.middleware?.beforeNotFound).flat(),
 			notFound,
 			renderPageRoute,
 		].flat(),
