@@ -4,6 +4,7 @@ import React, {
 	ReactElement,
 	ReactNode,
 	useContext,
+	useReducer,
 } from "react";
 import { useLocation } from "../features/client-side-navigation/lib";
 import { findRoute, RouteMatch } from "../internal/find-route";
@@ -24,6 +25,16 @@ export function App(props: AppProps) {
 	// TODO: Warn when a page doesn't export a default component
 
 	const lastRoute = useContext(RouteContext);
+	// Force update
+	const [updateCounter, update] = useReducer(
+		(old) => (old + 1) & 0xfff_ffff,
+		0,
+	);
+
+	if (import.meta.hot) {
+		(window as any).$RAKKAS_UPDATE = update;
+	}
+
 	const pageContext = useContext(IsomorphicContext);
 
 	pageContext.url = new URL(url);
@@ -32,7 +43,13 @@ export function App(props: AppProps) {
 		throw lastRoute.error;
 	}
 
-	if (!lastRoute.last || lastRoute.last.pathname !== pageContext.url.pathname) {
+	const forcedUpdate = (lastRoute.updateCounter || 0) !== updateCounter;
+	if (
+		!lastRoute.last ||
+		lastRoute.last.pathname !== pageContext.url.pathname ||
+		forcedUpdate
+	) {
+		lastRoute.updateCounter = updateCounter;
 		throw loadRoute(
 			pageContext,
 			lastRoute.found,
@@ -54,7 +71,9 @@ export function App(props: AppProps) {
 	return app;
 }
 
-export const RouteContext = createContext<RouteContextContent>({});
+export const RouteContext = createContext<RouteContextContent>({
+	updateCounter: 0,
+});
 
 interface RouteContextContent {
 	found?: RouteMatch<
@@ -67,6 +86,7 @@ interface RouteContextContent {
 	};
 	onRendered?(): void;
 	error?: unknown;
+	updateCounter?: number;
 }
 
 export async function loadRoute(
@@ -79,34 +99,52 @@ export async function loadRoute(
 	let found = lastFound;
 	const { pathname: originalPathname } = pageContext.url;
 
-	if (!found) {
-		for (const hook of beforeRouteHandlers) {
-			const result = hook(pageContext, pageContext.url);
+	for (const hook of beforeRouteHandlers) {
+		const result = hook(pageContext, pageContext.url);
 
-			if (!result) continue;
+		if (!result) continue;
 
-			if ("redirect" in result) {
-				const location = String(result.redirect);
-				return {
-					pathname: originalPathname,
-					app: (
-						<Redirect
-							href={location}
-							status={result.status}
-							permanent={result.permanent}
-						/>
-					),
-				};
-			} else {
-				// Rewrite
-				pageContext.url = new URL(result.rewrite, pageContext.url);
+		if ("redirect" in result) {
+			const location = String(result.redirect);
+			return {
+				pathname: originalPathname,
+				app: (
+					<Redirect
+						href={location}
+						status={result.status}
+						permanent={result.permanent}
+					/>
+				),
+			};
+		} else {
+			// Rewrite
+			pageContext.url = new URL(result.rewrite, pageContext.url);
+		}
+	}
+
+	let updatedComponents: Layout[] | undefined;
+
+	if (!found || import.meta.hot) {
+		let routes: typeof prodRoutes;
+		let updatedRoutes: typeof prodRoutes;
+
+		if (import.meta.env.PROD) {
+			routes = prodRoutes;
+		} else {
+			// This whole dance is about rendering the old component (which
+			// React updates internally via Fast Refresh), but calling the
+			// preload function of the new component.
+			routes = (await import("virtual:rakkasjs:client-page-routes")).default;
+
+			if (import.meta.hot) {
+				updatedRoutes = (
+					await import(
+						/* @vite-ignore */ "/virtual:rakkasjs:client-page-routes?" +
+							Date.now()
+					)
+				).default;
 			}
 		}
-
-		const routes = import.meta.env.PROD
-			? prodRoutes
-			: // We should dynamically import in dev to allow hot reloading
-			  (await import("virtual:rakkasjs:client-page-routes")).default;
 
 		let pathname = pageContext.url.pathname;
 		found = findRoute(routes, pathname, pageContext);
@@ -137,6 +175,18 @@ export async function loadRoute(
 			// Throw away the last path segment
 			pathname = pathname.split("/").slice(0, -2).join("/") || "/";
 		}
+
+		if (import.meta.hot) {
+			const foundIndex = routes.findIndex((route) => route === found!.route);
+			const updatedRoute = updatedRoutes![foundIndex];
+			if (updatedRoute) {
+				updatedComponents = (await Promise.all(
+					updatedRoute?.[1].map((importer) =>
+						importer().then((module) => module.default),
+					),
+				)) as any;
+			}
+		}
 	}
 
 	const importers = found.route[1];
@@ -146,10 +196,12 @@ export async function loadRoute(
 		params: found.params,
 	};
 
-	const promises = importers.map(async (importer) =>
+	const promises = importers.map(async (importer, i) =>
 		importer().then(async (module) => [
 			module.default,
-			await module.default?.preload?.(preloadContext),
+			(import.meta.hot && updatedComponents
+				? updatedComponents[i]?.preload
+				: await module.default?.preload)?.(preloadContext),
 		]),
 	) as Promise<[Layout, PreloadResult | undefined]>[];
 
@@ -167,14 +219,22 @@ export async function loadRoute(
 		meta = {};
 		preloaded.forEach((p) => Object.assign(meta, p?.meta));
 
-		preloadNode = preloaded.map((result, i) => (
-			<Fragment key={i}>
-				{result?.head}
-				{result?.redirect && <Redirect {...result?.redirect} />}
-			</Fragment>
-		));
+		preloadNode = preloaded
+			.map(
+				(result, i) =>
+					(result?.head || result?.redirect) && (
+						<Fragment key={i}>
+							{result?.head}
+							{result?.redirect && <Redirect {...result?.redirect} />}
+						</Fragment>
+					),
+			)
+			.filter(Boolean);
 	}
 
+	// If it's a forced update due to hot module
+	// reloading, we'll reuse the components from the
+	// previous render.
 	const components = layoutStack.map(
 		(m) => m[0] || (({ children }: any) => children),
 	);

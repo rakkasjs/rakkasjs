@@ -8,7 +8,7 @@ export interface PageRoutesOptions {
 	pageExtensions?: string[];
 }
 
-export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
+export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 	const { pageExtensions = ["tsx", "jsx"] } = options;
 
 	const extPattern = pageExtensions.join("|");
@@ -160,72 +160,89 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin {
 		return out;
 	}
 
-	return {
-		name: "rakkasjs:page-router",
+	return [
+		{
+			name: "rakkasjs:page-router",
 
-		resolveId(id) {
-			if (
-				id === "virtual:rakkasjs:server-page-routes" ||
-				id === "virtual:rakkasjs:client-page-routes"
-			) {
-				return id;
-			}
-		},
-
-		async load(id) {
-			if (id === "virtual:rakkasjs:server-page-routes") {
-				return generateRoutesModule();
-			} else if (id === "virtual:rakkasjs:client-page-routes") {
-				return generateRoutesModule(true);
-			}
-		},
-
-		configResolved(config) {
-			resolvedConfig = config;
-			routesRoot = config.root + "/src/routes";
-			isLayout = micromatch.matcher(pagePattern);
-			isPage = micromatch.matcher(layoutPattern);
-			isGuard = micromatch.matcher(guardPattern);
-			isSinglePageGuard = micromatch.matcher(singlePageGuardPattern);
-
-			// This is ugly but it's the easiest way to pass some info
-			// to the Babel transform
-			(config as any).api.rakkas.isPage = isPage;
-			(config as any).api.rakkas.isLayout = isLayout;
-		},
-
-		configureServer(server) {
-			server.watcher.addListener("all", async (e: string, fn: string) => {
-				const isGuardFile = isGuard(fn) || isSinglePageGuard(fn);
-
-				if (
-					((isPage(fn) || isLayout(fn) || isGuardFile) &&
-						(e === "add" || e === "unlink")) ||
-					(isGuardFile && e === "change")
-				) {
-					const serverModule = server.moduleGraph.getModuleById(
-						"virtual:rakkasjs:server-page-routes",
-					);
-					const clientModule = server.moduleGraph.getModuleById(
-						"virtual:rakkasjs:client-page-routes",
-					);
-
-					if (serverModule) {
-						server.moduleGraph.invalidateModule(serverModule);
-					}
-
-					if (clientModule) {
-						server.moduleGraph.invalidateModule(clientModule);
-					}
-
-					if (server.ws && (serverModule || clientModule)) {
-						server.ws.send({
-							type: "full-reload",
-							path: "*",
-						});
-					}
+			resolveId(id) {
+				if (id === "virtual:rakkasjs:server-page-routes") {
+					return id;
+				} else if (id.includes("virtual:rakkasjs:client-page-routes")) {
+					return "virtual:rakkasjs:client-page-routes";
 				}
-			});
+			},
+
+			async load(id) {
+				if (id === "virtual:rakkasjs:server-page-routes") {
+					return generateRoutesModule();
+				} else if (id === "virtual:rakkasjs:client-page-routes") {
+					return generateRoutesModule(true);
+				}
+			},
+
+			configResolved(config) {
+				resolvedConfig = config;
+				routesRoot = config.root + "/src/routes";
+				isLayout = micromatch.matcher(pagePattern);
+				isPage = micromatch.matcher(layoutPattern);
+				isGuard = micromatch.matcher(guardPattern);
+				isSinglePageGuard = micromatch.matcher(singlePageGuardPattern);
+
+				// This is ugly but it's the easiest way to pass some info
+				// to the Babel transform
+				(config as any).api.rakkas.isPage = isPage;
+				(config as any).api.rakkas.isLayout = isLayout;
+			},
+
+			configureServer(server) {
+				server.watcher.addListener("all", async (e: string, fn: string) => {
+					const isGuardFile = isGuard(fn) || isSinglePageGuard(fn);
+
+					if (
+						((isPage(fn) || isLayout(fn) || isGuardFile) &&
+							(e === "add" || e === "unlink")) ||
+						(isGuardFile && e === "change")
+					) {
+						const serverModule = server.moduleGraph.getModuleById(
+							"virtual:rakkasjs:server-page-routes",
+						);
+						const clientModule = server.moduleGraph.getModuleById(
+							"virtual:rakkasjs:client-page-routes",
+						);
+
+						if (serverModule) {
+							server.moduleGraph.invalidateModule(serverModule);
+						}
+
+						if (clientModule) {
+							server.moduleGraph.invalidateModule(clientModule);
+						}
+
+						if (server.ws && (serverModule || clientModule)) {
+							server.ws.send({
+								type: "full-reload",
+								path: "*",
+							});
+						}
+					}
+				});
+			},
+
+			transform(code, id, options) {
+				if (options?.ssr) return;
+
+				if (isPage(id) || isLayout(id)) {
+					return code + PAGE_HOT_RELOAD;
+				}
+			},
 		},
-	};
+	];
 }
+
+const PAGE_HOT_RELOAD = `
+	if (import.meta.hot) {
+		import.meta.hot.accept(() => {
+			$RAKKAS_UPDATE();
+		});
+	}
+`;
