@@ -56,9 +56,10 @@ export default function apiRoutes(): Plugin {
 				.filter(([, dirName]) => endpointFile.startsWith(dirName + "/"))
 				.map(([mi]) => mi);
 
-			exportStatement += `  [${routeToRegExp(
-				"/" + baseName,
-			)}, [e${i}, ${middlewares.map((mi) => `m${mi}`)}]],\n`;
+			const [re, rest] = routeToRegExp("/" + baseName);
+			exportStatement += `  [${re}, [e${i}, ${middlewares.map(
+				(mi) => `m${mi}`,
+			)}]${rest ? `, ${JSON.stringify(rest)}` : ""}],\n`;
 		}
 
 		exportStatement += "]";

@@ -1,7 +1,13 @@
 declare module "virtual:rakkasjs:api-routes" {
 	type Handler = import("@hattip/core").Handler;
 
-	const routes: Array<[RegExp, [EndpointImporter, ...MiddlewareImporter[]]]>;
+	const routes: Array<
+		[
+			regexp: RegExp,
+			importers: [EndpointImporter, ...MiddlewareImporter[]],
+			rest?: string,
+		]
+	>;
 
 	type EndpointImporter = () => Promise<Endpoint>;
 	type MiddlewareImporter = () => Promise<Middleware>;
@@ -24,6 +30,7 @@ declare module "virtual:rakkasjs:server-page-routes" {
 				...import("./page-types").LayoutImporter[],
 			],
 			guards: import("./page-types").PageRouteGuard[],
+			rest: string | undefined,
 			ids: string[],
 		]
 	>;
@@ -37,6 +44,7 @@ declare module "virtual:rakkasjs:client-page-routes" {
 			regexp: RegExp,
 			importers: [PageImporter, ...LayoutImporter[]],
 			guards: PageRouteGuard[],
+			rest?: string,
 		]
 	>;
 

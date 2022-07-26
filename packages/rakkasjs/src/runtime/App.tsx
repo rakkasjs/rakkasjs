@@ -168,7 +168,13 @@ export async function loadRoute(
 			if (!found && pathname === "/") {
 				found = {
 					params: {},
-					route: [/^\/$/, [async () => ({ default: Default404Page })], [], []],
+					route: [
+						/^\/$/,
+						[async () => ({ default: Default404Page })],
+						[],
+						undefined,
+						[],
+					],
 				};
 			}
 

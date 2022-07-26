@@ -1,7 +1,11 @@
 import { PageContext } from "../lib";
 import { PageRouteGuard, PageRouteGuardContext } from "../runtime/page-types";
 
-export function findRoute<T extends [RegExp, ...unknown[]]>(
+export function findRoute<
+	T extends
+		| typeof import("virtual:rakkasjs:server-page-routes").default[0]
+		| typeof import("virtual:rakkasjs:client-page-routes").default[0],
+>(
 	routes: T[],
 	path: string,
 	pageContext?: PageContext,
@@ -15,10 +19,10 @@ export function findRoute<T extends [RegExp, ...unknown[]]>(
 			const re = route[0];
 			const match = path.match(re);
 			if (!match) continue;
-			const params = match.groups || {};
+			const params = unescapeParams(match.groups || {}, route[3]);
 
 			if (pageContext) {
-				const guards = route[2] as Array<PageRouteGuard>;
+				const guards = (route[2] as Array<PageRouteGuard>) || [];
 				let guarded = false;
 				const guardContext: PageRouteGuardContext = {
 					...pageContext,
@@ -54,4 +58,12 @@ export function findRoute<T extends [RegExp, ...unknown[]]>(
 export interface RouteMatch<T> {
 	route: T;
 	params: Record<string, string>;
+}
+
+export function unescapeParams(params: Record<string, string>, rest?: string) {
+	for (const [key, value] of Object.entries(params)) {
+		if (key === rest) continue;
+		params[key] = decodeURIComponent(value);
+	}
+	return params;
 }

@@ -3,15 +3,16 @@ import {
 	RequestHandler,
 	RequestContext,
 } from "@hattip/compose";
+import { unescapeParams } from "../../internal/find-route";
 
 export default async function renderApiRoute(ctx: RequestContext) {
 	const apiRoutes = await import("virtual:rakkasjs:api-routes");
 
-	for (const [regex, importers] of apiRoutes.default) {
+	for (const [regex, importers, rest] of apiRoutes.default) {
 		const match = regex.exec(ctx.url.pathname);
 		if (!match) continue;
 
-		ctx.params = match.groups || {};
+		ctx.params = unescapeParams(match.groups || {}, rest);
 
 		const [endpointImporter, ...middlewareImporters] = importers;
 

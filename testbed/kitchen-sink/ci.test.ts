@@ -178,18 +178,32 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			expect(response2.headers.get("x-middleware")).toEqual("1");
 		});
 
-		test("renders params", async () => {
+		test("renders params in API route", async () => {
 			const response = await fetch(host + "/api-routes/param-value");
 			expect(response.status).toBe(200);
 			const json = await response.json();
 			expect(json).toMatchObject({ param: "param-value" });
 		});
 
-		test("renders spread params", async () => {
+		test("unescapes params in API route", async () => {
+			const response = await fetch(host + "/api-routes/param%20value");
+			expect(response.status).toBe(200);
+			const json = await response.json();
+			expect(json).toMatchObject({ param: "param value" });
+		});
+
+		test("renders spread params in API route", async () => {
 			const response = await fetch(host + "/api-routes/more/aaa/bbb/ccc");
 			expect(response.status).toBe(200);
 			const json = await response.json();
 			expect(json).toMatchObject({ rest: "/aaa/bbb/ccc" });
+		});
+
+		test("doesn't unescape spread params in API route", async () => {
+			const response = await fetch(host + "/api-routes/more/aaa%2Fbbb/ccc");
+			expect(response.status).toBe(200);
+			const json = await response.json();
+			expect(json).toMatchObject({ rest: "/aaa%2Fbbb/ccc" });
 		});
 
 		test("renders preloaded data", async () => {
@@ -201,6 +215,26 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			expect(dom("p#metadata").text()).toBe("Metadata: 2");
 			expect(dom("title").text()).toBe("The page title");
+		});
+
+		test("decodes page params", async () => {
+			const response = await fetch(host + "/page-params/unescape%20me");
+			expect(response.status).toBe(200);
+
+			const html = await response.text();
+			const dom = load(html);
+
+			expect(dom("p#param").text()).toBe("unescape me");
+		});
+
+		test("doesn't unescape spread page params", async () => {
+			const response = await fetch(host + "/page-params/spread/escape%2Fme");
+			expect(response.status).toBe(200);
+
+			const html = await response.text();
+			const dom = load(html);
+
+			expect(dom("p#param").text()).toBe("/escape%2Fme");
 		});
 
 		test("renders interactive page", async () => {

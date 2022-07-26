@@ -63,6 +63,7 @@ export default async function doRenderPageRoute(
 					regexp: RegExp,
 					importers: [PageImporter, ...LayoutImporter[]],
 					guards: PageRouteGuard<Record<string, string>>[],
+					rest: string | undefined,
 					ids: string[],
 				]
 		  >
@@ -86,7 +87,13 @@ export default async function doRenderPageRoute(
 			if (pathname === "/") {
 				found = {
 					params: {},
-					route: [/^\/$/, [async () => ({ default: Default404Page })], [], []],
+					route: [
+						/^\/$/,
+						[async () => ({ default: Default404Page })],
+						[],
+						undefined,
+						[],
+					],
 				};
 			}
 

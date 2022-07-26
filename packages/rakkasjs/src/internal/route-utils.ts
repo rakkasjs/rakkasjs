@@ -1,4 +1,6 @@
-export function routeToRegExp(route: string): RegExp {
+export function routeToRegExp(
+	route: string,
+): [regexp: RegExp, restName?: string] {
 	// Backslash to slash
 	route = route.replace(/\\/g, "/");
 
@@ -11,28 +13,31 @@ export function routeToRegExp(route: string): RegExp {
 		restParamName = restName;
 	}
 
-	return new RegExp(
-		"^" +
-			route
-				.split("/")
-				.filter((x) => x !== "index" && !x.startsWith("_"))
-				.map((x) => {
-					const escaped = encodeURIComponent(x);
-					// Unescape [ and ]
-					return escaped.replace(/%5B/g, "[").replace(/%5D/g, "]");
-				})
-				.join("/")
-				.replace(
-					// Escape special characters
-					/[\\^$*+?.()|[\]{}]/g,
-					(x) => `\\${x}`,
-				)
-				.replace(
-					/\\\[[a-zA-Z_][a-zA-Z0-9_]*\\]/g,
-					(name) => `(?<${name.slice(2, -2)}>[^/]*)`,
-				) +
-			(restParamName ? `(?<${restParamName}>(\\/.*)?$)` : "\\/?$"),
-	);
+	return [
+		new RegExp(
+			"^" +
+				route
+					.split("/")
+					.filter((x) => x !== "index" && !x.startsWith("_"))
+					.map((x) => {
+						const escaped = encodeURIComponent(x);
+						// Unescape [ and ]
+						return escaped.replace(/%5B/g, "[").replace(/%5D/g, "]");
+					})
+					.join("/")
+					.replace(
+						// Escape special characters
+						/[\\^$*+?.()|[\]{}]/g,
+						(x) => `\\${x}`,
+					)
+					.replace(
+						/\\\[[a-zA-Z_][a-zA-Z0-9_]*\\]/g,
+						(name) => `(?<${name.slice(2, -2)}>[^/]*)`,
+					) +
+				(restParamName ? `(?<${restParamName}>(\\/.*)?$)` : "\\/?$"),
+		),
+		restParamName,
+	];
 }
 
 type Route = [pattern: string, ...rest: unknown[]];

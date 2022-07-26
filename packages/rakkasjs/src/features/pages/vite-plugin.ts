@@ -121,17 +121,22 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 				.filter((entry) => pageFile.startsWith(entry[1] + "/"))
 				.map((entry) => entry[0]);
 
-			let exportElement = `  [${routeToRegExp(
-				"/" + baseName,
-			)}, [p${i}, ${layouts.map((li) => `l${li}`)}], [${guards.map(
-				(gi) => `g${gi}`,
-			)}`;
+			const [re, rest] = routeToRegExp("/" + baseName);
+			let exportElement = `  [${re}, [p${i}, ${layouts.map(
+				(li) => `l${li}`,
+			)}], [${guards.map((gi) => `g${gi}`)}`;
 
 			if (guardedPageIndices.has(i)) {
 				exportElement += `, s${i}`;
 			}
 
 			exportElement += "]";
+
+			if (rest) {
+				exportElement += `, ${JSON.stringify(rest)}`;
+			} else {
+				exportElement += `, `;
+			}
 
 			// Server needs the file names to inject styles and prefetch links
 			if (!client) {
