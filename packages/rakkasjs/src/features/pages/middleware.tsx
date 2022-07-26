@@ -355,6 +355,13 @@ export default async function doRenderPageRoute(
 
 	head += `</head><body>`;
 
+	let wrapperStream: ReadableStream = reactStream;
+	for (const hooks of pageHooks) {
+		if (hooks?.wrapSsrStream) {
+			wrapperStream = hooks.wrapSsrStream(wrapperStream);
+		}
+	}
+
 	const textEncoder = new TextEncoder();
 
 	const { readable, writable } = new TransformStream();
@@ -363,7 +370,7 @@ export default async function doRenderPageRoute(
 
 	async function pipe() {
 		writer.write(textEncoder.encode(head));
-		for await (const chunk of reactStream as any) {
+		for await (const chunk of wrapperStream as any) {
 			for (const hooks of pageHooks) {
 				if (hooks?.emitBeforeSsrChunk) {
 					const text = hooks.emitBeforeSsrChunk();

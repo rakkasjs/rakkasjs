@@ -58,6 +58,8 @@ export interface PageRequestHooks {
 	emitToDocumentHead?(): string;
 	/** Emit a chunk of HTML before each time React emits a chunk */
 	emitBeforeSsrChunk?(): string | undefined;
+	/** Wrap React's SSR stream */
+	wrapSsrStream?(stream: ReadableStream): ReadableStream;
 }
 
 /**
