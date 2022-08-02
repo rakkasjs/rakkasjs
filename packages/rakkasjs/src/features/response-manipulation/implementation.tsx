@@ -23,7 +23,7 @@ export interface RedirectProps {
 // @ts-ignore
 /**
  * Component for redirecting the user to a different URL. Handling redirections
- * in {@link CommonHooks.beforeRoute beforeRoute hook} or in the
+ * in {@link CommonHooks.beforePageLookup beforePageLookup hook} or in the
  * {@link PreloadFunction preload function} function results in better SEO so
  * it's recommended over using this component.
  */

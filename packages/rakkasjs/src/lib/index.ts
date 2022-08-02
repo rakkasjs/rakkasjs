@@ -14,6 +14,7 @@ export type {
 	PrerenderResult,
 	PageRouteGuard,
 	PageRouteGuardContext,
+	LookupHookResult,
 } from "../runtime/page-types";
 
 export * from "../runtime/common-hooks";

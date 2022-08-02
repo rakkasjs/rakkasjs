@@ -725,9 +725,14 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			await page.waitForFunction(() =>
 				document.body?.innerText.includes("Rewritten!"),
 			);
+
+			await page.goto(host + "/guard?allow-outer&redirect");
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Redirected!"),
+			);
 		});
 
-		test("beforeRoute redirect works on the server", async () => {
+		test("beforePageLookup redirect works on the server", async () => {
 			const r = await fetch(host + "/before-route/redirect", {
 				redirect: "manual",
 			});
@@ -735,7 +740,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			expect(r.headers.get("location")).toBe(host + "/before-route/redirected");
 		});
 
-		test("beforeRoute redirect works on the client", async () => {
+		test("beforePageLookup redirect works on the client", async () => {
 			await page.goto(host + "/before-route/redirect");
 			await page.waitForSelector(".hydrated");
 			await page.waitForFunction(() =>
@@ -743,7 +748,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			);
 		});
 
-		test("beforeRoute redirect works with client-side navigation", async () => {
+		test("beforePageLookup redirect works with client-side navigation", async () => {
 			await page.goto(host + "/before-route/links");
 			await page.waitForSelector(".hydrated");
 
@@ -758,13 +763,13 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			);
 		});
 
-		test("beforeRoute rewrite works on the server", async () => {
+		test("beforePageLookup rewrite works on the server", async () => {
 			const r = await fetch(host + "/before-route/rewrite");
 			const text = await r.text();
 			expect(text).toContain("Rewritten");
 		});
 
-		test("beforeRoute rewrite works on the client", async () => {
+		test("beforePageLookup rewrite works on the client", async () => {
 			await page.goto(host + "/before-route/rewrite");
 			await page.waitForSelector(".hydrated");
 			await page.waitForFunction(() =>
@@ -772,7 +777,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			);
 		});
 
-		test("beforeRoute rewrite works with client-side navigation", async () => {
+		test("beforePageLookup rewrite works with client-side navigation", async () => {
 			await page.goto(host + "/before-route/links");
 			await page.waitForSelector(".hydrated");
 

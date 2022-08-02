@@ -124,7 +124,7 @@ export interface PageRouteGuardContext<P = Record<string, string>>
 /** Type for the default export of page guards */
 export type PageRouteGuard<P = Record<string, string>> = (
 	ctx: PageRouteGuardContext<P>,
-) => boolean;
+) => LookupHookResult;
 
 /** Function to set response headers */
 export type HeadersFunction<M = Record<string, unknown>> = (
@@ -146,4 +146,30 @@ export interface PrerenderResult {
 	shouldCrawl?: boolean;
 	/** More links to prerender */
 	links?: (URL | string)[];
+}
+
+/**
+ * Return type of the beforeXxxLookup hooks.
+ *
+ * - `true` continues with the lookup
+ * - `false` skips the lookup
+ * - `{ redirect: string | URL }` redirects to the given URL
+ * - `{ rewrite: string | URL }` rewrites the URL to the given URL
+ */
+export type LookupHookResult =
+	| boolean
+	| Redirection
+	| {
+			/** Render this URL instead of the requested one */
+			rewrite: string | URL;
+	  };
+
+/** Redirection */
+export interface Redirection {
+	/** Location to redirect to */
+	redirect: string | URL;
+	/** Whether the redirect is permanent @default false */
+	permanent?: boolean;
+	/** The status code to use (hes precedence over `permanent`) */
+	status?: number;
 }

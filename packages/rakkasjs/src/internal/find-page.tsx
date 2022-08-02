@@ -1,7 +1,27 @@
 import { PageContext } from "../lib";
-import { PageRouteGuard, PageRouteGuardContext } from "../runtime/page-types";
+import {
+	PageRouteGuard,
+	PageRouteGuardContext,
+	Redirection,
+} from "../runtime/page-types";
 
-export function findRoute<
+export function findPage<
+	T extends
+		| typeof import("virtual:rakkasjs:server-page-routes").default[0]
+		| typeof import("virtual:rakkasjs:client-page-routes").default[0],
+>(
+	routes: T[],
+	path: string,
+	pageContext: PageContext,
+): RouteMatch<T> | Redirection | undefined;
+
+export function findPage<
+	T extends
+		| typeof import("virtual:rakkasjs:server-page-routes").default[0]
+		| typeof import("virtual:rakkasjs:client-page-routes").default[0],
+>(routes: T[], path: string): RouteMatch<T> | undefined;
+
+export function findPage<
 	T extends
 		| typeof import("virtual:rakkasjs:server-page-routes").default[0]
 		| typeof import("virtual:rakkasjs:client-page-routes").default[0],
@@ -9,41 +29,45 @@ export function findRoute<
 	routes: T[],
 	path: string,
 	pageContext?: PageContext,
-): RouteMatch<T> | undefined {
+): RouteMatch<T> | Redirection | undefined {
 	let originalHref = pageContext?.url.href;
 	let rewritten: boolean;
 
 	do {
 		rewritten = false;
-		for (const route of routes) {
+
+		outer: for (const route of routes) {
 			const re = route[0];
 			const match = path.match(re);
 			if (!match) continue;
+
 			const params = unescapeParams(match.groups || {}, route[3]);
 
 			if (pageContext) {
 				const guards = (route[2] as Array<PageRouteGuard>) || [];
-				let guarded = false;
 				const guardContext: PageRouteGuardContext = {
 					...pageContext,
 					params,
 				};
 
 				for (const guard of guards) {
-					if (!guard(guardContext)) {
-						guarded = true;
-						break;
-					}
-				}
-
-				if (guarded) {
-					if (pageContext.url.href !== originalHref) {
+					const result = guard(guardContext);
+					if (!result) {
+						// Try next match
+						continue outer;
+					} else if (result === true) {
+						// Continue with the next guard
+						continue;
+					} else if ("rewrite" in result) {
+						rewritten = true;
+						pageContext.url = new URL(result.rewrite, originalHref);
 						originalHref = pageContext.url.href;
 						path = pageContext.url.pathname;
-						rewritten = true;
-						break;
+						// Try again with the new path
+						break outer;
+					} else {
+						return result;
 					}
-					continue;
 				}
 			}
 

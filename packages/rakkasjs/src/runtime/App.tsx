@@ -7,15 +7,17 @@ import React, {
 	useReducer,
 } from "react";
 import { useLocation } from "../features/client-side-navigation/lib";
-import { findRoute, RouteMatch } from "../internal/find-route";
+import { findPage, RouteMatch } from "../internal/find-page";
 import { Layout, PreloadContext, PreloadResult } from "./page-types";
 import prodRoutes from "virtual:rakkasjs:client-page-routes";
 import { Default404Page } from "../features/pages/Default404Page";
-import { BeforeRouteResult, PageContext, Redirect } from "../lib";
+import { LookupHookResult, PageContext, Redirect } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 
 export interface AppProps {
-	beforeRouteHandlers: Array<(ctx: PageContext, url: URL) => BeforeRouteResult>;
+	beforePageLookupHandlers: Array<
+		(ctx: PageContext, url: URL) => LookupHookResult
+	>;
 	ssrMeta?: any;
 }
 
@@ -54,7 +56,7 @@ export function App(props: AppProps) {
 			pageContext,
 			lastRoute.found,
 			false,
-			props.beforeRouteHandlers,
+			props.beforePageLookupHandlers,
 			props.ssrMeta,
 		)
 			.then((route) => {
@@ -93,16 +95,19 @@ export async function loadRoute(
 	pageContext: PageContext,
 	lastFound: RouteContextContent["found"],
 	try404: boolean,
-	beforeRouteHandlers: Array<(ctx: PageContext, url: URL) => BeforeRouteResult>,
+	beforePageLookupHandlers: Array<
+		(ctx: PageContext, url: URL) => LookupHookResult
+	>,
 	ssrMeta?: any,
 ) {
 	let found = lastFound;
 	const { pathname: originalPathname } = pageContext.url;
 
-	for (const hook of beforeRouteHandlers) {
+	for (const hook of beforePageLookupHandlers) {
 		const result = hook(pageContext, pageContext.url);
 
-		if (!result) continue;
+		if (!result) break;
+		if (result === true) continue;
 
 		if ("redirect" in result) {
 			const location = String(result.redirect);
@@ -147,7 +152,22 @@ export async function loadRoute(
 		}
 
 		let pathname = pageContext.url.pathname;
-		found = findRoute(routes, pathname, pageContext);
+		const result = findPage(routes, pathname, pageContext);
+		if (result && "redirect" in result) {
+			const location = String(result.redirect);
+			return {
+				pathname: originalPathname,
+				app: (
+					<Redirect
+						href={location}
+						status={result.status}
+						permanent={result.permanent}
+					/>
+				),
+			};
+		}
+
+		found = result;
 
 		while (!found) {
 			if (!try404) {
@@ -163,7 +183,9 @@ export async function loadRoute(
 				pathname += "/";
 			}
 
-			found = findRoute(routes, pathname + "%24404");
+			const result = findPage(routes, pathname + "%24404");
+
+			found = result;
 
 			if (!found && pathname === "/") {
 				found = {

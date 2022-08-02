@@ -5,7 +5,7 @@ import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { App, RouteContext } from "../../runtime/App";
 import { isBot } from "../../runtime/isbot";
-import { findRoute, RouteMatch } from "../../internal/find-route";
+import { findPage, RouteMatch } from "../../internal/find-page";
 import {
 	Redirect,
 	ResponseContext,
@@ -29,7 +29,7 @@ import {
 	PrerenderResult,
 	ServerSidePageContext,
 } from "../../runtime/page-types";
-import { BeforeRouteResult } from "../../lib";
+import { LookupHookResult } from "../../lib";
 
 const pageContextMap = new WeakMap<Request, PageContext>();
 
@@ -69,9 +69,9 @@ export default async function doRenderPageRoute(
 		  >
 		| undefined;
 
-	const beforeRouteHandlers: Array<
-		(ctx: PageContext, url: URL) => BeforeRouteResult
-	> = [commonHooks.beforeRoute].filter(Boolean) as any;
+	const beforePageLookupHandlers: Array<
+		(ctx: PageContext, url: URL) => LookupHookResult
+	> = [commonHooks.beforePageLookup].filter(Boolean) as any;
 
 	if (ctx.notFound) {
 		do {
@@ -79,7 +79,7 @@ export default async function doRenderPageRoute(
 				pathname += "/";
 			}
 
-			found = findRoute(routes, pathname + "%24404");
+			found = findPage(routes, pathname + "%24404");
 			if (found) {
 				break;
 			}
@@ -101,10 +101,12 @@ export default async function doRenderPageRoute(
 			pathname = pathname.split("/").slice(0, -2).join("/") || "/";
 		} while (!found);
 	} else {
-		for (const hook of beforeRouteHandlers) {
+		for (const hook of beforePageLookupHandlers) {
 			const result = hook(pageContext, pageContext.url);
 
-			if (!result) continue;
+			if (!result) return;
+
+			if (result === true) continue;
 
 			if ("redirect" in result) {
 				const location = String(result.redirect);
@@ -120,9 +122,24 @@ export default async function doRenderPageRoute(
 				pageContext.url = new URL(result.rewrite, pageContext.url);
 			}
 		}
+
 		pathname = pageContext.url.pathname;
 
-		found = findRoute(routes, pathname, pageContext);
+		const result = findPage(routes, pathname, pageContext);
+
+		if (result && "redirect" in result) {
+			const location = String(result.redirect);
+			return new Response(redirectBody(location), {
+				status: result.status ?? result.permanent ? 301 : 302,
+				headers: {
+					location: new URL(location, ctx.url.origin).href,
+					"content-type": "text/html; charset=utf-8",
+				},
+			});
+		}
+
+		found = result;
+
 		if (!found) return;
 	}
 
@@ -200,7 +217,10 @@ export default async function doRenderPageRoute(
 		<ServerSideContext.Provider value={ctx}>
 			<IsomorphicContext.Provider value={pageContext}>
 				{preloadNode}
-				<App beforeRouteHandlers={beforeRouteHandlers} ssrMeta={meta} />
+				<App
+					beforePageLookupHandlers={beforePageLookupHandlers}
+					ssrMeta={meta}
+				/>
 			</IsomorphicContext.Provider>
 		</ServerSideContext.Provider>
 	);

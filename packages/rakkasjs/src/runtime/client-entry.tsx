@@ -5,7 +5,7 @@ import {
 	UseQueryOptions,
 	PageContext,
 	ErrorBoundary,
-	BeforeRouteResult,
+	LookupHookResult,
 } from "../lib";
 import { App, loadRoute, RouteContext } from "./App";
 import { ClientHooks } from "./client-hooks";
@@ -47,13 +47,13 @@ export async function startClient(options: StartClientOptions = {}) {
 	}
 	commonHooks.extendPageContext?.(pageContext);
 
-	const beforeRouteHandlers: Array<
-		(ctx: PageContext, url: URL) => BeforeRouteResult
-	> = [commonHooks.beforeRoute].filter(Boolean) as any;
+	const beforePageLookupHandlers: Array<
+		(ctx: PageContext, url: URL) => LookupHookResult
+	> = [commonHooks.beforePageLookup].filter(Boolean) as any;
 
 	let app = (
 		<IsomorphicContext.Provider value={pageContext}>
-			<App beforeRouteHandlers={beforeRouteHandlers} />
+			<App beforePageLookupHandlers={beforePageLookupHandlers} />
 		</IsomorphicContext.Provider>
 	);
 
@@ -72,7 +72,7 @@ export async function startClient(options: StartClientOptions = {}) {
 		pageContext,
 		undefined,
 		true,
-		beforeRouteHandlers,
+		beforePageLookupHandlers,
 	).catch((error) => {
 		return { error };
 	});

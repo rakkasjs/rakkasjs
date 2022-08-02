@@ -1,5 +1,5 @@
-import { PageContext } from "rakkasjs";
+import { LookupHookResult, PageContext } from "rakkasjs";
 
-export default function guard(ctx: PageContext) {
+export function pageGuard(ctx: PageContext): LookupHookResult {
 	return ctx.url.searchParams.has("allow-outer");
 }

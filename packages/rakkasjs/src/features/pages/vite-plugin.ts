@@ -77,7 +77,7 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 		let guardImporters = "";
 
 		for (const [i, guardFile] of guardFiles.entries()) {
-			guardImporters += `import g${i} from ${JSON.stringify(
+			guardImporters += `import { pageGuard as g${i} } from ${JSON.stringify(
 				"/" + guardFile,
 			)};\n`;
 		}
@@ -94,7 +94,7 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 			const pageIndex = pageFiles.findIndex((f) => f.startsWith(baseName));
 			if (pageIndex < 0) continue;
 
-			singlePageGuardImporters += `import s${pageIndex} from ${JSON.stringify(
+			singlePageGuardImporters += `import { pageGuard as s${pageIndex} } from ${JSON.stringify(
 				"/" + singlePageGuardFile,
 			)};\n`;
 			guardedPageIndices.add(pageIndex);
