@@ -343,6 +343,10 @@ export interface QueryClient {
 	 * You can also pass a promise here.
 	 */
 	setQueryData(key: string, data: any): void;
+	/**
+	 * Start fetching the data for the given key.
+	 */
+	prefetchQuery(key: string, data: Promise<any>): void;
 }
 
 /** Access the query client that manages the cache used by useQuery */
@@ -362,6 +366,10 @@ export function createQueryClient(cache: QueryCache): QueryClient {
 			if (data instanceof Promise) {
 				throw new TypeError("data must be synchronous");
 			}
+			cache.set(key, data);
+		},
+
+		prefetchQuery(key: string, data: Promise<any>) {
 			cache.set(key, data);
 		},
 	};

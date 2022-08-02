@@ -43,9 +43,9 @@ export async function startClient(options: StartClientOptions = {}) {
 		locals: {},
 	} as any;
 	for (const hooks of clientHooks) {
-		hooks.extendPageContext?.(pageContext);
+		await hooks.extendPageContext?.(pageContext);
 	}
-	commonHooks.extendPageContext?.(pageContext);
+	await commonHooks.extendPageContext?.(pageContext);
 
 	const beforePageLookupHandlers: Array<
 		(ctx: PageContext, url: URL) => LookupHookResult

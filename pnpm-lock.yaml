@@ -185,14 +185,14 @@ importers:
       "@babel/types": ^7.18.10
       "@brillout/json-s": ^0.4.6
       "@cyco130/eslint-config": ^2.1.1
-      "@hattip/adapter-node": ^0.0.16
-      "@hattip/bundler-cloudflare-workers": ^0.0.16
-      "@hattip/bundler-deno": ^0.0.16
-      "@hattip/bundler-netlify": ^0.0.16
-      "@hattip/bundler-vercel": ^0.0.16
-      "@hattip/compose": ^0.0.16
-      "@hattip/core": ^0.0.16
-      "@hattip/polyfills": ^0.0.16
+      "@hattip/adapter-node": ^0.0.17
+      "@hattip/bundler-cloudflare-workers": ^0.0.17
+      "@hattip/bundler-deno": ^0.0.17
+      "@hattip/bundler-netlify": ^0.0.17
+      "@hattip/bundler-vercel": ^0.0.17
+      "@hattip/compose": ^0.0.17
+      "@hattip/core": ^0.0.17
+      "@hattip/polyfills": ^0.0.17
       "@types/babel__core": ^7.1.19
       "@types/micromatch": ^4.0.2
       "@types/node": ^18.6.3
@@ -222,14 +222,14 @@ importers:
     dependencies:
       "@babel/core": 7.18.10
       "@babel/types": 7.18.10
-      "@hattip/adapter-node": 0.0.16
-      "@hattip/bundler-cloudflare-workers": 0.0.16
-      "@hattip/bundler-deno": 0.0.16
-      "@hattip/bundler-netlify": 0.0.16
-      "@hattip/bundler-vercel": 0.0.16
-      "@hattip/compose": 0.0.16
-      "@hattip/core": 0.0.16
-      "@hattip/polyfills": 0.0.16
+      "@hattip/adapter-node": 0.0.17
+      "@hattip/bundler-cloudflare-workers": 0.0.17
+      "@hattip/bundler-deno": 0.0.17
+      "@hattip/bundler-netlify": 0.0.17
+      "@hattip/bundler-vercel": 0.0.17
+      "@hattip/compose": 0.0.17
+      "@hattip/core": 0.0.17
+      "@hattip/polyfills": 0.0.17
       "@types/node": 18.6.3
       "@types/react": 18.0.15
       "@types/react-dom": 18.0.6
@@ -263,11 +263,11 @@ importers:
   testbed/kitchen-sink:
     specifiers:
       "@cyco130/eslint-config": ^2.1.1
-      "@hattip/adapter-cloudflare-workers": ^0.0.16
-      "@hattip/adapter-deno": ^0.0.16
-      "@hattip/adapter-netlify-edge": ^0.0.16
-      "@hattip/adapter-netlify-functions": ^0.0.16
-      "@hattip/adapter-vercel-edge": ^0.0.16
+      "@hattip/adapter-cloudflare-workers": ^0.0.17
+      "@hattip/adapter-deno": ^0.0.17
+      "@hattip/adapter-netlify-edge": ^0.0.17
+      "@hattip/adapter-netlify-functions": ^0.0.17
+      "@hattip/adapter-vercel-edge": ^0.0.17
       "@types/ps-tree": ^1.1.2
       "@types/react": ^18.0.15
       "@types/react-dom": ^18.0.6
@@ -288,9 +288,9 @@ importers:
       web-streams-polyfill: ^3.2.1
       wrangler: ^2.0.24
     dependencies:
-      "@hattip/adapter-cloudflare-workers": 0.0.16
-      "@hattip/adapter-deno": 0.0.16
-      "@hattip/adapter-vercel-edge": 0.0.16
+      "@hattip/adapter-cloudflare-workers": 0.0.17
+      "@hattip/adapter-deno": 0.0.17
+      "@hattip/adapter-vercel-edge": 0.0.17
       "@types/react": 18.0.15
       "@types/react-dom": 18.0.6
       cheerio: 1.0.0-rc.12
@@ -300,8 +300,8 @@ importers:
       web-streams-polyfill: 3.2.1
     devDependencies:
       "@cyco130/eslint-config": 2.1.1_qugx7qdu5zevzvxaiqyxfiwquq
-      "@hattip/adapter-netlify-edge": 0.0.16
-      "@hattip/adapter-netlify-functions": 0.0.16
+      "@hattip/adapter-netlify-edge": 0.0.17
+      "@hattip/adapter-netlify-functions": 0.0.17
       "@types/ps-tree": 1.1.2
       cross-env: 7.0.3
       eslint: 8.21.0
@@ -1483,67 +1483,67 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@hattip/adapter-cloudflare-workers/0.0.16:
+  /@hattip/adapter-cloudflare-workers/0.0.17:
     resolution:
       {
-        integrity: sha512-2aYZqQdW1rMzC85b2KT9Qh/cmVVcOjc5Gc2fzsdwAiP1HNuHgdPlUf+w4pBAdquq5oS07ok+7XYEXAt5xVuReA==,
+        integrity: sha512-mrei7SzbG6ME1I/9IySgoNECtFmsf1p3IMQcVy0YDBLxP5BY1k69V2RHNtPFA+Lf3dNnbEa1hQwcrqEu6+MClA==,
       }
     dependencies:
-      "@hattip/core": 0.0.16
+      "@hattip/core": 0.0.17
     dev: false
 
-  /@hattip/adapter-deno/0.0.16:
+  /@hattip/adapter-deno/0.0.17:
     resolution:
       {
-        integrity: sha512-CQPrWT1f6Cc3TMCIV+n7hZ/MbZF/csBmPwPpz+/wI3ZkYHrFz9wCaEaSW9h/Skq558jmNF6/UWLXbD8vlLu/3w==,
+        integrity: sha512-H21nJoI1+YQ0Ln1PSVsWU5PgnK5M2DnpkVEsYEgFri0O+1sAxrWcpkTUhznlwHkO3FALKyvAMKRkFesgR/apTw==,
       }
     dependencies:
-      "@hattip/core": 0.0.16
+      "@hattip/core": 0.0.17
     dev: false
 
-  /@hattip/adapter-netlify-edge/0.0.16:
+  /@hattip/adapter-netlify-edge/0.0.17:
     resolution:
       {
-        integrity: sha512-9LXpuOzLOCrPvGcojs/vCHWyNlHzuyLP0bF3aAQbahbqVbOTj/K6GsTcW6lACC2Vo/ZKVe8+TMV+fjPNDG9O+Q==,
+        integrity: sha512-OKZNEfdyniR2UnM0tRm46PXMV/H59EDzh8dEv+SGFszfglIUQLsXxRskEXxlU1IkkJQ/9xKsa0NDM7Ly3QNsxw==,
       }
     dependencies:
-      "@hattip/core": 0.0.16
+      "@hattip/core": 0.0.17
     dev: true
 
-  /@hattip/adapter-netlify-functions/0.0.16:
+  /@hattip/adapter-netlify-functions/0.0.17:
     resolution:
       {
-        integrity: sha512-wM+Bb4pylM071tooNpODl+939Xzq41f5viJbcS6fSYY45sYnCIbydaYO4sgmJNcarxZp59GCpr2gj61ijPw8hw==,
+        integrity: sha512-dnQAqo0lHoJxGOzcv/SUfkNvt6K1ic0mHHVfiocenuR9RQArbMIKwRHc44pTM/Ktf1r7tbwEbMf1ktCxY/bTFg==,
       }
     dependencies:
-      "@hattip/adapter-node": 0.0.16
-      "@hattip/core": 0.0.16
-      "@hattip/polyfills": 0.0.16
+      "@hattip/adapter-node": 0.0.17
+      "@hattip/core": 0.0.17
+      "@hattip/polyfills": 0.0.17
       netlify-lambda-types: 1.0.0
     dev: true
 
-  /@hattip/adapter-node/0.0.16:
+  /@hattip/adapter-node/0.0.17:
     resolution:
       {
-        integrity: sha512-IrPSaR3/QVxawnloPFUB1ixmf5s/Qy+Br65VbXgLZCXKdL+eMFA2PkV40L6frKEUfBZfAhjOY5Pq/wnaT2PmQg==,
+        integrity: sha512-+VlLzBiaR3djoRFML/FEprWjA9v3hXvR4CUovNkghofaDO0FvL48qW9+HBsqbliRVeX2WSdm8W7VONlnyjh+4w==,
       }
     dependencies:
-      "@hattip/core": 0.0.16
-      "@hattip/polyfills": 0.0.16
+      "@hattip/core": 0.0.17
+      "@hattip/polyfills": 0.0.17
 
-  /@hattip/adapter-vercel-edge/0.0.16:
+  /@hattip/adapter-vercel-edge/0.0.17:
     resolution:
       {
-        integrity: sha512-3R66t44iiI/xzyrlFc9vi07WJI9eiCjL9+RsFoU1vNjvn5cAtXIbk8uBQLOoYiRZbKVrYSVw+RHSP839Q1/fuA==,
+        integrity: sha512-p2ESDEFOPz7vQrjW9UQkog0xhhEDwCHyqu5eUVHu2kwRvcvBnQah9QwG3e16X0m85YTjeG5dsnf35/1k/sQ8RQ==,
       }
     dependencies:
-      "@hattip/core": 0.0.16
+      "@hattip/core": 0.0.17
     dev: false
 
-  /@hattip/bundler-cloudflare-workers/0.0.16:
+  /@hattip/bundler-cloudflare-workers/0.0.17:
     resolution:
       {
-        integrity: sha512-SCPBKAZHvivO0Zky77xcD9QoO1yi7dJ3N8yAM0MBQLY9vFHOPLWPPrvdnaH1AlCvFb7qjBZohdJsnO5VxQqWTw==,
+        integrity: sha512-JXhXJLV7cRMsjgeSlJkbeoHYL38lvy3HXJUwY8BWAKpi3wt9k9HgRLAUiwZ1h3jkd37puZWZGyryh3V+/yWH/Q==,
       }
     hasBin: true
     dependencies:
@@ -1551,22 +1551,10 @@ packages:
       esbuild: 0.14.51
     dev: false
 
-  /@hattip/bundler-deno/0.0.16:
+  /@hattip/bundler-deno/0.0.17:
     resolution:
       {
-        integrity: sha512-PEoSmZjdOGrv/Tu0N7ql1A7e0gZ52UTRNs7fI2uBUUtnc2LCVzByV64xGopn/RXzAiAdPC8ZzOiiGGQ+Yxrx8g==,
-      }
-    hasBin: true
-    dependencies:
-      cac: 6.7.12
-      cpr: 3.0.1
-      esbuild: 0.14.51
-    dev: false
-
-  /@hattip/bundler-netlify/0.0.16:
-    resolution:
-      {
-        integrity: sha512-b+toN8V3DWObQqw1vTsu0gAFetuSF+mpEtpkuK5zAOQpJ24nCFJXzB44oueuTiBONX1X2Wn0VUxH/K2MFyQmEQ==,
+        integrity: sha512-ncW2YcRmGRp93X3XWCpQkGH/SZ0Ac4LOOry5qSN6PEdLIaAq2HRI3THbrCPph9M1Qq3mXI+03SqKHx4xEpW66A==,
       }
     hasBin: true
     dependencies:
@@ -1575,10 +1563,10 @@ packages:
       esbuild: 0.14.51
     dev: false
 
-  /@hattip/bundler-vercel/0.0.16:
+  /@hattip/bundler-netlify/0.0.17:
     resolution:
       {
-        integrity: sha512-wpZ/2WaJl/UhTfIA33Q+pGXCCt9C3GgNhg/k2pOJXhv6lmhcaZLeVwcefaKcNcprwsgYMRQQFNTzEPVop0loTA==,
+        integrity: sha512-y7C51hAKISTnmT0ZZFCcNj7zEM/4SIRTczvHVdlC+QfSe9mKmcqddOxW+Q54qz/phy1J2d+1BNRDXd2gPniTog==,
       }
     hasBin: true
     dependencies:
@@ -1587,28 +1575,40 @@ packages:
       esbuild: 0.14.51
     dev: false
 
-  /@hattip/compose/0.0.16:
+  /@hattip/bundler-vercel/0.0.17:
     resolution:
       {
-        integrity: sha512-y8CHF6f7AiwXndEYSGnsvWcrh2aotBGuUKMKkI6ArSkWguRf3Mc33PHzdirkLchXn+vGndR5ESXDXdBTGbwuMw==,
+        integrity: sha512-tdDaaPx7+7rN/fp3ZWvemG4fy1YDih8FssRTtKGfRl4HLjPc5yYrHW4yXok4i8Lxl7XDB9KYdUjApbpwI2zueQ==,
       }
+    hasBin: true
     dependencies:
-      "@hattip/core": 0.0.16
+      cac: 6.7.12
+      cpr: 3.0.1
+      esbuild: 0.14.51
     dev: false
 
-  /@hattip/core/0.0.16:
+  /@hattip/compose/0.0.17:
     resolution:
       {
-        integrity: sha512-ojckOQPQtkgdqA3Yom5nusp2sMuQoic7khhCRTo1855nsHIfz7VAOpMcAYtzb5J5vOztkjBhogj/+g1wMpnK2g==,
-      }
-
-  /@hattip/polyfills/0.0.16:
-    resolution:
-      {
-        integrity: sha512-Bvg4svh2dFgjgBZPwrVmwy66nDgXJTqrH2lr1EEi24jiieCtBkZNxrBc0VNj3sKmukf8jILRNpfN59GarwgtWw==,
+        integrity: sha512-UzARUkQDM7dwbV7FHWz5W8T2rYpN5AzCLBqapNGps6kUf7kN2xYCl1iakG2FH04s0JuBCndU3ER7zeQ+E0dPGA==,
       }
     dependencies:
-      "@hattip/core": 0.0.16
+      "@hattip/core": 0.0.17
+    dev: false
+
+  /@hattip/core/0.0.17:
+    resolution:
+      {
+        integrity: sha512-sGTKYu8yahFLwVE4bO5C6W8k5sxrtot+8D8UI9DEFOajihlELFCBpXE0mxc4Iswm8yBJcezOavpIpJyjjziPDg==,
+      }
+
+  /@hattip/polyfills/0.0.17:
+    resolution:
+      {
+        integrity: sha512-kaSgWrnI1NaTdmnASHQ+Ls2+6E3oDnr7ENE/aV9sqCyrvKhWUyeDO/VE/ciRujTrLwxkP27xc96QFIBXUpP8vg==,
+      }
+    dependencies:
+      "@hattip/core": 0.0.17
       node-fetch-native: 0.1.4
 
   /@humanwhocodes/config-array/0.10.4:

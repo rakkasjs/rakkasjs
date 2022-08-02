@@ -50,9 +50,9 @@ export default async function doRenderPageRoute(
 		pageContext = { url: ctx.url, locals: {} } as any as PageContext;
 
 		for (const hook of pageHooks) {
-			hook?.extendPageContext?.(pageContext);
+			await hook?.extendPageContext?.(pageContext);
 		}
-		commonHooks.extendPageContext?.(pageContext);
+		await commonHooks.extendPageContext?.(pageContext);
 
 		pageContextMap.set(ctx.request, pageContext);
 	}

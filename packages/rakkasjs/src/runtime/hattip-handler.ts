@@ -91,13 +91,7 @@ export function createRequestHandler(userHooks: ServerHooks = {}) {
 
 function init(hooks: ServerHooks[]) {
 	return (ctx: RequestContext) => {
-		const { url, method } = ctx.request;
-		ctx.url = new URL(url);
-		ctx.method = method;
-		ctx.locals = {};
 		ctx.hooks = hooks;
-
-		// console.log(`${method} ${url}`);
 	};
 }
 
