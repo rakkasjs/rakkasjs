@@ -243,7 +243,6 @@ importers:
       fast-glob: 3.2.11
       micromatch: 4.0.5
       picocolors: 1.0.0
-      react-error-boundary: 3.1.4_react@18.2.0
     devDependencies:
       "@brillout/json-s": 0.4.6
       "@cyco130/eslint-config": 2.1.1_qugx7qdu5zevzvxaiqyxfiwquq
@@ -255,6 +254,7 @@ importers:
       publint: 0.1.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      react-error-boundary: 3.1.4_react@18.2.0
       react-helmet-async: 1.3.0_biqbaboplfbrettd7655fr4n2y
       tsup: 6.2.1_typescript@4.7.4
       typescript: 4.7.4
@@ -1018,6 +1018,7 @@ packages:
     engines: { node: ">=6.9.0" }
     dependencies:
       regenerator-runtime: 0.13.9
+    dev: true
 
   /@babel/runtime/7.18.9:
     resolution:
@@ -15881,7 +15882,7 @@ packages:
     dependencies:
       "@babel/runtime": 7.18.6
       react: 18.2.0
-    dev: false
+    dev: true
 
   /react-fast-compare/3.2.0:
     resolution:

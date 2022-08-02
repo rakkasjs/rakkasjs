@@ -71,8 +71,14 @@ export default defineConfig([
 			"react-dom/server.browser",
 			"@vavite/expose-vite-dev-server/vite-dev-server",
 		],
+		noExternal: [
+			"react-helmet-async",
+			"react-error-boundary",
+			"@brillout/json-s",
+		],
 		dts: {
 			entry: "./src/lib/index.ts",
+			resolve: ["react-error-boundary"],
 		},
 		plugins: [namedExports()],
 	},
