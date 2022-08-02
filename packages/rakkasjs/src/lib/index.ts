@@ -12,6 +12,8 @@ export type {
 	HeadersFunction,
 	PrerenderFunction,
 	PrerenderResult,
+	PageRouteGuard,
+	PageRouteGuardContext,
 } from "../runtime/page-types";
 
 export * from "../runtime/common-hooks";

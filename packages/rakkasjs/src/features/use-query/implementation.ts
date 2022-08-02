@@ -114,6 +114,10 @@ export interface PageContext {
 	locals: PageLocals;
 }
 
+export function usePageContext(): PageContext {
+	return useContext(IsomorphicContext);
+}
+
 /** Function passed to useQuery */
 export type QueryFn<T> = (ctx: PageContext) => T | Promise<T>;
 
@@ -181,7 +185,7 @@ function useQueryBase<T>(
 		() => (key === undefined ? undefined : cache.get(key)),
 	);
 
-	const ctx = useContext(IsomorphicContext);
+	const ctx = usePageContext();
 
 	useEffect(() => {
 		const item = key ? cache.get(key) : undefined;

@@ -5,4 +5,4 @@ export type {
 	PageContext,
 	QueryClient,
 } from "./implementation";
-export { useQuery, useQueryClient } from "./implementation";
+export { useQuery, useQueryClient, usePageContext } from "./implementation";

@@ -126,7 +126,7 @@ export type UseMutationResult<T, V> =
  * @param [options] Mutation options
  * @returns mutation Mutation result
  */
-export function useMutation<T, V>(
+export function useMutation<T, V = void>(
 	mutationFn: MutationFunction<T, V>,
 	options: UseMutationOptions<T, V> = {},
 ): UseMutationResult<T, V> {
