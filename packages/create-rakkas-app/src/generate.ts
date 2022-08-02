@@ -83,7 +83,11 @@ async function copyFiles(dir: string, options: Options, command: string) {
 						case ".eslintrc.cjs":
 							return options.eslint;
 						case "src/sample.test.ts":
+						case "src/sample.test.js":
 							return options.vitest;
+						case "src/crud.ts":
+						case "src/crud.js":
+							return options.demo;
 						default:
 							return options.demo || !filename.startsWith("src/routes/");
 					}
@@ -151,7 +155,7 @@ async function copyFiles(dir: string, options: Options, command: string) {
 const BASIC_PAGE = `export default function HomePage() {
 	return (
 		<main>
-			<h1>Hello world!</h1>;
+			<h1>Hello world!</h1>
 		</main>
 	);
 }
