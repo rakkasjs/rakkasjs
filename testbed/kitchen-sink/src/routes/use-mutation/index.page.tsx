@@ -14,7 +14,7 @@ export default function UseMutationPage({ url }: PageProps) {
 	return (
 		<p>
 			{m.isIdle ? (
-				<button onClick={m.mutate}>Mutate</button>
+				<button onClick={() => m.mutate()}>Mutate</button>
 			) : m.isSuccess ? (
 				<>
 					{m.data} <button onClick={m.reset}>Reset</button>

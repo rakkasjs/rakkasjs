@@ -67,7 +67,7 @@ export const Todo: FC<TodoProps> = ({ todo, refetch }) => {
 				)}
 
 				{todo.done && (
-					<button type="button" onClick={remove}>
+					<button type="button" onClick={() => remove()}>
 						Delete
 					</button>
 				)}

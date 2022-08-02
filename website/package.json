@@ -33,14 +33,14 @@
 	"devDependencies": {
 		"@cyco130/eslint-config": "^2.1.1",
 		"@cyco130/vite-plugin-mdx": "^0.0.0",
-		"@docsearch/css": "^3.1.1",
-		"@docsearch/react": "^3.1.1",
+		"@docsearch/css": "^3.2.0",
+		"@docsearch/react": "^3.2.0",
 		"@mapbox/rehype-prism": "^0.8.0",
 		"@rollup/pluginutils": "^4.2.1",
 		"@types/cookie": "^0.5.1",
 		"@types/react": "^18.0.15",
 		"@types/react-dom": "^18.0.6",
-		"eslint": "^8.19.0",
+		"eslint": "^8.21.0",
 		"gray-matter": "^4.0.3",
 		"install": "^0.13.0",
 		"node-dev": "^7.4.3",
@@ -53,6 +53,6 @@
 		"source-map": "^0.7.4",
 		"typescript": "^4.7.4",
 		"vfile": "^5.3.4",
-		"vite": "^3.0.0"
+		"vite": "^3.0.4"
 	}
 }

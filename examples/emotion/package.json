@@ -8,18 +8,18 @@
 		"start": "node dist/server"
 	},
 	"devDependencies": {
-		"@emotion/babel-plugin": "^11.9.2",
+		"@emotion/babel-plugin": "^11.10.0",
 		"@types/react": "^18.0.15",
 		"@types/react-dom": "^18.0.6",
 		"rakkasjs": "0.6.0-next.9",
 		"typescript": "^4.7.4",
-		"vite": "^3.0.0"
+		"vite": "^3.0.4"
 	},
 	"dependencies": {
-		"@emotion/react": "^11.9.3",
-		"@emotion/styled": "^11.9.3",
+		"@emotion/react": "^11.10.0",
+		"@emotion/styled": "^11.10.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"zod": "^3.17.3"
+		"zod": "^3.17.10"
 	}
 }

@@ -2,15 +2,11 @@ import { compose, RequestContext, RequestHandlerStack } from "@hattip/compose";
 import { ReactElement } from "react";
 import renderApiRoute from "../features/api-routes/middleware";
 import renderPageRoute from "../features/pages/middleware";
-import { ServerSideLocals, PageContext } from "../lib";
+import { PageContext } from "../lib";
 import serverHooks from "./feature-server-hooks";
 
 declare module "@hattip/compose" {
 	interface RequestContextExtensions {
-		/** Request URL */
-		url: URL;
-		/** Request method */
-		method: string;
 		/** Dynamic path parameters */
 		params: Record<string, string>;
 		/** Isomorphic fetch function */
@@ -19,8 +15,6 @@ declare module "@hattip/compose" {
 		hooks: ServerHooks[];
 		/** Set to true when searching for a not found page */
 		notFound?: boolean;
-		/** Application-specific stuff */
-		locals: ServerSideLocals;
 	}
 }
 

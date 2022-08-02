@@ -266,14 +266,12 @@ const VERCEL_EDGE_ENTRY = `
 `;
 
 const DENO_ENTRY = `
-	globalThis.process = { env: Deno.env.toObject() };
-
 	import * as path from "https://deno.land/std@0.144.0/path/mod.ts";
 	import { serve, serveDir, createRequestHandler } from "@hattip/adapter-deno";
 	import handler from "./hattip.js";
 	import staticFiles from "./static-manifest.js";
 
-	const staticDir = path.join(path.dirname(path.fromFileUrl(import.meta.url)), "static");
+	const staticDir = path.join(path.dirname(path.fromFileUrl(import.meta.url)), "public");
 
 	const denoHandler = createRequestHandler(handler);
 

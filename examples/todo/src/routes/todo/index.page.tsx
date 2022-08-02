@@ -45,7 +45,7 @@ export default function TodoPage() {
 					type="button"
 					className={css.addButton}
 					disabled={!text}
-					onClick={create}
+					onClick={() => create()}
 				>
 					Add
 				</button>
