@@ -308,16 +308,23 @@ export default async function doRenderPageRoute(
 		}
 	}
 
-	let scriptPath = "virtual:rakkasjs:client-entry";
+	let scriptPath: string;
 	if (import.meta.env.PROD) {
-		scriptPath = clientManifest![scriptPath]?.file ?? scriptPath;
+		for (const entry of Object.values(clientManifest!)) {
+			if (entry.isEntry) {
+				scriptPath = entry.file;
+				break;
+			}
+		}
+	} else {
+		scriptPath = "virtual:rakkasjs:client-entry";
 	}
 
 	const reactStream = await renderToReadableStream(
 		<StrictMode>{app}</StrictMode>,
 		{
 			// TODO: AbortController
-			bootstrapModules: ["/" + scriptPath],
+			bootstrapModules: ["/" + scriptPath!],
 			onError(error) {
 				if (!redirected) {
 					status = 500;
