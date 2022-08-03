@@ -4,6 +4,7 @@ import {
 	CacheItem,
 	createQueryClient,
 	DEFAULT_QUERY_OPTIONS,
+	QueryCache,
 	QueryCacheContext,
 } from "./implementation";
 
@@ -44,7 +45,7 @@ function Wrapper({ children }: { children: ReactNode }) {
 	);
 }
 
-const cache = {
+const cache: QueryCache = {
 	has(key: string) {
 		return key in queryCache || key in $RSC;
 	},
@@ -83,6 +84,8 @@ const cache = {
 				cacheTime: Math.max(queryCache[key]!.cacheTime, cacheTime),
 			};
 
+			delete queryCache[key]!.invalid;
+
 			valueOrPromise.then(
 				(value) => {
 					queryCache[key] = {
@@ -114,11 +117,14 @@ const cache = {
 				hydrated: false,
 				date: Date.now(),
 			};
+
+			delete queryCache[key]!.invalid;
 			delete queryCache[key]!.promise;
 		}
 
 		queryCache[key]!.subscribers.forEach((subscriber) => subscriber());
 	},
+
 	subscribe(key: string, fn: () => void) {
 		queryCache[key] ||= {
 			subscribers: new Set(),
@@ -147,5 +153,19 @@ const cache = {
 				}
 			}
 		};
+	},
+
+	enumerate() {
+		return Object.keys(queryCache);
+	},
+
+	invalidate(key: string) {
+		if (queryCache[key]) {
+			queryCache[key] = {
+				...queryCache[key]!,
+				invalid: true,
+			};
+			queryCache[key]!.subscribers.forEach((subscriber) => subscriber());
+		}
 	},
 };

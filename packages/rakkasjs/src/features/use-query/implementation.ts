@@ -14,18 +14,21 @@ export interface CacheItem {
 	value?: any;
 	error?: any;
 	promise?: Promise<any>;
-	date: number;
+	date?: number;
 	subscribers: Set<() => void>;
 	hydrated: boolean;
 	cacheTime: number;
 	evictionTimeout?: ReturnType<typeof setTimeout>;
+	invalid?: boolean;
 }
 
 export interface QueryCache {
 	has(key: string): boolean;
 	get(key: string): CacheItem | undefined;
 	set(key: string, value: any, cacheTime?: number): void;
+	invalidate(key: string): void;
 	subscribe(key: string, fn: () => void): () => void;
+	enumerate(): Iterable<string>;
 }
 
 export const QueryCacheContext = createContext<QueryCache>(undefined as any);
@@ -188,25 +191,28 @@ function useQueryBase<T>(
 	const ctx = usePageContext();
 
 	useEffect(() => {
-		const item = key ? cache.get(key) : undefined;
+		const cacheItem = key ? cache.get(key) : undefined;
 
-		if (item === undefined) {
+		if (cacheItem === undefined) {
 			return;
 		}
 
 		if (
-			refetchOnMount &&
-			(refetchOnMount === "always" || staleTime <= Date.now() - item.date) &&
-			!item.promise &&
-			!item.hydrated
+			(cacheItem.invalid ||
+				(refetchOnMount &&
+					(refetchOnMount === "always" ||
+						!cacheItem.date ||
+						staleTime <= Date.now() - cacheItem.date))) &&
+			!cacheItem.promise &&
+			!cacheItem.hydrated
 		) {
 			const promiseOrValue = fn(ctx);
 			cache.set(key!, promiseOrValue, cacheTime);
 		}
 
-		item.hydrated = false;
+		cacheItem.hydrated = false;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [key]);
+	}, [key, item?.invalid]);
 
 	if (key === undefined) {
 		return;
@@ -261,8 +267,8 @@ export interface QueryResult<T> {
 	refetch(): void;
 	/** Is the data being refetched? */
 	isRefetching: boolean;
-	/** Update date of the last return data */
-	dataUpdatedAt: number;
+	/** Update date of the last returned data */
+	dataUpdatedAt?: number;
 }
 
 function useRefetch<T>(
@@ -285,6 +291,7 @@ function useRefetch<T>(
 			if (
 				document.visibilityState === "visible" &&
 				(refetchOnWindowFocus === "always" ||
+					!queryResult!.dataUpdatedAt ||
 					staleTime <= Date.now() - queryResult!.dataUpdatedAt)
 			) {
 				queryResult!.refetch();
@@ -347,6 +354,12 @@ export interface QueryClient {
 	 * Start fetching the data for the given key.
 	 */
 	prefetchQuery(key: string, data: Promise<any>): void;
+	/**
+	 * Invalidate one or more queries.
+	 */
+	invalidateQueries(
+		keys?: string | string[] | ((key: string) => boolean),
+	): void;
 }
 
 /** Access the query client that manages the cache used by useQuery */
@@ -371,6 +384,23 @@ export function createQueryClient(cache: QueryCache): QueryClient {
 
 		prefetchQuery(key: string, data: Promise<any>) {
 			cache.set(key, data);
+		},
+
+		invalidateQueries(keys) {
+			if (typeof keys === "string") {
+				cache.invalidate(keys);
+				return;
+			} else if (Array.isArray(keys)) {
+				keys.forEach((key) => cache.invalidate(key));
+				return;
+			}
+
+			for (const key of cache.enumerate()) {
+				const shouldInvalidate = keys === undefined || keys(key);
+				if (shouldInvalidate) {
+					cache.invalidate(key);
+				}
+			}
 		},
 	};
 }

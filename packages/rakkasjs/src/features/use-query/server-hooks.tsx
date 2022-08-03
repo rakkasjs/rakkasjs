@@ -69,6 +69,14 @@ const useQueryServerHooks: ServerHooks = {
 			subscribe() {
 				throw new Error("Cannot subscribe on the server");
 			},
+
+			invalidate() {
+				throw new Error("Cannot invalidate on the server");
+			},
+
+			enumerate() {
+				throw new Error("Cannot enumerate on the server");
+			},
 		};
 
 		return {
