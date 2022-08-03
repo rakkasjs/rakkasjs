@@ -229,12 +229,16 @@ export async function loadRoute(
 	};
 
 	const promises = importers.map(async (importer, i) =>
-		importer().then(async (module) => [
-			module.default,
-			(import.meta.hot && updatedComponents
-				? updatedComponents[i]?.preload
-				: await module.default?.preload)?.(preloadContext),
-		]),
+		importer().then(async (module) => {
+			const preload =
+				import.meta.hot && updatedComponents
+					? updatedComponents[i]?.preload
+					: module.default?.preload;
+
+			const preloaded = await preload?.(preloadContext);
+
+			return [module.default, preloaded];
+		}),
 	) as Promise<[Layout, PreloadResult | undefined]>[];
 
 	const layoutStack = await Promise.all(promises);
