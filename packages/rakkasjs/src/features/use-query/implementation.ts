@@ -148,7 +148,7 @@ export function useQuery<T>(
 export function useQuery<T>(
 	key: string | undefined,
 	fn: QueryFn<T>,
-	options: UseQueryOptions,
+	options?: UseQueryOptions,
 ): QueryResult<T> | undefined;
 
 export function useQuery<T>(
