@@ -49,6 +49,7 @@ export function App(props: AppProps) {
 	if (
 		!lastRoute.last ||
 		lastRoute.last.pathname !== pageContext.url.pathname ||
+		lastRoute.last.search !== pageContext.url.search ||
 		forcedUpdate
 	) {
 		lastRoute.updateCounter = updateCounter;
@@ -84,6 +85,7 @@ interface RouteContextContent {
 	>;
 	last?: {
 		pathname: string;
+		search: string;
 		app: ReactElement;
 	};
 	onRendered?(): void;
@@ -113,6 +115,7 @@ export async function loadRoute(
 			const location = String(result.redirect);
 			return {
 				pathname: originalPathname,
+				search: pageContext.url.search,
 				app: (
 					<Redirect
 						href={location}
@@ -157,6 +160,7 @@ export async function loadRoute(
 			const location = String(result.redirect);
 			return {
 				pathname: originalPathname,
+				search: pageContext.url.search,
 				app: (
 					<Redirect
 						href={location}
@@ -285,6 +289,7 @@ export async function loadRoute(
 
 	return {
 		pathname: originalPathname,
+		search: pageContext.url.search,
 		app,
 	};
 }
