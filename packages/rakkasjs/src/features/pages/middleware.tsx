@@ -192,7 +192,20 @@ export default async function doRenderPageRoute(
 	const stack = (
 		(await Promise.all(
 			importers.map((i) =>
-				i().then(async (m) => [m, await m.default?.preload?.(preloadContext)]),
+				i().then(async (m) => {
+					try {
+						const preloaded = await m.default?.preload?.(preloadContext);
+						return [m, preloaded];
+					} catch (preloadError) {
+						// If a preload function throws, we return a component that
+						// throws the same error.
+						return [
+							() => {
+								throw preloadError;
+							},
+						];
+					}
+				}),
 			),
 		)) as [
 			[PageModule, PreloadResult | undefined],
@@ -325,9 +338,14 @@ export default async function doRenderPageRoute(
 		{
 			// TODO: AbortController
 			bootstrapModules: ["/" + scriptPath!],
-			onError(error) {
+			onError(error: any) {
 				if (!redirected) {
 					status = 500;
+					if (error && typeof error.toResponse === "function") {
+						Promise.resolve(error.toResponse()).then((response: Response) => {
+							status = response.status;
+						});
+					}
 				}
 				rejectRenderPromise(error);
 			},
@@ -354,10 +372,15 @@ export default async function doRenderPageRoute(
 				}),
 			]);
 		}
-	} catch (error) {
+	} catch (error: any) {
 		if (!redirected) {
-			console.error(error);
-			status = 500;
+			if (error && typeof error.toResponse === "function") {
+				const response = await error.toResponse();
+				status = response.status;
+			} else {
+				console.error(error);
+				status = 500;
+			}
 		}
 	}
 

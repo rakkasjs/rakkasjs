@@ -235,9 +235,20 @@ export async function loadRoute(
 					? updatedComponents[i]?.preload
 					: module.default?.preload;
 
-			const preloaded = await preload?.(preloadContext);
+			try {
+				const preloaded = await preload?.(preloadContext);
 
-			return [module.default, preloaded];
+				return [module.default, preloaded];
+			} catch (preloadError) {
+				// If a preload function throws, we return a component that
+				// throws the same error so that the error boundary can catch
+				// it.
+				return [
+					() => {
+						throw preloadError;
+					},
+				];
+			}
 		}),
 	) as Promise<[Layout, PreloadResult | undefined]>[];
 
