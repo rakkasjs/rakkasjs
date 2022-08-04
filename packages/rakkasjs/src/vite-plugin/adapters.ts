@@ -37,6 +37,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 				(options) => {
 					options.define = options.define || {};
 					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
+					options.define["global"] = "globalThis";
 				},
 			);
 		},
@@ -84,6 +85,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 				manipulateEsbuildOptions(options) {
 					options.define = options.define || {};
 					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
+					options.define["global"] = "globalThis";
 				},
 			});
 		},
@@ -133,6 +135,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 				manipulateEsbuildOptions(options) {
 					options.define = options.define || {};
 					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
+					options.define["global"] = "globalThis";
 				},
 			});
 		},
@@ -161,6 +164,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 					options.define = options.define || {};
 					options.define["process.env.NODE_ENV"] = '"production"';
 					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
+					options.define["global"] = "globalThis";
 				},
 			);
 		},
@@ -207,17 +211,29 @@ function walk(
 }
 
 const CLOUDFLARE_WORKERS_ENTRY = `
-	import hattipHandler from "./hattip.js";
 	import cloudflareWorkersAdapter from "@hattip/adapter-cloudflare-workers";
 
-	const handler = cloudflareWorkersAdapter(hattipHandler);
+	let handler;
 
 	export default {
-		fetch(req, env, ctx) {
-			globalThis.process = { env: {} };
-			for (const [key, value] of Object.entries(env)) {
-				if (typeof value === "string") process.env[key] = value;
+		async fetch(req, env, ctx) {
+			if (!globalThis.process?.env) {
+				globalThis.process = globalThis.process || {};
+				globalThis.process.env = new Proxy({}, {
+					get(_, key) {
+						if (typeof env[key] === "string") {
+							return env[key];
+						}
+						return undefined;
+					}
+				});
 			}
+
+			if (!handler) {
+				const hattipHandler = await import("./hattip.js");
+				handler = cloudflareWorkersAdapter(hattipHandler.default);
+			}
+
 			return handler(req, env, ctx);
 		}
 	};
@@ -231,20 +247,20 @@ const NETLIFY_ENTRY = `
 `;
 
 const NETLIFY_EDGE_ENTRY = `
-	globalThis.process = { env: Deno.env.toObject() };
-
 	import adapter from "@hattip/adapter-netlify-edge";
-	import handler from "./hattip.js";
 	import staticFiles from "./static-manifest.js";
 
-	export default adapter((ctx) => {
+	export default adapter(async (ctx) => {
+		globalThis.process = { env: Deno.env.toObject() };
 		const path = new URL(ctx.request.url).pathname;
 		if (staticFiles.has(path) || staticFiles.has(path + "/index.html")) {
 			ctx.passThrough();
-			return new Response("Ugly", { status: 404 });
+			return new Response("", { status: 404 });
 		}
 
-		return handler(ctx);
+		const handler = await import("./hattip.js");
+
+		return handler.default(ctx);
 	});
 `;
 
@@ -260,9 +276,11 @@ const VERCEL_EDGE_ENTRY = `
 	Object.assign(globalThis, { ReadableStream });
 
 	import adapter from "@hattip/adapter-vercel-edge";
-	import handler from "./hattip.js";
 
-	export default adapter(handler);
+	export default adapter(async ctx => {
+		const handler = await import("./hattip.js");
+		return handler.default(ctx);
+	});
 `;
 
 const DENO_ENTRY = `
