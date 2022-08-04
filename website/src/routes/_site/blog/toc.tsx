@@ -1,7 +1,7 @@
 const imports: Record<string, { default: { title: string; date: string } }> =
 	import.meta.glob("./*.page.mdx", {
 		eager: true,
-		query: "frontmatter",
+		as: "frontmatter",
 	});
 
 export const toc = Object.entries(imports)

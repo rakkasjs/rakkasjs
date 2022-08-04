@@ -1,7 +1,7 @@
 const imports: Record<string, { default: { title: string } }> =
 	import.meta.glob("./*.page.mdx", {
 		eager: true,
-		query: "frontmatter",
+		as: "frontmatter",
 	});
 
 const sections: Array<[section: string, slugs: string[]]> = [
