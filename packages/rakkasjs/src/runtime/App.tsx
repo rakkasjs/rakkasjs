@@ -8,7 +8,13 @@ import React, {
 } from "react";
 import { useLocation } from "../features/client-side-navigation/lib";
 import { findPage, RouteMatch } from "../internal/find-page";
-import { Layout, PreloadContext, PreloadResult } from "./page-types";
+import {
+	Layout,
+	LayoutModule,
+	PageModule,
+	PreloadContext,
+	PreloadResult,
+} from "./page-types";
 import prodRoutes from "virtual:rakkasjs:client-page-routes";
 import { Default404Page } from "../features/pages/Default404Page";
 import { LookupHookResult, PageContext, Redirect } from "../lib";
@@ -19,12 +25,13 @@ export interface AppProps {
 		(ctx: PageContext, url: URL) => LookupHookResult
 	>;
 	ssrMeta?: any;
+	ssrActionData?: any;
+	ssrPreloaded?: (void | PreloadResult<Record<string, unknown>>)[];
+	ssrModules?: (PageModule | LayoutModule)[];
 }
 
 export function App(props: AppProps) {
 	const { current: url } = useLocation();
-
-	// TODO: Warn when a page doesn't export a default component
 
 	const lastRoute = useContext(RouteContext);
 	// Force update
@@ -32,10 +39,15 @@ export function App(props: AppProps) {
 		(old) => (old + 1) & 0xfff_ffff,
 		0,
 	);
+	const forcedUpdate = (lastRoute.updateCounter || 0) !== updateCounter;
 
-	if (import.meta.hot) {
-		(window as any).$RAKKAS_UPDATE = update;
-	}
+	const actionData = import.meta.env.SSR
+		? props.ssrActionData
+		: history.state?.actionData;
+
+	// TODO: Warn when a page doesn't export a default component
+
+	if (!import.meta.env.SSR) (window as any).$RAKKAS_UPDATE = update;
 
 	const pageContext = useContext(IsomorphicContext);
 
@@ -45,11 +57,11 @@ export function App(props: AppProps) {
 		throw lastRoute.error;
 	}
 
-	const forcedUpdate = (lastRoute.updateCounter || 0) !== updateCounter;
 	if (
 		!lastRoute.last ||
 		lastRoute.last.pathname !== pageContext.url.pathname ||
 		lastRoute.last.search !== pageContext.url.search ||
+		// lastRoute.last.actionData !== actionData ||
 		forcedUpdate
 	) {
 		lastRoute.updateCounter = updateCounter;
@@ -58,7 +70,10 @@ export function App(props: AppProps) {
 			lastRoute.found,
 			false,
 			props.beforePageLookupHandlers,
+			actionData,
 			props.ssrMeta,
+			props.ssrPreloaded,
+			props.ssrModules,
 		)
 			.then((route) => {
 				lastRoute.last = route;
@@ -87,6 +102,7 @@ interface RouteContextContent {
 		pathname: string;
 		search: string;
 		app: ReactElement;
+		actionData: any;
 	};
 	onRendered?(): void;
 	error?: unknown;
@@ -100,7 +116,10 @@ export async function loadRoute(
 	beforePageLookupHandlers: Array<
 		(ctx: PageContext, url: URL) => LookupHookResult
 	>,
+	actionData: any,
 	ssrMeta?: any,
+	ssrPreloaded?: (void | PreloadResult<Record<string, unknown>>)[],
+	ssrModules?: (PageModule | LayoutModule)[],
 ) {
 	let found = lastFound;
 	const { pathname: originalPathname } = pageContext.url;
@@ -116,6 +135,7 @@ export async function loadRoute(
 			return {
 				pathname: originalPathname,
 				search: pageContext.url.search,
+				actionData,
 				app: (
 					<Redirect
 						href={location}
@@ -161,6 +181,7 @@ export async function loadRoute(
 			return {
 				pathname: originalPathname,
 				search: pageContext.url.search,
+				actionData,
 				app: (
 					<Redirect
 						href={location}
@@ -229,27 +250,37 @@ export async function loadRoute(
 	};
 
 	const promises = importers.map(async (importer, i) =>
-		importer().then(async (module) => {
-			const preload =
-				import.meta.hot && updatedComponents
-					? updatedComponents[i]?.preload
-					: module.default?.preload;
+		Promise.resolve(ssrModules?.[importers.length - 1 - i] || importer()).then(
+			async (module) => {
+				const preload =
+					import.meta.hot && updatedComponents
+						? updatedComponents[i]?.preload
+						: module.default?.preload;
 
-			try {
-				const preloaded = await preload?.(preloadContext);
+				try {
+					if (
+						!import.meta.env.SSR &&
+						i === (window as any).$RAKKAS_ACTION_ERROR_INDEX
+					) {
+						throw new Error("Action error");
+						delete (window as any).$RAKKAS_ACTION_ERROR_INDEX;
+					}
+					const preloaded =
+						ssrPreloaded?.[i] ?? (await preload?.(preloadContext));
 
-				return [module.default, preloaded];
-			} catch (preloadError) {
-				// If a preload function throws, we return a component that
-				// throws the same error so that the error boundary can catch
-				// it.
-				return [
-					() => {
-						throw preloadError;
-					},
-				];
-			}
-		}),
+					return [module.default, preloaded];
+				} catch (preloadError) {
+					// If a preload function throws, we return a component that
+					// throws the same error so that the error boundary can catch
+					// it.
+					return [
+						() => {
+							throw preloadError;
+						},
+					];
+				}
+			},
+		),
 	) as Promise<[Layout, PreloadResult | undefined]>[];
 
 	const layoutStack = await Promise.all(promises);
@@ -288,7 +319,12 @@ export async function loadRoute(
 
 	let app = components.reduce(
 		(prev, Component) => (
-			<Component url={pageContext.url} params={found!.params} meta={meta}>
+			<Component
+				url={pageContext.url}
+				params={found!.params}
+				meta={meta}
+				actionData={actionData}
+			>
 				{prev}
 			</Component>
 		),
@@ -305,6 +341,7 @@ export async function loadRoute(
 	return {
 		pathname: originalPathname,
 		search: pageContext.url.search,
+		actionData,
 		app,
 	};
 }

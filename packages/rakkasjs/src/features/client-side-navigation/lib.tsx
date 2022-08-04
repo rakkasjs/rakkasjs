@@ -5,4 +5,10 @@ export type {
 	NavigationOptions,
 } from "./implementation";
 
-export { navigate, useLocation, Link, StyledLink } from "./implementation";
+export {
+	navigate,
+	useLocation,
+	Link,
+	StyledLink,
+	useSubmit,
+} from "./implementation";

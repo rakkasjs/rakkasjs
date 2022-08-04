@@ -821,6 +821,29 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				});
 			});
 		}
+
+		test("action handlers work", async () => {
+			await page.goto(host + "/form");
+			await page.waitForSelector(".hydrated");
+
+			await page.type("input[name=name]", "wrong");
+			await page.click("button[type=submit]");
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Incorrect name"),
+			);
+
+			await page.evaluate(
+				() =>
+					((
+						document.querySelector("input[name=name]") as HTMLInputElement
+					).value = ""),
+			);
+			await page.type("input[name=name]", "correct");
+			await page.click("button[type=submit]");
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Thank you for your feedback!"),
+			);
+		});
 	});
 }
 

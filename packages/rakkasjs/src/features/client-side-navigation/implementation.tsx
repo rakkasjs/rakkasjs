@@ -10,7 +10,10 @@ import React, {
 	useMemo,
 	useState,
 	useSyncExternalStore,
+	startTransition,
+	FormEvent,
 } from "react";
+import { ActionResult, useMutation } from "../../lib";
 
 let lastRenderedId: string;
 let navigationPromise: Promise<void> | undefined;
@@ -26,13 +29,17 @@ export interface UseLocationResult {
 export function useLocation(): UseLocationResult {
 	const staticLocation = useContext(LocationContext);
 
-	const currentLocation = useSyncExternalStore(
+	const ssrLocation = JSON.stringify([staticLocation!, 0]);
+
+	const currentLocationId = useSyncExternalStore(
 		subscribeToLocation,
 		getLocationSnapshot,
-		useCallback(() => staticLocation!, [staticLocation]),
+		useCallback(() => ssrLocation, [ssrLocation]),
 	);
 
-	const deferredLocation = useDeferredValue(currentLocation);
+	const deferredLocationId = useDeferredValue(currentLocationId);
+	const [currentLocation] = JSON.parse(currentLocationId);
+	const [deferredLocation] = JSON.parse(deferredLocationId);
 
 	useEffect(() => {
 		base.href = deferredLocation;
@@ -42,15 +49,17 @@ export function useLocation(): UseLocationResult {
 		navigationResolve?.();
 		navigationPromise = undefined;
 		navigationResolve = undefined;
-	}, [deferredLocation]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [deferredLocationId]);
 
 	const current = useMemo(() => new URL(deferredLocation), [deferredLocation]);
 	const pending = useMemo(
 		() =>
-			currentLocation === deferredLocation
+			currentLocationId === deferredLocationId
 				? undefined
 				: new URL(currentLocation),
-		[currentLocation, deferredLocation],
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[currentLocationId, deferredLocationId],
 	);
 
 	return {
@@ -84,8 +93,10 @@ export interface NavigationOptions {
 	replace?: boolean;
 	/** Restore scroll position (or scroll to top) */
 	scroll?: boolean;
-	/** Data to be passed to the history entry */
+	/** Custom user data to be stored in the history entry */
 	data?: any;
+	/** Action data */
+	actionData?: any;
 }
 
 /**
@@ -95,7 +106,7 @@ export interface NavigationOptions {
  * @returns Whether the navigation was completed or cancelled
  */
 export async function navigate(
-	to: string,
+	to: string | Readonly<URL>,
 	options?: NavigationOptions,
 ): Promise<boolean> {
 	const url = new URL(to, location.href);
@@ -107,14 +118,18 @@ export async function navigate(
 		});
 	}
 
-	const { replace, data } = options || {};
+	const { replace, data, actionData } = options || {};
 	const id = createUniqueId();
 
 	if (replace) {
-		history.replaceState({ id, data, index: history.state.index }, "", to);
+		history.replaceState(
+			{ id, data, actionData, index: history.state.index },
+			"",
+			to,
+		);
 	} else {
 		const index = nextIndex++;
-		history.pushState({ id, data, index }, "", to);
+		history.pushState({ id, data, actionData, index }, "", to);
 	}
 
 	navigationPromise =
@@ -125,7 +140,7 @@ export async function navigate(
 
 	handleNavigation();
 
-	return navigationPromise.then(() => url.href === location.href);
+	return navigationPromise.then(() => history.state.id === history.state.id);
 }
 
 export const LocationContext = createContext<string | undefined>(undefined);
@@ -137,8 +152,11 @@ function subscribeToLocation(onStoreChange: () => void): () => void {
 	return () => locationChangeListeners.delete(onStoreChange);
 }
 
-function getLocationSnapshot(): string {
-	return location.href;
+let serialId = 0;
+let lastLocation: Readonly<[string, number]>;
+
+function getLocationSnapshot() {
+	return JSON.stringify(lastLocation);
 }
 
 let base: HTMLBaseElement;
@@ -152,10 +170,17 @@ export function initialize() {
 	base.href = location.href;
 
 	history.replaceState(
-		{ id: createUniqueId(), data: null, index: 0 },
+		{
+			id: createUniqueId(),
+			data: null,
+			actionData: history.state?.actionData,
+			index: 0,
+		},
 		"",
 		location.href,
 	);
+
+	lastLocation = [location.href, serialId];
 
 	addEventListener("popstate", handleNavigation);
 }
@@ -168,7 +193,15 @@ async function handleNavigation() {
 		JSON.stringify(scrollPosition),
 	);
 
-	locationChangeListeners.forEach((listener) => listener());
+	if (!import.meta.env.SSR) {
+		serialId = (serialId + 1) % 0xfff_ffff;
+		lastLocation = [location.href, serialId];
+	}
+
+	startTransition(() => {
+		locationChangeListeners.forEach((listener) => listener());
+		(window as any).$RAKKAS_UPDATE();
+	});
 }
 
 function createUniqueId(): string {
@@ -348,4 +381,42 @@ function shouldHandleClick(e: MouseEventLike): boolean {
 		!t.hasAttribute("download") &&
 		!t.relList.contains("external")
 	);
+}
+
+// TODO: Wher does this belong?
+export function useSubmit() {
+	const { current } = useLocation();
+
+	const mutation = useMutation(async (form: HTMLFormElement) => {
+		const response = await fetch(new URL(form.action ?? "", current), {
+			method: "POST",
+			body: new FormData(form),
+			headers: {
+				accept: "application/javascript",
+			},
+		});
+
+		if (!response.ok) {
+			throw new Error(`${response.status} ${response.statusText}`);
+		}
+
+		const text = await response.text();
+		const value: ActionResult = (0, eval)("(" + text + ")");
+
+		if ("redirect" in value) {
+			await navigate(value.redirect);
+		} else {
+			await navigate(current, { replace: true, actionData: value.data });
+		}
+	});
+
+	function submitHandler(e: FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		mutation.mutate(e.currentTarget);
+	}
+
+	return {
+		...mutation,
+		submitHandler,
+	};
 }

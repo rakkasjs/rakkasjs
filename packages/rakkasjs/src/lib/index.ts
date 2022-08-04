@@ -15,6 +15,9 @@ export type {
 	PageRouteGuard,
 	PageRouteGuardContext,
 	LookupHookResult,
+	ActionContext,
+	ActionHandler,
+	ActionResult,
 } from "../runtime/page-types";
 
 export * from "../runtime/common-hooks";

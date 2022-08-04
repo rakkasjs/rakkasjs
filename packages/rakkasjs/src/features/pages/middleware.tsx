@@ -20,20 +20,19 @@ import { PageContext } from "../use-query/implementation";
 import { Default404Page } from "./Default404Page";
 import commonHooks from "virtual:rakkasjs:common-hooks";
 import {
+	ActionResult,
 	LayoutImporter,
-	LayoutModule,
 	PageImporter,
-	PageModule,
 	PageRouteGuard,
-	PreloadResult,
 	PrerenderResult,
 	ServerSidePageContext,
 } from "../../runtime/page-types";
 import { LookupHookResult } from "../../lib";
+import devalue from "devalue";
 
 const pageContextMap = new WeakMap<Request, PageContext>();
 
-export default async function doRenderPageRoute(
+export default async function renderPageRoute(
 	ctx: RequestContext,
 ): Promise<Response | undefined> {
 	const pageHooks = ctx.hooks.map((hook) => hook.createPageHooks?.(ctx));
@@ -115,6 +114,7 @@ export default async function doRenderPageRoute(
 					headers: {
 						location: new URL(location, ctx.url.origin).href,
 						"content-type": "text/html; charset=utf-8",
+						vary: "accept",
 					},
 				});
 			} else {
@@ -134,6 +134,7 @@ export default async function doRenderPageRoute(
 				headers: {
 					location: new URL(location, ctx.url.origin).href,
 					"content-type": "text/html; charset=utf-8",
+					vary: "accept",
 				},
 			});
 		}
@@ -147,6 +148,7 @@ export default async function doRenderPageRoute(
 	let status: number = ctx.notFound ? 404 : 200;
 	const headers = new Headers({
 		"Content-Type": "text/html; charset=utf-8",
+		vary: "accept",
 	});
 
 	let hold = import.meta.env.RAKKAS_DISABLE_STREAMING === "true" ? true : 0;
@@ -189,32 +191,74 @@ export default async function doRenderPageRoute(
 		params: found.params,
 	} as ServerSidePageContext;
 
-	const stack = (
-		(await Promise.all(
-			importers.map((i) =>
-				i().then(async (m) => {
-					try {
-						const preloaded = await m.default?.preload?.(preloadContext);
-						return [m, preloaded];
-					} catch (preloadError) {
-						// If a preload function throws, we return a component that
-						// throws the same error.
-						return [
-							() => {
-								throw preloadError;
-							},
-						];
-					}
-				}),
-			),
-		)) as [
-			[PageModule, PreloadResult | undefined],
-			...[LayoutModule, PreloadResult | undefined][],
-		]
-	).reverse();
+	const modules = await Promise.all(importers.map((importer) => importer()));
 
-	const modules = stack.map((s) => s[0]);
-	const preloaded = stack.map((s) => s[1]);
+	let actionResult: ActionResult | undefined;
+	let actionErrorIndex = -1;
+	let actionError: any;
+
+	if (ctx.method !== "GET") {
+		for (const [i, module] of modules.entries()) {
+			if (module.action) {
+				try {
+					actionResult = await module.action(preloadContext);
+				} catch (error) {
+					actionError = error;
+					actionErrorIndex = i;
+				}
+				break;
+			}
+		}
+	}
+
+	if (ctx.request.headers.get("accept") === "application/javascript") {
+		if (actionResult && "redirect" in actionResult) {
+			actionResult.redirect = String(actionResult.redirect);
+		}
+
+		return new Response(devalue(actionResult), {
+			status: actionErrorIndex >= 0 ? 500 : 200,
+			headers: {
+				"content-type": "application/javascript",
+				vary: "accept",
+			},
+		});
+	}
+
+	if (actionResult && "redirect" in actionResult) {
+		const location = String(actionResult.redirect);
+		return new Response(redirectBody(location), {
+			status: actionResult.status ?? actionResult.permanent ? 301 : 302,
+			headers: {
+				location: new URL(location, ctx.url.origin).href,
+				"content-type": "text/html; charset=utf-8",
+				vary: "accept",
+			},
+		});
+	}
+
+	preloadContext.actionData = actionResult?.data;
+
+	const preloaded = await Promise.all(
+		modules.reverse().map(async (m, i) => {
+			try {
+				if (i === modules.length - 1 - actionErrorIndex) {
+					throw new Error(actionError);
+				}
+
+				const preloaded = await m.default?.preload?.(preloadContext);
+				return preloaded;
+			} catch (preloadError) {
+				// If a preload function throws, we return a component that
+				// throws the same error.
+				modules[i] = {
+					default() {
+						throw preloadError;
+					},
+				};
+			}
+		}),
+	);
 
 	const meta: any = {};
 	preloaded.forEach((p) => Object.assign(meta, p?.meta));
@@ -232,7 +276,10 @@ export default async function doRenderPageRoute(
 				{preloadNode}
 				<App
 					beforePageLookupHandlers={beforePageLookupHandlers}
+					ssrActionData={actionResult?.data}
 					ssrMeta={meta}
+					ssrPreloaded={preloaded}
+					ssrModules={modules}
 				/>
 			</IsomorphicContext.Provider>
 		</ServerSideContext.Provider>
@@ -396,7 +443,15 @@ export default async function doRenderPageRoute(
 		`<!DOCTYPE html><html><head>` +
 		cssOutput +
 		`<meta charset="UTF-8" />` +
-		`<meta name="viewport" content="width=device-width, initial-scale=1.0" />`;
+		`<meta name="viewport" content="width=device-width, initial-scale=1.0" />` +
+		// TODO: Refactor this. Probably belongs to client-side-navigation
+		(actionResult?.data === undefined
+			? ""
+			: `<script>$RAKKAS_ACTION_DATA=${devalue(actionResult?.data)}</script>`);
+
+	if (actionErrorIndex >= 0) {
+		head += `<script>$RAKKAS_ACTION_ERROR_INDEX=${actionErrorIndex}</script>`;
+	}
 
 	for (const hooks of pageHooks) {
 		if (hooks?.emitToDocumentHead) {

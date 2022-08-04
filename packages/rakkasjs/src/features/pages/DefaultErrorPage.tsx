@@ -36,7 +36,7 @@ export function DefaultErrorPage(props: FallbackProps) {
 				</>
 			)}
 			<p>
-				<button type="button" onClick={() => props.resetErrorBoundary()}>
+				<button type="button" onClick={() => location.reload()}>
 					Retry
 				</button>
 			</p>

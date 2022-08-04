@@ -68,11 +68,20 @@ export async function startClient(options: StartClientOptions = {}) {
 		app = commonHooks.wrapApp(app);
 	}
 
+	history.replaceState(
+		{
+			...history.state,
+			actionData: (window as any).$RAKKAS_ACTION_DATA,
+		},
+		"",
+	);
+
 	const route = await loadRoute(
 		pageContext,
 		undefined,
 		true,
 		beforePageLookupHandlers,
+		(window as any).$RAKKAS_ACTION_DATA,
 	).catch((error) => {
 		return { error };
 	});

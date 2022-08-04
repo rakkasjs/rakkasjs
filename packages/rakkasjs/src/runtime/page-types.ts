@@ -1,6 +1,5 @@
 import { ComponentType, ReactNode } from "react";
 import {
-	QueryClient,
 	PageContext,
 	RedirectProps,
 	ResponseHeadersProps,
@@ -13,12 +12,14 @@ export type LayoutImporter = () => Promise<LayoutModule>;
 
 export interface PageModule {
 	default: Page;
+	action?: ActionHandler;
 	headers?: HeadersFunction;
 	prerender?: PrerenderFunction;
 }
 
 export interface LayoutModule {
 	default: Layout;
+	action?: ActionHandler;
 	headers?: HeadersFunction;
 	prerender?: PrerenderFunction;
 }
@@ -50,6 +51,8 @@ export interface PageProps<
 	url: URL;
 	/** Route parameters */
 	params: P;
+	/** Action data */
+	actionData?: any;
 	/** Page meta data coming from the preload functions */
 	meta: M;
 }
@@ -85,15 +88,21 @@ export type PreloadFunction<
 	context: PreloadContext<P>,
 ) => PreloadResult<M> | void | Promise<PreloadResult<M> | void>;
 
+/** Arguments passed to the action function */
+export interface ActionContext<P = Record<string, string>> extends PageContext {
+	/** Route parameters */
+	params: P;
+	/** Request context */
+	requestContext: RequestContext;
+}
+
 /** Arguments passed to the preload function */
 export interface PreloadContext<P = Record<string, string>>
 	extends PageContext {
-	/** Query client for accessing the query cache */
-	queryClient: QueryClient;
-	/** Current URL */
-	url: URL;
 	/** Route parameters */
 	params: P;
+	/** Action data */
+	actionData?: any;
 }
 
 /**
@@ -125,6 +134,10 @@ export interface PageRouteGuardContext<P = Record<string, string>>
 export type PageRouteGuard<P = Record<string, string>> = (
 	ctx: PageRouteGuardContext<P>,
 ) => LookupHookResult;
+
+export type ActionHandler = (
+	pageContext: ActionContext,
+) => ActionResult | Promise<ActionResult>;
 
 /** Function to set response headers */
 export type HeadersFunction<M = Record<string, unknown>> = (
@@ -173,3 +186,5 @@ export interface Redirection {
 	/** The status code to use (hes precedence over `permanent`) */
 	status?: number;
 }
+
+export type ActionResult = Redirection | { data: any };
