@@ -96,7 +96,7 @@ export const toc = sections
 	)
 	.flat()
 	.filter((item) => {
-		if (!item.title) {
+		if (import.meta.env.DEV && !item.title) {
 			console.warn(`${item.section}: ${item.slug} has no title`);
 		}
 

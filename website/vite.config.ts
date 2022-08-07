@@ -31,6 +31,8 @@ export default defineConfig({
 	},
 
 	plugins: [
+		sampleLoader(),
+
 		frontmatterLoader(),
 
 		mdx({
@@ -41,8 +43,7 @@ export default defineConfig({
 
 		rakkas({
 			pageExtensions: ["jsx", "tsx", "mdx"],
+			prerender: true,
 		}),
-
-		sampleLoader(),
 	],
 });

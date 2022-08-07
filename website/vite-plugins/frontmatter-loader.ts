@@ -1,6 +1,7 @@
 import { PluginOption } from "vite";
-import fs from "fs";
 import grayMatter from "gray-matter";
+import fs from "fs";
+import path from "path";
 
 export default function frontmatterLoader(): PluginOption {
 	let root: string;
@@ -16,40 +17,42 @@ export default function frontmatterLoader(): PluginOption {
 
 		async resolveId(id, importer, options) {
 			if (hasFrontmatterQuery(id)) {
-				const resolved = await this.resolve(id, importer, {
+				// eslint-disable-next-line prefer-const
+				let [cleanId, query] = splitQuery(id);
+				const resolved = await this.resolve(cleanId, importer, {
 					...options,
 					skipSelf: true,
 				});
 				if (!resolved) return;
-
-				let [path, query] = splitQuery(resolved.id);
 
 				const params = new URLSearchParams(query);
 				params.delete("ext");
 				query = params.toString();
 
 				// Remove path extension
-				path = path.replace(/\.[^.]+$/, "");
+				const path = resolved.id.replace(/\.[^.]+$/, "");
 
-				resolved.id = path + (query ? "?" + query : "");
+				resolved.id = splitQuery(path)[0] + ".frontmatter";
 
+				// console.log(resolved);
 				return resolved;
 			}
 		},
 
 		async load(id) {
-			if (!hasFrontmatterQuery(id)) return;
+			if (!id.endsWith(".frontmatter")) return;
+			const filename = id.slice(0, -".frontmatter".length);
 
-			const [filename] = splitQuery(id);
-			const content = await fs.promises.readFile(
-				root + "/" + filename + ".mdx",
-				"utf8",
-			);
+			const content = await fs.promises.readFile(filename, "utf8").catch(() => {
+				return fs.promises.readFile(
+					path.resolve(root, "./" + filename),
+					"utf8",
+				);
+			});
+
 			const { data } = grayMatter(content);
 
-			return {
-				code: `export default ${JSON.stringify(data)}`,
-			};
+			return `export default ${JSON.stringify(data)}`;
 		},
 	};
 }

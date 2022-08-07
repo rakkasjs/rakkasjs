@@ -16,15 +16,17 @@ Rakkas has a file system-based router. The file name determines the URL path. Th
 
 This specific naming convention (`<name>.page.{extension}`) allows you to have your helper libraries and components next to your page components without accidentally exposing them as routes.
 
-A very simple Rakkas page would look like this:
+import Viewer from "lib/CodeViewer";
 
-import helloExample from "examples/hello/index.page.jsx?sample";
-
-<SampleViewer
-	filename="src/routes/index.page.jsx"
-	code={helloExample}
-	url="/examples/hello"
+<Viewer
+	name="hello"
+	files={import.meta.glob("../../../../../code-samples/hello/**/*", {
+		as: "raw",
+		eager: true,
+	})}
 />
+
+A very simple Rakkas page would look like this:
 
 Rakkas comes with a `Head` component for managing head tags like `title`. It is, in fact, simply `Helmet` from [`react-helmet-async`](https://github.com/staylor/react-helmet-async#readme) bundled and re-exported. Check their documentation for usage examples.
 
