@@ -24,7 +24,7 @@ cli
 	.option("-y, --skip-prompt", "[boolean] Skip the prompt")
 	.option(
 		"-f, --force",
-		"[boolean] Generate even if the directory already exists",
+		"[boolean] Generate even if the directory is not empty",
 	)
 	.option("-t, --typescript", "[boolean] Use TypeScript for static typing", {
 		default: true,
@@ -43,7 +43,10 @@ cli
 	.option("-d, --demo", "[boolean] Generate demo todo app", { default: true })
 	.action(async (dir = ".", options: Options) => {
 		console.log(
-			pico.black(pico.bgMagenta(" Rakkas ")) + " " + pico.magenta(version),
+			pico.black(pico.bgMagenta(" RAKKAS ")) +
+				" " +
+				pico.magenta(version) +
+				" 💃",
 		);
 
 		if (!options.force && fs.existsSync(dir)) {
@@ -61,16 +64,19 @@ cli
 	});
 
 cli.help((s) => {
-	console.log(s);
+	s.splice(3, 1);
 
 	s[0].body =
-		pico.black(pico.bgMagenta(" Rakkas ")) + " " + pico.magenta(version);
+		pico.black(pico.bgMagenta(" RAKKAS ")) +
+		" " +
+		pico.magenta(version) +
+		" 💃";
 
 	s[1].body = "  $ create-rakkas-app [dir] [...options]";
 	s[2] = s[1];
 
 	s[1] = {
-		body: "Create Rakkas application boiler plate",
+		body: "Generate Rakkas application boiler plate",
 	};
 
 	s.push({

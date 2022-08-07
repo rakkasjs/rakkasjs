@@ -18,11 +18,13 @@
 		"test:typecheck": "tsc -p tsconfig.json --noEmit",
 		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist --ignore-pattern templates"
 	},
-	"description": "TODO",
+	"description": "Generate Rakkas application boilerplate",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
 	"keywords": [
-		"TODO"
+		"react",
+		"vite",
+		"rakkas"
 	],
 	"devDependencies": {
 		"@cyco130/eslint-config": "^2.1.1",

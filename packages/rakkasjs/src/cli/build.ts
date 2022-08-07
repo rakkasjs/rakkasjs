@@ -44,7 +44,7 @@ export async function build(
 			onInitialConfigResolved(resolvedConfig) {
 				config = resolvedConfig;
 				config.logger.info(
-					pico.black(pico.bgMagenta(" Rakkas ")) +
+					pico.black(pico.bgMagenta(" RAKKAS ")) +
 						" " +
 						pico.magenta(version) +
 						" 💃",

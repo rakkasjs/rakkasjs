@@ -32,7 +32,7 @@ export async function prerender(
 	);
 
 	config.logger.info(
-		pico.black(pico.bgMagenta(" Rakkas ")) +
+		pico.black(pico.bgMagenta(" RAKKAS ")) +
 			" " +
 			pico.magenta(version) +
 			" 💃",

@@ -57,7 +57,7 @@ export async function serve(
 
 		info(
 			`\n  ${pico.green(
-				pico.black(pico.bgMagenta(" Rakkas ")) +
+				pico.black(pico.bgMagenta(" RAKKAS ")) +
 					" " +
 					pico.magenta(version) +
 					" development server is running 💃",
