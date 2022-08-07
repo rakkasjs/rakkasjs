@@ -349,30 +349,6 @@ export default async function renderPageRoute(
 		</div>
 	);
 
-	const moduleIds = found.route[3];
-
-	let cssOutput = "";
-
-	if (import.meta.env.PROD) {
-		const moduleSet = new Set(moduleIds);
-		const cssSet = new Set<string>();
-
-		for (const moduleId of moduleSet) {
-			const manifestEntry = clientManifest?.[moduleId];
-			if (!manifestEntry) continue;
-
-			// TODO: Prefetch modules and other assets
-
-			manifestEntry.imports?.forEach((id) => moduleSet.add(id));
-			manifestEntry.dynamicImports?.forEach((id) => moduleSet.add(id));
-			manifestEntry.css?.forEach((id) => cssSet.add(id));
-		}
-
-		for (const cssFile of cssSet) {
-			cssOutput += `<link rel="stylesheet" href=${escapeHtml("/" + cssFile)}>`;
-		}
-	}
-
 	let scriptPath: string;
 	if (import.meta.env.PROD) {
 		for (const entry of Object.values(clientManifest!)) {
@@ -381,8 +357,50 @@ export default async function renderPageRoute(
 				break;
 			}
 		}
+
+		if (!scriptPath!) throw new Error("Entry not found in client manifest");
 	} else {
 		scriptPath = "virtual:rakkasjs:client-entry";
+	}
+
+	const moduleIds = [scriptPath, ...found.route[4]];
+
+	let prefetchOutput = "";
+
+	if (import.meta.env.PROD) {
+		const moduleSet = new Set(moduleIds);
+		const cssSet = new Set<string>();
+		// const assetSet = new Set<string>();
+
+		for (const moduleId of moduleSet) {
+			const manifestEntry = clientManifest?.[moduleId];
+			if (!manifestEntry) continue;
+
+			// TODO: Prefetch modules and other assets
+			manifestEntry.imports?.forEach((id) => moduleSet.add(id));
+			manifestEntry.css?.forEach((id) => cssSet.add(id));
+			// manifestEntry.assets?.forEach((id) => assetSet.add(id));
+
+			const script = clientManifest?.[moduleId].file;
+			if (script) {
+				prefetchOutput += `<link rel="modulepreload" crossorigin href="${escapeHtml(
+					"/" + script,
+				)}">`;
+			}
+		}
+
+		for (const cssFile of cssSet) {
+			prefetchOutput += `<link rel="stylesheet" href="${escapeHtml(
+				"/" + cssFile,
+			)}">`;
+		}
+
+		// TODO: Prefetch/preload assets
+		// for (const assetFile of assetSet) {
+		// 	prefetchOutput += `<link rel="prefetch" href="${escapeHtml(
+		// 		"/" + assetFile,
+		// 	)}">`;
+		// }
 	}
 
 	const reactStream = await renderToReadableStream(
@@ -446,7 +464,7 @@ export default async function renderPageRoute(
 	// TODO: Customize HTML document
 	let head =
 		`<!DOCTYPE html><html><head>` +
-		cssOutput +
+		prefetchOutput +
 		`<meta charset="UTF-8" />` +
 		`<meta name="viewport" content="width=device-width, initial-scale=1.0" />` +
 		// TODO: Refactor this. Probably belongs to client-side-navigation
