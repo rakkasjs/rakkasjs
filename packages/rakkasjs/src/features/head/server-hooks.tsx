@@ -15,8 +15,8 @@ const headServerHooks: ServerHooks = {
 				const { helmet } = helmetContext as FilledContext;
 
 				return (
-					// TODO: Prioritize SEO head tags: https://github.com/staylor/react-helmet-async#prioritizing-tags-for-seo
 					helmet.title.toString() +
+					helmet.priority.toString() +
 					helmet.meta.toString() +
 					helmet.base.toString() +
 					helmet.link.toString() +
