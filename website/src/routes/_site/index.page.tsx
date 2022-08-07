@@ -48,8 +48,17 @@ function HomePage() {
 				</div>
 				<div className={css.card}>
 					<h4>🖥️&nbsp; Server-side rendering</h4>
-					<p>Render the initial page on the sever-side for excellent SEO</p>
+					<p>
+						Render pages on the sever with streaming support for excellent SEO
+					</p>
 				</div>
+				<div className={css.card}>
+					<h4>⬇️&nbsp; API-less data fetching system</h4>
+					<p>
+						Access your backend directly without having to implement an API
+						layer
+					</p>
+				</div>{" "}
 				<div className={css.card}>
 					<h4>🚀&nbsp; Deploy anywhere</h4>
 					<p>Deploy on Node, Vercel, Netlify, Cloudflare Workers...</p>
@@ -63,12 +72,8 @@ function HomePage() {
 				</div>
 				<div className={css.card}>
 					<h4>📁&nbsp; File system-based routing</h4>
-					<p>Organize your pages and layouts in an intuitive manner</p>
-				</div>
-				<div className={css.card}>
-					<h4>⚙️&nbsp; API routes</h4>
 					<p>
-						Build and organize your backend the same way you build your pages
+						Organize your pages, layouts, and endpoints in an intuitive manner
 					</p>
 				</div>
 			</div>

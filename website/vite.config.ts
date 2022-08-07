@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import rakkas from "rakkasjs/vite-plugin";
+import codeViewer from "./vite-plugins/code-viewer";
 import sampleLoader from "./vite-plugins/sample-loader";
 import frontmatterLoader from "./vite-plugins/frontmatter-loader";
 import mdx from "@cyco130/vite-plugin-mdx";
@@ -31,6 +32,7 @@ export default defineConfig({
 	},
 
 	plugins: [
+		codeViewer(),
 		sampleLoader(),
 
 		frontmatterLoader(),

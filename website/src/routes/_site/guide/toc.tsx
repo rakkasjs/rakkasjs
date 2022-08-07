@@ -19,7 +19,7 @@ const sections: Array<[section: string, slugs: string[]]> = [
 		"Basics",
 		[
 			// Slugs
-			"pages-and-routing",
+			"pages-and-basic-routing",
 			"client-side-navigation",
 			"fast-refresh",
 			"layouts",

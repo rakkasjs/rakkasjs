@@ -16,15 +16,7 @@ Rakkas has a file system-based router. The file name determines the URL path. Th
 
 This specific naming convention (`<name>.page.{extension}`) allows you to have your helper libraries and components next to your page components without accidentally exposing them as routes.
 
-import Viewer from "lib/CodeViewer";
-
-<Viewer
-	name="hello"
-	files={import.meta.glob("../../../../../code-samples/hello/**/*", {
-		as: "raw",
-		eager: true,
-	})}
-/>
+<CodeViewer name="hello" />
 
 A very simple Rakkas page would look like this:
 
