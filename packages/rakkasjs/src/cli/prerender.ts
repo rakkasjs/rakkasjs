@@ -75,6 +75,7 @@ export async function doPrerender(
 		if (url.origin !== origin) {
 			return;
 		}
+
 		paths.add(url.pathname);
 	}
 
@@ -98,13 +99,14 @@ export async function doPrerender(
 					response: Response,
 					options: PrerenderResult,
 				) {
+					const url = new URL(pathname, origin);
 					const {
 						shouldPrerender = true,
 						shouldCrawl = shouldPrerender,
 						links = [],
-					} = options;
+					} = options || ({} as PrerenderResult);
 
-					links.forEach(crawl);
+					links.forEach((link) => crawl(new URL(link, url)));
 
 					if (!shouldPrerender && !shouldCrawl) {
 						return;
@@ -138,10 +140,10 @@ export async function doPrerender(
 							const html = await response.text();
 							const dom = load(html);
 							dom("a[href]").each((_, el) => {
-								crawl(el.attribs.href);
+								crawl(new URL(el.attribs.href, url));
 							});
 							dom("area[href]").each((_, el) => {
-								crawl(el.attribs.href);
+								crawl(new URL(el.attribs.href, url));
 							});
 							body = html;
 						} else {

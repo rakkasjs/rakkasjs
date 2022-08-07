@@ -151,7 +151,11 @@ export default async function renderPageRoute(
 		vary: "accept",
 	});
 
-	let hold = import.meta.env.RAKKAS_DISABLE_STREAMING === "true" ? true : 0;
+	let hold =
+		process.env.RAKKAS_PRERENDER === "true" ||
+		import.meta.env.RAKKAS_DISABLE_STREAMING === "true"
+			? true
+			: 0;
 
 	function updateHeaders(props: ResponseContextProps) {
 		if (props.status) {
@@ -162,6 +166,7 @@ export default async function renderPageRoute(
 		}
 
 		if (
+			hold !== true &&
 			import.meta.env.RAKKAS_DISABLE_STREAMING !== "true" &&
 			props.throttleRenderStream !== undefined
 		) {
@@ -478,7 +483,21 @@ export default async function renderPageRoute(
 
 	const { readable, writable } = new TransformStream();
 
-	const writer = writable.getWriter();
+	// Response.prototype.text() implementation has a a bug in Node 14 and 16
+	// which breaks prerendering. So if streaming is disabled, we can simply buffer
+	// everything ourselves.
+	const bufferedChunks: Uint8Array[] = [];
+	const writer =
+		hold === true
+			? {
+					write(chunk: Uint8Array) {
+						bufferedChunks.push(chunk);
+					},
+					close() {
+						// Ignore
+					},
+			  }
+			: writable.getWriter();
 
 	async function pipe() {
 		writer.write(textEncoder.encode(head));
@@ -504,10 +523,20 @@ export default async function renderPageRoute(
 
 	if (hold === true) {
 		await pipePromise;
-	} else {
-		ctx.waitUntil(pipePromise);
+		// Merge buffered chunks
+		const output = new Uint8Array(
+			bufferedChunks.reduce((acc, chunk) => acc + chunk.length, 0),
+		);
+		let offset = 0;
+		for (const chunk of bufferedChunks) {
+			output.set(chunk, offset);
+			offset += chunk.length;
+		}
+
+		return new Response(output, { status, headers });
 	}
 
+	ctx.waitUntil(pipePromise);
 	return new Response(readable, { status, headers });
 }
 
