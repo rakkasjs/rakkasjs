@@ -69,7 +69,13 @@ export function useLocation(): UseLocationResult {
 }
 
 function restoreScrollPosition() {
-	const scrollPosition = sessionStorage.getItem(`rakkas:${history.state?.id}`);
+	let scrollPosition: string | null = null;
+
+	try {
+		scrollPosition = sessionStorage.getItem(`rakkas:${history.state?.id}`);
+	} catch {
+		// Ignore
+	}
 
 	if (scrollPosition) {
 		const { x, y } = JSON.parse(scrollPosition);
@@ -188,10 +194,15 @@ export function initialize() {
 async function handleNavigation() {
 	// Save scroll position
 	const scrollPosition = { x: scrollX, y: scrollY };
-	sessionStorage.setItem(
-		`rakkas:${lastRenderedId}`,
-		JSON.stringify(scrollPosition),
-	);
+
+	try {
+		sessionStorage.setItem(
+			`rakkas:${lastRenderedId}`,
+			JSON.stringify(scrollPosition),
+		);
+	} catch {
+		// Ignore
+	}
 
 	if (!import.meta.env.SSR) {
 		serialId = (serialId + 1) % 0xfff_ffff;
@@ -383,7 +394,7 @@ function shouldHandleClick(e: MouseEventLike): boolean {
 	);
 }
 
-// TODO: Wher does this belong?
+// TODO: Where does this belong?
 export function useSubmit() {
 	const { current } = useLocation();
 
