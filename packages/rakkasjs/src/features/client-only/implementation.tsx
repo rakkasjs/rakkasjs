@@ -2,6 +2,7 @@ import React, {
 	createContext,
 	ReactElement,
 	ReactNode,
+	Suspense,
 	useContext,
 	useEffect,
 } from "react";
@@ -16,7 +17,7 @@ export interface ClientOnlyProps {
 
 // TODO: Strip ClientOnly component's children out of the SSR bundle
 
-/** Component for opting out of server-side rendering */
+/** Opt out of server-side rendering */
 export function ClientOnly(props: ClientOnlyProps): ReactElement {
 	const context = useContext(ClientOnlyContext);
 
@@ -27,6 +28,15 @@ export function ClientOnly(props: ClientOnlyProps): ReactElement {
 	}, [context]);
 
 	return <>{context && context.hydrated ? props.children : props.fallback}</>;
+}
+
+/** Suspense boundary that only runs on the client */
+export function ClientSuspense(props: ClientOnlyProps): ReactElement {
+	return (
+		<ClientOnly fallback={props.fallback}>
+			<Suspense fallback={props.fallback}>{props.children}</Suspense>
+		</ClientOnly>
+	);
 }
 
 export const ClientOnlyContext = createContext<{

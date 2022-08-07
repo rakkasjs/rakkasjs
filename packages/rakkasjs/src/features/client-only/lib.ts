@@ -1,2 +1,2 @@
 export type { ClientOnlyProps } from "./implementation";
-export { ClientOnly } from "./implementation";
+export { ClientOnly, ClientSuspense } from "./implementation";
