@@ -1,0 +1,40 @@
+---
+title: Cloudflare Workers
+---
+
+Rakkas projects can be deployed to Cloudflare Workers. To do that, first, you should set the `adapter` option of Rakkas Vite plugin to `"cloudflare-workers"`:
+
+```ts
+import { defineConfig } from "vite";
+import rakkas from "rakkasjs/vite-plugin";
+
+export default defineConfig({
+	plugins: [
+		rakkas({
+			adapter: "cloudflare-workers",
+		}),
+	],
+});
+```
+
+Then create a `wrangler.toml` file like this:
+
+```toml
+name = "my-rakkas-project"
+compatibility_date = "2021-11-01"
+compatibility_flags = [
+  "streams_enable_constructors",
+]
+main = "dist/server/cloudflare-workers-bundle.js"
+usage_model = 'bundled'
+workers_dev = true
+
+[site]
+bucket = "./dist/client"
+```
+
+After building with `rakkas build`, you can publish your project with `wrangler publish`. You can also test locally with `miniflare --modules dist/cloudflare-workers-bundle/index.js`.
+
+## Cloudflare Workers-specific APIs
+
+During development, Rakkas applications always run on Node.js regardless of the `adapter` setting. As such, Cloudflare Workers-specific APIs like the KV store and durable objects are not available. You can polyfill them using, e.g., [`@miniflare/kv`](https://github.com/cloudflare/miniflare/tree/master/packages/kv) and [@miniflare/durable-objects](https://github.com/cloudflare/miniflare/tree/master/packages/durable-objects) packages in a [custom Node.js entry](node#custom-entry).

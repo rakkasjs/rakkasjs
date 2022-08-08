@@ -22,31 +22,9 @@ importers:
       typescript: 4.7.4
       vitest: 0.20.3
 
-  code-samples/basics:
-    specifiers:
-      "@hattip/response": ^0.0.17
-      "@types/react": ^18.0.15
-      "@types/react-dom": ^18.0.6
-      rakkasjs: 0.6.0-next.10
-      react: ^18.2.0
-      react-dom: ^18.2.0
-      typescript: ^4.7.4
-      vite: ^3.0.4
-      vite-tsconfig-paths: ^3.5.0
-    dependencies:
-      "@hattip/response": 0.0.17
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    devDependencies:
-      "@types/react": 18.0.15
-      "@types/react-dom": 18.0.6
-      rakkasjs: link:../../packages/rakkasjs
-      typescript: 4.7.4
-      vite: 3.0.4
-      vite-tsconfig-paths: 3.5.0_vite@3.0.4
-
   examples/emotion:
     specifiers:
+      "@babel/core": ^7.18.10
       "@emotion/babel-plugin": ^11.10.0
       "@emotion/react": ^11.10.0
       "@emotion/styled": ^11.10.0
@@ -57,15 +35,14 @@ importers:
       react-dom: ^18.2.0
       typescript: ^4.7.4
       vite: ^3.0.4
-      zod: ^3.17.10
     dependencies:
-      "@emotion/react": 11.10.0_3hx2ussxxho4jajbwrd6gq34qe
-      "@emotion/styled": 11.10.0_osjhb3oyc3dn55vkfbzx4nrkfi
+      "@emotion/react": 11.10.0_dekd3qhq25os2zmp2sxj6oaoou
+      "@emotion/styled": 11.10.0_cvyjuqpqzsw2jroi6znapo3uiq
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      zod: 3.17.10
     devDependencies:
-      "@emotion/babel-plugin": 11.10.0
+      "@babel/core": 7.18.10
+      "@emotion/babel-plugin": 11.10.0_@babel+core@7.18.10
       "@types/react": 18.0.15
       "@types/react-dom": 18.0.6
       rakkasjs: link:../../packages/rakkasjs
@@ -96,6 +73,73 @@ importers:
       typescript: 4.7.4
       vite: 3.0.4
       vite-tsconfig-paths: 3.5.0_vite@3.0.4
+
+  examples/graphql:
+    specifiers:
+      "@hattip/graphql": ^0.0.17
+      "@types/react": ^18.0.15
+      "@types/react-dom": ^18.0.6
+      graphql: ^16.5.0
+      rakkasjs: 0.6.0-next.10
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      typescript: ^4.7.4
+      vite: ^3.0.4
+    dependencies:
+      "@hattip/graphql": 0.0.17_graphql@16.5.0
+      graphql: 16.5.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    devDependencies:
+      "@types/react": 18.0.15
+      "@types/react-dom": 18.0.6
+      rakkasjs: link:../../packages/rakkasjs
+      typescript: 4.7.4
+      vite: 3.0.4
+
+  examples/guide-samples:
+    specifiers:
+      "@hattip/response": ^0.0.17
+      "@types/react": ^18.0.15
+      "@types/react-dom": ^18.0.6
+      rakkasjs: 0.6.0-next.10
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      typescript: ^4.7.4
+      vite: ^3.0.4
+      vite-tsconfig-paths: ^3.5.0
+    dependencies:
+      "@hattip/response": 0.0.17
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    devDependencies:
+      "@types/react": 18.0.15
+      "@types/react-dom": 18.0.6
+      rakkasjs: link:../../packages/rakkasjs
+      typescript: 4.7.4
+      vite: 3.0.4
+      vite-tsconfig-paths: 3.5.0_vite@3.0.4
+
+  examples/mdx:
+    specifiers:
+      "@cyco130/vite-plugin-mdx": ^0.0.0
+      "@types/react": ^18.0.15
+      "@types/react-dom": ^18.0.6
+      rakkasjs: 0.6.0-next.10
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      typescript: ^4.7.4
+      vite: ^3.0.4
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    devDependencies:
+      "@cyco130/vite-plugin-mdx": 0.0.0
+      "@types/react": 18.0.15
+      "@types/react-dom": 18.0.6
+      rakkasjs: link:../../packages/rakkasjs
+      typescript: 4.7.4
+      vite: 3.0.4
 
   examples/todo:
     specifiers:
@@ -935,17 +979,6 @@ packages:
       "@babel/types": 7.18.10
     dev: true
 
-  /@babel/plugin-syntax-jsx/7.18.6:
-    resolution:
-      {
-        integrity: sha512-6mmljtAedFGTWu2p/8WIORGwy+61PLgOMPOdazc7YoJ9ZCWUyFy3A6CpPkRKLKD1ToAesxX8KGEViAiLo9N+7Q==,
-      }
-    engines: { node: ">=6.9.0" }
-    peerDependencies:
-      "@babel/core": ^7.0.0-0
-    dependencies:
-      "@babel/helper-plugin-utils": 7.18.6
-
   /@babel/plugin-syntax-jsx/7.18.6_@babel+core@7.18.10:
     resolution:
       {
@@ -957,7 +990,6 @@ packages:
     dependencies:
       "@babel/core": 7.18.10
       "@babel/helper-plugin-utils": 7.18.6
-    dev: false
 
   /@babel/plugin-syntax-typescript/7.18.6_@babel+core@7.18.10:
     resolution:
@@ -1317,7 +1349,7 @@ packages:
       - "@algolia/client-search"
     dev: true
 
-  /@emotion/babel-plugin/11.10.0:
+  /@emotion/babel-plugin/11.10.0_@babel+core@7.18.10:
     resolution:
       {
         integrity: sha512-xVnpDAAbtxL1dsuSelU5A7BnY/lftws0wUexNJZTPsvX/1tM4GZJbclgODhvW4E+NH7E5VFcH0bBn30NvniPJA==,
@@ -1325,8 +1357,9 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0
     dependencies:
+      "@babel/core": 7.18.10
       "@babel/helper-module-imports": 7.18.6
-      "@babel/plugin-syntax-jsx": 7.18.6
+      "@babel/plugin-syntax-jsx": 7.18.6_@babel+core@7.18.10
       "@babel/runtime": 7.18.9
       "@emotion/hash": 0.9.0
       "@emotion/memoize": 0.8.0
@@ -1372,7 +1405,7 @@ packages:
         integrity: sha512-G/YwXTkv7Den9mXDO7AhLWkE3q+I92B+VqAE+dYG4NGPaHZGvt3G8Q0p9vmE+sq7rTGphUbAvmQ9YpbfMQGGlA==,
       }
 
-  /@emotion/react/11.10.0_3hx2ussxxho4jajbwrd6gq34qe:
+  /@emotion/react/11.10.0_dekd3qhq25os2zmp2sxj6oaoou:
     resolution:
       {
         integrity: sha512-K6z9zlHxxBXwN8TcpwBKcEsBsOw4JWCCmR+BeeOWgqp8GIU1yA2Odd41bwdAAr0ssbQrbJbVnndvv7oiv1bZeQ==,
@@ -1387,8 +1420,9 @@ packages:
       "@types/react":
         optional: true
     dependencies:
+      "@babel/core": 7.18.10
       "@babel/runtime": 7.18.9
-      "@emotion/babel-plugin": 11.10.0
+      "@emotion/babel-plugin": 11.10.0_@babel+core@7.18.10
       "@emotion/cache": 11.10.1
       "@emotion/serialize": 1.1.0
       "@emotion/utils": 1.2.0
@@ -1417,7 +1451,7 @@ packages:
       }
     dev: false
 
-  /@emotion/styled/11.10.0_osjhb3oyc3dn55vkfbzx4nrkfi:
+  /@emotion/styled/11.10.0_cvyjuqpqzsw2jroi6znapo3uiq:
     resolution:
       {
         integrity: sha512-V9oaEH6V4KePeQpgUE83i8ht+4Ri3E8Djp/ZPJ4DQlqWhSKITvgzlR3/YQE2hdfP4Jw3qVRkANJz01LLqK9/TA==,
@@ -1433,10 +1467,11 @@ packages:
       "@types/react":
         optional: true
     dependencies:
+      "@babel/core": 7.18.10
       "@babel/runtime": 7.18.9
-      "@emotion/babel-plugin": 11.10.0
+      "@emotion/babel-plugin": 11.10.0_@babel+core@7.18.10
       "@emotion/is-prop-valid": 1.2.0
-      "@emotion/react": 11.10.0_3hx2ussxxho4jajbwrd6gq34qe
+      "@emotion/react": 11.10.0_dekd3qhq25os2zmp2sxj6oaoou
       "@emotion/serialize": 1.1.0
       "@emotion/utils": 1.2.0
       "@types/react": 18.0.15
@@ -1460,6 +1495,57 @@ packages:
       {
         integrity: sha512-AHPmaAx+RYfZz0eYu6Gviiagpmiyw98ySSlQvCUhVGDRtDFe4DBS0x1bSjdF3gqUDYOczB+yYvBTtEylYSdRhg==,
       }
+    dev: false
+
+  /@envelop/core/2.4.2_graphql@16.5.0:
+    resolution:
+      {
+        integrity: sha512-C63lf0feBpBFpLM2pD++pzgRiYZu9uxxj55fsRnihEAQaC5iZTmffbVyfJkzRyd4WoPDT6BQpQYequI9yh8dPg==,
+      }
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      "@envelop/types": 2.3.1_graphql@16.5.0
+      graphql: 16.5.0
+    dev: false
+
+  /@envelop/parser-cache/4.5.2_odxs364rsp7gtvkvzaadebvwqa:
+    resolution:
+      {
+        integrity: sha512-0inZHY6XErO2UjsBE9tMRSCQD298JEBe4Wq/C1jePSS3ekLi8PJBDpVAwD782FSx+QxUmMUuVWjBd+5Tc1ycTA==,
+      }
+    peerDependencies:
+      "@envelop/core": ^2.4.2
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      "@envelop/core": 2.4.2_graphql@16.5.0
+      graphql: 16.5.0
+      lru-cache: 6.0.0
+    dev: false
+
+  /@envelop/types/2.3.1_graphql@16.5.0:
+    resolution:
+      {
+        integrity: sha512-c5VLCVVRJ2R9LpDHg/N2BO2l4veaJhklquW+FX8GfzXU79DPWe8WmX4MbM6ABUZmSLOJkYInifHrnlqAoucxpQ==,
+      }
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      graphql: 16.5.0
+    dev: false
+
+  /@envelop/validation-cache/4.5.2_odxs364rsp7gtvkvzaadebvwqa:
+    resolution:
+      {
+        integrity: sha512-udXDVfK73K0SCeWEWKph4mJDAIjMD1vvPzHFPrHQBdfqJcev3Ilu/YPchweE4Dl8+0BLaDiX0GkkpKGRgJk+1g==,
+      }
+    peerDependencies:
+      "@envelop/core": ^2.4.2
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      "@envelop/core": 2.4.2_graphql@16.5.0
+      graphql: 16.5.0
+      lru-cache: 6.0.0
     dev: false
 
   /@esbuild-kit/cjs-loader/2.3.1:
@@ -1545,6 +1631,78 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+
+  /@graphql-tools/merge/8.3.1_graphql@16.5.0:
+    resolution:
+      {
+        integrity: sha512-BMm99mqdNZbEYeTPK3it9r9S6rsZsQKtlqJsSBknAclXq2pGEfOxjcIZi+kBSkHZKPKCRrYDd5vY0+rUmIHVLg==,
+      }
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      "@graphql-tools/utils": 8.9.0_graphql@16.5.0
+      graphql: 16.5.0
+      tslib: 2.4.0
+    dev: false
+
+  /@graphql-tools/schema/8.5.1_graphql@16.5.0:
+    resolution:
+      {
+        integrity: sha512-0Esilsh0P/qYcB5DKQpiKeQs/jevzIadNTaT0jeWklPMwNbT7yMX4EqZany7mbeRRlSRwMzNzL5olyFdffHBZg==,
+      }
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      "@graphql-tools/merge": 8.3.1_graphql@16.5.0
+      "@graphql-tools/utils": 8.9.0_graphql@16.5.0
+      graphql: 16.5.0
+      tslib: 2.4.0
+      value-or-promise: 1.0.11
+    dev: false
+
+  /@graphql-tools/utils/8.9.0_graphql@16.5.0:
+    resolution:
+      {
+        integrity: sha512-pjJIWH0XOVnYGXCqej8g/u/tsfV4LvLlj0eATKQu5zwnxd/TiTHq7Cg313qUPTFFHZ3PP5wJ15chYVtLDwaymg==,
+      }
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      graphql: 16.5.0
+      tslib: 2.4.0
+    dev: false
+
+  /@graphql-typed-document-node/core/3.1.1_graphql@16.5.0:
+    resolution:
+      {
+        integrity: sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==,
+      }
+    peerDependencies:
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      graphql: 16.5.0
+    dev: false
+
+  /@graphql-yoga/subscription/2.2.3:
+    resolution:
+      {
+        integrity: sha512-It/Dfh+nW2ClTtmOylAa+o7fbKIRYRTH6jfKLj3YB75tkv/rFZ70bjlChDCrEMa46I+zDMg7+cdkrQOXov2fDg==,
+      }
+    dependencies:
+      "@graphql-yoga/typed-event-target": 0.1.1
+      "@repeaterjs/repeater": 3.0.4
+      tslib: 2.4.0
+    dev: false
+
+  /@graphql-yoga/typed-event-target/0.1.1:
+    resolution:
+      {
+        integrity: sha512-l23kLKHKhfD7jmv4OUlzxMTihSqgIjGWCSb0KdlLkeiaF2jjuo8pRhX200hFTrtjRHGSYS1fx2lltK/xWci+vw==,
+      }
+    dependencies:
+      "@repeaterjs/repeater": 3.0.4
+      tslib: 2.4.0
+    dev: false
 
   /@hattip/adapter-cloudflare-workers/0.0.17:
     resolution:
@@ -1664,6 +1822,28 @@ packages:
       {
         integrity: sha512-sGTKYu8yahFLwVE4bO5C6W8k5sxrtot+8D8UI9DEFOajihlELFCBpXE0mxc4Iswm8yBJcezOavpIpJyjjziPDg==,
       }
+
+  /@hattip/graphql/0.0.17_graphql@16.5.0:
+    resolution:
+      {
+        integrity: sha512-ftisikJAokzuFbNzBFo7OJJggv8bSNJ5rSds8DkNwb0Qfew+ZjvrJnm6r5LC7X0Y/qQvBGAGOgUkvZJhCNmS0w==,
+      }
+    peerDependencies:
+      graphql: ">= 15.8"
+    dependencies:
+      "@envelop/core": 2.4.2_graphql@16.5.0
+      "@envelop/parser-cache": 4.5.2_odxs364rsp7gtvkvzaadebvwqa
+      "@envelop/validation-cache": 4.5.2_odxs364rsp7gtvkvzaadebvwqa
+      "@graphql-tools/schema": 8.5.1_graphql@16.5.0
+      "@graphql-tools/utils": 8.9.0_graphql@16.5.0
+      "@graphql-typed-document-node/core": 3.1.1_graphql@16.5.0
+      "@graphql-yoga/subscription": 2.2.3
+      "@hattip/compose": 0.0.17
+      "@hattip/core": 0.0.17
+      dset: 3.1.2
+      graphql: 16.5.0
+      tslib: 2.4.0
+    dev: false
 
   /@hattip/polyfills/0.0.17:
     resolution:
@@ -3051,6 +3231,13 @@ packages:
         integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==,
       }
 
+  /@repeaterjs/repeater/3.0.4:
+    resolution:
+      {
+        integrity: sha512-AW8PKd6iX3vAZ0vA43nOUOnbq/X5ihgU+mSXXqunMkeQADGiqw/PY0JNeYtD5sr0PAy51YPgAPbDoeapv9r8WA==,
+      }
+    dev: false
+
   /@rollup/pluginutils/4.2.1:
     resolution:
       {
@@ -4263,17 +4450,6 @@ packages:
       negotiator: 0.6.3
     dev: false
 
-  /acorn-jsx/5.3.2_acorn@8.7.1:
-    resolution:
-      {
-        integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==,
-      }
-    peerDependencies:
-      acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
-    dependencies:
-      acorn: 8.7.1
-    dev: true
-
   /acorn-jsx/5.3.2_acorn@8.8.0:
     resolution:
       {
@@ -4291,15 +4467,6 @@ packages:
       }
     engines: { node: ">=0.4.0" }
     dev: false
-
-  /acorn/8.7.1:
-    resolution:
-      {
-        integrity: sha512-Xx54uLJQZ19lKygFXOWsscKUbsBZW0CPykPhVQdhIeIwrbPmJzqeASDInc8nKBnp/JT6igTs82qPXz069H8I/A==,
-      }
-    engines: { node: ">=0.4.0" }
-    hasBin: true
-    dev: true
 
   /acorn/8.8.0:
     resolution:
@@ -7271,6 +7438,14 @@ packages:
       make-dir: 2.1.0
       p-event: 2.3.1
       pify: 4.0.1
+    dev: false
+
+  /dset/3.1.2:
+    resolution:
+      {
+        integrity: sha512-g/M9sqy3oHe477Ar4voQxWtaPIFw1jTdKZuomOjhCcBx9nHUNn0pu6NopuFFrTh/TRZIKEj+76vLWFu9BNKk+Q==,
+      }
+    engines: { node: ">=4" }
     dev: false
 
   /duplexer/0.1.2:
@@ -10387,6 +10562,14 @@ packages:
     engines: { node: ^12.22.0 || ^14.16.0 || >=16.0.0 }
     dev: false
 
+  /graphql/16.5.0:
+    resolution:
+      {
+        integrity: sha512-qbHgh8Ix+j/qY+a/ZcJnFQ+j8ezakqPiHwPiZhV/3PgGlgf96QMBB5/f2rkiC9sgLoy/xvT6TSiaf2nTHJh5iA==,
+      }
+    engines: { node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0 }
+    dev: false
+
   /gray-matter/4.0.3:
     resolution:
       {
@@ -13458,8 +13641,8 @@ packages:
         integrity: sha512-TZZRZgeHvtgm+IhtgC2+uDMR7h8eTKF0QUX9YsgoL9+bADBpBY6SiLvWqnBlLbCEevITmTqmEuY3FoxMKVs1rQ==,
       }
     dependencies:
-      acorn: 8.7.1
-      acorn-jsx: 5.3.2_acorn@8.7.1
+      acorn: 8.8.0
+      acorn-jsx: 5.3.2_acorn@8.8.0
       micromark-extension-mdx-expression: 1.0.3
       micromark-extension-mdx-jsx: 1.0.3
       micromark-extension-mdx-md: 1.0.0
@@ -19287,6 +19470,14 @@ packages:
       builtins: 5.0.1
     dev: false
 
+  /value-or-promise/1.0.11:
+    resolution:
+      {
+        integrity: sha512-41BrgH+dIbCFXClcSapVs5M6GkENd3gQOJpEfPDNa71LsUGMXDL0jMWpI/Rh7WhX+Aalfz2TTS3Zt5pUsbnhLg==,
+      }
+    engines: { node: ">=12" }
+    dev: false
+
   /vary/1.1.2:
     resolution:
       {
@@ -19943,13 +20134,6 @@ packages:
       archiver-utils: 2.1.0
       compress-commons: 4.1.1
       readable-stream: 3.6.0
-    dev: false
-
-  /zod/3.17.10:
-    resolution:
-      {
-        integrity: sha512-IHXnQYQuOOOL/XgHhgl8YjNxBHi3xX0mVcHmqsvJgcxKkEczPshoWdxqyFwsARpf41E0v9U95WUROqsHHxt0UQ==,
-      }
     dev: false
 
   /zwitch/2.0.2:

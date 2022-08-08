@@ -1,5 +1,5 @@
 {
-	"name": "@rakkasjs/example-emotion",
+	"name": "@rakkasjs/example-graphql",
 	"type": "module",
 	"private": true,
 	"scripts": {
@@ -8,17 +8,15 @@
 		"start": "node dist/server"
 	},
 	"devDependencies": {
-		"@emotion/babel-plugin": "^11.10.0",
 		"@types/react": "^18.0.15",
 		"@types/react-dom": "^18.0.6",
 		"rakkasjs": "0.6.0-next.10",
 		"typescript": "^4.7.4",
-		"vite": "^3.0.4",
-		"@babel/core": "^7.18.10"
+		"vite": "^3.0.4"
 	},
 	"dependencies": {
-		"@emotion/react": "^11.10.0",
-		"@emotion/styled": "^11.10.0",
+		"@hattip/graphql": "^0.0.17",
+		"graphql": "^16.5.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	}

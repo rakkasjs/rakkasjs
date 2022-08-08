@@ -1,5 +1,3 @@
-import { HeadersFunction } from "rakkasjs";
-
 const imports: Record<string, { default: { title: string } }> =
 	import.meta.glob("./*.page.mdx", {
 		eager: true,
@@ -54,17 +52,11 @@ const sections: Array<[section: string, slugs: string[]]> = [
 	],
 	[
 		// Section
-		"Advanced routing",
+		"Routing",
 		[
 			// Slugs
 			"404-handling",
-		],
-	],
-	[
-		// Section
-		"Backend",
-		[
-			// Slugs
+			"route-guards",
 			"api-routes",
 			"api-middleware",
 		],
@@ -77,20 +69,6 @@ const sections: Array<[section: string, slugs: string[]]> = [
 			"client-entry",
 			"hattip-entry",
 			"common-hooks",
-			"configuration",
-			"environment-variables",
-		],
-	],
-	[
-		// Section
-		"Deployment",
-		[
-			// Slugs
-			"node",
-			"static-hosting",
-			"cloudflare-workers",
-			"vercel",
-			"netlify",
 		],
 	],
 	[
@@ -109,9 +87,21 @@ const sections: Array<[section: string, slugs: string[]]> = [
 			// Slugs
 			"page-context",
 			"client-rendering",
+			"static-prerendering",
 			"directory-structure",
-			"route-guards",
-			"seo",
+		],
+	],
+	[
+		// Section
+		"Deployment",
+		[
+			// Slugs
+			"node",
+			"static-hosts",
+			"cloudflare-workers",
+			"netlify",
+			"vercel",
+			"deno",
 		],
 	],
 	[

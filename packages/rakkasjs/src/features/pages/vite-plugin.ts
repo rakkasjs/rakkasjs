@@ -127,7 +127,7 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 			)}], [${guards.map((gi) => `g${gi}`)}`;
 
 			if (guardedPageIndices.has(i)) {
-				exportElement += `, s${i}`;
+				exportElement += guards.length ? `, s${i}` : `s${i}`;
 			}
 
 			exportElement += "]";

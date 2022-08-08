@@ -1,0 +1,24 @@
+---
+title: Vercel
+---
+
+Rakkas projects can be deployed to [Vercel Serverless Functions](https://vercel.com/docs/concepts/functions/serverless-functions) or [Vercel Edge Functions](https://vercel.com/docs/concepts/functions/edge-functions). To do that, first, you should set the `adapter` option of Rakkas Vite plugin to `"vercel"` or `"vercel-edge"`:
+
+```ts
+import { defineConfig } from "vite";
+import rakkas from "rakkasjs/vite-plugin";
+
+export default defineConfig({
+	plugins: [
+		rakkas({
+			adapter: "vercel", // or "vercel-edge"
+		}),
+	],
+});
+```
+
+After building with `rakkas build`, you can deploy with `vercel deploy --prebuilt`.
+
+## Worker-specific APIs
+
+Vercel Edge Functions run on a worker runtime. But, during development, Rakkas applications always run on Node.js regardless of the `adapter` setting. As such, Worker APIs will not be available during development. We're looking into ways of polyfilling these APIs for development. Also, `process.env` is not yet available for Vercel Edge.

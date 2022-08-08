@@ -1,6 +1,6 @@
 import { ActionContext, ActionResult, Head, PageProps } from "rakkasjs";
 
-export default function UseSubmitPage({ actionData }: PageProps) {
+export default function FormsPage({ actionData }: PageProps) {
 	return (
 		<form method="POST">
 			<Head title="Form example" />

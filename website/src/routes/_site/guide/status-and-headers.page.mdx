@@ -22,3 +22,5 @@ export interface ResponseHeadersProps {
 `headers` functions are called in order, starting from the outermost layout and finishing with the page. `status` and `headers` accept simple values as well as functions. Functions are useful for modifying the values set in outer layouts.
 
 `throttleRenderStream` can be used to disable or throttle the render stream.
+
+`headers` functions only run on the server and are stripped from the client bundle so it's safe to use backend-only APIs.

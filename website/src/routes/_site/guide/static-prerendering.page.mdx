@@ -1,0 +1,45 @@
+---
+title: Static prerendering
+---
+
+Instead of generating them on-demand, you can choose to render some or all of your pages upfront during the build which may speed up response times and enable you to serve them from a static file host. It works by setting the `prerender` property in the configuration to an array of paths (e.g. `["/"]`). During the build, Rakkas will crawl those paths and save them as static files.
+
+Not every page is suitable for prerendering. You can do it if and only if the content of the page is solely determined by its URL path. In particular, if the content depends on any of the following, it is not suitable for prerendering:
+
+- Cookies: A static page can't show different contents to different visitors, so you can't have any sort of session management.
+- Query parameters: Prerendering works by saving the rendered HTML in the file system and serving it via a static file server. Serving different pages for different query parameters is not supported in general. Path parameters are fine, though. So, instead of a URL pattern like `/books?page=2` you should prefer `/books/page-2` if you intend to pre-render a page.
+- Ever-changing external APIs: If you're fetching from an external API to render a page, there's a chance that what was fetched during the pre-render and during a client-side render will differ. This may be confusing for your visitors. If you're not interested in further updates after prerendering, you can solve this problem by using `useServerSideQuery`.
+
+## Prerendering API routes and `useServerSideQuery` results
+
+Rakkas will also prerender the responses from API routes and `useServerSideQuery` results called during the rendering of a page. This allows you to use API endpoints and `useServerSideQuery` even on static sites.
+
+Since prerendering works by saving the prerendered data to the file system, it isn't possible to have two routes that would cause a directory and a file to have the same name. For example, you can't pre-render both `/api/articles` and `/api/articles/[articleId]` routes because it would require `api/articles` to be a file and a directory at the same time. For pages, it is solved by saving prerendered pages as `/directory/index.html` instead of `/directory`.
+
+The recommended way of side-stepping this problem is to use file extensions, like `/api/articles.json` and `/api/articles/[articleId].json`. It also helps the static file server get the content types right. In this case the endpoint handlers would be named `/api/articles.json.endpoint.js` and `/api/articles/[articleId].endpoint.js` respectively.
+
+## Fine-tuning prerendering
+
+You can export a `prerender` function from pages and layouts and return an object matching the following interface to control the prerendering process:
+
+```tsx
+/** Return type of the prerender function \*/
+export interface PrerenderResult {
+	/** Should this page be prerendered? Defaults to true */
+	shouldPrerender?: boolean;
+	/** Should the prerenderer crawl this page? Defaults to the value of prerender */
+	shouldCrawl?: boolean;
+	/** More links to prerender */
+	links?: (URL | string)[];
+}
+```
+
+The `prerender` function only runs on the server and is stripped from the client bundle so it's safe to use backend-only APIs.
+
+## `rakkas prerender`
+
+The Rakkas CLI provides a `rakkas prerender` command that can be used to prerender specific pages of an already built Rakkas application. It accepts a list of paths and can be used to regenerate specific pages after database or CMS changes, for example:
+
+```bash
+rakkas prerender /products/awesome-shoes /products/cool-shirt /products/fine-hat
+```

@@ -1,0 +1,38 @@
+---
+title: Netlify
+---
+
+> Netlify Edge Functions is currently an experimental technology.
+
+Rakkas projects can be deployed to [Netlify Functions](https://www.netlify.com/products/functions/) or [Netlify Edge Functions](https://docs.netlify.com/netlify-labs/experimental-features/edge-functions/). To do that, first, you should set the `adapter` option of Rakkas Vite plugin to `"netlify"` or `"netlify-edge"`:
+
+```ts
+import { defineConfig } from "vite";
+import rakkas from "rakkasjs/vite-plugin";
+
+export default defineConfig({
+	plugins: [
+		rakkas({
+			adapter: "netlify", // or "netlify-edge"
+		}),
+	],
+});
+```
+
+Then create a `netlify.toml` file like this:
+
+```toml
+[build]
+publish = "netlify/static"
+
+# Uncomment for Netlify Edge
+# [[edge_functions]]
+# function = "edge"
+# path = "/*"
+```
+
+After building with `rakkas build`, you can preview your app with `netlify dev` or publish with `netlify deploy`.
+
+## Deno-specific APIs
+
+Netlify Edge Functions run on a Deno runtime. But, during development, Rakkas applications always run on Node.js regardless of the `adapter` setting. As such, Deno APIs will not be available during development. We're looking into ways of polyfilling these APIs for development.

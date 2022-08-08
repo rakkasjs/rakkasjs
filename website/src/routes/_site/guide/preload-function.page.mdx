@@ -16,8 +16,21 @@ You may think that the `preload` function is similar to `getServerSideProps` or 
 
 Consider a scenario where both a page and its parent layout need to fetch some data. Since the page is a child of the layout, its data fetching hook will not be rendered until the parent layout is rendered. If the data fetched by the page is not dependent on the data fetched by the layout, there is no reason to wait until the parent finishes. In this case, you can use the page's `preload` function like in the above example to start fetching immediately. This works because `preload` functions of the page and all its parent layouts are called in parallel.
 
-## Head tags, response headers, redirection
+## Head tags redirection
 
-When using streaming SSR, `Head`, `ResponseHeaders`, and `Redirect` components may be discovered _after_ the response headers and the document head have been sent. To avoid SEO problems, Rakkas will hold the stream until the page is fully rendered when it detects that the request is coming from a bot. But in some cases you may want correct status, headers, and head tags to be sent even to browsers. `preload` offers a way to do this like in the above example.
+When using streaming SSR, `Head` components may be discovered _after_ the document head has been sent. To avoid SEO problems, Rakkas will hold the stream until the page is fully rendered when it detects that the [request is coming from a bot](dynamic-rendering). But in some cases, you may want correct status, headers, and head tags to be sent even to browsers. `preload` offers a way to do this like in the above example.
 
 Another important thing to consider is out-of-order hydration. React may hydrate your components in a different order than you expect: If it detects the user is trying to interact with a component, its hydration will be prioritized. This can cause `Head` tags to be rendered out-of-order, causing back-and-forth switching of the document title when you have more than one `Head` component in the tree. Only using `preload` for rendering `Head` tags will prevent this potential issue.
+
+## Redirection
+
+`preload` functions can also redirect the request by returning an object like this:
+
+```js
+return {
+	redirect: {
+		href: "/redirect/to",
+		premanent: true,
+	},
+};
+```

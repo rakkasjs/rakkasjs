@@ -185,6 +185,18 @@ export interface Redirection {
 	permanent?: boolean;
 	/** The status code to use (hes precedence over `permanent`) */
 	status?: number;
+	/** Set response headers */
+	headers?: Record<string, string | string[]> | ((headers: Headers) => void);
 }
 
-export type ActionResult = Redirection | { data: any };
+export type ActionResult =
+	| Redirection
+	| {
+			data: any;
+			/** The status code */
+			status?: number;
+			/** Response headers */
+			headers?:
+				| Record<string, string | string[]>
+				| ((headers: Headers) => void);
+	  };

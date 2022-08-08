@@ -4,16 +4,13 @@ title: Integrations
 
 Integrating a non-trivial tool or library into a Rakkas app usually entails some of the following:
 
-- Adding Vite plugins or tweaking Vite configuration options. Rakkas exposes the [Vite configuration](./configuration-options#vite) in `rakkas.config.{js,ts}`.
-- Wrapping the React application element in a React context provider (e.g. `ApolloProvider` for Apollo). Rakkas allows you to wrap your app in provider components. You can even wrap it differently on the server-side and on the client using [customization hooks](./customization-hooks).
-- Applying a Babel plugin. Rakkas already uses Babel, you can add more plugins [in your configuration](./configuration-options#babel).
-- Injecting HTML markup into the generated document's head: [Server-side customization hooks](./customization-hooks#server-side) support this use case via `getHeadHtml`.
+- Adding Vite plugins or tweaking Vite configuration options. Rakkas respects the settings in the `vite.config.js` (or `.ts`) file.
+- Tweaking various aspects of the app using the [client](client-entry), [server](hattip-entry), and [common](common-hooks) customization hooks.
 
 ## Examples
 
-- [Styled Components](https://github.com/rakkasjs/rakkasjs/tree/main/examples/styled-components)
-- [Tailwind CSS](https://github.com/rakkasjs/rakkasjs/tree/main/examples/tailwind)
+- [Emotion](https://github.com/rakkasjs/rakkasjs/tree/main/examples/emotion)
 - [MDX](https://github.com/rakkasjs/rakkasjs/tree/main/examples/mdx)
-- [Apollo GraphQL (both client and server)](https://github.com/rakkasjs/rakkasjs/tree/main/examples/apollo)
+- [GraphQL](https://github.com/rakkasjs/rakkasjs/tree/main/examples/apollo)
 
-Also be sure to check out [RealWorld example app](https://github.com/rakkasjs/rakkas-realworld) for a simple but complete fullstack application demonstrating how to approach building a REST API, accessing your database (via [Prisma](https://www.prisma.io)), handling authentication, deployment (Node, Vercel, Netlify, and Cloudflare Workers) and more.
+Also check out [RealWorld example app](https://github.com/rakkasjs/rakkas-realworld) for a simple but complete full stack application demonstrating how to approach building a REST API, accessing your database (via [Prisma](https://www.prisma.io)), handling authentication, deployment (Node, Vercel, Netlify, and Cloudflare Workers) and more.

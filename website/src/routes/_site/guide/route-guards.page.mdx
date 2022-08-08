@@ -1,0 +1,20 @@
+---
+title: Route guards
+---
+
+Sometimes you want some of your pages to be available only under certain conditions. Use cases include:
+
+- Restrict access to a page to authenticated users only
+- Make some pages only available during development
+- Make some pages only available to certain subdomains (e.g. in multi-tenant applications)
+
+Rakkas's solution to such requirements is called route guards. A route guard is a file named `*.guard.js` (or `*.guard.ts`) that is placed next to the `*.page.jsx` (or `*.page.tsx`) file. It's expected to export a `pageGuard` function. It can:
+
+- Return `false` to prevent the page from rendering.
+- Return `{ redirect: "/some/url" }` to redirect.
+- Return `{ rewrite: "/new/url" }` to render as if the URL was `/new/url`.
+- Return true to continue as normal.
+
+The rewrite feature is handy, for example, to redirect to a login form while remembering the original URL.
+
+A route guard can also guard all pages under a directory if it's named `$guard.js` (or `.ts`). Guards are called starting from the outermost one. All have to return true for the page to render.

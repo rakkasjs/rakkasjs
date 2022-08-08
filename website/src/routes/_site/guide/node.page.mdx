@@ -24,7 +24,7 @@ Whether to trust `X-Forwarded-*` headers. If set to `1`, `X-Forwarded-Proto` and
 
 Set the URL origin, e.g. `https://example.com`. If not set, the origin will be computed from the protocol and hostname. To determine the protocol, `req.protocol` is tried first. If `TRUST_PROXY` is set, `X-Forwarded-Proto` header is used. Otherwise, `req.socket.encrypted` is used. To determine the hostname, `X-Forwarded-Host` (if `TRUST_PROXY` is set) or `Host` header is used.
 
-## Custom entry
+## Custom entry <a id="custom-entry" />
 
 To define a custom Node.js entry point, you must first provide a [HatTip entry](hattip-entry). Then you can create a `src/entry-node.js` (or `.ts`) file that exports a Node (`(req, res) => {}`) request handler function. A minimal custom Node.js entry would look like this:
 

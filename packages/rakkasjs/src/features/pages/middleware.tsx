@@ -111,11 +111,14 @@ export default async function renderPageRoute(
 				const location = String(result.redirect);
 				return new Response(redirectBody(location), {
 					status: result.status ?? result.permanent ? 301 : 302,
-					headers: {
-						location: new URL(location, ctx.url.origin).href,
-						"content-type": "text/html; charset=utf-8",
-						vary: "accept",
-					},
+					headers: makeHeaders(
+						{
+							location: new URL(location, ctx.url.origin).href,
+							"content-type": "text/html; charset=utf-8",
+							vary: "accept",
+						},
+						result.headers,
+					),
 				});
 			} else {
 				// Rewrite
@@ -131,11 +134,14 @@ export default async function renderPageRoute(
 			const location = String(result.redirect);
 			return new Response(redirectBody(location), {
 				status: result.status ?? result.permanent ? 301 : 302,
-				headers: {
-					location: new URL(location, ctx.url.origin).href,
-					"content-type": "text/html; charset=utf-8",
-					vary: "accept",
-				},
+				headers: makeHeaders(
+					{
+						location: new URL(location, ctx.url.origin).href,
+						"content-type": "text/html; charset=utf-8",
+						vary: "accept",
+					},
+					result.headers,
+				),
 			});
 		}
 
@@ -223,10 +229,13 @@ export default async function renderPageRoute(
 
 		return new Response(devalue(actionResult), {
 			status: actionErrorIndex >= 0 ? 500 : 200,
-			headers: {
-				"content-type": "application/javascript",
-				vary: "accept",
-			},
+			headers: makeHeaders(
+				{
+					"content-type": "application/javascript",
+					vary: "accept",
+				},
+				actionResult?.headers,
+			),
 		});
 	}
 
@@ -234,11 +243,14 @@ export default async function renderPageRoute(
 		const location = String(actionResult.redirect);
 		return new Response(redirectBody(location), {
 			status: actionResult.status ?? actionResult.permanent ? 301 : 302,
-			headers: {
-				location: new URL(location, ctx.url.origin).href,
-				"content-type": "text/html; charset=utf-8",
-				vary: "accept",
-			},
+			headers: makeHeaders(
+				{
+					location: new URL(location, ctx.url.origin).href,
+					"content-type": "text/html; charset=utf-8",
+					vary: "accept",
+				},
+				actionResult.headers,
+			),
 		});
 	}
 
@@ -579,4 +591,27 @@ function redirectBody(href: string) {
 
 	// http-equiv="refresh" is useful for static prerendering
 	return `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=${escaped}"></head><body><a href="${escaped}">${escaped}</a></body></html>`;
+}
+
+function makeHeaders(
+	init: HeadersInit,
+	headers?: Record<string, string | string[]> | ((headers: Headers) => void),
+) {
+	const result = new Headers(init);
+
+	if (typeof headers === "function") {
+		headers(result);
+	} else if (headers) {
+		for (const [header, value] of Object.entries(headers)) {
+			if (Array.isArray(value)) {
+				for (const v of value) {
+					result.append(header, v);
+				}
+			} else {
+				result.set(header, value);
+			}
+		}
+	}
+
+	return result;
 }

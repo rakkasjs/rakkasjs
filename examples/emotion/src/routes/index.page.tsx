@@ -1,6 +1,4 @@
 import styled from "@emotion/styled";
-import { createContext, useContext } from "react";
-import z from "zod";
 
 const StyledParagraph = styled.p({
 	color: "green",
