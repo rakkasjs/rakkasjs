@@ -24,7 +24,7 @@ export default function frontmatterLoader(): PluginOption {
 				(_: string, name) => {
 					const pattern = path.relative(
 						path.dirname(url.pathname),
-						path.join(root, "../code-samples", name + "/**/*"),
+						path.join(root, "../examples", name + "/**/*"),
 					);
 
 					let code = `<CodeViewer name=${JSON.stringify(

@@ -7,7 +7,7 @@ Using `useSubmit` instead of a full page reload form submission comes with a sub
 The following example will keep showing "Hello Jane Doe" even after you change the user name since the `useServerSideQuery` hook caches its results:
 
 <CodeViewer
-	name="basics"
+	name="guide-samples"
 	openFiles={["src/routes/query-invalidation/broken.page.tsx"]}
 	url="/query-invalidation/broken"
 />
@@ -17,7 +17,7 @@ The solution is to tell to invalidate the query cache. Rakkas allows access to i
 To fix the previous example, we will give our query a key (`userName`) and use `queryClient.invalidateQueries("userName")` to invalidate the query when the form submission completes. `useSubmit` accepts an option object that can have an `onSuccess` callback that allows us to do just that:
 
 <CodeViewer
-	name="basics"
+	name="guide-samples"
 	openFiles={["src/routes/query-invalidation/fixed.page.tsx"]}
 	url="/query-invalidation/fixed"
 />

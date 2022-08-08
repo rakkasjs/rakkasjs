@@ -23,7 +23,7 @@ function CodeSandbox(props: CodeViewerProps) {
 				body: JSON.stringify({
 					files: Object.fromEntries(
 						Object.keys(props.files).map((x) => [
-							x.slice(`../../../../../code-samples/${props.name}/`.length),
+							x.slice(`../../../../../examples/${props.name}/`.length),
 							{ content: props.files[x] },
 						]),
 					),

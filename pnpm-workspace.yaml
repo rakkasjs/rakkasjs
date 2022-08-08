@@ -3,4 +3,3 @@ packages:
   - "website"
   - "testbed/*"
   - "examples/*"
-  - "code-samples/*"

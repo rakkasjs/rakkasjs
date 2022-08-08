@@ -35,22 +35,12 @@ import hattipHandler from "./entry-hattip";
 export default createMiddleware(hattipHandler);
 ```
 
+## Express integration
+
 A custom Node.js entry makes it possible to integrate Rakkas with Express and other Node.js frameworks:
 
-```ts
-import { createMiddleware } from "rakkasjs/node-adapter";
-import hattipHandler from "./entry-hattip";
-import express from "express";
-
-const app = express();
-
-// You can use Express routes and middleware here
-app.get("/express", (req, res) => {
-	res.json({ message: "Hello from express!" });
-});
-
-app.use(createMiddleware(hattipHandler));
-
-// An Express app is actually a request handler function
-export default app;
-```
+<CodeViewer
+	name="express"
+	openFiles={["src/entry-node.ts", "src/routes/index.page.tsx"]}
+	url="/"
+/>

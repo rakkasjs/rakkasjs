@@ -1,11 +1,6 @@
 {
-	"name": "@rakkasjs/code-sample-hello",
-	"description": "Rakkas hello world example",
-	"keywords": [
-		"rakkas",
-		"example",
-		"helloworld"
-	],
+	"name": "@rakkasjs/example-guide-samples",
+	"description": "Rakkas guide code examples",
 	"type": "module",
 	"private": true,
 	"scripts": {
