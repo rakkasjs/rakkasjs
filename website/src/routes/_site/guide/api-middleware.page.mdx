@@ -1,0 +1,22 @@
+---
+title: API middleware
+---
+
+If you create a file named `middleware.js` or `middleware.ts` in the `src/routes` directory or one of its subdirectories, it will become a **middleware** for API routes in that directory or its subdirectories. Middleware modules default export a middleware function that takes a HatTip RequestContext. It can either return a response or `undefined` to pass the request to the next middleware or API handler. It can also call `await context.next()` to call the next handler to be able to modify the response.
+
+```ts
+import { RequestContext } from "rakkasjs";
+import { Session, getSession } from "./session";
+
+declare module "rakkasjs" {
+	// Redefine to provide types for ctx.locals
+	interface ServerSideLocals {
+		session: Session;
+	}
+}
+
+export default async function sessionMiddleware(ctx: RequestContext) {
+	ctx.locals.session = await getSession(ctx);
+	// The session will be available as ctx.locals in subsequent handlers
+}
+```

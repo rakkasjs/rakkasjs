@@ -1,8 +1,9 @@
-import { ActionContext, ActionResult, PageProps } from "rakkasjs";
+import { ActionContext, ActionResult, Head, PageProps } from "rakkasjs";
 
 export default function UseSubmitPage({ actionData }: PageProps) {
 	return (
 		<form method="POST">
+			<Head title="Form example" />
 			<h1>Form example</h1>
 			<p>Hint: Creadentials are definitely not admin/admin!</p>
 			<p>

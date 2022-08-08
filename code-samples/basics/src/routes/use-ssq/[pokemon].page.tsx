@@ -25,6 +25,7 @@ export default function PokemonStatsPage(props: PageProps<Params>) {
 
 	return (
 		<div className={css.wrapper}>
+			<Head title={`${pokemon} stats`} />
 			<div className={css.title}>
 				<nav>
 					<ul className={css.links}>

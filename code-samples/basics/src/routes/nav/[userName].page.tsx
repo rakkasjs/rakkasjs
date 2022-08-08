@@ -1,10 +1,11 @@
-import { PageProps, StyledLink } from "rakkasjs";
+import { Head, PageProps, StyledLink } from "rakkasjs";
 
 export default function UserProfilePage({ params }: PageProps) {
 	const activeStyle = { fontWeight: "bold" };
 
 	return (
 		<div>
+			<Head title={`Hello ${params.userName}`} />
 			<h1>
 				Hello <span style={{ color: "green" }}>{params.userName}</span>!
 			</h1>

@@ -1,0 +1,31 @@
+---
+title: Dynamic rendering
+---
+
+Rakkas uses React's streaming SSR features which means that it sends chunks of a page's HTML as soon as they are available instead of waiting until everything is fully rendered. This provides a great user experience but it may trip up bots and crawlers. To avoid harming SEO, Rakkas implements [dynamic rendering](https://developers.google.com/search/docs/advanced/javascript/dynamic-rendering). It simply means that Rakkas will sniff the user agent and if it is a bot, it will render the page fully instead of streaming. This also makes sure that response headers, response status, and document head tags are all set correctly.
+
+Currently Rakkas checks for the following strings in the user agent to determine if it is a bot:
+
+- bot
+- check
+- cloud
+- crawler
+- curl
+- download
+- facebookexternalhit
+- flipboard
+- google
+- heritrix
+- ia_archiver
+- monitor
+- perl
+- preview
+- python
+- qwantify
+- scan
+- spider
+- tumblr
+- vkshare
+- wget
+- whatsapp
+- yahoo

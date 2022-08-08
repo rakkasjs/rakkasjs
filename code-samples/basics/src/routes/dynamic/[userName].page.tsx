@@ -1,8 +1,9 @@
-import type { PageProps } from "rakkasjs";
+import { Head, PageProps } from "rakkasjs";
 
 export default function UserProfilePage({ params }: PageProps) {
 	return (
 		<div>
+			<Head title={`Hello ${params.userName}`} />
 			<h1>
 				Hello <span style={{ color: "green" }}>{params.userName}</span>!
 			</h1>

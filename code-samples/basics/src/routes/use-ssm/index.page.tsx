@@ -1,4 +1,5 @@
 import {
+	Head,
 	useQueryClient,
 	useServerSideMutation,
 	useServerSideQuery,
@@ -27,6 +28,7 @@ export default function FormsPage() {
 
 	return (
 		<div>
+			<Head title="useMutation example" />
 			<h1>
 				Hello <b>{currentUserName}</b>
 			</h1>

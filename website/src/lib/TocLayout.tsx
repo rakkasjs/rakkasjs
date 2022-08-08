@@ -73,7 +73,7 @@ export function TocLayout({ url, toc, title, children }: TocLayoutProps) {
 			</div>
 
 			<div>
-				<aside className={css.toc}>
+				<aside id="toc" className={css.toc}>
 					<Toc toc={toc} />
 				</aside>
 			</div>

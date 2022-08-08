@@ -1,6 +1,7 @@
 import {
 	ActionContext,
 	ActionResult,
+	Head,
 	PageProps,
 	useQueryClient,
 	useServerSideQuery,
@@ -22,6 +23,7 @@ export default function FormsPage({ actionData }: PageProps) {
 
 	return (
 		<form method="POST" onSubmit={submitHandler}>
+			<Head title="Form example" />
 			<h1>
 				Hello <b>{userName}</b>
 			</h1>

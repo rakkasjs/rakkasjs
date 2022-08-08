@@ -2,78 +2,36 @@
 title: API routes
 ---
 
-import { SampleViewer } from "./SampleViewer";
+Any file in the `src/routes` directory with a name that matches `*.api.js` or `*.api.ts` will become an API route. Routing convention is the same as in pages:
 
-You can build your backend API with Rakkas using **endpoints and middlewares** that are analogous to pages and layouts respectively.
+| Module name                          | URL path      |
+| ------------------------------------ | ------------- |
+| `src/routes/api/index.api.jsx`       | `/api`        |
+| `src/routes/api/users.api.jsx`       | `/users`      |
+| `src/routes/api/users/index.api.jsx` | also `/users` |
 
-In most Node.js frameworks (like Express) you handle HTTP requests by manipulating request and response objects. These are not available in some serverless environment Rakkas aims to support. So we use a simpler mental model: **An endpoint is a function that takes a request and returns a response**. You get a plain object that represents the request, and you return a plain object that represents the response.
+Dynamic routes and catch-all routes are also supported (`/api/user/[userId].api.js`, `/path/[...rest].api.js` ctc.).
 
-#### `RakkasRequest`
+API route modules export method handlers that match the name of the HTTP method they handle, but in lowercase, like `get`, `post`, `put`, etc. Since `delete` is a reserved word in JavaScript, `del` is used instead.
 
-Rakkas's request object `RakkasRequest` has the following props:
+Rakkas's HTTP handling is built on [HatTip](https://github.com/hattipjs/hattip), a set of JavaScript libraries for building HTTP server applications that run on many platforms like Node.js, Cloudflare Workers, Vercel, Netlify, Deno, and more. API method handlers are passed a HatTip `RequestContext` object that represents the HTTP request. Its `request` property is a standard [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) object. Handlers are expected to return a standard [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) object (or a promise of one). `Response` and `Request` follow the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) standard.
 
-| Name    | Type                     | Description                      |
-| ------- | ------------------------ | -------------------------------- |
-| ip      | `string`                 | IP address                       |
-| url     | `URL`                    | Request URL                      |
-| method  | `string`                 | HTTP method                      |
-| headers | `Headers`                | HTTP headers                     |
-| params  | `Record<string, string>` | Path parameters                  |
-| context | `Record<string, any>`    | See below                        |
-| type    | See below                | Content-type of the request body |
-| body    | Seel below               | Request body                     |
+You can call the `new Response` constructor or use the helper functions from the [`@hattip/response`](https://github.com/hattipjs/hattip/tree/main/packages/base/response) package to build responses:
 
-The `type` prop can be either `"empty"`, `"binary"`, `"text"`, `"form-data"`, or `"json"` depending on the request's body and `Content-Type` header:
+```ts
+import { json } from "@hattip/response";
 
-| Type         | Type of `body`    | Description                                                                                      |
-| ------------ | ----------------- | ------------------------------------------------------------------------------------------------ |
-| "empty"      | `undefined`       | The request body is empty                                                                        |
-| "text"       | `string`          | `Content-Type` starts with `text/`, body has been parsed as a string                             |
-| "form-data"¹ | `URLSearchParams` | `Content-Type` is `application/x-www-form-urlencoded`, body has been parsed as `URLSearchParams` |
-| "json"       | `unknown`         | `Content-Type` is `application/json` or ends with `+json`, body has been parsed as JSON          |
-| "binary"     | `Uint8Array`      | None of the above, body has been parsed as binary                                                |
+export function get() {
+	return json({ hello: "world" });
 
-¹ Rakkas will support parsing `multipart/form-data` before version 1.0.
+	// Shorthand for:
 
-#### `RakkasResponse`
-
-Rakkas's request object `RakkasResponse` has the following props, all optional:
-
-| Name    | Type      | Description               |
-| ------- | --------- | ------------------------- |
-| status  | `number`  | HTTP status, defaults 200 |
-| headers | See below | Response headers          |
-| body    | See below | Response body             |
-
-The `headers` property can either be a name value dictionary or an array of name value pairs. The `body` will be empty if it's null or undefined, sent as binary if it is `Uint8Array`, as text if it's a string. It will be JSON stringified if it is something else.
-
-## Endpoints
-
-An endpoint is a module in the `src/api` directory, named `endpoint.js` or anything that matches `*.endpoint.js` (or `ts`, or any other extension included in the `apiExtensions` [configuration option](./configuration-options)). It exports method handlers, functions that correspond to HTTP methods like `get`, `post`, `put` etc. `DELETE` method is handled by the `del` function because `delete` is a reserved word in JavaScript.
-
-A method handler is just a function that takes a `RakkasRequest` and returns a `RakkasResponse`, possibly asynchronously.
-
-Routing works similarly to pages:
-
-| Module name                          | URL path                                                           |
-| ------------------------------------ | ------------------------------------------------------------------ |
-| `src/api/endpoint.jsx`               | `/api/`                                                            |
-| `src/api/user.endpoint.jsx`          | `/api/user`                                                        |
-| `src/api/user/endpoint.jsx`          | also `/api/user`                                                   |
-| `src/api/user/[userId].endpoint.jsx` | `/api/user/[userId]` where `[userId]` is a dynamic route parameter |
-
-As an alternative, or in addition to exporting individual method handlers you can default export a function to handle all methods. Specific method handlers have priority.
-
-## Middleware functions
-
-If you default export a function from a file named `middleware.js` (or `ts`, or any other extension included in the `apiExtensions` [configuration option](./configuration-options)) in the `src/api` directory or in one of its subdirectories, you can intercept requests that would be otherwise handled by endpoint handlers in that directory or in one of its subdirectories. Like layouts, middleware functions can be nested and thematically grouped.
-
-A middleware function receives a `RakkasRequest` just like an endpoint handler and is expected to return a `RakkasResponse` (or a promise of one) just like an endpoint. But it receives a second parameter, a `next()` function which calls the next middleware function or endpoint handler in the hierarchy. You can pass `next()` a modified request and return a modified response or you can return a response without even calling `next`.
-
-The `context` property is a way to pass data from a middleware function to nested middleware functions or endpoint handlers. For example, you can create a cookie parsing middleware like this:
-
-And you can access the cookies like this:
+	// return new Response(JSON.stringify({ hello: "world" }), {
+	// 	headers: { "content-type": "application/json" },
+	// });
+}
+```
 
 ## Fetching data from downstream servers
 
-A server-side `fetch` implementation is available to middleware and endpoint modules for fetching data from downstream servers.
+A server-side `fetch` implementation is always on the backend for fetching data from downstream servers.

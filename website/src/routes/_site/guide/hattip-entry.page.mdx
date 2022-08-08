@@ -1,0 +1,72 @@
+---
+title: HatTip entry
+---
+
+The main server-side entry point of a Rakkas application is the `src/entry-hattip.js` (or `.ts`, `.jsx`, `.tsx`) file. Rakkas has a default implementation, so you don't have to provide one. But it exposes advanced customization features that you might find useful. It should export a default function which is a HatTip handler.
+
+One important use case is injecting HatTip middleware into your application. Currently available middlewares are:
+
+- [`@hattip/cookie`](https://github.com/hattipjs/hattip/blob/main/packages/middleware/cookie): Cookie handling middleware
+- [`@hattip/cors`](https://github.com/hattipjs/hattip/blob/main/packages/middleware/cors): CORS middleware
+- [`@hattip/graphql`](https://github.com/hattipjs/hattip/blob/main/packages/middleware/graphql): GraphQL middleware
+
+```tsx
+import { createRequestHandler } from "rakkasjs";
+import { cookie } from "@hattip/cookie";
+
+export default createRequestHandler({
+	middleware: {
+		// HatTip middleware to be injected
+		// before the page routes handler.
+		beforePages: [cookie()],
+		// HatTip middleware to be injected
+		// after the page routes handler but
+		// before the API routes handler
+		beforeApiRoutes: [],
+		// HatTip middleware to be injected
+		// after the API routes handler but
+		// before the 404 handler
+		beforeNotFound: [],
+	},
+
+	createPageHooks(requestContext) {
+		return {
+			emitBeforeSsrChunk() {
+				// Return a string to emit into React's
+				// SSR stream just before React emits a
+				// chunk of the page.
+				return "";
+			},
+
+			emitToDocumentHead() {
+				// Return a string to emit some HTML into the
+				// document's head.
+				return "";
+			},
+
+			extendPageContext(pageContext) {
+				// Add properties to the page context,
+				// especially to pageContext.locals.
+				// Extensions added here will only be
+				// available on the server-side.
+			},
+
+			wrapApp(app) {
+				// Wrap the Rakkas application in some provider
+				// component (only on the server).
+				return <SomeProvider>{app}</SomeProvider>;
+			},
+
+			wrapSsrStream(stream) {
+				const { readable, writable } = new TransformStream({
+					transform(chunk, controller) {
+						// Intercept and transform React's SSR stream
+					},
+				});
+
+				return readable;
+			},
+		};
+	},
+});
+```

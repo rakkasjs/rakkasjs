@@ -1,3 +1,5 @@
+import { HeadersFunction } from "rakkasjs";
+
 const imports: Record<string, { default: { title: string } }> =
 	import.meta.glob("./*.page.mdx", {
 		eager: true,
@@ -19,7 +21,7 @@ const sections: Array<[section: string, slugs: string[]]> = [
 		"Basics",
 		[
 			// Slugs
-			"pages-and-basic-routing",
+			"pages-and-basics",
 			"dynamic-routes",
 			"client-side-navigation",
 			"layouts",
@@ -34,7 +36,9 @@ const sections: Array<[section: string, slugs: string[]]> = [
 			"use-query",
 			"use-server-side-query",
 			"refetching",
+			"loading-state",
 			"error-handling",
+			"preload-function",
 		],
 	],
 	[
@@ -50,13 +54,30 @@ const sections: Array<[section: string, slugs: string[]]> = [
 	],
 	[
 		// Section
+		"Advanced routing",
+		[
+			// Slugs
+			"404-handling",
+		],
+	],
+	[
+		// Section
+		"Backend",
+		[
+			// Slugs
+			"api-routes",
+			"api-middleware",
+		],
+	],
+	[
+		// Section
 		"Customization",
 		[
 			// Slugs
-			"configuration",
-			"server-side-hooks",
-			"client-side-hooks",
+			"client-entry",
+			"hattip-entry",
 			"common-hooks",
+			"configuration",
 			"environment-variables",
 		],
 	],
@@ -74,13 +95,23 @@ const sections: Array<[section: string, slugs: string[]]> = [
 	],
 	[
 		// Section
+		"SEO",
+		[
+			// Slugs
+			"dynamic-rendering",
+			"status-and-headers",
+		],
+	],
+	[
+		// Section
 		"Advanced",
 		[
 			// Slugs
-			"api-routes",
+			"page-context",
+			"client-rendering",
+			"directory-structure",
 			"route-guards",
 			"seo",
-			"localized-routes",
 		],
 	],
 	[

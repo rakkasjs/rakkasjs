@@ -1,0 +1,19 @@
+---
+title: Directory structure
+---
+
+This is a table of how Rakkas interprets various files and directories in a Rakkas project:
+
+| File or directory                     | Description                                      |
+| ------------------------------------- | ------------------------------------------------ |
+| `/vite.config.{js\|ts}`               | [Vite configuration](https://vitejs.dev/config/) |
+| `/src/entry-client.{js\|ts}x?`        | [Client entrypoint](client-entry)                |
+| `/src/entry-hattip.{js\|ts}x?`        | [HatTip server entrypoint](hattip-entry)         |
+| `/public`                             | [Public assets](static-assets#public-directory)  |
+| `/src/routes/**/*.page.{jsx\|tsx}`    | [Pages](pages-and-basics)                        |
+| `/src/routes/**/layout.{jsx\|tsx}`    | [Layouts](layouts)                               |
+| `/src/routes/**/$404.page.{jsx\|tsx}` | [404 pages](404-handling)                        |
+| `/src/routes/**/*.api.{js\|ts}`       | [API routes](api-routes)                         |
+| `/src/routes/**/middleware.{js\|ts}`  | [API middleware](api-middleware)                 |
+| `/src/routes/**/*.guard.{js\|ts}`     | [Single route guards](route-guards)              |
+| `/src/routes/**/$guard.{js\|ts}`      | [Catch-all route guards](route-guards)           |

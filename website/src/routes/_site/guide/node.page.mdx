@@ -1,0 +1,56 @@
+---
+title: Node.js
+---
+
+Node.js is the default deployment target for Rakkas. After building your application with `rakkas build`, you can run it with `node dist/server/index.js`.
+
+## Environment variables
+
+You can use the following environment variables to configure the runtime behavior of a Rakkas application:
+
+### `HOST`
+
+The hostname to bind the server to. Defaults to `localhost`.
+
+### `PORT`
+
+The port to bind the server to. Defaults to `3000`.
+
+### `TRUST_PROXY`
+
+Whether to trust `X-Forwarded-*` headers. If set to `1`, `X-Forwarded-Proto` and `X-Forwarded-Host` are used to determine the origin when `ORIGIN` is not set. `X-Forwarded-For` is used to determine the IP address. The leftmost value is used if multiple values are set.
+
+### `ORIGIN`
+
+Set the URL origin, e.g. `https://example.com`. If not set, the origin will be computed from the protocol and hostname. To determine the protocol, `req.protocol` is tried first. If `TRUST_PROXY` is set, `X-Forwarded-Proto` header is used. Otherwise, `req.socket.encrypted` is used. To determine the hostname, `X-Forwarded-Host` (if `TRUST_PROXY` is set) or `Host` header is used.
+
+## Custom entry
+
+To define a custom Node.js entry point, you must first provide a [HatTip entry](hattip-entry). Then you can create a `src/entry-node.js` (or `.ts`) file that exports a Node (`(req, res) => {}`) request handler function. A minimal custom Node.js entry would look like this:
+
+```js
+import { createMiddleware } from "rakkasjs/node-adapter";
+import hattipHandler from "./entry-hattip";
+
+export default createMiddleware(hattipHandler);
+```
+
+A custom Node.js entry makes it possible to integrate Rakkas with Express and other Node.js frameworks:
+
+```ts
+import { createMiddleware } from "rakkasjs/node-adapter";
+import hattipHandler from "./entry-hattip";
+import express from "express";
+
+const app = express();
+
+// You can use Express routes and middleware here
+app.get("/express", (req, res) => {
+	res.json({ message: "Hello from express!" });
+});
+
+app.use(createMiddleware(hattipHandler));
+
+// An Express app is actually a request handler function
+export default app;
+```

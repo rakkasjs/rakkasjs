@@ -1,0 +1,34 @@
+---
+title: Page context
+---
+
+Rakkas passes a page context object to various callbacks and components. You can also access it with the `usePageContext` hook.
+
+```ts
+/** Context within which the page is being rendered */
+interface PageContext {
+	/** Request URL */
+	url: URL;
+	/** Isomorphic fetch function */
+	fetch: typeof fetch;
+	/** Query client used by useQuery */
+	queryClient: QueryClient;
+	/** Request context, only defined on the server! */
+	requestContext?: RequestContext;
+	/** Application-specific stuff */
+	locals: PageLocals;
+}
+```
+
+You can add new properties to this object using the `extendPageContext` customization hook that you can define on your [`src/entry-hattip.js`](/guide/hattip-entry), [`src/entry-client.js`](/guide/client-entry), or [`src/common-hooks.js`](/guide/common-hooks). Rakkas reserves the `locals` property for this purpose. You can use module augmentation to provide types for it:
+
+```ts
+declare module "rakkasjs" {
+	interface PageLocals {
+		/** My application-specific stuff */
+		myAppSpecificStuff: string;
+	}
+}
+```
+
+Extensions added on the HatTip server entry will only be available on the server while extensions added on the client entry will only be available on the client. One possible use case is to have helpers that have the same interface but are implemented differently for the server and the client. You can use the [common hooks](/guide/common-hooks) if you have no such requirement.

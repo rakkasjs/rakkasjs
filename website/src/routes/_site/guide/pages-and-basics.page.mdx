@@ -1,5 +1,5 @@
 ---
-title: Pages and basic routing
+title: Pages and basics
 ---
 
 In Rakkas, a page is a React component default exported from a module in the `src/routes` directory with a name that matches `*.page.jsx` (or `tsx`).
@@ -17,6 +17,10 @@ This specific naming convention (`<name>.page.{extension}`) allows you to have y
 A very simple Rakkas page would look like this:
 
 <CodeViewer name="basics" />
+
+## `Head` component
+
+Rakkas provides a `Head` component for managing document head tags. It is simply a repackaging of the [`react-helmet-async`](https://github.com/staylor/react-helmet-async) package.
 
 ## Fast refresh
 

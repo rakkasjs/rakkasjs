@@ -41,19 +41,3 @@ yarn create rakkas-app my-rakkas-app
 > - Start a development server with `npx rakkas`
 > - Build with `npx rakkas build`
 > - Launch with `node dist/server`
-
-## Project structure
-
-By default, `create-rakkas-app` generates a project with the following structure:
-
-| Path               | Description                                                                        |
-| ------------------ | ---------------------------------------------------------------------------------- |
-| `/package.json`    | npm package file                                                                   |
-| `/vite.config.js`¹ | Vite [configuration file](./configuration-options)                                 |
-| `/public`          | [Static files](./serving-static-files) to be served from `/`                       |
-| `/src/client.js`¹  | [Client-side customization hooks](./customization-hooks#server-side)               |
-| `/src/server.js`¹  | [Server-side customization hooks](./customization-hooks#client-side)               |
-| `/src/common.js`¹  | [Common customization hooks](./customization-hooks#common)                         |
-| `/src/routes`      | [Pages](./pages-and-routing), [layouts](./layouts), and [API routes](./api-routes) |
-
-¹ These files will have TypeScript extensions if you enable TypeScript support.
