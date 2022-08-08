@@ -44,8 +44,8 @@ const sections: Array<[section: string, slugs: string[]]> = [
 			// Slugs
 			"using-forms",
 			"use-submit",
+			"query-invalidation",
 			"use-mutation",
-			"use-ssm",
 		],
 	],
 	[

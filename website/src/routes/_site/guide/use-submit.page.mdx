@@ -1,0 +1,18 @@
+---
+title: useSubmit
+---
+
+In modern web applications, it's common practice to call `preventDefault()` on the form's `onSubmit` event handler and to use AJAX to handle the submission to provide a "zippier" user experience without full page refreshes. You can think of it as the form counterpart of client-side navigation.
+
+Rakkas provides a `useSubmit` custom hook that makes this technique trivial to implement. It returns an object that has a `submitHandler` property. You can turn a form into an AJAX form by setting its `onSubmit` event handler to `submitHandler`:
+
+<CodeViewer
+	name="basics"
+	openFiles={[
+		"src/routes/use-submit/index.page.tsx",
+		"src/routes/use-submit/submitted.page.tsx",
+	]}
+	url="/use-submit"
+/>
+
+This is an example of "progressive enhancement". The form submission will still work even if JavaScript fails or is too slow to load. But we will provide a better user experience if everything loads fine.

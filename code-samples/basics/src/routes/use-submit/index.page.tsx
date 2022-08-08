@@ -1,8 +1,10 @@
-import { ActionContext, ActionResult, PageProps } from "rakkasjs";
+import { ActionContext, ActionResult, PageProps, useSubmit } from "rakkasjs";
 
-export default function UseSubmitPage({ actionData }: PageProps) {
+export default function FormsPage({ actionData }: PageProps) {
+	const { submitHandler } = useSubmit();
+
 	return (
-		<form method="POST">
+		<form method="POST" onSubmit={submitHandler}>
 			<h1>Form example</h1>
 			<p>Hint: Creadentials are definitely not admin/admin!</p>
 			<p>
@@ -43,7 +45,7 @@ export async function action(ctx: ActionContext): Promise<ActionResult> {
 		formData.get("password") === "admin"
 	) {
 		return {
-			redirect: "/forms/submitted",
+			redirect: "/use-submit/submitted",
 		};
 	}
 

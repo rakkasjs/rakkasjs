@@ -2,11 +2,13 @@
 title: Using forms
 ---
 
-The traditional way of mutating server-side data is to use HTML forms. Rakkas has first-class support for forms thanks to its [Remix](https://remix.run/)-inspired **action handlers**. If you export an `action` function from your pages, Rakkas will call it when a `POST` request is made to the page's route. You can either redirect to another page by returning `{ redirect: '/path/to/page' }` or return some data (`{ data: 'some data' }`). Returned data will be available on pages and layouts in `props.actionData`. Usually you will redirect on success and return some error message on failure.
+The traditional way of mutating server-side data is to use HTML forms. Rakkas has first-class support for forms via [Remix](https://remix.run/)-inspired **action handlers**. If you export an `action` function from your pages, Rakkas will call it when a `POST` request is made to the page's route. You can either redirect to another page by returning `{ redirect: '/path/to/page' }` or return some data (`{ data: 'some data' }`). Returned data will be available on pages and layouts in `props.actionData`. Usually you will redirect on success and return some error message on failure.
 
 The `action` handler will only run on the server, it will be stripped from the client bundle. It means you can call filesystem APIs, perform database queries, or call third-party APIs that require private keys or have CORS disabled.
 
 Rakkas passes a context object to the action handler that you can use to access the request properties.
+
+**Note:** CodeSandbox doesn't support form redirections unless you open the preview in a new tab.
 
 <CodeViewer
 	name="basics"

@@ -1,0 +1,17 @@
+---
+title: useMutation
+---
+
+We believe form submissions and action handlers provide the best method of data mutation in Rakkas. But different applications have different requirements. If you want to mutate some data without using form submissions Rakkas also provides a [react-query](https://react-query.tanstack.com)-inspired `useMutation` hook. It takes a mutation function and returns an object that you can use to trigger the mutation and observe its state.
+
+Same caveats as `useSubmit`apply about query invalidation, in fact `useSubmit` is implemented using `useMutation`.
+
+`useServerSideMutation` (`useSSM` for short) is to `useMutation` what `useServerSideQuery` is to `useQuery`. It runs the mutation function on the server.
+
+Here's a reimplementation of the form example using `useServerSideMutation`. As you can see, it requires more wiring:
+
+<CodeViewer
+	name="basics"
+	openFiles={["src/routes/use-ssm/index.page.tsx"]}
+	url="/use-ssm"
+/>
