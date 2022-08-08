@@ -30,7 +30,7 @@ importers:
       "@emotion/styled": ^11.10.0
       "@types/react": ^18.0.15
       "@types/react-dom": ^18.0.6
-      rakkasjs: 0.6.0-next.10
+      rakkasjs: 0.6.0
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.7.4
@@ -55,7 +55,7 @@ importers:
       "@types/react": ^18.0.15
       "@types/react-dom": ^18.0.6
       express: ^4.18.1
-      rakkasjs: 0.6.0-next.10
+      rakkasjs: 0.6.0
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.7.4
@@ -80,7 +80,7 @@ importers:
       "@types/react": ^18.0.15
       "@types/react-dom": ^18.0.6
       graphql: ^16.5.0
-      rakkasjs: 0.6.0-next.10
+      rakkasjs: 0.6.0
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.7.4
@@ -102,7 +102,7 @@ importers:
       "@hattip/response": ^0.0.17
       "@types/react": ^18.0.15
       "@types/react-dom": ^18.0.6
-      rakkasjs: 0.6.0-next.10
+      rakkasjs: 0.6.0
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.7.4
@@ -125,7 +125,7 @@ importers:
       "@cyco130/vite-plugin-mdx": ^0.0.0
       "@types/react": ^18.0.15
       "@types/react-dom": ^18.0.6
-      rakkasjs: 0.6.0-next.10
+      rakkasjs: 0.6.0
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.7.4
@@ -143,12 +143,12 @@ importers:
 
   examples/todo:
     specifiers:
-      "@rakkasjs/eslint-config": 0.6.0-next.10
+      "@rakkasjs/eslint-config": 0.6.0
       "@types/react": ^18.0.15
       "@types/react-dom": ^18.0.6
       eslint: ^8.21.0
       prettier: ^2.7.1
-      rakkasjs: 0.6.0-next.10
+      rakkasjs: 0.6.0
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.7.4
