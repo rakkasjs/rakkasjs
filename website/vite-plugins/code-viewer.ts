@@ -19,8 +19,8 @@ export default function frontmatterLoader(): PluginOption {
 
 			let importInjected = false;
 
-			return code.replace(
-				/<CodeViewer name="([a-zA-Z0-9_-]+)" \/>/g,
+			const output = code.replace(
+				/<CodeViewer\s+name="([a-zA-Z0-9_-]+)"/g,
 				(_: string, name) => {
 					const pattern = path.relative(
 						path.dirname(url.pathname),
@@ -31,7 +31,7 @@ export default function frontmatterLoader(): PluginOption {
 						name,
 					)} files={import.meta.glob(${JSON.stringify(
 						pattern,
-					)}, { as: "raw", eager: true })} />`;
+					)}, { as: "raw", eager: true })}`;
 
 					if (!importInjected) {
 						code = "import CodeViewer from 'lib/CodeViewer';\n\n" + code;
@@ -41,6 +41,8 @@ export default function frontmatterLoader(): PluginOption {
 					return code;
 				},
 			);
+
+			return output;
 		},
 	};
 }

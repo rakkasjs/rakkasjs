@@ -11,25 +11,27 @@ export default function CodeSandboxViewer(props: CodeViewerProps) {
 }
 
 function CodeSandbox(props: CodeViewerProps) {
-	const { data: sandbox } = useQuery("code-sample", () =>
-		fetch("https://codesandbox.io/api/v1/sandboxes/define?json=1", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
-			},
-			body: JSON.stringify({
-				files: Object.fromEntries(
-					Object.keys(props.files).map((x) => [
-						x.slice(`../../../../../code-samples/${props.name}/`.length),
-						{ content: props.files[x] },
-					]),
-				),
-				template: "node",
-				title: props.title,
-				description: props.description,
-			}),
-		}).then((x) => x.json()),
+	const { data: sandbox } = useQuery(
+		`code-sample-${props.name}:${JSON.stringify(props.openFiles)}`,
+		() =>
+			fetch("https://codesandbox.io/api/v1/sandboxes/define?json=1", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json",
+				},
+				body: JSON.stringify({
+					files: Object.fromEntries(
+						Object.keys(props.files).map((x) => [
+							x.slice(`../../../../../code-samples/${props.name}/`.length),
+							{ content: props.files[x] },
+						]),
+					),
+					template: "node",
+					title: props.title,
+					description: props.description,
+				}),
+			}).then((x) => x.json()),
 	);
 
 	return (
@@ -38,7 +40,7 @@ function CodeSandbox(props: CodeViewerProps) {
 				(props.openFiles || ["src/routes/index.page.tsx"])
 					.map((file) => "/" + file)
 					.join(",") + ","
-			}&view=split`}
+			}&view=split&initialpath=${props.url || "/"}&codemirror=1&fontsize=14`}
 			style={{
 				width: "100%",
 				height: "600px",

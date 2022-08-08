@@ -46,26 +46,19 @@ export default function PokemonStatPage({ params }: PageProps<Params>) {
 
 	return (
 		<div className={css.wrapper}>
-			<Head title="Data Fetching Example - Rakkas" />
 			<div className={css.title}>
 				<nav>
 					<ul className={css.links}>
-						<StyledLink
-							href="/examples/use-query/pikachu"
-							activeClass={css.activeLink}
-						>
+						<StyledLink href="/use-query/pikachu" activeClass={css.activeLink}>
 							Pikachu
 						</StyledLink>
 						<StyledLink
-							href="/examples/use-query/charizard"
+							href="/use-query/charizard"
 							activeClass={css.activeLink}
 						>
 							Charizard
 						</StyledLink>
-						<StyledLink
-							href="/examples/use-query/onix"
-							activeClass={css.activeLink}
-						>
+						<StyledLink href="/use-query/onix" activeClass={css.activeLink}>
 							Onix
 						</StyledLink>
 					</ul>
@@ -80,7 +73,7 @@ export default function PokemonStatPage({ params }: PageProps<Params>) {
 				</p>
 			</div>
 
-			<h3>Stats</h3>
+			<h3 className={css.heading}>Stats</h3>
 			<ul className={css.stats}>
 				{data.stats.map((s) => (
 					<li className={css.stat} key={s.stat.name}>

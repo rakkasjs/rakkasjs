@@ -2,10 +2,56 @@
 title: Error handling
 ---
 
-import { SampleViewer } from "./SampleViewer";
+Rakkas provides an `ErrorBoundary` component for handling errors that occur while rendering or fetching data. It is simply a repackaging of the `ErrorBoundary` component from the [`react-error-boundary`](https://github.com/bvaughn/react-error-boundary) package.
 
-If a layout or page `load` function returns an error or throws, layouts and pages further nested in the hierarchy will not be called and the innermost layout or page that reported itself as an error handler is rendered with an `error` prop passed to its component.
+It's used like this:
 
-Layouts are assumed to be able to handle errors while pages are assumed not to be able to handle them. You can override this by passing true or false in `options.canHandleErrors` to `definePage` or `defineLayout`.
+```tsx
+import { ErrorBoundary } from "rakkasjs";
+import { ComponentThatMayThrow } from "./ComponentThatMayThrow";
 
-404 errors are handled in the same way, as if a page's load function returned an error.
+export default function MyComponent() {
+	return (
+		<ErrorBoundary
+			fallbackRender={({ error, resetErrorBoundary }) => (
+				<div>
+					<h1>An error has occurred</h1>
+					<pre>{error.message}</pre>
+					<button
+						onClick={() => {
+							resetErrorBoundary();
+						}}
+					>
+						Try again
+					</button>
+				</div>
+			)}
+		>
+			<ComponentThatMayThrow />
+		</ErrorBoundary>
+	);
+}
+```
+
+You should be aware that **React doesn't render error boundaries during SSR**. If an error occurs during SSR, React will simply retry to render the page on the client. For this reason, it's probably best not to use exceptions for error handling:
+
+```ts
+// Don't do this if tryToFetchSomeData can throw:
+//   useQuery(() => tryToFetchSomeData());
+
+// Do this instead:
+const { data: result } = useQuery(() => {
+	try {
+		const data = tryToFetchSomeData();
+		return { data };
+	} catch (error) {
+		return { error: error.message };
+	}
+});
+
+if ("error" in result) {
+	// Handle error
+} else {
+	// Use data
+}
+```

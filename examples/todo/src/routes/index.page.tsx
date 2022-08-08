@@ -4,7 +4,7 @@ const HomePage: Page = function HomePage() {
 	return (
 		<main>
 			<h1>Hello world!</h1>
-			<p>Welcome to Rakkas demo page.</p>
+			<p>Welcome to the Rakkas demo page 💃</p>
 			<p>
 				Try editing the files in <code>src/routes</code> to get started or go to
 				the{" "}

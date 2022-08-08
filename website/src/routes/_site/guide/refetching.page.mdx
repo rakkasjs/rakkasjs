@@ -2,40 +2,73 @@
 title: Refetching
 ---
 
-import { SampleViewer } from "./SampleViewer";
-
 `useQuery` and `useServerSideQuery` return a `QueryResult` object. Apart from the `data` property, it also has a `refetch` method that can be used to refetch the data on demand:
 
-import refetchExample from "examples/refetch/index.page.tsx?sample";
+<CodeViewer
+	name="basics"
+	openFiles={["src/routes/refetch/index.page.tsx"]}
+	url="/refetch"
+/>
 
-<SampleViewer url="/examples/refetch" code={refetchExample} />
+`useQuery` and `useServerSideQuery` takes an options argument that controls how and when to cache a query and when to refetch automatically:
 
-- When a page or layout is being rendered on the server side.
-- When client-side navigation causes a page or layout change. Only the `load` functions of the page component and those of the newly mounted layout components will be called. If a layout is shared between the previous and next page, it will stay mounted and won't be reloaded.
-- _Only for pages:_ When the URL path or query string (`url.pathname` and `url.search`) changes. Layouts are not affected.
-- _Only during development:_ When a page or layout module is hot reloaded.
-- When the [locale](/guide/localized-routes) changes.
-
-There are three methods for changing the reloading behavior:
-
-## `getCacheKey` function
-
-You can have a `getCacheKey` function in the object you pass to `definePage` or `defineLayout`. It is passed the same arguments as the `load` function except for `fetch`. Its return value can be anything that can be serialized into JSON. Rakkas will call it every time it has to decide whether to call the `load` function and will only call it if the return value is different than the last time.
-
-For example, you can tell Rakkas to call a page's `load` function only when the URL path changes and not when the query string changes:
-
--- SAMPLE --
-
-## `reload` function
-
-Page and layout components are passed a `reload` prop which you can use to manually force Rakkas to call its `load` function and rerender it:
-
-## `useReload` custom hook
-
-Page and layout components are passed a `useReload` function which is a React custom hook used to force a reload under certain conditions:
-
--- SAMPLE --
-
-## Static site generation
-
-`reload` and `useReload` are no-ops on a statically exported page since its data is supposed to be static anyway.
+```ts
+export interface UseQueryOptions {
+	/**
+	 * Time in milliseconds after which the value will be evicted from the
+	 * cache when there are no subscribers. Use 0 for immediate eviction and
+	 * `Infinity` to disable.
+	 *
+	 * @default 300_000 (5 minutes)
+	 */
+	cacheTime?: number;
+	/**
+	 * Time in milliseconds after which a cached value will be considered
+	 * stale.
+	 *
+	 * @default 100
+	 */
+	staleTime?: number;
+	/**
+	 * Refetch the query when the component is mounted. If set to `true`, a stale
+	 * query will be refetched when the component is mounted. If set to `"always"`,
+	 * the query will be refetched when the component is mounted regardless of
+	 * staleness. `false` disables this behavior.
+	 *
+	 * @default true
+	 */
+	refetchOnMount?: boolean | "always";
+	/**
+	 * Refetch the query when the window gains focus. If set to `true`, the
+	 * query will be refetched on window focus if it is stale. If set to
+	 * `"always"`, the query will be refetched on window focus regardless of
+	 * staleness. `false` disables this behavior.
+	 *
+	 * @default false
+	 */
+	refetchOnWindowFocus?: boolean | "always";
+	/**
+	 * Continuously refetch every `refetchInterval` milliseconds. Set to false
+	 * to disable.
+	 *
+	 * @default false
+	 */
+	refetchInterval?: number | false;
+	/**
+	 * Perform continuous refetching even when the window is in the background.
+	 *
+	 * @default false
+	 */
+	refetchIntervalInBackground?: boolean;
+	/**
+	 * Refetch the query when the internet connection is restored. If set to
+	 * `true`, a stale query will be refetched when the internet connection is
+	 * restored. If set to `"always"`, the query will be refetched when the
+	 * internet connection is restored regardless of staleness. `false` disables
+	 * this behavior.
+	 *
+	 * @default false
+	 */
+	refetchOnReconnect?: boolean | "always";
+}
+```

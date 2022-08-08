@@ -1,7 +1,6 @@
 {
 	"name": "@rakkasjs/code-sample-hello",
-	"title": "Rakkas Hello World Example",
-	"description": "The simplest possible Rakkas example",
+	"description": "Rakkas hello world example",
 	"keywords": [
 		"rakkas",
 		"example",

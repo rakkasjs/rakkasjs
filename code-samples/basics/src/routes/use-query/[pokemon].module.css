@@ -7,6 +7,10 @@
 	text-align: center;
 }
 
+.links {
+	padding: 0;
+}
+
 .links > *:not(:first-child) {
 	margin-left: 1em;
 }
@@ -19,12 +23,15 @@
 	zoom: 2;
 }
 
+.heading {
+	text-align: center;
+}
+
 .stats {
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
 	padding: 0;
-	margin-top: 0;
-	margin-left: -1em;
 }
 
 .stat {

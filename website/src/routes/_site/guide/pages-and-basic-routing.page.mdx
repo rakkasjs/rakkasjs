@@ -1,12 +1,10 @@
 ---
-title: Pages and routing
+title: Pages and basic routing
 ---
 
-import { SampleViewer } from "./SampleViewer";
+In Rakkas, a page is a React component default exported from a module in the `src/routes` directory with a name that matches `*.page.jsx` (or `tsx`).
 
-In Rakkas, a page is a React component default exported from a module in the `src/routes` directory with a name that matches `*.page.jsx` (or `tsx`, or any other extension included in the `pageExtensions` [configuration option](./configuration-options)).
-
-Rakkas has a file system-based router. The file name determines the URL path. The rules are easy:
+Rakkas has a file system-based router. The file name determines the URL path. The rules are as you would expect:
 
 | Module name                       | URL path      |
 | --------------------------------- | ------------- |
@@ -16,30 +14,12 @@ Rakkas has a file system-based router. The file name determines the URL path. Th
 
 This specific naming convention (`<name>.page.{extension}`) allows you to have your helper libraries and components next to your page components without accidentally exposing them as routes.
 
-<CodeViewer name="hello" />
-
 A very simple Rakkas page would look like this:
 
-Rakkas comes with a `Head` component for managing head tags like `title`. It is, in fact, simply `Helmet` from [`react-helmet-async`](https://github.com/staylor/react-helmet-async#readme) bundled and re-exported. Check their documentation for usage examples.
+<CodeViewer name="basics" />
 
-## Dynamic routes
+## Fast refresh
 
-Often you need to encode parameters in the URL path like `/post/1`, `/post/2` etc. Dynamic routes like this are handled using square brackets (`[]`). If you have a file named `/src/routes/profile/[userName].page.jsx`, for instance, and you visit `/profile/fatih`, your page component will receive `{ userName: "fatih" }` in `props.params` like in the example below.
+Rakkas supports Fast Refresh which allows you to edit your components and get immediate feedback for your changes without having to reload the page. Function components will be updated without losing their state (class components will lose their state). If you open one the examples above in CodeSandbox and edit a file, the changes will be instantly reflected in the preview.
 
-> Go ahead and click on the links, they won't take you away from this page.
-
-import paramsExample from "examples/params/[userName].page.jsx?sample";
-
-<SampleViewer
-	filename="[userName].page.jsx"
-	code={paramsExample}
-	url="/examples/params/Fatih"
-/>
-
-You can use more than one dynamic parameter like `/user/[userName]/posts/[postId]`. You can even put multiple parameters in a single path segment like `/user-[name]-[surname]/contact-info` (matches `/user-fatih-aygun/contact-info` with `params: { name: "fatih", surname: "aygun" }` for instance).
-
-More specific routes have priority over generic ones, so you can have both `/products/list` for a specific match and `/products/[productId]` as a catch-all route.
-
-### Spread parameters
-
-You can use the `[...paramName]` syntax to match more than one segment at the end of a route. For instance, `/path/[...rest]` will match `/path/aaa/bbb/ccc/` with `params: { rest: "/aaa/bbb/ccc" }`, `/path` with `params: { rest: "" }`, and `/path/` with `params: { rest: "/" }`.
+Fast Refresh only works on files that only export React components. Exporting any other value will fall back to a full reload. Exporting types is OK.

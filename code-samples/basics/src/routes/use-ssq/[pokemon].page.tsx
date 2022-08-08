@@ -1,5 +1,5 @@
 import { Head, PageProps, StyledLink, useServerSideQuery } from "rakkasjs";
-import css from "./[pokemon].module.css";
+import css from "../use-query/[pokemon].module.css";
 import db from "./db";
 
 // Types for the dynamic route params
@@ -25,26 +25,16 @@ export default function PokemonStatsPage(props: PageProps<Params>) {
 
 	return (
 		<div className={css.wrapper}>
-			<Head title="useServerSideQuery Example - Rakkas" />
 			<div className={css.title}>
 				<nav>
 					<ul className={css.links}>
-						<StyledLink
-							href="/examples/use-ssq/pikachu"
-							activeClass={css.activeLink}
-						>
+						<StyledLink href="/use-ssq/pikachu" activeClass={css.activeLink}>
 							Pikachu
 						</StyledLink>
-						<StyledLink
-							href="/examples/use-ssq/charizard"
-							activeClass={css.activeLink}
-						>
+						<StyledLink href="/use-ssq/charizard" activeClass={css.activeLink}>
 							Charizard
 						</StyledLink>
-						<StyledLink
-							href="/examples/use-ssq/onix"
-							activeClass={css.activeLink}
-						>
+						<StyledLink href="/use-ssq/onix" activeClass={css.activeLink}>
 							Onix
 						</StyledLink>
 					</ul>
@@ -59,7 +49,7 @@ export default function PokemonStatsPage(props: PageProps<Params>) {
 				</p>
 			</div>
 
-			<h3>Stats</h3>
+			<h3 className={css.heading}>Stats</h3>
 			<ul className={css.stats}>
 				{query.data.stats.map((s) => (
 					<li className={css.stat} key={s.stat.name}>

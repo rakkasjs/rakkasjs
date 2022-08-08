@@ -20,8 +20,8 @@ const sections: Array<[section: string, slugs: string[]]> = [
 		[
 			// Slugs
 			"pages-and-basic-routing",
+			"dynamic-routes",
 			"client-side-navigation",
-			"fast-refresh",
 			"layouts",
 			"static-assets",
 		],
@@ -35,7 +35,17 @@ const sections: Array<[section: string, slugs: string[]]> = [
 			"use-server-side-query",
 			"refetching",
 			"error-handling",
-			"preload-function",
+		],
+	],
+	[
+		// Section
+		"Data mutations",
+		[
+			// Slugs
+			"using-forms",
+			"use-submit",
+			"use-mutation",
+			"use-ssm",
 		],
 	],
 	[

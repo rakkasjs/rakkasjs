@@ -45,6 +45,7 @@ type Route = [pattern: string, ...rest: unknown[]];
 export function sortRoutes<R extends Route>(routes: R[]) {
 	const processedRoutes1 = routes.map((route) => ({
 		original: route,
+		dynamicCount: route[0].match(/\[/g)?.length || 0,
 		isRest: !!route[0].match(/\/\[\.\.\.([a-zA-Z_][a-zA-Z0-9_]*)\]$/),
 		segments: route[0]
 			.split("/")
@@ -61,6 +62,10 @@ export function sortRoutes<R extends Route>(routes: R[]) {
 		if (restDiff !== 0) {
 			return restDiff;
 		}
+
+		// Fewer routes first
+		const dynamicOrder = a.dynamicCount - b.dynamicCount;
+		if (dynamicOrder) return dynamicOrder;
 
 		const aSegments = a.segments;
 		const bSegments = b.segments;

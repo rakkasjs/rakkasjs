@@ -1,4 +1,4 @@
-import { ClientSuspense, useQuery, useQueryClient } from "rakkasjs";
+import { ClientSuspense, useQuery } from "rakkasjs";
 
 export interface CodeViewerProps {
 	name: string;
@@ -6,6 +6,7 @@ export interface CodeViewerProps {
 	description: string;
 	files: Record<string, string>;
 	openFiles?: string[];
+	url?: string;
 }
 
 export default function CodeViewer(props: CodeViewerProps) {
@@ -44,29 +45,13 @@ export default function CodeViewer(props: CodeViewerProps) {
 }
 
 function CodeViewerInner(props: CodeViewerProps) {
-	const { data: viewer } = useQuery("code-viewer-preference", () => {
-		try {
-			const viewer = localStorage.getItem("code-viewer-preference");
-			return viewer === "stackblitz" ? "stackblitz" : "codesandbox";
-		} catch {
-			return "codesandbox";
-		}
-	});
-
 	const { data: element } = useQuery(
-		`code-viewer-${props.name}-${viewer}`,
+		`code-viewer-${props.name}:${JSON.stringify(props.openFiles)}`,
 		async () => {
-			if (viewer === "stackblitz") {
-				const { default: Viewer } = await import("./StackBlitzViewer");
-				return <Viewer {...props} />;
-			} else {
-				const { default: Viewer } = await import("./CodeSandboxViewer");
-				return <Viewer {...props} />;
-			}
+			const { default: Viewer } = await import("./CodeSandboxViewer");
+			return <Viewer {...props} />;
 		},
 	);
-
-	const client = useQueryClient();
 
 	return (
 		<div
@@ -92,26 +77,6 @@ function CodeViewerInner(props: CodeViewerProps) {
 					}}
 				>
 					{element}
-				</div>
-				<div
-					style={{
-						width: "100%",
-						maxWidth: "80rem",
-						textAlign: "right",
-					}}
-				>
-					<button
-						type="button"
-						onClick={() => {
-							localStorage.setItem(
-								"code-viewer-preference",
-								viewer === "stackblitz" ? "codeSandbox" : "stackblitz",
-							);
-							client.invalidateQueries((key) => key.startsWith("code-viewer-"));
-						}}
-					>
-						Switch to {viewer === "stackblitz" ? "CodeSandbox" : "StackBlitz"}
-					</button>
 				</div>
 			</div>
 		</div>
