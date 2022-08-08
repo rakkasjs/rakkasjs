@@ -156,7 +156,7 @@ export const runServerSideMutation: <T>(
  * @param fn The function to run on the server
  * @param options Options for the mutation
  */
-export const useServerSideMutation: <T, V>(
+export const useServerSideMutation: <T, V = void>(
 	fn: (context: RequestContext, vars: V) => T | Promise<T>,
 	options?: UseMutationOptions<T, V>,
 ) => UseMutationResult<T, V> = useSSMImpl as any;

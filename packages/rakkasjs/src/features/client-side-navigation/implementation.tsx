@@ -13,7 +13,7 @@ import React, {
 	startTransition,
 	FormEvent,
 } from "react";
-import { ActionResult, useMutation } from "../../lib";
+import { ActionResult, useMutation, UseMutationOptions } from "../../lib";
 
 let lastRenderedId: string;
 let navigationPromise: Promise<void> | undefined;
@@ -395,7 +395,7 @@ function shouldHandleClick(e: MouseEventLike): boolean {
 }
 
 // TODO: Where does this belong?
-export function useSubmit() {
+export function useSubmit(options?: UseMutationOptions<void, HTMLFormElement>) {
 	const { current } = useLocation();
 
 	const mutation = useMutation(async (form: HTMLFormElement) => {
@@ -419,7 +419,7 @@ export function useSubmit() {
 		} else {
 			await navigate(current, { replace: true, actionData: value.data });
 		}
-	});
+	}, options);
 
 	function submitHandler(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();

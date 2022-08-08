@@ -96,7 +96,7 @@ export const runServerSideMutation: <T>(
 	throw new Error("runServerSideMutation is not available on the server-side");
 };
 
-export const useServerSideMutation: <T, V>(
+export const useServerSideMutation: <T, V = void>(
 	fn: (context: RequestContext, vars: V) => T | Promise<T>,
 	options?: UseMutationOptions<T, V>,
 ) => UseMutationResult<T, V> = (() => {
