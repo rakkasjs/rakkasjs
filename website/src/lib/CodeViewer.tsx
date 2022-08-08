@@ -4,7 +4,7 @@ export interface CodeViewerProps {
 	name: string;
 	title: string;
 	description: string;
-	files: Record<string, string>;
+	files?: Record<string, string>;
 	openFiles?: string[];
 	url?: string;
 }

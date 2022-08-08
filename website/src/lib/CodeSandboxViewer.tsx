@@ -13,8 +13,14 @@ export default function CodeSandboxViewer(props: CodeViewerProps) {
 function CodeSandbox(props: CodeViewerProps) {
 	const { data: sandbox } = useQuery(
 		`code-sample-${props.name}:${JSON.stringify(props.openFiles)}`,
-		() =>
-			fetch("https://codesandbox.io/api/v1/sandboxes/define?json=1", {
+		() => {
+			if (!props.files) {
+				return {
+					sandbox_id: `github/rakkasjs/rakkasjs/tree/next/examples/${props.name}`,
+				};
+			}
+
+			return fetch("https://codesandbox.io/api/v1/sandboxes/define?json=1", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -24,14 +30,15 @@ function CodeSandbox(props: CodeViewerProps) {
 					files: Object.fromEntries(
 						Object.keys(props.files).map((x) => [
 							x.slice(`../../../../../examples/${props.name}/`.length),
-							{ content: props.files[x] },
+							{ content: props.files![x] },
 						]),
 					),
 					template: "node",
 					title: props.title,
 					description: props.description,
 				}),
-			}).then((x) => x.json()),
+			}).then((x) => x.json());
+		},
 	);
 
 	return (

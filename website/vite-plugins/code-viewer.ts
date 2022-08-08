@@ -1,6 +1,8 @@
 import { PluginOption } from "vite";
 import path from "path";
 
+const FROM_REPO = true;
+
 export default function frontmatterLoader(): PluginOption {
 	let root: string;
 
@@ -22,16 +24,22 @@ export default function frontmatterLoader(): PluginOption {
 			const output = code.replace(
 				/<CodeViewer\s+name="([a-zA-Z0-9_-]+)"/g,
 				(_: string, name) => {
-					const pattern = path.relative(
-						path.dirname(url.pathname),
-						path.join(root, "../examples", name + "/**/*"),
-					);
+					let code: string;
 
-					let code = `<CodeViewer name=${JSON.stringify(
-						name,
-					)} files={import.meta.glob(${JSON.stringify(
-						pattern,
-					)}, { as: "raw", eager: true })}`;
+					if (FROM_REPO) {
+						code = `<CodeViewer name=${JSON.stringify(name)}`;
+					} else {
+						const pattern = path.relative(
+							path.dirname(url.pathname),
+							path.join(root, "../examples", name + "/**/*"),
+						);
+
+						code = `<CodeViewer name=${JSON.stringify(
+							name,
+						)} files={import.meta.glob(${JSON.stringify(
+							pattern,
+						)}, { as: "raw", eager: true })}`;
+					}
 
 					if (!importInjected) {
 						code = "import CodeViewer from 'lib/CodeViewer';\n\n" + code;
