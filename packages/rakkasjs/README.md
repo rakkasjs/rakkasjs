@@ -11,7 +11,7 @@ Lightning fast [Next.js](https://nextjs.org) alternative powered by [Vite](https
 [![Vite](https://badges.aleen42.com/src/vitejs.svg)](https://vitejs.dev)
 [![Tweet about Rakkas](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs)](https://twitter.com/intent/tweet?text=I%20gave%20%23RakkasJS%20a%20try!&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs)
 
-[Read the guide](https://rakkasjs.org/guide) | [Try on CodeSandbox](https://codesandbox.io/s/github/rakkasjs/rakkasjs/tree/next/examples/todo?file=/src/routes/index.page.tsx) | [Try on StackBlitz](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/next/examples/todo?file=src%2Froutes%2Findex.page.tsx)
+[Read the guide](https://rakkasjs.org/guide) | [Try on CodeSandbox](https://codesandbox.io/s/github/rakkasjs/rakkasjs/tree/main/examples/todo?file=/src/routes/index.page.tsx) | [Try on StackBlitz](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/main/examples/todo?file=src%2Froutes%2Findex.page.tsx)
 
 </div>
 
@@ -42,8 +42,8 @@ Important features are:
 
 > 🚀 See Rakkas in action in your browser:
 >
-> - [CodeSandbox](https://codesandbox.io/s/github/rakkasjs/rakkasjs/tree/next/examples/todo?file=/src/routes/index.page.tsx)
-> - [StackBlitz](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/next/examples/todo?file=src%2Froutes%2Findex.page.tsx)
+> - [CodeSandbox](https://codesandbox.io/s/github/rakkasjs/rakkasjs/tree/main/examples/todo?file=/src/routes/index.page.tsx)
+> - [StackBlitz](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/main/examples/todo?file=src%2Froutes%2Findex.page.tsx)
 
 To generate a Rakkas application boilerplate use one of the following commands:
 

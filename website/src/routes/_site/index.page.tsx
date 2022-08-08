@@ -31,7 +31,7 @@ function HomePage() {
 
 				<p>
 					<a
-						href="https://codesandbox.io/s/github/rakkasjs/rakkasjs/tree/next/examples/todo?file=/src/routes/index.page.tsx"
+						href="https://codesandbox.io/s/github/rakkasjs/rakkasjs/tree/main/examples/todo?file=/src/routes/index.page.tsx"
 						target="_blank"
 						rel="noreferrer"
 						style={{ marginRight: "2rem" }}
@@ -40,7 +40,7 @@ function HomePage() {
 						<ExternalIcon />
 					</a>
 					<a
-						href="https://stackblitz.com/github/rakkasjs/rakkasjs/tree/next/examples/todo?file=src%2Froutes%2Findex.page.tsx"
+						href="https://stackblitz.com/github/rakkasjs/rakkasjs/tree/main/examples/todo?file=src%2Froutes%2Findex.page.tsx"
 						target="_blank"
 						rel="noreferrer"
 					>

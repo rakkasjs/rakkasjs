@@ -16,7 +16,7 @@ function CodeSandbox(props: CodeViewerProps) {
 		() => {
 			if (!props.files) {
 				return {
-					sandbox_id: `github/rakkasjs/rakkasjs/tree/next/examples/${props.name}`,
+					sandbox_id: `github/rakkasjs/rakkasjs/tree/main/examples/${props.name}`,
 				};
 			}
 
