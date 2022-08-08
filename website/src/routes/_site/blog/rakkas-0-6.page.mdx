@@ -5,7 +5,7 @@ date: 2022-07-04
 
 {/* TODO: Fix date */}
 
-💃 [Rakkas](https://github.com/rakkasjs/rakkasjs), the lightning-fast React framework powered by [Vite](https://vitejs.dev), has just released version 0.6.0. First release since December, this is the largest and least backwards compatible update so far. But we believe the quantity and the quality of the new features justify the number of breaking changes. Read on and see if you agree.
+💃 [Rakkas](https://github.com/rakkasjs/rakkasjs), the bleeding edge React framework powered by [Vite](https://vitejs.dev), has just released version 0.6.0. First release since December, this is the largest and least backward compatible update so far. But we believe the quantity and the quality of the new features justify the number of breaking changes. See if you agree.
 
 ## React 18
 
@@ -50,7 +50,7 @@ export default function UserCard(props) {
 }
 ```
 
-This isn't a page, just an ordinary React component that you can use in many pages. In Rakkas 0.6 pages aren't very special in terms of data fetching anymore. Just like `getServerSideProps`, the function passed to `useServerSideQuery` (`useSSQ` for short) always runs on the server: On the client, a request is sent to the server instead of calling the function directly. Rakkas performs a code transform similar to Next's to strip the function and its imports from the client bundle.
+This isn't a page, just an ordinary React component that you can use on many pages. In Rakkas 0.6 pages aren't very special in terms of data fetching anymore. Just like `getServerSideProps`, the function passed to `useServerSideQuery` (`useSSQ` for short) always runs on the server: On the client, a request is sent to the server instead of calling the function directly. Rakkas performs a code transform similar to Next's to strip the function and its imports from the client bundle.
 
 `useSSQ`'s return type is inferred, so, if you're using TypeScript, you get IDE completion just like you would with a local function call. Another nice feature is that, unlike other similar data fetching hooks, `useSSQ` doesn't return loading or error states. Those are handled higher up in the component tree, with Suspense fallbacks and error boundaries respectively. This way, your component code stays clean and focused.
 
@@ -66,7 +66,7 @@ const result = useServerSideQuery(() =>
 
 This works because the `fetch` call inside `useServerSideQuery` runs on the server-side (Rakkas makes `fetch` globally available on all deployment targets) and, as such, is not affected by CORS restrictions. In effect, it creates an ad-hoc CORS proxy.
 
-Paired with its sibling `useServerSideMutation` (and lower level `runServerSideQuery` and `runServerSideMutation`), `useSSQ` lets you write code as if the server-client barrier didn't exist. But of course API routes are still available to allow you to implement REST, GraphQL, RPC etc. endpoints that you can access via `useQuery` and `useMutation` or other methods if you prefer to stick with traditional data fetching.
+Paired with Remix-inspired action handlers or `useServerSideMutation`, `useSSQ` lets you write code as if the server-client barrier didn't exist. But, of course, API routes are still available to allow you to implement REST, GraphQL, RPC etc. endpoints that you can access via `useQuery` and `useMutation` or other methods if you prefer to stick with traditional data fetching.
 
 ### Avoiding waterfalls
 
@@ -78,13 +78,11 @@ Rakkas 0.6 is now built on [HatTip](https://github.com/hattipjs/hattip), an HTTP
 
 HatTip also makes it possible to integrate with **Express** or other Connect-compatible Node.js server frameworks: Now you can use Express middleware and routes in your Rakkas app or build your app as an Express middleware to be used in other Express apps.
 
-The new **route guards** feature allows you to do things like making some routes available to logged in users only. **Catch-all routes** and better **404 handling** are also among the new features.
-
-Rakkas 0.6 also comes with out-of-the-box support for [MDX](https://mdxjs.com/).
+The new **route guards** feature allows you to do things like making some routes available to logged-in users only. **Catch-all routes** and better **404 handling** are also among the new features.
 
 ## Conclusion
 
-If this is the first time you hear of Rakkas, it has other cool features like lightning-fast development server (courtesy of Vite), file system routing, truly localizable URLs, nested layouts, static site generation, and more.
+If this is the first time you hear of Rakkas, it has other cool features like a lightning-fast development server (courtesy of Vite), file system routing, nested layouts, static site generation, and more.
 
 Rakkas uses experimental and/or beta features of React and Vite. As such, expect breaking changes until we hit 1.0. But [go ahead and give it a try](https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx) and share your thoughts. [Star us on Github](https://github.com/rakkasjs/rakkasjs/stargazers), [join our Discord server](https://rakkasjs.org/chat), and [follow me on Twitter](https://twitter.com/cyco130) for updates.
 

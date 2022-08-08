@@ -110,7 +110,6 @@ const sections: Array<[section: string, slugs: string[]]> = [
 		[
 			// Slugs
 			"integrations",
-			"feature-comparison",
 			"migration-guide",
 			"credits",
 		],

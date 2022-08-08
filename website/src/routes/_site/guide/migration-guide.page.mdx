@@ -17,18 +17,14 @@ title: Migration guide
 - Use `useLocation` instead of `useRouter` and other navigation hooks.
 - `definePage` and `defineLayout` don't exist anymore. Replace them with (depending on the use case)
   - Plain components
-  - `useQuery` calls
-  - `preload` functions
-  - `Redirect` or `ResponseHeaders` components
+  - [`useQuery`](/guide/use-query) calls
+  - [`preload`](/guide/preload-function) functions
+  - [`headers`](/guide/status-and-headers) functions
 - Use plain React context instead of the old layout context mechanism.
 - Use the `Head` component from `rakkasjs` instead of `Helmet` from `react-helmet-async`.
-- Consider using `useServerSideQuery`, `useServerSideMutation`, and page `action` functions instead of API routes for data fetching.
+- Consider using [`useServerSideQuery`](/guide/use-server-side-query) and [action handlers](/guide/using-forms) instead of API routes for data fetching.
 - Rename your `*.endpoint.{js,ts}` files as `*.api.{js,ts}` and `endpoint.{js,ts}` as `index.api.{js,ts}`.
 - Use standard `Request` and `Response` types instead of `RakkasRequest` and `RakkasResponse` in your API routes and middleware.
-- TODO: add `rakkas dev` command.
-- TODO: document new cloud adapters.
-- TODO: document new static adapter.
-- TODO: document `rakkas.config.js` to `vite.config.js` migration.
 
 ## 0.4 to 0.5
 

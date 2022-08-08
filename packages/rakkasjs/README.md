@@ -11,61 +11,72 @@ Lightning fast [Next.js](https://nextjs.org) alternative powered by [Vite](https
 [![Vite](https://badges.aleen42.com/src/vitejs.svg)](https://vitejs.dev)
 [![Tweet about Rakkas](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs)](https://twitter.com/intent/tweet?text=I%20gave%20%23RakkasJS%20a%20try!&url=https%3A%2F%2Fgithub.com%2Frakkasjs%2Frakkasjs)
 
-[Read the guide](https://rakkasjs.org/guide) | [Try it in the browser](https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx)
+[Read the guide](https://rakkasjs.org/guide) | [Try on CodeSandbox](https://codesandbox.io/s/github/rakkasjs/rakkasjs/tree/next/examples/todo?file=/src/routes/index.page.tsx) | [Try on StackBlitz](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/next/examples/todo?file=src%2Froutes%2Findex.page.tsx)
 
 </div>
 
 ---
 
-## What is Rakkas?
+**Rakkas** is a bleeding-edge full-stack [React](https://reactjs.org) framework powered by [Vite](https://vitejs.dev). You can consider it an up-and-coming alternative to [Next.js](https://nextjs.org), [Remix](https://remix.run/), or [Gatsby](https://www.gatsbyjs.com/).
 
-**Rakkas** is a web framework powered by [React](https://reactjs.org) and [Vite](https://vitejs.dev) that aims to have a developer experience similar to [Next.js](https://nextjs.org). Many of its features are also inspired by [Svelte Kit](https://kit.svelte.dev). Important features are:
+- [Chat on Discord](https://rakkasjs.org/chat)
+- [Follow on Twitter](https://twitter.com/cyco130)
 
-- ⚡&nbsp; Lightning fast development
-- 🖥️&nbsp; Hassle free server-side rendering
-- 🚀&nbsp; Support for deploying on serverless environments
+Important features are:
+
+- ⚡&nbsp; Lightning fast development server
+- 🖥️&nbsp; Streaming SSR with Suspense
+- 🔀&nbsp; Dynamic rendering (full static pages for bots, streaming for browsers)
+- ⬇️&nbsp; API-less data fetching system
+- 🚀&nbsp; Support for serverless and worker environments
 - 📄&nbsp; Static site generation
-- 🇺🇳&nbsp; Localizable URLs
-- 🔀&nbsp; Rendering modes (pre-rendering, server-side, client-side)
-- ☸️&nbsp; SPA-style client-side navigation
-- 📁&nbsp; Intuitive file system-based routing
-- ⬇️&nbsp; Simple but effective data fetching system
-- ⚙️&nbsp; API routes to build and organize your backend
-
-See the [feature comparison with Next.js](https://rakkasjs.org/guide/feature-comparison) for other supported and planned features.
+- 📁&nbsp; Flexible file system router
+- ⚙️&nbsp; API routes with middleware support
 
 ## Is Rakkas right for you?
 
-- Although many features have been implemented, Rakkas is still in development. There _will_ be breaking changes until we hit 1.0. As such, it's **not yet ready for production use**. If you need a stable React framework try Next.js or [Gatsby](https://www.gatsbyjs.com/).
-- Rakkas doesn't aim compatibility with Next.js. Check out [Vitext](https://github.com/Aslemammad/vitext) if you want to port a Next.js application to Vite.
-- Rakkas is somewhat opinionated. If you need more flexibility try [vite-ssr-plugin](https://vite-plugin-ssr.com/).
+- Although many features have been implemented, Rakkas is still under heavy development. It uses **experimental and/or beta features** of React and Vite. Minor releases will introduce breaking changes until we hit 1.0. As such, it's **not yet ready for production use**. If you need a stable React framework try Next.js, Remix, or Gatsby.
+- Rakkas is fairly opinionated. If you need more flexibility try [vite-ssr-plugin](https://vite-plugin-ssr.com/).
 
 ## Getting started
 
-> 🚀 You can now **try Rakkas online, right in your browser**!
+> 🚀 See Rakkas in action in your browser:
 >
-> - [Rakkas **TypeScript** demo app on StackBlitz](https://stackblitz.com/edit/rakkas-demo-ts?file=src%2Fpages%2Fpage.tsx)
-> - [Rakkas **JavaScript** demo app on StackBlitz](https://stackblitz.com/edit/rakkas-demo?file=src%2Fpages%2Fpage.jsx)
+> - [CodeSandbox](https://codesandbox.io/s/github/rakkasjs/rakkasjs/tree/next/examples/todo?file=/src/routes/index.page.tsx)
+> - [StackBlitz](https://stackblitz.com/github/rakkasjs/rakkasjs/tree/next/examples/todo?file=src%2Froutes%2Findex.page.tsx)
 
-The easiest way to try Rakkas out on your computer is to use the project initializer:
+To generate a Rakkas application boilerplate use one of the following commands:
 
 ```bash
-# Create the project directory
-mkdir my-app && cd my-app
-# Scaffold the demo app: Follow the prompts for the rest
-npx create-rakkas-app@latest
+npx create-rakkas-app@latest my-rakkas-app
+# or
+pnpm create rakkas-app my-rakkas-app
+# or
+yarn create rakkas-app my-rakkas-app
 ```
 
-`create-rakkas-app` project initializer comes with many features, all off which are optional but we strongly recommend enabling TypeScript and the generation of a demo project on your first try because self-documenting type definitions allow for a smoother learning curve and the demo project source code comes with plenty of comments. You may not need this guide!
+`create-rakkas-app` project initializer comes with many features, all of which are optional but we strongly recommend enabling TypeScript and the generation of a demo project on your first try because self-documenting type definitions allow for a smoother learning curve and the demo project source code comes with plenty of comments.
 
-> 👷 If you prefer a manual setup, you can install `rakkasjs`, `react`, `react-dom`, and `react-helmet-async` as production dependencies, and `@rakkasjs/cli` as a dev dependency:
+> 👷 If you prefer a manual setup, you can install the following packages:
 >
 > ```bash
-> npm install --save rakkasjs react react-dom react-helmet-async
-> npm install --save-dev @rakkasjs/cli
+> npm install --save react react-dom
+> npm install --save-dev vite rakkasjs
 > ```
 >
-> Then you can start a development server on `localhost:3000` with `npx rakkas dev`, build with `npx rakkas build`, and launch with `node dist/server`.
+> Then create a `src/routes/index.page.jsx` file like this:
+>
+> ```jsx
+> export default function HomePage() {
+> 	return <h1>Hello world!</h1>;
+> }
+> ```
+>
+> Now you can:
+>
+> - Start a development server with `npx rakkas`
+> - Build with `npx rakkas build`
+> - Launch with `node dist/server`
 
 ## Credits
 
@@ -78,6 +89,33 @@ npx create-rakkas-app@latest
   - [`react-error-boundary`](https://github.com/bvaughn/react-error-boundary) by Brian Vaughn (not affiliated), used under [MIT License](./react-error-boundary-license.txt)
 
 ## Version history
+
+## 0.6.0
+
+- React 18
+  - Concurrent mode
+  - Streaming SSR
+  - Suspense for data fetching
+- Vite 3
+  - ESM SSR build (`"type": "module"`)
+  - Improved cold start
+- Brand new data fetching system
+  - `react-query`-inspired `useQuery` and `useMutation`
+  - Remix-inspired action handlers
+  - API-less data fetching with `useServerSideQuery`
+  - Waterfall-free `preload` functions
+  - Remix-inspired form action handlers
+- HatTip
+  - HTTP handling based on web standards
+  - Adapters for Vercel Edge, Netlify Edge, and Deno/Deno Deploy
+  - Express integration
+- Routing improvements
+  - Route guards
+  - Catch-all routes
+  - Simpler 404 handling
+- Miscellaneous
+  - Response headers customization
+  - Shared ESLint configuration
 
 ## 0.5.0
 
