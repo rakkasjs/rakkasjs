@@ -1,4 +1,5 @@
 import { ClientSuspense, useQuery } from "rakkasjs";
+import css from "./CodeViewer.module.css";
 
 export interface CodeViewerProps {
 	name: string;
@@ -13,28 +14,9 @@ export default function CodeViewer(props: CodeViewerProps) {
 	return (
 		<ClientSuspense
 			fallback={
-				<div
-					style={{
-						width: "calc(100vw - 24rem)",
-						margin: "2rem 0 2rem calc(-50vw + 12rem + 50%)",
-					}}
-				>
-					<div
-						style={{
-							display: "flex",
-							flexDirection: "column",
-							alignItems: "center",
-						}}
-					>
-						<div
-							style={{
-								border: "1px solid #ccc",
-								width: "100%",
-								maxWidth: "80rem",
-								backgroundColor: "#eee",
-								height: 600,
-							}}
-						/>
+				<div className={css.main}>
+					<div className={css.second}>
+						<div className={css.third} />
 					</div>
 				</div>
 			}
@@ -54,30 +36,9 @@ function CodeViewerInner(props: CodeViewerProps) {
 	);
 
 	return (
-		<div
-			style={{
-				width: "calc(100vw - 24rem)",
-				margin: "2rem 0 2rem calc(-50vw + 12rem + 50%)",
-			}}
-		>
-			<div
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					alignItems: "center",
-				}}
-			>
-				<div
-					style={{
-						border: "1px solid #ccc",
-						width: "100%",
-						maxWidth: "80rem",
-						backgroundColor: "#eee",
-						height: 600,
-					}}
-				>
-					{element}
-				</div>
+		<div className={css.main}>
+			<div className={css.second}>
+				<div className={css.third}>{element}</div>
 			</div>
 		</div>
 	);

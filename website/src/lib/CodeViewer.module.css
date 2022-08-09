@@ -1,0 +1,25 @@
+.main {
+	width: calc(100%);
+	margin: 2rem 0;
+}
+
+.second {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.third {
+	border: 1px solid #ccc;
+	width: 100%;
+	max-width: 80rem;
+	background-color: #eee;
+	height: 600px;
+}
+
+@media (min-width: 900px) {
+	.main {
+		width: calc(100vw - 24rem);
+		margin: 2rem 0 2rem calc(-50vw + 12rem + 50%);
+	}
+}
