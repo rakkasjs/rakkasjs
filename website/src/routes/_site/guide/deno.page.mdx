@@ -2,7 +2,13 @@
 title: Deno
 ---
 
-Rakkas projects can be built to run on [Deno](https://deno.land/) and can be deployed to [Deno Deploy](https://deno.com/deploy). To do that, first, you should set the `adapter` option of Rakkas Vite plugin to `"deno"` or:
+Rakkas projects can be built to run on [Deno](https://deno.land/) and can be deployed to [Deno Deploy](https://deno.com/deploy). First, you should install the suitable HatTip adapter:
+
+```bash
+npm install -S @hattip/adapter-deno
+```
+
+Then you should set the `adapter` option of Rakkas Vite plugin to `"deno"`:
 
 ```ts
 import { defineConfig } from "vite";
@@ -17,7 +23,7 @@ export default defineConfig({
 });
 ```
 
-After building with `rakkas build`, you can run with `deno run --allow-read --allow-net --allow-env dist/deno/index.js` or deploy with `deployctl deploy --token <TOKEN> --project=<PROJECT> index.js` (replace `<TOKEN>` and `<PROJECT>` with your own).
+After building with `rakkas build`, you can run with `deno run --allow-read --allow-net --allow-env dist/deno/index.js` or deploy with `cd dist/deno && deployctl deploy --token <TOKEN> --project=<PROJECT> index.js` (replace `<TOKEN>` and `<PROJECT>` with your own).
 
 ## Deno-specific APIs
 

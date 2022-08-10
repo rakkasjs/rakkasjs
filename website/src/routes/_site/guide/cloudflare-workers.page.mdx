@@ -2,7 +2,13 @@
 title: Cloudflare Workers
 ---
 
-Rakkas projects can be deployed to Cloudflare Workers. To do that, first, you should set the `adapter` option of Rakkas Vite plugin to `"cloudflare-workers"`:
+Rakkas projects can be deployed to Cloudflare Workers. First, you should install the suitable HatTip adapter:
+
+```bash
+npm install -S @hattip/adapter-cloudflare-workers
+```
+
+Then you should set the `adapter` option of Rakkas Vite plugin to `"cloudflare-workers"`:
 
 ```ts
 import { defineConfig } from "vite";
@@ -33,7 +39,7 @@ workers_dev = true
 bucket = "./dist/client"
 ```
 
-After building with `rakkas build`, you can publish your project with `wrangler publish`. You can also test locally with `miniflare --modules dist/cloudflare-workers-bundle/index.js`.
+After building with `rakkas build`, you can publish your project with `wrangler publish`. You can also test locally with `miniflare --modules dist/server/cloudflare-workers-bundle.js`.
 
 ## Cloudflare Workers-specific APIs
 

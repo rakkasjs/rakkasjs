@@ -2,7 +2,13 @@
 title: Vercel
 ---
 
-Rakkas projects can be deployed to [Vercel Serverless Functions](https://vercel.com/docs/concepts/functions/serverless-functions) or [Vercel Edge Functions](https://vercel.com/docs/concepts/functions/edge-functions). To do that, first, you should set the `adapter` option of Rakkas Vite plugin to `"vercel"` or `"vercel-edge"`:
+Rakkas projects can be deployed to [Vercel Serverless Functions](https://vercel.com/docs/concepts/functions/serverless-functions) or [Vercel Edge Functions](https://vercel.com/docs/concepts/functions/edge-functions). For Vercel-edge, you should install the suitable HatTip adapter first:
+
+```bash
+npm install -S @hattip/vercel-edge
+```
+
+Serverless functions don't require any additional packages. Then you should set the `adapter` option of Rakkas Vite plugin to `"vercel"` or `"vercel-edge"`:
 
 ```ts
 import { defineConfig } from "vite";

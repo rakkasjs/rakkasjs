@@ -4,7 +4,13 @@ title: Netlify
 
 > Netlify Edge Functions is currently an experimental technology.
 
-Rakkas projects can be deployed to [Netlify Functions](https://www.netlify.com/products/functions/) or [Netlify Edge Functions](https://docs.netlify.com/netlify-labs/experimental-features/edge-functions/). To do that, first, you should set the `adapter` option of Rakkas Vite plugin to `"netlify"` or `"netlify-edge"`:
+Rakkas projects can be deployed to [Netlify Functions](https://www.netlify.com/products/functions/) or [Netlify Edge Functions](https://docs.netlify.com/netlify-labs/experimental-features/edge-functions/). First, you should install the suitable HatTip adapter:
+
+```bash
+npm install -S @hattip/adapter-netlify # or @hattip/adapter-netlify-edge
+```
+
+Then you should set the `adapter` option of Rakkas Vite plugin to `"netlify"` or `"netlify-edge"`:
 
 ```ts
 import { defineConfig } from "vite";
