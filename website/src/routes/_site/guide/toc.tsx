@@ -23,6 +23,7 @@ const sections: Array<[section: string, slugs: string[]]> = [
 			"dynamic-routes",
 			"client-side-navigation",
 			"layouts",
+			"styling",
 			"static-assets",
 		],
 	],
