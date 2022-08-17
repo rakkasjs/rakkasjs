@@ -12,4 +12,8 @@ export default defineConfig({
 			},
 		}),
 	],
+	ssr: {
+		// This is required to fix ESM/CJS incompatibilities
+		noExternal: ["@emotion/styled"],
+	},
 });
