@@ -259,6 +259,10 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		if (dev) {
 			test("hot reloads page", async () => {
 				await page.goto(host + "/");
+
+				// Wait a little (for some reason Windows requires this)
+				await new Promise((resolve) => setTimeout(resolve, 1_000));
+
 				await page.waitForSelector(".hydrated");
 
 				const button: ElementHandle<HTMLButtonElement> | null =
@@ -271,11 +275,11 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				);
 
 				const filePath = path.resolve(__dirname, "src/routes/index.page.tsx");
+
 				const oldContent = await fs.promises.readFile(filePath, "utf8");
 				const newContent = oldContent.replace("Hello world!", "Hot reloadin'!");
 
 				await fs.promises.writeFile(filePath, newContent);
-				await new Promise((resolve) => setTimeout(resolve, 500));
 
 				try {
 					await page.waitForFunction(
