@@ -399,11 +399,22 @@ export function useSubmit(options?: UseMutationOptions<void, HTMLFormElement>) {
 	const { current } = useLocation();
 
 	const mutation = useMutation(async (form: HTMLFormElement) => {
+		const formData = new FormData(form);
+		let body: FormData | URLSearchParams = formData;
+
+		if (form.enctype === "application/x-www-form-urlencoded") {
+			const entries = Array.from(formData.entries()).filter(
+				([, v]) => typeof v === "string",
+			) as Array<[string, string]>;
+			body = new URLSearchParams(entries);
+		}
+
 		const response = await fetch(new URL(form.action ?? "", current), {
 			method: "POST",
-			body: new FormData(form),
+			body,
 			headers: {
-				accept: "application/javascript",
+				"Content-Type": form.enctype || "application/x-www-form-urlencoded",
+				Accept: "application/javascript",
 			},
 		});
 
