@@ -345,3 +345,9 @@ export async function loadRoute(
 		app,
 	};
 }
+
+if (import.meta.hot) {
+	import.meta.hot.accept("/@id/virtual:rakkasjs:client-page-routes", () => {
+		// Ignore
+	});
+}
