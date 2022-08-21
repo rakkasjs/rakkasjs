@@ -17,7 +17,7 @@ const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 if (import.meta.env.TEST_HOST) {
 	testCase(
 		"Running on existing server",
-		process.env.NODE_ENV !== "production",
+		process.env.TEST_ENV !== "production",
 		TEST_HOST,
 	);
 } else {
