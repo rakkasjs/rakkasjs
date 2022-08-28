@@ -188,8 +188,8 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 			configResolved(config) {
 				resolvedConfig = config;
 				routesRoot = config.root + "/src/routes";
-				isLayout = micromatch.matcher(pagePattern);
-				isPage = micromatch.matcher(layoutPattern);
+				isLayout = micromatch.matcher(layoutPattern);
+				isPage = micromatch.matcher(pagePattern);
 				isGuard = micromatch.matcher(guardPattern);
 				isSinglePageGuard = micromatch.matcher(singlePageGuardPattern);
 
@@ -211,6 +211,7 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 						const serverModule = server.moduleGraph.getModuleById(
 							"virtual:rakkasjs:server-page-routes",
 						);
+
 						const clientModule = server.moduleGraph.getModuleById(
 							"virtual:rakkasjs:client-page-routes",
 						);

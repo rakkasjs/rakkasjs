@@ -175,7 +175,12 @@ export async function loadRoute(
 		}
 
 		let pathname = pageContext.url.pathname;
-		const result = findPage(routes, pathname, pageContext);
+		let result = findPage(routes, pathname, pageContext);
+
+		if (import.meta.hot && !result) {
+			result = findPage(updatedRoutes!, pathname, pageContext);
+		}
+
 		if (result && "redirect" in result) {
 			const location = String(result.redirect);
 			return {

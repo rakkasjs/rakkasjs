@@ -294,6 +294,40 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					await fs.promises.writeFile(filePath, oldContent);
 				}
 			}, 60_000);
+
+			test("newly created page appears", async () => {
+				await page.goto(host + "/not-yet-created");
+
+				// Wait a little (for some reason Windows requires this)
+				await new Promise((resolve) => setTimeout(resolve, 1_000));
+
+				await page.waitForSelector(".hydrated");
+
+				const filePath = path.resolve(
+					__dirname,
+					"src/routes/not-yet-created.page.tsx",
+				);
+				const content = `export default () => <h1>I'm a new page!</h1>`;
+				await fs.promises.writeFile(filePath, content);
+
+				try {
+					await page.waitForFunction(
+						() => document.body?.textContent?.includes("I'm a new page!"),
+						{ timeout: 60_000 },
+					);
+
+					await fs.promises.rm(filePath);
+
+					await page.waitForFunction(
+						() => !document.body?.textContent?.includes("Not Found"),
+						{ timeout: 60_000 },
+					);
+				} finally {
+					await fs.promises.rm(filePath).catch(() => {
+						// Ignore
+					});
+				}
+			}, 60_000);
 		}
 
 		test("sets page title", async () => {
