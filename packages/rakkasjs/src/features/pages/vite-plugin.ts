@@ -188,10 +188,20 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 			configResolved(config) {
 				resolvedConfig = config;
 				routesRoot = config.root + "/src/routes";
-				isLayout = micromatch.matcher(layoutPattern);
-				isPage = micromatch.matcher(pagePattern);
-				isGuard = micromatch.matcher(guardPattern);
-				isSinglePageGuard = micromatch.matcher(singlePageGuardPattern);
+				isLayout = micromatch.matcher(
+					path.resolve(routesRoot + "/" + layoutPattern).replace(/\\/g, "/"),
+				);
+				isPage = micromatch.matcher(
+					path.resolve(routesRoot + "/" + pagePattern).replace(/\\/g, "/"),
+				);
+				isGuard = micromatch.matcher(
+					path.resolve(routesRoot + "/" + guardPattern).replace(/\\/g, "/"),
+				);
+				isSinglePageGuard = micromatch.matcher(
+					path
+						.resolve(routesRoot + "/" + singlePageGuardPattern)
+						.replace(/\\/g, "/"),
+				);
 
 				// This is ugly but it's the easiest way to pass some info
 				// to the Babel transform
