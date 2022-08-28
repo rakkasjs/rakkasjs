@@ -338,6 +338,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 		test("performs client-side navigation", async () => {
 			await page.goto(host + "/nav");
+
+			await new Promise((resolve) => setTimeout(resolve, 1_000));
 			await page.waitForSelector(".hydrated");
 
 			const button: ElementHandle<HTMLButtonElement> | null =
