@@ -86,11 +86,16 @@ export async function doPrerender(
 		paths.add(url.pathname);
 	}
 
-	// Hide cursor
-	process.stdout.write("\u001B[?25l");
+	if (process.stdout.isTTY) {
+		// Hide cursor
+		process.stdout.write("\u001B[?25l");
+	}
+
 	for (const currentPath of paths) {
-		process.stdout.clearLine(0);
-		process.stdout.cursorTo(0);
+		if (process.stdout.isTTY) {
+			process.stdout.clearLine(0);
+			process.stdout.cursorTo(0);
+		}
 		process.stdout.write(pico.gray("Crawling ") + currentPath);
 
 		const request = new Request(origin + currentPath, {
@@ -175,10 +180,13 @@ export async function doPrerender(
 			},
 		});
 	}
-	// Show cursor
-	process.stdout.write("\u001B[?25h");
-	process.stdout.clearLine(0);
-	process.stdout.cursorTo(0);
+
+	if (process.stdout.isTTY) {
+		// Show cursor
+		process.stdout.write("\u001B[?25h");
+		process.stdout.clearLine(0);
+		process.stdout.cursorTo(0);
+	}
 
 	const fileNames = [...files.entries()]
 		.filter(([, v]) => v[0] !== -1)
