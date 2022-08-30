@@ -112,10 +112,12 @@ cli
 		"Prerender static pages of an already built app",
 	)
 	.option("-r, --root <root>", "Project root")
+	.option(
+		"-C, --crawl",
+		"[boolean] Crawl links on pages to find more pages to prerender",
+	)
 	.action((paths: string[], options: any) =>
-		import("./prerender").then(({ prerender }) =>
-			prerender(options.root, options),
-		),
+		import("./prerender").then(({ prerender }) => prerender(paths, options)),
 	);
 
 cli.help();

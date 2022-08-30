@@ -71,7 +71,7 @@ export async function build(
 
 	if (paths!.length) {
 		logStep(step++, "Prerendering static routes");
-		await doPrerender(config!);
+		await doPrerender(config!, undefined, true);
 	}
 
 	if (adapter!.bundle) {

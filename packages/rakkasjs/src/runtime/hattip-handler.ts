@@ -65,17 +65,19 @@ export function createRequestHandler(userHooks: ServerHooks = {}) {
 
 	return compose(
 		[
+			process.env.RAKKAS_PRERENDER === "true" && prerender,
+
 			init(hooks),
 
 			hooks.map((hook) => hook.middleware?.beforePages).flat(),
-
-			process.env.RAKKAS_PRERENDER === "true" && prerender,
 
 			async (ctx: RequestContext) => {
 				try {
 					return await renderPageRoute(ctx);
 				} catch (error) {
-					console.error(error);
+					if (!process.env.RAKKAS_PRERENDER) {
+						console.error(error);
+					}
 				}
 			},
 
@@ -102,11 +104,17 @@ function notFound(ctx: RequestContext) {
 async function prerender(ctx: RequestContext) {
 	if (ctx.method !== "GET") return;
 
+	let caught: unknown;
+	(ctx.platform as any).reportError = (error: unknown) => {
+		caught = error;
+	};
+
 	const response = await ctx.next();
 	await (ctx.platform as any).render(
 		ctx.url.pathname,
 		response.clone(),
 		(ctx.platform as any).prerenderOptions,
+		caught,
 	);
 	return response;
 }

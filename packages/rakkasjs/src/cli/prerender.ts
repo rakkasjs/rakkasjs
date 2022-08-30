@@ -12,6 +12,7 @@ import { PrerenderResult } from "../runtime/page-types";
 
 export interface RenderOptions {
 	root?: string;
+	crawl?: boolean;
 }
 
 export async function prerender(
@@ -46,17 +47,23 @@ export async function prerender(
 			")",
 	);
 
-	await doPrerender(config, paths ?? ["/"]);
+	await doPrerender(config, paths.length ? paths : undefined, options.crawl);
 }
 
 export async function doPrerender(
 	config: ResolvedConfig,
-	defaultPaths: string[] = [],
+	defaultPaths?: string[],
+	autoCrawl?: boolean,
 ) {
+	autoCrawl = autoCrawl ?? !defaultPaths?.length;
 	const outDir = path.resolve(config!.root, config!.build.outDir);
-	const pathNames: string[] = (config as any).api?.rakkas?.prerender || [];
-	pathNames.push(...defaultPaths);
+	let pathNames: string[] =
+		defaultPaths ?? ((config as any).api?.rakkas?.prerender || []);
 	const origin = "http://localhost";
+
+	if (pathNames.length === 0) {
+		pathNames = ["/"];
+	}
 
 	installNodeFetch();
 
@@ -67,7 +74,7 @@ export async function doPrerender(
 	};
 
 	const paths = new Set<string>(pathNames);
-	const files = new Map<string, number>();
+	const files = new Map<string, [status: number, error: unknown]>();
 	const dirs = new Set<string>();
 
 	function crawl(href: URL | string) {
@@ -79,7 +86,13 @@ export async function doPrerender(
 		paths.add(url.pathname);
 	}
 
+	// Hide cursor
+	process.stdout.write("\u001B[?25l");
 	for (const currentPath of paths) {
+		process.stdout.clearLine(0);
+		process.stdout.cursorTo(0);
+		process.stdout.write(pico.gray("Crawling ") + currentPath);
+
 		const request = new Request(origin + currentPath, {
 			headers: { "User-Agent": "rakkasjs-crawler" },
 		});
@@ -98,11 +111,12 @@ export async function doPrerender(
 					pathname: string,
 					response: Response,
 					options: PrerenderResult,
+					error?: unknown,
 				) {
 					const url = new URL(pathname, origin);
 					const {
 						shouldPrerender = true,
-						shouldCrawl = shouldPrerender,
+						shouldCrawl = autoCrawl ? shouldPrerender : false,
 						links = [],
 					} = options || ({} as PrerenderResult);
 
@@ -152,28 +166,57 @@ export async function doPrerender(
 
 						if (shouldPrerender) {
 							await fs.promises.writeFile(filename, body);
-							files.set(pathname, response.status);
+							files.set(pathname, [response.status, error]);
 						} else {
-							files.set(pathname, -1);
+							files.set(pathname, [-1, undefined]);
 						}
 					}
 				},
 			},
 		});
 	}
+	// Show cursor
+	process.stdout.write("\u001B[?25h");
+	process.stdout.clearLine(0);
+	process.stdout.cursorTo(0);
 
 	const fileNames = [...files.entries()]
-		.filter(([, v]) => v !== -1)
-		.map((f) => f[0])
-		.sort();
+		.filter(([, v]) => v[0] !== -1)
+		.sort((a, b) => {
+			if (!!a[1][1] === !!b[1][1]) {
+				return a[0].localeCompare(b[0]);
+			} else {
+				return a[1][1] ? 1 : -1;
+			}
+		})
+		.map(([name]) => name);
 
 	if (fileNames.length > 0) {
+		let errorCount = 0;
+		for (const [, [, error]] of files) {
+			if (error) {
+				errorCount++;
+			}
+		}
+
 		config.logger.info(
-			pico.green("✓") + ` ${fileNames.length} static routes prerendered.`,
+			(errorCount ? pico.yellow("!") : pico.green("✓")) +
+				` ${plural(fileNames.length, "static route")} prerendered` +
+				(errorCount ? ` (${plural(errorCount, "error")})` : "."),
 		);
 
+		let errorSeen = false;
 		for (const fileName of fileNames) {
-			const status = files.get(fileName)!;
+			const [status, error] = files.get(fileName)!;
+
+			if (error) {
+				if (!errorSeen) {
+					config.logger.info(
+						pico.red("\nSome pages were rendered with errors:"),
+					);
+					errorSeen = true;
+				}
+			}
 
 			config.logger.info(
 				(status < 300
@@ -185,6 +228,14 @@ export async function doPrerender(
 					pico.gray(config.build.outDir + "/client/") +
 					pico.cyan(fileName.slice(1)),
 			);
+
+			if (error) {
+				config.logger.error((error as any)?.stack);
+			}
 		}
 	}
+}
+
+function plural(n: number, s: string) {
+	return n + " " + (n === 1 ? s : s + "s");
 }

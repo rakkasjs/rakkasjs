@@ -427,6 +427,10 @@ export default async function renderPageRoute(
 						Promise.resolve(error.toResponse()).then((response: Response) => {
 							status = response.status;
 						});
+					} else if (process.env.RAKKAS_PRERENDER) {
+						(ctx.platform as any).reportError(error);
+					} else {
+						console.error(error);
 					}
 				}
 				rejectRenderPromise(error);
@@ -459,6 +463,8 @@ export default async function renderPageRoute(
 			if (error && typeof error.toResponse === "function") {
 				const response = await error.toResponse();
 				status = response.status;
+			} else if (process.env.RAKKAS_PRERENDER) {
+				(ctx.platform as any).reportError(error);
 			} else {
 				console.error(error);
 				status = 500;
