@@ -16,7 +16,7 @@ Rakkas will also prerender the responses from API routes and `useServerSideQuery
 
 Since prerendering works by saving the prerendered data to the file system, it isn't possible to have two routes that would cause a directory and a file to have the same name. For example, you can't pre-render both `/api/articles` and `/api/articles/[articleId]` routes because it would require `api/articles` to be a file and a directory at the same time. For pages, it is solved by saving prerendered pages as `/directory/index.html` instead of `/directory`.
 
-The recommended way of side-stepping this problem is to use file extensions, like `/api/articles.json` and `/api/articles/[articleId].json`. It also helps the static file server get the content types right. In this case the endpoint handlers would be named `/api/articles.json.endpoint.js` and `/api/articles/[articleId].endpoint.js` respectively.
+The recommended way of side-stepping this problem is to use file extensions, like `/api/articles.json` and `/api/articles/[articleId].json`. It also helps the static file server get the content types right. In this case the endpoint handlers would be named `/api/articles.json.api.js` and `/api/articles/[articleId].api.js` respectively.
 
 ## Fine-tuning prerendering
 

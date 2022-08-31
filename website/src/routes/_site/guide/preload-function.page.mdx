@@ -16,7 +16,7 @@ You may think that the `preload` function is similar to `getServerSideProps` or 
 
 Consider a scenario where both a page and its parent layout need to fetch some data. Since the page is a child of the layout, its data fetching hook will not be rendered until the parent layout is rendered. If the data fetched by the page is not dependent on the data fetched by the layout, there is no reason to wait until the parent finishes. In this case, you can use the page's `preload` function like in the above example to start fetching immediately. This works because `preload` functions of the page and all its parent layouts are called in parallel.
 
-## Head tags redirection
+## Head tags
 
 When using streaming SSR, `Head` components may be discovered _after_ the document head has been sent. To avoid SEO problems, Rakkas will hold the stream until the page is fully rendered when it detects that the [request is coming from a bot](dynamic-rendering). But in some cases, you may want correct status, headers, and head tags to be sent even to browsers. `preload` offers a way to do this like in the above example.
 
