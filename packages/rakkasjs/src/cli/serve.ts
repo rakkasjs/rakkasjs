@@ -1,5 +1,5 @@
 import { createServer, InlineConfig, resolveConfig, ServerOptions } from "vite";
-import { cleanOptions, GlobalCLIOptions } from ".";
+import { cleanOptions, GlobalCLIOptions, startTime } from ".";
 import pico from "picocolors";
 import { version } from "../../package.json";
 import rakkas from "../vite-plugin";
@@ -44,14 +44,11 @@ export async function serve(
 
 		const info = server.config.logger.info;
 
-		// @ts-expect-error: No types
-		const viteStartTime = global.__vite_start_time ?? false;
-
-		const startupDurationString = viteStartTime
+		const startupDurationString = startTime
 			? pico.dim(
-					`ready in ${pico.white(
-						pico.bold(Math.ceil(performance.now() - viteStartTime)),
-					)} ms`,
+					`(ready in ${pico.white(
+						pico.bold(Math.ceil(performance.now() - startTime)),
+					)} ms)`,
 			  )
 			: "";
 
@@ -61,7 +58,7 @@ export async function serve(
 					" " +
 					pico.magenta(version) +
 					" development server is running 💃",
-			)}  ${startupDurationString}\n`,
+			)} ${startupDurationString}\n`,
 			{ clear: !server.config.logger.hasWarned },
 		);
 

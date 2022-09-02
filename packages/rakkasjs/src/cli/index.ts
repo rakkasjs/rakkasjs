@@ -2,6 +2,8 @@ import { BuildOptions, ServerOptions, LogLevel } from "vite";
 import { cac } from "cac";
 import { version } from "../../package.json";
 
+export const startTime = performance.now();
+
 export interface GlobalCLIOptions {
 	"--"?: string[];
 	c?: boolean | string;
