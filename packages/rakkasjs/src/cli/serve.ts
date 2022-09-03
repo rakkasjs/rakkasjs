@@ -3,6 +3,7 @@ import { cleanOptions, GlobalCLIOptions, startTime } from ".";
 import pico from "picocolors";
 import { version } from "../../package.json";
 import rakkas from "../vite-plugin";
+import { performance } from "perf_hooks";
 
 export async function serve(
 	root: string,

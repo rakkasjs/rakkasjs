@@ -1,6 +1,7 @@
 import { BuildOptions, ServerOptions, LogLevel } from "vite";
 import { cac } from "cac";
 import { version } from "../../package.json";
+import { performance } from "perf_hooks";
 
 export const startTime = performance.now();
 
