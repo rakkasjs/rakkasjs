@@ -70,7 +70,7 @@ let contents = fs.readFileSync(dest + "/package.json", "utf8");
 contents = contents
 	.replace(`npm run test:typecheck && `, "")
 	.replace(/^ {4}"test:typecheck": "tsc -p tsconfig.json --noEmit",\r?\n/, "")
-	.replace(/^.+(type|tsconfig).+$/gm, "")
+	.replace(/^.+(types|typecheck|tsconfig).+$/gm, "")
 	.replace(/^\r?\n/gm, "")
 	.replace("@rakkasjs/eslint-config", "@rakkasjs/eslint-config-js");
 
