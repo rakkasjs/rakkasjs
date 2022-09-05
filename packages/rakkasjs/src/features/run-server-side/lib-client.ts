@@ -1,5 +1,5 @@
 import { QueryResult, useQuery } from "../use-query/lib";
-import { stringify } from "@brillout/json-s";
+import { stringify } from "@brillout/json-serializer/stringify";
 import { ServerSideFunction, UseServerSideQueryOptions } from "./lib-common";
 import type { RequestContext } from "@hattip/compose";
 import {

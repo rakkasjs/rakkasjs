@@ -1,6 +1,6 @@
 import type { ServerHooks } from "../../runtime/hattip-handler";
-import { parse } from "@brillout/json-s";
-import devalue from "devalue";
+import { parse } from "@brillout/json-serializer/parse";
+import { devalue } from "devalue";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {

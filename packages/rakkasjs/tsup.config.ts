@@ -74,7 +74,7 @@ export default defineConfig([
 		noExternal: [
 			"react-helmet-async",
 			"react-error-boundary",
-			"@brillout/json-s",
+			"@brillout/json-serializer",
 		],
 		dts: {
 			entry: "./src/lib/index.ts",

@@ -4,7 +4,7 @@ import {
 	createQueryClient,
 	QueryCacheContext,
 } from "./implementation";
-import devalue from "devalue";
+import { devalue } from "devalue";
 import { ServerHooks } from "../../runtime/hattip-handler";
 
 const useQueryServerHooks: ServerHooks = {

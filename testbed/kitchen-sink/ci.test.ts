@@ -138,7 +138,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 							});
 					}, 250);
 				});
-			}, 60_000);
+			}, 15_000);
 
 			afterAll(async () => {
 				if (!cp || cp.exitCode || !cp.pid) {
@@ -257,77 +257,86 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		if (dev) {
-			test("hot reloads page", async () => {
-				await page.goto(host + "/");
+			test(
+				"hot reloads page",
+				async () => {
+					await page.goto(host + "/");
 
-				// Wait a little (for some reason Windows requires this)
-				await new Promise((resolve) => setTimeout(resolve, 1_000));
+					// Wait a little (for some reason Windows requires this)
+					await new Promise((resolve) => setTimeout(resolve, 1_000));
 
-				await page.waitForSelector(".hydrated");
+					await page.waitForSelector(".hydrated");
 
-				const button: ElementHandle<HTMLButtonElement> | null =
-					await page.waitForSelector("button");
+					const button: ElementHandle<HTMLButtonElement> | null =
+						await page.waitForSelector("button");
 
-				await button!.click();
+					await button!.click();
 
-				await page.waitForFunction(
-					() => document.querySelector("button")?.textContent === "Clicked: 1",
-				);
-
-				const filePath = path.resolve(__dirname, "src/routes/index.page.tsx");
-
-				const oldContent = await fs.promises.readFile(filePath, "utf8");
-				const newContent = oldContent.replace("Hello world!", "Hot reloadin'!");
-
-				await fs.promises.writeFile(filePath, newContent);
-
-				try {
-					await page.waitForFunction(
-						() => document.body?.textContent?.includes("Hot reloadin'!"),
-						{ timeout: 60_000 },
-					);
 					await page.waitForFunction(
 						() =>
 							document.querySelector("button")?.textContent === "Clicked: 1",
 					);
-				} finally {
-					await fs.promises.writeFile(filePath, oldContent);
-				}
-			}, 60_000);
 
-			test("newly created page appears", async () => {
-				await page.goto(host + "/not-yet-created");
+					const filePath = path.resolve(__dirname, "src/routes/index.page.tsx");
 
-				// Wait a little (for some reason Windows requires this)
-				await new Promise((resolve) => setTimeout(resolve, 1_000));
-
-				await page.waitForSelector(".hydrated");
-
-				const filePath = path.resolve(
-					__dirname,
-					"src/routes/not-yet-created.page.tsx",
-				);
-				const content = `export default () => <h1>I'm a new page!</h1>`;
-				await fs.promises.writeFile(filePath, content);
-
-				try {
-					await page.waitForFunction(
-						() => document.body?.textContent?.includes("I'm a new page!"),
-						{ timeout: 60_000 },
+					const oldContent = await fs.promises.readFile(filePath, "utf8");
+					const newContent = oldContent.replace(
+						"Hello world!",
+						"Hot reloadin'!",
 					);
 
-					await fs.promises.rm(filePath);
+					await fs.promises.writeFile(filePath, newContent);
 
-					await page.waitForFunction(
-						() => !document.body?.textContent?.includes("Not Found"),
-						{ timeout: 60_000 },
+					try {
+						await page.waitForFunction(() =>
+							document.body?.textContent?.includes("Hot reloadin'!"),
+						);
+						await page.waitForFunction(
+							() =>
+								document.querySelector("button")?.textContent === "Clicked: 1",
+						);
+					} finally {
+						await fs.promises.writeFile(filePath, oldContent);
+					}
+				},
+				{ retry: 3 },
+			);
+
+			test(
+				"newly created page appears",
+				async () => {
+					await page.goto(host + "/not-yet-created");
+
+					// Wait a little (for some reason Windows requires this)
+					await new Promise((resolve) => setTimeout(resolve, 1_000));
+
+					await page.waitForSelector(".hydrated");
+
+					const filePath = path.resolve(
+						__dirname,
+						"src/routes/not-yet-created.page.tsx",
 					);
-				} finally {
-					await fs.promises.rm(filePath).catch(() => {
-						// Ignore
-					});
-				}
-			}, 60_000);
+					const content = `export default () => <h1>I'm a new page!</h1>`;
+					await fs.promises.writeFile(filePath, content);
+
+					try {
+						await page.waitForFunction(() =>
+							document.body?.textContent?.includes("I'm a new page!"),
+						);
+
+						await fs.promises.rm(filePath);
+
+						await page.waitForFunction(
+							() => !document.body?.textContent?.includes("Not Found"),
+						);
+					} finally {
+						await fs.promises.rm(filePath).catch(() => {
+							// Ignore
+						});
+					}
+				},
+				{ retry: 3 },
+			);
 		}
 
 		test("sets page title", async () => {
@@ -336,50 +345,57 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			await page.waitForFunction(() => document.title === "Page title");
 		});
 
-		test("performs client-side navigation", async () => {
-			await page.goto(host + "/nav");
+		test(
+			"performs client-side navigation",
+			async () => {
+				await page.goto(host + "/nav");
 
-			await new Promise((resolve) => setTimeout(resolve, 1_000));
-			await page.waitForSelector(".hydrated");
+				await new Promise((resolve) => setTimeout(resolve, 1_000));
+				await page.waitForSelector(".hydrated");
 
-			const button: ElementHandle<HTMLButtonElement> | null =
-				await page.waitForSelector("button");
-			expect(button).toBeTruthy();
+				const button: ElementHandle<HTMLButtonElement> | null =
+					await page.waitForSelector("button");
+				expect(button).toBeTruthy();
 
-			await button!.click();
-			await page.waitForFunction(
-				() => document.querySelector("button")?.textContent === "State test: 1",
-			);
+				await button!.click();
+				await page.waitForFunction(
+					() =>
+						document.querySelector("button")?.textContent === "State test: 1",
+				);
 
-			const link = (await page.waitForSelector(
-				"a[href='/nav/a']",
-			)) as ElementHandle<HTMLAnchorElement> | null;
-			expect(link).toBeTruthy();
+				const link = (await page.waitForSelector(
+					"a[href='/nav/a']",
+				)) as ElementHandle<HTMLAnchorElement> | null;
+				expect(link).toBeTruthy();
 
-			link!.click();
-			await page.waitForFunction(
-				(host: string) =>
-					document.body?.innerText.includes(`Navigating to: ${host}/nav/a`),
-				{},
-				host,
-			);
+				link!.click();
+				await page.waitForFunction(
+					(host: string) =>
+						document.body?.innerText.includes(`Navigating to: ${host}/nav/a`),
+					{},
+					host,
+				);
 
-			await page.waitForFunction(() => {
-				return (window as any).RESOLVE_QUERY !== undefined;
-			});
+				await page.waitForFunction(() => {
+					return (window as any).RESOLVE_QUERY !== undefined;
+				});
 
-			await page.evaluate(() => {
-				(window as any).RESOLVE_QUERY();
-			});
+				await page.evaluate(() => {
+					(window as any).RESOLVE_QUERY();
+				});
 
-			await page.waitForFunction(() =>
-				document.body?.innerText.includes("Client-side navigation test page A"),
-			);
+				await page.waitForFunction(() =>
+					document.body?.innerText.includes(
+						"Client-side navigation test page A",
+					),
+				);
 
-			await page.waitForFunction(() =>
-				document.body?.innerText.includes("State test: 1"),
-			);
-		});
+				await page.waitForFunction(() =>
+					document.body?.innerText.includes("State test: 1"),
+				);
+			},
+			{ retry: 3 },
+		);
 
 		test("restores scroll position", async () => {
 			await page.goto(host + "/nav?scroll=1");

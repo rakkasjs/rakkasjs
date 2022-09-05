@@ -1,3 +1,6 @@
+import x from "virtual:rakkasjs:server-page-routes";
+console.log(x.map((x) => x[4]));
+
 export default function HomePage() {
 	return (
 		<main>

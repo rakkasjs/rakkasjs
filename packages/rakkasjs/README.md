@@ -85,7 +85,7 @@ yarn create rakkas-app my-rakkas-app
 - Parts of the CLI are based on [Vite CLI](https://github.com/vitejs/vite/tree/main/packages/vite) by Yuxi (Evan) You (not affiliated) and Vite contributors (not affiliated), used under [MIT License](./vite-license.md).
 - Published npm package bundles the following software:
   - [`react-helmet-async`](https://github.com/staylor/react-helmet-async) by Scott Taylor (not affiliated), used under [Apache 2.0 license](./react-helmet-async-license.txt).
-  - [`@brillout/json-s`](https://github.com/brillout/json-s) by Romuald Brillout (not affiliated), used under [MIT License](./json-s-license.md).
+  - [`@brillout/json-serializer`](https://github.com/brillout/json-serializer) by Romuald Brillout (not affiliated), used under [MIT License](./json-s-license.md).
   - [`react-error-boundary`](https://github.com/bvaughn/react-error-boundary) by Brian Vaughn (not affiliated), used under [MIT License](./react-error-boundary-license.txt)
 
 ## Version history

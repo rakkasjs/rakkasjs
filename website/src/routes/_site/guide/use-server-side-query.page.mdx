@@ -27,7 +27,7 @@ When it runs on the client, variables from the surrounding scope that you use in
 
 Also note that instead of referencing `props.params.pokemon`, which would cause the whole `props` object to be captured and serialized, we destructure it and reference only the part we're interested in. This is not just to save a few bytes: By default, Rakkas uses the values of the captured variables as part of the cache key, unintentionally capturing irrelevant data may cause unnecessary refetches.
 
-Rakkas uses [`@brillout/json-s`](https://github.com/brillout/json-s) to serialize the captured values and [devalue](https://github.com/Rich-Harris/devalue) to serialize the return value. They both support `Date`, `undefined`, `Set`, `Map`, `BigInt`, `RegExp`, `NaN`, and `Infinity` in addition to standard JSON-serializable types. `devalue` also supports repeated and cyclic references. Captured values and the return value must be serializable with the respective libraries. In particular, functions, arbitrary class instances, DOM elements, etc. cannot be serialized properly.
+Rakkas uses [`@brillout/json-serializer`](https://github.com/brillout/json-serializer) to serialize the captured values and [devalue](https://github.com/Rich-Harris/devalue) to serialize the return value. They both support `Date`, `undefined`, `Set`, `Map`, `BigInt`, `RegExp`, `NaN`, and `Infinity` in addition to standard JSON-serializable types. `devalue` also supports repeated and cyclic references. Captured values and the return value must be serializable with the respective libraries. In particular, functions, arbitrary class instances, DOM elements, etc. cannot be serialized properly.
 
 ## Calling third party APIs
 

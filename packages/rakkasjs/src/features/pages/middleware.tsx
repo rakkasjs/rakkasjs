@@ -28,7 +28,7 @@ import {
 	ServerSidePageContext,
 } from "../../runtime/page-types";
 import { LookupHookResult } from "../../lib";
-import devalue from "devalue";
+import { devalue } from "devalue";
 
 const pageContextMap = new WeakMap<Request, PageContext>();
 

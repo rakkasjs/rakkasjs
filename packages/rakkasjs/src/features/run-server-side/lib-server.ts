@@ -1,11 +1,11 @@
 import { QueryResult, useQuery } from "../use-query/lib";
-import { stringify } from "@brillout/json-s";
+import { stringify } from "@brillout/json-serializer/stringify";
 import {
 	ServerSideFunction,
 	useRequestContext,
 	UseServerSideQueryOptions,
 } from "./lib-common";
-import devalue from "devalue";
+import { devalue } from "devalue";
 import { RequestContext } from "@hattip/compose";
 import { UseMutationOptions, UseMutationResult } from "../use-mutation/lib";
 
