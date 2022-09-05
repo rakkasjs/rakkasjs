@@ -138,7 +138,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 							});
 					}, 250);
 				});
-			}, 15_000);
+			}, 60_000);
 
 			afterAll(async () => {
 				if (!cp || cp.exitCode || !cp.pid) {
@@ -299,7 +299,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 						await fs.promises.writeFile(filePath, oldContent);
 					}
 				},
-				{ retry: 3 },
+				{ retry: 3, timeout: 15_000 },
 			);
 
 			test(
@@ -335,7 +335,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 						});
 					}
 				},
-				{ retry: 3 },
+				{ retry: 3, timeout: 15_000 },
 			);
 		}
 
@@ -394,7 +394,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					document.body?.innerText.includes("State test: 1"),
 				);
 			},
-			{ retry: 3 },
+			{ retry: 3, timeout: 15_000 },
 		);
 
 		test("restores scroll position", async () => {
