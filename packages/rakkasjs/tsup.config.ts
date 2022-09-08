@@ -74,7 +74,8 @@ export default defineConfig([
 		noExternal: [
 			"react-helmet-async",
 			"react-error-boundary",
-			"@brillout/json-serializer",
+			"@brillout/json-serializer/parse",
+			"@brillout/json-serializer/stringify",
 		],
 		dts: {
 			entry: "./src/lib/index.ts",
@@ -103,6 +104,10 @@ export default defineConfig([
 			"react-dom/server",
 			"react-dom/server.browser",
 			"@vavite/expose-vite-dev-server/vite-dev-server",
+		],
+		noExternal: [
+			"@brillout/json-serializer/parse",
+			"@brillout/json-serializer/stringify",
 		],
 		plugins: [namedExports()],
 	},
