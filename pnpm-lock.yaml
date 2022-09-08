@@ -51,13 +51,11 @@ importers:
 
   examples/empty:
     specifiers:
-      "@hattip/adapter-bun": ^0.0.17
       rakkasjs: 0.6.1
       react: ^18.2.0
       react-dom: ^18.2.0
       vite: ^3.1.0
     dependencies:
-      "@hattip/adapter-bun": 0.0.17
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -1910,15 +1908,6 @@ packages:
     dependencies:
       "@repeaterjs/repeater": 3.0.4
       tslib: 2.4.0
-    dev: false
-
-  /@hattip/adapter-bun/0.0.17:
-    resolution:
-      {
-        integrity: sha512-ysSxhW+uwSKPSU4CQ8wInNHpGQNUIDbRlFxK58MOgcUzO2K4R5IZ2D0NGk/6IgZKqH6R1RBTa4OxqskrG2wYUA==,
-      }
-    dependencies:
-      "@hattip/core": 0.0.17
     dev: false
 
   /@hattip/adapter-cloudflare-workers/0.0.17:
