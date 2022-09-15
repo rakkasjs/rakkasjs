@@ -110,6 +110,18 @@ cli
 	);
 
 cli
+	.command("preview [root]", "Start a preview server using production build")
+	.option("--host [host]", `[string] specify hostname`)
+	.option("--port <port>", `[number] specify port`)
+	.option("--https", `[boolean] use TLS + HTTP/2`)
+	.option("--open [path]", `[boolean | string] open browser on startup`)
+	.option("--cors", `[boolean] enable CORS`)
+	.option("--strictPort", `[boolean] exit if specified port is already in use`)
+	.action(async (root: string, options: ServerOptions & GlobalCLIOptions) =>
+		import("./preview").then(({ preview }) => preview(root, options)),
+	);
+
+cli
 	.command(
 		"prerender [...paths]",
 		"Prerender static pages of an already built app",
