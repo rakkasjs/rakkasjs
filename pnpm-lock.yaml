@@ -346,6 +346,7 @@ importers:
       react-dom: ^18.2.0
       react-error-boundary: ^3.1.4
       react-helmet-async: ^1.3.0
+      sirv: ^2.0.2
       tsup: ^6.2.3
       typescript: ^4.8.2
       vite: ^3.1.0
@@ -373,6 +374,7 @@ importers:
       fast-glob: 3.2.11
       micromatch: 4.0.5
       picocolors: 1.0.0
+      sirv: 2.0.2
     devDependencies:
       "@brillout/json-serializer": 0.5.1
       "@cyco130/eslint-config": 2.1.1_yqf6kl63nyoq5megxukfnom5rm
