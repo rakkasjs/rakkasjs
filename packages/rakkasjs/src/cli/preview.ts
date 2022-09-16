@@ -21,7 +21,7 @@ export async function preview(
 		root,
 		base: options.base,
 		mode: options.mode,
-		server: serverOptions,
+		preview: serverOptions,
 		configFile: options.config,
 		logLevel: options.logLevel,
 		clearScreen: options.clearScreen,
