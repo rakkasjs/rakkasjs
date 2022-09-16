@@ -13,7 +13,7 @@ import { cleanOptions, GlobalCLIOptions, startTime } from ".";
 import { version } from "../../package.json";
 
 export async function preview(
-	root: string = process.cwd(),
+	root = process.cwd(),
 	options: ServerOptions & GlobalCLIOptions,
 ) {
 	const serverOptions: ServerOptions = cleanOptions(options);
