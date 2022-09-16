@@ -1,16 +1,22 @@
+import sirv from "sirv";
 import { createMiddleware } from "@hattip/adapter-node";
 import fs from "fs";
 import path from "path";
 import pico from "picocolors";
-import { InlineConfig, preview as previewServer, resolveConfig, ServerOptions } from "vite";
+import {
+	InlineConfig,
+	preview as previewServer,
+	resolveConfig,
+	ServerOptions,
+} from "vite";
 import { cleanOptions, GlobalCLIOptions, startTime } from ".";
 import { version } from "../../package.json";
 
 export async function preview(
-	root: string,
+	root: string = process.cwd(),
 	options: ServerOptions & GlobalCLIOptions,
 ) {
-	const serverOptions: ServerOptions = cleanOptions(options);	
+	const serverOptions: ServerOptions = cleanOptions(options);
 	const inlineConfig: InlineConfig = {
 		root,
 		base: options.base,
@@ -19,7 +25,7 @@ export async function preview(
 		configFile: options.config,
 		logLevel: options.logLevel,
 		clearScreen: options.clearScreen,
-		optimizeDeps: { force: options.force }
+		optimizeDeps: { force: options.force },
 	};
 
 	const initialConfig = await resolveConfig(inlineConfig, "serve").catch(
@@ -30,29 +36,46 @@ export async function preview(
 			process.exit(1);
 		},
 	);
-	const DIST_DIR = path.join(process.cwd(), initialConfig.build.outDir);
-	const HANDLER_PATH = path.join(DIST_DIR, "server", "hattip.js")
+	const DIST_DIR = path.join(root, initialConfig.build.outDir);
+	const HANDLER_PATH = path.join(DIST_DIR, "server", "hattip.js");
+	const ASSETS_DIR = path.join(DIST_DIR, "client");
 
 	if (!fs.existsSync(HANDLER_PATH)) {
 		// eslint-disable no-console
-		console.error(`\n  ${pico.black(pico.bgMagenta(" RAKKAS ")) + " " + pico.magenta(version) + " " + pico.red("Please run `rakkas build` before running preview server.")}`);	
+		console.error(
+			`\n  ${
+				pico.black(pico.bgMagenta(" RAKKAS ")) +
+				" " +
+				pico.magenta(version) +
+				" " +
+				pico.red("Please run `rakkas build` before running preview server.")
+			}`,
+		);
 		return;
 	}
 
 	try {
-		const handler = await import(HANDLER_PATH);
-		const listener = createMiddleware(handler.default);
+		const handlerImport = await import(HANDLER_PATH);
+		const sirvHandler = sirv(ASSETS_DIR);
+		const handler = createMiddleware(handlerImport.default);
 
 		const server = await previewServer({
 			...inlineConfig,
-			publicDir: path.join(DIST_DIR, "client"),
+			publicDir: path.join(DIST_DIR),
 		});
 
-		// remove default handler and pass all handler to hatTip
+		// remove default handler and pass all handler to hatTip and sirv ( for assets )
 		server.httpServer.listeners("request").forEach(function (l: any) {
 			server.httpServer.removeListener("request", l);
 			server.httpServer.on("request", function (req, res) {
-				listener(req, res)
+				sirvHandler(req, res, () => {
+					handler(req, res, () => {
+						if (!res.writableEnded) {
+							res.writeHead(404);
+							res.end();
+						}
+					});
+				});
 			});
 		});
 
@@ -60,24 +83,28 @@ export async function preview(
 
 		const startupDurationString = startTime
 			? pico.dim(
-				`(ready in ${pico.white(
-					pico.bold(Math.ceil(performance.now() - startTime)),
-				)} ms)`,
-			)
+					`(ready in ${pico.white(
+						pico.bold(Math.ceil(performance.now() - startTime)),
+					)} ms)`,
+			  )
 			: "";
 
 		info(
 			`\n  ${pico.green(
 				pico.black(pico.bgMagenta(" RAKKAS ")) +
-				" " +
-				pico.magenta(version) +
-				" production preview server is running 💃",
+					" " +
+					pico.magenta(version) +
+					" production preview server is running 💃",
 			)} ${startupDurationString}\n`,
 			{ clear: !server.config.logger.hasWarned },
 		);
 
-		server.printUrls()
-
-	} catch (err) {
+		server.printUrls();
+	} catch (e: any) {
+		initialConfig.logger.error(
+			pico.red(`error when starting dev server:\n${e.stack}`),
+			{ error: e },
+		);
+		process.exit(1);
 	}
 }
