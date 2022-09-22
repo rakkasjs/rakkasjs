@@ -1,6 +1,6 @@
 {
 	"name": "create-rakkas-app",
-	"version": "0.6.1",
+	"version": "0.6.1-preact.2",
 	"type": "module",
 	"files": [
 		"dist",

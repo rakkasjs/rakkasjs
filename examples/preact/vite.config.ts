@@ -47,12 +47,6 @@ export default defineConfig({
 					return "export const renderToReadableStream = null";
 				}
 			},
-
-			load(id) {
-				if (id === "virtual:empty") {
-					return "export const renderToReadableStream = null";
-				}
-			},
 		},
 		tsconfigPaths(),
 		rakkas({

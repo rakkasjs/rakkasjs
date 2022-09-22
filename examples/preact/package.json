@@ -15,7 +15,7 @@
 	"devDependencies": {
 		"@hattip/adapter-cloudflare-workers": "^0.0.17",
 		"prettier": "^2.7.1",
-		"rakkasjs": "0.6.1",
+		"rakkasjs": "0.6.1-preact.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"typescript": "^4.8.2",
