@@ -154,6 +154,29 @@ importers:
       typescript: 4.8.2
       vite: 3.1.0
 
+  examples/preact:
+    specifiers:
+      preact: ^10.11.0
+      preact-render-to-string: ^5.2.4
+      preact-ssr-prepass: ^1.2.0
+      prettier: ^2.7.1
+      rakkasjs: 0.6.1
+      typescript: ^4.8.2
+      vite: ^3.1.0
+      vite-tsconfig-paths: ^3.5.0
+      vitest: ^0.23.1
+    dependencies:
+      preact: 10.11.0
+      preact-render-to-string: 5.2.4_preact@10.11.0
+      preact-ssr-prepass: 1.2.0_preact@10.11.0
+    devDependencies:
+      prettier: 2.7.1
+      rakkasjs: link:../../packages/rakkasjs
+      typescript: 4.8.2
+      vite: 3.1.0
+      vite-tsconfig-paths: 3.5.0_vite@3.1.0
+      vitest: 0.23.1
+
   examples/todo:
     specifiers:
       "@rakkasjs/eslint-config": 0.6.1
@@ -16032,6 +16055,36 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
+  /preact-render-to-string/5.2.4_preact@10.11.0:
+    resolution:
+      {
+        integrity: sha512-iIPHb3BXUQ3Za6KNhkjN/waq11Oh+QWWtAgN3id3LrL+cszH3DYh8TxJPNQ6Aogsbu4JsqdJLBZltwPFpG6N6w==,
+      }
+    peerDependencies:
+      preact: ">=10"
+    dependencies:
+      preact: 10.11.0
+      pretty-format: 3.8.0
+    dev: false
+
+  /preact-ssr-prepass/1.2.0_preact@10.11.0:
+    resolution:
+      {
+        integrity: sha512-UKz6FB2+KepjHQ6aGqiTUMZfGgdoTunxtByczdUNho9UvSRTJw31Np9J+wUSAlJ1kALJGX1BpcBLvO3iohQUSA==,
+      }
+    peerDependencies:
+      preact: ">=10 || ^10.0.0-beta.0 || ^10.0.0-alpha.0"
+    dependencies:
+      preact: 10.11.0
+    dev: false
+
+  /preact/10.11.0:
+    resolution:
+      {
+        integrity: sha512-Fk6+vB2kb6mSJfDgODq0YDhMfl0HNtK5+Uc9QqECO4nlyPAQwCI+BKyWO//idA7ikV7o+0Fm6LQmNuQi1wXI1w==,
+      }
+    dev: false
+
   /precinct/9.0.1:
     resolution:
       {
@@ -16150,6 +16203,13 @@ packages:
       ansi-regex: 5.0.1
       ansi-styles: 5.2.0
       react-is: 17.0.2
+    dev: false
+
+  /pretty-format/3.8.0:
+    resolution:
+      {
+        integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==,
+      }
     dev: false
 
   /pretty-ms/7.0.1:

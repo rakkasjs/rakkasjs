@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 
 import React, { Fragment, StrictMode, Suspense } from "react";
-import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { App, RouteContext } from "../../runtime/App";
 import { isBot } from "../../runtime/isbot";
@@ -29,6 +28,7 @@ import {
 } from "../../runtime/page-types";
 import { LookupHookResult } from "../../lib";
 import { devalue } from "devalue";
+import { renderToStream } from "./implementation/render-to-stream";
 
 const pageContextMap = new WeakMap<Request, PageContext>();
 
@@ -161,7 +161,7 @@ export default async function renderPageRoute(
 		process.env.RAKKAS_PRERENDER === "true" ||
 		import.meta.env.RAKKAS_DISABLE_STREAMING === "true"
 			? true
-			: 0;
+			: pageContext.throttleRenderStream ?? 0;
 
 	function updateHeaders(props: ResponseContextProps) {
 		if (props.status) {
@@ -192,7 +192,7 @@ export default async function renderPageRoute(
 
 		if (props.redirect) {
 			redirected = redirected ?? props.redirect;
-			reactStream.cancel();
+			abortController.abort();
 		}
 	}
 
@@ -365,14 +365,14 @@ export default async function renderPageRoute(
 	if (import.meta.env.PROD) {
 		for (const entry of Object.values(clientManifest!)) {
 			if (entry.isEntry) {
-				scriptPath = entry.file;
+				scriptPath = "/" + entry.file;
 				break;
 			}
 		}
 
 		if (!scriptPath!) throw new Error("Entry not found in client manifest");
 	} else {
-		scriptPath = "virtual:rakkasjs:client-entry";
+		scriptPath = "/virtual:rakkasjs:client-entry";
 	}
 
 	const moduleIds = [scriptPath, ...found.route[4]];
@@ -415,49 +415,33 @@ export default async function renderPageRoute(
 		// }
 	}
 
-	const reactStream = await renderToReadableStream(
-		<StrictMode>{app}</StrictMode>,
-		{
-			// TODO: AbortController
-			bootstrapModules: ["/" + scriptPath!],
-			onError(error: any) {
-				if (!redirected) {
-					status = 500;
-					if (error && typeof error.toResponse === "function") {
-						Promise.resolve(error.toResponse()).then((response: Response) => {
-							status = response.status;
-						});
-					} else if (process.env.RAKKAS_PRERENDER) {
-						(ctx.platform as any).reportError(error);
-					} else {
-						console.error(error);
-					}
-				}
-				rejectRenderPromise(error);
-			},
-		},
-	);
+	let renderStream: ReadableStream;
+	const abortController = new AbortController();
 
 	try {
+		const userAgent = ctx.request.headers.get("user-agent");
+		if (userAgent && isBot(userAgent)) {
+			hold = true;
+		}
+
+		let renderer = renderToStream;
+		for (const hooks of pageHooks) {
+			if (hooks?.renderToStream) {
+				renderer = hooks.renderToStream;
+			}
+		}
+
+		renderStream = await renderer({
+			page: <StrictMode>{app}</StrictMode>,
+			scriptPath,
+			abortSignal: abortController.signal,
+			throttle: hold,
+		});
+
 		await renderPromise;
 		await new Promise<void>((resolve) => {
 			setTimeout(resolve, 0);
 		});
-
-		const userAgent = ctx.request.headers.get("user-agent");
-		if (hold === true || (userAgent && isBot(userAgent))) {
-			await reactStream.allReady;
-			await new Promise<void>((resolve) => {
-				setTimeout(resolve, 0);
-			});
-		} else if (hold > 0) {
-			await Promise.race([
-				reactStream.allReady,
-				new Promise<void>((resolve) => {
-					setTimeout(resolve, hold as number);
-				}),
-			]);
-		}
 	} catch (error: any) {
 		if (!redirected) {
 			if (error && typeof error.toResponse === "function") {
@@ -469,6 +453,8 @@ export default async function renderPageRoute(
 				console.error(error);
 				status = 500;
 			}
+
+			rejectRenderPromise!(error);
 		}
 	}
 
@@ -508,7 +494,7 @@ export default async function renderPageRoute(
 
 	head += `</head><body>`;
 
-	let wrapperStream: ReadableStream = reactStream;
+	let wrapperStream: ReadableStream = renderStream!;
 	for (const hooks of pageHooks) {
 		if (hooks?.wrapSsrStream) {
 			wrapperStream = hooks.wrapSsrStream(wrapperStream);

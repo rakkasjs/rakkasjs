@@ -31,11 +31,12 @@ export function useLocation(): UseLocationResult {
 
 	const ssrLocation = JSON.stringify([staticLocation!, 0]);
 
-	const currentLocationId = useSyncExternalStore(
-		subscribeToLocation,
-		getLocationSnapshot,
-		useCallback(() => ssrLocation, [ssrLocation]),
-	);
+	const currentLocationId =
+		useSyncExternalStore(
+			subscribeToLocation,
+			getLocationSnapshot,
+			useCallback(() => ssrLocation, [ssrLocation]),
+		) ?? ssrLocation;
 
 	const deferredLocationId = useDeferredValue(currentLocationId);
 	const [currentLocation] = JSON.parse(currentLocationId);

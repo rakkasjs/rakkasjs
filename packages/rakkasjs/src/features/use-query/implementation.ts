@@ -115,6 +115,8 @@ export interface PageContext {
 	requestContext?: RequestContext;
 	/** Application-specific stuff */
 	locals: PageLocals;
+	/**  */
+	throttleRenderStream?: number | true;
 }
 
 export function usePageContext(): PageContext {

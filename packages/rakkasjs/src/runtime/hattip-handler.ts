@@ -1,6 +1,7 @@
 import { compose, RequestContext, RequestHandlerStack } from "@hattip/compose";
 import { ReactElement } from "react";
 import renderApiRoute from "../features/api-routes/middleware";
+import { PageRenderingContext } from "../features/pages/implementation/render-to-stream";
 import renderPageRoute from "../features/pages/middleware";
 import { PageContext } from "../lib";
 import serverHooks from "./feature-server-hooks";
@@ -54,6 +55,7 @@ export interface PageRequestHooks {
 	emitBeforeSsrChunk?(): string | undefined;
 	/** Wrap React's SSR stream */
 	wrapSsrStream?(stream: ReadableStream): ReadableStream;
+	renderToStream?(ctx: PageRenderingContext): Promise<ReadableStream>;
 }
 
 /**
