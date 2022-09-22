@@ -28,14 +28,24 @@ export default defineConfig({
 					case "react/jsx-dev-runtime":
 						path = "jsx-runtime.mjs";
 						break;
+					case "react-dom/server.browser":
+						return "virtual:empty";
 				}
 
 				if (path) {
 					return resolve(dir, "node_modules/preact/compat", path);
 				}
 			},
+
+			load(id) {
+				if (id === "virtual:empty") {
+					return "export const renderToReadableStream = null";
+				}
+			},
 		},
 		tsconfigPaths(),
-		rakkas(),
+		rakkas({
+			adapter: "cloudflare-workers",
+		}),
 	],
 });

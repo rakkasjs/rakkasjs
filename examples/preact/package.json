@@ -13,8 +13,11 @@
 		"test:unit": "vitest run"
 	},
 	"devDependencies": {
+		"@hattip/adapter-cloudflare-workers": "^0.0.17",
 		"prettier": "^2.7.1",
 		"rakkasjs": "0.6.1",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
 		"typescript": "^4.8.2",
 		"vite": "^3.1.0",
 		"vite-tsconfig-paths": "^3.5.0",
