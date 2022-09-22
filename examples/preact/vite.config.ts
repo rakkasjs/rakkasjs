@@ -34,6 +34,17 @@ export default defineConfig({
 
 				if (path) {
 					return resolve(dir, "node_modules/preact/compat", path);
+				} else {
+					const match = id.match(/^\breact(?:-dom)?(\/.*)/);
+					if (match) {
+						console.log("match", match);
+					}
+				}
+			},
+
+			load(id) {
+				if (id === "virtual:empty") {
+					return "export const renderToReadableStream = null";
 				}
 			},
 
