@@ -371,6 +371,7 @@ export interface MouseEventLike {
 	shiftKey: boolean;
 	altKey: boolean;
 	ctrlKey: boolean;
+	metaKey: boolean;
 
 	preventDefault(): void;
 }
@@ -388,6 +389,7 @@ function shouldHandleClick(e: MouseEventLike): boolean {
 		!e.shiftKey &&
 		!e.altKey &&
 		!e.ctrlKey &&
+		!e.metaKey &&
 		(!t.target || t.target === "_self") &&
 		!t.hasAttribute("download") &&
 		!t.relList.contains("external")
