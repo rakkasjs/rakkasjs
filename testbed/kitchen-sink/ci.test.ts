@@ -138,7 +138,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 							});
 					}, 250);
 				});
-			}, 60_000);
+			}, 5_000);
 
 			afterAll(async () => {
 				if (!cp || cp.exitCode || !cp.pid) {

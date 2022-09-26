@@ -7,7 +7,7 @@ const HomePage: Page<never, { key: number }> = (props) => {
 	return (
 		<>
 			<h1>Home</h1>
-			<p>Hot reloadin'!</p>
+			<p>Hello world!</p>
 			<p id="metadata">Metadata: {props.meta.key}</p>
 			<button onClick={() => setCount((old) => old + 1)}>
 				Clicked: {count}
