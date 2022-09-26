@@ -20,7 +20,7 @@ function HomePage() {
 				</div>
 
 				<div className={css.tagLine}>
-					Lightning fast Next.js alternative powered by Vite
+					Bleeding-edge React framework powered by Vite
 				</div>
 
 				<p>

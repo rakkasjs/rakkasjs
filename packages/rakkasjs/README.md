@@ -2,7 +2,7 @@
 
 <div align="center">
 
-Lightning fast [Next.js](https://nextjs.org) alternative powered by [Vite](https://vitejs.dev)
+Bleeding-edge React framework powered by [Vite](https://vitejs.dev)
 
 [![Build Status](https://app.travis-ci.com/rakkasjs/rakkasjs.svg?branch=main)](https://app.travis-ci.com/rakkasjs/rakkasjs)
 ![npm type definitions](https://img.shields.io/npm/types/rakkasjs)

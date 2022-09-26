@@ -40,7 +40,7 @@
 		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist",
 		"test:package": "publint"
 	},
-	"description": "Lightning fast Next.js alternative powered by Vite",
+	"description": "Bleeding-edge React framework powered by Vite",
 	"license": "MIT",
 	"repository": "https://github.com/rakkasjs/rakkasjs",
 	"homepage": "https://rakkasjs.org",
