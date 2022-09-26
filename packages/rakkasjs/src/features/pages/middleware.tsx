@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import React, { Fragment, StrictMode, Suspense } from "react";
+import React, { Fragment, ReactNode, StrictMode, Suspense } from "react";
 import { renderToReadableStream } from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { App, RouteContext } from "../../runtime/App";
@@ -280,24 +280,42 @@ export default async function renderPageRoute(
 	const meta: any = {};
 	preloaded.forEach((p) => Object.assign(meta, p?.meta));
 
-	const preloadNode = preloaded.map((result, i) => (
-		<Fragment key={i}>
-			{result?.head}
-			{result?.redirect && <Redirect {...result?.redirect} />}
-		</Fragment>
-	));
+	const preloadNode: ReactNode[] = preloaded
+		.map((result, i) => {
+			return (
+				(result?.head || result?.redirect) && (
+					<Fragment key={i}>
+						{result?.head}
+						{result?.redirect && <Redirect {...result?.redirect} />}
+					</Fragment>
+				)
+			);
+		})
+		.filter(Boolean);
 
 	let app = (
+		<App
+			beforePageLookupHandlers={beforePageLookupHandlers}
+			ssrActionData={actionResult?.data}
+			ssrMeta={meta}
+			ssrPreloaded={preloaded}
+			ssrModules={modules}
+		/>
+	);
+
+	if (preloadNode.length) {
+		app = (
+			<>
+				{preloadNode}
+				{app}
+			</>
+		);
+	}
+
+	app = (
 		<ServerSideContext.Provider value={ctx}>
 			<IsomorphicContext.Provider value={pageContext}>
-				{preloadNode}
-				<App
-					beforePageLookupHandlers={beforePageLookupHandlers}
-					ssrActionData={actionResult?.data}
-					ssrMeta={meta}
-					ssrPreloaded={preloaded}
-					ssrModules={modules}
-				/>
+				{app}
 			</IsomorphicContext.Provider>
 		</ServerSideContext.Provider>
 	);

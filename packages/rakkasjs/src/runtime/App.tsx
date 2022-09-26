@@ -291,11 +291,10 @@ export async function loadRoute(
 	const layoutStack = await Promise.all(promises);
 
 	let meta: any;
-	let preloadNode: ReactNode;
+	let preloadNode: ReactNode[] = [];
 
 	if (import.meta.env.SSR) {
 		meta = ssrMeta;
-		preloadNode = null;
 	} else {
 		const preloaded = layoutStack.map((r) => r[1]).reverse();
 
@@ -336,12 +335,14 @@ export async function loadRoute(
 		null as any as ReactElement,
 	);
 
-	app = (
-		<>
-			{preloadNode}
-			{app}
-		</>
-	);
+	if (preloadNode.length) {
+		app = (
+			<>
+				{preloadNode}
+				{app}
+			</>
+		);
+	}
 
 	return {
 		pathname: originalPathname,

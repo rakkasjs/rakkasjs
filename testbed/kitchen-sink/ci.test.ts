@@ -900,6 +900,17 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				document.body?.innerText.includes("Thank you for your feedback!"),
 			);
 		});
+
+		test("useId result matches SSR", async () => {
+			await page.goto(host + "/use-id");
+			await page.waitForSelector(".hydrated");
+
+			await page.waitForFunction(
+				() =>
+					document.getElementById("useIdTestContainer")?.innerText ===
+					"Success",
+			);
+		});
 	});
 }
 
