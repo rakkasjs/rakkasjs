@@ -131,8 +131,10 @@ export async function doPrerender(
 						return;
 					}
 
+					const isRedirect = response.status >= 300 && response.status < 400;
 					const isPage =
-						response.headers.get("content-type")?.split(";")[0] === "text/html";
+						response.headers.get("content-type")?.split(";")[0] ===
+							"text/html" || isRedirect;
 
 					if (isPage) {
 						if (!pathname.endsWith("/")) {
@@ -170,6 +172,14 @@ export async function doPrerender(
 						}
 
 						if (shouldPrerender) {
+							if (!body) {
+								body = isRedirect
+									? `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${escapeHtml(
+											response.headers.get("location")!,
+									  )}"></head></html>`
+									: "";
+							}
+
 							await fs.promises.writeFile(filename, body);
 							files.set(pathname, [response.status, error]);
 						} else {
@@ -246,4 +256,13 @@ export async function doPrerender(
 
 function plural(n: number, s: string) {
 	return n + " " + (n === 1 ? s : s + "s");
+}
+
+function escapeHtml(text: string): string {
+	return text
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#x27;");
 }
