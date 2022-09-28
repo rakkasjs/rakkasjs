@@ -30,21 +30,16 @@ function HomePage() {
 				</p>
 
 				<p>
+					<a href="/new" target="_blank" style={{ marginRight: "2rem" }}>
+						Try on StackBlitz
+						<ExternalIcon />
+					</a>
 					<a
 						href="https://codesandbox.io/s/github/rakkasjs/rakkasjs/tree/main/examples/todo?file=/src/routes/index.page.tsx"
 						target="_blank"
 						rel="noreferrer"
-						style={{ marginRight: "2rem" }}
 					>
 						Try on CodeSandbox
-						<ExternalIcon />
-					</a>
-					<a
-						href="https://stackblitz.com/github/rakkasjs/rakkasjs/tree/main/examples/todo?file=src%2Froutes%2Findex.page.tsx"
-						target="_blank"
-						rel="noreferrer"
-					>
-						Try on StackBlitz
 						<ExternalIcon />
 					</a>
 				</p>
