@@ -206,6 +206,18 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			expect(json).toMatchObject({ rest: "/aaa%2Fbbb/ccc" });
 		});
 
+		test("handles credentials in ctx.fetch", async () => {
+			const json = await fetch(host + "/fetch", {
+				headers: { Authorization: "1234" },
+			}).then((r) => r.json());
+
+			expect(json).toMatchObject({
+				withCredentials: "1234",
+				withoutCredentials: "",
+				withImplicitCredentials: "1234",
+			});
+		});
+
 		test("renders preloaded data", async () => {
 			const response = await fetch(host + "/");
 			expect(response.status).toBe(200);

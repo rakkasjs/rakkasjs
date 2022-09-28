@@ -16,9 +16,11 @@ const isomorphicFetchServerHooks: ServerHooks = {
 				url = url || new URL(newRequest.url, ctx.url);
 
 				const sameOrigin = url.origin === ctx.url.origin;
+				const credentials =
+					newRequest.credentials ?? init?.credentials ?? "same-origin";
 				const includeCredentials =
-					newRequest.credentials === "include" ||
-					(newRequest.credentials === "same-origin" && sameOrigin);
+					credentials === "include" ||
+					(credentials === "same-origin" && sameOrigin);
 
 				if (includeCredentials) {
 					const cookie = ctx.request.headers.get("cookie");
