@@ -43,7 +43,29 @@
 		background: #fff;
 		border-right: solid 1px #ddd;
 		height: calc(100vh - 70px);
+		scrollbar-color: transparent;
 		overflow-y: auto;
+	}
+
+	.toc:hover {
+		scrollbar-color: #ccc;
+	}
+
+	.toc::-webkit-scrollbar {
+		width: 0.4rem;
+	}
+
+	.toc::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.toc::-webkit-scrollbar-thumb {
+		background-color: transparent;
+		border-radius: 1rem;
+	}
+
+	.toc:hover::-webkit-scrollbar-thumb {
+		background-color: #ccc;
 	}
 
 	.content {

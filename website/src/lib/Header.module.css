@@ -25,6 +25,34 @@
 	transition: left 0.2s ease-in-out;
 	max-height: calc(100vh - 81px);
 	overflow-y: auto;
+	scrollbar-color: #ccc;
+}
+
+@media (pointer: fine) {
+	.sidebar {
+		scrollbar-color: transparent;
+	}
+
+	.sidebar:hover {
+		scrollbar-color: #ccc;
+	}
+
+	.sidebar::-webkit-scrollbar {
+		width: 0.4rem;
+	}
+
+	.sidebar::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.sidebar::-webkit-scrollbar-thumb {
+		background-color: transparent;
+		border-radius: 1rem;
+	}
+
+	.sidebar:hover::-webkit-scrollbar-thumb {
+		background-color: #ccc;
+	}
 }
 
 .sidebar.open {
