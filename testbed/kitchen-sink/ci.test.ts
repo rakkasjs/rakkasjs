@@ -351,11 +351,17 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			);
 		}
 
-		test("sets page title", async () => {
-			await page.goto(host + "/title");
+		test(
+			"sets page title",
+			async () => {
+				await page.goto(host + "/title");
 
-			await page.waitForFunction(() => document.title === "Page title");
-		});
+				await page.waitForFunction(() => document.title === "Page title");
+			},
+			// This is flaky on Mac, probably because it can't recover from the
+			// previous test's hot reload.
+			{ retry: 3 },
+		);
 
 		test(
 			"performs client-side navigation",
