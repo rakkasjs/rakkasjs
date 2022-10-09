@@ -4,7 +4,7 @@ import {
 	createQueryClient,
 	QueryCacheContext,
 } from "./implementation";
-import { devalue } from "devalue";
+import { uneval } from "devalue";
 import { ServerHooks } from "../../runtime/hattip-handler";
 
 const useQueryServerHooks: ServerHooks = {
@@ -93,13 +93,13 @@ const useQueryServerHooks: ServerHooks = {
 			},
 
 			emitToDocumentHead() {
-				const newItemsString = devalue(cache._getNewItems());
+				const newItemsString = uneval(cache._getNewItems());
 				return `<script>$RSC=${newItemsString}</script>`;
 			},
 
 			emitBeforeSsrChunk() {
 				if (cache._hasNewItems) {
-					const newItemsString = devalue(cache._getNewItems());
+					const newItemsString = uneval(cache._getNewItems());
 					return `<script>Object.assign($RSC,${newItemsString})</script>`;
 				}
 			},

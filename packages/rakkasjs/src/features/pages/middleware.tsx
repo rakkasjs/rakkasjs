@@ -28,7 +28,7 @@ import {
 	ServerSidePageContext,
 } from "../../runtime/page-types";
 import { LookupHookResult } from "../../lib";
-import { devalue } from "devalue";
+import { uneval } from "devalue";
 
 const pageContextMap = new WeakMap<Request, PageContext>();
 
@@ -227,7 +227,7 @@ export default async function renderPageRoute(
 			actionResult.redirect = String(actionResult.redirect);
 		}
 
-		return new Response(devalue(actionResult), {
+		return new Response(uneval(actionResult), {
 			status: actionErrorIndex >= 0 ? 500 : 200,
 			headers: makeHeaders(
 				{
@@ -506,7 +506,7 @@ export default async function renderPageRoute(
 		// TODO: Refactor this. Probably belongs to client-side-navigation
 		(actionResult?.data === undefined
 			? ""
-			: `<script>$RAKKAS_ACTION_DATA=${devalue(actionResult?.data)}</script>`);
+			: `<script>$RAKKAS_ACTION_DATA=${uneval(actionResult?.data)}</script>`);
 
 	if (actionErrorIndex >= 0) {
 		head += `<script>$RAKKAS_ACTION_ERROR_INDEX=${actionErrorIndex}</script>`;

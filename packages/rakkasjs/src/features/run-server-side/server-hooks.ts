@@ -1,6 +1,6 @@
 import type { ServerHooks } from "../../runtime/hattip-handler";
 import { parse } from "@brillout/json-serializer/parse";
-import { devalue } from "devalue";
+import { uneval } from "devalue";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
@@ -52,7 +52,7 @@ const runServerSideServerHooks: ServerHooks = {
 			// TODO: Server-side context
 			const result = await fn(closureContents, ctx, vars);
 
-			return new Response(devalue(result));
+			return new Response(uneval(result));
 		},
 	},
 	createPageHooks(requestContext) {

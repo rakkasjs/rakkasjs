@@ -5,7 +5,7 @@ import {
 	useRequestContext,
 	UseServerSideQueryOptions,
 } from "./lib-common";
-import { devalue } from "devalue";
+import { uneval } from "devalue";
 import { RequestContext } from "@hattip/compose";
 import { UseMutationOptions, UseMutationResult } from "../use-mutation/lib";
 
@@ -37,7 +37,7 @@ function runSSQImpl(
 
 			await (ctx.platform as any).render(
 				url,
-				new Response(devalue(result)),
+				new Response(uneval(result)),
 				(ctx.platform as any).prerenderOptions,
 			);
 		}
@@ -80,7 +80,7 @@ function useSSQImpl(
 
 					await (ctx!.platform as any).render(
 						url,
-						new Response(devalue(result)),
+						new Response(uneval(result)),
 						(ctx!.platform as any).prerenderOptions,
 					);
 				}
