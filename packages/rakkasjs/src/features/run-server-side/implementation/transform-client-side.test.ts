@@ -38,6 +38,7 @@ const tests: Test[] = [
 					return ctx.session.userName;
 				});
 				useSSQ(outside);
+				useSSQ(() => baz);
 				runSSM(() => { void baz; })
 			}
 		`,
@@ -52,7 +53,8 @@ const tests: Test[] = [
 				useSSQ(["abc123", 0, [foo, baz]], { option: "qux" });
 				useSSQ(["abc123", 1, []]);
 				useSSQ(["abc123", 2, []]);
-				runSSM(["abc123", 3, [baz]]);
+				useSSQ(["abc123", 3, [baz]]);
+				runSSM(["abc123", 4, [baz]]);
 			};
 		`,
 	},

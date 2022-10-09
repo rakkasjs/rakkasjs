@@ -60,9 +60,13 @@ export default createRequestHandler({
 			wrapSsrStream(stream) {
 				const { readable, writable } = new TransformStream({
 					transform(chunk, controller) {
-						// Intercept and transform React's SSR stream
+						// You can transform the chunks of the
+						// React SSR stream here.
+						controller.enqueue(chunk);
 					},
 				});
+
+				stream.pipeThrough(writable);
 
 				return readable;
 			},

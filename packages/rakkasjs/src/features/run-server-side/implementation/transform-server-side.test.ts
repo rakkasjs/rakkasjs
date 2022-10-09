@@ -27,6 +27,7 @@ const tests: Test[] = [
 					return ctx.session.userName;
 				});
 				useSSQ(outside);
+				useSSQ(() => baz);
 				runSSM(() => { void 0; });
 			}
 		`,
@@ -39,6 +40,7 @@ const tests: Test[] = [
 				useSSQ(["abc123", 0, [foo, baz], $runServerSide$[0]], { option: "qux" });
 				useSSQ(["abc123", 1, [], $runServerSide$[1]]);
 				useSSQ(["abc123", 2, [], $runServerSide$[2]]);
+				useSSQ(["abc123", 3, [baz], $runServerSide$[3]]);
 				null;
 			};
 
@@ -55,6 +57,10 @@ const tests: Test[] = [
 				async ($runServerSideClosure$, ...$runServerSideArgs$) => {
 					let [] = $runServerSideClosure$;
 					return outside(...$runServerSideArgs$);
+				},
+				async ($runServerSideClosure$) => {
+					let [baz] = $runServerSideClosure$;
+					return baz;
 				},
 				async ($runServerSideClosure$) => {
 					let [] = $runServerSideClosure$;
