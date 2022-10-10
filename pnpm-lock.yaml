@@ -89,7 +89,7 @@ importers:
 
   examples/graphql:
     specifiers:
-      "@hattip/graphql": ^0.0.18
+      "@hattip/graphql": ^0.0.19
       "@types/react": ^18.0.21
       "@types/react-dom": ^18.0.6
       graphql: ^16.6.0
@@ -99,7 +99,7 @@ importers:
       typescript: ^4.8.4
       vite: ^3.1.6
     dependencies:
-      "@hattip/graphql": 0.0.18_graphql@16.6.0
+      "@hattip/graphql": 0.0.19_graphql@16.6.0
       graphql: 16.6.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -112,7 +112,7 @@ importers:
 
   examples/guide-samples:
     specifiers:
-      "@hattip/response": ^0.0.18
+      "@hattip/response": ^0.0.19
       "@types/react": ^18.0.21
       "@types/react-dom": ^18.0.6
       rakkasjs: 0.6.1
@@ -122,7 +122,7 @@ importers:
       vite: ^3.1.6
       vite-tsconfig-paths: ^3.5.1
     dependencies:
-      "@hattip/response": 0.0.18
+      "@hattip/response": 0.0.19
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -153,6 +153,35 @@ importers:
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
       vite: 3.1.6
+
+  examples/session:
+    specifiers:
+      "@hattip/cookie": ^0.0.19
+      "@hattip/polyfills": ^0.0.19
+      "@hattip/session": ^0.0.19
+      "@types/react": ^18.0.21
+      "@types/react-dom": ^18.0.6
+      dotenv-cli: ^6.0.0
+      rakkasjs: 0.6.1
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      typescript: ^4.8.4
+      vite: ^3.1.6
+      vite-tsconfig-paths: ^3.5.1
+    dependencies:
+      "@hattip/cookie": 0.0.19
+      "@hattip/session": 0.0.19
+      dotenv-cli: 6.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    devDependencies:
+      "@hattip/polyfills": 0.0.19
+      "@types/react": 18.0.21
+      "@types/react-dom": 18.0.6
+      rakkasjs: link:../../packages/rakkasjs
+      typescript: 4.8.4
+      vite: 3.1.6
+      vite-tsconfig-paths: 3.5.1_vite@3.1.6
 
   examples/todo:
     specifiers:
@@ -315,14 +344,14 @@ importers:
       "@babel/types": ^7.19.3
       "@brillout/json-serializer": ^0.5.1
       "@cyco130/eslint-config": ^2.1.1
-      "@hattip/adapter-node": ^0.0.18
-      "@hattip/bundler-cloudflare-workers": ^0.0.18
-      "@hattip/bundler-deno": ^0.0.18
-      "@hattip/bundler-netlify": ^0.0.18
-      "@hattip/bundler-vercel": ^0.0.18
-      "@hattip/compose": ^0.0.18
-      "@hattip/core": ^0.0.18
-      "@hattip/polyfills": ^0.0.18
+      "@hattip/adapter-node": ^0.0.19
+      "@hattip/bundler-cloudflare-workers": ^0.0.19
+      "@hattip/bundler-deno": ^0.0.19
+      "@hattip/bundler-netlify": ^0.0.19
+      "@hattip/bundler-vercel": ^0.0.19
+      "@hattip/compose": ^0.0.19
+      "@hattip/core": ^0.0.19
+      "@hattip/polyfills": ^0.0.19
       "@types/babel__core": ^7.1.19
       "@types/micromatch": ^4.0.2
       "@types/node": ^18.8.3
@@ -353,14 +382,14 @@ importers:
     dependencies:
       "@babel/core": 7.19.3
       "@babel/types": 7.19.3
-      "@hattip/adapter-node": 0.0.18
-      "@hattip/bundler-cloudflare-workers": 0.0.18
-      "@hattip/bundler-deno": 0.0.18
-      "@hattip/bundler-netlify": 0.0.18
-      "@hattip/bundler-vercel": 0.0.18
-      "@hattip/compose": 0.0.18
-      "@hattip/core": 0.0.18
-      "@hattip/polyfills": 0.0.18
+      "@hattip/adapter-node": 0.0.19
+      "@hattip/bundler-cloudflare-workers": 0.0.19
+      "@hattip/bundler-deno": 0.0.19
+      "@hattip/bundler-netlify": 0.0.19
+      "@hattip/bundler-vercel": 0.0.19
+      "@hattip/compose": 0.0.19
+      "@hattip/core": 0.0.19
+      "@hattip/polyfills": 0.0.19
       "@types/node": 18.8.3
       "@types/react": 18.0.21
       "@types/react-dom": 18.0.6
@@ -395,11 +424,11 @@ importers:
   testbed/kitchen-sink:
     specifiers:
       "@cyco130/eslint-config": ^2.1.1
-      "@hattip/adapter-cloudflare-workers": ^0.0.18
-      "@hattip/adapter-deno": ^0.0.18
-      "@hattip/adapter-netlify-edge": ^0.0.18
-      "@hattip/adapter-netlify-functions": ^0.0.18
-      "@hattip/adapter-vercel-edge": ^0.0.18
+      "@hattip/adapter-cloudflare-workers": ^0.0.19
+      "@hattip/adapter-deno": ^0.0.19
+      "@hattip/adapter-netlify-edge": ^0.0.19
+      "@hattip/adapter-netlify-functions": ^0.0.19
+      "@hattip/adapter-vercel-edge": ^0.0.19
       "@types/ps-tree": ^1.1.2
       "@types/react": ^18.0.21
       "@types/react-dom": ^18.0.6
@@ -420,9 +449,9 @@ importers:
       web-streams-polyfill: ^3.2.1
       wrangler: ^2.1.10
     dependencies:
-      "@hattip/adapter-cloudflare-workers": 0.0.18
-      "@hattip/adapter-deno": 0.0.18
-      "@hattip/adapter-vercel-edge": 0.0.18
+      "@hattip/adapter-cloudflare-workers": 0.0.19
+      "@hattip/adapter-deno": 0.0.19
+      "@hattip/adapter-vercel-edge": 0.0.19
       "@types/react": 18.0.21
       "@types/react-dom": 18.0.6
       cheerio: 1.0.0-rc.12
@@ -432,8 +461,8 @@ importers:
       web-streams-polyfill: 3.2.1
     devDependencies:
       "@cyco130/eslint-config": 2.1.1_z4bbprzjrhnsfa24uvmcbu7f5q
-      "@hattip/adapter-netlify-edge": 0.0.18
-      "@hattip/adapter-netlify-functions": 0.0.18
+      "@hattip/adapter-netlify-edge": 0.0.19
+      "@hattip/adapter-netlify-functions": 0.0.19
       "@types/ps-tree": 1.1.2
       cross-env: 7.0.3
       eslint: 8.25.0
@@ -1942,67 +1971,67 @@ packages:
       tslib: 2.4.0
     dev: false
 
-  /@hattip/adapter-cloudflare-workers/0.0.18:
+  /@hattip/adapter-cloudflare-workers/0.0.19:
     resolution:
       {
-        integrity: sha512-79sP9lvqfflXtclcrOffVFWk13JL+AE5rVuU9xjP0ugAePTDAgiNBHvvHVElgZvydL4U26DiVGzxi3Tr3YnQww==,
+        integrity: sha512-oh+y0ZhsEJz3m5Qy8T4GHb6QBpyxC1cogpCscS1gYhsNzBDRu/STAFyUmc9P677QpWVBaAvVKrOsj7lQ2HJSxw==,
       }
     dependencies:
-      "@hattip/core": 0.0.18
+      "@hattip/core": 0.0.19
     dev: false
 
-  /@hattip/adapter-deno/0.0.18:
+  /@hattip/adapter-deno/0.0.19:
     resolution:
       {
-        integrity: sha512-a+Hd1PiQpUWxvVkeHa5c10JX9p8K/ipUAox3MmEMNngL8DaeM1gap/eEe4S4rv4k+duiz8nnHzRInX0cRyJH3g==,
+        integrity: sha512-iMY7Hpy5Vyzwh7JMOnHc2krYIh8E5gkOsqfwD1dvsASfLRIjGn4QUVNPSfvtJhPnmEwpPegVwL4SqD0HLvKKbA==,
       }
     dependencies:
-      "@hattip/core": 0.0.18
+      "@hattip/core": 0.0.19
     dev: false
 
-  /@hattip/adapter-netlify-edge/0.0.18:
+  /@hattip/adapter-netlify-edge/0.0.19:
     resolution:
       {
-        integrity: sha512-25Qa+CS4pJJw7VGeKSMCyUFbrXvXUzf4Ie/AVTR1vE8nFRTb2FMgHEDJCKRREQcxbIKMitdmT6RluMhMgLxjZQ==,
+        integrity: sha512-qiViq64YgO/eTAm5fHe6mgPVUdJwybk4pnR4AEzVsD7PpgFcZbczlSbObKcB8X5los88k+LT5Pbbrp5S+t1j7A==,
       }
     dependencies:
-      "@hattip/core": 0.0.18
+      "@hattip/core": 0.0.19
     dev: true
 
-  /@hattip/adapter-netlify-functions/0.0.18:
+  /@hattip/adapter-netlify-functions/0.0.19:
     resolution:
       {
-        integrity: sha512-x6wOiVoNvnbfdtJwEgCHOf6rhTo8Xl8nQ39OjrlXoA6E5Mpb+D7wKqdccAvBXJMK1HjmACTZGxMYHIdXVnC6Gg==,
+        integrity: sha512-U5v6anN+m341BeupQdT2hRnERJG6PCyn30eIPYG+ifsJwRXoif5RbfofwDIs7u03GJ2/2VtW1MtK6fYELgnONQ==,
       }
     dependencies:
-      "@hattip/adapter-node": 0.0.18
-      "@hattip/core": 0.0.18
-      "@hattip/polyfills": 0.0.18
+      "@hattip/adapter-node": 0.0.19
+      "@hattip/core": 0.0.19
+      "@hattip/polyfills": 0.0.19
       netlify-lambda-types: 1.0.0
     dev: true
 
-  /@hattip/adapter-node/0.0.18:
+  /@hattip/adapter-node/0.0.19:
     resolution:
       {
-        integrity: sha512-tDAPyBCI19V/5gv8071VlGTbgN+CXu/tCfUgqNQ3D78X2ldWHEUwfzh6KfxA/ZlgaYo1J5jggMExGqDHRltdGw==,
+        integrity: sha512-2Tq7g+c6nt/YtsibuHDYKhBQJ/V/8LD21uvl2t6ypP6oTJ5qXsXZLGBXIDGqO9d/BDl81BQK/Rp4LKD09BJO3w==,
       }
     dependencies:
-      "@hattip/core": 0.0.18
-      "@hattip/polyfills": 0.0.18
+      "@hattip/core": 0.0.19
+      "@hattip/polyfills": 0.0.19
 
-  /@hattip/adapter-vercel-edge/0.0.18:
+  /@hattip/adapter-vercel-edge/0.0.19:
     resolution:
       {
-        integrity: sha512-X6w2tR3taIXQ/T8VXMabHrBrwkU/D+I9/+7qAm9TZ8EOiX0oXI9FI7ng6q8r5Vt4NzsttBPRlf5WY6dniIoeuA==,
+        integrity: sha512-goxu1AiPj+qbFp4i8+VYgoDovk4vpxsiMxG3R2ytr3EbNZZH1Rbl3AVGGX/BkFF9R0VyqGffXOfoWztAStuDkQ==,
       }
     dependencies:
-      "@hattip/core": 0.0.18
+      "@hattip/core": 0.0.19
     dev: false
 
-  /@hattip/bundler-cloudflare-workers/0.0.18:
+  /@hattip/bundler-cloudflare-workers/0.0.19:
     resolution:
       {
-        integrity: sha512-t2quui6AXSi4DhhqL+tTLaTq2i5CpkEx2ivpPjffptpdNORPfIFenmNnTGSCFtVhc9F1Ek/RP/exdezgH40FTg==,
+        integrity: sha512-tyDaxFr/PeOv2YS0TDaiogjWBLI/riERxaeFzMTfaWrQzbRwkNYC8jh7tHWpiSqUxRV8nFBkG0bvdjOKVBaIGQ==,
       }
     hasBin: true
     dependencies:
@@ -2010,22 +2039,10 @@ packages:
       esbuild: 0.14.54
     dev: false
 
-  /@hattip/bundler-deno/0.0.18:
+  /@hattip/bundler-deno/0.0.19:
     resolution:
       {
-        integrity: sha512-4vog3oUyrDbV1vY+fDBDFOl4JJbdP8ZC94eTJRFGG9Gq7WA1+jXeaEBbVnJerqYY7O8O0YYElbXzyxw2+7OF+A==,
-      }
-    hasBin: true
-    dependencies:
-      cac: 6.7.14
-      cpr: 3.0.1
-      esbuild: 0.14.54
-    dev: false
-
-  /@hattip/bundler-netlify/0.0.18:
-    resolution:
-      {
-        integrity: sha512-DBTTahUF9hPCIQAFLO/aaDD18hcVaA+QfasIDvmZv6WuRZ1OIrEuCfc9lUSetULu/7YQDIH1v9oQus6W2Fjmhw==,
+        integrity: sha512-S5UKxJhj+2a7lih+ie21ewxbK1Bo8zHAasBoZzoKHaI93d5Bq05dUxF0J6XHn5v9NmSvOpUceXsrKY4rL+jwQQ==,
       }
     hasBin: true
     dependencies:
@@ -2034,10 +2051,10 @@ packages:
       esbuild: 0.14.54
     dev: false
 
-  /@hattip/bundler-vercel/0.0.18:
+  /@hattip/bundler-netlify/0.0.19:
     resolution:
       {
-        integrity: sha512-AG4CAUJ2fb+HmYkhWLN7TQQC/eFlfPdsnFF9BHvoOyJYaHoK3P7rOWJO3sPSRYKvOFbq3/isz3VmUe9uQw4Jgg==,
+        integrity: sha512-zksnZkuwREga17K2wL7HYtCDnHFUxe+t07c0281KFwSPRvuISfs9a5Od3sY0dlZthbyLRcAB6AruIpDcDNjGdA==,
       }
     hasBin: true
     dependencies:
@@ -2046,25 +2063,49 @@ packages:
       esbuild: 0.14.54
     dev: false
 
-  /@hattip/compose/0.0.18:
+  /@hattip/bundler-vercel/0.0.19:
     resolution:
       {
-        integrity: sha512-2mheAIBd0xEPhxH4+aV/rqcehUaPc7Ohw9sdNNqyPH+UdcZp8Nw83XnJ7rVTsyZk7x3bmWUJ+SzGqp4cJ3Yj6A==,
+        integrity: sha512-w3jGC8geg6j+bBVUpqnbxQP2RYguFq5dzUpvYgqDbFWlxS79BuV9GmZRgH3bFpqw4tX/CgfT/p7MCKDYUDmKfw==,
       }
+    hasBin: true
     dependencies:
-      "@hattip/core": 0.0.18
+      cac: 6.7.14
+      cpr: 3.0.1
+      esbuild: 0.14.54
     dev: false
 
-  /@hattip/core/0.0.18:
+  /@hattip/compose/0.0.19:
     resolution:
       {
-        integrity: sha512-korEWAPU7k7gtWLsMj5BNmluu5oQG25DAtupqcHPbzVxYuIq/JnnNxN8dHc2mLHnRv9COVUw+s/8ZU+T1tjN2w==,
+        integrity: sha512-7kLstZ+vSDflfWzqPOpBgn+4J3NwsqxuYL6lKsd1JVSL8/IH5Xl9t3rznQgElr9mpgeTj3fuKk3CwUIF3kyiPg==,
+      }
+    dependencies:
+      "@hattip/core": 0.0.19
+    dev: false
+
+  /@hattip/cookie/0.0.19:
+    resolution:
+      {
+        integrity: sha512-o8knl3agg5Y/N3r1MhJRzA7fIdSzvYgaF5rfd+7ZeBMnyz6izCMW24mJTeCPaqKDhbcf79/Jo3IIBPC1xUtOVQ==,
+      }
+    dependencies:
+      "@hattip/compose": 0.0.19
+      "@hattip/core": 0.0.19
+      "@types/cookie": 0.5.1
+      cookie: 0.5.0
+    dev: false
+
+  /@hattip/core/0.0.19:
+    resolution:
+      {
+        integrity: sha512-V2lzJMyNEey4J+m3tlOD9JpLsbKeAF9s2mnfKBdY5IOjkDEjUTnSQVzLv1Mzk45UMbKD4d+IyNrO2+L3xD/enA==,
       }
 
-  /@hattip/graphql/0.0.18_graphql@16.6.0:
+  /@hattip/graphql/0.0.19_graphql@16.6.0:
     resolution:
       {
-        integrity: sha512-14Wdi1ns7YGub9Nx18tbpg1NweiX965/lBzArJXUdfqa3RAYi7byoOy/o/ys0MYDIwP/4cIxFRVhKO8K7aGZ7Q==,
+        integrity: sha512-aCrb2gZcb9mgrUIiSMv980IbYwTaLZPXGaklN4LkxDfMtJYnu2dCNDxI+hLCRZM8/RNEQ9Ei4Cjkcf/gv5AW9A==,
       }
     peerDependencies:
       graphql: ">= 15.8"
@@ -2076,29 +2117,40 @@ packages:
       "@graphql-tools/utils": 8.12.0_graphql@16.6.0
       "@graphql-typed-document-node/core": 3.1.1_graphql@16.6.0
       "@graphql-yoga/subscription": 2.2.3
-      "@hattip/compose": 0.0.18
-      "@hattip/core": 0.0.18
+      "@hattip/compose": 0.0.19
+      "@hattip/core": 0.0.19
       dset: 3.1.2
       graphql: 16.6.0
       tslib: 2.4.0
     dev: false
 
-  /@hattip/polyfills/0.0.18:
+  /@hattip/polyfills/0.0.19:
     resolution:
       {
-        integrity: sha512-ZxgD4hMtBa93F7NVrfK4on28J3iOmWkgdphXZXQ/j5GeHbxilrBuX297AYyfxCgX0DlPY12CgqojWXCqUk8zaQ==,
+        integrity: sha512-r4k2D1/hSHnlAHxSQODjquZlny/nMceBVkHh6fGc2F8b0JdogcVOFMMXxGCnkL0gj86ikuxxjJp0iim95h3W1A==,
       }
     dependencies:
-      "@hattip/core": 0.0.18
+      "@hattip/core": 0.0.19
       node-fetch-native: 0.1.7
 
-  /@hattip/response/0.0.18:
+  /@hattip/response/0.0.19:
     resolution:
       {
-        integrity: sha512-2Spmha01vnU4wqSPZy1czzCN4FL/V1dHL4oVDNUEq4HK+vNdqy11JZTj2Orq7UFzndfPKzcQJzZeK8yOsbzdQw==,
+        integrity: sha512-ZDWJK+Jel7H1WVpy8KIpvVhP5mqOVRU9abTBs+A5tUtm8SHu45Zn+FK8ZdohxD8g5La8PobXIf/GvRBQL6BTKA==,
       }
     dependencies:
-      "@hattip/core": 0.0.18
+      "@hattip/core": 0.0.19
+    dev: false
+
+  /@hattip/session/0.0.19:
+    resolution:
+      {
+        integrity: sha512-jZNxb5AuFped8OEy4AAydDLuiSe5LmvAqrXNY2HkEe+lAVxR46fplOqrtB7b+i7z6+nitIUKtNTjXsu/m097sA==,
+      }
+    dependencies:
+      "@hattip/compose": 0.0.19
+      "@hattip/cookie": 0.0.19
+      "@hattip/core": 0.0.19
     dev: false
 
   /@humanwhocodes/config-array/0.10.7:
@@ -3832,7 +3884,6 @@ packages:
       {
         integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==,
       }
-    dev: true
 
   /@types/debug/4.1.7:
     resolution:
@@ -7753,6 +7804,27 @@ packages:
     engines: { node: ^12.20.0 || ^14.13.1 || >=16.0.0 }
     dependencies:
       type-fest: 2.19.0
+    dev: false
+
+  /dotenv-cli/6.0.0:
+    resolution:
+      {
+        integrity: sha512-qXlCOi3UMDhCWFKe0yq5sg3X+pJAz+RQDiFN38AMSbUrnY3uZshSfDJUAge951OS7J9gwLZGfsBlWRSOYz/TRg==,
+      }
+    hasBin: true
+    dependencies:
+      cross-spawn: 7.0.3
+      dotenv: 16.0.3
+      dotenv-expand: 8.0.3
+      minimist: 1.2.6
+    dev: false
+
+  /dotenv-expand/8.0.3:
+    resolution:
+      {
+        integrity: sha512-SErOMvge0ZUyWd5B0NXMQlDkN+8r+HhVUsxgOO7IoPDOdDRD2JjExpN6y3KnFR66jsJMwSn1pqIivhU5rcJiNg==,
+      }
+    engines: { node: ">=12" }
     dev: false
 
   /dotenv/10.0.0:
@@ -12167,7 +12239,6 @@ packages:
       }
     dependencies:
       has: 1.0.3
-    dev: false
 
   /is-core-module/2.9.0:
     resolution:
@@ -17716,7 +17787,7 @@ packages:
       }
     hasBin: true
     dependencies:
-      is-core-module: 2.9.0
+      is-core-module: 2.10.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 

@@ -130,9 +130,10 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 }
 
 const DEFAULT_NODE_ENTRY_CONTENTS = `
-	import hattipHandler from "virtual:rakkasjs:hattip-entry";
 	import { createMiddleware } from "rakkasjs/node-adapter";
-	export default createMiddleware(hattipHandler);
+	export default createMiddleware(
+		(req, res, next) => import("virtual:rakkasjs:hattip-entry").then((m) => m.default(req, res, next)),
+	);
 `;
 
 const DEFAULT_HATTIP_ENTRY_CONTENTS = `

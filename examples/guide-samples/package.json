@@ -17,7 +17,7 @@
 		"vite-tsconfig-paths": "^3.5.1"
 	},
 	"dependencies": {
-		"@hattip/response": "^0.0.18",
+		"@hattip/response": "^0.0.19",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	}

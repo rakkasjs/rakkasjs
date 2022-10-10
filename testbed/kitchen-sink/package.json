@@ -20,8 +20,8 @@
 	},
 	"devDependencies": {
 		"@cyco130/eslint-config": "^2.1.1",
-		"@hattip/adapter-netlify-edge": "^0.0.18",
-		"@hattip/adapter-netlify-functions": "^0.0.18",
+		"@hattip/adapter-netlify-edge": "^0.0.19",
+		"@hattip/adapter-netlify-functions": "^0.0.19",
 		"@types/ps-tree": "^1.1.2",
 		"cross-env": "^7.0.3",
 		"eslint": "^8.25.0",
@@ -36,9 +36,9 @@
 		"wrangler": "^2.1.10"
 	},
 	"dependencies": {
-		"@hattip/adapter-cloudflare-workers": "^0.0.18",
-		"@hattip/adapter-deno": "^0.0.18",
-		"@hattip/adapter-vercel-edge": "^0.0.18",
+		"@hattip/adapter-cloudflare-workers": "^0.0.19",
+		"@hattip/adapter-deno": "^0.0.19",
+		"@hattip/adapter-vercel-edge": "^0.0.19",
 		"@types/react": "^18.0.21",
 		"@types/react-dom": "^18.0.6",
 		"cheerio": "^1.0.0-rc.12",
