@@ -151,7 +151,7 @@ export default async function renderPageRoute(
 	}
 
 	let redirected: boolean | undefined;
-	let status: number = ctx.notFound ? 404 : 200;
+	let status: number;
 	const headers = new Headers({
 		"Content-Type": "text/html; charset=utf-8",
 		vary: "accept",
@@ -228,7 +228,7 @@ export default async function renderPageRoute(
 		}
 
 		return new Response(uneval(actionResult), {
-			status: actionErrorIndex >= 0 ? 500 : 200,
+			status: actionErrorIndex >= 0 ? 500 : actionResult?.status ?? 200,
 			headers: makeHeaders(
 				{
 					"content-type": "application/javascript",
@@ -254,6 +254,9 @@ export default async function renderPageRoute(
 		});
 	}
 
+	status = actionResult?.status ?? (ctx.notFound ? 404 : 200);
+
+	pageContext.actionData = actionResult?.data;
 	preloadContext.actionData = actionResult?.data;
 
 	const preloaded = await Promise.all(

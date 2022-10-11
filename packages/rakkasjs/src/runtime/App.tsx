@@ -52,6 +52,7 @@ export function App(props: AppProps) {
 	const pageContext = useContext(IsomorphicContext);
 
 	pageContext.url = new URL(url);
+	pageContext.actionData = actionData;
 
 	if ("error" in lastRoute) {
 		throw lastRoute.error;

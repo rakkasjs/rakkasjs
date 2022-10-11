@@ -115,6 +115,8 @@ export interface PageContext {
 	requestContext?: RequestContext;
 	/** Application-specific stuff */
 	locals: PageLocals;
+	/** Action data */
+	actionData?: any;
 }
 
 export function usePageContext(): PageContext {

@@ -13,7 +13,12 @@ import React, {
 	startTransition,
 	FormEvent,
 } from "react";
-import { ActionResult, useMutation, UseMutationOptions } from "../../lib";
+import {
+	ActionResult,
+	useMutation,
+	UseMutationOptions,
+	usePageContext,
+} from "../../lib";
 
 let lastRenderedId: string;
 let navigationPromise: Promise<void> | undefined;
@@ -159,7 +164,7 @@ function subscribeToLocation(onStoreChange: () => void): () => void {
 }
 
 let serialId = 0;
-let lastLocation: Readonly<[string, number]>;
+let lastLocation: Readonly<[href: string, id: number]>;
 
 function getLocationSnapshot() {
 	return JSON.stringify(lastLocation);
@@ -397,47 +402,49 @@ function shouldHandleClick(e: MouseEventLike): boolean {
 }
 
 // TODO: Where does this belong?
-export function useSubmit(options?: UseMutationOptions<void, HTMLFormElement>) {
+export function useSubmit(options?: UseMutationOptions<any, HTMLFormElement>) {
 	const { current } = useLocation();
+	const pageContext = usePageContext();
 
-	const mutation = useMutation(async (form: HTMLFormElement) => {
-		const formData = new FormData(form);
-		let body: FormData | URLSearchParams = formData;
+	const mutation = useMutation<any, HTMLFormElement>(
+		async (form: HTMLFormElement) => {
+			const formData = new FormData(form);
+			let body: FormData | URLSearchParams = formData;
 
-		if (form.enctype === "application/x-www-form-urlencoded") {
-			const entries = Array.from(formData.entries()).filter(
-				([, v]) => typeof v === "string",
-			) as Array<[string, string]>;
-			body = new URLSearchParams(entries);
-		}
+			if (form.enctype === "application/x-www-form-urlencoded") {
+				const entries = Array.from(formData.entries()).filter(
+					([, v]) => typeof v === "string",
+				) as Array<[string, string]>;
+				body = new URLSearchParams(entries);
+			}
 
-		const response = await fetch(new URL(form.action ?? "", current), {
-			method: "POST",
-			body,
-			headers: {
-				"Content-Type": form.enctype || "application/x-www-form-urlencoded",
-				Accept: "application/javascript",
-			},
-		});
+			const response = await fetch(new URL(form.action ?? "", current), {
+				method: "POST",
+				body,
+				headers: {
+					"Content-Type": form.enctype || "application/x-www-form-urlencoded",
+					Accept: "application/javascript",
+				},
+			});
 
-		if (!response.ok) {
-			throw new Error(`${response.status} ${response.statusText}`);
-		}
+			const text = await response.text();
+			const value: ActionResult = (0, eval)("(" + text + ")");
 
-		const text = await response.text();
-		const value: ActionResult = (0, eval)("(" + text + ")");
-
-		if ("redirect" in value) {
-			await navigate(value.redirect);
-		} else {
-			await navigate(current, { replace: true, actionData: value.data });
-		}
-	}, options);
+			if ("redirect" in value) {
+				await navigate(value.redirect);
+			} else {
+				await navigate(current, { replace: true, actionData: value.data });
+			}
+		},
+		options,
+	);
 
 	function submitHandler(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		mutation.mutate(e.currentTarget);
 	}
+
+	mutation.data = mutation.data ?? pageContext.actionData;
 
 	return {
 		...mutation,

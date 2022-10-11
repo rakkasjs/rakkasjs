@@ -6,13 +6,23 @@ import {
 	useQueryClient,
 	useSubmit,
 } from "rakkasjs";
+import { useRef } from "react";
 import { users } from "src/data/users";
 
-export default function SignUpPage({ actionData }: PageProps) {
+export default function SignUpPage() {
 	const queryClient = useQueryClient();
-	const { submitHandler } = useSubmit({
+
+	const passwordRef = useRef<HTMLInputElement>(null);
+
+	const { submitHandler, data } = useSubmit({
 		onSuccess: () => {
-			queryClient.invalidateQueries("session");
+			if (data) {
+				// Data means, unintuitively, there was an error
+				// Let's clear the password field
+				passwordRef.current!.value = "";
+			} else {
+				queryClient.invalidateQueries("session");
+			}
 		},
 	});
 
@@ -24,7 +34,7 @@ export default function SignUpPage({ actionData }: PageProps) {
 				<label>
 					User name:
 					<br />
-					<input type="text" name="userName" />
+					<input type="text" name="userName" defaultValue={data?.userName} />
 				</label>
 			</p>
 
@@ -32,13 +42,11 @@ export default function SignUpPage({ actionData }: PageProps) {
 				<label>
 					Password:
 					<br />
-					<input type="password" name="password" />
+					<input type="password" name="password" ref={passwordRef} />
 				</label>
 			</p>
 
-			{actionData?.error && (
-				<p style={{ color: "crimson" }}>{actionData.error}</p>
-			)}
+			{data?.error && <p style={{ color: "crimson" }}>{data.error}</p>}
 
 			<p>
 				<button type="submit">Sign up</button>
@@ -87,6 +95,7 @@ export const action: ActionHandler = async (ctx) => {
 	});
 
 	ctx.requestContext.session.data.userName = userName;
+
 	// This doesn't do anything with stores that store session data in the
 	// cookie itself, but it's necessary for other stores to regenerate the
 	// session ID to prevent session fixation attacks.
