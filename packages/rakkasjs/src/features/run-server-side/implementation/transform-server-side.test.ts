@@ -15,6 +15,7 @@ const tests: Test[] = [
 		message: "transforms server-side code",
 		input: `
 			import { useSSQ, runSSM } from "rakkasjs";
+			import { someValue } from "./some-module";
 			const bar = 1;
 
 			function outside() {}
@@ -28,11 +29,13 @@ const tests: Test[] = [
 				});
 				useSSQ(outside);
 				useSSQ(() => baz);
+				useSSQ(() => someValue);
 				runSSM(() => { void 0; });
 			}
 		`,
 		output: `
 			import { useSSQ } from "rakkasjs";
+			import { someValue } from "./some-module";
 			const bar = 1;
 			function outside() {}
 			function x(foo) {
@@ -41,6 +44,7 @@ const tests: Test[] = [
 				useSSQ(["abc123", 1, [], $runServerSide$[1]]);
 				useSSQ(["abc123", 2, [], $runServerSide$[2]]);
 				useSSQ(["abc123", 3, [baz], $runServerSide$[3]]);
+				useSSQ(["abc123", 4, [], $runServerSide$[4]]);
 				null;
 			};
 
@@ -61,6 +65,10 @@ const tests: Test[] = [
 				async ($runServerSideClosure$) => {
 					let [baz] = $runServerSideClosure$;
 					return baz;
+				},
+				async ($runServerSideClosure$) => {
+					let [] = $runServerSideClosure$;
+					return someValue;
 				},
 				async ($runServerSideClosure$) => {
 					let [] = $runServerSideClosure$;

@@ -16,7 +16,7 @@ const tests: Test[] = [
 		input: `
 			import { useSSQ, runSSM } from "rakkasjs";
 			import { sharedFn } from "shared-module";
-			import { serverSideFn } from "server-side-module";
+			import { serverSideFn, serverSideVar } from "server-side-module";
 			import { alreadyUnused } from "other-server-side";
 
 			const bar = 1;
@@ -34,11 +34,13 @@ const tests: Test[] = [
 				useSSQ(async function (ctx) {
 					const baz = 2;
 					serverOnlyFn();
+					serverSideFn();
 					sharedFn();
 					return ctx.session.userName;
 				});
 				useSSQ(outside);
 				useSSQ(() => baz);
+				useSSQ(() => serverSideVar);
 				runSSM(() => { void baz; })
 			}
 		`,
@@ -54,7 +56,8 @@ const tests: Test[] = [
 				useSSQ(["abc123", 1, []]);
 				useSSQ(["abc123", 2, []]);
 				useSSQ(["abc123", 3, [baz]]);
-				runSSM(["abc123", 4, [baz]]);
+				useSSQ(["abc123", 4, []]);
+				runSSM(["abc123", 5, [baz]]);
 			};
 		`,
 	},

@@ -49,53 +49,43 @@ export function babelTransformClientSideHooks(
 									)[0];
 								}
 
-								const body = fn.get("body");
+								let body = fn.get("body");
 								const identifiers = new Set<string>();
 
-								if (body.type === "Identifier") {
-									const identifier = body.node as t.Identifier;
-									const binding = fn.scope.parent.getBinding(identifier.name);
+								if (body.type !== "BlockStatement") {
+									body = body.replaceWith(
+										t.blockStatement([
+											t.returnStatement(body.node as t.Expression),
+										]),
+									)[0];
 
-									if (
-										program.scope
-											.getBinding(identifier.name)
-											?.referencePaths.includes(body)
-									) {
-										return;
-									}
-
-									if (
-										binding?.path.get("id") === body ||
-										binding?.referencePaths.includes(body)
-									) {
-										identifiers.add(identifier.name);
-									}
-								} else {
-									body.traverse({
-										Identifier: {
-											exit(identifier) {
-												const binding = fn.scope.parent.getBinding(
-													identifier.node.name,
-												);
-
-												if (
-													program.scope
-														.getBinding(identifier.node.name)
-														?.referencePaths.includes(identifier)
-												) {
-													return;
-												}
-
-												if (
-													binding?.path.get("id") === identifier ||
-													binding?.referencePaths.includes(identifier)
-												) {
-													identifiers.add(identifier.node.name);
-												}
-											},
-										},
-									});
+									fn.scope.parent.crawl();
 								}
+
+								body.traverse({
+									Identifier: {
+										exit(identifier) {
+											const binding = fn.scope.parent.getBinding(
+												identifier.node.name,
+											);
+
+											if (
+												program.scope
+													.getBinding(identifier.node.name)
+													?.referencePaths.includes(identifier)
+											) {
+												return;
+											}
+
+											if (
+												binding?.path.get("id") === identifier ||
+												binding?.referencePaths.includes(identifier)
+											) {
+												identifiers.add(identifier.node.name);
+											}
+										},
+									},
+								});
 
 								modifiedRef.current = true;
 
