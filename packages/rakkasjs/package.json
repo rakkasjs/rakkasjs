@@ -94,6 +94,7 @@
 		"cheerio": "^1.0.0-rc.12",
 		"devalue": "^4.0.0",
 		"fast-glob": "^3.2.12",
+		"magic-string": "^0.26.7",
 		"micromatch": "^4.0.5",
 		"picocolors": "^1.0.0",
 		"sirv": "^2.0.2"

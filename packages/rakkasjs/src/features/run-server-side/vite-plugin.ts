@@ -97,6 +97,9 @@ export default function runServerSide(): PluginOption[] {
 					filename: id,
 					code: true,
 					plugins,
+					sourceMaps:
+						resolvedConfig.command === "serve" ||
+						!!resolvedConfig.build.sourcemap,
 				});
 
 				if (ref.current) {
@@ -104,10 +107,12 @@ export default function runServerSide(): PluginOption[] {
 				}
 
 				if (result) {
-					return result.code;
+					return {
+						code: result.code!,
+						map: result.map,
+					};
 				} else {
 					this.warn(`[rakkasjs:run-server-side]: Failed to transform ${id}`);
-					return code;
 				}
 			},
 

@@ -367,6 +367,7 @@ importers:
       devalue: ^4.0.0
       eslint: ^8.25.0
       fast-glob: ^3.2.12
+      magic-string: ^0.26.7
       micromatch: ^4.0.5
       picocolors: ^1.0.0
       prettier: ^2.7.1
@@ -401,6 +402,7 @@ importers:
       cheerio: 1.0.0-rc.12
       devalue: 4.0.0
       fast-glob: 3.2.12
+      magic-string: 0.26.7
       micromatch: 4.0.5
       picocolors: 1.0.0
       sirv: 2.0.2
@@ -4763,7 +4765,7 @@ packages:
       "@babel/plugin-transform-react-jsx-development": 7.18.6_@babel+core@7.19.3
       "@babel/plugin-transform-react-jsx-self": 7.18.6_@babel+core@7.19.3
       "@babel/plugin-transform-react-jsx-source": 7.18.6_@babel+core@7.19.3
-      magic-string: 0.26.3
+      magic-string: 0.26.7
       react-refresh: 0.14.0
       vite: 3.1.6
     transitivePeerDependencies:
@@ -13835,10 +13837,10 @@ packages:
       sourcemap-codec: 1.4.8
     dev: true
 
-  /magic-string/0.26.3:
+  /magic-string/0.26.7:
     resolution:
       {
-        integrity: sha512-u1Po0NDyFcwdg2nzHT88wSK0+Rih0N1M+Ph1Sp08k8yvFFU3KR72wryS7e1qMPJypt99WB7fIFVCA92mQrMjrg==,
+        integrity: sha512-hX9XH3ziStPoPhJxLq1syWuZMxbDvGNbVchfrdCtanC7D13888bMFow61x8axrx+GfHLtVeAx2kxL7tTGRl+Ow==,
       }
     engines: { node: ">=12" }
     dependencies:

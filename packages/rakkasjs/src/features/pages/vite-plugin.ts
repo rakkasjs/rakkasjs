@@ -3,6 +3,7 @@ import micromatch from "micromatch";
 import glob from "fast-glob";
 import path from "path";
 import { routeToRegExp, sortRoutes } from "../../internal/route-utils";
+import MagicString from "magic-string";
 
 export interface PageRoutesOptions {
 	pageExtensions?: string[];
@@ -248,7 +249,19 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 				if (options?.ssr) return;
 
 				if (isPage(id) || isLayout(id)) {
-					return code + PAGE_HOT_RELOAD;
+					if (
+						resolvedConfig.command === "serve" ||
+						resolvedConfig.build.sourcemap
+					) {
+						const str = new MagicString(code);
+						str.append(PAGE_HOT_RELOAD);
+						return {
+							code: str.toString(),
+							map: str.generateMap({ hires: true }),
+						};
+					} else {
+						return code + PAGE_HOT_RELOAD;
+					}
 				}
 			},
 		},
