@@ -7,6 +7,7 @@ import {
 	UseMutationOptions,
 	UseMutationResult,
 } from "../use-mutation/lib";
+import React from "react";
 
 function runSSQImpl(
 	_: RequestContext,
@@ -44,6 +45,20 @@ function runSSMImpl(
 	const stringified = closure.map((x) => stringify(x));
 
 	return sendRequest(moduleId, counter, stringified, true, vars);
+}
+
+function useFormMutationImpl(
+	desc: [moduleId: string, counter: number, closure: any[]],
+) {
+	const [moduleId, counter, closure] = desc;
+	const stringified = closure.map((x) => stringify(x));
+
+	return {
+		action: `/_data/${import.meta.env.RAKKAS_BUILD_ID}/${encodeURIComponent(
+			moduleId,
+		)}/${counter}`,
+		input: <input type="hidden" name="_closure" value={stringified} />,
+	};
 }
 
 function useSSMImpl(
@@ -166,4 +181,5 @@ export {
 	useServerSideQuery as useSSQ,
 	runServerSideMutation as runSSM,
 	useServerSideMutation as useSSM,
+	useFormMutationImpl as useFormMutation,
 };

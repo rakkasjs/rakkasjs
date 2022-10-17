@@ -27,6 +27,8 @@ export interface RakkasOptions {
 	 * @default false
 	 */
 	prerender?: string[] | boolean;
+	/** Whether to enable strict mode in dev. @default true */
+	strictMode?: boolean;
 	adapter?:
 		| "node"
 		| "cloudflare-workers"
@@ -61,7 +63,11 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		exposeViteDevServer(),
 
 		preventViteBuild(),
-		injectConfig({ prerender, adapter }),
+		injectConfig({
+			prerender,
+			adapter,
+			strictMode: options.strictMode ?? true,
+		}),
 		apiRoutes(),
 		pageRoutes({
 			pageExtensions: options.pageExtensions,

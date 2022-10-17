@@ -5,6 +5,7 @@ import { RakkasAdapter } from "./adapters";
 export interface InjectConfigOptions {
 	prerender: string[];
 	adapter: RakkasAdapter;
+	strictMode: boolean;
 }
 
 export function injectConfig(options: InjectConfigOptions): Plugin {
@@ -97,6 +98,12 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 						prerender: options.prerender,
 						adapter: options.adapter,
 					},
+				},
+
+				define: {
+					"process.env.RAKKAS_STRICT_MODE": JSON.stringify(
+						options.strictMode.toString(),
+					),
 				},
 			};
 		},

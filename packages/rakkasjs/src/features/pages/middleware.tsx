@@ -436,28 +436,29 @@ export default async function renderPageRoute(
 		// }
 	}
 
-	const reactStream = await renderToReadableStream(
-		<StrictMode>{app}</StrictMode>,
-		{
-			// TODO: AbortController
-			bootstrapModules: ["/" + scriptPath!],
-			onError(error: any) {
-				if (!redirected) {
-					status = 500;
-					if (error && typeof error.toResponse === "function") {
-						Promise.resolve(error.toResponse()).then((response: Response) => {
-							status = response.status;
-						});
-					} else if (process.env.RAKKAS_PRERENDER) {
-						(ctx.platform as any).reportError(error);
-					} else {
-						console.error(error);
-					}
+	if (import.meta.env.DEV && process.env.RAKKAS_STRICT_MODE === "true") {
+		app = <StrictMode>{app}</StrictMode>;
+	}
+
+	const reactStream = await renderToReadableStream(app, {
+		// TODO: AbortController
+		bootstrapModules: ["/" + scriptPath!],
+		onError(error: any) {
+			if (!redirected) {
+				status = 500;
+				if (error && typeof error.toResponse === "function") {
+					Promise.resolve(error.toResponse()).then((response: Response) => {
+						status = response.status;
+					});
+				} else if (process.env.RAKKAS_PRERENDER) {
+					(ctx.platform as any).reportError(error);
+				} else {
+					console.error(error);
 				}
-				rejectRenderPromise(error);
-			},
+			}
+			rejectRenderPromise(error);
 		},
-	);
+	});
 
 	try {
 		await renderPromise;

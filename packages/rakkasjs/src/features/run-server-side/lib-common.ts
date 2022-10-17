@@ -1,5 +1,5 @@
 import type { RequestContext } from "@hattip/compose";
-import { useContext } from "react";
+import { ReactNode, useContext } from "react";
 import { ServerSideContext } from "../../runtime/isomorphic-context";
 import { UseQueryOptions } from "../use-query/implementation";
 
@@ -24,4 +24,9 @@ export interface UseServerSideQueryOptions extends UseQueryOptions {
 	 * be used when rendering static pages.
 	 */
 	usePostMethod?: boolean;
+}
+
+export interface UseFormMutationResult {
+	action: string;
+	input: ReactNode;
 }

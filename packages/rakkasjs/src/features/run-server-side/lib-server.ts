@@ -103,6 +103,12 @@ export const useServerSideMutation: <T, V = void>(
 	// No op
 }) as any;
 
+export const useFormMutation: <T, V = void>(
+	fn: (context: RequestContext) => T | Promise<T>,
+) => UseMutationResult<T, V> = (() => {
+	// No op
+}) as any;
+
 export const useServerSideQuery: <T>(
 	fn: ServerSideFunction<T>,
 	options?: UseServerSideQueryOptions,

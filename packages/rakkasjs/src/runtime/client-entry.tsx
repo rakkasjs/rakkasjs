@@ -87,16 +87,16 @@ export async function startClient(options: StartClientOptions = {}) {
 	});
 
 	app = (
-		<StrictMode>
-			<RouteContext.Provider value={"error" in route ? route : { last: route }}>
-				<Suspense>
-					<ErrorBoundary FallbackComponent={ErrorComponent}>
-						{app}
-					</ErrorBoundary>
-				</Suspense>
-			</RouteContext.Provider>
-		</StrictMode>
+		<RouteContext.Provider value={"error" in route ? route : { last: route }}>
+			<Suspense>
+				<ErrorBoundary FallbackComponent={ErrorComponent}>{app}</ErrorBoundary>
+			</Suspense>
+		</RouteContext.Provider>
 	);
+
+	if (import.meta.env.DEV && process.env.RAKKAS_STRICT_MODE === "true") {
+		app = <StrictMode>{app}</StrictMode>;
+	}
 
 	hydrateRoot(document.getElementById("root")!, app);
 }
