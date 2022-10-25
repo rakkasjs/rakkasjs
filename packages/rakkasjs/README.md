@@ -82,7 +82,7 @@ yarn create rakkas-app my-rakkas-app
 
 - [Fatih Aygün](https://github.com/cyco130), under [MIT License](https://opensource.org/licenses/MIT).
 - Logomark: “Flamenco” by [gzz from Noun Project](https://thenounproject.com/term/flamenco/111303) (not affiliated) under [Creative Commons Attribution Generic license (CCBY)](https://creativecommons.org/licenses/by/2.0/)
-- Parts of the CLI are based on [Vite CLI](https://github.com/vitejs/vite/tree/main/packages/vite) by Yuxi (Evan) You (not affiliated) and Vite contributors (not affiliated), used under [MIT License](./vite-license.md).
+- Parts of the CLI are based on [Vite CLI](https://github.com/vitejs/vite/tree/main/packages/vite) by Yuxi You (Evan) and Vite contributors (not affiliated), used under [MIT License](./vite-license.md).
 - Published npm package bundles the following software:
   - [`react-helmet-async`](https://github.com/staylor/react-helmet-async) by Scott Taylor (not affiliated), used under [Apache 2.0 license](./react-helmet-async-license.txt).
   - [`@brillout/json-serializer`](https://github.com/brillout/json-serializer) by Romuald Brillout (not affiliated), used under [MIT License](./json-s-license.md).
