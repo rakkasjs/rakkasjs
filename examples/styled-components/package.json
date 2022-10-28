@@ -1,0 +1,28 @@
+{
+	"name": "@rakkasjs/example-styled-components",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "rakkas",
+		"build": "rakkas build",
+		"start": "node dist/server",
+		"test": "pnpm test:typecheck",
+		"test:typecheck": "tsc -p tsconfig.json --noEmit"
+	},
+	"devDependencies": {
+		"@types/react": "^18.0.21",
+		"@types/react-dom": "^18.0.6",
+		"@types/styled-components": "^5.1.26",
+		"babel-plugin-styled-components": "^2.0.7",
+		"rakkasjs": "0.6.2-next.8",
+		"typescript": "^4.8.4",
+		"vite": "^3.1.6",
+		"vite-tsconfig-paths": "^3.5.1",
+		"vite-plugin-cjs-interop": "^0.0.1"
+	},
+	"dependencies": {
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"styled-components": "^5.3.6"
+	}
+}

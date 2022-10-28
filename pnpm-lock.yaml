@@ -183,6 +183,35 @@ importers:
       vite: 3.1.6
       vite-tsconfig-paths: 3.5.1_vite@3.1.6
 
+  examples/styled-components:
+    specifiers:
+      "@types/react": ^18.0.21
+      "@types/react-dom": ^18.0.6
+      "@types/styled-components": ^5.1.26
+      babel-plugin-styled-components: ^2.0.7
+      rakkasjs: 0.6.2-next.8
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      styled-components: ^5.3.6
+      typescript: ^4.8.4
+      vite: ^3.1.6
+      vite-plugin-cjs-interop: ^0.0.1
+      vite-tsconfig-paths: ^3.5.1
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      styled-components: 5.3.6_biqbaboplfbrettd7655fr4n2y
+    devDependencies:
+      "@types/react": 18.0.21
+      "@types/react-dom": 18.0.6
+      "@types/styled-components": 5.1.26
+      babel-plugin-styled-components: 2.0.7_styled-components@5.3.6
+      rakkasjs: link:../../packages/rakkasjs
+      typescript: 4.8.4
+      vite: 3.1.6
+      vite-plugin-cjs-interop: 0.0.1
+      vite-tsconfig-paths: 3.5.1_vite@3.1.6
+
   examples/todo:
     specifiers:
       "@rakkasjs/eslint-config": 0.6.2-next.8
@@ -1041,7 +1070,7 @@ packages:
       "@babel/helper-environment-visitor": 7.18.9
       "@babel/helper-member-expression-to-functions": 7.18.9
       "@babel/helper-optimise-call-expression": 7.18.6
-      "@babel/traverse": 7.18.10
+      "@babel/traverse": 7.19.3
       "@babel/types": 7.19.3
     transitivePeerDependencies:
       - supports-color
@@ -1352,6 +1381,26 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
+  /@babel/traverse/7.19.3_supports-color@5.5.0:
+    resolution:
+      {
+        integrity: sha512-qh5yf6149zhq2sgIXmwjnsvmnNQC2iw70UFjp4olxucKrWd/dvlUsBI88VSLUsnMNF7/vnOiA+nk1+yLoCqROQ==,
+      }
+    engines: { node: ">=6.9.0" }
+    dependencies:
+      "@babel/code-frame": 7.18.6
+      "@babel/generator": 7.19.3
+      "@babel/helper-environment-visitor": 7.18.9
+      "@babel/helper-function-name": 7.19.0
+      "@babel/helper-hoist-variables": 7.18.6
+      "@babel/helper-split-export-declaration": 7.18.6
+      "@babel/parser": 7.19.3
+      "@babel/types": 7.19.3
+      debug: 4.3.4_supports-color@5.5.0
+      globals: 11.12.0
+    transitivePeerDependencies:
+      - supports-color
+
   /@babel/types/7.19.3:
     resolution:
       {
@@ -1602,7 +1651,6 @@ packages:
       }
     dependencies:
       "@emotion/memoize": 0.8.0
-    dev: false
 
   /@emotion/memoize/0.8.0:
     resolution:
@@ -1684,6 +1732,18 @@ packages:
       "@types/react": 18.0.21
       react: 18.2.0
     dev: false
+
+  /@emotion/stylis/0.8.5:
+    resolution:
+      {
+        integrity: sha512-h6KtPihKFn3T9fuIrwvXXUOwlx3rfUvfZIcP5a6rh8Y7zjE3O06hT5Ss4S/YI1AYhuZ1kjaE/5EaOOI2NqSylQ==,
+      }
+
+  /@emotion/unitless/0.7.5:
+    resolution:
+      {
+        integrity: sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==,
+      }
 
   /@emotion/unitless/0.8.0:
     resolution:
@@ -3989,6 +4049,16 @@ packages:
       "@types/unist": 2.0.6
     dev: true
 
+  /@types/hoist-non-react-statics/3.3.1:
+    resolution:
+      {
+        integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==,
+      }
+    dependencies:
+      "@types/react": 18.0.21
+      hoist-non-react-statics: 3.3.2
+    dev: true
+
   /@types/http-cache-semantics/4.0.1:
     resolution:
       {
@@ -4277,6 +4347,17 @@ packages:
       {
         integrity: sha512-TgfOX+mGY/NyNxJLIbDWrO9DjGoVSW9+aB8H2yy1fy32jsvxijhmyJI9fDFgvz3YP4lvJaq9DzdR/M1bOgVc9g==,
       }
+    dev: true
+
+  /@types/styled-components/5.1.26:
+    resolution:
+      {
+        integrity: sha512-KuKJ9Z6xb93uJiIyxo/+ksS7yLjS1KzG6iv5i78dhVg/X3u5t1H7juRWqVmodIdz6wGVaIApo1u01kmFRdJHVw==,
+      }
+    dependencies:
+      "@types/hoist-non-react-statics": 3.3.1
+      "@types/react": 18.0.21
+      csstype: 3.1.1
     dev: true
 
   /@types/through/0.0.30:
@@ -4713,7 +4794,7 @@ packages:
     hasBin: true
     dependencies:
       "@mapbox/node-pre-gyp": 1.0.10
-      acorn: 8.8.0
+      acorn: 8.8.1
       async-sema: 3.1.1
       bindings: 1.5.0
       estree-walker: 2.0.2
@@ -4736,7 +4817,7 @@ packages:
     hasBin: true
     dependencies:
       "@mapbox/node-pre-gyp": 1.0.10_supports-color@9.2.3
-      acorn: 8.8.0
+      acorn: 8.8.1
       async-sema: 3.1.1
       bindings: 1.5.0
       estree-walker: 2.0.2
@@ -4839,6 +4920,17 @@ packages:
     dependencies:
       acorn: 8.8.0
 
+  /acorn-jsx/5.3.2_acorn@8.8.1:
+    resolution:
+      {
+        integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==,
+      }
+    peerDependencies:
+      acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
+    dependencies:
+      acorn: 8.8.1
+    dev: true
+
   /acorn-walk/8.2.0:
     resolution:
       {
@@ -4851,6 +4943,14 @@ packages:
     resolution:
       {
         integrity: sha512-QOxyigPVrpZ2GXT+PFyZTl6TtOFc5egxHIP9IlQ+RbupQuX4RkT/Bee4/kQuC02Xkzg84JcT7oLYtDIQxp+v7w==,
+      }
+    engines: { node: ">=0.4.0" }
+    hasBin: true
+
+  /acorn/8.8.1:
+    resolution:
+      {
+        integrity: sha512-7zFpHzhnqYKrkYdUjF1HI1bzd0VygEGX8lFk4k5zVMqHEoES+P+7TKI+EvLO9WVMJ8eekdO0aDEK044xTXwPPA==,
       }
     engines: { node: ">=0.4.0" }
     hasBin: true
@@ -5467,6 +5567,27 @@ packages:
       cosmiconfig: 7.0.1
       resolve: 1.22.1
 
+  /babel-plugin-styled-components/2.0.7_styled-components@5.3.6:
+    resolution:
+      {
+        integrity: sha512-i7YhvPgVqRKfoQ66toiZ06jPNA3p6ierpfUuEWxNF+fV27Uv5gxBkf8KZLHUCc1nFA9j6+80pYoIpqCeyW3/bA==,
+      }
+    peerDependencies:
+      styled-components: ">= 2"
+    dependencies:
+      "@babel/helper-annotate-as-pure": 7.18.6
+      "@babel/helper-module-imports": 7.18.6
+      babel-plugin-syntax-jsx: 6.18.0
+      lodash: 4.17.21
+      picomatch: 2.3.1
+      styled-components: 5.3.6_biqbaboplfbrettd7655fr4n2y
+
+  /babel-plugin-syntax-jsx/6.18.0:
+    resolution:
+      {
+        integrity: sha512-qrPaCSo9c8RHNRHIotaufGbuOBN8rtdC4QrrFFc43vyWCCz7Kl7GL1PGaXtMGQZUXrkCjNEgxDfmAuAabr/rlw==,
+      }
+
   /backoff/2.5.0:
     resolution:
       {
@@ -6031,6 +6152,12 @@ packages:
       }
     engines: { node: ">=10" }
     dev: false
+
+  /camelize/1.0.1:
+    resolution:
+      {
+        integrity: sha512-dU+Tx2fsypxTgtLoE36npi3UqcjSSMNYfkqgmoEhtZrraP5VWq0K7FkWVTYa8eMPtnU/G2txVsfdCJTn9uzpuQ==,
+      }
 
   /caniuse-lite/1.0.30001373:
     resolution:
@@ -7050,6 +7177,13 @@ packages:
       }
     engines: { node: ">=8" }
 
+  /css-color-keywords/1.0.0:
+    resolution:
+      {
+        integrity: sha512-FyyrDHZKEjXDpNJYvVsV960FiqQyXc/LlYmsxl2BcdMb2WPx0OGRVgTg55rPSyLSNMqP52R9r8geSp7apN3Ofg==,
+      }
+    engines: { node: ">=4" }
+
   /css-select/5.1.0:
     resolution:
       {
@@ -7062,6 +7196,16 @@ packages:
       domutils: 3.0.1
       nth-check: 2.1.1
     dev: false
+
+  /css-to-react-native/3.0.0:
+    resolution:
+      {
+        integrity: sha512-Ro1yETZA813eoyUp2GDBhG2j+YggidUmzO1/v9eYBKR2EHVEniE2MI/NqpTQ954BMpTPZFsGNPm46qFB9dpaPQ==,
+      }
+    dependencies:
+      camelize: 1.0.1
+      css-color-keywords: 1.0.0
+      postcss-value-parser: 4.2.0
 
   /css-what/6.1.0:
     resolution:
@@ -7182,6 +7326,21 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
+
+  /debug/4.3.4_supports-color@5.5.0:
+    resolution:
+      {
+        integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==,
+      }
+    engines: { node: ">=6.0" }
+    peerDependencies:
+      supports-color: "*"
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+    dependencies:
+      ms: 2.1.2
+      supports-color: 5.5.0
 
   /debug/4.3.4_supports-color@9.2.3:
     resolution:
@@ -11646,7 +11805,6 @@ packages:
       }
     dependencies:
       react-is: 16.13.1
-    dev: false
 
   /homedir-polyfill/1.0.3:
     resolution:
@@ -13845,7 +14003,6 @@ packages:
     engines: { node: ">=12" }
     dependencies:
       sourcemap-codec: 1.4.8
-    dev: false
 
   /make-dir/1.3.0:
     resolution:
@@ -14454,8 +14611,8 @@ packages:
         integrity: sha512-TZZRZgeHvtgm+IhtgC2+uDMR7h8eTKF0QUX9YsgoL9+bADBpBY6SiLvWqnBlLbCEevITmTqmEuY3FoxMKVs1rQ==,
       }
     dependencies:
-      acorn: 8.8.0
-      acorn-jsx: 5.3.2_acorn@8.8.0
+      acorn: 8.8.1
+      acorn-jsx: 5.3.2_acorn@8.8.1
       micromark-extension-mdx-expression: 1.0.3
       micromark-extension-mdx-jsx: 1.0.3
       micromark-extension-mdx-md: 1.0.0
@@ -16812,6 +16969,12 @@ packages:
       yaml: 1.10.2
     dev: true
 
+  /postcss-value-parser/4.2.0:
+    resolution:
+      {
+        integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==,
+      }
+
   /postcss-values-parser/6.0.2_postcss@8.4.17:
     resolution:
       {
@@ -18247,7 +18410,6 @@ packages:
       {
         integrity: sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==,
       }
-    dev: true
 
   /shebang-command/1.2.0:
     resolution:
@@ -19084,6 +19246,31 @@ packages:
       inline-style-parser: 0.1.1
     dev: true
 
+  /styled-components/5.3.6_biqbaboplfbrettd7655fr4n2y:
+    resolution:
+      {
+        integrity: sha512-hGTZquGAaTqhGWldX7hhfzjnIYBZ0IXQXkCYdvF1Sq3DsUaLx6+NTHC5Jj1ooM2F68sBiVz3lvhfwQs/S3l6qg==,
+      }
+    engines: { node: ">=10" }
+    requiresBuild: true
+    peerDependencies:
+      react: ">= 16.8.0"
+      react-dom: ">= 16.8.0"
+      react-is: ">= 16.8.0"
+    dependencies:
+      "@babel/helper-module-imports": 7.18.6
+      "@babel/traverse": 7.19.3_supports-color@5.5.0
+      "@emotion/is-prop-valid": 1.2.0
+      "@emotion/stylis": 0.8.5
+      "@emotion/unitless": 0.7.5
+      babel-plugin-styled-components: 2.0.7_styled-components@5.3.6
+      css-to-react-native: 3.0.0
+      hoist-non-react-statics: 3.3.2
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      shallowequal: 1.1.0
+      supports-color: 5.5.0
+
   /stylis/4.0.13:
     resolution:
       {
@@ -19661,7 +19848,7 @@ packages:
       "@tsconfig/node14": 1.0.3
       "@tsconfig/node16": 1.0.3
       "@types/node": 16.11.64
-      acorn: 8.8.0
+      acorn: 8.8.1
       acorn-walk: 8.2.0
       arg: 4.1.3
       create-require: 1.1.1
@@ -20486,6 +20673,17 @@ packages:
       is-buffer: 2.0.5
       unist-util-stringify-position: 3.0.2
       vfile-message: 3.1.2
+    dev: true
+
+  /vite-plugin-cjs-interop/0.0.1:
+    resolution:
+      {
+        integrity: sha512-DqBBKsh5qA/mtqU7g90IEvQqdWYeKKxWipPXJWKBCxPBR1fbjJsFoYVaFfd8jtMWbMN7dvH7ZtyBH7Ie4b/9wA==,
+      }
+    dependencies:
+      acorn: 8.8.1
+      estree-walker: 3.0.1
+      magic-string: 0.26.7
     dev: true
 
   /vite-tsconfig-paths/3.5.1_vite@3.1.6:
