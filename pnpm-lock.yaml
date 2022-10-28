@@ -195,7 +195,7 @@ importers:
       styled-components: ^5.3.6
       typescript: ^4.8.4
       vite: ^3.1.6
-      vite-plugin-cjs-interop: ^0.0.1
+      vite-plugin-cjs-interop: ^0.0.2
       vite-tsconfig-paths: ^3.5.1
     dependencies:
       react: 18.2.0
@@ -209,7 +209,7 @@ importers:
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
       vite: 3.1.6
-      vite-plugin-cjs-interop: 0.0.1
+      vite-plugin-cjs-interop: 0.0.2
       vite-tsconfig-paths: 3.5.1_vite@3.1.6
 
   examples/todo:
@@ -575,6 +575,7 @@ importers:
       typescript: ^4.8.4
       vfile: ^5.3.5
       vite: ^3.1.6
+      vite-plugin-cjs-interop: ^0.0.2
     dependencies:
       "@mdx-js/react": 2.1.4_react@18.2.0
       "@stackblitz/sdk": 1.8.0
@@ -610,6 +611,7 @@ importers:
       typescript: 4.8.4
       vfile: 5.3.5
       vite: 3.1.6
+      vite-plugin-cjs-interop: 0.0.2
 
 packages:
   /@algolia/autocomplete-core/1.7.1:
@@ -20675,10 +20677,10 @@ packages:
       vfile-message: 3.1.2
     dev: true
 
-  /vite-plugin-cjs-interop/0.0.1:
+  /vite-plugin-cjs-interop/0.0.2:
     resolution:
       {
-        integrity: sha512-DqBBKsh5qA/mtqU7g90IEvQqdWYeKKxWipPXJWKBCxPBR1fbjJsFoYVaFfd8jtMWbMN7dvH7ZtyBH7Ie4b/9wA==,
+        integrity: sha512-DnvbHQ0yYonkzQGkk3+rIYPKSFTs3FvYOVmuCvyAMH/tSEZqpXv/GWk+qCoWKmFe6gsDDv27bjXdmiwHG2ljgA==,
       }
     dependencies:
       acorn: 8.8.1

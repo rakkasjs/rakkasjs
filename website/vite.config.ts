@@ -15,6 +15,7 @@ import bash from "reprism/languages/bash.js";
 import rhypePrism from "@mapbox/rehype-prism";
 import remarkGfm from "remark-gfm";
 import remarkFm from "remark-frontmatter";
+import { cjsInterop } from "vite-plugin-cjs-interop";
 
 loadLanguages(tsx.default, bash.default);
 
@@ -46,6 +47,10 @@ export default defineConfig({
 		rakkas({
 			pageExtensions: ["jsx", "tsx", "mdx"],
 			prerender: true,
+		}),
+
+		cjsInterop({
+			dependencies: ["@docsearch/react"],
 		}),
 	],
 });

@@ -18,7 +18,7 @@
 		"typescript": "^4.8.4",
 		"vite": "^3.1.6",
 		"vite-tsconfig-paths": "^3.5.1",
-		"vite-plugin-cjs-interop": "^0.0.1"
+		"vite-plugin-cjs-interop": "^0.0.2"
 	},
 	"dependencies": {
 		"react": "^18.2.0",

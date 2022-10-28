@@ -7,13 +7,8 @@ import { Squash as Hamburger } from "hamburger-react";
 import { Toc } from "./Toc";
 import { toc as guideToc } from "../routes/_site/guide/toc";
 import { toc as blogToc } from "../routes/_site/blog/toc";
-import * as DocSearchAll from "@docsearch/react";
+import { DocSearch } from "@docsearch/react";
 import "@docsearch/css";
-
-const DocSearch: typeof DocSearchAll.DocSearch =
-	"default" in DocSearchAll
-		? (DocSearchAll as any).default.DocSearch
-		: DocSearchAll.DocSearch;
 
 export const Header: FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
