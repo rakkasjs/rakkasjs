@@ -8,12 +8,12 @@
 		"start": "node dist/server"
 	},
 	"devDependencies": {
-		"@cyco130/vite-plugin-mdx": "^0.0.0",
-		"@types/react": "^18.0.21",
-		"@types/react-dom": "^18.0.6",
+		"@cyco130/vite-plugin-mdx": "^0.0.2",
+		"@types/react": "^18.0.24",
+		"@types/react-dom": "^18.0.8",
 		"rakkasjs": "0.6.2-next.8",
 		"typescript": "^4.8.4",
-		"vite": "^3.1.6"
+		"vite": "^3.2.1"
 	},
 	"dependencies": {
 		"react": "^18.2.0",
