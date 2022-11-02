@@ -59,10 +59,15 @@ export async function preview(
 		const sirvHandler = sirv(ASSETS_DIR);
 		const handler = createMiddleware(handlerImport.default);
 
+		const originalNodeEnv = process.env.NODE_ENV;
+
 		const server = await previewServer({
 			...inlineConfig,
 			publicDir: path.join(DIST_DIR),
 		});
+
+		// Restore NODE_ENV after vite has set it to "development"
+		process.env.NODE_ENV = originalNodeEnv;
 
 		// remove default handler and pass all handler to hatTip and sirv ( for assets )
 		server.httpServer.listeners("request").forEach(function (l: any) {
