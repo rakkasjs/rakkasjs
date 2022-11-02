@@ -58,11 +58,8 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 				],
 
 				ssr: {
-					external: [
-						"react-dom/server.browser",
-						"@vavite/expose-vite-dev-server",
-					],
-					noExternal: ["rakkasjs"],
+					external: ["react-dom/server.browser"],
+					noExternal: ["rakkasjs", "@vavite/expose-vite-dev-server"],
 					optimizeDeps: {
 						exclude: [
 							"rakkasjs",
