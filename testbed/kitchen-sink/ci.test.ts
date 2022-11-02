@@ -929,6 +929,17 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					"Success",
 			);
 		});
+
+		if (dev) {
+			test("doesn't flush unstyled content", async () => {
+				await page.goto(host + "/css");
+				const h1 = (await page.waitForSelector("h1"))!;
+				// Should be red
+				expect(await h1.evaluate((e) => getComputedStyle(e).color)).toBe(
+					"rgb(255, 0, 0)",
+				);
+			});
+		}
 	});
 }
 

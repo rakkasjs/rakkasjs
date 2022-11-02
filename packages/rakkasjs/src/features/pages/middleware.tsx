@@ -29,6 +29,7 @@ import {
 } from "../../runtime/page-types";
 import { LookupHookResult } from "../../lib";
 import { uneval } from "devalue";
+import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
 
 const pageContextMap = new WeakMap<Request, PageContext>();
 
@@ -434,6 +435,33 @@ export default async function renderPageRoute(
 		// 		"/" + assetFile,
 		// 	)}">`;
 		// }
+	} else {
+		const moduleSet = new Set(moduleIds);
+		const cssSet = new Set<string>();
+		const root = viteDevServer!.config.root.replace(/\\/g, "/");
+
+		for (const moduleId of moduleSet) {
+			const module =
+				viteDevServer!.moduleGraph.getModuleById(moduleId) ??
+				viteDevServer!.moduleGraph.getModuleById(root + "/" + moduleId);
+
+			if (!module) continue;
+
+			for (const imported of module.importedModules) {
+				const url = new URL(imported.url, ctx.url);
+				url.searchParams.delete("v");
+				url.searchParams.delete("t");
+				if (url.href.match(/\.(css|scss|sass|less|styl|stylus)$/)) {
+					cssSet.add(imported.id!);
+				} else if (url.href.match(/\.(js|jsx|ts|tsx)$/)) {
+					moduleSet.add(imported.id!);
+				}
+			}
+		}
+
+		for (const cssFile of cssSet) {
+			prefetchOutput += `<link rel="stylesheet" href="${escapeHtml(cssFile)}">`;
+		}
 	}
 
 	if (import.meta.env.DEV && process.env.RAKKAS_STRICT_MODE === "true") {
