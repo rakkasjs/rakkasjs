@@ -1,6 +1,6 @@
 {
 	"name": "@rakkasjs/eslint-config",
-	"version": "0.6.3",
+	"version": "0.6.4",
 	"files": [
 		"patch.js",
 		"index.js"

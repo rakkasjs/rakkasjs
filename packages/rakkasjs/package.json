@@ -1,6 +1,6 @@
 {
 	"name": "rakkasjs",
-	"version": "0.6.3",
+	"version": "0.6.4",
 	"type": "module",
 	"bin": {
 		"rakkas": "./cli.js",
@@ -86,9 +86,9 @@
 		"@types/node": "^18.11.9",
 		"@types/react": "^18.0.24",
 		"@types/react-dom": "^18.0.8",
-		"@vavite/connect": "^1.5.0",
-		"@vavite/expose-vite-dev-server": "1.5.0",
-		"@vavite/multibuild": "^1.5.0",
+		"@vavite/connect": "^1.5.1",
+		"@vavite/expose-vite-dev-server": "1.5.1",
+		"@vavite/multibuild": "^1.5.1",
 		"@vitejs/plugin-react": "^2.2.0",
 		"cac": "^6.7.14",
 		"cheerio": "^1.0.0-rc.12",
