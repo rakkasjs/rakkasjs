@@ -452,9 +452,9 @@ export default async function renderPageRoute(
 				url.searchParams.delete("v");
 				url.searchParams.delete("t");
 				if (url.href.match(/\.(css|scss|sass|less|styl|stylus)$/)) {
-					cssSet.add(imported.id!);
+					cssSet.add(imported.url);
 				} else if (url.href.match(/\.(js|jsx|ts|tsx)$/)) {
-					moduleSet.add(imported.id!);
+					moduleSet.add(imported.id ?? imported.url);
 				}
 			}
 		}
