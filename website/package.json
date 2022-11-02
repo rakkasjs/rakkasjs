@@ -55,7 +55,7 @@
 		"source-map": "^0.7.4",
 		"typescript": "^4.8.4",
 		"vfile": "^5.3.5",
-		"vite": "^3.2.1",
+		"vite": "^3.2.2",
 		"vite-plugin-cjs-interop": "^0.0.3"
 	}
 }

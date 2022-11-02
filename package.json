@@ -18,11 +18,11 @@
 		"lint-staged": "^13.0.3",
 		"prettier": "^2.7.1",
 		"typescript": "^4.8.4",
-		"vitest": "^0.24.3"
+		"vitest": "^0.24.5"
 	},
 	"dependencies": {
 		"@vitejs/plugin-react": "^2.2.0",
-		"vite": "^3.2.1"
+		"vite": "^3.2.2"
 	},
 	"--": "Uncomment the next option to test against a local Vite repo",
 	"--pnpm": {

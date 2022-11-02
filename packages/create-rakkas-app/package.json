@@ -30,7 +30,7 @@
 		"@cyco130/eslint-config": "^2.1.2",
 		"@types/inquirer": "^9.0.2",
 		"@types/mkdirp": "^1.0.2",
-		"@types/node": "^18.11.7",
+		"@types/node": "^18.11.9",
 		"@types/rimraf": "^3.0.2",
 		"detype": "^0.6.1",
 		"eslint": "^8.26.0",
@@ -39,7 +39,7 @@
 		"tsup": "^6.3.0",
 		"tsx": "^3.11.0",
 		"typescript": "^4.8.4",
-		"vitest": "^0.24.3"
+		"vitest": "^0.24.5"
 	},
 	"dependencies": {
 		"cac": "^6.7.14",
