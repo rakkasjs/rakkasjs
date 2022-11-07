@@ -10,13 +10,13 @@
 		"test:typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"devDependencies": {
-		"@types/react": "^18.0.24",
+		"@types/react": "^18.0.25",
 		"@types/react-dom": "^18.0.8",
 		"@types/styled-components": "^5.1.26",
 		"babel-plugin-styled-components": "^2.0.7",
-		"rakkasjs": "0.6.4",
+		"rakkasjs": "0.6.5",
 		"typescript": "^4.8.4",
-		"vite": "^3.2.2",
+		"vite": "^3.2.3",
 		"vite-plugin-cjs-interop": "^0.0.3",
 		"vite-tsconfig-paths": "^3.5.2"
 	},

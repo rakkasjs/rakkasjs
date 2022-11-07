@@ -9,15 +9,15 @@
 		"start": "node dist/server"
 	},
 	"devDependencies": {
-		"@types/react": "^18.0.24",
+		"@types/react": "^18.0.25",
 		"@types/react-dom": "^18.0.8",
-		"rakkasjs": "0.6.4",
+		"rakkasjs": "0.6.5",
 		"typescript": "^4.8.4",
-		"vite": "^3.2.2",
+		"vite": "^3.2.3",
 		"vite-tsconfig-paths": "^3.5.2"
 	},
 	"dependencies": {
-		"@hattip/response": "^0.0.20",
+		"@hattip/response": "^0.0.21",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	}

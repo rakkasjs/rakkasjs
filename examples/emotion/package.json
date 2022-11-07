@@ -8,13 +8,13 @@
 		"start": "node dist/server"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.19.6",
+		"@babel/core": "^7.20.2",
 		"@emotion/babel-plugin": "^11.10.5",
-		"@types/react": "^18.0.24",
+		"@types/react": "^18.0.25",
 		"@types/react-dom": "^18.0.8",
-		"rakkasjs": "0.6.4",
+		"rakkasjs": "0.6.5",
 		"typescript": "^4.8.4",
-		"vite": "^3.2.2"
+		"vite": "^3.2.3"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.10.5",

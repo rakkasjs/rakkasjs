@@ -1,6 +1,6 @@
 {
 	"name": "@rakkasjs/eslint-config-js",
-	"version": "0.6.4",
+	"version": "0.6.5",
 	"files": [
 		"patch.js",
 		"index.js"
@@ -33,7 +33,7 @@
 		"eslint-plugin-ssr-friendly": "^1.0.6"
 	},
 	"devDependencies": {
-		"eslint": "^8.26.0",
-		"publint": "^0.1.1"
+		"eslint": "^8.27.0",
+		"publint": "^0.1.3"
 	}
 }
