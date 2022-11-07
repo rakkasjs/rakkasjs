@@ -15,7 +15,7 @@
 		"vite": "^3.2.3"
 	},
 	"dependencies": {
-		"@hattip/graphql": "^0.0.21",
+		"@hattip/graphql": "^0.0.22",
 		"graphql": "^16.6.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
