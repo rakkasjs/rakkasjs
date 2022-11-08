@@ -10,6 +10,7 @@ const RUN_SERVER_SIDE_FUNCTION_NAMES = [
 	"runServerSideMutation",
 	"runSSQ",
 	"runSSM",
+	"useFormMutation",
 ];
 
 export function isRunServerSideCall(

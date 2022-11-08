@@ -40,6 +40,7 @@ export type {
 	runSSQ,
 	useServerSideMutation,
 	useSSM,
+	useFormMutation,
 } from "../features/run-server-side/lib-client";
 
 export type {
