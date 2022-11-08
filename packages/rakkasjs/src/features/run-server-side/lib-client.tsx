@@ -7,7 +7,7 @@ import {
 	UseMutationOptions,
 	UseMutationResult,
 } from "../use-mutation/lib";
-import React from "react";
+import { encodeFileNameSafe } from "../../runtime/utils";
 
 function runSSQImpl(
 	_: RequestContext,
@@ -53,11 +53,16 @@ function useFormMutationImpl(
 	const [moduleId, counter, closure] = desc;
 	const stringified = closure.map((x) => stringify(x));
 
+	let closurePath = stringified.map(encodeFileNameSafe).join("/");
+	if (closurePath) closurePath = "/" + closurePath;
+
 	return {
-		action: `/_data/${import.meta.env.RAKKAS_BUILD_ID}/${encodeURIComponent(
-			moduleId,
-		)}/${counter}`,
-		input: <input type="hidden" name="_closure" value={stringified} />,
+		action:
+			`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
+			encodeURIComponent(moduleId) +
+			"/" +
+			counter +
+			closurePath,
 	};
 }
 
@@ -91,12 +96,13 @@ function sendRequest(
 					"]" +
 					(vars !== undefined ? "," + stringify(vars) : "") +
 					"]",
+				headers: {
+					"Content-Type": "application/json",
+				},
 			},
 		);
 	} else {
-		let closurePath = stringified
-			.map((s) => btoa(s).replace(/\//g, "_").replace(/\+/g, "-"))
-			.join("/");
+		let closurePath = stringified.map(encodeFileNameSafe).join("/");
 		if (closurePath) closurePath = "/" + closurePath;
 
 		response = fetch(
@@ -176,10 +182,14 @@ export const useServerSideMutation: <T, V = void>(
 	options?: UseMutationOptions<T, V>,
 ) => UseMutationResult<T, V> = useSSMImpl as any;
 
+export const useFormMutation: (fn: (ctx: RequestContext) => any) => {
+	action: string;
+	input: JSX.Element;
+} = useFormMutationImpl as any;
+
 export {
 	runServerSideQuery as runSSQ,
 	useServerSideQuery as useSSQ,
 	runServerSideMutation as runSSM,
 	useServerSideMutation as useSSM,
-	useFormMutationImpl as useFormMutation,
 };

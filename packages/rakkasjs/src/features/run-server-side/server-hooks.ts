@@ -1,6 +1,7 @@
 import type { ServerHooks } from "../../runtime/hattip-handler";
 import { parse } from "@brillout/json-serializer/parse";
 import { uneval } from "devalue";
+import { decodeFileNameSafe } from "../../runtime/utils";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
@@ -18,7 +19,10 @@ const runServerSideServerHooks: ServerHooks = {
 			let vars: unknown;
 
 			try {
-				if (ctx.method === "POST") {
+				if (
+					ctx.method === "POST" &&
+					ctx.request.headers.get("content-type") === "application/json"
+				) {
 					const text = await ctx.request.text();
 					const data = parse(text) as [unknown[], unknown];
 					if (!Array.isArray(data)) {
@@ -30,10 +34,15 @@ const runServerSideServerHooks: ServerHooks = {
 					}
 					vars = data[1];
 				} else {
-					closure.length = closure.length - 1;
-					closureContents = closure.map((s) => parse(decodeBase64(s)));
+					if (ctx.method === "GET") {
+						// Remove path segment /d.js at the end
+						closure.length -= 1;
+					}
+
+					closureContents = closure.map((s) => parse(decodeFileNameSafe(s)));
 				}
 			} catch (e) {
+				console.error(e);
 				return new Response("Parse error", { status: 400 });
 			}
 
@@ -65,13 +74,3 @@ const runServerSideServerHooks: ServerHooks = {
 };
 
 export default runServerSideServerHooks;
-
-export function decodeBase64(s: string) {
-	s = s.replace(/_/g, "/").replace(/-/g, "+");
-
-	if (typeof Buffer !== "undefined") {
-		return Buffer.from(s, "base64").toString("utf8");
-	} else {
-		return atob(s);
-	}
-}

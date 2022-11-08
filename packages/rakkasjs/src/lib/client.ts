@@ -9,6 +9,7 @@ export {
 	runServerSideMutation,
 	useSSM,
 	useServerSideMutation,
+	useFormMutation,
 } from "../features/run-server-side/lib-client";
 
 export { startClient } from "../runtime/client-entry";

@@ -8,6 +8,7 @@ import {
 import { uneval } from "devalue";
 import { RequestContext } from "@hattip/compose";
 import { UseMutationOptions, UseMutationResult } from "../use-mutation/lib";
+import { encodeFileNameSafe } from "../../runtime/utils";
 
 function runSSQImpl(
 	ctx: RequestContext,
@@ -24,7 +25,7 @@ function runSSQImpl(
 
 	return Promise.resolve(fn(closure, ctx)).then(async (result) => {
 		if (process.env.RAKKAS_PRERENDER === "true") {
-			let closurePath = stringified.map(encodeBase64).join("/");
+			let closurePath = stringified.map(encodeFileNameSafe).join("/");
 			if (closurePath) closurePath = "/" + closurePath;
 
 			const url =
@@ -67,7 +68,7 @@ function useSSQImpl(
 		() =>
 			Promise.resolve(fn(closure, ctx)).then(async (result) => {
 				if (process.env.RAKKAS_PRERENDER === "true") {
-					let closurePath = stringified.map(encodeBase64).join("/");
+					let closurePath = stringified.map(encodeFileNameSafe).join("/");
 					if (closurePath) closurePath = "/" + closurePath;
 
 					const url =
@@ -103,11 +104,28 @@ export const useServerSideMutation: <T, V = void>(
 	// No op
 }) as any;
 
-export const useFormMutation: <T, V = void>(
-	fn: (context: RequestContext) => T | Promise<T>,
-) => UseMutationResult<T, V> = (() => {
-	// No op
-}) as any;
+function useFormMutationImpl(
+	desc: [moduleId: string, counter: number, closure: any[]],
+) {
+	const [moduleId, counter, closure] = desc;
+	const stringified = closure.map((x) => stringify(x));
+
+	let closurePath = stringified.map(encodeFileNameSafe).join("/");
+	if (closurePath) closurePath = "/" + closurePath;
+
+	return {
+		action:
+			`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
+			encodeURIComponent(moduleId) +
+			"/" +
+			counter +
+			closurePath,
+	};
+}
+
+export const useFormMutation: (fn: (ctx: RequestContext) => any) => {
+	action: string;
+} = useFormMutationImpl as any;
 
 export const useServerSideQuery: <T>(
 	fn: ServerSideFunction<T>,
@@ -125,15 +143,3 @@ export {
 	runServerSideMutation as runSSM,
 	useServerSideMutation as useSSM,
 };
-
-function encodeBase64(str: string) {
-	let encoded: string;
-
-	if (typeof Buffer !== "undefined") {
-		encoded = Buffer.from(str).toString("base64");
-	} else {
-		encoded = btoa(str);
-	}
-
-	return encoded.replace(/\//g, "_").replace(/\+/g, "-");
-}

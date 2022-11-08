@@ -1,5 +1,5 @@
 import type { RequestContext } from "@hattip/compose";
-import { ReactNode, useContext } from "react";
+import { useContext } from "react";
 import { ServerSideContext } from "../../runtime/isomorphic-context";
 import { UseQueryOptions } from "../use-query/implementation";
 
@@ -28,5 +28,4 @@ export interface UseServerSideQueryOptions extends UseQueryOptions {
 
 export interface UseFormMutationResult {
 	action: string;
-	input: ReactNode;
 }
