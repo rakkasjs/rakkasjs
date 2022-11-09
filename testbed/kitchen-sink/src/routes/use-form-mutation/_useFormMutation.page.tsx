@@ -1,24 +1,35 @@
-import { useFormMutation } from "rakkasjs";
+import { PageProps, useFormMutation } from "rakkasjs";
 
-export default function UseFormMutationPage() {
-	const x = 42;
-	const y = 13;
+export default function UseFormMutationPage({ url }: PageProps) {
+	const { action, data, submitHandler, status } = useFormMutation(
+		async (ctx) => {
+			const fd = await ctx.request.formData();
 
-	const { action } = useFormMutation(async (ctx) => {
-		const fd = await ctx.request.formData();
-		console.log(fd.get("hello"));
+			if (fd.get("name") !== "correct") {
+				return { data: "Incorrect name" };
+			}
 
-		return x * y;
-	});
+			return { redirect: "?done" };
+		},
+	);
+
+	if (url.searchParams.has("done")) {
+		return <p>Thank you for your feedback!</p>;
+	}
 
 	return (
-		<>
-			<h1>UseFormMutationPage</h1>
-			<form action={action} method="post">
-				<button type="submit" name="hello" value="world">
-					Submit
-				</button>
+		<div>
+			<h1>Form</h1>
+			<form action={action} method="post" onSubmit={submitHandler}>
+				<p>
+					<input name="name" type="text" />
+				</p>
+				{data && <p>{data}</p>}
+				<p>
+					<button type="submit">Submit</button>
+				</p>
+				{status === "loading" && <p>Submitting...</p>}
 			</form>
-		</>
+		</div>
 	);
 }
