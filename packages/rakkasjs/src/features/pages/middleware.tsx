@@ -36,6 +36,10 @@ const pageContextMap = new WeakMap<Request, PageContext>();
 export default async function renderPageRoute(
 	ctx: RequestContext,
 ): Promise<Response | undefined> {
+	if (ctx.method === "POST" && ctx.url.searchParams.get("_action")) {
+		return;
+	}
+
 	const pageHooks = ctx.hooks.map((hook) => hook.createPageHooks?.(ctx));
 
 	const routes = (await import("virtual:rakkasjs:server-page-routes")).default;
@@ -205,7 +209,7 @@ export default async function renderPageRoute(
 
 	const modules = await Promise.all(importers.map((importer) => importer()));
 
-	let actionResult: ActionResult | undefined;
+	let actionResult: ActionResult<any> | undefined;
 	let actionErrorIndex = -1;
 	let actionError: any;
 

@@ -1,6 +1,12 @@
 import { QueryResult, useQuery } from "../use-query/lib";
 import { stringify } from "@brillout/json-serializer/stringify";
-import { ServerSideFunction, UseServerSideQueryOptions } from "./lib-common";
+import {
+	ServerSideFunction,
+	useFormAction,
+	UseFormMutationFn,
+	UseFormMutationResult,
+	UseServerSideQueryOptions,
+} from "./lib-common";
 import type { RequestContext } from "@hattip/compose";
 import {
 	useMutation,
@@ -8,6 +14,7 @@ import {
 	UseMutationResult,
 } from "../use-mutation/lib";
 import { encodeFileNameSafe } from "../../runtime/utils";
+import { useSubmit } from "../client-side-navigation/implementation";
 
 function runSSQImpl(
 	_: RequestContext,
@@ -47,22 +54,16 @@ function runSSMImpl(
 	return sendRequest(moduleId, counter, stringified, true, vars);
 }
 
-function useFormMutationImpl(
+function useFormMutationImpl<T>(
 	desc: [moduleId: string, counter: number, closure: any[]],
-) {
-	const [moduleId, counter, closure] = desc;
-	const stringified = closure.map((x) => stringify(x));
-
-	let closurePath = stringified.map(encodeFileNameSafe).join("/");
-	if (closurePath) closurePath = "/" + closurePath;
+	options?: UseMutationOptions<T, any>,
+): UseFormMutationResult<T> {
+	const action = useFormAction(desc).href;
+	const submit = useSubmit(options);
 
 	return {
-		action:
-			`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
-			encodeURIComponent(moduleId) +
-			"/" +
-			counter +
-			closurePath,
+		action,
+		...submit,
 	};
 }
 
@@ -182,10 +183,10 @@ export const useServerSideMutation: <T, V = void>(
 	options?: UseMutationOptions<T, V>,
 ) => UseMutationResult<T, V> = useSSMImpl as any;
 
-export const useFormMutation: (fn: (ctx: RequestContext) => any) => {
-	action: string;
-	input: JSX.Element;
-} = useFormMutationImpl as any;
+export const useFormMutation: <T>(
+	fn: UseFormMutationFn<T>,
+	options?: UseMutationOptions<T, void>,
+) => UseFormMutationResult<T> = useFormMutationImpl as any;
 
 export {
 	runServerSideQuery as runSSQ,

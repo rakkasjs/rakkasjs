@@ -2,27 +2,35 @@ import type { ServerHooks } from "../../runtime/hattip-handler";
 import { parse } from "@brillout/json-serializer/parse";
 import { uneval } from "devalue";
 import { decodeFileNameSafe } from "../../runtime/utils";
+import renderPageRoute from "../pages/middleware";
+import { composableActionData } from "./lib-server";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
 		beforeApiRoutes: async (ctx) => {
-			if (
-				!ctx.url.pathname.startsWith(
-					`/_data/${import.meta.env.RAKKAS_BUILD_ID}/`,
-				)
-			)
-				return undefined;
+			const prefix = `/_data/`;
+			let action = ctx.url.searchParams.get("_action");
 
-			const [, , , moduleId, counter, ...closure] = ctx.url.pathname.split("/");
+			if (!ctx.url.pathname.startsWith(prefix) && !action) {
+				return;
+			}
+
+			action = action || ctx.url.pathname.slice(prefix.length);
+			const [buildId, moduleId, counter, ...closure] = action.split("/");
+			if (buildId !== import.meta.env.RAKKAS_BUILD_ID) {
+				return new Response("Outdated client", { status: 410 /* Gone */ });
+			}
 
 			let closureContents: unknown[];
 			let vars: unknown;
+			let isFormMutation = true;
 
 			try {
 				if (
 					ctx.method === "POST" &&
 					ctx.request.headers.get("content-type") === "application/json"
 				) {
+					isFormMutation = false;
 					const text = await ctx.request.text();
 					const data = parse(text) as [unknown[], unknown];
 					if (!Array.isArray(data)) {
@@ -37,12 +45,12 @@ const runServerSideServerHooks: ServerHooks = {
 					if (ctx.method === "GET") {
 						// Remove path segment /d.js at the end
 						closure.length -= 1;
+						isFormMutation = false;
 					}
 
 					closureContents = closure.map((s) => parse(decodeFileNameSafe(s)));
 				}
 			} catch (e) {
-				console.error(e);
 				return new Response("Parse error", { status: 400 });
 			}
 
@@ -58,8 +66,27 @@ const runServerSideServerHooks: ServerHooks = {
 
 			const fn = module.$runServerSide$[Number(counter)];
 
-			// TODO: Server-side context
 			const result = await fn(closureContents, ctx, vars);
+
+			if (isFormMutation) {
+				if (ctx.request.headers.get("accept") === "application/javascript") {
+					return new Response(uneval(result));
+				} else {
+					if (result.redirect) {
+						return new Response(null, {
+							status: 302,
+							headers: {
+								location: new URL(result.redirect, ctx.url).href,
+							},
+						});
+					}
+
+					ctx.url.searchParams.delete("_action");
+					composableActionData.set(ctx, [action, result]);
+
+					return renderPageRoute(ctx);
+				}
+			}
 
 			return new Response(uneval(result));
 		},

@@ -16,7 +16,11 @@ import React, {
 import {
 	ActionResult,
 	useMutation,
+	UseMutationErrorResult,
+	UseMutationIdleResult,
+	UseMutationLoadingResult,
 	UseMutationOptions,
+	UseMutationSuccessResult,
 	usePageContext,
 } from "../../lib";
 
@@ -401,8 +405,19 @@ function shouldHandleClick(e: MouseEventLike): boolean {
 	);
 }
 
+export type UseSubmitResult = {
+	submitHandler(event: FormEvent<HTMLFormElement>): void;
+} & (
+	| UseMutationIdleResult
+	| UseMutationLoadingResult
+	| UseMutationErrorResult
+	| UseMutationSuccessResult<any>
+);
+
 // TODO: Where does this belong?
-export function useSubmit(options?: UseMutationOptions<any, HTMLFormElement>) {
+export function useSubmit(
+	options?: UseMutationOptions<any, HTMLFormElement>,
+): UseSubmitResult {
 	const { current } = useLocation();
 	const pageContext = usePageContext();
 
@@ -428,7 +443,7 @@ export function useSubmit(options?: UseMutationOptions<any, HTMLFormElement>) {
 			});
 
 			const text = await response.text();
-			const value: ActionResult = (0, eval)("(" + text + ")");
+			const value: ActionResult<any> = (0, eval)("(" + text + ")");
 
 			if ("redirect" in value) {
 				await navigate(value.redirect);
@@ -446,8 +461,17 @@ export function useSubmit(options?: UseMutationOptions<any, HTMLFormElement>) {
 
 	mutation.data = mutation.data ?? pageContext.actionData;
 
+	const { data, error, isError, isIdle, isLoading, isSuccess, status } =
+		mutation;
+
 	return {
-		...mutation,
 		submitHandler,
-	};
+		data,
+		error,
+		isError,
+		isIdle,
+		isLoading,
+		isSuccess,
+		status,
+	} as UseSubmitResult;
 }

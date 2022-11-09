@@ -1,6 +1,16 @@
+import { stringify } from "@brillout/json-serializer/stringify";
 import type { RequestContext } from "@hattip/compose";
-import { useContext } from "react";
+import { FormEvent, useContext } from "react";
+import {
+	ActionResult,
+	UseMutationErrorResult,
+	UseMutationIdleResult,
+	UseMutationLoadingResult,
+	UseMutationSuccessResult,
+	usePageContext,
+} from "../../lib";
 import { ServerSideContext } from "../../runtime/isomorphic-context";
+import { encodeFileNameSafe } from "../../runtime/utils";
 import { UseQueryOptions } from "../use-query/implementation";
 
 /**
@@ -26,6 +36,40 @@ export interface UseServerSideQueryOptions extends UseQueryOptions {
 	usePostMethod?: boolean;
 }
 
-export interface UseFormMutationResult {
+export type UseFormMutationResult<T> = {
 	action: string;
+	submitHandler(event: FormEvent<HTMLFormElement>): void;
+} & (
+	| UseMutationIdleResult
+	| UseMutationLoadingResult
+	| UseMutationErrorResult
+	| UseMutationSuccessResult<T>
+);
+
+export type UseFormMutationFn<T> = (
+	context: RequestContext,
+) => ActionResult<T> | Promise<ActionResult<T>>;
+
+export function useFormAction(
+	desc: [moduleId: string, counter: number, closure: any[]],
+) {
+	const { url } = usePageContext();
+
+	const [moduleId, counter, closure] = desc;
+	const stringified = closure.map((x) => stringify(x));
+
+	let closurePath = stringified.map(encodeFileNameSafe).join("/");
+	if (closurePath) closurePath = "/" + closurePath;
+
+	const actionPath =
+		import.meta.env.RAKKAS_BUILD_ID +
+		"/" +
+		encodeURIComponent(moduleId) +
+		"/" +
+		counter +
+		closurePath;
+	const actionUrl = new URL(url);
+	actionUrl.searchParams.set("_action", actionPath);
+
+	return actionUrl;
 }

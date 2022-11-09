@@ -2,6 +2,8 @@ import { QueryResult, useQuery } from "../use-query/lib";
 import { stringify } from "@brillout/json-serializer/stringify";
 import {
 	ServerSideFunction,
+	useFormAction,
+	UseFormMutationResult,
 	useRequestContext,
 	UseServerSideQueryOptions,
 } from "./lib-common";
@@ -104,28 +106,39 @@ export const useServerSideMutation: <T, V = void>(
 	// No op
 }) as any;
 
-function useFormMutationImpl(
-	desc: [moduleId: string, counter: number, closure: any[]],
-) {
-	const [moduleId, counter, closure] = desc;
-	const stringified = closure.map((x) => stringify(x));
+export const composableActionData = new WeakMap<
+	RequestContext,
+	[route: string, data: any]
+>();
 
-	let closurePath = stringified.map(encodeFileNameSafe).join("/");
-	if (closurePath) closurePath = "/" + closurePath;
+function useFormMutationImpl<T>(
+	desc: [moduleId: string, counter: number, closure: any[]],
+): UseFormMutationResult<T> {
+	const action = useFormAction(desc);
+	const ctx = useRequestContext()!;
+	const dataContainer = composableActionData.get(ctx);
+	const hasData = !!(
+		dataContainer && dataContainer[0] === action.searchParams.get("_action")
+	);
 
 	return {
-		action:
-			`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
-			encodeURIComponent(moduleId) +
-			"/" +
-			counter +
-			closurePath,
-	};
+		action: action.href,
+		status: hasData ? "success" : "idle",
+		isError: false,
+		isIdle: !hasData,
+		isLoading: false,
+		isSuccess: hasData,
+		submitHandler() {
+			throw new Error("submitHandler is not available on the server-side");
+		},
+		data: hasData ? dataContainer![1].data : undefined,
+		error: undefined,
+	} as UseFormMutationResult<T>;
 }
 
-export const useFormMutation: (fn: (ctx: RequestContext) => any) => {
-	action: string;
-} = useFormMutationImpl as any;
+export const useFormMutation: <T>(
+	fn: (ctx: RequestContext) => any,
+) => UseFormMutationResult<T> = useFormMutationImpl as any;
 
 export const useServerSideQuery: <T>(
 	fn: ServerSideFunction<T>,

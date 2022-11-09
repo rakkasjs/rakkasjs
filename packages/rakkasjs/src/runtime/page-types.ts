@@ -137,7 +137,7 @@ export type PageRouteGuard<P = Record<string, string>> = (
 
 export type ActionHandler = (
 	pageContext: ActionContext,
-) => ActionResult | Promise<ActionResult>;
+) => ActionResult<any> | Promise<ActionResult<any>>;
 
 /** Function to set response headers */
 export type HeadersFunction<M = Record<string, unknown>> = (
@@ -189,10 +189,10 @@ export interface Redirection {
 	headers?: Record<string, string | string[]> | ((headers: Headers) => void);
 }
 
-export type ActionResult =
+export type ActionResult<T> =
 	| Redirection
 	| {
-			data: any;
+			data: T;
 			/** The status code */
 			status?: number;
 			/** Response headers */

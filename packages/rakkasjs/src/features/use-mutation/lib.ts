@@ -16,7 +16,7 @@ export interface UseMutationOptions<T, V> {
 }
 
 /** Initial mutation state */
-export interface UseMutationIdleResult<T, V> {
+export interface UseMutationIdleResult {
 	/** Mutation status */
 	status: "idle";
 	/** Data returned from the mutation */
@@ -31,16 +31,10 @@ export interface UseMutationIdleResult<T, V> {
 	isLoading: false;
 	/** Did the last mutation complete successfully? */
 	isSuccess: false;
-	/** Fire the mutation */
-	mutate(vars: V): void;
-	/** Fire the mutation and awaits its result */
-	mutateAsync(vars: V): Promise<T>;
-	/** Reset the mutation to its initial state */
-	reset(): void;
 }
 
 /** Loading mutation state */
-export interface UseMutationLoadingResult<T, V> {
+export interface UseMutationLoadingResult {
 	/** Mutation status */
 	status: "loading";
 	/** Data returned from the mutation */
@@ -55,16 +49,10 @@ export interface UseMutationLoadingResult<T, V> {
 	isLoading: true;
 	/** Did the last mutation complete successfully? */
 	isSuccess: false;
-	/** Fire the mutation */
-	mutate(vars: V): void;
-	/** Fire the mutation and awaits its result */
-	mutateAsync(vars: V): Promise<T>;
-	/** Reset the mutation to its initial state */
-	reset(): void;
 }
 
 /** Failed mutation state */
-export interface UseMutationErrorResult<T, V> {
+export interface UseMutationErrorResult {
 	/** Mutation status */
 	status: "error";
 	/** Data returned from the mutation */
@@ -79,16 +67,10 @@ export interface UseMutationErrorResult<T, V> {
 	isLoading: false;
 	/** Did the last mutation complete successfully? */
 	isSuccess: false;
-	/** Fire the mutation */
-	mutate(vars: V): void;
-	/** Fire the mutation and awaits its result */
-	mutateAsync(vars: V): Promise<T>;
-	/** Reset the mutation to its initial state */
-	reset(): void;
 }
 
 /** Successful mutation state */
-export interface UseMutationSuccessResult<T, V> {
+export interface UseMutationSuccessResult<T> {
 	/** Mutation status */
 	status: "success";
 	/** Data returned from the mutation */
@@ -103,20 +85,25 @@ export interface UseMutationSuccessResult<T, V> {
 	isLoading: false;
 	/** Did the last mutation complete successfully? */
 	isSuccess: true;
+}
+
+export interface UseMutationMethods<T, V> {
 	/** Fire the mutation */
 	mutate(vars: V): void;
-	/** Fire the mutation and awaits its result */
+	/** Fire the mutation and await its result */
 	mutateAsync(vars: V): Promise<T>;
 	/** Reset the mutation to its initial state */
 	reset(): void;
 }
 
 /** Return value of useMutation */
-export type UseMutationResult<T, V> =
-	| UseMutationIdleResult<T, V>
-	| UseMutationLoadingResult<T, V>
-	| UseMutationErrorResult<T, V>
-	| UseMutationSuccessResult<T, V>;
+export type UseMutationResult<T, V> = UseMutationMethods<T, V> &
+	(
+		| UseMutationIdleResult
+		| UseMutationLoadingResult
+		| UseMutationErrorResult
+		| UseMutationSuccessResult<T>
+	);
 
 /**
  * Performs a mutation
