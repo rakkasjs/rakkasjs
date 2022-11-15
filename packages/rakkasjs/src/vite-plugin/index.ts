@@ -14,7 +14,7 @@ import apiRoutes from "../features/api-routes/vite-plugin";
 import pageRoutes from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
 import { adapters, RakkasAdapter } from "./adapters";
-import { babelTransformClientSidePages } from "../features/run-server-side/implementation/transform-client-page";
+import { babelTransformClientSidePages } from "../features/run-server-side/implementation/transform/transform-client-page";
 
 export interface RakkasOptions {
 	/** Options passed to @vite/plugin-react */

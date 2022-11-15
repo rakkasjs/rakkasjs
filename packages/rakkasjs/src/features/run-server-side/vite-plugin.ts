@@ -1,7 +1,7 @@
 import { PluginOption, ResolvedConfig } from "vite";
 import { PluginItem, transformAsync } from "@babel/core";
-import { babelTransformServerSideHooks } from "./implementation/transform-server-side";
-import { babelTransformClientSideHooks } from "./implementation/transform-client-side";
+import { babelTransformServerSideHooks } from "./implementation/transform/transform-server-side";
+import { babelTransformClientSideHooks } from "./implementation/transform/transform-client-side";
 
 export default function runServerSide(): PluginOption[] {
 	let idCounter = 0;
