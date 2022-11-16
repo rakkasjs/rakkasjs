@@ -18,7 +18,8 @@ const runServerSideServerHooks: ServerHooks = {
 			action = action || ctx.url.pathname.slice(prefix.length);
 			const [buildId, moduleId, counter, ...closure] = action.split("/");
 			if (buildId !== import.meta.env.RAKKAS_BUILD_ID) {
-				return new Response("Outdated client", { status: 410 /* Gone */ });
+				// 410 Gone would be more appropriate but it won't work with statically rendered pages
+				return new Response("Outdated client", { status: 404 });
 			}
 
 			let closureContents: unknown[];

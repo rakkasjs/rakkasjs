@@ -118,6 +118,14 @@ function sendRequest(
 
 	return response.then(async (r) => {
 		if (!r.ok) {
+			if (r.status === 404) {
+				// Outdated build, try a hard reload
+				window.location.reload();
+				await new Promise(() => {
+					// Wait forever
+				});
+			}
+
 			const message = await r.text();
 			throw new Error(message || r.statusText);
 		}

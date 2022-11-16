@@ -80,8 +80,12 @@ export function App(props: AppProps) {
 				lastRoute.last = route;
 				lastRoute.onRendered?.();
 			})
-			.catch((error) => {
-				lastRoute.error = error;
+			.catch(async () => {
+				// Try a full reload in case of a mid-session deployment
+				window.location.reload();
+				await new Promise(() => {
+					// Wait forever
+				});
 			});
 	}
 
