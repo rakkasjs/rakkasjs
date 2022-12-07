@@ -53,7 +53,7 @@
 	"peerDependencies": {
 		"react": "18",
 		"react-dom": "18",
-		"vite": "3"
+		"vite": "3 || 4"
 	},
 	"devDependencies": {
 		"@brillout/json-serializer": "^0.5.3",

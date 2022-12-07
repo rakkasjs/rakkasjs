@@ -12,8 +12,8 @@ importers:
       vite: ^3.2.3
       vitest: ^0.24.5
     dependencies:
-      "@vitejs/plugin-react": 2.2.0_vite@3.2.3
-      vite: 3.2.3
+      "@vitejs/plugin-react": 2.2.0_vite@3.2.5
+      vite: 3.2.5
     devDependencies:
       cross-env: 7.0.3
       husky: 8.0.1
@@ -47,7 +47,7 @@ importers:
       "@types/react-dom": 18.0.8
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
-      vite: 3.2.3
+      vite: 3.2.5
 
   examples/empty:
     specifiers:
@@ -60,7 +60,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
       rakkasjs: link:../../packages/rakkasjs
-      vite: 3.2.3
+      vite: 3.2.5
 
   examples/express:
     specifiers:
@@ -84,8 +84,8 @@ importers:
       "@types/react-dom": 18.0.8
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
-      vite: 3.2.3
-      vite-tsconfig-paths: 3.5.2_vite@3.2.3
+      vite: 3.2.5
+      vite-tsconfig-paths: 3.5.2_vite@3.2.5
 
   examples/graphql:
     specifiers:
@@ -108,7 +108,7 @@ importers:
       "@types/react-dom": 18.0.8
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
-      vite: 3.2.3
+      vite: 3.2.5
 
   examples/guide-samples:
     specifiers:
@@ -130,8 +130,8 @@ importers:
       "@types/react-dom": 18.0.8
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
-      vite: 3.2.3
-      vite-tsconfig-paths: 3.5.2_vite@3.2.3
+      vite: 3.2.5
+      vite-tsconfig-paths: 3.5.2_vite@3.2.5
 
   examples/mdx:
     specifiers:
@@ -147,12 +147,12 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
-      "@cyco130/vite-plugin-mdx": 0.0.2_vite@3.2.3
+      "@cyco130/vite-plugin-mdx": 0.0.2_vite@3.2.5
       "@types/react": 18.0.25
       "@types/react-dom": 18.0.8
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
-      vite: 3.2.3
+      vite: 3.2.5
 
   examples/session:
     specifiers:
@@ -180,8 +180,8 @@ importers:
       "@types/react-dom": 18.0.8
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
-      vite: 3.2.3
-      vite-tsconfig-paths: 3.5.2_vite@3.2.3
+      vite: 3.2.5
+      vite-tsconfig-paths: 3.5.2_vite@3.2.5
 
   examples/styled-components:
     specifiers:
@@ -208,9 +208,9 @@ importers:
       babel-plugin-styled-components: 2.0.7_styled-components@5.3.6
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
-      vite: 3.2.3
+      vite: 3.2.5
       vite-plugin-cjs-interop: 0.0.3
-      vite-tsconfig-paths: 3.5.2_vite@3.2.3
+      vite-tsconfig-paths: 3.5.2_vite@3.2.5
 
   examples/todo:
     specifiers:
@@ -237,8 +237,8 @@ importers:
       prettier: 2.7.1
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
-      vite: 3.2.3
-      vite-tsconfig-paths: 3.5.2_vite@3.2.3
+      vite: 3.2.5
+      vite-tsconfig-paths: 3.5.2_vite@3.2.5
       vitest: 0.24.5
 
   examples/urql:
@@ -263,8 +263,8 @@ importers:
       "@types/react-dom": 18.0.8
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
-      vite: 3.2.3
-      vite-tsconfig-paths: 3.5.2_vite@3.2.3
+      vite: 3.2.5
+      vite-tsconfig-paths: 3.5.2_vite@3.2.5
 
   packages/create-rakkas-app:
     specifiers:
@@ -423,10 +423,10 @@ importers:
       "@types/node": 18.11.9
       "@types/react": 18.0.25
       "@types/react-dom": 18.0.8
-      "@vavite/connect": 1.5.1_vite@3.2.3
-      "@vavite/expose-vite-dev-server": 1.5.1_vite@3.2.3
-      "@vavite/multibuild": 1.5.1_vite@3.2.3
-      "@vitejs/plugin-react": 2.2.0_vite@3.2.3
+      "@vavite/connect": 1.5.1_vite@3.2.5
+      "@vavite/expose-vite-dev-server": 1.5.1_vite@3.2.5
+      "@vavite/multibuild": 1.5.1_vite@3.2.5
+      "@vitejs/plugin-react": 2.2.0_vite@3.2.5
       cac: 6.7.14
       cheerio: 1.0.0-rc.12
       devalue: 4.2.0
@@ -450,7 +450,7 @@ importers:
       react-helmet-async: 1.3.0_biqbaboplfbrettd7655fr4n2y
       tsup: 6.4.0_typescript@4.8.4
       typescript: 4.8.4
-      vite: 3.2.3_@types+node@18.11.9
+      vite: 3.2.5_@types+node@18.11.9
 
   testbed/kitchen-sink:
     specifiers:
@@ -504,7 +504,7 @@ importers:
       rakkasjs: link:../../packages/rakkasjs
       rimraf: 3.0.2
       typescript: 4.8.4
-      vite: 3.2.3
+      vite: 3.2.5
       wrangler: 2.1.15
 
   testbed/static:
@@ -538,7 +538,7 @@ importers:
       puppeteer: 19.2.2
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.8.4
-      vite: 3.2.3
+      vite: 3.2.5
 
   website:
     specifiers:
@@ -588,7 +588,7 @@ importers:
       sanitize.css: 13.0.0
     devDependencies:
       "@cyco130/eslint-config": 2.1.2_rmayb2veg2btbq6mbmnyivgasy
-      "@cyco130/vite-plugin-mdx": 0.0.2_vite@3.2.3
+      "@cyco130/vite-plugin-mdx": 0.0.2_vite@3.2.5
       "@docsearch/css": 3.3.0
       "@docsearch/react": 3.3.0_2zx2umvpluuhvlq44va5bta2da
       "@mapbox/rehype-prism": 0.8.0
@@ -610,7 +610,7 @@ importers:
       source-map: 0.7.4
       typescript: 4.8.4
       vfile: 5.3.5
-      vite: 3.2.3
+      vite: 3.2.5
       vite-plugin-cjs-interop: 0.0.3
 
 packages:
@@ -1421,7 +1421,7 @@ packages:
       - supports-color
     dev: true
 
-  /@cyco130/vite-plugin-mdx/0.0.2_vite@3.2.3:
+  /@cyco130/vite-plugin-mdx/0.0.2_vite@3.2.5:
     resolution:
       {
         integrity: sha512-0Wszl1QUrHvlNOVtyeb4r1Yxy1RT55KpkvqqnGE6b/GrdHZjlgXN/eDUgVXvIU0Vz85q4IC7hKqdpgAWoTKsKw==,
@@ -1433,7 +1433,7 @@ packages:
       "@rollup/pluginutils": 5.0.2
       source-map: 0.7.4
       vfile: 5.3.5
-      vite: 3.2.3
+      vite: 3.2.5
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -4814,7 +4814,7 @@ packages:
       wonka: 6.0.0
     dev: false
 
-  /@vavite/connect/1.5.1_vite@3.2.3:
+  /@vavite/connect/1.5.1_vite@3.2.5:
     resolution:
       {
         integrity: sha512-/8qg1mSlnkpu3BNMSzq7ndMJpn0m/C8FD4S/vY0DRO9jggCgrUe00WwFEljXDQBMu5v+iQ42pxwRuTerfmXfnw==,
@@ -4823,10 +4823,10 @@ packages:
       vite: ">=2.8.1"
     dependencies:
       "@types/node": 18.11.9
-      vite: 3.2.3_@types+node@18.11.9
+      vite: 3.2.5_@types+node@18.11.9
     dev: false
 
-  /@vavite/expose-vite-dev-server/1.5.1_vite@3.2.3:
+  /@vavite/expose-vite-dev-server/1.5.1_vite@3.2.5:
     resolution:
       {
         integrity: sha512-/d6LXGCFn43QnRpI1wE9OcNS56STgE4nO2lKBcSaNsU3/UdjeKd0NL0l+Ey6vsbbh0u6r7jlipYWzZJ1LEyeHw==,
@@ -4834,10 +4834,10 @@ packages:
     peerDependencies:
       vite: ">=2.8.1"
     dependencies:
-      vite: 3.2.3_@types+node@18.11.9
+      vite: 3.2.5_@types+node@18.11.9
     dev: false
 
-  /@vavite/multibuild/1.5.1_vite@3.2.3:
+  /@vavite/multibuild/1.5.1_vite@3.2.5:
     resolution:
       {
         integrity: sha512-e3QsSY5+cE+22YyqfijGK1HWZIebq52gI0eNbGBjOcpyp7+mzGve/yKfA5O/QWU9sikmEBCVAkE220TDIktItQ==,
@@ -4848,7 +4848,7 @@ packages:
       "@types/node": 18.11.9
       cac: 6.7.14
       picocolors: 1.0.0
-      vite: 3.2.3_@types+node@18.11.9
+      vite: 3.2.5_@types+node@18.11.9
     dev: false
 
   /@vercel/nft/0.22.1:
@@ -4897,7 +4897,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vitejs/plugin-react/2.2.0_vite@3.2.3:
+  /@vitejs/plugin-react/2.2.0_vite@3.2.5:
     resolution:
       {
         integrity: sha512-FFpefhvExd1toVRlokZgxgy2JtnBOdp4ZDsq7ldCWaqGSGn9UhWMAVm/1lxPL14JfNS5yGz+s9yFrQY6shoStA==,
@@ -4913,7 +4913,7 @@ packages:
       "@babel/plugin-transform-react-jsx-source": 7.19.6_@babel+core@7.20.2
       magic-string: 0.26.7
       react-refresh: 0.14.0
-      vite: 3.2.3_@types+node@18.11.9
+      vite: 3.2.5_@types+node@18.11.9
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -20664,7 +20664,7 @@ packages:
       magic-string: 0.26.7
     dev: true
 
-  /vite-tsconfig-paths/3.5.2_vite@3.2.3:
+  /vite-tsconfig-paths/3.5.2_vite@3.2.5:
     resolution:
       {
         integrity: sha512-xJMgHA2oJ28QCG2f+hXrcqzo7IttrSRK4A//Tp94CfuX5eetOx33qiwXHUdi3FwkHP2ocpxHuvE45Ix67gwEmQ==,
@@ -20676,15 +20676,15 @@ packages:
       globrex: 0.1.2
       recrawl-sync: 2.2.3
       tsconfig-paths: 4.1.0
-      vite: 3.2.3
+      vite: 3.2.5
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite/3.2.3:
+  /vite/3.2.5:
     resolution:
       {
-        integrity: sha512-h8jl1TZ76eGs3o2dIBSsvXDLb1m/Ec1iej8ZMdz+PsaFUsftZeWe2CZOI3qogEsMNaywc17gu0q6cQDzh/weCQ==,
+        integrity: sha512-4mVEpXpSOgrssFZAOmGIr85wPHKvaDAcXqxVxVRZhljkJOMZi1ibLibzjLHzJvcok8BMguLc7g1W6W/GqZbLdQ==,
       }
     engines: { node: ^14.18.0 || >=16.0.0 }
     hasBin: true
@@ -20716,10 +20716,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
 
-  /vite/3.2.3_@types+node@18.11.9:
+  /vite/3.2.5_@types+node@18.11.9:
     resolution:
       {
-        integrity: sha512-h8jl1TZ76eGs3o2dIBSsvXDLb1m/Ec1iej8ZMdz+PsaFUsftZeWe2CZOI3qogEsMNaywc17gu0q6cQDzh/weCQ==,
+        integrity: sha512-4mVEpXpSOgrssFZAOmGIr85wPHKvaDAcXqxVxVRZhljkJOMZi1ibLibzjLHzJvcok8BMguLc7g1W6W/GqZbLdQ==,
       }
     engines: { node: ^14.18.0 || >=16.0.0 }
     hasBin: true
@@ -20787,7 +20787,7 @@ packages:
       tinybench: 2.3.1
       tinypool: 0.3.0
       tinyspy: 1.0.2
-      vite: 3.2.3_@types+node@18.11.9
+      vite: 3.2.5_@types+node@18.11.9
     transitivePeerDependencies:
       - less
       - sass

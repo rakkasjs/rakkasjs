@@ -30,6 +30,8 @@ export async function build(
 		);
 	}
 
+	process.env.NODE_ENV = options.mode || "production";
+
 	await multibuild(
 		{
 			root,

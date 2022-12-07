@@ -27,8 +27,7 @@
 	"--": "Uncomment the next option to test against a local Vite repo",
 	"--pnpm": {
 		"overrides": {
-			"vite": "link:../vite/packages/vite",
-			"@vitejs/plugin-react": "link:../vite/packages/plugin-react"
+			"vite": "link:../vite/packages/vite"
 		}
 	}
 }
