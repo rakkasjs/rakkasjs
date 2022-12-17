@@ -21,7 +21,7 @@ export interface UseMutationIdleResult {
 	status: "idle";
 	/** Data returned from the mutation */
 	data?: undefined;
-	/** Error thrown by from the mutation */
+	/** Error thrown by the mutation */
 	error?: undefined;
 	/** Was there an error? */
 	isError: false;
@@ -177,4 +177,87 @@ export function useMutation<T, V = void>(
 			});
 		},
 	} as any;
+}
+
+/** Optinos for useMutation */
+export interface UseMutationsOptions<T, V> {
+	/** Called just before the mutation starts */
+	onMutate?(id: number, vars: V): void | Promise<void>;
+	/** Called when the mutation fails */
+	onError?(id: number, error: unknown): void;
+	/** Called when the mutation ends (either error or success) */
+	onSettled?(id: number, data?: T, error?: unknown): void;
+	/** Called when the mutation completes successfully */
+	onSuccess?(id: number, data: T): void;
+}
+
+export interface UseMutationsResult<T, V> {
+	/** Fire the mutation */
+	mutate(vars: V): void;
+	/** Fire the mutation and await its result */
+	mutateAsync(vars: V): Promise<T>;
+	/** Mutations that are currently underway */
+	pending: { id: number; vars: V }[];
+}
+
+/**
+ * Performs a mutation that can be fired multiple times at once. Each triggered
+ * mutation will have a unique ID that can be used to track it in the `pending`
+ * array in the return value. You can use `onSuccess`, `onError`, and
+ * `onSettled` to track the status of each mutation to provide loading states
+ * or optimistic updates.
+ *
+ * @template T Type of mutation result data
+ * @template V Type of mutation variables
+ * @param mutationFn Function that performs the mutation
+ * @param [options] Mutation options
+ * @returns Mutation result
+ */
+export function useMutations<T, V = void>(
+	mutationFn: MutationFunction<T, V>,
+	options: UseMutationsOptions<T, V> = {},
+): UseMutationsResult<T, V> {
+	const [pending, setPending] = useState<{ id: number; vars: V }[]>([]);
+	const idRef = useRef(0);
+
+	async function mutate(vars: V) {
+		const id = idRef.current++;
+		setPending((pending) => [...pending, { id, vars }]);
+
+		await options.onMutate?.(id, vars);
+
+		let data: T | undefined;
+		let error: unknown | undefined;
+
+		try {
+			data = await mutationFn(vars);
+
+			options.onSuccess?.(id, data);
+
+			return data;
+		} catch (err) {
+			error = err;
+			options.onError?.(id, err);
+		} finally {
+			try {
+				options.onSettled?.(id, data, error);
+			} finally {
+				setPending((pending) => pending.filter((p) => p.id !== id));
+			}
+		}
+
+		throw error;
+	}
+
+	return {
+		mutate(vars) {
+			mutate(vars).catch(() => {
+				// Do nothing
+			});
+		},
+
+		mutateAsync: mutate,
+
+		pending,
+	};
 }
