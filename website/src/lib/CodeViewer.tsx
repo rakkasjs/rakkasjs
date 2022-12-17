@@ -30,7 +30,7 @@ function CodeViewerInner(props: CodeViewerProps) {
 	const { data: element } = useQuery(
 		`code-viewer-${props.name}:${JSON.stringify(props.openFiles)}`,
 		async () => {
-			const { default: Viewer } = await import("./CodeSandboxViewer");
+			const { default: Viewer } = await import("./StackBlitzViewer");
 			return <Viewer {...props} />;
 		},
 	);
