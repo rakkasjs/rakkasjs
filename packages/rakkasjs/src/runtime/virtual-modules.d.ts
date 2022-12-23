@@ -32,6 +32,7 @@ declare module "virtual:rakkasjs:server-page-routes" {
 			guards: import("./page-types").PageRouteGuard[],
 			rest: string | undefined,
 			ids: string[],
+			serverOnly?: boolean,
 		]
 	>;
 

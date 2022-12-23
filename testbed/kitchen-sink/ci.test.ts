@@ -963,6 +963,11 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				);
 			});
 		}
+
+		test("filters out dev-only routes", async () => {
+			const r = await fetch(host + "/dev-only");
+			expect(r.status).toBe(dev ? 200 : 404);
+		});
 	});
 }
 

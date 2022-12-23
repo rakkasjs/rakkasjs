@@ -7,6 +7,7 @@ import MagicString from "magic-string";
 
 export interface PageRoutesOptions {
 	pageExtensions?: string[];
+	filterRoutes?: (path: string) => boolean | "server";
 }
 
 export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
@@ -29,9 +30,18 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 	let isSinglePageGuard: (filename: string) => boolean;
 
 	async function generateRoutesModule(client?: boolean): Promise<string> {
-		const pageFiles = (await glob(routesRoot + pagePattern)).map((f) =>
-			path.relative(resolvedConfig.root, f).replace(/\\/g, "/"),
-		);
+		const serverOnlyPages = new Set<string>();
+		const pageFiles = (await glob(routesRoot + pagePattern))
+			.map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"))
+			.filter((f) => {
+				f = f.slice("src/routes/".length);
+				const filtered = options.filterRoutes?.(f) ?? true;
+				if (filtered === "server") {
+					serverOnlyPages.add(f);
+				}
+
+				return filtered;
+			});
 
 		let pageImporters = "";
 
@@ -50,7 +60,8 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 
 		const layoutFiles = (await glob(routesRoot + layoutPattern))
 			.sort(/* Long to short */ (a, b) => b.length - a.length)
-			.map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"));
+			.map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"))
+			.filter((f) => options.filterRoutes?.(f) !== false);
 
 		const layoutDirs = layoutFiles.map((f) => path.dirname(f));
 
@@ -71,7 +82,8 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 
 		const guardFiles = (await glob(routesRoot + guardPattern))
 			.sort(/* short to kong  */ (a, b) => a.length - b.length)
-			.map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"));
+			.map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"))
+			.filter((f) => options.filterRoutes?.(f) !== false);
 
 		const guardDirs = guardFiles.map((f) => path.dirname(f));
 
@@ -142,6 +154,12 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 			// Server needs the file names to inject styles and prefetch links
 			if (!client) {
 				exportElement += `, [r${i}, ${layouts.map((li) => `m${li}`)}]`;
+				if (
+					!client &&
+					serverOnlyPages.has(pageFile.slice("src/routes/".length))
+				) {
+					exportElement += ",true";
+				}
 			}
 
 			exportElement += "],\n";
@@ -178,10 +196,18 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 				}
 			},
 
-			async load(id) {
+			async load(id, options) {
 				if (id === "virtual:rakkasjs:server-page-routes") {
+					if (!options?.ssr) {
+						return "export default null";
+					}
+
 					return generateRoutesModule();
 				} else if (id === "virtual:rakkasjs:client-page-routes") {
+					if (options?.ssr) {
+						return "export default null";
+					}
+
 					return generateRoutesModule(true);
 				}
 			},

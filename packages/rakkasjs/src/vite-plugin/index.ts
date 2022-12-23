@@ -27,8 +27,19 @@ export interface RakkasOptions {
 	 * @default false
 	 */
 	prerender?: string[] | boolean;
+	/**
+	 * Route file filter. This function is called for every route file (page,
+	 * api, layout, guard, or middleware) and  be used to exclude some routes
+	 * from the build or mark them as server-only. Server-only routes don't
+	 * ship any client-side code and are rendered on the server.
+	 *
+	 * `path` is relative to the `src/routes` directory and is in POSIX format
+	 * like `login/index.page.tsx`.
+	 */
+	filterRoutes?: (path: string) => boolean | "server";
 	/** Whether to enable strict mode in dev. @default true */
 	strictMode?: boolean;
+	/** Platform adapter */
 	adapter?:
 		| "node"
 		| "cloudflare-workers"
@@ -71,6 +82,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		apiRoutes(),
 		pageRoutes({
 			pageExtensions: options.pageExtensions,
+			filterRoutes: options.filterRoutes,
 		}),
 		virtualDefaultEntry({
 			entry: "/src/entry-node",

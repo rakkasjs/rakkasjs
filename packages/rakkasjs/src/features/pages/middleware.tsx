@@ -69,6 +69,7 @@ export default async function renderPageRoute(
 					guards: PageRouteGuard<Record<string, string>>[],
 					rest: string | undefined,
 					ids: string[],
+					serverOnly?: boolean,
 				]
 		  >
 		| undefined;
@@ -388,6 +389,8 @@ export default async function renderPageRoute(
 	);
 
 	let scriptPath: string;
+	const serverOnly = found.route[5];
+
 	if (import.meta.env.PROD) {
 		for (const entry of Object.values(clientManifest!)) {
 			if (entry.isEntry) {
@@ -420,7 +423,7 @@ export default async function renderPageRoute(
 			// manifestEntry.assets?.forEach((id) => assetSet.add(id));
 
 			const script = clientManifest?.[moduleId].file;
-			if (script) {
+			if (script && !serverOnly) {
 				prefetchOutput += `<link rel="modulepreload" crossorigin href="${escapeHtml(
 					"/" + script,
 				)}">`;
@@ -474,7 +477,7 @@ export default async function renderPageRoute(
 
 	const reactStream = await renderToReadableStream(app, {
 		// TODO: AbortController
-		bootstrapModules: ["/" + scriptPath!],
+		bootstrapModules: serverOnly ? [] : ["/" + scriptPath!],
 		onError(error: any) {
 			if (!redirected) {
 				status = 500;
@@ -540,11 +543,11 @@ export default async function renderPageRoute(
 		`<meta charset="UTF-8" />` +
 		`<meta name="viewport" content="width=device-width, initial-scale=1.0" />` +
 		// TODO: Refactor this. Probably belongs to client-side-navigation
-		(actionResult?.data === undefined
+		(actionResult?.data === undefined && !serverOnly
 			? ""
 			: `<script>$RAKKAS_ACTION_DATA=${uneval(actionResult?.data)}</script>`);
 
-	if (actionErrorIndex >= 0) {
+	if (actionErrorIndex >= 0 && !serverOnly) {
 		head += `<script>$RAKKAS_ACTION_ERROR_INDEX=${actionErrorIndex}</script>`;
 	}
 
