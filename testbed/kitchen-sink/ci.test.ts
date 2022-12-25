@@ -160,14 +160,14 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 		test("renders simple API route", async () => {
 			const response = await fetch(host + "/api-routes/simple");
-			expect(response.status).toBe(200);
+			expect(response.ok).toBe(true);
 			const text = await response.text();
 			expect(text).toEqual("Hello from API route");
 		});
 
 		test("runs middleware", async () => {
 			const response = await fetch(host + "/api-routes/simple?abort=1");
-			expect(response.status).toBe(200);
+			expect(response.ok).toBe(true);
 			const text = await response.text();
 			expect(text).toEqual("Hello from middleware");
 
@@ -180,28 +180,28 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 		test("renders params in API route", async () => {
 			const response = await fetch(host + "/api-routes/param-value");
-			expect(response.status).toBe(200);
+			expect(response.ok).toBe(true);
 			const json = await response.json();
 			expect(json).toMatchObject({ param: "param-value" });
 		});
 
 		test("unescapes params in API route", async () => {
 			const response = await fetch(host + "/api-routes/param%20value");
-			expect(response.status).toBe(200);
+			expect(response.ok).toBe(true);
 			const json = await response.json();
 			expect(json).toMatchObject({ param: "param value" });
 		});
 
 		test("renders spread params in API route", async () => {
 			const response = await fetch(host + "/api-routes/more/aaa/bbb/ccc");
-			expect(response.status).toBe(200);
+			expect(response.ok).toBe(true);
 			const json = await response.json();
 			expect(json).toMatchObject({ rest: "/aaa/bbb/ccc" });
 		});
 
 		test("doesn't unescape spread params in API route", async () => {
 			const response = await fetch(host + "/api-routes/more/aaa%2Fbbb/ccc");
-			expect(response.status).toBe(200);
+			expect(response.ok).toBe(true);
 			const json = await response.json();
 			expect(json).toMatchObject({ rest: "/aaa%2Fbbb/ccc" });
 		});
@@ -220,7 +220,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 		test("renders preloaded data", async () => {
 			const response = await fetch(host + "/");
-			expect(response.status).toBe(200);
+			expect(response.ok).toBe(true);
 
 			const html = await response.text();
 			const dom = load(html);
@@ -231,7 +231,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 		test("decodes page params", async () => {
 			const response = await fetch(host + "/page-params/unescape%20me");
-			expect(response.status).toBe(200);
+			expect(response.ok).toBe(true);
 
 			const html = await response.text();
 			const dom = load(html);
@@ -241,7 +241,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 		test("doesn't unescape spread page params", async () => {
 			const response = await fetch(host + "/page-params/spread/escape%2Fme");
-			expect(response.status).toBe(200);
+			expect(response.ok).toBe(true);
 
 			const html = await response.text();
 			const dom = load(html);
@@ -884,7 +884,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					{ url: "/prerender/not-prerendered", shouldPrerender: false },
 				])("$url", async ({ url, shouldPrerender }) => {
 					const response = await fetch(host + url);
-					expect(response.status).toBe(200);
+					expect(response.ok).toBe(true);
 					const text = await response.text();
 
 					if (shouldPrerender) {

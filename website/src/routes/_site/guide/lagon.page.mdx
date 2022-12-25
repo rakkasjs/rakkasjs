@@ -1,0 +1,30 @@
+---
+title: Lagon
+---
+
+Rakkas projects can be built to run on [Lagon](https://lagon.app/), an upcoming JavaScript runtime for the edge. First, you should install the suitable HatTip adapter:
+
+```bash
+npm install -S @hattip/adapter-lagon
+```
+
+Then you should set the `adapter` option of Rakkas Vite plugin to `"lagon"`:
+
+```ts
+import { defineConfig } from "vite";
+import rakkas from "rakkasjs/vite-plugin";
+
+export default defineConfig({
+	plugins: [
+		rakkas({
+			adapter: "lagon",
+		}),
+	],
+});
+```
+
+After building with `rakkas build`, you can run your project with `lagon dev dist/server/entry-lagon.js --public-dir dist/client`.
+
+## Limitations
+
+Lagon is in early development, so it is not ready for production use yet.

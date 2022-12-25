@@ -77,7 +77,7 @@ export async function build(
 	}
 
 	if (adapter!.bundle) {
-		logStep(step++, `Bundling for ${adapter!.name}`);
+		logStep(step++, `Adapting for ${adapter!.name}`);
 		await adapter!.bundle(config!.root);
 	}
 }

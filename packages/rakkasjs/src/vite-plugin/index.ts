@@ -48,6 +48,8 @@ export interface RakkasOptions {
 		| "netlify"
 		| "netlify-edge"
 		| "deno"
+		| "bun"
+		| "lagon"
 		| RakkasAdapter;
 }
 

@@ -1,0 +1,31 @@
+---
+title: Bun
+---
+
+Rakkas projects can be built to run on [Bun](https://bun.sh). First, you should install the suitable HatTip adapter:
+
+```bash
+npm install -S @hattip/adapter-bun
+```
+
+Then you should set the `adapter` option of Rakkas Vite plugin to `"bun"`:
+
+```ts
+import { defineConfig } from "vite";
+import rakkas from "rakkasjs/vite-plugin";
+
+export default defineConfig({
+	plugins: [
+		rakkas({
+			adapter: "bun",
+		}),
+	],
+});
+```
+
+After building with `rakkas build`, you can run your project with `bun run dist/server/entry-bun.js`.
+
+## Limitations
+
+- Bun doesn't support streaming, so streaming is disabled.
+- Bun doesn't have a `Request.prototype.formData()` implementation yet. Rakkas polyfills it using `URLSearchParams` so only `application/x-www-form-urlencoded` is supported. `multipart/form-data` is not supported.

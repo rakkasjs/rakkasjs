@@ -20,6 +20,8 @@
 	},
 	"devDependencies": {
 		"@cyco130/eslint-config": "^2.1.2",
+		"@hattip/adapter-bun": "^0.0.24",
+		"@hattip/adapter-lagon": "^0.0.24",
 		"@hattip/adapter-netlify-edge": "^0.0.24",
 		"@hattip/adapter-netlify-functions": "^0.0.24",
 		"@types/ps-tree": "^1.1.2",

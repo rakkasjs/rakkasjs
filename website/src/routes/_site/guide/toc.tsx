@@ -103,6 +103,8 @@ const sections: Array<[section: string, slugs: string[]]> = [
 			"netlify",
 			"vercel",
 			"deno",
+			"bun",
+			"lagon",
 		],
 	],
 	[

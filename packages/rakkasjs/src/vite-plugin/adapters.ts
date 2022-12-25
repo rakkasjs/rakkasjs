@@ -169,6 +169,36 @@ export const adapters: Record<string, RakkasAdapter> = {
 			);
 		},
 	},
+
+	bun: {
+		name: "bun",
+
+		disableStreaming: true,
+
+		async bundle(root) {
+			let input = findEntry(root, "src/entry-bun");
+
+			if (!input) {
+				input = path.resolve(root, "dist/server/entry-bun.js");
+				await fs.promises.writeFile(input, BUN_ENTRY);
+			}
+		},
+	},
+
+	lagon: {
+		name: "lagon",
+
+		disableStreaming: true,
+
+		async bundle(root) {
+			let input = findEntry(root, "src/entry-lagon");
+
+			if (!input) {
+				input = path.resolve(root, "dist/server/entry-lagon.js");
+				await fs.promises.writeFile(input, LAGON_ENTRY);
+			}
+		},
+	},
 };
 
 function findEntry(root: string, name: string) {
@@ -310,4 +340,40 @@ const DENO_ENTRY = `
 			port: Number(process.env.PORT) || 3000,
 		},
 	);
+`;
+
+const BUN_ENTRY = `
+	import bunAdapter from "@hattip/adapter-bun";
+	import handler from "./hattip.js";
+	import url from "url";
+	import path from "path";
+
+	Request.prototype.formData = async function () {
+		return new URLSearchParams(await this.text());
+	};
+
+	const dir = path.resolve(
+		path.dirname(url.fileURLToPath(new URL(import.meta.url))),
+		"../client",
+	);
+
+	export default bunAdapter(handler, { staticDir: dir });
+`;
+
+const LAGON_ENTRY = `
+	import lagonAdapter from "@hattip/adapter-lagon";
+	import hattipHandler from "./hattip.js";
+
+	globalThis.setTimeout = (callback) => Promise.resolve().then(callback);
+
+	const originalFormData = Request.prototype.formData;
+	Request.prototype.formData = async function () {
+		if (this.headers.get("content-type")?.startsWith("multipart/form-data")) {
+			return originalFormData.call(this);
+		} else {
+			return new URLSearchParams(await this.text());
+		}
+	};
+
+	export const handler = lagonAdapter(hattipHandler);
 `;

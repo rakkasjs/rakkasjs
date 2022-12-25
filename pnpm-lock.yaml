@@ -482,8 +482,10 @@ importers:
   testbed/kitchen-sink:
     specifiers:
       "@cyco130/eslint-config": ^2.1.2
+      "@hattip/adapter-bun": ^0.0.24
       "@hattip/adapter-cloudflare-workers": ^0.0.24
       "@hattip/adapter-deno": ^0.0.24
+      "@hattip/adapter-lagon": ^0.0.24
       "@hattip/adapter-netlify-edge": ^0.0.24
       "@hattip/adapter-netlify-functions": ^0.0.24
       "@hattip/adapter-vercel-edge": ^0.0.24
@@ -519,6 +521,8 @@ importers:
       web-streams-polyfill: 3.2.1
     devDependencies:
       "@cyco130/eslint-config": 2.1.2_lzzuuodtsqwxnvqeq4g4likcqa
+      "@hattip/adapter-bun": 0.0.24
+      "@hattip/adapter-lagon": 0.0.24
       "@hattip/adapter-netlify-edge": 0.0.24
       "@hattip/adapter-netlify-functions": 0.0.24
       "@types/ps-tree": 1.1.2
@@ -2150,6 +2154,15 @@ packages:
       tslib: 2.4.1
     dev: false
 
+  /@hattip/adapter-bun/0.0.24:
+    resolution:
+      {
+        integrity: sha512-mKbcAqMC3QL6zkMqE8TGsAvjkbi8dDe0iDKu3V6MZ9Ub0xq/xC+P6zl0wLw/9PMdha0ThY3s0nQdYejuFjik9w==,
+      }
+    dependencies:
+      "@hattip/core": 0.0.24
+    dev: true
+
   /@hattip/adapter-cloudflare-workers/0.0.24:
     resolution:
       {
@@ -2167,6 +2180,16 @@ packages:
     dependencies:
       "@hattip/core": 0.0.24
     dev: false
+
+  /@hattip/adapter-lagon/0.0.24:
+    resolution:
+      {
+        integrity: sha512-rzHpJe0ezBPGGGk/5/A97PJTF8wPg/AeS09oUOVT8G0zE+Cql/TVup0a6UVrHqr7NnaIXD/WTCr0YrzaZLWO+Q==,
+      }
+    dependencies:
+      "@hattip/core": 0.0.24
+      "@hattip/polyfills": 0.0.24
+    dev: true
 
   /@hattip/adapter-netlify-edge/0.0.24:
     resolution:
