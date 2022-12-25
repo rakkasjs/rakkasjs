@@ -1,13 +1,9 @@
 lockfileVersion: 5.4
 
-overrides:
-  "--vite": link:../vite/packages/vite
-  "@hattip/polyfills": link:../hattip/packages/base/polyfills
-
 importers:
   .:
     specifiers:
-      "@hattip/polyfills": link:../hattip/packages/base/polyfills
+      "@hattip/polyfills": 0.0.22
       "@vitejs/plugin-react": ^3.0.0
       cross-env: ^7.0.3
       husky: ^8.0.2
@@ -17,7 +13,7 @@ importers:
       vite: ^4.0.3
       vitest: ^0.26.2
     dependencies:
-      "@hattip/polyfills": link:../hattip/packages/base/polyfills
+      "@hattip/polyfills": 0.0.22
       "@vitejs/plugin-react": 3.0.0_vite@4.0.3
       vite: 4.0.3
     devDependencies:
@@ -33,6 +29,7 @@ importers:
       "@auth/core": 0.2.3
       "@types/react": ^18.0.26
       "@types/react-dom": ^18.0.10
+      dotenv-cli: ^6.0.0
       rakkasjs: 0.6.10
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -46,6 +43,7 @@ importers:
     devDependencies:
       "@types/react": 18.0.26
       "@types/react-dom": 18.0.10
+      dotenv-cli: 6.0.0
       rakkasjs: link:../../packages/rakkasjs
       typescript: 4.9.4
       vite: 4.0.3
@@ -186,7 +184,7 @@ importers:
   examples/session:
     specifiers:
       "@hattip/cookie": ^0.0.24
-      "@hattip/polyfills": link:../../../hattip/packages/base/polyfills
+      "@hattip/polyfills": ^0.0.22
       "@hattip/session": ^0.0.24
       "@types/react": ^18.0.26
       "@types/react-dom": ^18.0.10
@@ -204,7 +202,7 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
-      "@hattip/polyfills": link:../../../hattip/packages/base/polyfills
+      "@hattip/polyfills": 0.0.22
       "@types/react": 18.0.26
       "@types/react-dom": 18.0.10
       rakkasjs: link:../../packages/rakkasjs
@@ -409,7 +407,7 @@ importers:
       "@hattip/bundler-vercel": ^0.0.24
       "@hattip/compose": ^0.0.24
       "@hattip/core": ^0.0.24
-      "@hattip/polyfills": link:../../../hattip/packages/base/polyfills
+      "@hattip/polyfills": ^0.0.22
       "@types/babel__core": ^7.1.20
       "@types/micromatch": ^4.0.2
       "@types/node": ^18.11.17
@@ -448,7 +446,7 @@ importers:
       "@hattip/bundler-vercel": 0.0.24
       "@hattip/compose": 0.0.24
       "@hattip/core": 0.0.24
-      "@hattip/polyfills": link:../../../hattip/packages/base/polyfills
+      "@hattip/polyfills": 0.0.22
       "@types/node": 18.11.17
       "@types/react": 18.0.26
       "@types/react-dom": 18.0.10
@@ -2187,7 +2185,7 @@ packages:
     dependencies:
       "@hattip/adapter-node": 0.0.24
       "@hattip/core": 0.0.24
-      "@hattip/polyfills": link:../hattip/packages/base/polyfills
+      "@hattip/polyfills": 0.0.24
       netlify-lambda-types: 1.0.0
     dev: true
 
@@ -2198,7 +2196,7 @@ packages:
       }
     dependencies:
       "@hattip/core": 0.0.24
-      "@hattip/polyfills": link:../hattip/packages/base/polyfills
+      "@hattip/polyfills": 0.0.24
 
   /@hattip/adapter-vercel-edge/0.0.24:
     resolution:
@@ -2277,6 +2275,12 @@ packages:
       cookie: 0.5.0
     dev: false
 
+  /@hattip/core/0.0.22:
+    resolution:
+      {
+        integrity: sha512-C3SNVpDOPwDff3jigPhGr2bWe+B/1tvaFTP2nVu90VFmWCVZ6y0dT81RiBHjiRCoYX82KgAyxBiN1WD/YbgM+w==,
+      }
+
   /@hattip/core/0.0.24:
     resolution:
       {
@@ -2304,6 +2308,24 @@ packages:
       graphql: 16.6.0
       tslib: 2.4.1
     dev: false
+
+  /@hattip/polyfills/0.0.22:
+    resolution:
+      {
+        integrity: sha512-mb7zUl7KdCl511CNjqTFIm6eZ0mIyJ3PLYOoZB2fwWnxSUEq3LSkLl33K8RWgPhP/K0ACoFsSGuteEQN2lVuVA==,
+      }
+    dependencies:
+      "@hattip/core": 0.0.22
+      node-fetch-native: 0.1.8
+
+  /@hattip/polyfills/0.0.24:
+    resolution:
+      {
+        integrity: sha512-gvydPhzwb4mWVt5w476WjrHO6fRudyvOQTc1Nob+/y2Vyxa5srG7XbwLor3UFXQXinSJDew5dsk1mkQP/3stPg==,
+      }
+    dependencies:
+      "@hattip/core": 0.0.24
+      node-fetch-native: 0.1.8
 
   /@hattip/response/0.0.24:
     resolution:
@@ -8479,7 +8501,6 @@ packages:
       dotenv: 16.0.3
       dotenv-expand: 8.0.3
       minimist: 1.2.6
-    dev: false
 
   /dotenv-expand/8.0.3:
     resolution:
@@ -8487,7 +8508,6 @@ packages:
         integrity: sha512-SErOMvge0ZUyWd5B0NXMQlDkN+8r+HhVUsxgOO7IoPDOdDRD2JjExpN6y3KnFR66jsJMwSn1pqIivhU5rcJiNg==,
       }
     engines: { node: ">=12" }
-    dev: false
 
   /dotenv/10.0.0:
     resolution:
@@ -8503,7 +8523,6 @@ packages:
         integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==,
       }
     engines: { node: ">=12" }
-    dev: false
 
   /dotenv/5.0.1:
     resolution:
@@ -15973,6 +15992,12 @@ packages:
         integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==,
       }
     engines: { node: ">=10.5.0" }
+
+  /node-fetch-native/0.1.8:
+    resolution:
+      {
+        integrity: sha512-ZNaury9r0NxaT2oL65GvdGDy+5PlSaHTovT6JV5tOW07k1TQmgC0olZETa4C9KZg0+6zBr99ctTYa3Utqj9P/Q==,
+      }
 
   /node-fetch/1.7.3:
     resolution:
