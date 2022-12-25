@@ -170,12 +170,14 @@ export async function loadRoute(
 			routes = (await import("virtual:rakkasjs:client-page-routes")).default;
 
 			if (import.meta.hot) {
-				updatedRoutes = (
-					await import(
-						/* @vite-ignore */ "/virtual:rakkasjs:client-page-routes?" +
-							Date.now()
-					)
-				).default;
+				updatedRoutes =
+					// ESBuild strips vite-ignore comments, so we have to use
+					// eval to make Vite ignore this import.
+					(
+						await (0, eval)(
+							`import("/virtual:rakkasjs:client-page-routes?" + Date.now())`,
+						)
+					).default;
 			}
 		}
 
