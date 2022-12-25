@@ -21,11 +21,11 @@
 		"puppeteer": "^19.4.1",
 		"rakkasjs": "workspace:*",
 		"typescript": "^4.9.4",
-		"vite": "^4.0.1"
+		"vite": "^4.0.3"
 	},
 	"dependencies": {
 		"@types/react": "^18.0.26",
-		"@types/react-dom": "^18.0.9",
+		"@types/react-dom": "^18.0.10",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"sirv-cli": "^2.0.2"
