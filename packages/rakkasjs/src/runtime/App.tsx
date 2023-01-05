@@ -1,5 +1,4 @@
 import React, {
-	createContext,
 	Fragment,
 	ReactElement,
 	ReactNode,
@@ -19,6 +18,7 @@ import prodRoutes from "virtual:rakkasjs:client-page-routes";
 import { Default404Page } from "../features/pages/Default404Page";
 import { LookupHookResult, PageContext, Redirect } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
+import { createNamedContext } from "./named-context";
 
 export interface AppProps {
 	beforePageLookupHandlers: Array<
@@ -94,9 +94,12 @@ export function App(props: AppProps) {
 	return app;
 }
 
-export const RouteContext = createContext<RouteContextContent>({
-	updateCounter: 0,
-});
+export const RouteContext = createNamedContext<RouteContextContent>(
+	"RouteContext",
+	{
+		updateCounter: 0,
+	},
+);
 
 interface RouteContextContent {
 	found?: RouteMatch<

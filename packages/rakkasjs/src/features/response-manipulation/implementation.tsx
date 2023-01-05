@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, {
-	createContext,
-	ReactElement,
-	useContext,
-	useLayoutEffect,
-} from "react";
+import React, { ReactElement, useContext, useLayoutEffect } from "react";
 import { navigate } from "../client-side-navigation/lib";
 import { escapeJson } from "../../runtime/utils";
 import type { CommonHooks, PreloadFunction } from "../../lib";
+import { createNamedContext } from "../../runtime/named-context";
 
 /** {@link Redirect} props */
 export interface RedirectProps {
@@ -104,6 +100,6 @@ export interface ResponseContextProps {
 	throttleRenderStream?: number | true;
 }
 
-export const ResponseContext = createContext<
+export const ResponseContext = createNamedContext<
 	(props: ResponseContextProps) => void
->(() => undefined);
+>("ResponseContext", () => undefined);

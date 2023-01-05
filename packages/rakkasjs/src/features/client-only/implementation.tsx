@@ -1,11 +1,11 @@
 import React, {
-	createContext,
 	ReactElement,
 	ReactNode,
 	Suspense,
 	useContext,
 	useEffect,
 } from "react";
+import { createNamedContext } from "../../runtime/named-context";
 
 /** {@link ClientOnly} props */
 export interface ClientOnlyProps {
@@ -39,7 +39,7 @@ export function ClientSuspense(props: ClientOnlyProps): ReactElement {
 	);
 }
 
-export const ClientOnlyContext = createContext<{
+export const ClientOnlyContext = createNamedContext<{
 	hydrated: boolean;
 	setHydrated: () => void;
-}>(undefined as any);
+}>("ClientOnlyContext", undefined as any);

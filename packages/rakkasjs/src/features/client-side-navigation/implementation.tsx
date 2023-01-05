@@ -1,6 +1,5 @@
 import React, {
 	AnchorHTMLAttributes,
-	createContext,
 	CSSProperties,
 	forwardRef,
 	useCallback,
@@ -23,6 +22,7 @@ import {
 	UseMutationSuccessResult,
 	usePageContext,
 } from "../../lib";
+import { createNamedContext } from "../../runtime/named-context";
 
 let lastRenderedId: string;
 let navigationPromise: Promise<void> | undefined;
@@ -158,7 +158,10 @@ export async function navigate(
 	return navigationPromise.then(() => history.state.id === history.state.id);
 }
 
-export const LocationContext = createContext<string | undefined>(undefined);
+export const LocationContext = createNamedContext<string | undefined>(
+	"LocationContext",
+	undefined,
+);
 
 const locationChangeListeners = new Set<() => void>();
 

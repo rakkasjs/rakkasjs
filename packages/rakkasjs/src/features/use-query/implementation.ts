@@ -1,14 +1,10 @@
 /// <reference types="vite/client" />
 
 import type { RequestContext } from "@hattip/compose";
-import {
-	createContext,
-	useContext,
-	useEffect,
-	useSyncExternalStore,
-} from "react";
+import { useContext, useEffect, useSyncExternalStore } from "react";
 import { PageLocals } from "../../lib";
 import { IsomorphicContext } from "../../runtime/isomorphic-context";
+import { createNamedContext } from "../../runtime/named-context";
 
 export interface CacheItem {
 	value?: any;
@@ -31,7 +27,10 @@ export interface QueryCache {
 	enumerate(): Iterable<string>;
 }
 
-export const QueryCacheContext = createContext<QueryCache>(undefined as any);
+export const QueryCacheContext = createNamedContext<QueryCache>(
+	"QueryCacheContext",
+	undefined as any,
+);
 
 /** useQuery options */
 export interface UseQueryOptions {
