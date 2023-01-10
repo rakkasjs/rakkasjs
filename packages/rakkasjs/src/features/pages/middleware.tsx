@@ -329,15 +329,15 @@ export default async function renderPageRoute(
 		</ServerSideContext.Provider>
 	);
 
+	if (commonHooks.wrapApp) {
+		app = commonHooks.wrapApp(app);
+	}
+
 	const reversePageHooks = [...pageHooks].reverse();
 	for (const hooks of reversePageHooks) {
 		if (hooks?.wrapApp) {
 			app = hooks.wrapApp(app);
 		}
-	}
-
-	if (commonHooks.wrapApp) {
-		app = commonHooks.wrapApp(app);
 	}
 
 	let resolveRenderPromise: () => void;

@@ -57,15 +57,15 @@ export async function startClient(options: StartClientOptions = {}) {
 		</IsomorphicContext.Provider>
 	);
 
+	if (commonHooks.wrapApp) {
+		app = commonHooks.wrapApp(app);
+	}
+
 	const reverseHooks = [...clientHooks].reverse();
 	for (const hooks of reverseHooks) {
 		if (hooks.wrapApp) {
 			app = hooks.wrapApp(app);
 		}
-	}
-
-	if (commonHooks.wrapApp) {
-		app = commonHooks.wrapApp(app);
 	}
 
 	history.replaceState(
