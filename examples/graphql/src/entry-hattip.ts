@@ -1,7 +1,16 @@
-import { createRequestHandler } from "rakkasjs";
-import { yoga } from "@hattip/graphql";
+import { createRequestHandler, RequestContext } from "rakkasjs";
+import { yoga, createSchema } from "@hattip/graphql";
 
 let yogaMiddleware: ReturnType<typeof yoga> | undefined;
+
+const schema = createSchema<{ requestContext: RequestContext }>({
+	typeDefs: `type Query { hello: String! }`,
+	resolvers: {
+		Query: {
+			hello: () => "Hello world!",
+		},
+	},
+});
 
 export default createRequestHandler({
 	middleware: {
@@ -15,7 +24,7 @@ export default createRequestHandler({
 				// the fetch API injection is available.
 				if (!yogaMiddleware) {
 					yogaMiddleware = yoga({
-						endpoint: "/graphql",
+						graphqlEndpoint: "/graphql",
 
 						fetchAPI: {
 							fetch,
@@ -26,18 +35,9 @@ export default createRequestHandler({
 
 						graphiql: import.meta.env.PROD
 							? false
-							: {
-									defaultQuery: `query { hello }`,
-							  },
+							: { defaultQuery: `query { hello }` },
 
-						schema: {
-							typeDefs: `type Query { hello: String! }`,
-							resolvers: {
-								Query: {
-									hello: () => "Hello world!",
-								},
-							},
-						},
+						schema,
 					});
 				}
 

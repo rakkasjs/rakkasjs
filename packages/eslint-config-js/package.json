@@ -24,16 +24,16 @@
 	},
 	"dependencies": {
 		"@rushstack/eslint-patch": "^1.2.0",
-		"eslint-config-prettier": "^8.5.0",
+		"eslint-config-prettier": "^8.6.0",
 		"eslint-plugin-css-modules": "^2.11.0",
-		"eslint-plugin-import": "^2.26.0",
+		"eslint-plugin-import": "^2.27.4",
 		"eslint-plugin-no-only-tests": "^3.1.0",
-		"eslint-plugin-react": "^7.31.11",
+		"eslint-plugin-react": "^7.32.0",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"eslint-plugin-ssr-friendly": "^1.2.0"
 	},
 	"devDependencies": {
-		"eslint": "^8.30.0",
-		"publint": "^0.1.5"
+		"eslint": "^8.32.0",
+		"publint": "^0.1.8"
 	}
 }

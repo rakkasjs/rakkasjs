@@ -20,7 +20,7 @@ export interface TocLayoutProps {
 export function TocLayout({ url, toc, title, children }: TocLayoutProps) {
 	const slug = url.pathname.split("/")[2];
 	const currentIndex = toc.findIndex((item) => item.slug === slug);
-	type TocItem = typeof toc[number] | undefined;
+	type TocItem = (typeof toc)[number] | undefined;
 	const current = toc[currentIndex] as TocItem;
 	const prev = current && (toc[currentIndex - 1] as TocItem);
 	const next = current && (toc[currentIndex + 1] as TocItem);

@@ -14,15 +14,15 @@
 	},
 	"devDependencies": {
 		"cross-env": "^7.0.3",
-		"husky": "^8.0.2",
+		"husky": "^8.0.3",
 		"lint-staged": "^13.1.0",
-		"prettier": "^2.8.1",
+		"prettier": "^2.8.3",
 		"typescript": "^4.9.4",
-		"vitest": "^0.26.2"
+		"vitest": "^0.27.1"
 	},
 	"dependencies": {
-		"@hattip/polyfills": "0.0.22",
-		"@vitejs/plugin-react": "^3.0.0",
+		"@hattip/polyfills": "0.0.26",
+		"@vitejs/plugin-react": "^3.0.1",
 		"vite": "^4.0.3"
 	},
 	"--": "Uncomment the next option to test against local packages",

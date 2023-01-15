@@ -30,16 +30,16 @@
 		"@cyco130/eslint-config": "^2.1.2",
 		"@types/inquirer": "^9.0.3",
 		"@types/mkdirp": "^1.0.2",
-		"@types/node": "^18.11.17",
+		"@types/node": "^18.11.18",
 		"@types/rimraf": "^3.0.2",
 		"detype": "^0.6.2",
-		"eslint": "^8.30.0",
-		"prettier": "^2.8.1",
-		"publint": "^0.1.5",
+		"eslint": "^8.32.0",
+		"prettier": "^2.8.3",
+		"publint": "^0.1.8",
 		"tsup": "^6.5.0",
-		"tsx": "^3.12.1",
+		"tsx": "^3.12.2",
 		"typescript": "^4.9.4",
-		"vitest": "^0.26.2"
+		"vitest": "^0.27.1"
 	},
 	"dependencies": {
 		"cac": "^6.7.14",
@@ -47,6 +47,6 @@
 		"inquirer": "^9.1.4",
 		"mkdirp": "^1.0.4",
 		"picocolors": "^1.0.0",
-		"rimraf": "^3.0.2"
+		"rimraf": "^4.0.6"
 	}
 }

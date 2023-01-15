@@ -2,7 +2,7 @@ import { fileURLToPath } from "url";
 import path from "path";
 import cpr from "cpr";
 import mkdirp from "mkdirp";
-import rimraf from "rimraf";
+import { rimraf } from "rimraf";
 import { promisify } from "util";
 import fs from "fs";
 import { run } from "../src/utils";
@@ -11,7 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 let src = path.resolve(__dirname, "../../../examples/todo");
 let dest = path.resolve(__dirname, "../templates/ts");
 
-await promisify(rimraf)(__dirname + "/../templates");
+await promisify(rimraf)(__dirname + "/../templates", {});
 await mkdirp(dest);
 
 await new Promise((resolve, reject) =>

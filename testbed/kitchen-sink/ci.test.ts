@@ -22,7 +22,7 @@ if (import.meta.env.TEST_HOST) {
 	);
 } else {
 	if ((process.env.INCLUDE_TESTS ?? "all") === "all") {
-		process.env.INCLUDE_TESTS = "dev,prod,miniflare,netlify,netlify-edge,deno";
+		process.env.INCLUDE_TESTS = "dev,prod,wrangler,netlify,netlify-edge,deno";
 	}
 
 	const include = process.env.INCLUDE_TESTS!.split(",").filter(Boolean);
@@ -39,19 +39,19 @@ if (import.meta.env.TEST_HOST) {
 	const nodeVersionMajor = +nodeVersions[0];
 	const nodeVersionMinor = +nodeVersions[1];
 
-	if (include.includes("miniflare")) {
+	if (include.includes("wrangler")) {
 		if (
 			nodeVersionMajor >= 17 ||
-			(nodeVersionMajor >= 16 && nodeVersionMinor >= 7)
+			(nodeVersionMajor >= 16 && nodeVersionMinor >= 13)
 		) {
 			testCase(
-				"Miniflare",
+				"Cloudflare Workers",
 				false,
 				TEST_HOST,
-				"miniflare -m dist/server/cloudflare-workers-bundle.js -p 3000",
+				"wrangler dev --local --port 3000",
 			);
 		} else {
-			console.warn("Skipping Miniflare test because of Node version");
+			console.warn("Skipping Cloudflare Workers test because of Node version");
 		}
 	}
 
@@ -60,7 +60,7 @@ if (import.meta.env.TEST_HOST) {
 			"Netlify functions",
 			false,
 			TEST_HOST,
-			"pnpm build:netlify && netlify dev -d netlify/static -op 3000",
+			"pnpm build:netlify && netlify serve -op 3000",
 		);
 	}
 
@@ -69,7 +69,7 @@ if (import.meta.env.TEST_HOST) {
 			"Netlify edge",
 			false,
 			TEST_HOST,
-			"pnpm build:netlify-edge && netlify dev -d netlify/static -op 3000",
+			"pnpm build:netlify-edge && netlify serve -op 3000",
 		);
 	}
 
