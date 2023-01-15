@@ -321,14 +321,6 @@ export default async function renderPageRoute(
 		);
 	}
 
-	app = (
-		<ServerSideContext.Provider value={ctx}>
-			<IsomorphicContext.Provider value={pageContext}>
-				{app}
-			</IsomorphicContext.Provider>
-		</ServerSideContext.Provider>
-	);
-
 	if (commonHooks.wrapApp) {
 		app = commonHooks.wrapApp(app);
 	}
@@ -339,6 +331,14 @@ export default async function renderPageRoute(
 			app = hooks.wrapApp(app);
 		}
 	}
+
+	app = (
+		<ServerSideContext.Provider value={ctx}>
+			<IsomorphicContext.Provider value={pageContext}>
+				{app}
+			</IsomorphicContext.Provider>
+		</ServerSideContext.Provider>
+	);
 
 	let resolveRenderPromise: () => void;
 	let rejectRenderPromise: (err: unknown) => void;

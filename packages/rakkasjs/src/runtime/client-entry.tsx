@@ -51,11 +51,7 @@ export async function startClient(options: StartClientOptions = {}) {
 		(ctx: PageContext, url: URL) => LookupHookResult
 	> = [commonHooks.beforePageLookup].filter(Boolean) as any;
 
-	let app = (
-		<IsomorphicContext.Provider value={pageContext}>
-			<App beforePageLookupHandlers={beforePageLookupHandlers} />
-		</IsomorphicContext.Provider>
-	);
+	let app = <App beforePageLookupHandlers={beforePageLookupHandlers} />;
 
 	if (commonHooks.wrapApp) {
 		app = commonHooks.wrapApp(app);
@@ -67,6 +63,12 @@ export async function startClient(options: StartClientOptions = {}) {
 			app = hooks.wrapApp(app);
 		}
 	}
+
+	app = (
+		<IsomorphicContext.Provider value={pageContext}>
+			{app}
+		</IsomorphicContext.Provider>
+	);
 
 	history.replaceState(
 		{
