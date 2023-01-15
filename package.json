@@ -23,7 +23,7 @@
 	"dependencies": {
 		"@hattip/polyfills": "0.0.26",
 		"@vitejs/plugin-react": "^3.0.1",
-		"vite": "^4.0.3"
+		"vite": "^4.0.4"
 	},
 	"--": "Uncomment the next option to test against local packages",
 	"--pnpm": {
