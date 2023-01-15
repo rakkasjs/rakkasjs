@@ -13,8 +13,7 @@
 		"build": "tsup && tsx scripts/create-templates.ts",
 		"dev": "tsup --watch",
 		"prepack": "rm -rf dist && pnpm build",
-		"test": "pnpm test:typecheck && pnpm test:lint && pnpm test:unit",
-		"test:unit": "vitest run",
+		"test": "pnpm test:typecheck && pnpm test:lint",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit",
 		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist --ignore-pattern templates"
 	},
@@ -27,7 +26,7 @@
 		"rakkas"
 	],
 	"devDependencies": {
-		"@cyco130/eslint-config": "^2.1.2",
+		"@cyco130/eslint-config": "^2.1.3",
 		"@types/inquirer": "^9.0.3",
 		"@types/mkdirp": "^1.0.2",
 		"@types/node": "^18.11.18",

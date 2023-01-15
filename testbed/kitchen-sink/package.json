@@ -19,7 +19,7 @@
 		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
 	},
 	"devDependencies": {
-		"@cyco130/eslint-config": "^2.1.2",
+		"@cyco130/eslint-config": "^2.1.3",
 		"@hattip/adapter-bun": "^0.0.26",
 		"@hattip/adapter-lagon": "^0.0.26",
 		"@hattip/adapter-netlify-edge": "^0.0.26",

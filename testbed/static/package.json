@@ -13,7 +13,7 @@
 		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
 	},
 	"devDependencies": {
-		"@cyco130/eslint-config": "^2.1.2",
+		"@cyco130/eslint-config": "^2.1.3",
 		"@types/ps-tree": "^1.1.2",
 		"eslint": "^8.32.0",
 		"node-fetch": "^3.3.0",
