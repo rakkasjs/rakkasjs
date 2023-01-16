@@ -1,10 +1,16 @@
-import { Plugin } from "vite";
+import { Plugin, ResolvedConfig } from "vite";
 import micromatch from "micromatch";
 import glob from "fast-glob";
 import path from "path";
 import { routeToRegExp, sortRoutes } from "../../internal/route-utils";
 
-export default function apiRoutes(): Plugin {
+export interface ApiRoutesOptions {
+	filterRoutes?: (path: string) => boolean | string;
+}
+
+export default function apiRoutes(options: ApiRoutesOptions): Plugin {
+	const { filterRoutes } = options;
+
 	const extPattern = "mjs|js|ts|jsx|tsx";
 
 	const endpointPattern = `/**/*.api.(${extPattern})`;
@@ -14,12 +20,29 @@ export default function apiRoutes(): Plugin {
 	let isMiddleware: (filename: string) => boolean;
 	let isEndpoint: (filename: string) => boolean;
 
-	async function generateRoutesModule(): Promise<string> {
-		const endpointFiles = await glob(root + endpointPattern);
+	let resolvedConfig: ResolvedConfig;
 
-		const middlewareFiles = await (
-			await glob(root + middlewarePattern)
-		).sort(/* Long to short */ (a, b) => b.length - a.length);
+	function filter(fileNames: string[]): string[] {
+		return filterRoutes
+			? fileNames.filter((f) => {
+					f = path
+						.relative(resolvedConfig.root, f)
+						.replace(/\\/g, "/")
+						.slice("src/routes/".length);
+					const filtered = filterRoutes(f);
+					return filtered;
+			  })
+			: fileNames;
+	}
+
+	async function generateRoutesModule(): Promise<string> {
+		const endpointFiles = filter(await glob(root + endpointPattern));
+
+		const middlewareFiles = filter(
+			(await glob(root + middlewarePattern)).sort(
+				/* Long to short */ (a, b) => b.length - a.length,
+			),
+		);
 
 		const middlewareDirs = middlewareFiles.map(
 			(f, i) => [i, path.dirname(f)] as const,
@@ -87,6 +110,7 @@ export default function apiRoutes(): Plugin {
 		},
 
 		configResolved(config) {
+			resolvedConfig = config;
 			root = config.root + "/src/routes";
 			isMiddleware = micromatch.matcher(endpointPattern);
 			isEndpoint = micromatch.matcher(middlewarePattern);

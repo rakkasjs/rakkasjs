@@ -965,9 +965,14 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			});
 		}
 
-		test("filters out dev-only routes", async () => {
+		test("filters out dev-only page routes", async () => {
 			const r = await fetch(host + "/dev-only");
 			expect(r.status).toBe(dev ? 200 : 404);
+		});
+
+		test("filters out dev-only API routes", async () => {
+			const r2 = await fetch(host + "/dev-only", { method: "POST" });
+			expect(r2.status).toBe(dev ? 200 : 404);
 		});
 	});
 }

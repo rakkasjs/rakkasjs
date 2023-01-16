@@ -29,14 +29,22 @@ export interface RakkasOptions {
 	prerender?: string[] | boolean;
 	/**
 	 * Route file filter. This function is called for every route file (page,
-	 * api, layout, guard, or middleware) and  be used to exclude some routes
-	 * from the build or mark them as server-only. Server-only routes don't
-	 * ship any client-side code and are rendered on the server.
+	 * API, layout, guard, or middleware) and can be used to exclude some routes
+	 * from the build or, for pages, determine how they are rendered.
 	 *
-	 * `path` is relative to the `src/routes` directory and is in POSIX format
+	 * Returning `false` excludes the route from the build while `true` includes
+	 * it. For pages, the following values are also accepted:
+	 *
+	 * - `"server"`: Render the page on the server and don't ship any client-side JS
+	 * - `"hydrate"`: Render the page on the server and hydrate it on the client (same as `true`)
+	 * - `"client"`: Render a placeholder on the server and let client JS render it
+	 *
+	 * For non-page files, all truthy values are treated as `true`.
+	 *
+	 * `path` argument is relative to the `src/routes` directory and is in POSIX format
 	 * like `login/index.page.tsx`.
 	 */
-	filterRoutes?: (path: string) => boolean | "server";
+	filterRoutes?: (path: string) => boolean | "server" | "client" | "hydrate";
 	/** Whether to enable strict mode in dev. @default true */
 	strictMode?: boolean;
 	/** Platform adapter */
@@ -81,7 +89,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 			adapter,
 			strictMode: options.strictMode ?? true,
 		}),
-		apiRoutes(),
+		apiRoutes({ filterRoutes: options.filterRoutes }),
 		pageRoutes({
 			pageExtensions: options.pageExtensions,
 			filterRoutes: options.filterRoutes,
