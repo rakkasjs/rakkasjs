@@ -1,0 +1,62 @@
+name: Select CI tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      node_version:
+        description: "Node.js version"
+        required: true
+        default: "16"
+      os:
+        description: "Operating system"
+        required: true
+        type: "choice"
+        options: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        default: "ubuntu-latest"
+      tests:
+        description: "Tests to run"
+        required: true
+        type: "choice"
+        options: ["dev", "prod", "wrangler", "netlify", "netlify-edge", "deno"]
+        default: "prod"
+
+defaults:
+  run:
+    working-directory: .
+
+jobs:
+  test:
+    runs-on: ${{ inputs.os }}
+    strategy:
+      fail-fast: false
+    name: "CI tests on node-${{ inputs.node_version }}, ${{ inputs.os }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7
+
+      - name: Set node version to ${{ inputs.node_version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node_version }}
+          cache: "pnpm"
+
+      - name: Install
+        run: pnpm install
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Run CI tests
+        env:
+          INCLUDE_TESTS: ${{ inputs.tests }}
+        run: pnpm run ci
