@@ -60,6 +60,7 @@ const sections: Array<[section: string, slugs: string[]]> = [
 			"route-guards",
 			"api-routes",
 			"api-middleware",
+			"route-config",
 		],
 	],
 	[

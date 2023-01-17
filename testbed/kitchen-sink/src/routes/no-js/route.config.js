@@ -1,5 +1,5 @@
 // @ts-check
-/** @type import("rakkasjs").DirectoryOptions */
+/** @type import("rakkasjs").RouteConfigExport */
 export default {
 	renderingMode: "server",
 };

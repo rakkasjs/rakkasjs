@@ -32,6 +32,10 @@ export default defineConfig({
 		noExternal: ["sanitize.css", "@docsearch/css"],
 	},
 
+	optimizeDeps: {
+		include: ["@mdx-js/react", "hamburger-react", "@docsearch/react"],
+	},
+
 	plugins: [
 		codeViewer(),
 		sampleLoader(),
