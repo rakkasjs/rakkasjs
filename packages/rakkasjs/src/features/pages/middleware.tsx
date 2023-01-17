@@ -30,6 +30,7 @@ import {
 import { LookupHookResult } from "../../lib";
 import { uneval } from "devalue";
 import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
+import { PageRequestHooks } from "../../runtime/hattip-handler";
 
 const pageContextMap = new WeakMap<Request, PageContext>();
 
@@ -69,7 +70,8 @@ export default async function renderPageRoute(
 					guards: PageRouteGuard<Record<string, string>>[],
 					rest: string | undefined,
 					ids: string[],
-					serverOnly?: boolean,
+					/** undefined = hydrate, 1 = server, 2 = client */
+					mode?: 1 | 2,
 				]
 		  >
 		| undefined;
@@ -156,12 +158,45 @@ export default async function renderPageRoute(
 		if (!found) return;
 	}
 
-	let redirected: boolean | undefined;
-	let status: number;
+	const renderMode = (["hydrate", "server", "client"] as const)[
+		found.route[5] ?? 0
+	];
+
+	const dataOnly =
+		ctx.request.headers.get("accept") === "application/javascript";
 	const headers = new Headers({
 		"Content-Type": "text/html; charset=utf-8",
 		vary: "accept",
 	});
+
+	let scriptPath: string;
+
+	if (import.meta.env.PROD) {
+		for (const entry of Object.values(clientManifest!)) {
+			if (entry.isEntry) {
+				scriptPath = entry.file;
+				break;
+			}
+		}
+
+		if (!scriptPath!) throw new Error("Entry not found in client manifest");
+	} else {
+		scriptPath = "virtual:rakkasjs:client-entry";
+	}
+
+	if (renderMode === "client" && ctx.method === "GET" && !dataOnly) {
+		const prefetchOutput = `<script type="module" async src="/${scriptPath}"></script>`;
+		const head = renderHead(prefetchOutput, renderMode);
+		const html = head + `<div id="root"></div></body></html>`;
+
+		return new Response(html, {
+			status: 200,
+			headers,
+		});
+	}
+
+	let redirected: boolean | undefined;
+	let status: number;
 
 	let hold =
 		process.env.RAKKAS_PRERENDER === "true" ||
@@ -228,7 +263,7 @@ export default async function renderPageRoute(
 		}
 	}
 
-	if (ctx.request.headers.get("accept") === "application/javascript") {
+	if (dataOnly) {
 		if (actionResult && "redirect" in actionResult) {
 			actionResult.redirect = String(actionResult.redirect);
 		}
@@ -264,9 +299,10 @@ export default async function renderPageRoute(
 
 	pageContext.actionData = actionResult?.data;
 	preloadContext.actionData = actionResult?.data;
+	const reverseModules = modules.reverse();
 
 	const preloaded = await Promise.all(
-		modules.reverse().map(async (m, i) => {
+		reverseModules.map(async (m, i) => {
 			try {
 				if (i === modules.length - 1 - actionErrorIndex) {
 					throw new Error(actionError);
@@ -388,96 +424,13 @@ export default async function renderPageRoute(
 		</div>
 	);
 
-	let scriptPath: string;
-	const serverOnly = found.route[5];
-
-	if (import.meta.env.PROD) {
-		for (const entry of Object.values(clientManifest!)) {
-			if (entry.isEntry) {
-				scriptPath = entry.file;
-				break;
-			}
-		}
-
-		if (!scriptPath!) throw new Error("Entry not found in client manifest");
-	} else {
-		scriptPath = "virtual:rakkasjs:client-entry";
-	}
-
-	const moduleIds = [scriptPath, ...found.route[4]];
-
-	let prefetchOutput = "";
-
-	if (import.meta.env.PROD) {
-		const moduleSet = new Set(moduleIds);
-		const cssSet = new Set<string>();
-		// const assetSet = new Set<string>();
-
-		for (const moduleId of moduleSet) {
-			const manifestEntry = clientManifest?.[moduleId];
-			if (!manifestEntry) continue;
-
-			// TODO: Prefetch modules and other assets
-			manifestEntry.imports?.forEach((id) => moduleSet.add(id));
-			manifestEntry.css?.forEach((id) => cssSet.add(id));
-			// manifestEntry.assets?.forEach((id) => assetSet.add(id));
-
-			const script = clientManifest?.[moduleId].file;
-			if (script && !serverOnly) {
-				prefetchOutput += `<link rel="modulepreload" crossorigin href="${escapeHtml(
-					"/" + script,
-				)}">`;
-			}
-		}
-
-		for (const cssFile of cssSet) {
-			prefetchOutput += `<link rel="stylesheet" href="${escapeHtml(
-				"/" + cssFile,
-			)}">`;
-		}
-
-		// TODO: Prefetch/preload assets
-		// for (const assetFile of assetSet) {
-		// 	prefetchOutput += `<link rel="prefetch" href="${escapeHtml(
-		// 		"/" + assetFile,
-		// 	)}">`;
-		// }
-	} else {
-		const moduleSet = new Set(moduleIds);
-		const cssSet = new Set<string>();
-		const root = viteDevServer!.config.root.replace(/\\/g, "/");
-
-		for (const moduleId of moduleSet) {
-			const module =
-				viteDevServer!.moduleGraph.getModuleById(moduleId) ??
-				viteDevServer!.moduleGraph.getModuleById(root + "/" + moduleId);
-
-			if (!module) continue;
-
-			for (const imported of module.importedModules) {
-				const url = new URL(imported.url, ctx.url);
-				url.searchParams.delete("v");
-				url.searchParams.delete("t");
-				if (url.href.match(/\.(css|scss|sass|less|styl|stylus)$/)) {
-					cssSet.add(imported.url);
-				} else if (url.href.match(/\.(js|jsx|ts|tsx)$/)) {
-					moduleSet.add(imported.id ?? imported.url);
-				}
-			}
-		}
-
-		for (const cssFile of cssSet) {
-			prefetchOutput += `<link rel="stylesheet" href="${escapeHtml(cssFile)}">`;
-		}
-	}
-
 	if (import.meta.env.DEV && process.env.RAKKAS_STRICT_MODE === "true") {
 		app = <StrictMode>{app}</StrictMode>;
 	}
 
 	const reactStream = await renderToReadableStream(app, {
 		// TODO: AbortController
-		bootstrapModules: serverOnly ? [] : ["/" + scriptPath!],
+		bootstrapModules: renderMode === "server" ? [] : ["/" + scriptPath!],
 		onError(error: any) {
 			if (!redirected) {
 				status = 500;
@@ -536,34 +489,19 @@ export default async function renderPageRoute(
 		});
 	}
 
-	// TODO: Customize HTML document
-	let head =
-		`<!DOCTYPE html><html><head>` +
-		prefetchOutput +
-		`<meta charset="UTF-8" />` +
-		`<meta name="viewport" content="width=device-width, initial-scale=1.0" />` +
-		// TODO: Refactor this. Probably belongs to client-side-navigation
-		(actionResult?.data === undefined && !serverOnly
-			? ""
-			: `<script>$RAKKAS_ACTION_DATA=${uneval(actionResult?.data)}</script>`);
+	const prefetchOutput = createPrefetchTags(
+		ctx.url,
+		[scriptPath, ...found.route[4]],
+		renderMode === "server",
+	);
 
-	if (actionErrorIndex >= 0 && !serverOnly) {
-		head += `<script>$RAKKAS_ACTION_ERROR_INDEX=${actionErrorIndex}</script>`;
-	}
-
-	for (const hooks of pageHooks) {
-		if (hooks?.emitToDocumentHead) {
-			head += hooks.emitToDocumentHead();
-		}
-	}
-
-	if (import.meta.env.DEV) {
-		head +=
-			`<script type="module" src="/@vite/client"></script>` +
-			`<script type="module" async>${REACT_FAST_REFRESH_PREAMBLE}</script>`;
-	}
-
-	head += `</head><body>`;
+	const head = renderHead(
+		prefetchOutput,
+		renderMode,
+		actionResult?.data,
+		actionErrorIndex,
+		pageHooks,
+	);
 
 	let wrapperStream: ReadableStream = reactStream;
 	for (const hooks of pageHooks) {
@@ -675,6 +613,119 @@ function makeHeaders(
 			}
 		}
 	}
+
+	return result;
+}
+
+function createPrefetchTags(
+	pageUrl: URL,
+	moduleIds: string[],
+	server: boolean,
+) {
+	let result = "";
+
+	if (import.meta.env.PROD) {
+		const moduleSet = new Set(moduleIds);
+		const cssSet = new Set<string>();
+		// const assetSet = new Set<string>();
+
+		for (const moduleId of moduleSet) {
+			const manifestEntry = clientManifest?.[moduleId];
+			if (!manifestEntry) continue;
+
+			// TODO: Prefetch modules and other assets
+			manifestEntry.imports?.forEach((id) => moduleSet.add(id));
+			manifestEntry.css?.forEach((id) => cssSet.add(id));
+			// manifestEntry.assets?.forEach((id) => assetSet.add(id));
+
+			const script = clientManifest?.[moduleId].file;
+			if (script && server) {
+				result += `<link rel="modulepreload" crossorigin href="${escapeHtml(
+					"/" + script,
+				)}">`;
+			}
+		}
+
+		for (const cssFile of cssSet) {
+			result += `<link rel="stylesheet" href="${escapeHtml("/" + cssFile)}">`;
+		}
+
+		// TODO: Prefetch/preload assets
+		// for (const assetFile of assetSet) {
+		// 	prefetchOutput += `<link rel="prefetch" href="${escapeHtml(
+		// 		"/" + assetFile,
+		// 	)}">`;
+		// }
+	} else {
+		const moduleSet = new Set(moduleIds);
+		const cssSet = new Set<string>();
+		const root = viteDevServer!.config.root.replace(/\\/g, "/");
+
+		for (const moduleId of moduleSet) {
+			const module =
+				viteDevServer!.moduleGraph.getModuleById(moduleId) ??
+				viteDevServer!.moduleGraph.getModuleById(root + "/" + moduleId);
+
+			if (!module) continue;
+
+			for (const imported of module.importedModules) {
+				const url = new URL(imported.url, pageUrl);
+				url.searchParams.delete("v");
+				url.searchParams.delete("t");
+				if (url.href.match(/\.(css|scss|sass|less|styl|stylus)$/)) {
+					cssSet.add(imported.url);
+				} else if (url.href.match(/\.(js|jsx|ts|tsx)$/)) {
+					moduleSet.add(imported.id ?? imported.url);
+				}
+			}
+		}
+
+		for (const cssFile of cssSet) {
+			result += `<link rel="stylesheet" href="${escapeHtml(cssFile)}">`;
+		}
+	}
+
+	return result;
+}
+
+function renderHead(
+	prefetchOutput: string,
+	renderMode: "server" | "hydrate" | "client",
+	actionData: unknown = undefined,
+	actionErrorIndex = -1,
+	pageHooks: Array<PageRequestHooks | undefined> = [],
+) {
+	// TODO: Customize HTML document
+	let result =
+		`<!DOCTYPE html><html><head>` +
+		prefetchOutput +
+		`<meta charset="UTF-8" />` +
+		`<meta name="viewport" content="width=device-width, initial-scale=1.0" />` +
+		(renderMode === "hydrate"
+			? `<script>$RAKKAS_HYDRATE="hydrate"</script>`
+			: "") +
+		// TODO: Refactor this. Probably belongs to client-side-navigation
+		(actionData === undefined && renderMode !== "server"
+			? ""
+			: `<script>$RAKKAS_ACTION_DATA=${uneval(actionData)}</script>`);
+
+	if (actionErrorIndex >= 0 && renderMode !== "server") {
+		result += `<script>$RAKKAS_ACTION_ERROR_INDEX=${actionErrorIndex}</script>`;
+	}
+
+	for (const hooks of pageHooks) {
+		if (hooks?.emitToDocumentHead) {
+			result += hooks.emitToDocumentHead();
+		}
+	}
+
+	if (import.meta.env.DEV) {
+		result +=
+			`<script type="module" src="/@vite/client"></script>` +
+			`<script type="module" async>${REACT_FAST_REFRESH_PREAMBLE}</script>`;
+	}
+
+	result += `</head><body>`;
 
 	return result;
 }

@@ -55,7 +55,7 @@ export const Redirect = import.meta.env.SSR
 			return null as any;
 	  };
 
-/** {@link ResponseHeader} props */
+/** {@link ResponseHeaders} props */
 export interface ResponseHeadersProps {
 	/** Status code */
 	status?: number | ((currentStatus: number) => number);

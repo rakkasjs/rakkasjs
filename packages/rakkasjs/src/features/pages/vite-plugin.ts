@@ -7,7 +7,7 @@ import MagicString from "magic-string";
 
 export interface PageRoutesOptions {
 	pageExtensions?: string[];
-	filterRoutes?: (path: string) => boolean | "server";
+	filterRoutes?: (path: string) => boolean | string;
 }
 
 export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
@@ -30,14 +30,15 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 	let isSinglePageGuard: (filename: string) => boolean;
 
 	async function generateRoutesModule(client?: boolean): Promise<string> {
-		const serverOnlyPages = new Set<string>();
+		const renderModes = new Map<string, string>();
+
 		const pageFiles = (await glob(routesRoot + pagePattern))
 			.map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"))
 			.filter((f) => {
 				f = f.slice("src/routes/".length);
 				const filtered = options.filterRoutes?.(f) ?? true;
-				if (filtered === "server") {
-					serverOnlyPages.add(f);
+				if (typeof filtered === "string") {
+					renderModes.set(f, filtered);
 				}
 
 				return filtered;
@@ -154,11 +155,10 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 			// Server needs the file names to inject styles and prefetch links
 			if (!client) {
 				exportElement += `, [r${i}, ${layouts.map((li) => `m${li}`)}]`;
-				if (
-					!client &&
-					serverOnlyPages.has(pageFile.slice("src/routes/".length))
-				) {
-					exportElement += ",true";
+				if (!client) {
+					const mode =
+						renderModes.get(pageFile.slice("src/routes/".length)) ?? "hydrate";
+					exportElement += RENDER_MODES[mode] ?? "";
 				}
 			}
 
@@ -301,3 +301,8 @@ const PAGE_HOT_RELOAD = `
 		});
 	}
 `;
+
+const RENDER_MODES: Record<string, string | undefined> = {
+	server: ",1",
+	client: ",2",
+};

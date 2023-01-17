@@ -1,5 +1,5 @@
 import React, { StrictMode, Suspense } from "react";
-import { hydrateRoot } from "react-dom/client";
+import { hydrateRoot, createRoot } from "react-dom/client";
 import { DEFAULT_QUERY_OPTIONS } from "../features/use-query/implementation";
 import {
 	UseQueryOptions,
@@ -100,5 +100,9 @@ export async function startClient(options: StartClientOptions = {}) {
 		app = <StrictMode>{app}</StrictMode>;
 	}
 
-	hydrateRoot(document.getElementById("root")!, app);
+	const container = document.getElementById("root")!;
+
+	(window as any).$RAKKAS_HYDRATE
+		? hydrateRoot(container, app)
+		: createRoot(container).render(app);
 }
