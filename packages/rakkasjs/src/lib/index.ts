@@ -18,6 +18,9 @@ export type {
 	ActionContext,
 	ActionHandler,
 	ActionResult,
+	RouteConfigExport,
+	RouteConfig,
+	BaseRouteConfig,
 } from "../runtime/page-types";
 
 export * from "../runtime/common-hooks";

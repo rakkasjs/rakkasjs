@@ -3,14 +3,9 @@ import micromatch from "micromatch";
 import glob from "fast-glob";
 import path from "path";
 import { routeToRegExp, sortRoutes } from "../../internal/route-utils";
+import { BaseRouteConfig } from "../../lib";
 
-export interface ApiRoutesOptions {
-	filterRoutes?: (path: string) => boolean | string;
-}
-
-export default function apiRoutes(options: ApiRoutesOptions): Plugin {
-	const { filterRoutes } = options;
-
+export default function apiRoutes(): Plugin {
 	const extPattern = "mjs|js|ts|jsx|tsx";
 
 	const endpointPattern = `/**/*.api.(${extPattern})`;
@@ -21,6 +16,23 @@ export default function apiRoutes(options: ApiRoutesOptions): Plugin {
 	let isEndpoint: (filename: string) => boolean;
 
 	let resolvedConfig: ResolvedConfig;
+
+	function filterRoutes(filename: string): boolean {
+		const configs = resolvedConfig.api?.rakkas?.routeConfigs || [];
+		const defaults: BaseRouteConfig = {};
+
+		for (const config of configs) {
+			if (filename.startsWith(config.dir)) {
+				if (config.value.disabled) {
+					return false;
+				}
+
+				Object.assign(defaults, config.value.defaults);
+			}
+		}
+
+		return !defaults.disabled;
+	}
 
 	function filter(fileNames: string[]): string[] {
 		return filterRoutes

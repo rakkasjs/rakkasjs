@@ -4,10 +4,10 @@ import glob from "fast-glob";
 import path from "path";
 import { routeToRegExp, sortRoutes } from "../../internal/route-utils";
 import MagicString from "magic-string";
+import { BaseRouteConfig } from "../../lib";
 
 export interface PageRoutesOptions {
 	pageExtensions?: string[];
-	filterRoutes?: (path: string) => boolean | string;
 }
 
 export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
@@ -29,6 +29,31 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 	let isGuard: (filename: string) => boolean;
 	let isSinglePageGuard: (filename: string) => boolean;
 
+	function getRenderModes(
+		filename: string,
+	): false | "hydrate" | "server" | "client" {
+		const configs = resolvedConfig.api?.rakkas?.routeConfigs || [];
+		const defaults: BaseRouteConfig = {};
+
+		for (const config of configs) {
+			if (filename.startsWith(config.dir)) {
+				if (config.value.disabled) {
+					return false;
+				}
+
+				if (config.value.renderingMode) {
+					return config.value.renderingMode;
+				}
+
+				Object.assign(defaults, config.value.defaults);
+			}
+		}
+
+		return defaults.disabled === false
+			? false
+			: defaults.renderingMode ?? "hydrate";
+	}
+
 	async function generateRoutesModule(client?: boolean): Promise<string> {
 		const renderModes = new Map<string, string>();
 
@@ -36,7 +61,7 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 			.map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"))
 			.filter((f) => {
 				f = f.slice("src/routes/".length);
-				const filtered = options.filterRoutes?.(f) ?? true;
+				const filtered = getRenderModes(f) ?? true;
 				if (typeof filtered === "string") {
 					renderModes.set(f, filtered);
 				}
@@ -62,7 +87,7 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 		const layoutFiles = (await glob(routesRoot + layoutPattern))
 			.sort(/* Long to short */ (a, b) => b.length - a.length)
 			.map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"))
-			.filter((f) => options.filterRoutes?.(f) !== false);
+			.filter(getRenderModes);
 
 		const layoutDirs = layoutFiles.map((f) => path.dirname(f));
 
@@ -84,7 +109,7 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 		const guardFiles = (await glob(routesRoot + guardPattern))
 			.sort(/* short to kong  */ (a, b) => a.length - b.length)
 			.map((f) => path.relative(resolvedConfig.root, f).replace(/\\/g, "/"))
-			.filter((f) => options.filterRoutes?.(f) !== false);
+			.filter(getRenderModes);
 
 		const guardDirs = guardFiles.map((f) => path.dirname(f));
 

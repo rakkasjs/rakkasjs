@@ -1,4 +1,5 @@
 import { ComponentType, ReactNode } from "react";
+import { ResolvedConfig } from "vite";
 import {
 	PageContext,
 	RedirectProps,
@@ -200,3 +201,16 @@ export type ActionResult<T> =
 				| Record<string, string | string[]>
 				| ((headers: Headers) => void);
 	  };
+
+export type RouteConfigExport =
+	| RouteConfig
+	| ((config: ResolvedConfig) => RouteConfig | Promise<RouteConfig>);
+
+export interface RouteConfig extends BaseRouteConfig {
+	defaults?: BaseRouteConfig;
+}
+
+export interface BaseRouteConfig {
+	disabled?: boolean;
+	renderingMode?: "hydrate" | "server" | "client";
+}
