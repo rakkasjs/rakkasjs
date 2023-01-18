@@ -21,7 +21,7 @@
 		"vitest": "^0.27.1"
 	},
 	"dependencies": {
-		"@hattip/polyfills": "0.0.26",
+		"@hattip/polyfills": "0.0.27",
 		"@vitejs/plugin-react": "^3.0.1",
 		"vite": "^4.0.4"
 	},
