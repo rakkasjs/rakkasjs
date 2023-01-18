@@ -6,6 +6,7 @@ import { BuildStep } from "@vavite/multibuild";
 import pico from "picocolors";
 import micromatch from "micromatch";
 import path from "path";
+import { pathToFileURL } from "url";
 import { RouteConfig } from "../lib";
 
 export interface InjectConfigOptions {
@@ -123,9 +124,10 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 			);
 
 			const routeConfigContents = await Promise.allSettled(
-				routeConfigFiles.map((file) =>
-					import(file + `?${cacheBuster}`).then((module) => module.default),
-				),
+				routeConfigFiles.map((file) => {
+					const specifier = pathToFileURL(file) + `?${cacheBuster}`;
+					return import(specifier).then((module) => module.default);
+				}),
 			);
 			cacheBuster++;
 
