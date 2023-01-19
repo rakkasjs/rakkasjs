@@ -4,7 +4,7 @@ title: Route configuration
 
 For fine-grained control over the routing behavior, you can add one or more `route.config.js` files into your `src/routes` directory.
 
-> **NOTE:** Route config files _must_ be in vanilla JavaScript. TypeScript, JSX, and other formats that require compilation are not supported. You can use `@ts-check` and `@type` comments like in the examples below to get type-checking.
+> **NOTE:** Route config files _must_ be in vanilla JavaScript. TypeScript, JSX, and other formats that require compilation are not supported yet. You can use `@ts-check` and `@type` comments like in the examples below to get type-checking.
 
 This file should default export either a `RouteConfig` object or a function that returns one. If it's a function, it will be called with a `ResolvedConfig` argument that contains the fully resolved Vite configuration. For example:
 
@@ -17,22 +17,32 @@ export default (cfg) => ({
 });
 ```
 
+These files are loaded and evaluated when your Vite configuration is loaded. So, conceptually, they are part of your Vite configuration. Any changes to a `route.config.js` file, or creating or deleting one, will cause Vite dev server to restart just like other configuration changes.
+
+## `disabled`
+
 The `disabled` option can be used to disable all the routes in that directory and below. It's useful, for instance, for removing local development-only routes from the production build like in the example above.
+
+## `renderingMode`
 
 The `renderingMode` option can be used to set the rendering mode for all pages in that directory and below. Possible values are:
 
-## `hydrate`
+### `hydrate`
 
 The page is rendered on the server and hydrated on the client. This is the default mode.
 
-## `server`
+### `server`
 
 The page is rendered on the server and no client-side JavaScript is sent to the browser. It's suitable for fully static pages that don't require any interactivity beyond standard HTML links and forms.
 
 Note that if you use `Suspense`, React will inject a tiny script to replace the placeholder with the actual content once it becomes available. If you require your page to run without JavaScript, you should disable streaming (which is done automatically for statically prerendered pages).
 
-## `client`
+### `client`
 
 An empty HTML page is sent to the browser and the page is rendered on the client. This is useful for pages that cannot be rendered on the server because, for example, they require access to browser APIs. Another use case is pages that don't require a low "First Contentful Paint", such as admin interfaces.
 
 Client-rendered pages will generate empty HTML pages when prerendered and links to other pages cannot be crawled unless specified explicitly in the return value of the `prerender` function.
+
+## `defaults`
+
+When `disabled` or `renderingMode` is set in a `route.config.js` file, route configs further down the directory tree cannot override them. To allow overriding, you can use the `defaults` option. You can set `defaults.disabled` and `defaults.renderingMode` to set these options but allow them to be overridden by child directories.
