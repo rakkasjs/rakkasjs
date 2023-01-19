@@ -364,8 +364,6 @@ const LAGON_ENTRY = `
 	import lagonAdapter from "@hattip/adapter-lagon";
 	import hattipHandler from "./hattip.js";
 
-	globalThis.setTimeout = (callback) => Promise.resolve().then(callback);
-
 	const originalFormData = Request.prototype.formData;
 	Request.prototype.formData = async function () {
 		if (this.headers.get("content-type")?.startsWith("multipart/form-data")) {
