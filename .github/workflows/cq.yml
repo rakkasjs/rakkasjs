@@ -1,8 +1,11 @@
 name: Code quality checks
 
 on:
-  workflow_dispatch:
   push:
+    branches:
+      - main
+      - stable
+      - next
   pull_request:
 
 defaults:

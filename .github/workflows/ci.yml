@@ -2,6 +2,10 @@ name: CI tests
 
 on:
   push:
+    branches:
+      - main
+      - stable
+      - next
   pull_request:
 
 defaults:
