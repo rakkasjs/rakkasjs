@@ -3,7 +3,6 @@ import path from "path";
 import cpr from "cpr";
 import mkdirp from "mkdirp";
 import { rimraf } from "rimraf";
-import { promisify } from "util";
 import fs from "fs";
 import { run } from "../src/utils";
 
@@ -17,7 +16,7 @@ async function main() {
 	let src = path.resolve(__dirname, "../../../examples/todo");
 	let dest = path.resolve(__dirname, "../templates/ts");
 
-	await promisify(rimraf)(__dirname + "/../templates", {});
+	await rimraf(__dirname + "/../templates");
 	await mkdirp(dest);
 
 	await new Promise((resolve, reject) =>
