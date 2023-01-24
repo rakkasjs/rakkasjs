@@ -44,3 +44,27 @@ After building with `rakkas build`, you can publish your project with `wrangler 
 ## Cloudflare Workers-specific APIs
 
 During development, Rakkas applications always run on Node.js regardless of the `adapter` setting. As such, Cloudflare Workers-specific APIs like the KV store and durable objects are not available. You can polyfill them using, e.g., [`@miniflare/kv`](https://github.com/cloudflare/miniflare/tree/master/packages/kv) and [@miniflare/durable-objects](https://github.com/cloudflare/miniflare/tree/master/packages/durable-objects) packages in a [custom Node.js entry](node#custom-entry).
+
+For example, to simulate a D1 database with the binding `CLOUDFLARE_DB` during development:
+
+```ts
+// src/entry-node.ts
+import { createMiddleware } from 'rakkasjs/node-adapter';
+import hattipHandler from './entry-hattip';
+import { BetaDatabase } from '@miniflare/d1';
+import { createSQLiteDB } from '@miniflare/shared';
+import fs from 'fs';
+
+fs.mkdirSync('./data', { recursive: true });
+
+const dbPromise = Promise.resolve()
+  .then(() => createSQLiteDB('./data/data.db'))
+  .then((db) => new BetaDatabase(db));
+  
+export default createMiddleware(async (context) => {
+  const db = await dbPromise;
+  context.platform.env = context.platform.env ?? {};
+  context.platform.env.CLOUDFLARE_DB = db;
+  return hattipHandler(context);
+});
+```
