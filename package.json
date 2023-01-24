@@ -10,7 +10,8 @@
 		"ci": "pnpm -r --stream --workspace-concurrency=1 run ci",
 		"vite-ecosystem-ci": "cross-env INCLUDE_TESTS=dev,prod pnpm -r --stream --workspace-concurrency=1 run ci",
 		"test:packages": "pnpm -r --stream run test",
-		"test:prettier": "prettier --check --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'"
+		"test:prettier": "prettier --check --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'",
+		"format": "prettier --write --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'"
 	},
 	"devDependencies": {
 		"cross-env": "^7.0.3",
