@@ -6,7 +6,7 @@ import { spawn, ChildProcess } from "child_process";
 import fetch from "node-fetch";
 import path from "path";
 import psTree from "ps-tree";
-import puppeteer from "puppeteer";
+import puppeteer, { ElementHandle } from "puppeteer";
 import { promisify } from "util";
 import { kill } from "process";
 
@@ -158,6 +158,25 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			expect(response.ok).toBe(true);
 			const json = await response.json();
 			expect(json).toMatchObject({ rest: "/aaa%2Fbbb/ccc" });
+		});
+
+		test("renders interactive page", async () => {
+			await page.goto(host + "/");
+
+			// Wait a little to allow for dependency optimization
+			await new Promise((resolve) => setTimeout(resolve, 1_000));
+
+			await page.waitForSelector(".hydrated");
+
+			const button: ElementHandle<HTMLButtonElement> | null =
+				await page.waitForSelector("button");
+			expect(button).toBeTruthy();
+
+			await button!.click();
+
+			await page.waitForFunction(
+				() => document.querySelector("button")?.textContent === "Clicked: 1",
+			);
 		});
 	});
 }

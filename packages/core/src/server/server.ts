@@ -1,8 +1,23 @@
 import { HattipHandler } from "@hattip/core";
-import { compose, composePartial, RequestHandler } from "@hattip/compose";
+import {
+	compose,
+	composePartial,
+	RequestContext,
+	RequestHandler,
+} from "@hattip/compose";
 
-export function createApp(routes: ServerRoute[]): HattipHandler {
-	const hattipHandler = compose(async function app(ctx) {
+export interface CreateAppOptions {
+	routes: ServerRoute[];
+	middleware?: {
+		beforePages?: RequestHandler[];
+		after?: RequestHandler[];
+	};
+}
+
+export function createApp(options: CreateAppOptions): HattipHandler {
+	const { routes, middleware: { beforePages = [], after = [] } = {} } = options;
+
+	async function app(ctx: RequestContext) {
 		ctx.fetch = async function fetch(input, init) {
 			let url: URL | undefined;
 
@@ -70,8 +85,18 @@ export function createApp(routes: ServerRoute[]): HattipHandler {
 				...route[2].map((i) => i()),
 			]);
 
-			const methodHandler = routeModule[ctx.method as Method];
-			if (!methodHandler) continue;
+			let methodHandler = routeModule[ctx.method as Method];
+			if (!methodHandler) {
+				if (routeModule.default) {
+					methodHandler = (ctx) =>
+						ctx.render?.({
+							page: routeModule,
+							layouts: wrapperModules,
+						});
+				} else {
+					continue;
+				}
+			}
 
 			const middleware = wrapperModules
 				.map((m) => m.middleware)
@@ -92,7 +117,9 @@ export function createApp(routes: ServerRoute[]): HattipHandler {
 
 			return handler(ctx);
 		}
-	});
+	}
+
+	const hattipHandler = compose(beforePages, app, after);
 
 	return hattipHandler;
 }
@@ -103,7 +130,14 @@ declare module "@hattip/compose" {
 		params: Record<string, string>;
 		/** Isomorphic fetch function */
 		fetch: typeof fetch;
+		/** Render a page */
+		render?(options: RenderOptions): Promise<Response>;
 	}
+}
+
+export interface RenderOptions {
+	page: RouteModule;
+	layouts: WrapperModule[];
 }
 
 type ServerRoute = [
@@ -114,9 +148,12 @@ type ServerRoute = [
 
 type RouteModule = {
 	[method in Method]?: RequestHandler;
+} & {
+	default?: unknown;
 };
 
 interface WrapperModule {
+	default?: unknown;
 	middleware?: RequestHandler;
 }
 
