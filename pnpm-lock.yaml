@@ -293,6 +293,45 @@ importers:
       vite: 4.0.4
       vite-tsconfig-paths: 4.0.3_gl4qsmwzp7wy5uclz4tx77gbli
 
+  packages/core:
+    specifiers:
+      "@cyco130/eslint-config": ^2.1.3
+      "@hattip/adapter-node": ^0.0.27
+      "@hattip/compose": ^0.0.27
+      "@hattip/core": ^0.0.27
+      "@types/micromatch": ^4.0.2
+      "@types/node": ^18.11.18
+      "@vavite/connect": ^1.5.3
+      "@vavite/expose-vite-dev-server": 1.5.3
+      eslint: ^8.32.0
+      fast-glob: ^3.2.12
+      micromatch: ^4.0.5
+      picocolors: ^1.0.0
+      prettier: ^2.8.3
+      publint: ^0.1.8
+      tsup: ^6.5.0
+      typescript: ^4.9.4
+      vite: ^4.0.3
+    dependencies:
+      "@hattip/adapter-node": 0.0.27
+      "@hattip/compose": 0.0.27
+      "@hattip/core": 0.0.27
+      "@types/node": 18.11.18
+      "@vavite/connect": 1.5.3_vite@4.0.4
+      "@vavite/expose-vite-dev-server": 1.5.3_vite@4.0.4
+      fast-glob: 3.2.12
+      micromatch: 4.0.5
+      picocolors: 1.0.0
+    devDependencies:
+      "@cyco130/eslint-config": 2.1.3_7uibuqfxkfaozanbtbziikiqje
+      "@types/micromatch": 4.0.2
+      eslint: 8.32.0
+      prettier: 2.8.3
+      publint: 0.1.8
+      tsup: 6.5.0_typescript@4.9.4
+      typescript: 4.9.4
+      vite: 4.0.4_@types+node@18.11.18
+
   packages/create-rakkas-app:
     specifiers:
       "@cyco130/eslint-config": ^2.1.3
@@ -478,6 +517,39 @@ importers:
       tsup: 6.5.0_typescript@4.9.4
       typescript: 4.9.4
       vite: 4.0.4_@types+node@18.11.18
+
+  testbed/core:
+    specifiers:
+      "@cyco130/eslint-config": ^2.1.3
+      "@hattip/adapter-node": ^0.0.27
+      "@hattip/compose": ^0.0.27
+      "@hattip/core": ^0.0.27
+      "@rakkasjs/core": workspace:*
+      "@types/ps-tree": ^1.1.2
+      cross-env: ^7.0.3
+      eslint: ^8.32.0
+      node-fetch: ^3.3.0
+      ps-tree: ^1.2.0
+      puppeteer: ^19.5.2
+      typescript: ^4.9.4
+      vavite: ^1.5.3
+      vite: ^4.0.3
+    dependencies:
+      "@hattip/adapter-node": 0.0.27
+      "@hattip/compose": 0.0.27
+      "@hattip/core": 0.0.27
+    devDependencies:
+      "@cyco130/eslint-config": 2.1.3_7uibuqfxkfaozanbtbziikiqje
+      "@rakkasjs/core": link:../../packages/core
+      "@types/ps-tree": 1.1.2
+      cross-env: 7.0.3
+      eslint: 8.32.0
+      node-fetch: 3.3.0
+      ps-tree: 1.2.0
+      puppeteer: 19.5.2
+      typescript: 4.9.4
+      vavite: 1.5.3_vite@4.0.4
+      vite: 4.0.4
 
   testbed/kitchen-sink:
     specifiers:
@@ -3970,7 +4042,7 @@ packages:
     engines: { node: ">= 8" }
     dependencies:
       "@nodelib/fs.scandir": 2.1.5
-      fastq: 1.13.0
+      fastq: 1.15.0
 
   /@octokit/auth-token/3.0.2:
     resolution:
@@ -4458,7 +4530,7 @@ packages:
       }
     dependencies:
       "@types/connect": 3.4.35
-      "@types/node": 18.11.17
+      "@types/node": 18.11.18
     dev: true
 
   /@types/braces/3.0.1:
@@ -4502,7 +4574,7 @@ packages:
         integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==,
       }
     dependencies:
-      "@types/node": 18.11.17
+      "@types/node": 18.11.18
     dev: true
 
   /@types/cookie/0.5.1:
@@ -4562,7 +4634,7 @@ packages:
         integrity: sha512-DxMhY+NAsTwMMFHBTtJFNp5qiHKJ7TeqOo23zVEM9alT1Ml27Q3xcTH0xwxn7Q0BbMcVEJOs/7aQtUWupUQN3Q==,
       }
     dependencies:
-      "@types/node": 18.11.17
+      "@types/node": 18.11.18
       "@types/qs": 6.9.7
       "@types/range-parser": 1.2.4
     dev: true
@@ -4769,13 +4841,6 @@ packages:
       }
     dev: true
 
-  /@types/node/18.11.17:
-    resolution:
-      {
-        integrity: sha512-HJSUJmni4BeDHhfzn6nF0sVmd1SMezP7/4F0Lq+aXzmp2xm9O7WXrUtHW/CHlYVtZUbByEvWidHqRtcJXGF2Ng==,
-      }
-    dev: true
-
   /@types/node/18.11.18:
     resolution:
       {
@@ -4891,7 +4956,7 @@ packages:
       }
     dependencies:
       "@types/mime": 3.0.1
-      "@types/node": 18.11.17
+      "@types/node": 18.11.18
     dev: true
 
   /@types/stack-trace/0.0.29:
@@ -5161,8 +5226,7 @@ packages:
       vite: ">=2.8.1"
     dependencies:
       "@types/node": 18.11.18
-      vite: 4.0.4_@types+node@18.11.18
-    dev: false
+      vite: 4.0.4
 
   /@vavite/expose-vite-dev-server/1.5.3_vite@4.0.4:
     resolution:
@@ -5172,8 +5236,23 @@ packages:
     peerDependencies:
       vite: ">=2.8.1"
     dependencies:
-      vite: 4.0.4_@types+node@18.11.18
-    dev: false
+      vite: 4.0.4
+
+  /@vavite/multibuild-cli/1.5.3_vite@4.0.4:
+    resolution:
+      {
+        integrity: sha512-XeNjAE2CHqZcGmWOzFbAQkYhO5Tj13NIazFm6SPuNhVPYHuIf59xsDxH6ae65iaEj5SqwceR/kBXLc1tCyEKqA==,
+      }
+    hasBin: true
+    peerDependencies:
+      vite: ">=2.8.1"
+    dependencies:
+      "@types/node": 18.11.18
+      "@vavite/multibuild": 1.5.3_vite@4.0.4
+      cac: 6.7.14
+      picocolors: 1.0.0
+      vite: 4.0.4
+    dev: true
 
   /@vavite/multibuild/1.5.3_vite@4.0.4:
     resolution:
@@ -5186,8 +5265,18 @@ packages:
       "@types/node": 18.11.18
       cac: 6.7.14
       picocolors: 1.0.0
-      vite: 4.0.4_@types+node@18.11.18
-    dev: false
+      vite: 4.0.4
+
+  /@vavite/reloader/1.5.3_vite@4.0.4:
+    resolution:
+      {
+        integrity: sha512-YF1tJr7/aengDPDvlN/onymGcpZouFAsyG3Nhp0aKdd1Yy2SA+4Fc73yv892Puc14Yleizs7dscN29bhPaZOjQ==,
+      }
+    peerDependencies:
+      vite: ">=2.8.1"
+    dependencies:
+      vite: 4.0.4
+    dev: true
 
   /@vercel/nft/0.22.6:
     resolution:
@@ -6647,7 +6736,7 @@ packages:
       }
     dependencies:
       function-bind: 1.1.1
-      get-intrinsic: 1.1.2
+      get-intrinsic: 1.1.3
 
   /call-me-maybe/1.0.2:
     resolution:
@@ -8836,37 +8925,6 @@ packages:
       stackframe: 1.3.4
     dev: false
 
-  /es-abstract/1.20.1:
-    resolution:
-      {
-        integrity: sha512-WEm2oBhfoI2sImeM4OF2zE2V3BYdSF+KnSi9Sidz51fQHd7+JuF8Xgcj9/0o+OWeIeIS/MiuNnlruQrJf16GQA==,
-      }
-    engines: { node: ">= 0.4" }
-    dependencies:
-      call-bind: 1.0.2
-      es-to-primitive: 1.2.1
-      function-bind: 1.1.1
-      function.prototype.name: 1.1.5
-      get-intrinsic: 1.1.2
-      get-symbol-description: 1.0.0
-      has: 1.0.3
-      has-property-descriptors: 1.0.0
-      has-symbols: 1.0.3
-      internal-slot: 1.0.3
-      is-callable: 1.2.4
-      is-negative-zero: 2.0.2
-      is-regex: 1.1.4
-      is-shared-array-buffer: 1.0.2
-      is-string: 1.0.7
-      is-weakref: 1.0.2
-      object-inspect: 1.12.2
-      object-keys: 1.1.1
-      object.assign: 4.1.2
-      regexp.prototype.flags: 1.4.3
-      string.prototype.trimend: 1.0.5
-      string.prototype.trimstart: 1.0.5
-      unbox-primitive: 1.0.2
-
   /es-abstract/1.20.5:
     resolution:
       {
@@ -8899,6 +8957,7 @@ packages:
       string.prototype.trimend: 1.0.6
       string.prototype.trimstart: 1.0.6
       unbox-primitive: 1.0.2
+    dev: true
 
   /es-abstract/1.21.1:
     resolution:
@@ -8974,7 +9033,7 @@ packages:
       }
     engines: { node: ">= 0.4" }
     dependencies:
-      is-callable: 1.2.4
+      is-callable: 1.2.7
       is-date-object: 1.0.5
       is-symbol: 1.0.4
 
@@ -10593,14 +10652,6 @@ packages:
       - supports-color
     dev: false
 
-  /fastq/1.13.0:
-    resolution:
-      {
-        integrity: sha512-YpkpUnK8od0o1hmeSc7UUs/eB/vIPWJYjKck2QKIzAf71Vm1AAQ3EbuZB3g2JIy+pg+ERD0vqI79KyZiB2e2Nw==,
-      }
-    dependencies:
-      reusify: 1.0.4
-
   /fastq/1.15.0:
     resolution:
       {
@@ -10608,7 +10659,6 @@ packages:
       }
     dependencies:
       reusify: 1.0.4
-    dev: false
 
   /fault/2.0.1:
     resolution:
@@ -11205,7 +11255,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.1.4
-      es-abstract: 1.20.1
+      es-abstract: 1.21.1
       functions-have-names: 1.2.3
 
   /functions-have-names/1.2.3:
@@ -11271,16 +11321,6 @@ packages:
         integrity: sha512-Hm0ixYtaSZ/V7C8FJrtZIuBBI+iSgL+1Aq82zSu8VQNB4S3Gk8e7Qs3VwBDJAhmRZcFqkl3tQu36g/Foh5I5ig==,
       }
     dev: true
-
-  /get-intrinsic/1.1.2:
-    resolution:
-      {
-        integrity: sha512-Jfm3OyCxHh9DJyc28qGk+JmfkpO41A4XkneDSujN9MDXrm4oDKdHvndhZ2dN94+ERNfkYJWDclW6k2L/ZGHjXA==,
-      }
-    dependencies:
-      function-bind: 1.1.1
-      has: 1.0.3
-      has-symbols: 1.0.3
 
   /get-intrinsic/1.1.3:
     resolution:
@@ -11374,7 +11414,7 @@ packages:
     engines: { node: ">= 0.4" }
     dependencies:
       call-bind: 1.0.2
-      get-intrinsic: 1.1.2
+      get-intrinsic: 1.1.3
 
   /get-tsconfig/4.3.0:
     resolution:
@@ -11661,7 +11701,7 @@ packages:
     engines: { node: ">=0.6.0" }
     hasBin: true
     dependencies:
-      minimist: 1.2.6
+      minimist: 1.2.7
 
   /gopd/1.0.1:
     resolution:
@@ -11925,7 +11965,7 @@ packages:
         integrity: sha512-62DVLZGoiEBDHQyqG4w9xCuZ7eJEwNmJRWw2VY84Oedb7WFcA27fiEVe8oUQx9hAUJ4ekurquucTGwsyO1XGdQ==,
       }
     dependencies:
-      get-intrinsic: 1.1.2
+      get-intrinsic: 1.1.3
 
   /has-proto/1.0.1:
     resolution:
@@ -12566,17 +12606,6 @@ packages:
     engines: { node: ">= 0.10" }
     dev: true
 
-  /internal-slot/1.0.3:
-    resolution:
-      {
-        integrity: sha512-O0DB1JC/sPyZl7cIo78n5dR7eUSwwpYPiXRhTzNxZVAMUuB8vlnRFyLxdrVToks6XPLVnFfbzaVd5WLjhgg+vA==,
-      }
-    engines: { node: ">= 0.4" }
-    dependencies:
-      get-intrinsic: 1.1.2
-      has: 1.0.3
-      side-channel: 1.0.4
-
   /internal-slot/1.0.4:
     resolution:
       {
@@ -12744,13 +12773,6 @@ packages:
     dependencies:
       builtin-modules: 3.3.0
     dev: false
-
-  /is-callable/1.2.4:
-    resolution:
-      {
-        integrity: sha512-nsuwtxZfMX67Oryl9LCQ+upnC0Z0BgpwntpS89m1H/TLF0zNfzfLMV/9Wa/6MZsj0acpEjAO0KF1xT6ZdLl95w==,
-      }
-    engines: { node: ">= 0.4" }
 
   /is-callable/1.2.7:
     resolution:
@@ -16496,6 +16518,7 @@ packages:
       {
         integrity: sha512-z+cPxW0QGUp0mcqcsgQyLVRDoXFQbXOwBaqyF7VIgI4TWNQsDHrBpUQslRmIfAoYWdYzs6UlKJtB2XJpTaNSpQ==,
       }
+    dev: true
 
   /object-inspect/1.12.3:
     resolution:
@@ -16519,18 +16542,6 @@ packages:
     dependencies:
       isobject: 3.0.1
     dev: false
-
-  /object.assign/4.1.2:
-    resolution:
-      {
-        integrity: sha512-ixT2L5THXsApyiUPYKmW+2EHpXXe5Ii3M+f4e+aJFAHao5amFRW6J0OO6c/LU8Be47utCx2GL89hxGB6XSmKuQ==,
-      }
-    engines: { node: ">= 0.4" }
-    dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.1.4
-      has-symbols: 1.0.3
-      object-keys: 1.1.1
 
   /object.assign/4.1.4:
     resolution:
@@ -19261,8 +19272,8 @@ packages:
       }
     dependencies:
       call-bind: 1.0.2
-      get-intrinsic: 1.1.2
-      object-inspect: 1.12.2
+      get-intrinsic: 1.1.3
+      object-inspect: 1.12.3
 
   /siginfo/2.0.0:
     resolution:
@@ -19851,16 +19862,6 @@ packages:
       is-regex: 1.1.4
     dev: true
 
-  /string.prototype.trimend/1.0.5:
-    resolution:
-      {
-        integrity: sha512-I7RGvmjV4pJ7O3kdf+LXFpVfdNOxtCW/2C8f6jNiW4+PQchwxkCDzlk1/7p+Wl4bqFIZeF47qAHXLuHHWKAxog==,
-      }
-    dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.1.4
-      es-abstract: 1.20.1
-
   /string.prototype.trimend/1.0.6:
     resolution:
       {
@@ -19869,17 +19870,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.1.4
-      es-abstract: 1.20.5
-
-  /string.prototype.trimstart/1.0.5:
-    resolution:
-      {
-        integrity: sha512-THx16TJCGlsN0o6dl2o6ncWUsdgnLRSA23rRE5pyGBw/mLr3Ej/R2LaqCtgP8VNMGZsvMWnf9ooZPyY2bHvUFg==,
-      }
-    dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.1.4
-      es-abstract: 1.20.1
+      es-abstract: 1.21.1
 
   /string.prototype.trimstart/1.0.6:
     resolution:
@@ -19889,7 +19880,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.1.4
-      es-abstract: 1.20.5
+      es-abstract: 1.21.1
 
   /string_decoder/1.1.1:
     resolution:
@@ -21591,6 +21582,22 @@ packages:
     engines: { node: ">= 0.8" }
     dev: false
 
+  /vavite/1.5.3_vite@4.0.4:
+    resolution:
+      {
+        integrity: sha512-gyzhz6Hoin6N+7bJiuDxCSX6Mmw/uQOUnsZSLZagXEQx89//koBIeam2/TKsh6rtJQKpzjEALlVvM9UljF7SMA==,
+      }
+    hasBin: true
+    peerDependencies:
+      vite: ">=2.8.1"
+    dependencies:
+      "@vavite/connect": 1.5.3_vite@4.0.4
+      "@vavite/expose-vite-dev-server": 1.5.3_vite@4.0.4
+      "@vavite/multibuild-cli": 1.5.3_vite@4.0.4
+      "@vavite/reloader": 1.5.3_vite@4.0.4
+      vite: 4.0.4
+    dev: true
+
   /vfile-location/4.0.1:
     resolution:
       {
@@ -21748,6 +21755,7 @@ packages:
       rollup: 3.7.5
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
 
   /vitest/0.27.1:
     resolution:
