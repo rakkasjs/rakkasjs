@@ -9,26 +9,37 @@ export function createRenderer(): RequestHandler {
 }
 
 interface RenderOptions {
-	layouts: LayoutModule[];
-	page: PageModule;
+	page: [name: string, module: PageModule];
+	layouts: [name: string, module: LayoutModule][];
+	clientModuleName: string;
 }
 
 async function render(options: RenderOptions): Promise<Response> {
-	const { layouts, page } = options;
+	const { layouts, page, clientModuleName } = options;
 
-	let app = createElement(page.default, {});
+	let app = createElement(page[1].default, {});
 	for (const layout of layouts) {
-		if (layout.default) {
-			app = createElement(layout.default, {}, app);
+		if (layout[1].default) {
+			app = createElement(layout[1].default, {}, app);
 		}
 	}
 
-	const stream = await renderToReadableStream(app);
+	const stream = await renderToReadableStream(app, {
+		bootstrapModules: [clientModuleName],
+	});
 
 	const htmlAttributes = "";
 	const headAttributes = "";
-	const headContents = "";
+	let headContents = "";
 	const bodyAttributes = "";
+
+	// Inject module preload links
+	const modules = [...layouts.map((l) => l[0]), page[0]];
+	for (const module of modules) {
+		headContents += `<link data-route rel="modulepreload" href=${JSON.stringify(
+			module,
+		)}>`;
+	}
 
 	const pre = `<!DOCTYPE html><html${htmlAttributes}><head${headAttributes}>${headContents}</head><body${bodyAttributes}><div id="root">`;
 	const post = `</div></body></html>`;

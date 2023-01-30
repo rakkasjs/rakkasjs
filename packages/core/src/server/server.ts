@@ -5,8 +5,10 @@ import {
 	RequestContext,
 	RequestHandler,
 } from "@hattip/compose";
+import type { Manifest } from "vite";
 
 export interface CreateAppOptions {
+	viteClientManifest?: Manifest;
 	routes: ServerRoute[];
 	middleware?: {
 		beforePages?: RequestHandler[];
@@ -15,7 +17,11 @@ export interface CreateAppOptions {
 }
 
 export function createApp(options: CreateAppOptions): HattipHandler {
-	const { routes, middleware: { beforePages = [], after = [] } = {} } = options;
+	const {
+		viteClientManifest,
+		routes,
+		middleware: { beforePages = [], after = [] } = {},
+	} = options;
 
 	async function app(ctx: RequestContext) {
 		ctx.fetch = async function fetch(input, init) {
@@ -81,18 +87,36 @@ export function createApp(options: CreateAppOptions): HattipHandler {
 			if (!match) continue;
 
 			const [routeModule, ...wrapperModules] = await Promise.all([
-				route[1](),
-				...route[2].map((i) => i()),
+				route[1][1](),
+				...route[2].map((i) => i[1]()),
 			]);
 
 			let methodHandler = routeModule[ctx.method as Method];
 			if (!methodHandler) {
 				if (routeModule.default) {
-					methodHandler = (ctx) =>
-						ctx.render?.({
-							page: routeModule,
-							layouts: wrapperModules,
+					methodHandler = (ctx) => {
+						if (!ctx.render) {
+							return;
+						}
+
+						const assets = mapAssets(
+							{
+								client: route[3] ?? "undefined",
+								page: route[1][0],
+								layouts: route[2].map((x) => x[0]),
+							},
+							viteClientManifest,
+						);
+
+						return ctx.render({
+							page: [assets.page, routeModule],
+							layouts: route[2].map((_, i) => [
+								assets.layouts[i],
+								wrapperModules[i],
+							]),
+							clientModuleName: assets.client,
 						});
+					};
 				} else {
 					continue;
 				}
@@ -124,6 +148,45 @@ export function createApp(options: CreateAppOptions): HattipHandler {
 	return hattipHandler;
 }
 
+interface AssetsInput {
+	client: string;
+	page: string;
+	layouts: string[];
+}
+
+interface AssetsOutput {
+	client: string;
+	page: string;
+	layouts: string[];
+}
+
+function mapAssets(assets: AssetsInput, manifest?: Manifest): AssetsOutput {
+	if (!manifest) return assets;
+
+	const moduleSet = new Set<string>();
+	const cssSet = new Set<string>();
+
+	function getAsset(script: string) {
+		const manifestEntry = manifest![script.slice(1)];
+		if (!manifestEntry) {
+			throw new Error(`Could not find asset for ${script}`);
+		}
+
+		// TODO: Prefetch modules and other assets
+		manifestEntry.imports?.forEach((id) => moduleSet.add(id));
+		manifestEntry.css?.forEach((id) => cssSet.add(id));
+		// manifestEntry.assets?.forEach((id) => assetSet.add(id));
+
+		return "/" + manifestEntry.file;
+	}
+
+	return {
+		client: getAsset(assets.client),
+		page: getAsset(assets.page),
+		layouts: assets.layouts.map(getAsset),
+	};
+}
+
 declare module "@hattip/compose" {
 	interface RequestContextExtensions {
 		/** Dynamic path parameters */
@@ -136,14 +199,28 @@ declare module "@hattip/compose" {
 }
 
 export interface RenderOptions {
-	page: RouteModule;
-	layouts: WrapperModule[];
+	page: RouteSpecifier;
+	layouts: WrapperSpecifier[];
+	clientModuleName: string;
 }
 
 type ServerRoute = [
 	pattern: RegExp,
-	routeImporter: () => Promise<RouteModule>,
-	wrapperImporters: Array<() => Promise<WrapperModule>>,
+	routeSpecifier: RouteImporterSpecifier,
+	wrapperSpecifiers: WrapperImporterSpecifier[],
+	clientModuleName?: string,
+];
+
+type RouteSpecifier = [name: string, importer: RouteModule];
+type WrapperSpecifier = [name: string, importer: WrapperModule];
+
+type RouteImporterSpecifier = [
+	name: string,
+	importer: () => Promise<RouteModule>,
+];
+type WrapperImporterSpecifier = [
+	name: string,
+	importer: () => Promise<WrapperModule>,
 ];
 
 type RouteModule = {

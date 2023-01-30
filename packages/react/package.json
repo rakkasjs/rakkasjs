@@ -6,7 +6,8 @@
 		"dist"
 	],
 	"exports": {
-		"./server": "./dist/server.js"
+		"./server": "./dist/server.js",
+		"./client": "./dist/client.js"
 	},
 	"typesVersions": {
 		"*": {
