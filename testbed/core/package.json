@@ -32,6 +32,7 @@
 		"@hattip/adapter-node": "^0.0.27",
 		"@hattip/compose": "^0.0.27",
 		"@hattip/core": "^0.0.27",
+		"cheerio": "^1.0.0-rc.12",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	}

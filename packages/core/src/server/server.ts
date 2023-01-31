@@ -115,6 +115,7 @@ export function createApp(options: CreateAppOptions): HattipHandler {
 								wrapperModules[i],
 							]),
 							clientModuleName: assets.client,
+							context: ctx,
 						});
 					};
 				} else {
@@ -202,6 +203,7 @@ export interface RenderOptions {
 	page: RouteSpecifier;
 	layouts: WrapperSpecifier[];
 	clientModuleName: string;
+	context: RequestContext;
 }
 
 type ServerRoute = [

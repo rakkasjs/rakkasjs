@@ -13,4 +13,9 @@ export default defineConfig([
 		platform: "neutral",
 		dts: true,
 	},
+	{
+		entry: { client: "./src/client/client.ts" },
+		format: ["esm"],
+		platform: "browser",
+	},
 ]);

@@ -1,4 +1,4 @@
-import { RequestHandler } from "@hattip/compose";
+import { RequestContext, RequestHandler } from "@hattip/compose";
 import { createElement, ComponentType } from "react";
 import { renderToReadableStream } from "react-dom/server.browser";
 import { uneval } from "devalue";
@@ -13,6 +13,7 @@ interface RenderOptions {
 	page: [name: string, module: PageModule];
 	layouts: [name: string, module: LayoutModule][];
 	clientModuleName: string;
+	context: RequestContext;
 }
 
 async function render(options: RenderOptions): Promise<Response> {
@@ -37,9 +38,10 @@ async function render(options: RenderOptions): Promise<Response> {
 
 	const data = preloadResults.map((r) => r?.data);
 
-	const serialized = uneval([meta, ...data]);
+	const serialized = uneval([(options.context as any).params, meta, ...data]);
 
 	let app = createElement(page[1].default, {
+		params: (options.context as any).params,
 		meta,
 		data: preloadResults[preloadResults.length - 1]?.data,
 	});
@@ -48,7 +50,11 @@ async function render(options: RenderOptions): Promise<Response> {
 		if (layout[1].default) {
 			app = createElement(
 				layout[1].default,
-				{ meta, data: preloadResults[i]?.data },
+				{
+					params: (options.context as any).params,
+					meta,
+					data: preloadResults[i]?.data,
+				},
 				app,
 			);
 		}
@@ -143,6 +149,7 @@ interface PageModule {
 }
 
 interface PageProps {
+	params: Record<string, string>;
 	meta: Record<string, unknown>;
 	data?: unknown;
 }

@@ -202,6 +202,26 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			expect(dom("p#metadata").text()).toBe("Metadata: 2");
 			expect(dom("title").text()).toBe("The page title");
 		});
+
+		test("decodes page params", async () => {
+			const response = await fetch(host + "/page-params/unescape%20me");
+			expect(response.ok).toBe(true);
+
+			const html = await response.text();
+			const dom = load(html);
+
+			expect(dom("p#param").text()).toBe("unescape me");
+		});
+
+		test("doesn't unescape spread page params", async () => {
+			const response = await fetch(host + "/page-params/spread/escape%2Fme");
+			expect(response.ok).toBe(true);
+
+			const html = await response.text();
+			const dom = load(html);
+
+			expect(dom("p#param").text()).toBe("/escape%2Fme");
+		});
 	});
 }
 

@@ -6,13 +6,14 @@ export async function startClient() {
 		"link[data-route]",
 	) as NodeListOf<HTMLLinkElement>;
 
-	const [meta, ...data] = window.$RAKKAS_DATA;
+	const [params, meta, ...data] = window.$RAKKAS_DATA;
 
 	const modules: ClientModule[] = await Promise.all(
 		[...links].map((link) => (0, eval)(`import(${JSON.stringify(link.href)})`)),
 	);
 
 	let app: ReactElement = createElement(modules[modules.length - 1].default, {
+		params,
 		meta,
 		data: data[data.length - 1],
 	});
@@ -22,6 +23,7 @@ export async function startClient() {
 			app = createElement(
 				modules[i].default,
 				{
+					params,
 					meta,
 					data: data[i],
 				},
@@ -38,11 +40,16 @@ interface ClientModule {
 }
 
 interface ClientComponentProps {
+	params: Record<string, string>;
 	meta: Record<string, unknown>;
 	data: unknown;
 }
 
 declare global {
 	// eslint-disable-next-line no-var
-	var $RAKKAS_DATA: [Record<string, unknown>, ...unknown[]];
+	var $RAKKAS_DATA: [
+		Record<string, string>,
+		Record<string, unknown>,
+		...unknown[],
+	];
 }
