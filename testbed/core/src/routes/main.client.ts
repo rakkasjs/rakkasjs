@@ -1,3 +1,5 @@
+"use meh";
+
 import { startClient } from "@rakkasjs/react/client";
 import routes from "rakkasjs:client-routes";
 

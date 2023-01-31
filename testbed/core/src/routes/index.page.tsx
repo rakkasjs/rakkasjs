@@ -22,3 +22,7 @@ export default function HomePage() {
 // 		head: <Head title="The page title" />,
 // 	};
 // };
+
+export function POST() {
+	return new Response("Hello world!");
+}

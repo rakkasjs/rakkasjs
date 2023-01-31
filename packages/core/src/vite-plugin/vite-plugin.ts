@@ -1,9 +1,11 @@
 /// <reference types="@vavite/multibuild/vite-config" />
-// import micromatch from "micromatch";
+import micromatch from "micromatch";
 import { PluginOption, ResolvedConfig } from "vite";
 import glob from "fast-glob";
 import path from "path";
 import { routeToRegExp, sortRoutes } from "./route-utils";
+import { transformAsync } from "@babel/core";
+import { babelTransformRemoveExports } from "./remove-exports";
 
 // export interface RakkasCoreOptions {}
 
@@ -12,7 +14,9 @@ export default function rakkasCore(): PluginOption[] {
 	let config: ResolvedConfig;
 
 	// let isRoute: (filename: string) => boolean;
+	let isPage: (filename: string) => boolean;
 	// let isWrapper: (filename: string) => boolean;
+	let isLayout: (filename: string) => boolean;
 
 	async function generateRoutesModule(client?: string) {
 		const cwd = path.join(config.root, ROUTES_DIR);
@@ -27,14 +31,18 @@ export default function rakkasCore(): PluginOption[] {
 		let wrapperIndex = 1;
 		let wrapperImporters = "";
 
-		const wrappers = (await glob(WRAPPER_PATTERN, { cwd }))
+		const wrappers = (
+			await glob(client ? LAYOUT_PATTERN : WRAPPER_PATTERN, { cwd })
+		)
 			.map((filename) => {
 				const importSpecifier =
 					"/" + path.join(ROUTES_DIR, filename).replace(/\\/g, "/");
 				const name = `w${wrapperIndex++}`;
 				const quoted = JSON.stringify(importSpecifier);
 
-				wrapperImporters += `const ${name} = [${quoted}, () => import(${quoted})];\n`;
+				wrapperImporters += client
+					? `const ${name} = () => import(${quoted});\n`
+					: `const ${name} = [${quoted}, () => import(${quoted})];\n`;
 
 				return {
 					name,
@@ -71,7 +79,7 @@ export default function rakkasCore(): PluginOption[] {
 		let routeImporters = "";
 
 		const routes = sortRoutes(
-			(await glob(ROUTE_PATTERN, { cwd }))
+			(await glob(client ? PAGE_PATTERN : ROUTE_PATTERN, { cwd }))
 				.map((filename) => {
 					const pathname = "/" + filename.match(/^(.*)\.(?:page|api)\./)![1];
 					const importSpecifier =
@@ -79,7 +87,9 @@ export default function rakkasCore(): PluginOption[] {
 					const name = `r${routeIndex++}`;
 					const quoted = JSON.stringify(importSpecifier);
 
-					routeImporters += `const ${name} = [${quoted}, () => import(${quoted})];\n`;
+					routeImporters += client
+						? `const ${name} = () => import(${quoted});\n`
+						: `const ${name} = [${quoted}, () => import(${quoted})];\n`;
 
 					return {
 						name,
@@ -109,7 +119,12 @@ export default function rakkasCore(): PluginOption[] {
 
 		routeExports += "];\n";
 
-		const output = [clientNames, wrapperImporters, routeImporters, routeExports]
+		const output = [
+			!client && clientNames,
+			wrapperImporters,
+			routeImporters,
+			routeExports,
+		]
 			.filter(Boolean)
 			.join("\n");
 
@@ -120,10 +135,14 @@ export default function rakkasCore(): PluginOption[] {
 		{
 			name: "rakkas:router",
 
+			enforce: "post",
+
 			configResolved(cfg) {
 				config = cfg;
 				// isRoute = micromatch.matcher(ROUTE_PATTERN);
+				isPage = micromatch.matcher(PAGE_PATTERN);
 				// isWrapper = micromatch.matcher(WRAPPER_PATTERN);
+				isLayout = micromatch.matcher(LAYOUT_PATTERN);
 			},
 
 			resolveId(id, importer) {
@@ -151,6 +170,28 @@ export default function rakkasCore(): PluginOption[] {
 					return generateRoutesModule(clientDir);
 				}
 			},
+
+			async transform(code, id, options) {
+				if (options?.ssr || (!isPage(id) && !isLayout(id))) {
+					return;
+				}
+
+				const result = await transformAsync(code, {
+					filename: id,
+					code: true,
+					plugins: [babelTransformRemoveExports(["default"])],
+					sourceMaps: config.command === "serve" || !!config.build.sourcemap,
+				});
+
+				if (result) {
+					return {
+						code: result.code!,
+						map: result.map,
+					};
+				} else {
+					this.warn(`[rakkasjs]: Failed to transform ${id}`);
+				}
+			},
 		},
 	];
 }
@@ -158,7 +199,13 @@ export default function rakkasCore(): PluginOption[] {
 const ROUTES_DIR = "src/routes";
 
 const ROUTE_PATTERN = `**/*.(page|api).*`;
+const PAGE_PATTERN = `**/*.page.*`;
+// const API_PATTERN = `**/*.api.*`;
+
 const WRAPPER_PATTERN = `**/(*.|)(layout|middleware).*`;
+const LAYOUT_PATTERN = `**/(*.|)layout.*`;
+// const MIDDLEWARE_PATTERN = `**/(*.|)middleware.*`;
+
 const CLIENT_PATTERN = `**/*.client.*`;
 
 const MODULE_PREFIX = "rakkasjs:";
