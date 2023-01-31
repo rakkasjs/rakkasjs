@@ -21,4 +21,9 @@ export default function MainLayout({ children }: { children: ReactNode }) {
 	);
 }
 
-// MainLayout.preload = (): PreloadResult => ({ meta: { key: 1 } });
+export function preload() {
+	return {
+		meta: { key: 1 },
+		head: { title: "The page title" },
+	};
+}

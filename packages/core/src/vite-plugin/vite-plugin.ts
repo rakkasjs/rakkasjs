@@ -29,6 +29,7 @@ export default function rakkasCore(): PluginOption[] {
 		}
 
 		let wrapperIndex = 1;
+		let eagerWrapperImports = "";
 		let wrapperImporters = "";
 
 		const wrappers = (
@@ -40,8 +41,17 @@ export default function rakkasCore(): PluginOption[] {
 				const name = `w${wrapperIndex++}`;
 				const quoted = JSON.stringify(importSpecifier);
 
+				const quotedEager = JSON.stringify(importSpecifier + "?eager");
+				let eager: string;
+				if (config.command === "serve") {
+					eager = `() => import(${quotedEager})`;
+				} else {
+					eagerWrapperImports += `import * as e${wrapperIndex} from ${quotedEager};\n`;
+					eager = `e${wrapperIndex}`;
+				}
+
 				wrapperImporters += client
-					? `const ${name} = () => import(${quoted});\n`
+					? `const ${name} = [() => import(${quoted}), ${eager}];\n`
 					: `const ${name} = [${quoted}, () => import(${quoted})];\n`;
 
 				return {
@@ -77,6 +87,7 @@ export default function rakkasCore(): PluginOption[] {
 
 		let routeIndex = 1;
 		let routeImporters = "";
+		let eagerRouteImports = "";
 
 		const routes = sortRoutes(
 			(await glob(client ? PAGE_PATTERN : ROUTE_PATTERN, { cwd }))
@@ -87,8 +98,17 @@ export default function rakkasCore(): PluginOption[] {
 					const name = `r${routeIndex++}`;
 					const quoted = JSON.stringify(importSpecifier);
 
+					const quotedEager = JSON.stringify(importSpecifier + "?eager");
+					let eager: string;
+					if (config.command === "serve") {
+						eager = `() => import(${quotedEager})`;
+					} else {
+						eagerRouteImports += `import * as x${routeIndex} from ${quotedEager};\n`;
+						eager = `x${routeIndex}`;
+					}
+
 					routeImporters += client
-						? `const ${name} = () => import(${quoted});\n`
+						? `const ${name} = [() => import(${quoted}), ${eager}];\n`
 						: `const ${name} = [${quoted}, () => import(${quoted})];\n`;
 
 					return {
@@ -121,6 +141,8 @@ export default function rakkasCore(): PluginOption[] {
 
 		const output = [
 			!client && clientNames,
+			eagerWrapperImports,
+			eagerRouteImports,
 			wrapperImporters,
 			routeImporters,
 			routeExports,
@@ -179,7 +201,11 @@ export default function rakkasCore(): PluginOption[] {
 				const result = await transformAsync(code, {
 					filename: id,
 					code: true,
-					plugins: [babelTransformRemoveExports(["default"])],
+					plugins: [
+						babelTransformRemoveExports(
+							id.endsWith("?eager") ? ["preload"] : ["default"],
+						),
+					],
 					sourceMaps: config.command === "serve" || !!config.build.sourcemap,
 				});
 

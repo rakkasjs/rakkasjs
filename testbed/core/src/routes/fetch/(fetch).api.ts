@@ -24,6 +24,6 @@ export async function GET(ctx: RequestContext) {
 	);
 }
 
-export function post(ctx: RequestContext) {
+export function POST(ctx: RequestContext) {
 	return new Response(ctx.request.headers.get("Authorization"));
 }

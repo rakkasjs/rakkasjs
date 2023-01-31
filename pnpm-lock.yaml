@@ -533,6 +533,7 @@ importers:
       "@types/micromatch": ^4.0.2
       "@types/react": ^18.0.26
       "@types/react-dom": ^18.0.10
+      devalue: ^4.2.2
       eslint: ^8.32.0
       prettier: ^2.8.3
       publint: ^0.1.8
@@ -543,6 +544,7 @@ importers:
       vite: ^4.0.3
     dependencies:
       "@hattip/compose": 0.0.27
+      devalue: 4.2.2
     devDependencies:
       "@cyco130/eslint-config": 2.1.3_7uibuqfxkfaozanbtbziikiqje
       "@types/micromatch": 4.0.2

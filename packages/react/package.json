@@ -55,6 +55,7 @@
 		"vite": "^4.0.3"
 	},
 	"dependencies": {
-		"@hattip/compose": "^0.0.27"
+		"@hattip/compose": "^0.0.27",
+		"devalue": "^4.2.2"
 	}
 }

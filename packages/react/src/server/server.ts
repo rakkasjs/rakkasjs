@@ -1,6 +1,7 @@
 import { RequestHandler } from "@hattip/compose";
 import { createElement, ComponentType } from "react";
 import { renderToReadableStream } from "react-dom/server.browser";
+import { uneval } from "devalue";
 
 export function createRenderer(): RequestHandler {
 	return (ctx) => {
@@ -17,10 +18,39 @@ interface RenderOptions {
 async function render(options: RenderOptions): Promise<Response> {
 	const { layouts, page, clientModuleName } = options;
 
-	let app = createElement(page[1].default, {});
-	for (const layout of layouts) {
+	const preloadResults = await Promise.all([
+		...layouts.map((l) => l[1].preload?.()),
+		page[1].preload?.(),
+	]);
+
+	const meta = {};
+	const headTags = {
+		charset: "utf-8",
+		viewport: "width=device-width, initial-scale=1",
+		title: "Rakkas app",
+	};
+
+	for (const result of preloadResults) {
+		Object.assign(meta, result?.meta);
+		Object.assign(headTags, result?.head);
+	}
+
+	const data = preloadResults.map((r) => r?.data);
+
+	const serialized = uneval([meta, ...data]);
+
+	let app = createElement(page[1].default, {
+		meta,
+		data: preloadResults[preloadResults.length - 1]?.data,
+	});
+
+	for (const [i, layout] of layouts.entries()) {
 		if (layout[1].default) {
-			app = createElement(layout[1].default, {}, app);
+			app = createElement(
+				layout[1].default,
+				{ meta, data: preloadResults[i]?.data },
+				app,
+			);
 		}
 	}
 
@@ -30,7 +60,7 @@ async function render(options: RenderOptions): Promise<Response> {
 
 	const htmlAttributes = "";
 	const headAttributes = "";
-	let headContents = "";
+	let headContents = renderHeadTags(headTags);
 	const bodyAttributes = "";
 
 	// Inject module preload links
@@ -41,7 +71,12 @@ async function render(options: RenderOptions): Promise<Response> {
 		)}>`;
 	}
 
-	const pre = `<!DOCTYPE html><html${htmlAttributes}><head${headAttributes}>${headContents}</head><body${bodyAttributes}><div id="root">`;
+	const dataScript = `<script>$RAKKAS_DATA=${serialized}</script>`;
+
+	const pre =
+		`<!DOCTYPE html><html${htmlAttributes}>` +
+		`<head${headAttributes}>${headContents}${dataScript}</head>` +
+		`<body${bodyAttributes}><div id="root">`;
 	const post = `</div></body></html>`;
 
 	const transform = new TransformStream({
@@ -63,14 +98,70 @@ async function render(options: RenderOptions): Promise<Response> {
 	});
 }
 
+function renderHeadTags(tags: HeadTags): string {
+	let result = "";
+
+	for (const [tag, attributes] of Object.entries(tags)) {
+		if (typeof attributes === "string") {
+			if (tag === "charset") {
+				result += `<meta charset="${escapeHtml(attributes)}">`;
+			} else if (tag === "title") {
+				result += `<title>${escapeHtml(attributes)}</title>`;
+			} else if (tag.startsWith("og:")) {
+				result += `<meta property="${escapeHtml(tag)}" content="${escapeHtml(
+					attributes,
+				)}">`;
+			} else {
+				result += `<meta name="${escapeHtml(tag)}" content="${escapeHtml(
+					attributes,
+				)}">`;
+			}
+		} else {
+			result += `<${tag}`;
+			for (const [attr, value] of Object.entries(attributes)) {
+				result += ` ${attr}="${escapeHtml(value)}"`;
+			}
+			result += ">";
+		}
+	}
+
+	return result;
+}
+
+function escapeHtml(text: string): string {
+	return text
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#x27;");
+}
+
 interface PageModule {
-	default: ComponentType;
+	default: ComponentType<PageProps>;
+	preload?(): Awaitable<PreloadResult>;
+}
+
+interface PageProps {
+	meta: Record<string, unknown>;
+	data?: unknown;
 }
 
 interface LayoutModule {
 	default?: ComponentType<LayoutProps>;
+	preload?(): Awaitable<PreloadResult>;
 }
 
-interface LayoutProps {
+interface LayoutProps extends PageProps {
 	children?: React.ReactNode;
 }
+
+interface PreloadResult {
+	data?: unknown;
+	meta?: Record<string, unknown>;
+	head?: HeadTags;
+}
+
+type Awaitable<T> = T | Promise<T>;
+
+type HeadTags = Record<string, string | Record<string, string>>;
