@@ -13,9 +13,9 @@ export default function rakkasCore(): PluginOption[] {
 	// options: RakkasCoreOptions = {},
 	let config: ResolvedConfig;
 
-	// let isRoute: (filename: string) => boolean;
+	let isRoute: (filename: string) => boolean;
 	let isPage: (filename: string) => boolean;
-	// let isWrapper: (filename: string) => boolean;
+	let isWrapper: (filename: string) => boolean;
 	let isLayout: (filename: string) => boolean;
 
 	async function generateRoutesModule(client?: string) {
@@ -161,9 +161,9 @@ export default function rakkasCore(): PluginOption[] {
 
 			configResolved(cfg) {
 				config = cfg;
-				// isRoute = micromatch.matcher(ROUTE_PATTERN);
+				isRoute = micromatch.matcher(ROUTE_PATTERN);
 				isPage = micromatch.matcher(PAGE_PATTERN);
-				// isWrapper = micromatch.matcher(WRAPPER_PATTERN);
+				isWrapper = micromatch.matcher(WRAPPER_PATTERN);
 				isLayout = micromatch.matcher(LAYOUT_PATTERN);
 			},
 
@@ -217,6 +217,43 @@ export default function rakkasCore(): PluginOption[] {
 				} else {
 					this.warn(`[rakkasjs]: Failed to transform ${id}`);
 				}
+			},
+
+			configureServer(server) {
+				server.watcher.addListener("all", async (e: string, fn: string) => {
+					if (
+						(isRoute(fn) || isWrapper(fn)) &&
+						(e === "add" || e === "unlink")
+					) {
+						// \x00virtual:rakkasjs:server-routes
+						// \x00virtual:rakkasjs:client-routes?from=%2Fhome%2Fcyco%2FDocuments%2Fgithub%2Frakkasjs%2Ftestbed%2Fcore%2Fsrc%2Froutes%2Fmain.client.ts
+
+						let invalidated = false;
+
+						const serverModule = server.moduleGraph.getModuleById(
+							VIRTUAL_SERVER_ROUTES_ID,
+						);
+
+						if (serverModule) {
+							server.moduleGraph.invalidateModule(serverModule);
+							invalidated = true;
+						}
+
+						for (const [key, module] of server.moduleGraph.idToModuleMap) {
+							if (key.startsWith(VIRTUAL_CLIENT_ROUTES_ID + "?from=")) {
+								server.moduleGraph.invalidateModule(module);
+								invalidated = true;
+							}
+						}
+
+						if (server.ws && invalidated) {
+							server.ws.send({
+								type: "full-reload",
+								path: "*",
+							});
+						}
+					}
+				});
 			},
 		},
 	];

@@ -116,6 +116,7 @@ export function createApp(options: CreateAppOptions): HattipHandler {
 							]),
 							clientModuleName: assets.client,
 							context: ctx,
+							devServer: !viteClientManifest,
 						});
 					};
 				} else {
@@ -204,6 +205,7 @@ export interface RenderOptions {
 	layouts: WrapperSpecifier[];
 	clientModuleName: string;
 	context: RequestContext;
+	devServer: boolean;
 }
 
 type ServerRoute = [

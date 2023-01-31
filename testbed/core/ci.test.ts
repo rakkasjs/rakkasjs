@@ -10,6 +10,7 @@ import puppeteer, { ElementHandle } from "puppeteer";
 import { promisify } from "util";
 import { kill } from "process";
 import { load } from "cheerio";
+import fs from "fs";
 
 const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 
@@ -222,6 +223,89 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			expect(dom("p#param").text()).toBe("/escape%2Fme");
 		});
+
+		if (dev) {
+			test(
+				"hot reloads page",
+				async () => {
+					await page.goto(host + "/");
+
+					// Wait a little (for some reason Windows requires this)
+					await new Promise((resolve) => setTimeout(resolve, 1_000));
+
+					await page.waitForSelector(".hydrated");
+
+					const button: ElementHandle<HTMLButtonElement> | null =
+						await page.waitForSelector("button");
+
+					await button!.click();
+
+					await page.waitForFunction(
+						() =>
+							document.querySelector("button")?.textContent === "Clicked: 1",
+					);
+
+					const filePath = path.resolve(__dirname, "src/routes/index.page.tsx");
+
+					const oldContent = await fs.promises.readFile(filePath, "utf8");
+					const newContent = oldContent.replace(
+						"Hello world!",
+						"Hot reloadin'!",
+					);
+
+					await fs.promises.writeFile(filePath, newContent);
+
+					try {
+						await page.waitForFunction(() =>
+							document.body?.textContent?.includes("Hot reloadin'!"),
+						);
+						await page.waitForFunction(
+							() =>
+								document.querySelector("button")?.textContent === "Clicked: 1",
+						);
+					} finally {
+						await fs.promises.writeFile(filePath, oldContent);
+					}
+				},
+				{ retry: 3, timeout: 15_000 },
+			);
+
+			test(
+				"newly created page appears",
+				async () => {
+					await page.goto(host + "/not-yet-created");
+
+					// Wait a little (for some reason Windows requires this)
+					await new Promise((resolve) => setTimeout(resolve, 1_000));
+
+					await page.waitForSelector(".hydrated");
+
+					const filePath = path.resolve(
+						__dirname,
+						"src/routes/not-yet-created.page.tsx",
+					);
+					const content = `export default () => <h1>I'm a new page!</h1>`;
+					await fs.promises.writeFile(filePath, content);
+
+					try {
+						await page.waitForFunction(() =>
+							document.body?.textContent?.includes("I'm a new page!"),
+						);
+
+						await fs.promises.rm(filePath);
+
+						await page.waitForFunction(
+							() => !document.body?.textContent?.includes("Not found"),
+						);
+					} finally {
+						await fs.promises.rm(filePath).catch(() => {
+							// Ignore
+						});
+					}
+				},
+				{ retry: 3, timeout: 15_000 },
+			);
+		}
 	});
 }
 

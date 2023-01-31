@@ -14,6 +14,7 @@ interface RenderOptions {
 	layouts: [name: string, module: LayoutModule][];
 	clientModuleName: string;
 	context: RequestContext;
+	devServer: boolean;
 }
 
 async function render(options: RenderOptions): Promise<Response> {
@@ -68,6 +69,12 @@ async function render(options: RenderOptions): Promise<Response> {
 	const headAttributes = "";
 	let headContents = renderHeadTags(headTags);
 	const bodyAttributes = "";
+
+	if (options.devServer) {
+		headContents +=
+			`<script type="module" src="/@vite/client"></script>` +
+			`<script type="module" async>${REACT_FAST_REFRESH_PREAMBLE}</script>`;
+	}
 
 	// Inject module preload links
 	const modules = [...layouts.map((l) => l[0]), page[0]];
@@ -172,3 +179,9 @@ interface PreloadResult {
 type Awaitable<T> = T | Promise<T>;
 
 type HeadTags = Record<string, string | Record<string, string>>;
+
+const REACT_FAST_REFRESH_PREAMBLE = `import RefreshRuntime from '/@react-refresh'
+RefreshRuntime.injectIntoGlobalHook(window)
+window.$RefreshReg$ = () => {}
+window.$RefreshSig$ = () => (type) => type
+window.__vite_plugin_react_preamble_installed__ = true`;

@@ -4,6 +4,7 @@ import { defineConfig, Plugin } from "vite";
 import vavite from "vavite";
 import rakkasCore from "@rakkasjs/core/vite-plugin";
 import { fileURLToPath } from "url";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
 	buildSteps: [
@@ -43,6 +44,7 @@ export default defineConfig({
 			serveClientAssetsInDev: true,
 			clientAssetsDir: "dist/client",
 		}),
+		react(),
 		rakkasCore(),
 		resolveClientBuildOutputDir(),
 	],
