@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 import type { RequestContext } from "@hattip/compose";
-import { useContext, useEffect, useSyncExternalStore } from "react";
+import { useContext, useEffect, useMemo, useSyncExternalStore } from "react";
 import { PageLocals } from "../../lib";
 import { IsomorphicContext } from "../../runtime/isomorphic-context";
 import { createNamedContext } from "../../runtime/named-context";
@@ -215,6 +215,9 @@ function useQueryBase<T>(
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [key, item?.invalid]);
 
+	// preserve reference between calls
+	const queryResultReference = useMemo(() => ({} as QueryResult<T>), []);
+
 	if (key === undefined) {
 		return;
 	}
@@ -233,12 +236,12 @@ function useQueryBase<T>(
 	}
 
 	if (item && "value" in item) {
-		return {
+		return Object.assign(queryResultReference, {
 			data: item.value,
 			isRefetching: !!item.promise,
 			refetch,
 			dataUpdatedAt: item.date,
-		};
+		});
 	}
 
 	if (item?.promise) {
@@ -252,12 +255,12 @@ function useQueryBase<T>(
 		throw result;
 	}
 
-	return {
+	return Object.assign(queryResultReference, {
 		data: result,
 		refetch,
 		isRefetching: false,
 		dataUpdatedAt: item?.date ?? Date.now(),
-	};
+	});
 }
 
 /** Return value of useQuery */
