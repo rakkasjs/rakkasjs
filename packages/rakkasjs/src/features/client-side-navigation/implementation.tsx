@@ -34,6 +34,9 @@ export interface UseLocationResult {
 	pending: Readonly<URL> | undefined;
 }
 
+let previousNavigationIndex: number | undefined;
+let currentNavigationIndex = 0;
+
 /** Hook to get the navigation state */
 export function useLocation(): UseLocationResult {
 	const staticLocation = useContext(LocationContext);
@@ -53,6 +56,8 @@ export function useLocation(): UseLocationResult {
 	useEffect(() => {
 		base.href = deferredLocation;
 		lastRenderedId = history.state.id;
+		previousNavigationIndex = currentNavigationIndex;
+		currentNavigationIndex = history.state.index;
 		restoreScrollPosition();
 
 		navigationResolve?.();
@@ -74,6 +79,26 @@ export function useLocation(): UseLocationResult {
 	return {
 		current,
 		pending,
+	};
+}
+
+/** Cancel the last navigation. Returns a function that "redoes" the cancelled navigation. */
+export function cancelLastNavigation(): () => void {
+	if (previousNavigationIndex === undefined) {
+		throw new Error("No previous navigation to cancel");
+	}
+
+	const delta = previousNavigationIndex - currentNavigationIndex;
+
+	history.go(delta);
+
+	currentNavigationIndex = previousNavigationIndex;
+	previousNavigationIndex = undefined;
+
+	return () => {
+		history.go(-delta);
+		previousNavigationIndex = currentNavigationIndex;
+		currentNavigationIndex = previousNavigationIndex + delta;
 	};
 }
 
@@ -143,7 +168,7 @@ export async function navigate(
 			to,
 		);
 	} else {
-		const index = nextIndex++;
+		const index = ++nextIndex;
 		history.pushState({ id, data, actionData, index }, "", to);
 	}
 

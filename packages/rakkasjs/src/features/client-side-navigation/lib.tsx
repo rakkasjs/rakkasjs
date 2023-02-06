@@ -11,4 +11,5 @@ export {
 	Link,
 	StyledLink,
 	useSubmit,
+	cancelLastNavigation,
 } from "./implementation";

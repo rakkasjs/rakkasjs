@@ -5,7 +5,10 @@ import React, {
 	useContext,
 	useReducer,
 } from "react";
-import { useLocation } from "../features/client-side-navigation/lib";
+import {
+	cancelLastNavigation,
+	useLocation,
+} from "../features/client-side-navigation/lib";
 import { findPage, RouteMatch } from "../internal/find-page";
 import {
 	Layout,
@@ -213,7 +216,12 @@ export async function loadRoute(
 			if (!try404) {
 				// Always try a full reload before showing a 404 page
 				// the route may be a static file or an API route.
-				window.location.reload();
+				cancelLastNavigation();
+				await new Promise((resolve) => {
+					window.addEventListener("popstate", resolve, { once: true });
+				});
+
+				location.assign(pageContext.url.href);
 				await new Promise(() => {
 					// Wait forever
 				});

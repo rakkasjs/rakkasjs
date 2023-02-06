@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { ReactElement, useContext, useLayoutEffect } from "react";
+import React, {
+	ReactElement,
+	useContext,
+	useLayoutEffect,
+	useRef,
+} from "react";
 import { navigate } from "../client-side-navigation/lib";
 import { escapeJson } from "../../runtime/utils";
 import type { CommonHooks, PreloadFunction } from "../../lib";
@@ -19,7 +24,7 @@ export interface RedirectProps {
 // @ts-ignore
 /**
  * Component for redirecting the user to a different URL. Handling redirections
- * in {@link CommonHooks.beforePageLookup beforePageLookup hook} or in the
+ * in {@link CommonHooks["beforePageLookup"] beforePageLookup hook} or in the
  * {@link PreloadFunction preload function} function results in better SEO so
  * it's recommended over using this component.
  */
@@ -48,7 +53,11 @@ export const Redirect = import.meta.env.SSR
 			);
 	  }
 	: function Redirect(props: RedirectProps): ReactElement {
+			const redirected = useRef(false);
+
 			useLayoutEffect(() => {
+				if (redirected.current) return;
+				redirected.current = true;
 				navigate(props.href, { replace: true });
 			});
 
