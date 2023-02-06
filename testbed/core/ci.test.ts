@@ -306,6 +306,18 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				{ retry: 3, timeout: 15_000 },
 			);
 		}
+
+		test(
+			"sets page title",
+			async () => {
+				await page.goto(host + "/title");
+
+				await page.waitForFunction(() => document.title === "Page title");
+			},
+			// This is flaky on Mac, probably because it can't recover from the
+			// previous test's hot reload.
+			{ retry: 3 },
+		);
 	});
 }
 
