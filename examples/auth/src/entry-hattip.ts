@@ -1,8 +1,8 @@
 import { createRequestHandler } from "rakkasjs";
 import { Auth } from "@auth/core";
 import type { Provider } from "@auth/core/providers";
-import GitHubProvider, { GithubProfile } from "@auth/core/providers/github";
-import DiscordProvider, { DiscordProfile } from "@auth/core/providers/discord";
+import GitHubProvider from "@auth/core/providers/github";
+import DiscordProvider from "@auth/core/providers/discord";
 
 export default createRequestHandler({
 	middleware: {

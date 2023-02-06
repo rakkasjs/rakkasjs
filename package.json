@@ -18,13 +18,13 @@
 		"husky": "^8.0.3",
 		"lint-staged": "^13.1.0",
 		"prettier": "^2.8.3",
-		"typescript": "^4.9.4",
-		"vitest": "^0.27.1"
+		"typescript": "^4.9.5",
+		"vitest": "^0.28.4"
 	},
 	"dependencies": {
 		"@hattip/polyfills": "0.0.27",
-		"@vitejs/plugin-react": "^3.0.1",
-		"vite": "^4.0.4"
+		"@vitejs/plugin-react": "^3.1.0",
+		"vite": "^4.1.1"
 	},
 	"--": "Uncomment the next option to test against local packages",
 	"--pnpm": {

@@ -1,7 +1,7 @@
 import { fileURLToPath } from "url";
 import path from "path";
 import cpr from "cpr";
-import mkdirp from "mkdirp";
+import { mkdirp } from "mkdirp";
 import { rimraf } from "rimraf";
 import fs from "fs";
 import { run } from "../src/utils";

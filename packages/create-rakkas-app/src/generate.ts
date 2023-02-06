@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { Options } from ".";
-import mkdirp from "mkdirp";
+import { mkdirp } from "mkdirp";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
