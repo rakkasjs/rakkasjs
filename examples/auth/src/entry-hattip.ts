@@ -1,4 +1,4 @@
-import { createRequestHandler } from "rakkasjs";
+import { createRequestHandler, PageLocals } from "rakkasjs";
 import { Auth } from "@auth/core";
 import type { Provider } from "@auth/core/providers";
 import GitHubProvider from "@auth/core/providers/github";
@@ -8,25 +8,25 @@ export default createRequestHandler({
 	middleware: {
 		beforePages: [
 			async (ctx) => {
+				// Only handle requests to /auth/*
 				if (!ctx.url.pathname.match(/^\/auth(\/|$)/)) {
 					return;
 				}
 
-				// If you want to support URL rewres and method overrides
-				// create a new Request object from the context:
-				//
-				// const request = new Request(ctx.url, {
-				// 	method: ctx.method,
-				// 	headers: ctx.request.headers,
-				// 	body: ctx.request.body,
-				// });
-
 				const {
+					SERVER_SECRET,
 					GITHUB_CLIENT_ID,
 					GITHUB_CLIENT_SECRET,
 					DISCORD_CLIENT_ID,
 					DISCORD_CLIENT_SECRET,
 				} = process.env;
+
+				if (!SERVER_SECRET) {
+					throw new Error(
+						"SERVER_SECRET environment variable is not set. " +
+							"You can generate one with 'npm run gen-secret' and put it in a .env file in the root of the project.",
+					);
+				}
 
 				const providers: Provider[] = [];
 
@@ -64,12 +64,38 @@ export default createRequestHandler({
 					);
 				}
 
-				return Auth(new Request(ctx.request), {
-					trustHost: true,
-					secret: "nA3YFUSfC3XZdiTgAcbZel3gfj4YcCdTez7dShT+waI=",
-					providers,
-				});
+				return Auth(
+					new Request(ctx.url, {
+						method: ctx.method,
+						headers: ctx.request.headers,
+						body: ctx.request.body,
+						// @ts-expect-error: Node's fetch now requires this but types haven't been updated yet
+						duplex: "half",
+					}),
+					{
+						trustHost: true,
+						secret: SERVER_SECRET,
+						providers,
+					},
+				);
 			},
 		],
+	},
+	createPageHooks(requestContext) {
+		return {
+			async extendPageContext(pageContext) {
+				// We'll read the session and CSRF token and put it
+				// in the query client so that it can be used throughout
+				// the app. `requestContext.fetch` doesn't do a network
+				// roundtrip so it's cheap to use.
+				const [session, csrf] = await Promise.all([
+					requestContext.fetch("/auth/session").then((r) => r.json()),
+					requestContext.fetch("/auth/csrf").then((r) => r.json()),
+				]);
+
+				pageContext.queryClient.setQueryData("auth:session", session);
+				pageContext.queryClient.setQueryData("auth:csrf", csrf);
+			},
+		};
 	},
 });

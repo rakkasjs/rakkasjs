@@ -6,6 +6,7 @@
 		"dev": "dotenv rakkas",
 		"build": "rakkas build",
 		"start": "dotenv node dist/server",
+		"gen-secret": "node src/gen-secret.js",
 		"test": "pnpm test:typecheck",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit"
 	},
