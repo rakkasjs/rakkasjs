@@ -3,10 +3,9 @@
 	"type": "module",
 	"name": "@rakkasjs/website",
 	"scripts": {
-		"start": "sirv --port 3000 dist/client",
+		"dev": "rakkas",
 		"build": "rakkas build",
-		"dev": "vite",
-		"--prepack": "pnpm build"
+		"start": "sirv --port 3000 dist/client"
 	},
 	"author": "Fatih Aygün <cyco130@gmail.com>",
 	"license": "MIT",

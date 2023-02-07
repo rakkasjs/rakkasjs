@@ -3,7 +3,7 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
-		"dev": "vite",
+		"dev": "rakkas",
 		"build": "rakkas build",
 		"start": "node dist/server"
 	},
