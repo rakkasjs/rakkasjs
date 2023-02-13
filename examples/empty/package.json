@@ -8,7 +8,7 @@
 		"start": "node dist/server"
 	},
 	"devDependencies": {
-		"rakkasjs": "0.6.15",
+		"rakkasjs": "0.6.16",
 		"vite": "^4.1.1"
 	},
 	"dependencies": {
