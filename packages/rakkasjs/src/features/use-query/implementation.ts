@@ -1,10 +1,20 @@
 /// <reference types="vite/client" />
 
 import type { RequestContext } from "@hattip/compose";
-import { useContext, useEffect, useMemo, useSyncExternalStore } from "react";
-import { PageLocals } from "../../lib";
+import {
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+	useSyncExternalStore,
+} from "react";
+import { PageLocals, useErrorHandler } from "../../lib";
 import { IsomorphicContext } from "../../runtime/isomorphic-context";
 import { createNamedContext } from "../../runtime/named-context";
+import {
+	EventStreamContentType,
+	fetchEventSource,
+} from "@microsoft/fetch-event-source";
 
 export interface CacheItem {
 	value?: any;
@@ -164,6 +174,44 @@ export function useQuery<T>(
 	return result;
 }
 
+export function useEventSource<T>(url: string): EventSourceResult<T> {
+	const [result, setResult] = useState<EventSourceResult<T>>({});
+
+	const errorHandler = useErrorHandler();
+
+	useEffect(() => {
+		const ctrl = new AbortController();
+		fetchEventSource(url, {
+			credentials: "include",
+			signal: ctrl.signal,
+			async onopen(response) {
+				const { ok, status, headers } = response;
+				if (ok && headers.get("content-type") === EventStreamContentType)
+					return;
+				const error = new Error(await response.text());
+				// unretriable error
+				if (status >= 400 && status < 500 && status !== 429)
+					return errorHandler(error);
+				// retriable error
+				throw error;
+			},
+			onclose() {
+				// retriable error
+				throw new Error();
+			},
+			onmessage({ data }) {
+				setResult({
+					data: (0, eval)("(" + data + ")"),
+					dataUpdatedAt: Date.now(),
+				});
+			},
+		}).catch(errorHandler);
+		return () => ctrl.abort();
+	}, [url, errorHandler, setResult]);
+
+	return result;
+}
+
 function useQueryBase<T>(
 	key: string | undefined,
 	fn: QueryFn<T>,
@@ -271,6 +319,13 @@ export interface QueryResult<T> {
 	refetch(): void;
 	/** Is the data being refetched? */
 	isRefetching: boolean;
+	/** Update date of the last returned data */
+	dataUpdatedAt?: number;
+}
+
+export interface EventSourceResult<T> {
+	/** Last data */
+	data?: T;
 	/** Update date of the last returned data */
 	dataUpdatedAt?: number;
 }

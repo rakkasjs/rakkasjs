@@ -4,6 +4,7 @@ import { uneval } from "devalue";
 import { decodeFileNameSafe } from "../../runtime/utils";
 import renderPageRoute from "../pages/middleware";
 import { composableActionData } from "./lib-server";
+import { EventStreamContentType } from "@microsoft/fetch-event-source";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
@@ -68,6 +69,26 @@ const runServerSideServerHooks: ServerHooks = {
 			const fn = module.$runServerSide$[Number(counter)];
 
 			const result = await fn(closureContents, ctx, vars);
+
+			if (
+				ctx.request.headers.get("accept") === EventStreamContentType &&
+				result instanceof ReadableStream
+			) {
+				const { readable, writable } = new TransformStream<any, string>({
+					transform(chunk, controller) {
+						controller.enqueue(`data: ${uneval(chunk)}\n\n`);
+					},
+				});
+				result.pipeTo(writable);
+				return new Response(readable, {
+					status: 200,
+					headers: {
+						"Content-Type": EventStreamContentType,
+						"Cache-Control": "no-cache",
+						Connection: "keep-alive",
+					},
+				});
+			}
 
 			if (isFormMutation) {
 				if (ctx.request.headers.get("accept") === "application/javascript") {

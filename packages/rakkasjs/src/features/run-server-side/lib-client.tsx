@@ -15,6 +15,7 @@ import {
 } from "../use-mutation/lib";
 import { encodeFileNameSafe } from "../../runtime/utils";
 import { useSubmit } from "../client-side-navigation/implementation";
+import { EventSourceResult, useEventSource } from "../use-query/implementation";
 
 function runSSQImpl(
 	_: RequestContext,
@@ -43,6 +44,26 @@ function useSSQImpl(
 		() => sendRequest(moduleId, counter, stringified, usePostMethod),
 		useQueryOptions,
 	);
+}
+
+function useSSEImpl(
+	desc: [moduleId: string, counter: number, closure: any[]],
+): EventSourceResult<any> {
+	const [moduleId, counter, closure] = desc;
+
+	const stringified = closure.map((x) => stringify(x));
+	let closurePath = stringified.map(encodeFileNameSafe).join("/");
+	if (closurePath) closurePath = "/" + closurePath;
+
+	const url =
+		`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
+		encodeURIComponent(moduleId) +
+		"/" +
+		counter +
+		closurePath +
+		"/d.js";
+
+	return useEventSource(url);
 }
 
 function runSSMImpl(
@@ -196,9 +217,14 @@ export const useFormMutation: <T>(
 	options?: UseMutationOptions<T, void>,
 ) => UseFormMutationResult<T> = useFormMutationImpl as any;
 
+export const useServerSentEvents: <T>(
+	fn: ServerSideFunction<ReadableStream<T>>,
+) => EventSourceResult<T> = useSSEImpl as any;
+
 export {
 	runServerSideQuery as runSSQ,
 	useServerSideQuery as useSSQ,
 	runServerSideMutation as runSSM,
 	useServerSideMutation as useSSM,
+	useServerSentEvents as useSSE,
 };

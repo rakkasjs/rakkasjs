@@ -11,6 +11,7 @@ import { uneval } from "devalue";
 import { RequestContext } from "@hattip/compose";
 import { UseMutationOptions, UseMutationResult } from "../use-mutation/lib";
 import { encodeFileNameSafe } from "../../runtime/utils";
+import { EventSourceResult } from "../use-query/implementation";
 
 function runSSQImpl(
 	ctx: RequestContext,
@@ -46,6 +47,11 @@ function runSSQImpl(
 		}
 		return result;
 	});
+}
+
+function useSSEImpl(): EventSourceResult<any> {
+	// No op
+	return {};
 }
 
 function useSSQImpl(
@@ -150,9 +156,14 @@ export const runServerSideQuery: <T>(
 	fn: ServerSideFunction<T>,
 ) => Promise<T> = runSSQImpl as any;
 
+export const useServerSentEvents: <T>(
+	fn: ServerSideFunction<AsyncIterable<T> | ReadableStream<T>>,
+) => EventSourceResult<T> = useSSEImpl as any;
+
 export {
 	runServerSideQuery as runSSQ,
 	useServerSideQuery as useSSQ,
 	runServerSideMutation as runSSM,
 	useServerSideMutation as useSSM,
+	useServerSentEvents as useSSE,
 };

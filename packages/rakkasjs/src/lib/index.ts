@@ -37,6 +37,8 @@ export * from "../features/run-server-side/lib-common";
 export type {
 	useSSQ,
 	useServerSideQuery,
+	useSSE,
+	useServerSentEvents,
 	runSSM,
 	runServerSideMutation,
 	runServerSideQuery,

@@ -34,6 +34,7 @@ const sections: Array<[section: string, slugs: string[]]> = [
 			// Slugs
 			"use-query",
 			"use-server-side-query",
+			"use-server-sent-events",
 			"refetching",
 			"loading-state",
 			"error-handling",

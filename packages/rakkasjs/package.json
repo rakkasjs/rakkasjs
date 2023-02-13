@@ -83,6 +83,7 @@
 		"@hattip/compose": "^0.0.27",
 		"@hattip/core": "^0.0.27",
 		"@hattip/polyfills": "^0.0.27",
+		"@microsoft/fetch-event-source": "^2.0.1",
 		"@types/node": "^18.11.19",
 		"@types/react": "^18.0.27",
 		"@types/react-dom": "^18.0.10",
