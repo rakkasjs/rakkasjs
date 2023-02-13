@@ -493,7 +493,7 @@ export function useSubmit(
 		mutation.mutate(e.currentTarget);
 	}
 
-	mutation.data = mutation.data ?? pageContext.actionData;
+	mutation.data = mutation.data?.data ?? pageContext.actionData;
 
 	const { data, error, isError, isIdle, isLoading, isSuccess, status } =
 		mutation;
