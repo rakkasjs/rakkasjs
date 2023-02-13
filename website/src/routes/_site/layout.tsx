@@ -37,7 +37,7 @@ const MainLayout: Layout = ({ children }) => (
 
 		<footer className={css.footer}>
 			<p>
-				Software and documentation: Copyright 2021 Fatih Aygün. MIT License.
+				Software and documentation: Copyright {new Date().getFullYear()} Fatih Aygün. MIT License.
 			</p>
 
 			<p>
