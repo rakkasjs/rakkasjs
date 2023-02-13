@@ -473,13 +473,19 @@ export function useSubmit(
 			const text = await response.text();
 			const value: ActionResult<any> = (0, eval)("(" + text + ")");
 
-			if ("redirect" in value) {
-				await navigate(value.redirect);
-			} else {
-				await navigate(current, { replace: true, actionData: value.data });
-			}
+			return value;
 		},
-		options,
+		{
+			...options,
+			onSuccess(value) {
+				if ("redirect" in value) {
+					navigate(value.redirect);
+				} else {
+					options?.onSuccess?.(value.data);
+					navigate(current, { replace: true, actionData: value.data });
+				}
+			},
+		},
 	);
 
 	function submitHandler(e: FormEvent<HTMLFormElement>) {
