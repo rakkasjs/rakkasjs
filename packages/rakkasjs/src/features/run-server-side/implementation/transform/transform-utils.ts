@@ -4,8 +4,10 @@ import * as t from "@babel/types";
 const RUN_SERVER_SIDE_FUNCTION_NAMES = [
 	"useServerSideQuery",
 	"useServerSideMutation",
+	"useServerSentEvents",
 	"useSSQ",
 	"useSSM",
+	"useSSE",
 	"runServerSideQuery",
 	"runServerSideMutation",
 	"runSSQ",

@@ -3,6 +3,8 @@ export * from ".";
 export {
 	useSSQ,
 	useServerSideQuery,
+	useSSE,
+	useServerSentEvents,
 	runSSQ,
 	runServerSideQuery,
 	runSSM,

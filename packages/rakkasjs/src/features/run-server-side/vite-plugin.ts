@@ -68,7 +68,7 @@ export default function runServerSide(): PluginOption[] {
 				if (
 					id.startsWith(resolvedConfig.root) &&
 					code.match(
-						/\buseServerSideQuery|useServerSideMutation|useSSQ|useSSM|runServerSideQuery|runServerSideMutation|runSSQ|runSSM|useFormMutation\b/,
+						/\buseServerSideQuery|useServerSentEvents|useServerSideMutation|useSSQ|useSSM|useSSE|runServerSideQuery|runServerSideMutation|runSSQ|runSSM|useFormMutation\b/,
 					) &&
 					code.includes(`"rakkasjs"`) &&
 					!code.includes(`'rakkasjs'`)
