@@ -76,6 +76,7 @@ export default defineConfig([
 			"react-error-boundary",
 			"@brillout/json-serializer/parse",
 			"@brillout/json-serializer/stringify",
+			"@microsoft/fetch-event-source",
 		],
 		dts: {
 			entry: "./src/lib/index.ts",
@@ -108,6 +109,7 @@ export default defineConfig([
 		noExternal: [
 			"@brillout/json-serializer/parse",
 			"@brillout/json-serializer/stringify",
+			"@microsoft/fetch-event-source",
 		],
 		plugins: [namedExports()],
 	},

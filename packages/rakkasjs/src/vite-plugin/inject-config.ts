@@ -87,12 +87,7 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 				appType: "custom",
 
 				optimizeDeps: {
-					include: [
-						"react",
-						"react-dom",
-						"react-dom/client",
-						"@microsoft/fetch-event-source",
-					],
+					include: ["react", "react-dom", "react-dom/client"],
 					// TODO: Remove this when https://github.com/vitejs/vite/pull/8917 is merged
 					exclude: [
 						"rakkasjs",

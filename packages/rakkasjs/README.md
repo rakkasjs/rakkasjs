@@ -87,6 +87,7 @@ yarn create rakkas-app my-rakkas-app
   - [`react-helmet-async`](https://github.com/staylor/react-helmet-async) by Scott Taylor (not affiliated), used under [Apache 2.0 license](./react-helmet-async-license.txt).
   - [`@brillout/json-serializer`](https://github.com/brillout/json-serializer) by Romuald Brillout (not affiliated), used under [MIT License](./json-s-license.md).
   - [`react-error-boundary`](https://github.com/bvaughn/react-error-boundary) by Brian Vaughn (not affiliated), used under [MIT License](./react-error-boundary-license.txt)
+  - [`@microsoft/fetch-event-source`](https://github.com/Azure/fetch-event-source) by Microsoft Corporation (not affiliated), used under [MIT License](./microsoft-fetch-event-source-license.md)
 
 ## Version history
 
