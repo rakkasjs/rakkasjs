@@ -9,8 +9,6 @@ export default function UseSsePage() {
 		});
 	});
 
-	console.log(out);
-
 	const { data, dataUpdatedAt } = out;
 
 	return (
