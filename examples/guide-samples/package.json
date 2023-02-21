@@ -11,7 +11,7 @@
 	"devDependencies": {
 		"@types/react": "^18.0.28",
 		"@types/react-dom": "^18.0.11",
-		"rakkasjs": "0.6.17",
+		"rakkasjs": "0.6.18",
 		"typescript": "^4.9.5",
 		"vite": "^4.1.3",
 		"vite-tsconfig-paths": "^4.0.5"
