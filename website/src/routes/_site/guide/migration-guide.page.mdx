@@ -2,6 +2,13 @@
 title: Migration guide
 ---
 
+## 0.6 to 0.7
+
+- `react-helmet-async` is gone:
+  - `Head` can now only be used for `<title>` and `<meta>` tags with a Remix-like API.
+  - `head` property of `preload`'s return value should now be an object, not `ReactNode`.
+  - You can still use `emitToDocumentHead` to inject arbitrary HTML into the document head.
+
 ## 0.5 to 0.6
 
 > This is the largest update so far with a lot of breaking changes. The whole data fetching system has been redesigned to use React Suspense and streaming SSR. We apologize for the inconvenience but we feel the changes are justified because they take the developer experience to a whole new level.

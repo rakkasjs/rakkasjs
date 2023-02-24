@@ -5,6 +5,7 @@ import {
 	RedirectProps,
 	ResponseHeadersProps,
 	RequestContext,
+	HeadProps,
 } from "../lib";
 
 export type PageImporter = () => Promise<PageModule>;
@@ -75,7 +76,7 @@ export interface LayoutProps<
  * 			meta: {
  * 				someKey: "Some metadata to be passed to the pages and layouts",
  * 			},
- * 			head: <Head title="My Page Title" />,
+ * 			head: { title: "My Page Title", description: "My page description" },
  * 		};
  * 	};
  * ```
@@ -120,7 +121,7 @@ export interface PreloadResult<M = Record<string, unknown>> {
 	/** Metadata passed to page and layout components. */
 	meta?: Partial<M>;
 	/** Head tags rendered for the page. Use the <Head /> component. */
-	head?: ReactNode;
+	head?: HeadProps;
 	/** Redirection */
 	redirect?: RedirectProps;
 }

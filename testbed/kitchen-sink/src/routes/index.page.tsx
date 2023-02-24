@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Head, Page } from "rakkasjs";
+import { Page } from "rakkasjs";
 
 const HomePage: Page<never, { key: number }> = (props) => {
 	const [count, setCount] = useState(0);
@@ -20,7 +20,7 @@ const HomePage: Page<never, { key: number }> = (props) => {
 HomePage.preload = async () => {
 	return {
 		meta: { key: 2 },
-		head: <Head title="The page title" />,
+		head: { title: "The page title" },
 	};
 };
 

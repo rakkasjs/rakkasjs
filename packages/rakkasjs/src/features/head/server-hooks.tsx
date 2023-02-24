@@ -1,29 +1,50 @@
 import React from "react";
 import type { ServerHooks } from "../../runtime/hattip-handler";
-import { HelmetProvider, FilledContext } from "react-helmet-async";
+import { escapeHtml } from "../../runtime/utils";
+import { defaultHeadTags, HeadContext } from "./implementation";
+import { HeadProps } from "./lib";
 
 const headServerHooks: ServerHooks = {
 	createPageHooks() {
-		const helmetContext = {};
+		const tags: HeadProps = { ...defaultHeadTags };
 
 		return {
 			wrapApp: (app) => {
-				return <HelmetProvider context={helmetContext}>{app}</HelmetProvider>;
+				return <HeadContext.Provider value={tags}>{app}</HeadContext.Provider>;
 			},
 
 			emitToDocumentHead() {
-				const { helmet } = helmetContext as FilledContext;
+				let result = "";
 
-				return (
-					helmet.title.toString() +
-					helmet.priority.toString() +
-					helmet.meta.toString() +
-					helmet.base.toString() +
-					helmet.link.toString() +
-					helmet.style.toString() +
-					helmet.script.toString() +
-					helmet.noscript.toString()
-				);
+				for (const [name, attributes] of Object.entries(tags)) {
+					if (attributes === null) {
+						continue;
+					}
+
+					if (typeof attributes === "string") {
+						if (name === "charset") {
+							result += `<meta charset="${escapeHtml(attributes)}">`;
+						} else if (name === "title") {
+							result += `<title>${escapeHtml(attributes)}</title>`;
+						} else if (name.startsWith("og:")) {
+							result += `<meta property="${escapeHtml(
+								name,
+							)}" content="${escapeHtml(attributes)}">`;
+						} else {
+							result += `<meta name="${escapeHtml(name)}" content="${escapeHtml(
+								attributes,
+							)}">`;
+						}
+					} else {
+						result = "<meta";
+						for (const [attr, value] of Object.entries(attributes)) {
+							result += ` ${attr}="${escapeHtml(value)}"`;
+						}
+						result += ` data-rh="${escapeHtml(name)}">`;
+					}
+				}
+
+				return result;
 			},
 		};
 	},

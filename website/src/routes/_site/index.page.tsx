@@ -9,9 +9,7 @@ import { BlogPostHeader } from "lib/BlogPostHeader";
 function HomePage() {
 	return (
 		<main className={css.main}>
-			<Head>
-				<title>Rakkas</title>
-			</Head>
+			<Head title="Rakkas" />
 
 			<div className={css.banner}>
 				<div className={css.logo}>

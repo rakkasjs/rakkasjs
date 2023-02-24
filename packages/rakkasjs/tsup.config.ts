@@ -72,7 +72,6 @@ export default defineConfig([
 			"@vavite/expose-vite-dev-server/vite-dev-server",
 		],
 		noExternal: [
-			"react-helmet-async",
 			"react-error-boundary",
 			"@brillout/json-serializer/parse",
 			"@brillout/json-serializer/stringify",

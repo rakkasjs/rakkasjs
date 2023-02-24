@@ -18,9 +18,9 @@ Consider a scenario where both a page and its parent layout need to fetch some d
 
 ## Head tags
 
-When using streaming SSR, `Head` components may be discovered _after_ the document head has been sent. To avoid SEO problems, Rakkas will hold the stream until the page is fully rendered when it detects that the [request is coming from a bot](dynamic-rendering). But in some cases, you may want correct status, headers, and head tags to be sent even to browsers. `preload` offers a way to do this like in the above example.
+When using streaming SSR, `Head` components may be discovered _after_ the document head has been sent. To avoid SEO problems, Rakkas will hold the stream until the page is fully rendered when it detects that the [request is coming from a bot](dynamic-rendering). But in some cases, you may want the correct status, headers, and head tags to be sent even to browsers. `preload` offers a way to do this like in the above example.
 
-Another important thing to consider is out-of-order hydration. React may hydrate your components in a different order than you expect: If it detects the user is trying to interact with a component, its hydration will be prioritized. This can cause `Head` tags to be rendered out-of-order, causing back-and-forth switching of the document title when you have more than one `Head` component in the tree. Only using `preload` for rendering `Head` tags will prevent this potential issue.
+Another important thing to consider is out-of-order hydration. React may hydrate your components in a different order than you expect: If it detects the user is trying to interact with a component, its hydration will be prioritized. This can cause `Head` tags to be rendered out-of-order, causing back-and-forth switching of the document title when you have more than one `Head` component in the tree. Only using `preload` for rendering head tags will prevent this potential issue.
 
 ## Redirection
 
