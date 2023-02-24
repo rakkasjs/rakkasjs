@@ -20,10 +20,23 @@ A very simple Rakkas page would look like this:
 
 ## `Head` component
 
-Rakkas provides a `Head` component for managing document head tags. It is simply a repackaging of the [`react-helmet-async`](https://github.com/staylor/react-helmet-async) package.
+Rakkas provides a `Head` component for managing the title and meta tags in the document head:
+
+```jsx
+<Head
+	charset="utf-8" // <meta charset="utf-8" />
+	title="About" // <title>About</title>
+	description="About page" // <meta name="description" content="About page" />
+	og:image="https://example.com/image.jpg" // <meta property="og:image" content="https://example.com/image.jpg" />
+	refresh={{ "http-equiv": "refresh", content: "5" }} // <meta http-equiv="refresh" content="5" />
+
+>
+```
+
+The format is inspired by [Remix `meta` function](https://remix.run/docs/en/v1/route/meta).
 
 ## Fast refresh
 
-Rakkas supports Fast Refresh which allows you to edit your components and get immediate feedback for your changes without having to reload the page. Function components will be updated without losing their state (class components will lose their state). If you open one the examples above in CodeSandbox and edit a file, the changes will be instantly reflected in the preview.
+Rakkas supports Fast Refresh which allows you to edit your components and get immediate feedback for your changes without having to reload the page. Function components will be updated without losing their state (class components will lose their state). If you open one of the examples above in CodeSandbox and edit a file, the changes will be instantly reflected in the preview.
 
 Fast Refresh only works on files that only export React components. Exporting any other value will fall back to a full reload. Exporting types is OK.

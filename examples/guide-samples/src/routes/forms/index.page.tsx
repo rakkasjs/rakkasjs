@@ -1,4 +1,4 @@
-import { ActionContext, ActionResult, Head, PageProps } from "rakkasjs";
+import { ActionHandler, Head, PageProps } from "rakkasjs";
 
 export default function FormsPage({ actionData }: PageProps) {
 	return (
@@ -36,7 +36,7 @@ export default function FormsPage({ actionData }: PageProps) {
 	);
 }
 
-export async function action(ctx: ActionContext): Promise<ActionResult> {
+export const action: ActionHandler = async (ctx) => {
 	const formData = await ctx.requestContext.request.formData();
 
 	if (
@@ -56,4 +56,4 @@ export async function action(ctx: ActionContext): Promise<ActionResult> {
 			password: formData.get("password"),
 		},
 	};
-}
+};

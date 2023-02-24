@@ -10,10 +10,7 @@ import { ExternalIcon } from "lib/ExternalIcon";
 
 const MainLayout: Layout = ({ children }) => (
 	<>
-		<Head>
-			<html lang="en" />
-			<title>Rakkas</title>
-		</Head>
+		<Head title="Rakkas" />
 
 		<Header />
 

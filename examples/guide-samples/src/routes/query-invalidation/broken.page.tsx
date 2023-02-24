@@ -1,5 +1,6 @@
 import {
 	ActionContext,
+	ActionHandler,
 	ActionResult,
 	Head,
 	PageProps,
@@ -40,7 +41,7 @@ export default function FormsPage({ actionData }: PageProps) {
 	);
 }
 
-export async function action(ctx: ActionContext): Promise<ActionResult> {
+export const action: ActionHandler = async (ctx) => {
 	const formData = await ctx.requestContext.request.formData();
 
 	const userName = formData.get("userName");
@@ -58,4 +59,4 @@ export async function action(ctx: ActionContext): Promise<ActionResult> {
 	return {
 		data: { success: true },
 	};
-}
+};

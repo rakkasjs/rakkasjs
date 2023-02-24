@@ -1,4 +1,4 @@
-import { Head, Page, useQuery } from "rakkasjs";
+import { Page, useQuery } from "rakkasjs";
 
 const PreloadPage: Page = () => {
 	const preloaded = useQuery("preload", () => {
@@ -26,10 +26,10 @@ PreloadPage.preload = (ctx) => {
 	}
 
 	return {
-		// Set head tags. Unlike a Head component rendered in a page,
+		// Set head meta tags. Unlike a Head component rendered in a page,
 		// it is guaranteed to be rendered on the server when rendered in the
 		// preload function.
-		head: <Head title="Preload example" />,
+		head: { title: "Preload example" },
 	};
 };
 

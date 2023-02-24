@@ -1,45 +1,86 @@
-import React, { ReactNode } from "react";
-import { Helmet } from "react-helmet-async";
+/* eslint-disable @typescript-eslint/ban-types */
+import { ReactElement, useContext, useEffect } from "react";
+import { HeadContext, scheduleHeadUpdate } from "./implementation";
 
-export interface HeadProps {
-	async?: boolean;
-	base?: any;
-	bodyAttributes?: JSX.IntrinsicElements["body"] & {
-		[key: string]: string | number | boolean | null | undefined;
-	};
-	children?: ReactNode;
-	defaultTitle?: string;
-	defer?: boolean;
-	encodeSpecialCharacters?: boolean;
-	htmlAttributes?: JSX.IntrinsicElements["html"] & {
-		[key: string]: string | number | boolean | null | undefined;
-	};
-	onChangeClientState?: (
-		newState: any,
-		addedTags: HeadTags,
-		removedTags: HeadTags,
-	) => void;
-	link?: JSX.IntrinsicElements["link"][];
-	meta?: JSX.IntrinsicElements["meta"][];
-	noscript?: Array<any>;
-	script?: Array<any>;
-	style?: Array<any>;
+export type HeadProps = Record<
+	string,
+	string | Record<string, string> | null
+> & {
+	// Special cases
+	charset?: string;
 	title?: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	titleAttributes?: Object;
-	titleTemplate?: string;
-	prioritizeSeoTags?: boolean;
-}
 
-export interface HeadTags {
-	baseTag: Array<any>;
-	linkTags: Array<HTMLLinkElement>;
-	metaTags: Array<HTMLMetaElement>;
-	noscriptTags: Array<any>;
-	scriptTags: Array<HTMLScriptElement>;
-	styleTags: Array<HTMLStyleElement>;
-}
+	// Common head tags
+	description?: string | null;
+	author?: string | null;
+	keywords?: string | null;
+	"application-name"?: string | null;
+	generator?: string | null;
+	referrer?:
+		| "no-referrer"
+		| "origin"
+		| "no-referrer-when-downgrade"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-URL"
+		| null;
+	"theme-color"?: string | null;
+	"color-scheme"?:
+		| "normal"
+		| "light"
+		| "dark"
+		| "light dark"
+		| "dark light"
+		| "only light"
+		| null;
+	creator?: string | null;
+	robots?: string | null;
+	googlebot?: string | null;
+	viewport?: string | null;
+	publisher?: string | null;
 
-export function Head(props: HeadProps) {
-	return <Helmet {...props} />;
+	// Common Open Graph tags
+	"og:type"?: "website" | "article" | "book" | "profile" | null | (string & {});
+	"og:title"?: string | null;
+	"og:url"?: string | null;
+	"og:description"?: string | null;
+	"og:image"?: string | null;
+
+	// Common Twitter tags
+	"twitter:card"?: "summary" | "summary_large_image" | "app" | "player" | null;
+	"twitter:site"?: string | null;
+	"twitter:title"?: string | null;
+	"twitter:description"?: string | null;
+	"twitter:image"?: string | null;
+};
+
+export function Head(props: HeadProps): ReactElement {
+	const tags = useContext(HeadContext);
+
+	if (import.meta.env.SSR) {
+		Object.assign(tags, props);
+	} else {
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		useEffect(() => {
+			const old: HeadProps = {};
+			for (const [name, value] of Object.entries(props)) {
+				if (name in tags) {
+					old[name] = tags[name];
+				}
+				tags[name] = value;
+			}
+
+			scheduleHeadUpdate();
+			return () => {
+				for (const [name, value] of Object.entries(old)) {
+					tags[name] = value;
+				}
+				scheduleHeadUpdate();
+			};
+		});
+	}
+
+	return null as any;
 }

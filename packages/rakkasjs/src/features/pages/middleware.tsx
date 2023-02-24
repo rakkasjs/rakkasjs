@@ -27,7 +27,7 @@ import {
 	PrerenderResult,
 	ServerSidePageContext,
 } from "../../runtime/page-types";
-import { LookupHookResult } from "../../lib";
+import { Head, LookupHookResult } from "../../lib";
 import { uneval } from "devalue";
 import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
 import { PageRequestHooks } from "../../runtime/hattip-handler";
@@ -330,7 +330,7 @@ export default async function renderPageRoute(
 			return (
 				(result?.head || result?.redirect) && (
 					<Fragment key={i}>
-						{result?.head}
+						{<Head {...result?.head} />}
 						{result?.redirect && <Redirect {...result?.redirect} />}
 					</Fragment>
 				)
@@ -696,11 +696,20 @@ function renderHead(
 	pageHooks: Array<PageRequestHooks | undefined> = [],
 ) {
 	// TODO: Customize HTML document
-	let result =
-		`<!DOCTYPE html><html><head>` +
+	let result = `<!DOCTYPE html><html><head>`;
+
+	for (const hooks of pageHooks) {
+		if (hooks?.emitToDocumentHead) {
+			result += hooks.emitToDocumentHead();
+		}
+	}
+
+	if (actionErrorIndex >= 0 && renderMode !== "server") {
+		result += `<script>$RAKKAS_ACTION_ERROR_INDEX=${actionErrorIndex}</script>`;
+	}
+
+	result +=
 		prefetchOutput +
-		`<meta charset="UTF-8" />` +
-		`<meta name="viewport" content="width=device-width, initial-scale=1.0" />` +
 		(renderMode === "hydrate"
 			? `<script>$RAKKAS_HYDRATE="hydrate"</script>`
 			: "") +
@@ -708,16 +717,6 @@ function renderHead(
 		(actionData === undefined && renderMode !== "server"
 			? ""
 			: `<script>$RAKKAS_ACTION_DATA=${uneval(actionData)}</script>`);
-
-	if (actionErrorIndex >= 0 && renderMode !== "server") {
-		result += `<script>$RAKKAS_ACTION_ERROR_INDEX=${actionErrorIndex}</script>`;
-	}
-
-	for (const hooks of pageHooks) {
-		if (hooks?.emitToDocumentHead) {
-			result += hooks.emitToDocumentHead();
-		}
-	}
 
 	if (import.meta.env.DEV) {
 		result +=

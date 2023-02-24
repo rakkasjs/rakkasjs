@@ -9,6 +9,7 @@ import { version } from "../../package.json";
 import { load } from "cheerio";
 import { pathToFileURL } from "url";
 import { PrerenderResult } from "../runtime/page-types";
+import { escapeHtml } from "../runtime/utils";
 
 export interface RenderOptions {
 	root?: string;
@@ -256,13 +257,4 @@ export async function doPrerender(
 
 function plural(n: number, s: string) {
 	return n + " " + (n === 1 ? s : s + "s");
-}
-
-function escapeHtml(text: string): string {
-	return text
-		.replace(/&/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&#x27;");
 }

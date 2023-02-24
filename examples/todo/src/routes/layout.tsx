@@ -7,9 +7,11 @@ import css from "./layout.module.css";
 
 const MainLayout: Layout = ({ children }) => (
 	<>
-		{/* Rakkas relies on react-helmet-async for managing the document head */}
-		{/* See their documentation: https://github.com/staylor/react-helmet-async#readme */}
-		<Head title="Rakkas Demo App" />
+		{/* Set title and meta tags */}
+		<Head
+			title="Rakkas Demo App"
+			description="A demo app for Rakkas, a React framework for server-rendered apps."
+		/>
 
 		<header className={css.header}>
 			{/* <Link /> is like <a /> but it provides client-side navigation without full page reload. */}

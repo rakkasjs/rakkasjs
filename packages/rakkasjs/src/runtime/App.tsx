@@ -19,7 +19,7 @@ import {
 } from "./page-types";
 import prodRoutes from "virtual:rakkasjs:client-page-routes";
 import { Default404Page } from "../features/pages/Default404Page";
-import { LookupHookResult, PageContext, Redirect } from "../lib";
+import { Head, LookupHookResult, PageContext, Redirect } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 import { createNamedContext } from "./named-context";
 
@@ -324,7 +324,7 @@ export async function loadRoute(
 				(result, i) =>
 					(result?.head || result?.redirect) && (
 						<Fragment key={i}>
-							{result?.head}
+							{<Head {...result?.head} />}
 							{result?.redirect && <Redirect {...result?.redirect} />}
 						</Fragment>
 					),
