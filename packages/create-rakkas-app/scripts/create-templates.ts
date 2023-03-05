@@ -85,7 +85,14 @@ async function main() {
 	contents = fs.readFileSync(dest + "/vite.config.js", "utf8");
 	contents = contents
 		.replace(`tsconfigPaths(), `, "")
-		.replace(/import tsconfigPaths from "vite-tsconfig-paths";\r?\n/, "");
+		.replace(
+			/import tsconfigPaths from "vite-tsconfig-paths";/,
+			`import path from "node:path";\n`,
+		)
+		.replace(
+			"plugins",
+			`resolve: { alias: { src: path.resolve(__dirname, "src") } },\nplugins`,
+		);
 	fs.writeFileSync(dest + "/vite.config.js", contents);
 
 	const ESLINT_CONFIG = `require("@rakkasjs/eslint-config-js/patch");
@@ -97,6 +104,17 @@ async function main() {
 
 	fs.writeFileSync(dest + "/.eslintrc.cjs", ESLINT_CONFIG, "utf8");
 	fs.writeFileSync(dest + "/.prettierrc", "{}", "utf8");
+
+	const JSCONFIG = `{
+			"compilerOptions": {
+				"paths": {
+					"src/*": ["./src/*"]
+				}
+			}
+		}
+	`;
+
+	fs.writeFileSync(dest + "/jsconfig.json", JSCONFIG, "utf8");
 
 	await run(`prettier ${dest}/.. --write`);
 }
