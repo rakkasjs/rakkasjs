@@ -51,7 +51,7 @@ For example, to simulate a D1 database with the binding `CLOUDFLARE_DB` during d
 // src/entry-node.ts
 import { createMiddleware } from "rakkasjs/node-adapter";
 import hattipHandler from "./entry-hattip";
-import { BetaDatabase } from "@miniflare/d1";
+import { D1Database, D1DatabaseAPI } from "@miniflare/d1";
 import { createSQLiteDB } from "@miniflare/shared";
 import fs from "fs";
 
@@ -59,7 +59,7 @@ fs.mkdirSync("./data", { recursive: true });
 
 const dbPromise = Promise.resolve()
 	.then(() => createSQLiteDB("./data/data.db"))
-	.then((db) => new BetaDatabase(db));
+	.then((sqliteDb) => new D1Database(new D1DatabaseAPI(sqliteDb)));
 
 export default createMiddleware(async (context) => {
 	const db = await dbPromise;
