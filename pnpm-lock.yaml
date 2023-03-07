@@ -116,7 +116,7 @@ importers:
 
   examples/graphql:
     specifiers:
-      "@hattip/graphql": ^0.0.30
+      "@hattip/graphql": 0.0.30
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
       graphql: ^16.6.0
@@ -139,7 +139,7 @@ importers:
 
   examples/guide-samples:
     specifiers:
-      "@hattip/response": ^0.0.30
+      "@hattip/response": 0.0.30
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
       rakkasjs: 0.7.0-next.1
@@ -208,11 +208,44 @@ importers:
       typescript: 4.9.5
       vite: 4.1.4
 
+  examples/server-sent-events:
+    specifiers:
+      "@hattip/cookie": 0.0.30
+      "@hattip/response": 0.0.30
+      "@hattip/session": 0.0.30
+      "@rakkasjs/eslint-config": 0.7.0-next.1
+      "@types/react": ^18.0.28
+      "@types/react-dom": ^18.0.11
+      eslint: ^8.35.0
+      prettier: ^2.8.4
+      rakkasjs: 0.7.0-next.1
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      typescript: ^4.9.5
+      vite: ^4.1.4
+      vite-tsconfig-paths: ^4.0.5
+    dependencies:
+      "@hattip/cookie": 0.0.30
+      "@hattip/response": 0.0.30
+      "@hattip/session": 0.0.30
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    devDependencies:
+      "@rakkasjs/eslint-config": link:../../packages/eslint-config
+      "@types/react": 18.0.28
+      "@types/react-dom": 18.0.11
+      eslint: 8.35.0
+      prettier: 2.8.4
+      rakkasjs: link:../../packages/rakkasjs
+      typescript: 4.9.5
+      vite: 4.1.4
+      vite-tsconfig-paths: 4.0.5_typescript@4.9.5
+
   examples/session:
     specifiers:
-      "@hattip/cookie": ^0.0.30
-      "@hattip/polyfills": ^0.0.30
-      "@hattip/session": ^0.0.30
+      "@hattip/cookie": 0.0.30
+      "@hattip/polyfills": 0.0.30
+      "@hattip/session": 0.0.30
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
       dotenv-cli: ^7.0.0
@@ -423,14 +456,14 @@ importers:
       "@babel/types": ^7.21.2
       "@brillout/json-serializer": ^0.5.3
       "@cyco130/eslint-config": ^3.0.1
-      "@hattip/adapter-node": ^0.0.30
-      "@hattip/bundler-cloudflare-workers": ^0.0.30
-      "@hattip/bundler-deno": ^0.0.30
-      "@hattip/bundler-netlify": ^0.0.30
-      "@hattip/bundler-vercel": ^0.0.30
-      "@hattip/compose": ^0.0.30
-      "@hattip/core": ^0.0.30
-      "@hattip/polyfills": ^0.0.30
+      "@hattip/adapter-node": 0.0.30
+      "@hattip/bundler-cloudflare-workers": 0.0.30
+      "@hattip/bundler-deno": 0.0.30
+      "@hattip/bundler-netlify": 0.0.30
+      "@hattip/bundler-vercel": 0.0.30
+      "@hattip/compose": 0.0.30
+      "@hattip/core": 0.0.30
+      "@hattip/polyfills": 0.0.30
       "@microsoft/fetch-event-source": ^2.0.1
       "@types/babel__core": ^7.20.0
       "@types/micromatch": ^4.0.2
@@ -505,13 +538,13 @@ importers:
   testbed/kitchen-sink:
     specifiers:
       "@cyco130/eslint-config": ^3.0.1
-      "@hattip/adapter-bun": ^0.0.30
-      "@hattip/adapter-cloudflare-workers": ^0.0.30
-      "@hattip/adapter-deno": ^0.0.30
-      "@hattip/adapter-lagon": ^0.0.30
-      "@hattip/adapter-netlify-edge": ^0.0.30
-      "@hattip/adapter-netlify-functions": ^0.0.30
-      "@hattip/adapter-vercel-edge": ^0.0.30
+      "@hattip/adapter-bun": 0.0.30
+      "@hattip/adapter-cloudflare-workers": 0.0.30
+      "@hattip/adapter-deno": 0.0.30
+      "@hattip/adapter-lagon": 0.0.30
+      "@hattip/adapter-netlify-edge": 0.0.30
+      "@hattip/adapter-netlify-functions": 0.0.30
+      "@hattip/adapter-vercel-edge": 0.0.30
       "@types/ps-tree": ^1.1.2
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
@@ -4499,7 +4532,7 @@ packages:
     engines: { node: ">= 8" }
     dependencies:
       "@nodelib/fs.scandir": 2.1.5
-      fastq: 1.13.0
+      fastq: 1.15.0
 
   /@octokit/auth-token/3.0.3:
     resolution:
@@ -11001,14 +11034,6 @@ packages:
       - supports-color
     dev: false
 
-  /fastq/1.13.0:
-    resolution:
-      {
-        integrity: sha512-YpkpUnK8od0o1hmeSc7UUs/eB/vIPWJYjKck2QKIzAf71Vm1AAQ3EbuZB3g2JIy+pg+ERD0vqI79KyZiB2e2Nw==,
-      }
-    dependencies:
-      reusify: 1.0.4
-
   /fastq/1.15.0:
     resolution:
       {
@@ -11016,7 +11041,6 @@ packages:
       }
     dependencies:
       reusify: 1.0.4
-    dev: false
 
   /fault/2.0.1:
     resolution:
