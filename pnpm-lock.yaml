@@ -30,7 +30,7 @@ importers:
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
       dotenv-cli: ^7.0.0
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -57,7 +57,7 @@ importers:
       "@emotion/styled": ^11.10.6
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -78,7 +78,7 @@ importers:
 
   examples/empty:
     specifiers:
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       vite: ^4.1.4
@@ -95,7 +95,7 @@ importers:
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
       express: ^4.18.2
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -120,7 +120,7 @@ importers:
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
       graphql: ^16.6.0
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -142,7 +142,7 @@ importers:
       "@hattip/response": 0.0.30
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -162,12 +162,12 @@ importers:
 
   examples/localized-urls:
     specifiers:
-      "@rakkasjs/eslint-config": 0.7.0-next.1
+      "@rakkasjs/eslint-config": 0.7.0-next.2
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
       eslint: ^8.35.0
       prettier: ^2.8.4
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -192,7 +192,7 @@ importers:
       "@cyco130/vite-plugin-mdx": ^0.0.3
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -210,24 +210,20 @@ importers:
 
   examples/server-sent-events:
     specifiers:
-      "@hattip/cookie": 0.0.30
       "@hattip/response": 0.0.30
-      "@hattip/session": 0.0.30
-      "@rakkasjs/eslint-config": 0.7.0-next.1
+      "@rakkasjs/eslint-config": 0.7.0-next.2
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
       eslint: ^8.35.0
       prettier: ^2.8.4
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
       vite: ^4.1.4
       vite-tsconfig-paths: ^4.0.5
     dependencies:
-      "@hattip/cookie": 0.0.30
       "@hattip/response": 0.0.30
-      "@hattip/session": 0.0.30
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -249,7 +245,7 @@ importers:
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
       dotenv-cli: ^7.0.0
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -276,7 +272,7 @@ importers:
       "@types/react-dom": ^18.0.11
       "@types/styled-components": ^5.1.26
       babel-plugin-styled-components: ^2.0.7
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       styled-components: ^5.3.8
@@ -301,12 +297,12 @@ importers:
 
   examples/todo:
     specifiers:
-      "@rakkasjs/eslint-config": 0.7.0-next.1
+      "@rakkasjs/eslint-config": 0.7.0-next.2
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
       eslint: ^8.35.0
       prettier: ^2.8.4
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -333,7 +329,7 @@ importers:
       "@types/react": ^18.0.28
       "@types/react-dom": ^18.0.11
       graphql: ^16.6.0
-      rakkasjs: 0.7.0-next.1
+      rakkasjs: 0.7.0-next.2
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -5789,7 +5785,7 @@ packages:
       "@babel/plugin-transform-react-jsx-source": 7.19.6_@babel+core@7.21.0
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.1.4_@types+node@18.14.6
+      vite: 4.1.4
     transitivePeerDependencies:
       - supports-color
     dev: false
