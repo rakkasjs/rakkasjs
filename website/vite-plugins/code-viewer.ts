@@ -1,5 +1,5 @@
+import path from "node:path";
 import { PluginOption } from "vite";
-import path from "path";
 
 const FROM_REPO = true;
 

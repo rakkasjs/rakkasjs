@@ -1,12 +1,12 @@
-import { spawn } from "child_process";
+import { spawn } from "node:child_process";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { Plugin, UserConfig } from "vite";
 import { RakkasAdapter } from "./adapters";
 import glob from "fast-glob";
 import { BuildStep } from "@vavite/multibuild";
 import pico from "picocolors";
 import micromatch from "micromatch";
-import path from "path";
-import { pathToFileURL } from "url";
 import { RouteConfig } from "../lib";
 
 export interface InjectConfigOptions {

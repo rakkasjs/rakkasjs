@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import { Plugin } from "vite";
 
 export interface VirtualDefaultEntryOptions {

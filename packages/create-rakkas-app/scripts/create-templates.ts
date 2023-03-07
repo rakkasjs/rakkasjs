@@ -1,9 +1,9 @@
-import { fileURLToPath } from "url";
-import path from "path";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+import fs from "node:fs";
 import cpr from "cpr";
 import { mkdirp } from "mkdirp";
 import { rimraf } from "rimraf";
-import fs from "fs";
 import { run } from "../src/utils";
 
 main().catch((err) => {

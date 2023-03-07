@@ -1,6 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
 import { Plugin, ResolvedConfig } from "vite";
-import fs from "fs";
-import path from "path";
 
 export function resolveClientManifest(): Plugin {
 	let resolvedConfig: ResolvedConfig;

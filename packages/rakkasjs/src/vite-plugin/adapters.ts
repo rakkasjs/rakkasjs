@@ -1,5 +1,5 @@
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
 import cloudflareWorkers from "@hattip/bundler-cloudflare-workers";
 import { bundle as netlify } from "@hattip/bundler-netlify";
 import { bundle as vercel } from "@hattip/bundler-vercel";
@@ -343,10 +343,10 @@ const DENO_ENTRY = `
 `;
 
 const BUN_ENTRY = `
+	import url from "node:url";
+	import path from "node:path";
 	import bunAdapter from "@hattip/adapter-bun";
 	import handler from "./hattip.js";
-	import url from "url";
-	import path from "path";
 
 	Request.prototype.formData = async function () {
 		return new URLSearchParams(await this.text());

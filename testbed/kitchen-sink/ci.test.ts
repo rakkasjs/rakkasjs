@@ -1,15 +1,15 @@
 /* eslint-disable import/no-named-as-default-member */
 /// <reference types="vite/client" />
 
+import { spawn, ChildProcess } from "node:child_process";
+import path from "node:path";
+import fs from "node:fs";
+import { promisify } from "node:util";
+import { kill } from "node:process";
 import { describe, test, expect, beforeAll, afterAll } from "vitest";
-import { spawn, ChildProcess } from "child_process";
 import fetch from "node-fetch";
-import path from "path";
 import psTree from "ps-tree";
 import puppeteer, { ElementHandle } from "puppeteer";
-import fs from "fs";
-import { promisify } from "util";
-import { kill } from "process";
 import { load } from "cheerio";
 
 const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";

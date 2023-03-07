@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+import os from "node:os";
 import { Options } from ".";
 import { mkdirp } from "mkdirp";
-import fs from "fs";
-import { fileURLToPath } from "url";
-import path from "path";
 import cpr from "cpr";
 import pico from "picocolors";
-import os from "os";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

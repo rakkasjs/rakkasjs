@@ -1,6 +1,6 @@
+import path from "node:path";
+import fs from "node:fs";
 import { PluginOption } from "vite";
-import path from "path";
-import fs from "fs";
 // @ts-expect-error: No typings
 import { highlight } from "reprism";
 

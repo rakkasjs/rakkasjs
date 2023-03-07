@@ -1,5 +1,5 @@
+import fs from "node:fs";
 import { defineConfig } from "tsup";
-import fs from "fs";
 
 function namedExports() {
 	return {

@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
+import fs from "node:fs";
 import { cac } from "cac";
 import { version } from "../package.json";
 import inquirer from "inquirer";
 import pico from "picocolors";
 import { generate } from "./generate";
-import fs from "fs";
 
 const cli = cac("create-rakkas-app");
 

@@ -53,7 +53,7 @@ import { createMiddleware } from "rakkasjs/node-adapter";
 import hattipHandler from "./entry-hattip";
 import { D1Database, D1DatabaseAPI } from "@miniflare/d1";
 import { createSQLiteDB } from "@miniflare/shared";
-import fs from "fs";
+import fs from "node:fs";
 
 fs.mkdirSync("./data", { recursive: true });
 

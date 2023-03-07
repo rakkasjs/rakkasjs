@@ -1,7 +1,7 @@
+import path from "node:path";
 import { Plugin, ResolvedConfig } from "vite";
 import micromatch from "micromatch";
 import glob from "fast-glob";
-import path from "path";
 import { routeToRegExp, sortRoutes } from "../../internal/route-utils";
 import { BaseRouteConfig } from "../../lib";
 
