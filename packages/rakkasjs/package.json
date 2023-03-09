@@ -9,6 +9,8 @@
 	"files": [
 		"dist",
 		"cli.js",
+		"node-loader.mjs",
+		"suppress-loader-warnings.cjs",
 		"*.d.ts",
 		"vite-license.md",
 		"json-s-license.md"
