@@ -8,16 +8,13 @@ declare module "rakkasjs" {
 
 const commonHooks: CommonHooks = {
 	beforePageLookup(ctx, url) {
-		if (ctx.lang) {
-			// This prevents infinite redirect loops
-			return true;
-		}
-
 		const lang = url.pathname.split("/")[1];
 
 		if (lang === "en" || lang === "fr") {
-			url.pathname = url.pathname.slice(lang.length + 1);
 			ctx.lang = lang;
+			const newUrl = new URL(url.href);
+			newUrl.pathname = url.pathname.slice(lang.length + 1);
+			return { rewrite: newUrl };
 		} else if (url.pathname === "/") {
 			let lang = "en"; // Default language
 
@@ -29,17 +26,17 @@ const commonHooks: CommonHooks = {
 					lang = "fr";
 				}
 			} else {
-				// Detect language from browser language
+				// Detect language from browser language(s)
 				const navLang = (navigator.languages ?? [navigator.language])[0];
 				if (navLang?.startsWith("fr")) {
 					lang = "fr";
 				}
 			}
 
-			const newURL = new URL(url.href);
-			newURL.pathname = `/${lang}`;
+			const newUrl = new URL(url.href);
+			newUrl.pathname = `/${lang}`;
 
-			return { redirect: newURL.href };
+			return { redirect: newUrl.href };
 		}
 
 		return true;
