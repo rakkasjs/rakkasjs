@@ -208,7 +208,9 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 						),
 						{ clear: true, timestamp: true },
 					);
-					server.restart();
+					server.restart().catch(() => {
+						// Ignore
+					});
 				}
 			});
 		},

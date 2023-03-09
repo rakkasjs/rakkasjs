@@ -43,21 +43,21 @@ export function injectStyles(
 				const styles = server.extractCritical([...ids].join(" "));
 
 				if (styles.css) {
-					writer.write(
+					await writer.write(
 						encoder.encode(
 							`<style data-emotion="${cache.key}"${nonceString}>${styles.css}</style>`,
 						),
 					);
 
 					if (!scriptInserted) {
-						writer.write(encoder.encode(FIRST_SCRIPT));
+						await writer.write(encoder.encode(FIRST_SCRIPT));
 						scriptInserted = true;
 					} else {
-						writer.write(encoder.encode(SCRIPT));
+						await writer.write(encoder.encode(SCRIPT));
 					}
 				}
 
-				writer.write(encoder.encode(text));
+				await writer.write(encoder.encode(text));
 				text = "";
 			} else {
 				text += decoder.decode(chunk.content);
@@ -65,13 +65,15 @@ export function injectStyles(
 		}
 
 		if (text) {
-			writer.write(encoder.encode(text));
+			await writer.write(encoder.encode(text));
 		}
 
-		writer.close();
+		await writer.close();
 	}
 
-	go();
+	go().catch(() => {
+		// Ignore
+	});
 
 	return readable;
 }

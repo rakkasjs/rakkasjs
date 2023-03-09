@@ -233,7 +233,9 @@ export default async function renderPageRoute(
 
 		if (props.redirect) {
 			redirected = redirected ?? props.redirect;
-			reactStream.cancel();
+			reactStream.cancel().catch(() => {
+				// Ignore
+			});
 		}
 	}
 
@@ -435,9 +437,11 @@ export default async function renderPageRoute(
 			if (!redirected) {
 				status = 500;
 				if (error && typeof error.toResponse === "function") {
-					Promise.resolve(error.toResponse()).then((response: Response) => {
-						status = response.status;
-					});
+					void Promise.resolve(error.toResponse()).then(
+						(response: Response) => {
+							status = response.status;
+						},
+					);
 				} else if (process.env.RAKKAS_PRERENDER) {
 					(ctx.platform as any).reportError(error);
 				} else {
@@ -531,26 +535,28 @@ export default async function renderPageRoute(
 			: writable.getWriter();
 
 	async function pipe() {
-		writer.write(textEncoder.encode(head));
+		await writer.write(textEncoder.encode(head));
 		for await (const chunk of wrapperStream as any) {
 			for (const hooks of pageHooks) {
 				if (hooks?.emitBeforeSsrChunk) {
 					const text = hooks.emitBeforeSsrChunk();
 					if (text) {
-						writer.write(textEncoder.encode(text));
+						await writer.write(textEncoder.encode(text));
 					}
 				}
 			}
 
-			writer.write(chunk);
+			await writer.write(chunk);
 		}
 
-		writer.write(textEncoder.encode("</body></html>"));
+		await writer.write(textEncoder.encode("</body></html>"));
 
-		writer.close();
+		await writer.close();
 	}
 
-	const pipePromise = pipe();
+	const pipePromise = pipe().catch(() => {
+		// Ignore
+	});
 
 	if (hold === true) {
 		await pipePromise;

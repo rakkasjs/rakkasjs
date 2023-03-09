@@ -228,7 +228,7 @@ export function initialize() {
 	addEventListener("popstate", handleNavigation);
 }
 
-async function handleNavigation() {
+function handleNavigation() {
 	// Save scroll position
 	const scrollPosition = { x: scrollX, y: scrollY };
 
@@ -258,8 +258,6 @@ function createUniqueId(): string {
 
 let nextIndex = 0;
 
-// TODO: Implement onNavigationEnd
-
 /** {@link Link} props */
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 	/** Data to be passed to the history entry */
@@ -270,6 +268,8 @@ export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 	noScroll?: boolean;
 	/** Called when navigation starts */
 	onNavigationStart?: () => void;
+	/** Called when navigation ends or is cancelled */
+	onNavigationEnd?: (completed: boolean) => void;
 }
 
 /** Link component for client-side navigation */
@@ -281,6 +281,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 			noScroll,
 			replaceState,
 			onNavigationStart,
+			onNavigationEnd,
 			...props
 		},
 		ref,
@@ -295,14 +296,19 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 				}
 
 				onNavigationStart?.();
+				e.preventDefault();
 
 				navigate(e.currentTarget.href, {
 					data: historyState,
 					replace: replaceState,
 					scroll: !noScroll,
-				});
-
-				e.preventDefault();
+				})
+					.then((completed) => {
+						onNavigationEnd?.(completed);
+					})
+					.catch(() => {
+						onNavigationEnd?.(false);
+					});
 			}}
 		/>
 	),
@@ -479,10 +485,12 @@ export function useSubmit(
 			...options,
 			onSuccess(value) {
 				if ("redirect" in value) {
-					navigate(value.redirect);
+					navigate(value.redirect).catch(ignore);
 				} else {
 					options?.onSuccess?.(value.data);
-					navigate(current, { replace: true, actionData: value.data });
+					navigate(current, { replace: true, actionData: value.data }).catch(
+						ignore,
+					);
 				}
 			},
 		},
@@ -508,4 +516,8 @@ export function useSubmit(
 		isSuccess,
 		status,
 	} as UseSubmitResult;
+}
+
+function ignore() {
+	// Do nothing
 }

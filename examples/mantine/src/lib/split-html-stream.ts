@@ -3,8 +3,17 @@ export async function* splitOnOpen(
 	input: AsyncIterableIterator<Uint8Array>,
 ): AsyncIterableIterator<HtmlChunk> {
 	let state: "data" | "open" | "other" = "data";
+	const it = input[Symbol.asyncIterator]();
+	const read = () =>
+		it.next().catch(() => ({ done: true } as IteratorResult<Uint8Array>));
 
-	outer: for await (let chunk of input) {
+	let piece: IteratorResult<Uint8Array>;
+	outer: while ((piece = await read())) {
+		if (piece.done) {
+			break;
+		}
+		let chunk = piece.value;
+
 		let i = 0;
 		let start = 0;
 		inner: for (;;) {
@@ -23,7 +32,7 @@ export async function* splitOnOpen(
 							// Bad luck, let's try again with more data
 							let next: IteratorResult<Uint8Array>;
 							do {
-								next = await input.next();
+								next = await read();
 								if (next.done) {
 									yield { content: chunk.slice(start) };
 									return;
@@ -56,6 +65,7 @@ export async function* splitOnOpen(
 								yield { content: chunk.slice(start) };
 								i = 0;
 								chunk = chunk2;
+								start = 0;
 							} else {
 								i = pos + 1;
 							}
@@ -66,6 +76,7 @@ export async function* splitOnOpen(
 								yield { content: chunk.slice(start) };
 								i = 0;
 								chunk = chunk2;
+								start = 0;
 							} else {
 								i = pos + 1;
 							}

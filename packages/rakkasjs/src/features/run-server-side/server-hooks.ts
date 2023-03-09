@@ -79,7 +79,13 @@ const runServerSideServerHooks: ServerHooks = {
 						controller.enqueue(`data: ${uneval(chunk)}\n\n`);
 					},
 				});
-				result.pipeTo(writable);
+
+				ctx.waitUntil(
+					result.pipeTo(writable).catch(() => {
+						// Ignore
+					}),
+				);
+
 				return new Response(readable, {
 					status: 200,
 					headers: {

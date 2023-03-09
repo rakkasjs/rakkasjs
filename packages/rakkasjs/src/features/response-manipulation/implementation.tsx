@@ -58,7 +58,9 @@ export const Redirect = import.meta.env.SSR
 			useLayoutEffect(() => {
 				if (redirected.current) return;
 				redirected.current = true;
-				navigate(props.href, { replace: true });
+				navigate(props.href, { replace: true }).catch(() => {
+					// Ignore
+				});
 			});
 
 			return null as any;

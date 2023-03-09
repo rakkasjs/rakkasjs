@@ -26,7 +26,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 				await fs.promises.writeFile(entry, CLOUDFLARE_WORKERS_ENTRY);
 			}
 
-			cloudflareWorkers(
+			await cloudflareWorkers(
 				{
 					output: path.resolve(
 						root,
@@ -56,7 +56,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 				await fs.promises.writeFile(entry, VERCEL_ENTRY);
 			}
 
-			vercel({
+			await vercel({
 				serverlessEntry: entry,
 				staticDir: path.resolve(root, "dist/client"),
 				manipulateEsbuildOptions(options) {
@@ -79,7 +79,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 				await fs.promises.writeFile(entry, VERCEL_EDGE_ENTRY);
 			}
 
-			vercel({
+			await vercel({
 				edgeEntry: entry,
 				staticDir: path.resolve(root, "dist/client"),
 				manipulateEsbuildOptions(options) {
@@ -104,7 +104,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 				await fs.promises.writeFile(entry, NETLIFY_ENTRY);
 			}
 
-			netlify({
+			await netlify({
 				functionEntry: entry,
 				staticDir: path.resolve(root, "dist/client"),
 				manipulateEsbuildOptions(options) {
@@ -129,7 +129,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 
 			await generateStaticAssetManifest(root);
 
-			netlify({
+			await netlify({
 				edgeEntry: entry,
 				staticDir: path.resolve(root, "dist/client"),
 				manipulateEsbuildOptions(options) {
@@ -154,7 +154,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 
 			await generateStaticAssetManifest(root);
 
-			deno(
+			await deno(
 				{
 					input,
 					output: path.resolve(root, "dist/deno/mod.js"),
