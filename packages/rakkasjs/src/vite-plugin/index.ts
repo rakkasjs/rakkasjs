@@ -8,6 +8,7 @@ import vaviteConnect from "@vavite/connect";
 import exposeViteDevServer from "@vavite/expose-vite-dev-server";
 import { resolveClientManifest } from "./resolve-client-manifest";
 import { virtualDefaultEntry } from "./virtual-default-entry";
+import { nodeLoaderPlugin } from "@vavite/node-loader/plugin";
 
 // Feature plugins
 import apiRoutes from "../features/api-routes/vite-plugin";
@@ -58,6 +59,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 	let resolvedConfig: ResolvedConfig;
 
 	return [
+		globalThis.__vavite_loader__ && nodeLoaderPlugin(),
 		...vaviteConnect({
 			handlerEntry: "/virtual:rakkasjs:node-entry",
 			clientAssetsDir: "dist/client",

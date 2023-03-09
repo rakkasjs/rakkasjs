@@ -2,6 +2,7 @@ import { performance } from "node:perf_hooks";
 import { BuildOptions, ServerOptions, LogLevel } from "vite";
 import { cac } from "cac";
 import { version } from "../../package.json";
+import { spawn } from "node:child_process";
 
 export const startTime = performance.now();
 
@@ -46,6 +47,11 @@ export function cleanOptions<Options extends GlobalCLIOptions>(
 	return ret;
 }
 
+declare global {
+	// eslint-disable-next-line no-var
+	var __vavite_loader__: boolean;
+}
+
 cli
 	.option("-c, --config <file>", `[string] use specified config file`)
 	.option("--base <path>", `[string] public base path (default: /)`)
@@ -69,8 +75,46 @@ cli
 		"--force",
 		`[boolean] force the optimizer to ignore the cache and re-bundle`,
 	)
-	.action(async (root: string, options: ServerOptions & GlobalCLIOptions) =>
-		import("./serve").then(({ serve }) => serve(root, options)),
+	.option("--use-loader", `[boolean] use ESM loader (experimental)`)
+
+	.action(
+		async (
+			root: string,
+			options: ServerOptions &
+				GlobalCLIOptions & {
+					useLoader?: boolean;
+				},
+		) => {
+			if (options.useLoader && !global.__vavite_loader__) {
+				// Rerun the command with the loader options
+				const options =
+					(process.env.NODE_OPTIONS ? process.env.NODE_OPTIONS + " " : "") +
+					"-r rakkasjs/suppress-loader-warnings --loader rakkasjs/node-loader";
+
+				const cp = spawn(process.execPath, process.argv.slice(1), {
+					stdio: "inherit",
+					env: {
+						...process.env,
+						NODE_OPTIONS: options,
+					},
+				});
+
+				cp.on("error", (err) => {
+					console.error(err);
+					process.exit(1);
+				});
+
+				cp.on("exit", (code) => {
+					process.exit(code ?? 0);
+				});
+
+				return;
+			}
+
+			delete options.useLoader;
+
+			return import("./serve").then(({ serve }) => serve(root, options));
+		},
 	);
 
 cli

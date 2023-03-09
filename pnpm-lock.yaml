@@ -507,6 +507,7 @@ importers:
       "@vavite/connect": ^1.6.1
       "@vavite/expose-vite-dev-server": 1.6.1
       "@vavite/multibuild": ^1.6.1
+      "@vavite/node-loader": ^1.6.1
       "@vitejs/plugin-react": ^3.1.0
       cac: ^6.7.14
       cheerio: ^1.0.0-rc.12
@@ -543,6 +544,7 @@ importers:
       "@vavite/connect": 1.6.1_vite@4.1.4
       "@vavite/expose-vite-dev-server": 1.6.1_vite@4.1.4
       "@vavite/multibuild": 1.6.1_vite@4.1.4
+      "@vavite/node-loader": 1.6.1_vite@4.1.4
       "@vitejs/plugin-react": 3.1.0_vite@4.1.4
       cac: 6.7.14
       cheerio: 1.0.0-rc.12
@@ -6050,6 +6052,18 @@ packages:
       vite: 4.1.4_@types+node@18.14.6
     dev: false
 
+  /@vavite/node-loader/1.6.1_vite@4.1.4:
+    resolution:
+      {
+        integrity: sha512-OQO7wKZyW9A2KiNo6A993F3BRrhIAfx9QE4uGGvndRz8XZqYWmaDrcRNlVBYAitf6fJDKNJXW4SheXCxcq5PBw==,
+      }
+    hasBin: true
+    peerDependencies:
+      vite: ">=2.8.1"
+    dependencies:
+      vite: 4.1.4_@types+node@18.14.6
+    dev: false
+
   /@vercel/nft/0.22.6:
     resolution:
       {
@@ -6112,7 +6126,7 @@ packages:
       "@babel/plugin-transform-react-jsx-source": 7.19.6_@babel+core@7.21.0
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.1.4
+      vite: 4.1.4_@types+node@18.14.6
     transitivePeerDependencies:
       - supports-color
     dev: false

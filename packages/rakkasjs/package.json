@@ -20,7 +20,9 @@
 			"default": "./dist/server.js"
 		},
 		"./node-adapter": "./dist/node-adapter.js",
-		"./vite-plugin": "./dist/vite-plugin.js"
+		"./vite-plugin": "./dist/vite-plugin.js",
+		"./node-loader": "./node-loader.mjs",
+		"./suppress-loader-warnings": "./suppress-loader-warnings.cjs"
 	},
 	"typesVersions": {
 		"*": {
@@ -88,6 +90,7 @@
 		"@vavite/connect": "^1.6.1",
 		"@vavite/expose-vite-dev-server": "1.6.1",
 		"@vavite/multibuild": "^1.6.1",
+		"@vavite/node-loader": "^1.6.1",
 		"@vitejs/plugin-react": "^3.1.0",
 		"cac": "^6.7.14",
 		"cheerio": "^1.0.0-rc.12",
