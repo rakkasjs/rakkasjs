@@ -12,7 +12,7 @@ const commonHooks: CommonHooks = {
 
 		if (lang === "en" || lang === "fr") {
 			ctx.lang = lang;
-			const newUrl = new URL(url.href);
+			const newUrl = new URL(url);
 			newUrl.pathname = url.pathname.slice(lang.length + 1);
 			return { rewrite: newUrl };
 		} else if (url.pathname === "/") {
@@ -33,10 +33,10 @@ const commonHooks: CommonHooks = {
 				}
 			}
 
-			const newUrl = new URL(url.href);
+			const newUrl = new URL(url);
 			newUrl.pathname = `/${lang}`;
 
-			return { redirect: newUrl.href };
+			return { redirect: newUrl };
 		}
 
 		return true;
