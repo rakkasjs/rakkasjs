@@ -2,25 +2,34 @@ import { useState } from "react";
 import { Todo } from "./Todo";
 import css from "./page.module.css";
 import {
-	runServerSideMutation,
-	useMutation,
+	useQueryClient,
+	useServerSideMutation,
 	useServerSideQuery,
 } from "rakkasjs";
 
 import { createTodo, readAllTodos } from "src/crud";
 
 export default function TodoPage() {
-	const { data, refetch } = useServerSideQuery(readAllTodos, {
+	const { data } = useServerSideQuery(readAllTodos, {
+		key: "todos",
 		refetchOnWindowFocus: true,
 		refetchOnReconnect: true,
 	});
 
 	const [text, setText] = useState("");
 
-	const { mutate: create } = useMutation(async () => {
-		await runServerSideMutation(() => createTodo({ text, done: false }));
-		refetch();
-	});
+	const client = useQueryClient();
+
+	const { mutate: create } = useServerSideMutation(
+		async () => {
+			createTodo({ text, done: false });
+		},
+		{
+			onSuccess() {
+				client.invalidateQueries("todos");
+			},
+		},
+	);
 
 	return (
 		<main>
@@ -30,7 +39,7 @@ export default function TodoPage() {
 
 			<ul className={css.todoList}>
 				{data.map((todo) => (
-					<Todo key={todo.id} todo={todo} refetch={refetch} />
+					<Todo key={todo.id} todo={todo} />
 				))}
 			</ul>
 

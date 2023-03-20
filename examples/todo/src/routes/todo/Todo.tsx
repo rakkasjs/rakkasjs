@@ -1,30 +1,39 @@
-import { runServerSideMutation, useMutation } from "rakkasjs";
+import { useQueryClient, useServerSideMutation } from "rakkasjs";
 import { useState, FC } from "react";
 import { deleteTodo, TodoItem, updateTodo } from "src/crud";
 import css from "./Todo.module.css";
 
 export interface TodoProps {
 	todo: TodoItem;
-	refetch(): void;
 }
 
-export const Todo: FC<TodoProps> = ({ todo, refetch }) => {
+export const Todo: FC<TodoProps> = ({ todo }) => {
 	const [state, setState] = useState({ text: todo.text, editing: false });
 	const { id } = todo;
 
-	const { mutate: update } = useMutation(async (item: Partial<TodoItem>) => {
-		const result = await runServerSideMutation(() =>
-			updateTodo(id, item as TodoItem),
-		);
+	const client = useQueryClient();
 
-		refetch();
-		return result;
-	});
+	const { mutate: update } = useServerSideMutation(
+		async (_, item: Partial<TodoItem>) => {
+			return updateTodo(id, item as TodoItem);
+		},
+		{
+			onSuccess() {
+				client.invalidateQueries("todos");
+			},
+		},
+	);
 
-	const { mutate: remove } = useMutation(async () => {
-		await runServerSideMutation(() => deleteTodo(id));
-		refetch();
-	});
+	const { mutate: remove } = useServerSideMutation(
+		async () => {
+			await deleteTodo(id);
+		},
+		{
+			onSuccess() {
+				client.invalidateQueries("todos");
+			},
+		},
+	);
 
 	return (
 		<li className={css.item} key={todo.id}>
