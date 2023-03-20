@@ -10,7 +10,15 @@ export default createRequestHandler({
 
 		return {
 			wrapApp(app) {
-				return <MantineProvider emotionCache={cache}>{app}</MantineProvider>;
+				return (
+					<MantineProvider
+						emotionCache={cache}
+						withNormalizeCSS
+						withGlobalStyles
+					>
+						{app}
+					</MantineProvider>
+				);
 			},
 			wrapSsrStream: (stream) => injectStyles(stream, cache, server),
 		};
