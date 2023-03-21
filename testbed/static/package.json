@@ -13,15 +13,15 @@
 		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
 	},
 	"devDependencies": {
-		"@cyco130/eslint-config": "^3.0.1",
+		"@cyco130/eslint-config": "^3.0.2",
 		"@types/ps-tree": "^1.1.2",
-		"eslint": "^8.35.0",
-		"node-fetch": "^3.3.0",
+		"eslint": "^8.36.0",
+		"node-fetch": "^3.3.1",
 		"ps-tree": "^1.2.0",
-		"puppeteer": "^19.7.3",
+		"puppeteer": "^19.7.5",
 		"rakkasjs": "workspace:*",
-		"typescript": "^4.9.5",
-		"vite": "^4.1.4"
+		"typescript": "^5.0.2",
+		"vite": "^4.2.1"
 	},
 	"dependencies": {
 		"@types/react": "^18.0.28",

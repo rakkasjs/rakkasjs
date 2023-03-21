@@ -16,15 +16,15 @@
 		"@rakkasjs/eslint-config": "0.7.0-next.5",
 		"@types/react": "^18.0.28",
 		"@types/react-dom": "^18.0.11",
-		"eslint": "^8.35.0",
-		"prettier": "^2.8.4",
+		"eslint": "^8.36.0",
+		"prettier": "^2.8.6",
 		"rakkasjs": "0.7.0-next.5",
-		"typescript": "^4.9.5",
-		"vite": "^4.1.4",
-		"vite-tsconfig-paths": "^4.0.5"
+		"typescript": "^5.0.2",
+		"vite": "^4.2.1",
+		"vite-tsconfig-paths": "^4.0.7"
 	},
 	"dependencies": {
-		"@hattip/response": "0.0.30",
+		"@hattip/response": "0.0.33",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	}
