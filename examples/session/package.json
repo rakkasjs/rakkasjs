@@ -12,7 +12,7 @@
 		"@hattip/polyfills": "0.0.33",
 		"@types/react": "^18.0.28",
 		"@types/react-dom": "^18.0.11",
-		"rakkasjs": "0.7.0-next.5",
+		"rakkasjs": "0.7.0-next.6",
 		"typescript": "^5.0.2",
 		"vite": "^4.2.1",
 		"vite-tsconfig-paths": "^4.0.7"
