@@ -144,6 +144,8 @@ export function useMutation<T, V = void>(
 			options.onError?.(err);
 			setError(err);
 			setStatus("error");
+
+			throw err;
 		} finally {
 			if (!reset.current) {
 				options.onSettled?.(data, error);
