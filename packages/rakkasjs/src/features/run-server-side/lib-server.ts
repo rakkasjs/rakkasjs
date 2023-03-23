@@ -108,9 +108,20 @@ export const runServerSideMutation: <T>(
 export const useServerSideMutation: <T, V = void>(
 	fn: (context: RequestContext, vars: V) => T | Promise<T>,
 	options?: UseMutationOptions<T, V>,
-) => UseMutationResult<T, V> = (() => {
-	// No op
-}) as any;
+) => UseMutationResult<T, V> = () => ({
+	mutate: throwServerMutationError,
+	mutateAsync: throwServerMutationError,
+	reset: throwServerMutationError,
+	status: "idle",
+	isError: false,
+	isIdle: true,
+	isLoading: false,
+	isSuccess: false,
+});
+
+function throwServerMutationError(): never {
+	throw new Error("Mutations cannot be called on the server");
+}
 
 export const composableActionData = new WeakMap<
 	RequestContext,
