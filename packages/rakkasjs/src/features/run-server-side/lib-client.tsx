@@ -166,10 +166,15 @@ function sendRequest(
  * @param fn The function to run on the server
  * @param options Options for the query
  */
-export const useServerSideQuery: <T>(
+export const useServerSideQuery: <
+	T,
+	Enabled extends boolean = true,
+	InitialData extends T | undefined = undefined,
+	PlaceholderData = undefined,
+>(
 	fn: ServerSideFunction<T>,
-	options?: UseServerSideQueryOptions,
-) => QueryResult<T> = useSSQImpl as any;
+	options?: UseServerSideQueryOptions<T, Enabled, InitialData, PlaceholderData>,
+) => QueryResult<T, Enabled, InitialData, PlaceholderData> = useSSQImpl as any;
 
 /**
  * Runs a piece of code on the server. The callback will always run the server.

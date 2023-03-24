@@ -5,6 +5,7 @@ import {
 	useContext,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 	useSyncExternalStore,
 } from "react";
@@ -43,7 +44,12 @@ export const QueryCacheContext = createNamedContext<QueryCache>(
 );
 
 /** useQuery options */
-export interface UseQueryOptions {
+export interface UseQueryOptions<
+	T = unknown,
+	Enabled extends boolean = true,
+	InitialData extends T | undefined = undefined,
+	PlaceholderData = undefined,
+> {
 	/**
 	 * Time in milliseconds after which the value will be evicted from the
 	 * cache when there are no subscribers. Use 0 for immediate eviction and
@@ -100,9 +106,28 @@ export interface UseQueryOptions {
 	 * @default false
 	 */
 	refetchOnReconnect?: boolean | "always";
+	/**
+	 * Set this to `false` to disable automatic refetching when the query mounts or changes query keys.
+	 * To refetch the query, use the `refetch` method returned from the `useQuery` instance.
+	 * Defaults to `true`.
+	 */
+	enabled?: Enabled;
+	/**
+	 * If set, this value will be used as the initial data for this query.
+	 */
+	initialData?: InitialData;
+	/**
+	 * If set, this value will be used as the placeholder data for this particular query observer while the query is still fetching and no initialData has been provided.
+	 */
+	placeholderData?: PlaceholderData;
 }
 
-export const DEFAULT_QUERY_OPTIONS: Required<UseQueryOptions> = {
+type RequiredUseQueryOptions<T = unknown> = Required<
+	Omit<UseQueryOptions<T>, "initialData" | "placeholderData">
+> &
+	Pick<UseQueryOptions<T>, "initialData" | "placeholderData">;
+
+export const DEFAULT_QUERY_OPTIONS: RequiredUseQueryOptions = {
 	cacheTime: 5 * 60 * 1000,
 	staleTime: 100,
 	refetchOnMount: false,
@@ -110,6 +135,7 @@ export const DEFAULT_QUERY_OPTIONS: Required<UseQueryOptions> = {
 	refetchInterval: false,
 	refetchIntervalInBackground: false,
 	refetchOnReconnect: false,
+	enabled: true,
 };
 
 /** Context within which the page is being rendered */
@@ -144,28 +170,43 @@ export type QueryFn<T> = (ctx: PageContext) => T | Promise<T>;
  * @param [options] Query options
  * @returns query   Query result
  */
-export function useQuery<T>(
+export function useQuery<
+	T,
+	Enabled extends boolean = true,
+	InitialData extends T | undefined = undefined,
+	PlaceholderData = undefined,
+>(
 	key: undefined,
 	fn: QueryFn<T>,
-	options?: UseQueryOptions,
+	options?: UseQueryOptions<T, Enabled, InitialData, PlaceholderData>,
 ): undefined;
 
-export function useQuery<T>(
+export function useQuery<
+	T,
+	Enabled extends boolean = true,
+	InitialData extends T | undefined = undefined,
+	PlaceholderData = undefined,
+>(
 	key: string,
 	fn: QueryFn<T>,
-	options?: UseQueryOptions,
-): QueryResult<T>;
+	options?: UseQueryOptions<T, Enabled, InitialData, PlaceholderData>,
+): QueryResult<T, Enabled, InitialData, PlaceholderData>;
+
+export function useQuery<
+	T,
+	Enabled extends boolean = true,
+	InitialData extends T | undefined = undefined,
+	PlaceholderData = undefined,
+>(
+	key: string | undefined,
+	fn: QueryFn<T>,
+	options?: UseQueryOptions<T, Enabled, InitialData, PlaceholderData>,
+): QueryResult<T, Enabled, InitialData, PlaceholderData> | undefined;
 
 export function useQuery<T>(
 	key: string | undefined,
 	fn: QueryFn<T>,
-	options?: UseQueryOptions,
-): QueryResult<T> | undefined;
-
-export function useQuery<T>(
-	key: string | undefined,
-	fn: QueryFn<T>,
-	options: UseQueryOptions = {},
+	options: UseQueryOptions<T> = {},
 ): QueryResult<T> | undefined {
 	const fullOptions = { ...DEFAULT_QUERY_OPTIONS, ...options };
 	const result = useQueryBase(key, fn, fullOptions);
@@ -215,9 +256,16 @@ export function useEventSource<T>(url: string): EventSourceResult<T> {
 function useQueryBase<T>(
 	key: string | undefined,
 	fn: QueryFn<T>,
-	options: Required<UseQueryOptions>,
+	options: RequiredUseQueryOptions,
 ): QueryResult<T> | undefined {
-	const { cacheTime, staleTime, refetchOnMount } = options;
+	const {
+		cacheTime,
+		staleTime,
+		refetchOnMount,
+		enabled,
+		initialData,
+		placeholderData,
+	} = options;
 
 	const cache = useContext(QueryCacheContext);
 
@@ -292,12 +340,29 @@ function useQueryBase<T>(
 		});
 	}
 
+	if (initialData === undefined && placeholderData !== undefined) {
+		return Object.assign(queryResultReference, {
+			data: placeholderData,
+			isRefetching: enabled,
+			refetch,
+			dataUpdatedAt: Date.now(),
+		});
+	}
+
 	if (item?.promise) {
 		throw item.promise;
 	}
 
-	const result = fn(ctx);
-	cache.set(key, result, cacheTime);
+	let result: ReturnType<QueryFn<T>> | undefined = initialData;
+	let shouldCache = initialData !== undefined;
+	if (initialData === undefined && enabled) {
+		shouldCache = true;
+		result = fn(ctx);
+	}
+
+	if (shouldCache) {
+		cache.set(key, result, cacheTime);
+	}
 
 	if (result instanceof Promise) {
 		throw result;
@@ -312,9 +377,20 @@ function useQueryBase<T>(
 }
 
 /** Return value of useQuery */
-export interface QueryResult<T> {
+export interface QueryResult<
+	T,
+	Enabled extends boolean = true,
+	InitialData = undefined,
+	PlaceholderData = undefined,
+> {
 	/** Fetched data */
-	data: T;
+	data: InitialData extends undefined
+		? Enabled extends true
+			? PlaceholderData extends undefined
+				? T
+				: PlaceholderData | T
+			: PlaceholderData | T
+		: T;
 	/** Refetch the data */
 	refetch(): void;
 	/** Is the data being refetched? */
@@ -332,7 +408,7 @@ export interface EventSourceResult<T> {
 
 function useRefetch<T>(
 	queryResult: QueryResult<T> | undefined,
-	options: Required<UseQueryOptions>,
+	options: RequiredUseQueryOptions,
 ) {
 	const {
 		refetchOnWindowFocus,
@@ -340,11 +416,14 @@ function useRefetch<T>(
 		refetchIntervalInBackground,
 		staleTime,
 		refetchOnReconnect,
+		enabled,
+		initialData,
+		placeholderData,
 	} = options;
 
 	// Refetch on window focus
 	useEffect(() => {
-		if (!queryResult || !refetchOnWindowFocus) return;
+		if (!queryResult || !refetchOnWindowFocus || !enabled) return;
 
 		function handleVisibilityChange() {
 			if (
@@ -364,11 +443,36 @@ function useRefetch<T>(
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
 			window.removeEventListener("focus", handleVisibilityChange);
 		};
-	}, [refetchOnWindowFocus, queryResult, staleTime]);
+	}, [refetchOnWindowFocus, queryResult, staleTime, enabled]);
+
+	// Refetch on enable
+	const enabledRef = useRef(enabled);
+	useEffect(() => {
+		const prevEnabled = enabledRef.current;
+		enabledRef.current = enabled;
+
+		if (!queryResult || !enabled || prevEnabled) return;
+
+		queryResult.refetch();
+	}, [queryResult, staleTime, enabled]);
+
+	// Refetch after the first render if initialData/placeholderData was set
+	useEffect(() => {
+		if (
+			queryResult &&
+			enabled &&
+			((initialData !== undefined && queryResult.data === initialData) ||
+				(initialData === undefined &&
+					placeholderData !== undefined &&
+					queryResult.data === placeholderData))
+		)
+			queryResult.refetch();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	// Refetch on interval
 	useEffect(() => {
-		if (!refetchInterval || !queryResult) return;
+		if (!refetchInterval || !queryResult || !enabled) return;
 
 		const id = setInterval(() => {
 			if (
@@ -382,11 +486,11 @@ function useRefetch<T>(
 		return () => {
 			clearInterval(id);
 		};
-	}, [refetchInterval, refetchIntervalInBackground, queryResult]);
+	}, [refetchInterval, refetchIntervalInBackground, queryResult, enabled]);
 
 	// Refetch on reconnect
 	useEffect(() => {
-		if (!refetchOnReconnect || !queryResult) return;
+		if (!refetchOnReconnect || !queryResult || !enabled) return;
 
 		function handleReconnect() {
 			queryResult!.refetch();
@@ -397,7 +501,7 @@ function useRefetch<T>(
 		return () => {
 			window.removeEventListener("online", handleReconnect);
 		};
-	}, [refetchOnReconnect, queryResult]);
+	}, [refetchOnReconnect, queryResult, enabled]);
 }
 
 /** Query client that manages the cache used by useQuery */

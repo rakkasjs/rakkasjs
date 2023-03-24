@@ -24,7 +24,12 @@ export function useRequestContext() {
 export type ServerSideFunction<T> = (context: RequestContext) => T | Promise<T>;
 
 /** Options for {@link useServerSideQuery} */
-export interface UseServerSideQueryOptions extends UseQueryOptions {
+export interface UseServerSideQueryOptions<
+	T = unknown,
+	Enabled extends boolean = true,
+	InitialData extends T | undefined = undefined,
+	PlaceholderData = undefined,
+> extends UseQueryOptions<T, Enabled, InitialData, PlaceholderData> {
 	/** Query key. Rakkas will generate a unique key if not provided. */
 	key?: string;
 	/**

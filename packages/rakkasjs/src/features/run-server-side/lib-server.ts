@@ -157,10 +157,15 @@ export const useFormMutation: <T>(
 	fn: (ctx: RequestContext) => any,
 ) => UseFormMutationResult<T> = useFormMutationImpl as any;
 
-export const useServerSideQuery: <T>(
+export const useServerSideQuery: <
+	T,
+	Enabled extends boolean = true,
+	InitialData extends T | undefined = undefined,
+	PlaceholderData = undefined,
+>(
 	fn: ServerSideFunction<T>,
-	options?: UseServerSideQueryOptions,
-) => QueryResult<T> = useSSQImpl as any;
+	options?: UseServerSideQueryOptions<T, Enabled, InitialData, PlaceholderData>,
+) => QueryResult<T, Enabled, InitialData, PlaceholderData> = useSSQImpl as any;
 
 export const runServerSideQuery: <T>(
 	context: RequestContext | undefined,
