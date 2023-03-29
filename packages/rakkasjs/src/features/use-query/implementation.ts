@@ -9,7 +9,7 @@ import {
 	useState,
 	useSyncExternalStore,
 } from "react";
-import { PageLocals, useErrorHandler } from "../../lib";
+import { PageLocals, useErrorBoundary } from "../../lib";
 import { IsomorphicContext } from "../../runtime/isomorphic-context";
 import { createNamedContext } from "../../runtime/named-context";
 import {
@@ -218,7 +218,7 @@ export function useQuery<T>(
 export function useEventSource<T>(url: string): EventSourceResult<T> {
 	const [result, setResult] = useState<EventSourceResult<T>>({});
 
-	const errorHandler = useErrorHandler();
+	const { showBoundary } = useErrorBoundary();
 
 	useEffect(() => {
 		const ctrl = new AbortController();
@@ -232,7 +232,7 @@ export function useEventSource<T>(url: string): EventSourceResult<T> {
 				const error = new Error(await response.text());
 				// unretriable error
 				if (status >= 400 && status < 500 && status !== 429)
-					return errorHandler(error);
+					return showBoundary(error);
 				// retriable error
 				throw error;
 			},
@@ -246,9 +246,9 @@ export function useEventSource<T>(url: string): EventSourceResult<T> {
 					dataUpdatedAt: Date.now(),
 				});
 			},
-		}).catch(errorHandler);
+		}).catch(showBoundary);
 		return () => ctrl.abort();
-	}, [url, errorHandler, setResult]);
+	}, [url, setResult, showBoundary]);
 
 	return result;
 }

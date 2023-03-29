@@ -59,6 +59,7 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 									hattip: "virtual:rakkasjs:hattip-entry",
 								},
 							},
+							target: "node18",
 						},
 					},
 				},
