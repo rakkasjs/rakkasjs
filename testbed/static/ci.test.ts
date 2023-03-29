@@ -6,7 +6,6 @@ import path from "node:path";
 import { promisify } from "node:util";
 import { kill } from "node:process";
 import { describe, test, expect, beforeAll, afterAll } from "vitest";
-import fetch from "node-fetch";
 import psTree from "ps-tree";
 import puppeteer, { ElementHandle } from "puppeteer";
 

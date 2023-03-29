@@ -16,7 +16,6 @@
 		"@cyco130/eslint-config": "^3.0.2",
 		"@types/ps-tree": "^1.1.2",
 		"eslint": "^8.37.0",
-		"node-fetch": "^3.3.1",
 		"ps-tree": "^1.2.0",
 		"puppeteer": "^19.8.2",
 		"rakkasjs": "workspace:*",
