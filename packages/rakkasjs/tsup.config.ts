@@ -50,7 +50,7 @@ export default defineConfig([
 	},
 	{
 		entry: ["./src/lib/client.ts"],
-		target: "node14",
+		target: "node18",
 		format: ["esm"],
 		platform: "node",
 		shims: false,
