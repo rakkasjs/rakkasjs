@@ -267,6 +267,7 @@ function useQueryBase<T>(
 		placeholderData,
 	} = options;
 
+	const [initialEnabled] = useState(enabled);
 	const cache = useContext(QueryCacheContext);
 
 	const item = useSyncExternalStore(
@@ -295,6 +296,7 @@ function useQueryBase<T>(
 		}
 
 		if (
+			enabled &&
 			(cacheItem.invalid ||
 				(refetchOnMount &&
 					(refetchOnMount === "always" ||
@@ -340,7 +342,10 @@ function useQueryBase<T>(
 		});
 	}
 
-	if (initialData === undefined && placeholderData !== undefined) {
+	if (
+		initialData === undefined &&
+		(placeholderData !== undefined || !initialEnabled)
+	) {
 		return Object.assign(queryResultReference, {
 			data: placeholderData,
 			isRefetching: enabled,
