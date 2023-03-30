@@ -2,7 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import type { HattipHandler } from "@hattip/core";
-import installNodeFetch from "@hattip/polyfills/node-fetch";
 import { ResolvedConfig, resolveConfig } from "vite";
 import pico from "picocolors";
 import { GlobalCLIOptions } from ".";
@@ -65,8 +64,6 @@ export async function doPrerender(
 	if (pathNames.length === 0) {
 		pathNames = ["/"];
 	}
-
-	installNodeFetch();
 
 	process.env.RAKKAS_PRERENDER = "true";
 	const fileUrl = pathToFileURL(outDir + "/server/hattip.js").href;

@@ -11,9 +11,9 @@ export const ErrorBoundary: FC<PropsWithChildren<ErrorBoundaryProps>> = (
 ) => (
 	<OriginalErrorBoundary
 		{...props}
-		onReset={() => {
+		onReset={(details) => {
 			resetErrors();
-			props.onReset?.();
+			props.onReset?.(details);
 		}}
 	/>
 );

@@ -1,1 +1,1 @@
-export * from "@hattip/adapter-node";
+export * from "@hattip/adapter-node/native-fetch";

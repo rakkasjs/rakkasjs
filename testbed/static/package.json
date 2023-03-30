@@ -15,16 +15,15 @@
 	"devDependencies": {
 		"@cyco130/eslint-config": "^3.0.2",
 		"@types/ps-tree": "^1.1.2",
-		"eslint": "^8.36.0",
-		"node-fetch": "^3.3.1",
+		"eslint": "^8.37.0",
 		"ps-tree": "^1.2.0",
-		"puppeteer": "^19.7.5",
+		"puppeteer": "^19.8.2",
 		"rakkasjs": "workspace:*",
 		"typescript": "^5.0.2",
 		"vite": "^4.2.1"
 	},
 	"dependencies": {
-		"@types/react": "^18.0.28",
+		"@types/react": "^18.0.31",
 		"@types/react-dom": "^18.0.11",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
