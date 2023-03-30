@@ -84,8 +84,6 @@ const cache: QueryCache = {
 				cacheTime: Math.max(queryCache[key]!.cacheTime, cacheTime),
 			};
 
-			delete queryCache[key]!.invalid;
-
 			valueOrPromise.then(
 				(value) => {
 					queryCache[key] = {
@@ -94,6 +92,7 @@ const cache: QueryCache = {
 						hydrated: false,
 						date: Date.now(),
 					};
+					delete queryCache[key]!.invalid;
 					delete queryCache[key]!.promise;
 
 					queryCache[key]!.subscribers.forEach((subscriber) => subscriber());
