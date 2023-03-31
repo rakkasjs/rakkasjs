@@ -31,6 +31,7 @@ import { Head, LookupHookResult } from "../../lib";
 import { uneval } from "devalue";
 import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
 import { PageRequestHooks } from "../../runtime/hattip-handler";
+import { ModuleNode } from "vite";
 
 const pageContextMap = new WeakMap<Request, PageContext>();
 
@@ -668,13 +669,16 @@ function createPrefetchTags(
 		const root = viteDevServer!.config.root.replace(/\\/g, "/");
 
 		for (const moduleId of moduleSet) {
-			const module =
+			const module:
+				| (ModuleNode & { ssrImportedModules?: Set<ModuleNode> })
+				| undefined =
 				viteDevServer!.moduleGraph.getModuleById(moduleId) ??
 				viteDevServer!.moduleGraph.getModuleById(root + "/" + moduleId);
 
 			if (!module) continue;
 
-			for (const imported of module.importedModules) {
+			for (const imported of module.ssrImportedModules ??
+				module.importedModules) {
 				const url = new URL(imported.url, pageUrl);
 				url.searchParams.delete("v");
 				url.searchParams.delete("t");

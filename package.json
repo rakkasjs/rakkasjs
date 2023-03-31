@@ -29,7 +29,7 @@
 	"--": "Uncomment the next option to test against local packages",
 	"--pnpm": {
 		"overrides": {
-			"--vite": "link:../vite/packages/vite"
+			"vite": "link:../vite/packages/vite"
 		}
 	}
 }
