@@ -19,10 +19,6 @@
 		"vite",
 		"ssr"
 	],
-	"overrides": {
-		"react": "$react",
-		"react-dom": "$react-dom"
-	},
 	"dependencies": {
 		"@mdx-js/react": "^2.3.0",
 		"@stackblitz/sdk": "^1.8.2",
