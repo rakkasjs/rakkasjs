@@ -690,8 +690,23 @@ function createPrefetchTags(
 			}
 		}
 
-		for (const cssFile of cssSet) {
-			result += `<link rel="stylesheet" href="${escapeHtml(cssFile)}">`;
+		if (cssSet.size > 0) {
+			// 1. Inject a link for each CSS file to avoid FOUC
+			for (const cssFile of cssSet) {
+				result += `<link rel="stylesheet" data-rakkas-style-sheet href=${JSON.stringify(
+					cssFile,
+				)}>`;
+			}
+
+			// 2. Inject a script that imports all CSS files so that Vite inserts the style tags
+			result += `<script type="module">`;
+
+			for (const cssFile of cssSet) {
+				result += `import ${JSON.stringify(cssFile)};`;
+			}
+
+			// 3. Once styles are inserted, remove the style sheet links to avoid duplicate styles
+			result += `document.querySelectorAll('[data-rakkas-style-sheet]').forEach((el) => el.remove())</script>`;
 		}
 	}
 
