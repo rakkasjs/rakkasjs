@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import sirv from "sirv";
-import { createMiddleware } from "@hattip/adapter-node/native-fetch";
+import { createMiddleware } from "@hattip/adapter-node";
 import pico from "picocolors";
 import {
 	InlineConfig,
