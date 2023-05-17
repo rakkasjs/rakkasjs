@@ -120,6 +120,8 @@ function restoreScrollPosition() {
 			const element = document.querySelector(hash);
 			if (element) {
 				element.scrollIntoView();
+			} else {
+				scrollTo(0, 0);
 			}
 		} else {
 			scrollTo(0, 0);
