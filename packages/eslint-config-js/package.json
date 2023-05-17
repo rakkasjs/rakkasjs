@@ -33,7 +33,7 @@
 		"eslint-plugin-ssr-friendly": "^1.2.0"
 	},
 	"devDependencies": {
-		"eslint": "^8.37.0",
+		"eslint": "^8.40.0",
 		"publint": "^0.1.11"
 	}
 }

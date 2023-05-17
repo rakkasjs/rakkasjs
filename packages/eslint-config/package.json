@@ -25,10 +25,10 @@
 	},
 	"dependencies": {
 		"@rushstack/eslint-patch": "^1.2.0",
-		"@typescript-eslint/eslint-plugin": "^5.57.0",
-		"@typescript-eslint/parser": "^5.57.0",
+		"@typescript-eslint/eslint-plugin": "^5.59.6",
+		"@typescript-eslint/parser": "^5.59.6",
 		"eslint-config-prettier": "^8.8.0",
-		"eslint-import-resolver-typescript": "^3.5.3",
+		"eslint-import-resolver-typescript": "^3.5.5",
 		"eslint-plugin-css-modules": "^2.11.0",
 		"eslint-plugin-import": "^2.27.5",
 		"eslint-plugin-no-only-tests": "^3.1.0",
@@ -37,8 +37,8 @@
 		"eslint-plugin-ssr-friendly": "^1.2.0"
 	},
 	"devDependencies": {
-		"eslint": "^8.37.0",
+		"eslint": "^8.40.0",
 		"publint": "^0.1.11",
-		"typescript": "^5.0.2"
+		"typescript": "^5.0.4"
 	}
 }

@@ -8,14 +8,14 @@
 		"start": "node dist/server"
 	},
 	"devDependencies": {
-		"@types/react": "^18.0.31",
-		"@types/react-dom": "^18.0.11",
+		"@types/react": "^18.2.6",
+		"@types/react-dom": "^18.2.4",
 		"rakkasjs": "0.7.0-next.10",
-		"typescript": "^5.0.2",
-		"vite": "^4.2.1"
+		"typescript": "^5.0.4",
+		"vite": "^4.3.7"
 	},
 	"dependencies": {
-		"@hattip/graphql": "0.0.33",
+		"@hattip/graphql": "0.0.34",
 		"graphql": "^16.6.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
