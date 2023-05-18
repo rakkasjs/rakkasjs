@@ -9,6 +9,9 @@ import { version } from "../../package.json";
 import { load } from "cheerio";
 import { PrerenderResult } from "../runtime/page-types";
 import { escapeHtml } from "../runtime/utils";
+import installFetch from "@hattip/polyfills/node-fetch";
+
+installFetch();
 
 export interface RenderOptions {
 	root?: string;

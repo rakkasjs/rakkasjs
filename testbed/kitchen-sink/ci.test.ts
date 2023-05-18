@@ -85,7 +85,7 @@ if (import.meta.env.TEST_HOST) {
 }
 
 const browser = await puppeteer.launch({
-	// headless: false,
+	headless: "new",
 	defaultViewport: { width: 1200, height: 800 },
 });
 

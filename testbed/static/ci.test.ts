@@ -13,7 +13,7 @@ import fetch from "node-fetch";
 const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 
 const browser = await puppeteer.launch({
-	// headless: false,
+	headless: "new",
 	defaultViewport: { width: 1200, height: 800 },
 });
 

@@ -18,7 +18,7 @@
 		"eslint": "^8.40.0",
 		"node-fetch": "^3.3.1",
 		"ps-tree": "^1.2.0",
-		"puppeteer": "^19.8.2",
+		"puppeteer": "^20.2.1",
 		"rakkasjs": "workspace:*",
 		"typescript": "^5.0.4",
 		"vite": "^4.3.7"

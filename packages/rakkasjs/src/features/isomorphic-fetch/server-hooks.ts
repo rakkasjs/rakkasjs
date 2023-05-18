@@ -12,7 +12,17 @@ const isomorphicFetchServerHooks: ServerHooks = {
 					input = url.href;
 				}
 
-				const newRequest = new Request(input, init);
+				let newRequest: Request;
+
+				try {
+					newRequest = new Request(input, init);
+				} catch (error) {
+					// Miniflare throws when accessing credentials
+					const newInit = { ...init };
+					delete newInit?.credentials;
+					newRequest = new Request(input, newInit);
+				}
+
 				url = url || new URL(newRequest.url, ctx.url);
 
 				const sameOrigin = url.origin === ctx.url.origin;
@@ -24,8 +34,7 @@ const isomorphicFetchServerHooks: ServerHooks = {
 					// Miniflare throws when accessing credentials
 				}
 
-				const credentials =
-					requestCredentials ?? init?.credentials ?? "same-origin";
+				const credentials = requestCredentials ?? "same-origin";
 
 				const includeCredentials =
 					credentials === "include" ||
