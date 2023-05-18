@@ -10,6 +10,7 @@ import { describe, test, expect, beforeAll, afterAll } from "vitest";
 import psTree from "ps-tree";
 import puppeteer, { ElementHandle } from "puppeteer";
 import { load } from "cheerio";
+import fetch from "node-fetch";
 
 const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
 

@@ -27,6 +27,7 @@
 		"@types/ps-tree": "^1.1.2",
 		"cross-env": "^7.0.3",
 		"eslint": "^8.40.0",
+		"node-fetch": "^3.3.1",
 		"ps-tree": "^1.2.0",
 		"puppeteer": "^19.8.2",
 		"rakkasjs": "workspace:*",

@@ -852,6 +852,9 @@ importers:
       eslint:
         specifier: ^8.40.0
         version: 8.40.0
+      node-fetch:
+        specifier: ^3.3.1
+        version: 3.3.1
       ps-tree:
         specifier: ^1.2.0
         version: 1.2.0
@@ -901,6 +904,9 @@ importers:
       eslint:
         specifier: ^8.40.0
         version: 8.40.0
+      node-fetch:
+        specifier: ^3.3.1
+        version: 3.3.1
       ps-tree:
         specifier: ^1.2.0
         version: 1.2.0
@@ -9053,7 +9059,6 @@ packages:
         integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==,
       }
     engines: { node: ">= 12" }
-    dev: false
 
   /date-fns@1.30.1:
     resolution:
@@ -11426,7 +11431,6 @@ packages:
     dependencies:
       node-domexception: 1.0.0
       web-streams-polyfill: 3.2.1
-    dev: false
 
   /fetch-node-website@6.1.2:
     resolution:
@@ -11824,7 +11828,6 @@ packages:
     engines: { node: ">=12.20.0" }
     dependencies:
       fetch-blob: 3.2.0
-    dev: false
 
   /forwarded@0.2.0:
     resolution:
@@ -16993,7 +16996,6 @@ packages:
         integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==,
       }
     engines: { node: ">=10.5.0" }
-    dev: false
 
   /node-fetch-native@1.1.1:
     resolution:
@@ -17051,7 +17053,6 @@ packages:
       data-uri-to-buffer: 4.0.1
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
-    dev: false
 
   /node-forge@1.3.1:
     resolution:
@@ -23032,7 +23033,6 @@ packages:
         integrity: sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==,
       }
     engines: { node: ">= 8" }
-    dev: false
 
   /webcrypto-core@1.7.7:
     resolution:
