@@ -120,6 +120,10 @@ export interface UseQueryOptions<
 	 * If set, this value will be used as the placeholder data for this particular query observer while the query is still fetching and no initialData has been provided.
 	 */
 	placeholderData?: PlaceholderData;
+	/**
+	 * If set, any previous data will be kept when fetching new data because the query key changed.
+	 */
+	keepPreviousData?: boolean;
 }
 
 type RequiredUseQueryOptions<T = unknown> = Required<
@@ -136,6 +140,7 @@ export const DEFAULT_QUERY_OPTIONS: RequiredUseQueryOptions = {
 	refetchIntervalInBackground: false,
 	refetchOnReconnect: false,
 	enabled: true,
+	keepPreviousData: false,
 };
 
 /** Context within which the page is being rendered */
@@ -265,6 +270,7 @@ function useQueryBase<T>(
 		enabled,
 		initialData,
 		placeholderData,
+		keepPreviousData,
 	} = options;
 
 	const [initialEnabled] = useState(enabled);
@@ -287,6 +293,13 @@ function useQueryBase<T>(
 	);
 
 	const ctx = usePageContext();
+
+	const previousItem = useRef<CacheItem | undefined>(undefined);
+	useEffect(() => {
+		if (keepPreviousData && item && "value" in item) {
+			previousItem.current = item;
+		}
+	}, [item, keepPreviousData]);
 
 	useEffect(() => {
 		const cacheItem = key ? cache.get(key) : undefined;
@@ -354,8 +367,20 @@ function useQueryBase<T>(
 		});
 	}
 
+	const returnPreviousOrSuspend = (promise: Promise<any>) => {
+		if (keepPreviousData && previousItem.current !== undefined) {
+			return Object.assign(queryResultReference, {
+				data: previousItem.current.value,
+				isRefetching: true,
+				refetch,
+				dataUpdatedAt: previousItem.current.date,
+			});
+		}
+		throw promise;
+	};
+
 	if (item?.promise) {
-		throw item.promise;
+		return returnPreviousOrSuspend(item.promise);
 	}
 
 	let result: ReturnType<QueryFn<T>> | undefined = initialData;
@@ -370,7 +395,7 @@ function useQueryBase<T>(
 	}
 
 	if (result instanceof Promise) {
-		throw result;
+		return returnPreviousOrSuspend(result);
 	}
 
 	return Object.assign(queryResultReference, {
