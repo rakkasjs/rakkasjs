@@ -10,9 +10,13 @@ import { describe, test, expect, beforeAll, afterAll } from "vitest";
 import psTree from "ps-tree";
 import puppeteer, { ElementHandle } from "puppeteer";
 import { load } from "cheerio";
-import fetch from "node-fetch";
+import nodeFetch from "node-fetch";
 
-const TEST_HOST = import.meta.env.TEST_HOST || "http://localhost:3000";
+if (!globalThis.fetch) {
+	globalThis.fetch = nodeFetch as any;
+}
+
+const TEST_HOST = import.meta.env.TEST_HOST || "http://127.0.0.1:3000";
 
 if (import.meta.env.TEST_HOST) {
 	testCase(
@@ -41,7 +45,8 @@ if (import.meta.env.TEST_HOST) {
 
 	if (include.includes("wrangler")) {
 		if (
-			nodeVersionMajor !== 18 && // Not sure why it doesn't work
+			// Skip on Linux until this is resolved: https://github.com/cloudflare/workers-sdk/issues/3262
+			process.platform !== "linux" &&
 			(nodeVersionMajor >= 17 ||
 				(nodeVersionMajor >= 16 && nodeVersionMinor >= 13))
 		) {
@@ -49,7 +54,7 @@ if (import.meta.env.TEST_HOST) {
 				"Cloudflare Workers",
 				false,
 				TEST_HOST,
-				"wrangler dev --local --port 3000",
+				"wrangler dev --port 3000",
 			);
 		} else {
 			console.warn("Skipping Cloudflare Workers test because of Node version");
@@ -105,10 +110,12 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					env: {
 						...process.env,
 						BROWSER: "none",
+						HOST: "127.0.0.1",
 					},
 				});
 
-				await new Promise<void>((resolve, reject) => {
+				// eslint-disable-next-line no-async-promise-executor
+				await new Promise<void>(async (resolve, reject) => {
 					cp!.on("error", (error) => {
 						cp = undefined;
 						reject(error);
@@ -121,8 +128,9 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 						}
 					});
 
-					const interval = setInterval(() => {
-						fetch(host + "/")
+					for (;;) {
+						let doBreak = false;
+						await fetch(host + "/")
 							.then(async (r) => {
 								const text = await r.text();
 								if (
@@ -130,14 +138,20 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 									text.includes("This is a shared header.") &&
 									text.includes("Hello world!")
 								) {
-									clearInterval(interval);
 									resolve();
+									doBreak = true;
 								}
 							})
 							.catch(() => {
 								// Ignore error
 							});
-					}, 250);
+
+						if (doBreak) {
+							break;
+						}
+
+						await new Promise((resolve) => setTimeout(resolve, 250));
+					}
 				});
 			}, 60_000);
 
