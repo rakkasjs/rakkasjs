@@ -6,6 +6,8 @@ export type HeadProps = Record<
 	string,
 	string | Record<string, string> | null
 > & {
+	tagName?: "meta" | "title" | "link";
+
 	// Special cases
 	charset?: string;
 	title?: string;
@@ -64,18 +66,14 @@ export function Head(props: HeadProps): ReactElement {
 	} else {
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useEffect(() => {
-			const old: HeadProps = {};
 			for (const [name, value] of Object.entries(props)) {
-				if (name in tags) {
-					old[name] = tags[name];
-				}
 				tags[name] = value;
 			}
 
 			scheduleHeadUpdate();
 			return () => {
-				for (const [name, value] of Object.entries(old)) {
-					tags[name] = value;
+				for (const name of Object.keys(props)) {
+					delete tags[name];
 				}
 				scheduleHeadUpdate();
 			};

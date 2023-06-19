@@ -9,8 +9,8 @@ export const HeadContext = createNamedContext<HeadProps>(
 
 export const defaultHeadTags: HeadProps = {
 	charset: "utf-8",
-	title: "Rakkas App",
 	viewport: "width=device-width, initial-scale=1",
+	title: "Rakkas App",
 };
 
 export const clientHeadTags: HeadProps = { ...defaultHeadTags };
@@ -24,6 +24,7 @@ export function scheduleHeadUpdate() {
 	updateScheduled = true;
 	requestAnimationFrame(() => {
 		const json = JSON.stringify(clientHeadTags);
+
 		try {
 			if (json === lastRendered) {
 				return;
@@ -35,6 +36,9 @@ export function scheduleHeadUpdate() {
 				delete clientHeadTags[name];
 
 				let el: HTMLElement | null | undefined;
+
+				const tag = (attributes as Record<string, string>)?.tagName ?? "meta";
+				delete (attributes as Record<string, string>)?.tagName;
 
 				if (typeof attributes === "string") {
 					if (name === "charset") {
@@ -85,23 +89,24 @@ export function scheduleHeadUpdate() {
 						}
 					}
 				} else {
-					el = select(`meta[data-rh="${escapeHtml(name)}"]`);
+					el = select(`${tag}[data-rh="${escapeHtml(name)}"]`);
 					if (attributes === null) {
 						el?.remove();
 					} else if (el) {
 						for (const attr of el.attributes) {
 							if (attr.name in attributes) {
 								attr.value = attributes[attr.name];
-							} else {
+							} else if (attr.name !== "data-rh") {
 								el.removeAttribute(attr.name);
 							}
 						}
 					} else {
-						el = document.createElement("meta");
+						el = document.createElement(tag);
 						document.head.appendChild(el);
 						for (const [attr, value] of Object.entries(attributes)) {
 							el.setAttribute(attr, value);
 						}
+						el.setAttribute("data-rh", name);
 					}
 				}
 
@@ -109,11 +114,15 @@ export function scheduleHeadUpdate() {
 			}
 
 			for (const el of document.head.querySelectorAll(
-				"title,meta",
+				"title,meta,[data-rh]",
 			) as NodeListOf<HTMLElement>) {
 				if (!updated.has(el)) {
 					el.remove();
 				}
+			}
+
+			for (const name of Object.keys(clientHeadTags)) {
+				delete clientHeadTags[name];
 			}
 
 			Object.assign(clientHeadTags, defaultHeadTags);

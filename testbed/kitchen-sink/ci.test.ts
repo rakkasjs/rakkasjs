@@ -988,6 +988,17 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			const r2 = await fetch(host + "/dev-only", { method: "POST" });
 			expect(r2.status).toBe(dev ? 200 : 404);
 		});
+
+		test("sets head tags", async () => {
+			const r = await fetch(host + "/head");
+			const text = await r.text();
+			expect(text).toContain(
+				'<meta charset="utf-8">' +
+					'<meta name="viewport" content="width=device-width, initial-scale=1">' +
+					"<title>The head page</title>" +
+					'<link rel="canonical" href="http://localhost:3000/head" data-rh="canonical">',
+			);
+		});
 	});
 }
 

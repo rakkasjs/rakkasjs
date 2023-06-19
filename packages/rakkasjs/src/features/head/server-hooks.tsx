@@ -16,10 +16,17 @@ const headServerHooks: ServerHooks = {
 			emitToDocumentHead() {
 				let result = "";
 
-				for (const [name, attributes] of Object.entries(tags)) {
+				const sorted = Object.entries(tags).sort(
+					([ak, av], [bk, bv]) => rank(ak, av) - rank(bk, bv),
+				);
+
+				for (const [name, attributes] of sorted) {
 					if (attributes === null) {
 						continue;
 					}
+
+					const tag = (attributes as Record<string, string>)?.tagName ?? "meta";
+					delete (attributes as Record<string, string>)?.tagName;
 
 					if (typeof attributes === "string") {
 						if (name === "charset") {
@@ -36,7 +43,7 @@ const headServerHooks: ServerHooks = {
 							)}">`;
 						}
 					} else {
-						result = "<meta";
+						result += "<" + tag;
 						for (const [attr, value] of Object.entries(attributes)) {
 							result += ` ${attr}="${escapeHtml(value)}"`;
 						}
@@ -51,3 +58,17 @@ const headServerHooks: ServerHooks = {
 };
 
 export default headServerHooks;
+
+function rank(k: string, v: string | Record<string, string> | null): number {
+	if (k === "charset") {
+		return 0;
+	} else if (typeof v === "object" && v && "http-equiv" in v) {
+		return 1;
+	} else if (k === "viewport") {
+		return 2;
+	} else if (k === "title") {
+		return 3;
+	} else {
+		return 4;
+	}
+}

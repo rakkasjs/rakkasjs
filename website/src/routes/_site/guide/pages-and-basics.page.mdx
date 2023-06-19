@@ -20,7 +20,7 @@ A very simple Rakkas page would look like this:
 
 ## `Head` component
 
-Rakkas provides a `Head` component for managing the title and meta tags in the document head:
+Rakkas provides a `Head` component for managing the title, meta, and link tags in the document head:
 
 ```jsx
 <Head
@@ -29,7 +29,7 @@ Rakkas provides a `Head` component for managing the title and meta tags in the d
 	description="About page" // <meta name="description" content="About page" />
 	og:image="https://example.com/image.jpg" // <meta property="og:image" content="https://example.com/image.jpg" />
 	refresh={{ "http-equiv": "refresh", content: "5" }} // <meta http-equiv="refresh" content="5" />
-
+	canonical={{ tagName: "link", rel: "canonical", href: "https://example.com/about" }} // <link rel="canonical" href="https://example.com/about" />
 >
 ```
 
