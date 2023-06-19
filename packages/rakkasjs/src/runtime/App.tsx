@@ -285,8 +285,8 @@ export async function loadRoute(
 						!import.meta.env.SSR &&
 						i === (window as any).$RAKKAS_ACTION_ERROR_INDEX
 					) {
-						throw new Error("Action error");
 						delete (window as any).$RAKKAS_ACTION_ERROR_INDEX;
+						throw new Error("Action error");
 					}
 					const preloaded =
 						ssrPreloaded?.[i] ?? (await preload?.(preloadContext));
