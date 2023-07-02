@@ -2,6 +2,7 @@
 
 import type { RequestContext } from "@hattip/compose";
 import {
+	useCallback,
 	useContext,
 	useEffect,
 	useMemo,
@@ -329,6 +330,16 @@ function useQueryBase<T>(
 	// preserve reference between calls
 	const queryResultReference = useMemo(() => ({} as QueryResult<T>), []);
 
+	const refetch = useCallback(
+		function refetch() {
+			const item = cache.get(key!);
+			if (!item?.promise) {
+				cache.set(key!, fn(ctx), cacheTime);
+			}
+		},
+		[cache, cacheTime, ctx, fn, key],
+	);
+
 	if (key === undefined) {
 		return;
 	}
@@ -337,13 +348,6 @@ function useQueryBase<T>(
 		const error = item.error;
 
 		throw error;
-	}
-
-	function refetch() {
-		const item = cache.get(key!);
-		if (!item?.promise) {
-			cache.set(key!, fn(ctx), cacheTime);
-		}
 	}
 
 	if (item && "value" in item) {
@@ -451,9 +455,12 @@ function useRefetch<T>(
 		placeholderData,
 	} = options;
 
+	const isEmpty = !queryResult;
+	const { refetch } = queryResult || {};
+
 	// Refetch on window focus
 	useEffect(() => {
-		if (!queryResult || !refetchOnWindowFocus || !enabled) return;
+		if (isEmpty || !refetchOnWindowFocus || !enabled) return;
 
 		function handleVisibilityChange() {
 			if (
@@ -462,7 +469,7 @@ function useRefetch<T>(
 					!queryResult!.dataUpdatedAt ||
 					staleTime <= Date.now() - queryResult!.dataUpdatedAt)
 			) {
-				queryResult!.refetch();
+				refetch!();
 			}
 		}
 
@@ -473,7 +480,7 @@ function useRefetch<T>(
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
 			window.removeEventListener("focus", handleVisibilityChange);
 		};
-	}, [refetchOnWindowFocus, queryResult, staleTime, enabled]);
+	}, [refetchOnWindowFocus, isEmpty, staleTime, enabled, queryResult, refetch]);
 
 	// Refetch on enable
 	const enabledRef = useRef(enabled);
@@ -481,10 +488,10 @@ function useRefetch<T>(
 		const prevEnabled = enabledRef.current;
 		enabledRef.current = enabled;
 
-		if (!queryResult || !enabled || prevEnabled) return;
+		if (isEmpty || !enabled || prevEnabled) return;
 
-		queryResult.refetch();
-	}, [queryResult, staleTime, enabled]);
+		refetch!();
+	}, [staleTime, enabled, isEmpty, refetch]);
 
 	// Refetch after the first render if initialData/placeholderData was set
 	useEffect(() => {
@@ -502,28 +509,28 @@ function useRefetch<T>(
 
 	// Refetch on interval
 	useEffect(() => {
-		if (!refetchInterval || !queryResult || !enabled) return;
+		if (!refetchInterval || isEmpty || !enabled) return;
 
 		const id = setInterval(() => {
 			if (
 				refetchIntervalInBackground ||
 				document.visibilityState === "visible"
 			) {
-				queryResult.refetch();
+				refetch!();
 			}
 		}, refetchInterval);
 
 		return () => {
 			clearInterval(id);
 		};
-	}, [refetchInterval, refetchIntervalInBackground, queryResult, enabled]);
+	}, [refetchInterval, refetchIntervalInBackground, enabled, isEmpty, refetch]);
 
 	// Refetch on reconnect
 	useEffect(() => {
-		if (!refetchOnReconnect || !queryResult || !enabled) return;
+		if (!refetchOnReconnect || isEmpty || !enabled) return;
 
 		function handleReconnect() {
-			queryResult!.refetch();
+			refetch!();
 		}
 
 		window.addEventListener("online", handleReconnect);
@@ -531,7 +538,7 @@ function useRefetch<T>(
 		return () => {
 			window.removeEventListener("online", handleReconnect);
 		};
-	}, [refetchOnReconnect, queryResult, enabled]);
+	}, [refetchOnReconnect, enabled, isEmpty, refetch]);
 }
 
 /** Query client that manages the cache used by useQuery */
