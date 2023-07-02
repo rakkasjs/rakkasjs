@@ -81,11 +81,15 @@ export default function runServerSide(): PluginOption[] {
 						moduleId = (idCounter++).toString(36);
 					}
 
-					plugins.push(
-						options?.ssr
-							? babelTransformServerSideHooks(moduleId)
-							: babelTransformClientSideHooks(moduleId, ref),
-					);
+					// moduleId can be undefined if the file is not in the manifest
+					// e.g. if it hasn't been used. We can safely ignore it in that case.
+					if (moduleId) {
+						plugins.push(
+							options?.ssr
+								? babelTransformServerSideHooks(moduleId)
+								: babelTransformClientSideHooks(moduleId, ref),
+						);
+					}
 				}
 
 				if (!plugins.length) {
