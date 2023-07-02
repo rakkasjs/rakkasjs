@@ -22,6 +22,10 @@ function runSSQImpl(
 		fn: (...args: any) => any,
 	],
 ): Promise<any> {
+	if (typeof desc === "function") {
+		return Promise.reject(new Error("runSSQ call hasn't been transformed"));
+	}
+
 	const [moduleId, counter, closure, fn] = desc;
 
 	const stringified = closure.map((x) => stringify(x));
@@ -63,6 +67,10 @@ function useSSQImpl(
 	],
 	options: UseServerSideQueryOptions = {},
 ): QueryResult<any> {
+	if (typeof desc === "function") {
+		throw new Error("useSSQ call hasn't been transformed");
+	}
+
 	const { key: userKey, usePostMethod, ...useQueryOptions } = options;
 	const ctx = useRequestContext();
 	const [moduleId, counter, closure, fn] = desc;
