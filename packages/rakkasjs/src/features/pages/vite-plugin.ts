@@ -139,7 +139,8 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 			guardedPageIndices.add(pageIndex);
 		}
 
-		let exportStatement = "export default [\n";
+		let routesExport = "export default [\n";
+		let notFoundExport = "export const notFoundRoutes = [\n";
 
 		const pageRoutes = sortRoutes(
 			pageFiles.map((endpointFile, i) => {
@@ -189,10 +190,15 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 
 			exportElement += "],\n";
 
-			exportStatement += exportElement;
+			if (baseName === "$404" || baseName.endsWith("/$404")) {
+				notFoundExport += exportElement;
+			} else {
+				routesExport += exportElement;
+			}
 		}
 
-		exportStatement += "]";
+		routesExport += "]";
+		notFoundExport += "]";
 
 		const out = [
 			layoutImporters,
@@ -201,7 +207,8 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 			guardImporters,
 			singlePageGuardImporters,
 			pageNames,
-			exportStatement,
+			routesExport,
+			notFoundExport,
 		]
 			.filter(Boolean)
 			.join("\n");
@@ -224,13 +231,13 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 			async load(id, options) {
 				if (id === "virtual:rakkasjs:server-page-routes") {
 					if (!options?.ssr) {
-						return "export default null";
+						return "export default null; export const notFoundRoutes = null;";
 					}
 
 					return generateRoutesModule();
 				} else if (id === "virtual:rakkasjs:client-page-routes") {
 					if (options?.ssr) {
-						return "export default null";
+						return "export default null; export const notFoundRoutes = null;";
 					}
 
 					return generateRoutesModule(true);

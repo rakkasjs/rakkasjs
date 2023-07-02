@@ -2,8 +2,10 @@
 title: 404 handling
 ---
 
-When Rakkas fails to match a URL with a page component, it will look for a `$404.page.jsx` (or `.tsx`) file. For instance, when a request to `/` is made and no page component matches, Rakkas will look for `/foo/bar/baz/$404`, `/foo/bar/$404`, `/foo/$404`, and `/$404` in that order. This way, 404 pages can have the correct layout depending on the URL.
+When Rakkas fails to match a URL with a page component, it will look for a `$404.page.jsx` (or `.tsx`) file. For instance, when a request to `/foo/bar/baz` is made and no page component matches, Rakkas will look for `/foo/bar/baz/$404`, `/foo/bar/$404`, `/foo/$404`, and `/$404` in that order. This way, 404 pages can have the correct layout depending on the URL.
 
 404 pages can have `action`, `headers`, `prerender`, and `preload` functions just like normal pages. It's good practice to always have a root 404 page in `src/routes/$404.page.jsx` or `.tsx`, Rakkas's default 404 page is very basic unstyled.
 
-If a `Link` or `StyledLink` component points to a non-existent page, Rakkas will do a full page reload before showing a 404 page just in case the URL is pointing to a static asset.
+The difference between using a 404 page and a catch-all page with spread parameters, that is betweebn `/path/$404` and `/path/[...rest]` is that 404 pages have lower priority. A catch-all page route will match before any API routes, but a 404 page will only match if no other route matches.
+
+If a `Link` or `StyledLink` component points to a non-existent page, Rakkas will do a full page reload before showing a 404 page just in case the URL is pointing to a non-page route like an API endpoint or a static file.

@@ -999,6 +999,12 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					'<link rel="canonical" href="http://localhost:3000/head" data-rh="canonical">',
 			);
 		});
+
+		test("disables guarded catch-all route", async () => {
+			const r = await fetch(host + "/guarded-catch-all");
+			const text = await r.text();
+			expect(text).not.toContain("I shouldn&#x27;t be here!");
+		});
 	});
 }
 

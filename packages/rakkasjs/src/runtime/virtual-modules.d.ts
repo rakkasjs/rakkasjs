@@ -41,6 +41,7 @@ declare module "virtual:rakkasjs:server-page-routes" {
 	>;
 
 	export default routes;
+	export const notFoundRoutes: typeof routes;
 }
 
 declare module "virtual:rakkasjs:client-page-routes" {
@@ -64,6 +65,7 @@ declare module "virtual:rakkasjs:client-page-routes" {
 	type LayoutModule = import("./page-types").LayoutModule;
 
 	export default routes;
+	export const notFoundRoutes: typeof routes;
 }
 
 declare module "virtual:rakkasjs:client-manifest" {
