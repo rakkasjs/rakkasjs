@@ -14,6 +14,8 @@ You can use more than one dynamic parameter like `/user/[userName]/posts/[postId
 
 More specific routes have priority over generic ones, so you can have both `/products/list` for a specific match and `/products/[productId]` as a catch-all route.
 
-### Spread parameters
+## Spread parameters and catch-all routes
 
 You can use the `[...paramName]` syntax to match more than one segment at the end of a route. For instance, `/path/[...rest]` will match `/path/aaa/bbb/ccc/` with `params: { rest: "/aaa/bbb/ccc" }`, `/path` with `params: { rest: "" }`, and `/path/` with `params: { rest: "/" }`.
+
+> **NOTE:** Catch-all page routes have higher priority than [API routes](/guide/api-routes) which means a catch-all page route will be matched before an API route is matched even if the latter is more specific. For example, `/foo/[...slug].page.tsx` will match `/foo/bar` before an API route `/foo/bar.api.ts` is matched. You can use a [route guard](/guide/route-guards#catch-all) to disable the page route for a specific path to make it work.

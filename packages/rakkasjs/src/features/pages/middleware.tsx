@@ -44,7 +44,9 @@ export default async function renderPageRoute(
 
 	const pageHooks = ctx.hooks.map((hook) => hook.createPageHooks?.(ctx));
 
-	const routes = (await import("virtual:rakkasjs:server-page-routes")).default;
+	const { default: routes, notFoundRoutes } = await import(
+		"virtual:rakkasjs:server-page-routes"
+	);
 
 	let {
 		url: { pathname },
@@ -87,7 +89,7 @@ export default async function renderPageRoute(
 				pathname += "/";
 			}
 
-			found = findPage(routes, pathname + "%24404");
+			found = findPage(notFoundRoutes, pathname + "%24404");
 			if (found) {
 				break;
 			}

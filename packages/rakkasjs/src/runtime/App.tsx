@@ -17,7 +17,9 @@ import {
 	PreloadContext,
 	PreloadResult,
 } from "./page-types";
-import prodRoutes from "virtual:rakkasjs:client-page-routes";
+import prodRoutes, {
+	notFoundRoutes as prodNotFoundRoutes,
+} from "virtual:rakkasjs:client-page-routes";
 import { Default404Page } from "../features/pages/Default404Page";
 import { Head, LookupHookResult, PageContext, Redirect } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
@@ -166,24 +168,30 @@ export async function loadRoute(
 	if (!found || import.meta.hot) {
 		let routes: typeof prodRoutes;
 		let updatedRoutes: typeof prodRoutes;
+		let notFoundRoutes: typeof prodNotFoundRoutes;
+		let updatedNotFoundRoutes: typeof prodNotFoundRoutes;
 
 		if (import.meta.env.PROD) {
 			routes = prodRoutes;
+			notFoundRoutes = prodNotFoundRoutes;
 		} else {
 			// This whole dance is about rendering the old component (which
 			// React updates internally via Fast Refresh), but calling the
 			// preload function of the new component.
-			routes = (await import("virtual:rakkasjs:client-page-routes")).default;
+			const updatedModule = await import("virtual:rakkasjs:client-page-routes");
+			routes = updatedModule.default;
+			notFoundRoutes = updatedModule.notFoundRoutes;
 
 			if (import.meta.hot) {
-				updatedRoutes =
+				// TODO: This leaks memory
+				const updatedModule =
 					// ESBuild strips vite-ignore comments, so we have to use
 					// eval to make Vite ignore this import.
-					(
-						await (0, eval)(
-							`import("/virtual:rakkasjs:client-page-routes?" + Date.now())`,
-						)
-					).default;
+					await (0, eval)(
+						`import("/virtual:rakkasjs:client-page-routes?" + Date.now())`,
+					);
+				updatedRoutes = updatedModule.default;
+				updatedNotFoundRoutes = updatedModule.notFoundRoutes;
 			}
 		}
 
@@ -231,7 +239,10 @@ export async function loadRoute(
 				pathname += "/";
 			}
 
-			const result = findPage(routes, pathname + "%24404");
+			const result = findPage(notFoundRoutes, pathname + "%24404");
+			if (import.meta.hot && !result) {
+				findPage(updatedNotFoundRoutes!, pathname + "%24404");
+			}
 
 			found = result;
 

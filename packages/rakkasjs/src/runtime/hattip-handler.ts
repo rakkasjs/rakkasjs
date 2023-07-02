@@ -86,7 +86,15 @@ export function createRequestHandler(userHooks: ServerHooks = {}) {
 
 			hooks.map((hook) => hook.middleware?.beforeNotFound).flat(),
 			notFound,
-			renderPageRoute,
+			async (ctx: RequestContext) => {
+				try {
+					return await renderPageRoute(ctx);
+				} catch (error) {
+					if (!process.env.RAKKAS_PRERENDER) {
+						console.error(error);
+					}
+				}
+			},
 		].flat(),
 	);
 }

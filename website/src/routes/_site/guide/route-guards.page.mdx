@@ -18,3 +18,16 @@ Rakkas's solution to such requirements is called route guards. A route guard is 
 The rewrite feature is handy, for example, to redirect to a login form while remembering the original URL.
 
 A route guard can also guard all pages under a directory if it's named `$guard.js` (or `.ts`). Guards are called starting from the outermost one. All have to return true for the page to render.
+
+## Disabling catch-all page routes <a id="catch-all" />
+
+Another use case for route guards is to disable catch-all page routes that shadow API routes. For example, `/foo/[...slug].page.tsx` will match `/foo/bar` before an API route `/foo/bar.api.ts` is matched, effectively shadowing it. To prevent this, you can create a guard file `foo/[...slug].guard.ts` with the following content:
+
+```ts
+import type { LookupHookResult, PageContext } from "rakkasjs";
+
+export function pageGuard(ctx: PageContext): LookupHookResult {
+	// Selectively disable the catch-all page route for /foo/bar
+	return ctx.url.pathname !== "/foo/bar";
+}
+```
