@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 /** Function passed to useMutation */
 export type MutationFunction<T, V> = (vars: V) => T | Promise<T>;
@@ -122,41 +122,64 @@ export function useMutation<T, V = void>(
 	>("idle");
 	const [data, setData] = useState<T | undefined>(undefined);
 	const [error, setError] = useState<unknown | undefined>(undefined);
-	const reset = useRef(false);
+	const resetRef = useRef(false);
 
-	async function doMutate(vars: V) {
-		setStatus("loading");
-		await options.onMutate?.(vars);
-		try {
-			const result = await mutationFn(vars);
-			if (reset.current) {
-				return;
+	const { onMutate, onError, onSettled, onSuccess } = options;
+
+	const doMutate = useCallback(
+		async function doMutate(vars: V): Promise<T> {
+			setStatus("loading");
+			await onMutate?.(vars);
+			try {
+				const result = await mutationFn(vars);
+
+				if (!resetRef.current) {
+					onSuccess?.(result);
+					setData(result);
+					setStatus("success");
+				}
+
+				return result;
+			} catch (err) {
+				if (!resetRef.current) {
+					onError?.(err);
+					setError(err);
+					setStatus("error");
+				}
+
+				throw err;
+			} finally {
+				if (!resetRef.current) {
+					onSettled?.(data, error);
+				}
 			}
+		},
+		[data, error, mutationFn, onError, onMutate, onSettled, onSuccess],
+	);
 
-			options.onSuccess?.(result);
-			setData(result);
-			setStatus("success");
-			return result;
-		} catch (err) {
-			if (reset.current) {
-				return;
-			}
-			options.onError?.(err);
-			setError(err);
-			setStatus("error");
+	const mutateAsync = useCallback(
+		function mutateAsync(vars: V) {
+			resetRef.current = false;
+			return doMutate(vars);
+		},
+		[doMutate],
+	);
 
-			throw err;
-		} finally {
-			if (!reset.current) {
-				options.onSettled?.(data, error);
-			}
-		}
-	}
+	const reset = useCallback(function reset() {
+		setStatus("idle");
+		setData(undefined);
+		setError(undefined);
+		resetRef.current = true;
+	}, []);
 
-	function mutate(vars: V) {
-		reset.current = false;
-		return doMutate(vars);
-	}
+	const mutate = useCallback(
+		function mutate(vars: V) {
+			mutateAsync(vars).catch(() => {
+				// Do nothing
+			});
+		},
+		[mutateAsync],
+	);
 
 	return {
 		status,
@@ -166,19 +189,10 @@ export function useMutation<T, V = void>(
 		isIdle: status === "idle",
 		isLoading: status === "loading",
 		isSuccess: status === "success",
-		reset() {
-			setStatus("idle");
-			setData(undefined);
-			setError(undefined);
-			reset.current = true;
-		},
-		mutateAsync: mutate,
-		mutate(vars: V) {
-			mutate(vars).catch(() => {
-				// Do nothing
-			});
-		},
-	} as any;
+		reset,
+		mutateAsync,
+		mutate,
+	} as UseMutationResult<T, V>;
 }
 
 /** Optinos for useMutation */
