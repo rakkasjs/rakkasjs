@@ -38,7 +38,7 @@ export function babelTransformClientSidePages(): PluginItem {
 
 									for (const specifier of specifiers) {
 										if (
-											t.isExportSpecifier(specifier) &&
+											specifier.isExportSpecifier() &&
 											t.isIdentifier(specifier.node.exported) &&
 											SSR_EXPORTS.includes(specifier.node.exported.name)
 										) {

@@ -1,6 +1,7 @@
 import path from "node:path";
 import { Plugin, ResolvedConfig } from "vite";
 import micromatch from "micromatch";
+// eslint-disable-next-line import/no-named-as-default
 import glob from "fast-glob";
 import { routeToRegExp, sortRoutes } from "../../internal/route-utils";
 import MagicString from "magic-string";

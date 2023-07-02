@@ -3,6 +3,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { Plugin, UserConfig } from "vite";
 import { RakkasAdapter } from "./adapters";
+// eslint-disable-next-line import/no-named-as-default
 import glob from "fast-glob";
 import { BuildStep } from "@vavite/multibuild";
 import pico from "picocolors";

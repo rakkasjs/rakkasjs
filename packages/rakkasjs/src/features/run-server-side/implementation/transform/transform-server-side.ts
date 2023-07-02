@@ -35,8 +35,8 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 								>;
 
 								if (
-									!t.isArrowFunctionExpression(fn) &&
-									!t.isFunctionExpression(fn)
+									!fn.isArrowFunctionExpression() &&
+									!fn.isFunctionExpression()
 								) {
 									fn = fn.replaceWith(
 										t.arrowFunctionExpression(

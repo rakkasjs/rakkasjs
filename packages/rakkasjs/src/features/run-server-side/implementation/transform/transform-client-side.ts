@@ -36,8 +36,8 @@ export function babelTransformClientSideHooks(
 								>;
 
 								if (
-									!t.isArrowFunctionExpression(fn) &&
-									!t.isFunctionExpression(fn)
+									!fn.isArrowFunctionExpression() &&
+									!fn.isFunctionExpression()
 								) {
 									fn = fn.replaceWith(
 										t.arrowFunctionExpression(

@@ -1,4 +1,4 @@
-import { useQuery, ErrorBoundary } from "rakkasjs";
+import { useQuery, ErrorBoundary, FallbackProps } from "rakkasjs";
 import { Suspense, useRef } from "react";
 
 export default function UseQueryPage() {
@@ -9,7 +9,7 @@ export default function UseQueryPage() {
 			<h1>useQuery error handling</h1>
 			<div id="content">
 				<ErrorBoundary
-					fallbackRender={(props) => {
+					fallbackRender={(props: FallbackProps) => {
 						return (
 							<div>
 								<p>Error!</p>
