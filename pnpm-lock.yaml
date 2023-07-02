@@ -58,7 +58,7 @@ importers:
         specifier: ^7.2.1
         version: 7.2.1
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -98,7 +98,7 @@ importers:
         specifier: ^18.2.6
         version: 18.2.6
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -117,7 +117,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       vite:
         specifier: ^4.3.9
@@ -145,7 +145,7 @@ importers:
         specifier: ^18.2.6
         version: 18.2.6
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -179,7 +179,7 @@ importers:
         specifier: ^18.2.6
         version: 18.2.6
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -207,7 +207,7 @@ importers:
         specifier: ^18.2.6
         version: 18.2.6
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -229,7 +229,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.14
@@ -244,7 +244,7 @@ importers:
         specifier: ^2.8.8
         version: 2.8.8
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -281,7 +281,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.14
@@ -296,7 +296,7 @@ importers:
         specifier: ^2.8.8
         version: 2.8.8
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -327,7 +327,7 @@ importers:
         specifier: ^18.2.6
         version: 18.2.6
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -349,7 +349,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.14
@@ -364,7 +364,7 @@ importers:
         specifier: ^2.8.8
         version: 2.8.8
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -404,7 +404,7 @@ importers:
         specifier: ^18.2.6
         version: 18.2.6
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -444,7 +444,7 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4(@babel/core@7.22.5)(styled-components@6.0.1)
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -469,7 +469,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.14
@@ -484,7 +484,7 @@ importers:
         specifier: ^2.8.8
         version: 2.8.8
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -521,7 +521,7 @@ importers:
         specifier: ^18.2.6
         version: 18.2.6
       rakkasjs:
-        specifier: 0.7.0-next.11
+        specifier: 0.7.0-next.12
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.1.6
@@ -647,7 +647,7 @@ importers:
         version: 2.11.0(eslint@8.44.0)
       eslint-plugin-import:
         specifier: ^2.27.5
-        version: 2.27.5(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-typescript@3.5.3)(eslint@8.44.0)
+        version: 2.27.5(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-typescript@3.5.5)(eslint@8.44.0)
       eslint-plugin-no-only-tests:
         specifier: ^3.1.0
         version: 3.1.0
@@ -3180,7 +3180,7 @@ packages:
       eslint-import-resolver-exports: 1.0.0-beta.5(eslint-plugin-import@2.27.5)(eslint@8.44.0)
       eslint-import-resolver-typescript: 3.5.3(eslint-plugin-import@2.27.5)(eslint@8.44.0)
       eslint-plugin-css-modules: 2.11.0(eslint@8.44.0)
-      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-typescript@3.5.3)(eslint@8.44.0)
+      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-typescript@3.5.5)(eslint@8.44.0)
       eslint-plugin-no-only-tests: 3.1.0
       eslint-plugin-only-warn: 1.1.0
       eslint-plugin-react: 7.32.2(eslint@8.44.0)
@@ -6643,6 +6643,7 @@ packages:
       picocolors: 1.0.0
       tiny-glob: 0.2.9
       tslib: 2.5.0
+    dev: true
 
   /@pkgr/utils@2.4.0:
     resolution:
@@ -6657,7 +6658,6 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       tslib: 2.5.0
-    dev: false
 
   /@pnpm/config.env-replace@1.1.0:
     resolution:
@@ -9258,7 +9258,6 @@ packages:
         integrity: sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==,
       }
     engines: { node: ">=0.6" }
-    dev: false
 
   /binary-extensions@2.2.0:
     resolution:
@@ -9397,7 +9396,6 @@ packages:
     engines: { node: ">= 5.10.0" }
     dependencies:
       big-integer: 1.6.51
-    dev: false
 
   /brace-expansion@1.1.11:
     resolution:
@@ -9549,7 +9547,6 @@ packages:
     engines: { node: ">=12" }
     dependencies:
       run-applescript: 5.0.0
-    dev: false
 
   /bundle-require@4.0.1(esbuild@0.18.11):
     resolution:
@@ -11072,7 +11069,6 @@ packages:
     dependencies:
       bplist-parser: 0.2.0
       untildify: 4.0.0
-    dev: false
 
   /default-browser@4.0.0:
     resolution:
@@ -11085,7 +11081,6 @@ packages:
       default-browser-id: 3.0.0
       execa: 7.1.1
       titleize: 3.0.0
-    dev: false
 
   /defaults@1.0.4:
     resolution:
@@ -11124,7 +11119,6 @@ packages:
         integrity: sha512-N+MeXYoqr3pOgn8xfyRPREN7gHakLYjhsHhWGT3fWAiL4IkAt0iDw14QiiEm2bE30c5XX5q0FtAA3CK5f9/BUg==,
       }
     engines: { node: ">=12" }
-    dev: false
 
   /define-properties@1.1.4:
     resolution:
@@ -11738,6 +11732,7 @@ packages:
     dependencies:
       graceful-fs: 4.2.10
       tapable: 2.2.1
+    dev: true
 
   /enhanced-resolve@5.14.0:
     resolution:
@@ -11748,7 +11743,6 @@ packages:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.2.1
-    dev: false
 
   /entities@2.2.0:
     resolution:
@@ -12210,7 +12204,7 @@ packages:
       eslint-plugin-import: "*"
     dependencies:
       eslint: 8.44.0
-      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-typescript@3.5.3)(eslint@8.44.0)
+      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-typescript@3.5.5)(eslint@8.44.0)
       resolve.exports: 2.0.1
     dev: true
 
@@ -12239,7 +12233,7 @@ packages:
       debug: 4.3.4(supports-color@9.4.0)
       enhanced-resolve: 5.12.0
       eslint: 8.44.0
-      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-typescript@3.5.3)(eslint@8.44.0)
+      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-typescript@3.5.5)(eslint@8.44.0)
       get-tsconfig: 4.3.0
       globby: 13.1.3
       is-core-module: 2.11.0
@@ -12247,6 +12241,7 @@ packages:
       synckit: 0.8.4
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /eslint-import-resolver-typescript@3.5.5(@typescript-eslint/parser@5.60.1)(eslint-plugin-import@2.27.5)(eslint@8.44.0):
     resolution:
@@ -12272,39 +12267,6 @@ packages:
       - "@typescript-eslint/parser"
       - eslint-import-resolver-node
       - eslint-import-resolver-webpack
-      - supports-color
-    dev: false
-
-  /eslint-module-utils@2.7.4(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@3.5.3)(eslint@8.44.0):
-    resolution:
-      {
-        integrity: sha512-j4GT+rqzCoRKHwURX7pddtIPGySnX9Si/cgMI5ztrcqOPtk5dDEeZ34CQVPphnqkJytlc97Vuk05Um2mJ3gEQA==,
-      }
-    engines: { node: ">=4" }
-    peerDependencies:
-      "@typescript-eslint/parser": "*"
-      eslint: "*"
-      eslint-import-resolver-node: "*"
-      eslint-import-resolver-typescript: "*"
-      eslint-import-resolver-webpack: "*"
-    peerDependenciesMeta:
-      "@typescript-eslint/parser":
-        optional: true
-      eslint:
-        optional: true
-      eslint-import-resolver-node:
-        optional: true
-      eslint-import-resolver-typescript:
-        optional: true
-      eslint-import-resolver-webpack:
-        optional: true
-    dependencies:
-      "@typescript-eslint/parser": 5.60.1(eslint@8.44.0)(typescript@5.1.6)
-      debug: 3.2.7
-      eslint: 8.44.0
-      eslint-import-resolver-node: 0.3.7
-      eslint-import-resolver-typescript: 3.5.3(eslint-plugin-import@2.27.5)(eslint@8.44.0)
-    transitivePeerDependencies:
       - supports-color
 
   /eslint-module-utils@2.7.4(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@3.5.5)(eslint@8.44.0):
@@ -12338,7 +12300,6 @@ packages:
       eslint-import-resolver-typescript: 3.5.5(@typescript-eslint/parser@5.60.1)(eslint-plugin-import@2.27.5)(eslint@8.44.0)
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /eslint-module-utils@2.8.0(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-typescript@3.5.5)(eslint@8.44.0):
     resolution:
@@ -12370,7 +12331,6 @@ packages:
       eslint-import-resolver-typescript: 3.5.5(@typescript-eslint/parser@5.60.1)(eslint-plugin-import@2.27.5)(eslint@8.44.0)
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /eslint-plugin-css-modules@2.11.0(eslint@8.44.0):
     resolution:
@@ -12384,41 +12344,6 @@ packages:
       eslint: 8.44.0
       gonzales-pe: 4.3.0
       lodash: 4.17.21
-
-  /eslint-plugin-import@2.27.5(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-typescript@3.5.3)(eslint@8.44.0):
-    resolution:
-      {
-        integrity: sha512-LmEt3GVofgiGuiE+ORpnvP+kAm3h6MLZJ4Q5HCyHADofsb4VzXFsRiWj3c0OFiV+3DWFh0qg3v9gcPlfc3zRow==,
-      }
-    engines: { node: ">=4" }
-    peerDependencies:
-      "@typescript-eslint/parser": "*"
-      eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
-    peerDependenciesMeta:
-      "@typescript-eslint/parser":
-        optional: true
-    dependencies:
-      "@typescript-eslint/parser": 5.60.1(eslint@8.44.0)(typescript@5.1.6)
-      array-includes: 3.1.6
-      array.prototype.flat: 1.3.1
-      array.prototype.flatmap: 1.3.1
-      debug: 3.2.7
-      doctrine: 2.1.0
-      eslint: 8.44.0
-      eslint-import-resolver-node: 0.3.7
-      eslint-module-utils: 2.7.4(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@3.5.3)(eslint@8.44.0)
-      has: 1.0.3
-      is-core-module: 2.11.0
-      is-glob: 4.0.3
-      minimatch: 3.1.2
-      object.values: 1.1.6
-      resolve: 1.22.1
-      semver: 6.3.0
-      tsconfig-paths: 3.14.1
-    transitivePeerDependencies:
-      - eslint-import-resolver-typescript
-      - eslint-import-resolver-webpack
-      - supports-color
 
   /eslint-plugin-import@2.27.5(@typescript-eslint/parser@5.60.1)(eslint-import-resolver-typescript@3.5.5)(eslint@8.44.0):
     resolution:
@@ -12454,7 +12379,6 @@ packages:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
       - supports-color
-    dev: false
 
   /eslint-plugin-no-only-tests@3.1.0:
     resolution:
@@ -13953,6 +13877,7 @@ packages:
       {
         integrity: sha512-YCcF28IqSay3fqpIu5y3Krg/utCBHBeoflkZyHj/QcqI2nrLPC3ZegS9CmIo+hJb8K7aiGsuUl7PwWVjNG2HQQ==,
       }
+    dev: true
 
   /get-tsconfig@4.5.0:
     resolution:
@@ -14200,6 +14125,7 @@ packages:
       {
         integrity: sha512-40oNTM9UfG6aBmuKxk/giHn5nQ8RVz/SS4Ir6zgzOv9/qC3kKZ9v4etGTcJbEl/NyVQH7FGU7d+X1egr57Md2Q==,
       }
+    dev: true
 
   /globby@11.1.0:
     resolution:
@@ -14227,6 +14153,7 @@ packages:
       ignore: 5.2.4
       merge2: 1.4.1
       slash: 4.0.0
+    dev: true
 
   /globby@13.1.4:
     resolution:
@@ -14240,7 +14167,6 @@ packages:
       ignore: 5.2.4
       merge2: 1.4.1
       slash: 4.0.0
-    dev: false
 
   /globby@13.2.1:
     resolution:
@@ -14261,6 +14187,7 @@ packages:
       {
         integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==,
       }
+    dev: true
 
   /gonzales-pe@4.3.0:
     resolution:
@@ -15545,7 +15472,6 @@ packages:
       }
     engines: { node: ^12.20.0 || ^14.13.1 || >=16.0.0 }
     hasBin: true
-    dev: false
 
   /is-extendable@0.1.1:
     resolution:
@@ -15634,7 +15560,6 @@ packages:
     hasBin: true
     dependencies:
       is-docker: 3.0.0
-    dev: false
 
   /is-installed-globally@0.1.0:
     resolution:
@@ -19262,6 +19187,7 @@ packages:
       define-lazy-prop: 2.0.0
       is-docker: 2.2.1
       is-wsl: 2.2.0
+    dev: true
 
   /open@8.4.2:
     resolution:
@@ -19286,7 +19212,6 @@ packages:
       define-lazy-prop: 3.0.0
       is-inside-container: 1.0.0
       is-wsl: 2.2.0
-    dev: false
 
   /opentracing@0.14.7:
     resolution:
@@ -21627,7 +21552,6 @@ packages:
     engines: { node: ">=12" }
     dependencies:
       execa: 5.1.1
-    dev: false
 
   /run-async@2.4.1:
     resolution:
@@ -23083,6 +23007,7 @@ packages:
     dependencies:
       "@pkgr/utils": 2.3.1
       tslib: 2.4.1
+    dev: true
 
   /synckit@0.8.5:
     resolution:
@@ -23093,7 +23018,6 @@ packages:
     dependencies:
       "@pkgr/utils": 2.4.0
       tslib: 2.5.0
-    dev: false
 
   /tabbable@6.2.0:
     resolution:
@@ -23360,6 +23284,7 @@ packages:
     dependencies:
       globalyzer: 0.1.0
       globrex: 0.1.2
+    dev: true
 
   /tiny-lru@11.0.1:
     resolution:
@@ -23405,7 +23330,6 @@ packages:
         integrity: sha512-KxVu8EYHDPBdUYdKZdKtU2aj2XfEx9AfjXxE/Aj0vT06w2icA09Vus1rh6eSu1y01akYg6BjIK/hxyLJINoMLQ==,
       }
     engines: { node: ">=12" }
-    dev: false
 
   /tmp-promise@3.0.3:
     resolution:
@@ -23681,6 +23605,7 @@ packages:
       {
         integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==,
       }
+    dev: true
 
   /tslib@2.5.0:
     resolution:
@@ -24256,7 +24181,6 @@ packages:
         integrity: sha512-KK8xQ1mkzZeg9inewmFVDNkg3l5LUhoq9kN6iWYB/CC9YMG8HA+c1Q8HwDe6dEX7kErrEVNVBO3fWsVq5iDgtw==,
       }
     engines: { node: ">=8" }
-    dev: false
 
   /unzip-response@2.0.1:
     resolution:
