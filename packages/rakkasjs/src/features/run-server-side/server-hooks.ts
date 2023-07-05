@@ -8,7 +8,7 @@ import { EventStreamContentType } from "@microsoft/fetch-event-source";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
-		beforeApiRoutes: async (ctx) => {
+		beforePages: async (ctx) => {
 			const prefix = `/_data/`;
 			let action = ctx.url.searchParams.get("_action");
 
