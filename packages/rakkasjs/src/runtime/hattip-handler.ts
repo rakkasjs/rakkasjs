@@ -61,7 +61,7 @@ export interface PageRequestHooks {
  * handler and fefault export it from your HatTip entry.
  */
 export function createRequestHandler(userHooks: ServerHooks = {}) {
-	const hooks = [...serverHooks, userHooks];
+	const hooks = [userHooks, ...serverHooks];
 
 	return compose(
 		[
