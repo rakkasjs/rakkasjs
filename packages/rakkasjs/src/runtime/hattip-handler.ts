@@ -25,6 +25,8 @@ export interface ServerHooks {
 	 * processing chain
 	 */
 	middleware?: {
+		/** Middlewares to be run before everything */
+		beforeAll?: RequestHandlerStack;
 		/** Middlewares to be run before mathcing pages */
 		beforePages?: RequestHandlerStack;
 		/** Middlewares to be run before matching API routes */
@@ -61,13 +63,15 @@ export interface PageRequestHooks {
  * handler and fefault export it from your HatTip entry.
  */
 export function createRequestHandler(userHooks: ServerHooks = {}) {
-	const hooks = [userHooks, ...serverHooks];
+	const hooks = [...serverHooks, userHooks];
 
 	return compose(
 		[
 			process.env.RAKKAS_PRERENDER === "true" && prerender,
 
 			init(hooks),
+
+			hooks.map((hook) => hook.middleware?.beforeAll).flat(),
 
 			hooks.map((hook) => hook.middleware?.beforePages).flat(),
 
