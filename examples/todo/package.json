@@ -14,12 +14,12 @@
 		"test:unit": "vitest run"
 	},
 	"devDependencies": {
-		"@rakkasjs/eslint-config": "0.7.0-next.14",
+		"@rakkasjs/eslint-config": "0.7.0-next.16",
 		"@types/react": "^18.2.14",
 		"@types/react-dom": "^18.2.6",
 		"eslint": "^8.44.0",
 		"prettier": "^3.0.0",
-		"rakkasjs": "0.7.0-next.14",
+		"rakkasjs": "0.7.0-next.16",
 		"typescript": "^5.1.6",
 		"vite": "^4.4.2",
 		"vite-tsconfig-paths": "^4.2.0",
