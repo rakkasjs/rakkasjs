@@ -108,17 +108,17 @@ for (const test of tests) {
 	const f = test._ === "skip" ? it.skip : test._ === "only" ? it.only : it;
 
 	f(test.message, async () => {
-		const result = await transformAsync(trim(test.input), {
+		const result = await transformAsync(await trim(test.input), {
 			parserOpts: { plugins: ["jsx", "typescript"] },
 			plugins: [babelTransformServerSideHooks("abc123")],
 		});
 
-		const output = trim(result?.code || "");
-		expect(output).to.equal(trim(test.output));
+		const output = await trim(result?.code || "");
+		expect(output).to.equal(await trim(test.output));
 	});
 }
 
-function trim(c: string): string {
+async function trim(c: string): Promise<string> {
 	return format(c.replace(/(\s|\n|\r)+/g, " ").trim(), {
 		filepath: "test.tsx",
 	});

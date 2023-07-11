@@ -111,8 +111,11 @@ describe(TEST_HOST, () => {
 		await page.goto(TEST_HOST + "/json");
 		await page.waitForSelector(".hydrated");
 
-		await page.waitForFunction(() =>
-			document.querySelector("body")?.textContent?.includes(`"hello": "world"`),
+		await page.waitForFunction(
+			() =>
+				document
+					.querySelector("body")
+					?.textContent?.includes(`"hello": "world"`),
 		);
 	});
 
@@ -127,17 +130,21 @@ describe(TEST_HOST, () => {
 		expect(link).toBeTruthy();
 		await link.click();
 
-		await page.waitForFunction(() =>
-			document.querySelector("body")?.textContent?.includes(`"hello": "world"`),
+		await page.waitForFunction(
+			() =>
+				document
+					.querySelector("body")
+					?.textContent?.includes(`"hello": "world"`),
 		);
 	});
 
 	test("renders redirection page", async () => {
 		await page.goto(TEST_HOST + "/redirect");
-		await page.waitForFunction(() =>
-			document
-				.querySelector("body")
-				?.textContent?.includes("Redirection worked!"),
+		await page.waitForFunction(
+			() =>
+				document
+					.querySelector("body")
+					?.textContent?.includes("Redirection worked!"),
 		);
 	});
 
@@ -151,10 +158,11 @@ describe(TEST_HOST, () => {
 		await page.goto(TEST_HOST + "/ssq");
 		await page.waitForSelector(".hydrated");
 
-		await page.waitForFunction(() =>
-			document
-				.querySelector("body")
-				?.textContent?.includes("an interesting value"),
+		await page.waitForFunction(
+			() =>
+				document
+					.querySelector("body")
+					?.textContent?.includes("an interesting value"),
 		);
 	});
 });
