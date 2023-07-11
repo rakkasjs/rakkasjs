@@ -20,15 +20,15 @@
     "prettier": "^2.8.8",
     "rakkasjs": "0.7.0-next.14",
     "typescript": "^5.1.6",
-    "vite": "^4.3.9",
+    "vite": "^4.4.2",
     "vite-tsconfig-paths": "^4.2.0"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/server": "^11.11.0",
-    "@mantine/core": "^6.0.15",
-    "@mantine/hooks": "^6.0.15",
-    "@mantine/ssr": "^6.0.15",
+    "@mantine/core": "^6.0.16",
+    "@mantine/hooks": "^6.0.16",
+    "@mantine/ssr": "^6.0.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }
