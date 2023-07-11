@@ -34,6 +34,6 @@
 	},
 	"devDependencies": {
 		"eslint": "^8.44.0",
-		"publint": "^0.1.15"
+		"publint": "^0.1.16"
 	}
 }
