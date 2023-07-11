@@ -328,7 +328,7 @@ function useQueryBase<T>(
 	}, [key, item?.invalid]);
 
 	// preserve reference between calls
-	const queryResultReference = useMemo(() => ({} as QueryResult<T>), []);
+	const queryResultReference = useMemo(() => ({}) as QueryResult<T>, []);
 
 	const refetch = useCallback(
 		function refetch() {

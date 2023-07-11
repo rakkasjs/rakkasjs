@@ -83,7 +83,7 @@ async function* splitOnOpen(
 	let state: "data" | "open" | "other" = "data";
 	const it = input[Symbol.asyncIterator]();
 	const read = () =>
-		it.next().catch(() => ({ done: true } as IteratorResult<Uint8Array>));
+		it.next().catch(() => ({ done: true }) as IteratorResult<Uint8Array>);
 
 	let piece: IteratorResult<Uint8Array>;
 	outer: while ((piece = await read())) {
