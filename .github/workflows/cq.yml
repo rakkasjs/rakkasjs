@@ -12,6 +12,10 @@ defaults:
   run:
     working-directory: .
 
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref || github.run_id }}"
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
