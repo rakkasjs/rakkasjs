@@ -50,4 +50,4 @@ jobs:
       - name: "Commit formatted files"
         run: |
           git commit -am "chore: format files"
-          git push origin ${{ github.head_ref }}
+          git push origin ${{ steps.comment-branch.outputs.head_ref }}
