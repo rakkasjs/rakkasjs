@@ -14,7 +14,7 @@
 		"@types/react": "^18.2.14",
 		"@types/react-dom": "^18.2.6",
 		"dotenv-cli": "^7.2.1",
-		"rakkasjs": "0.7.0-next.16",
+		"rakkasjs": "0.7.0-next.17",
 		"typescript": "^5.1.6",
 		"vite": "^4.4.2",
 		"vite-tsconfig-paths": "^4.2.0"
