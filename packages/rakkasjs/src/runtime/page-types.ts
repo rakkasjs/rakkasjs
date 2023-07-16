@@ -119,7 +119,7 @@ export type ServerSidePageContext<P = Record<string, string>> =
 /** Return type of a preload function */
 export interface PreloadResult<M = Record<string, unknown>> {
 	/** Metadata passed to page and layout components. */
-	meta?: Partial<M>;
+	meta?: Partial<M> | ((prevMeta: M) => M);
 	/** Head tags rendered for the page. Use the <Head /> component. */
 	head?: HeadProps;
 	/** Redirection */
