@@ -328,7 +328,9 @@ export default async function renderPageRoute(
 	);
 
 	const meta: any = {};
-	preloaded.forEach((p) => Object.assign(meta, p?.meta));
+	preloaded.forEach((p) =>
+		typeof p?.meta === "function" ? p.meta(meta) : Object.assign(meta, p?.meta),
+	);
 
 	const preloadNode: ReactNode[] = preloaded
 		.map((result, i) => {

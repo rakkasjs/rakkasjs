@@ -328,7 +328,11 @@ export async function loadRoute(
 		const preloaded = layoutStack.map((r) => r[1]).reverse();
 
 		meta = {};
-		preloaded.forEach((p) => Object.assign(meta, p?.meta));
+		preloaded.forEach((p) =>
+			typeof p?.meta === "function"
+				? p.meta(meta)
+				: Object.assign(meta, p?.meta),
+		);
 
 		preloadNode = preloaded
 			.map(
