@@ -90,7 +90,7 @@
 		"@types/react": "^18.2.14",
 		"@types/react-dom": "^18.2.6",
 		"@vavite/connect": "^1.8.2",
-		"@vavite/expose-vite-dev-server": "1.8.2",
+		"@vavite/expose-vite-dev-server": "2.0.1",
 		"@vavite/multibuild": "^1.8.2",
 		"@vavite/node-loader": "^1.8.2",
 		"@vitejs/plugin-react": "^4.0.3",
