@@ -1,0 +1,31 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": ["config:base", "schedule:weekly", "group:allNonMajor"],
+	"ignorePresets": ["ignorePaths"],
+	"ignorePaths": ["**/node_modules/**", "**/dist/**"],
+	"labels": ["dependencies"],
+	"rangeStrategy": "bump",
+	"packageRules": [
+		{
+			"depTypeList": ["peerDependencies"],
+			"enabled": false
+		},
+		{
+			"depTypeList": ["devDependencies"],
+			"enabled": false
+		},
+		{
+			"groupName": "core",
+			"matchPackagePrefixes": ["@vavite/"]
+		},
+		{
+			"groupName": "core",
+			"matchPackageNames": ["vavite"]
+		},
+		{
+			"groupName": "core",
+			"matchPackagePrefixes": ["@hattip/"]
+		}
+	],
+	"ignoreDeps": []
+}
