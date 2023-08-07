@@ -1,0 +1,24 @@
+{
+	"name": "@rakkasjs/example-fastify",
+	"description": "Rakkas Fastify integration example",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "rakkas",
+		"build": "rakkas build",
+		"start": "node dist/server"
+	},
+	"devDependencies": {
+		"@types/react": "^18.2.14",
+		"@types/react-dom": "^18.2.6",
+		"rakkasjs": "0.7.0-next.17",
+		"typescript": "^5.1.6",
+		"vite": "^4.4.2",
+		"vite-tsconfig-paths": "^4.2.0"
+	},
+	"dependencies": {
+		"fastify": "^4.21.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0"
+	}
+}
