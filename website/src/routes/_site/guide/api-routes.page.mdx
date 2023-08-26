@@ -4,11 +4,11 @@ title: API routes
 
 Any file in the `src/routes` directory with a name that matches `*.api.js` or `*.api.ts` will become an API route. Routing convention is the same as in pages:
 
-| Module name                          | URL path      |
-| ------------------------------------ | ------------- |
-| `src/routes/api/index.api.jsx`       | `/api`        |
-| `src/routes/api/users.api.jsx`       | `/users`      |
-| `src/routes/api/users/index.api.jsx` | also `/users` |
+| Module name                          | URL path          |
+| ------------------------------------ | ----------------- |
+| `src/routes/api/index.api.jsx`       | `/api`            |
+| `src/routes/api/users.api.jsx`       | `/api/users`      |
+| `src/routes/api/users/index.api.jsx` | also `/api/users` |
 
 Dynamic routes and catch-all routes are also supported (`/api/user/[userId].api.js`, `/path/[...rest].api.js` ctc.).
 
