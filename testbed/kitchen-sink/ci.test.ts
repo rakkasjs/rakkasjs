@@ -1019,6 +1019,18 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			const text = await r.text();
 			expect(text).not.toContain("I shouldn&#x27;t be here!");
 		});
+
+		test("matches non-ascii paths", async () => {
+			const r = await fetch(host + "/non-ascii/😀");
+			const text = await r.text();
+			expect(text).toContain("😀");
+		});
+
+		test("matches -- for /", async () => {
+			const r = await fetch(host + "/flat/route");
+			const text = await r.text();
+			expect(text).toContain("Flat Route");
+		});
 	});
 }
 

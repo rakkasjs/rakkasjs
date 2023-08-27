@@ -239,9 +239,9 @@ export async function loadRoute(
 				pathname += "/";
 			}
 
-			const result = findPage(notFoundRoutes, pathname + "%24404");
+			const result = findPage(notFoundRoutes, pathname + "$404");
 			if (import.meta.hot && !result) {
-				findPage(updatedNotFoundRoutes!, pathname + "%24404");
+				findPage(updatedNotFoundRoutes!, pathname + "$404");
 			}
 
 			found = result;
