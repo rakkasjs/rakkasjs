@@ -7,7 +7,7 @@
 	],
 	"main": "index.js",
 	"scripts": {
-		"test": "publint"
+		"test": "publint --strict"
 	},
 	"description": "Reusable ESLint configuration for Rakkas applications",
 	"license": "MIT",

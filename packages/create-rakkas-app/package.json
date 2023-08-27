@@ -13,9 +13,10 @@
 		"build": "tsup && tsx scripts/create-templates.ts",
 		"dev": "tsup --watch",
 		"prepack": "rm -rf dist && pnpm build",
-		"test": "pnpm test:typecheck && pnpm test:lint",
+		"test": "pnpm test:typecheck && pnpm test:lint && pnpm test:package",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit",
-		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist --ignore-pattern templates"
+		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist --ignore-pattern templates",
+		"test:package": "publint --strict"
 	},
 	"description": "Generate Rakkas application boilerplate",
 	"license": "MIT",
