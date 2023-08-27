@@ -89,7 +89,7 @@ export default async function renderPageRoute(
 				pathname += "/";
 			}
 
-			found = findPage(notFoundRoutes, pathname + "%24404");
+			found = findPage(notFoundRoutes, pathname + "$404");
 			if (found) {
 				break;
 			}
