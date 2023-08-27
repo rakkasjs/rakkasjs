@@ -1,5 +1,3 @@
-/// <reference types="@vavite/multibuild/vite-config" />
-
 import { PluginOption, ResolvedConfig } from "vite";
 import react, { Options as ReactPluginOptions } from "@vitejs/plugin-react";
 import { injectConfig } from "./inject-config";

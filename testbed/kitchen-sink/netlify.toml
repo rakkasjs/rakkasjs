@@ -1,4 +1,5 @@
 [build]
+base = "testbed/kitchen-sink"
 publish = "netlify/static"
 
 [[edge_functions]]

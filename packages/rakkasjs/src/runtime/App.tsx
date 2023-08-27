@@ -108,8 +108,8 @@ export const RouteContext = createNamedContext<RouteContextContent>(
 
 interface RouteContextContent {
 	found?: RouteMatch<
-		| typeof import("virtual:rakkasjs:client-page-routes").default[0]
-		| typeof import("virtual:rakkasjs:server-page-routes").default[0]
+		| (typeof import("virtual:rakkasjs:client-page-routes").default)[0]
+		| (typeof import("virtual:rakkasjs:server-page-routes").default)[0]
 	>;
 	last?: {
 		pathname: string;

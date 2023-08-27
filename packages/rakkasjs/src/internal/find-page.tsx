@@ -7,8 +7,8 @@ import {
 
 export function findPage<
 	T extends
-		| typeof import("virtual:rakkasjs:server-page-routes").default[0]
-		| typeof import("virtual:rakkasjs:client-page-routes").default[0],
+		| (typeof import("virtual:rakkasjs:server-page-routes").default)[0]
+		| (typeof import("virtual:rakkasjs:client-page-routes").default)[0],
 >(
 	routes: T[],
 	path: string,
@@ -17,14 +17,14 @@ export function findPage<
 
 export function findPage<
 	T extends
-		| typeof import("virtual:rakkasjs:server-page-routes").default[0]
-		| typeof import("virtual:rakkasjs:client-page-routes").default[0],
+		| (typeof import("virtual:rakkasjs:server-page-routes").default)[0]
+		| (typeof import("virtual:rakkasjs:client-page-routes").default)[0],
 >(routes: T[], path: string): RouteMatch<T> | undefined;
 
 export function findPage<
 	T extends
-		| typeof import("virtual:rakkasjs:server-page-routes").default[0]
-		| typeof import("virtual:rakkasjs:client-page-routes").default[0],
+		| (typeof import("virtual:rakkasjs:server-page-routes").default)[0]
+		| (typeof import("virtual:rakkasjs:client-page-routes").default)[0],
 >(
 	routes: T[],
 	path: string,

@@ -10,20 +10,20 @@
 		"test:typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"devDependencies": {
-		"@types/react": "^18.2.14",
-		"@types/react-dom": "^18.2.6",
+		"@types/react": "^18.2.21",
+		"@types/react-dom": "^18.2.7",
 		"@types/styled-components": "^5.1.26",
 		"babel-plugin-styled-components": "^2.1.4",
 		"rakkasjs": "0.7.0-next.17",
-		"typescript": "^5.1.6",
-		"vite": "^4.4.2",
-		"vite-plugin-cjs-interop": "^0.0.8",
+		"typescript": "^5.2.2",
+		"vite": "^4.4.9",
+		"vite-plugin-cjs-interop": "^1.0.0",
 		"vite-tsconfig-paths": "^4.2.0"
 	},
 	"dependencies": {
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-is": "^18.2.0",
-		"styled-components": "6.0.3"
+		"styled-components": "6.0.7"
 	}
 }

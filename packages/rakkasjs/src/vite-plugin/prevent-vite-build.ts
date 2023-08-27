@@ -1,5 +1,3 @@
-/// <reference types="@vavite/multibuild/vite-config" />
-
 import { Plugin } from "vite";
 
 export function preventViteBuild(): Plugin {

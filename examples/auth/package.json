@@ -11,16 +11,16 @@
 		"test:typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"devDependencies": {
-		"@types/react": "^18.2.14",
-		"@types/react-dom": "^18.2.6",
-		"dotenv-cli": "^7.2.1",
+		"@types/react": "^18.2.21",
+		"@types/react-dom": "^18.2.7",
+		"dotenv-cli": "^7.3.0",
 		"rakkasjs": "0.7.0-next.17",
-		"typescript": "^5.1.6",
-		"vite": "^4.4.2",
+		"typescript": "^5.2.2",
+		"vite": "^4.4.9",
 		"vite-tsconfig-paths": "^4.2.0"
 	},
 	"dependencies": {
-		"@auth/core": "0.9.0",
+		"@auth/core": "0.12.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	}
