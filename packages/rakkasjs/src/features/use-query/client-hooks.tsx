@@ -84,8 +84,8 @@ const cache: QueryCache = {
 				cacheTime: Math.max(queryCache[key]!.cacheTime, cacheTime),
 			};
 
-			valueOrPromise.then(
-				(value) => {
+			valueOrPromise
+				.then((value) => {
 					queryCache[key] = {
 						...queryCache[key]!,
 						value,
@@ -94,15 +94,15 @@ const cache: QueryCache = {
 					};
 					delete queryCache[key]!.invalid;
 					delete queryCache[key]!.promise;
-
-					queryCache[key]!.subscribers.forEach((subscriber) => subscriber());
-				},
-				(error) => {
+				})
+				.catch((error) => {
+					queryCache[key] = { ...queryCache[key]!, error };
 					delete queryCache[key]!.promise;
-					queryCache[key]!.error = error;
 					throw error;
-				},
-			);
+				})
+				.finally(() => {
+					queryCache[key]!.subscribers.forEach((subscriber) => subscriber());
+				});
 		} else {
 			queryCache[key] ||= {
 				date: Date.now(),
