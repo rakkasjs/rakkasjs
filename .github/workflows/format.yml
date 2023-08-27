@@ -10,7 +10,7 @@ defaults:
 
 jobs:
   format:
-    if: ${{ github.event.issue.pull_request }} && ${{ github.event.comment.body }} == "/format"
+    if: github.event.issue.pull_request && github.event.comment.body == '/format'
     runs-on: ubuntu-latest
     name: "Format and commit back"
     steps:
