@@ -170,7 +170,7 @@ export async function navigate(
 			to,
 		);
 	} else {
-		const index = ++nextIndex;
+		const index = nextIndex++;
 		history.pushState({ id, data, actionData, index }, "", to);
 	}
 
