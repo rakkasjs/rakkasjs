@@ -344,19 +344,19 @@ function useQueryBase<T>(
 		return;
 	}
 
-	if (!import.meta.env.SSR && item && "error" in item) {
-		const error = item.error;
-
-		throw error;
-	}
-
 	if (item && "value" in item) {
 		return Object.assign(queryResultReference, {
 			data: item.value,
 			isRefetching: !!item.promise,
 			refetch,
 			dataUpdatedAt: item.date,
+			error: item.error,
 		});
+	}
+
+	if (!import.meta.env.SSR && item && "error" in item) {
+		const error = item.error;
+		throw error;
 	}
 
 	if (
@@ -431,6 +431,8 @@ export interface QueryResult<
 	isRefetching: boolean;
 	/** Update date of the last returned data */
 	dataUpdatedAt?: number;
+	/** Error thrown by the query when a refetch fails */
+	error?: any;
 }
 
 export interface EventSourceResult<T> {
