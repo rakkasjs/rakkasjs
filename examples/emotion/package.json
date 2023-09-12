@@ -8,7 +8,7 @@
 		"start": "node dist/server"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.22.11",
+		"@babel/core": "^7.22.17",
 		"@emotion/babel-plugin": "^11.11.0",
 		"@types/react": "^18.2.21",
 		"@types/react-dom": "^18.2.7",

@@ -12,13 +12,13 @@
 	"devDependencies": {
 		"@types/react": "^18.2.21",
 		"@types/react-dom": "^18.2.7",
-		"@types/styled-components": "^5.1.26",
+		"@types/styled-components": "^5.1.27",
 		"babel-plugin-styled-components": "^2.1.4",
 		"rakkasjs": "0.7.0-next.18",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9",
 		"vite-plugin-cjs-interop": "^1.0.0",
-		"vite-tsconfig-paths": "^4.2.0"
+		"vite-tsconfig-paths": "^4.2.1"
 	},
 	"dependencies": {
 		"react": "^18.2.0",

@@ -15,10 +15,10 @@
 	"devDependencies": {
 		"@cyco130/eslint-config": "^3.3.2",
 		"@types/ps-tree": "^1.1.2",
-		"eslint": "^8.48.0",
+		"eslint": "^8.49.0",
 		"node-fetch": "^3.3.2",
 		"ps-tree": "^1.2.0",
-		"puppeteer": "^21.1.0",
+		"puppeteer": "^21.1.1",
 		"rakkasjs": "workspace:*",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9"

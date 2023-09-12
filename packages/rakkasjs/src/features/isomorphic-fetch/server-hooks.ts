@@ -65,6 +65,7 @@ const isomorphicFetchServerHooks: ServerHooks = {
 						waitUntil: ctx.waitUntil,
 						passThrough: ctx.passThrough,
 						platform: ctx.platform,
+						env: ctx.env,
 					});
 				}
 

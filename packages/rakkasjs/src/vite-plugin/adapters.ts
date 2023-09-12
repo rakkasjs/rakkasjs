@@ -314,14 +314,19 @@ const VERCEL_EDGE_ENTRY = `
 `;
 
 const DENO_ENTRY = `
-	import * as path from "https://deno.land/std@0.144.0/path/mod.ts";
-	import { serve, serveDir, createRequestHandler } from "@hattip/adapter-deno";
+	import { createServeHandler } from "@hattip/adapter-deno";
+	import * as path from "https://deno.land/std@0.201.0/path/mod.ts";
+	import { serveDir } from "https://deno.land/std@0.201.0/http/file_server.ts";
+	import { serve } from "https://deno.land/std@0.201.0/http/server.ts";
 	import handler from "./hattip.js";
 	import staticFiles from "./static-manifest.js";
+	import process from "node:process";
+
+	globalThis.process = process;
 
 	const staticDir = path.join(path.dirname(path.fromFileUrl(import.meta.url)), "public");
 
-	const denoHandler = createRequestHandler(handler);
+	const denoHandler = createServeHandler(handler);
 
 	serve(
 		async (request, connInfo) => {
@@ -347,10 +352,6 @@ const BUN_ENTRY = `
 	import path from "node:path";
 	import bunAdapter from "@hattip/adapter-bun";
 	import handler from "./hattip.js";
-
-	Request.prototype.formData = async function () {
-		return new URLSearchParams(await this.text());
-	};
 
 	const dir = path.resolve(
 		path.dirname(url.fileURLToPath(new URL(import.meta.url))),

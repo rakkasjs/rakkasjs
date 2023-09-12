@@ -189,6 +189,9 @@ export async function doPrerender(
 					}
 				},
 			},
+			env(variable: string) {
+				return process.env[variable];
+			},
 		});
 	}
 

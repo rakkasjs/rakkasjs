@@ -9,17 +9,17 @@
 		"start": "dotenv node dist/server"
 	},
 	"devDependencies": {
-		"@hattip/polyfills": "0.0.34",
+		"@hattip/polyfills": "0.0.35",
 		"@types/react": "^18.2.21",
 		"@types/react-dom": "^18.2.7",
 		"rakkasjs": "0.7.0-next.18",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9",
-		"vite-tsconfig-paths": "^4.2.0"
+		"vite-tsconfig-paths": "^4.2.1"
 	},
 	"dependencies": {
-		"@hattip/cookie": "0.0.34",
-		"@hattip/session": "0.0.34",
+		"@hattip/cookie": "0.0.35",
+		"@hattip/session": "0.0.35",
 		"dotenv-cli": "^7.3.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
