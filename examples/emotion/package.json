@@ -8,9 +8,9 @@
 		"start": "node dist/server"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.22.17",
+		"@babel/core": "^7.23.0",
 		"@emotion/babel-plugin": "^11.11.0",
-		"@types/react": "^18.2.21",
+		"@types/react": "^18.2.22",
 		"@types/react-dom": "^18.2.7",
 		"rakkasjs": "0.7.0-next.19",
 		"typescript": "^5.2.2",

@@ -10,7 +10,7 @@
 		"test:typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"devDependencies": {
-		"@types/react": "^18.2.21",
+		"@types/react": "^18.2.22",
 		"@types/react-dom": "^18.2.7",
 		"rakkasjs": "0.7.0-next.19",
 		"typescript": "^5.2.2",
@@ -18,7 +18,7 @@
 		"vite-tsconfig-paths": "^4.2.1"
 	},
 	"dependencies": {
-		"graphql": "^16.8.0",
+		"graphql": "^16.8.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"urql": "^4.0.5"

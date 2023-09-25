@@ -15,15 +15,15 @@
 	},
 	"devDependencies": {
 		"@rakkasjs/eslint-config": "0.7.0-next.19",
-		"@types/react": "^18.2.21",
+		"@types/react": "^18.2.22",
 		"@types/react-dom": "^18.2.7",
-		"eslint": "^8.49.0",
+		"eslint": "^8.50.0",
 		"prettier": "^3.0.3",
 		"rakkasjs": "0.7.0-next.19",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9",
 		"vite-tsconfig-paths": "^4.2.1",
-		"vitest": "^0.34.4"
+		"vitest": "^0.34.5"
 	},
 	"dependencies": {
 		"react": "^18.2.0",

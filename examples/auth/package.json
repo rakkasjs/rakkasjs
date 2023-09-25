@@ -11,7 +11,7 @@
 		"test:typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"devDependencies": {
-		"@types/react": "^18.2.21",
+		"@types/react": "^18.2.22",
 		"@types/react-dom": "^18.2.7",
 		"dotenv-cli": "^7.3.0",
 		"rakkasjs": "0.7.0-next.19",
@@ -20,7 +20,7 @@
 		"vite-tsconfig-paths": "^4.2.1"
 	},
 	"dependencies": {
-		"@auth/core": "0.14.0",
+		"@auth/core": "0.15.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	}
