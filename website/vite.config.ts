@@ -3,7 +3,7 @@ import rakkas from "rakkasjs/vite-plugin";
 import codeViewer from "./vite-plugins/code-viewer";
 import sampleLoader from "./vite-plugins/sample-loader";
 import frontmatterLoader from "./vite-plugins/frontmatter-loader";
-import mdx from "@cyco130/vite-plugin-mdx";
+import { mdx } from "@cyco130/vite-plugin-mdx";
 
 // @ts-expect-error: No typings
 import { loadLanguages } from "reprism";
