@@ -13,12 +13,12 @@
 		"test:lint": "eslint . --ignore-pattern dist"
 	},
 	"devDependencies": {
-		"@rakkasjs/eslint-config": "0.7.0-next.19",
+		"@rakkasjs/eslint-config": "0.7.0-next.20",
 		"@types/react": "^18.2.22",
 		"@types/react-dom": "^18.2.7",
 		"eslint": "^8.50.0",
 		"prettier": "^3.0.3",
-		"rakkasjs": "0.7.0-next.19",
+		"rakkasjs": "0.7.0-next.20",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9",
 		"vite-tsconfig-paths": "^4.2.1"

@@ -62,7 +62,7 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -102,7 +102,7 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -121,7 +121,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       vite:
         specifier: ^4.4.9
@@ -149,7 +149,7 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -180,7 +180,7 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -214,7 +214,7 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -242,7 +242,7 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -264,7 +264,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.22
@@ -279,7 +279,7 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -307,7 +307,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.22
@@ -328,7 +328,7 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -359,7 +359,7 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -381,7 +381,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.22
@@ -396,7 +396,7 @@ importers:
         specifier: ^3.0.2
         version: 3.0.3
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -436,7 +436,7 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -476,7 +476,7 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4(@babel/core@7.23.0)(styled-components@6.0.8)
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -501,7 +501,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.22
@@ -516,7 +516,7 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
@@ -553,7 +553,7 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.19
+        specifier: 0.7.0-next.20
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
