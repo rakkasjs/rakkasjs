@@ -1,8 +1,9 @@
-require("@rakkasjs/eslint-config/patch");
+require("@cyco130/eslint-config/patch");
 
 module.exports = {
 	root: true,
-	extends: ["@rakkasjs"],
+	ignorePatterns: ["node_modules", "dist", "**/*.cjs"],
+	extends: ["@cyco130/eslint-config/react"],
 	parserOptions: { tsconfigRootDir: __dirname },
 	settings: {
 		"import/resolver": {

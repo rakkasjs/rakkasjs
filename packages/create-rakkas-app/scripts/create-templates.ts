@@ -98,6 +98,7 @@ async function main() {
 	const ESLINT_CONFIG = `require("@rakkasjs/eslint-config-js/patch");
 		module.exports = {
 		root: true,
+	ignorePatterns: ["node_modules", "dist", "**/*.cjs"],
 		extends: ["@rakkasjs/eslint-config-js"],
 		};
 	`;
