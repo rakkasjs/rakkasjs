@@ -1,26 +1,10 @@
 import { createRequestHandler } from "rakkasjs";
-import { createEmotionCache, MantineProvider } from "@mantine/core";
-import { createStylesServer } from "@mantine/ssr";
-import { injectStyles } from "./lib/inject-mantine-styles";
+import { ColorSchemeScript } from "@mantine/core";
 
 export default createRequestHandler({
 	createPageHooks() {
-		const cache = createEmotionCache({ key: "mantine" });
-		const server = createStylesServer(cache);
-
 		return {
-			wrapApp(app) {
-				return (
-					<MantineProvider
-						emotionCache={cache}
-						withNormalizeCSS
-						withGlobalStyles
-					>
-						{app}
-					</MantineProvider>
-				);
-			},
-			wrapSsrStream: (stream) => injectStyles(stream, cache, server),
+			emitToDocumentHead: () => <ColorSchemeScript />,
 		};
 	},
 });

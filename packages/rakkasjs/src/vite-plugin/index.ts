@@ -2,7 +2,7 @@ import { PluginOption, ResolvedConfig } from "vite";
 import react, { Options as ReactPluginOptions } from "@vitejs/plugin-react";
 import { injectConfig } from "./inject-config";
 import { preventViteBuild } from "./prevent-vite-build";
-import vaviteConnect from "@vavite/connect";
+import { vaviteConnect } from "@vavite/connect";
 import exposeViteDevServer from "@vavite/expose-vite-dev-server";
 import { resolveClientManifest } from "./resolve-client-manifest";
 import { virtualDefaultEntry } from "./virtual-default-entry";

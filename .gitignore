@@ -134,5 +134,6 @@ dist
 # Local folders
 .netlify
 .vercel
+.wrangler
 testbed/kitchen-sink/netlify
 packages/create-rakkas-app/templates

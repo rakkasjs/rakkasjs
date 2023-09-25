@@ -1,7 +1,10 @@
 /// <reference types="vite/client" />
 
 import React, { Fragment, ReactNode, StrictMode, Suspense } from "react";
-import { renderToReadableStream } from "react-dom/server.browser";
+import {
+	renderToReadableStream,
+	renderToStaticMarkup,
+} from "react-dom/server.browser";
 import clientManifest from "virtual:rakkasjs:client-manifest";
 import { App, RouteContext } from "../../runtime/App";
 import { isBot } from "../../runtime/isbot";
@@ -728,9 +731,13 @@ function renderHead(
 	let result = `<!DOCTYPE html><html><head>`;
 
 	for (const hooks of pageHooks) {
-		if (hooks?.emitToDocumentHead) {
-			result += hooks.emitToDocumentHead();
-		}
+		const head = hooks?.emitToDocumentHead?.();
+		if (!head) continue;
+
+		const headStr =
+			typeof head === "string" ? head : renderToStaticMarkup(head);
+
+		result += headStr;
 	}
 
 	if (actionErrorIndex >= 0 && renderMode !== "server") {

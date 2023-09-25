@@ -51,7 +51,7 @@ export interface PageRequestHooks {
 	 */
 	wrapApp?(app: ReactElement): ReactElement;
 	/** Write to the document's head section */
-	emitToDocumentHead?(): string;
+	emitToDocumentHead?(): ReactElement | string | undefined;
 	/** Emit a chunk of HTML before each time React emits a chunk */
 	emitBeforeSsrChunk?(): string | undefined;
 	/** Wrap React's SSR stream */

@@ -17,6 +17,8 @@
     "@types/react": "^18.2.22",
     "@types/react-dom": "^18.2.7",
     "eslint": "^8.50.0",
+    "postcss-preset-mantine": "^1.7.0",
+    "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.0.3",
     "rakkasjs": "0.7.0-next.19",
     "typescript": "^5.2.2",
@@ -24,11 +26,8 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/server": "^11.11.0",
     "@mantine/core": "^7.0.1",
     "@mantine/hooks": "^7.0.1",
-    "@mantine/ssr": "^6.0.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }
