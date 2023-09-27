@@ -11,6 +11,7 @@ import React, {
 	useSyncExternalStore,
 	startTransition,
 	FormEvent,
+	useRef,
 } from "react";
 import {
 	ActionResult,
@@ -272,6 +273,19 @@ export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 	onNavigationStart?: () => void;
 	/** Called when navigation ends or is cancelled */
 	onNavigationEnd?: (completed: boolean) => void;
+	/**
+	 * Whether and when to load the code for the new page. Options are:
+	 *
+	 * - `"eager"`: Load as soon as the link is rendered
+	 * - `"viewport"`: Load when the link enters the viewport
+	 * - `"idle"`: Load when the browser is idle (falls back to hover if `requestIdleCallback` is not available)
+	 * - `"hover"`: Load when the user hovers over the link
+	 * - `"tap"`: Load when the user taps or starts clicking on the link
+	 * - `"never"`: Only load when the link is clicked
+	 *
+	 * @default "hover"
+	 */
+	prefetch?: "eager" | "viewport" | "idle" | "hover" | "tap" | "never";
 }
 
 /** Link component for client-side navigation */
@@ -284,36 +298,98 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 			replaceState,
 			onNavigationStart,
 			onNavigationEnd,
+			onMouseEnter,
+			onTouchStart,
+			onMouseDown,
+			prefetch = "hover",
 			...props
 		},
 		ref,
-	) => (
-		<a
-			{...props}
-			ref={ref}
-			onClick={(e) => {
-				onClick?.(e);
-				if (!shouldHandleClick(e)) {
-					return;
-				}
+	) => {
+		const { ref: a, inView } = useInView<HTMLAnchorElement>();
 
-				onNavigationStart?.();
-				e.preventDefault();
+		if (prefetch === "idle" && typeof requestIdleCallback === "undefined") {
+			prefetch = "hover";
+		}
 
-				navigate(e.currentTarget.href, {
-					data: historyState,
-					replace: replaceState,
-					scroll: !noScroll,
-				})
-					.then((completed) => {
-						onNavigationEnd?.(completed);
+		useEffect(() => {
+			if (props.href === undefined) {
+				return;
+			} else if (prefetch === "eager") {
+				prefetchRoute(props.href);
+			} else if (prefetch === "viewport" && inView) {
+				prefetchRoute(props.href);
+			} else if (prefetch === "idle" && inView) {
+				requestIdleCallback(() => prefetchRoute(props.href!));
+			}
+		}, [props.href, prefetch, a, inView]);
+
+		return (
+			<a
+				{...props}
+				ref={(el) => {
+					a.current = el;
+
+					if (typeof ref === "function") {
+						ref(el);
+					} else if (ref) {
+						ref.current = el;
+					}
+				}}
+				onClick={(e) => {
+					onClick?.(e);
+					if (!shouldHandleClick(e)) {
+						return;
+					}
+
+					onNavigationStart?.();
+					e.preventDefault();
+
+					navigate(e.currentTarget.href, {
+						data: historyState,
+						replace: replaceState,
+						scroll: !noScroll,
 					})
-					.catch(() => {
-						onNavigationEnd?.(false);
-					});
-			}}
-		/>
-	),
+						.then((completed) => {
+							onNavigationEnd?.(completed);
+						})
+						.catch(() => {
+							onNavigationEnd?.(false);
+						});
+				}}
+				onMouseEnter={
+					prefetch === "hover"
+						? (e) => {
+								onMouseEnter?.(e);
+								if (!e.defaultPrevented) {
+									prefetchRoute(e.currentTarget.href);
+								}
+						  }
+						: onMouseEnter
+				}
+				onMouseDown={
+					prefetch === "tap"
+						? (e) => {
+								onMouseDown?.(e);
+								if (!e.defaultPrevented) {
+									prefetchRoute(e.currentTarget.href);
+								}
+						  }
+						: onMouseDown
+				}
+				onTouchStart={
+					prefetch === "tap" || prefetch === "hover"
+						? (e) => {
+								onTouchStart?.(e);
+								if (!e.defaultPrevented) {
+									prefetchRoute(e.currentTarget.href);
+								}
+						  }
+						: onTouchStart
+				}
+			/>
+		);
+	},
 );
 
 Link.displayName = "Link";
@@ -522,4 +598,44 @@ export function useSubmit(
 
 function ignore() {
 	// Do nothing
+}
+
+export const prefetcher = {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	prefetch(location: URL | string) {
+		// Do nothing until initialized
+	},
+};
+
+/**
+ * Preload a page's code and possibly data.
+ */
+export function prefetchRoute(location: URL | string) {
+	prefetcher.prefetch(location);
+}
+
+function useInView<T extends HTMLElement>() {
+	const ref = useRef<T | null>();
+	const [inView, setInView] = useState(false);
+	const observerRef = useRef<IntersectionObserver>();
+
+	useEffect(() => {
+		const { current } = ref;
+		if (!current) {
+			return;
+		}
+
+		if (!observerRef.current) {
+			observerRef.current = new IntersectionObserver((entries) => {
+				entries.forEach((entry) => setInView(entry.isIntersecting));
+			});
+		}
+
+		const observer = observerRef.current;
+
+		observer.observe(current);
+		return () => observer.unobserve(current);
+	});
+
+	return { ref, inView };
 }

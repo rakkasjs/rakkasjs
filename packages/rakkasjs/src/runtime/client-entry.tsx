@@ -89,7 +89,7 @@ export async function startClient(options: StartClientOptions = {}) {
 	});
 
 	app = (
-		<RouteContext.Provider value={"error" in route ? route : { last: route }}>
+		<RouteContext.Provider value={"error" in route! ? route : { last: route }}>
 			<Suspense>
 				<ErrorBoundary FallbackComponent={ErrorComponent}>{app}</ErrorBoundary>
 			</Suspense>

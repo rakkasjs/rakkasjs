@@ -12,4 +12,5 @@ export {
 	StyledLink,
 	useSubmit,
 	cancelLastNavigation,
+	prefetchRoute,
 } from "./implementation";

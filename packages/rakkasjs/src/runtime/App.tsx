@@ -24,6 +24,7 @@ import { Default404Page } from "../features/pages/Default404Page";
 import { Head, LookupHookResult, PageContext, Redirect } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 import { createNamedContext } from "./named-context";
+import { prefetcher } from "../features/client-side-navigation/implementation";
 
 export interface AppProps {
 	beforePageLookupHandlers: Array<
@@ -58,6 +59,27 @@ export function App(props: AppProps) {
 
 	pageContext.url = new URL(url);
 	pageContext.actionData = actionData;
+
+	if (!import.meta.env.SSR) {
+		prefetcher.prefetch = function prefetch(location) {
+			const url = new URL(location, pageContext.url);
+			url.hash = "";
+
+			loadRoute(
+				{ ...pageContext, url },
+				lastRoute.found,
+				false,
+				props.beforePageLookupHandlers,
+				actionData,
+				props.ssrMeta,
+				props.ssrPreloaded,
+				props.ssrModules,
+				true,
+			).catch((e) => {
+				console.error(e);
+			});
+		};
+	}
 
 	if ("error" in lastRoute) {
 		throw lastRoute.error;
@@ -133,6 +155,7 @@ export async function loadRoute(
 	ssrMeta?: any,
 	ssrPreloaded?: (void | PreloadResult<Record<string, unknown>>)[],
 	ssrModules?: (PageModule | LayoutModule)[],
+	prefetchOnly = false,
 ) {
 	let found = lastFound;
 	const { pathname: originalPathname } = pageContext.url;
@@ -286,6 +309,8 @@ export async function loadRoute(
 	const promises = importers.map(async (importer, i) =>
 		Promise.resolve(ssrModules?.[importers.length - 1 - i] || importer()).then(
 			async (module) => {
+				if (prefetchOnly) return;
+
 				const preload =
 					import.meta.hot && updatedComponents
 						? updatedComponents[i]?.preload
@@ -318,6 +343,7 @@ export async function loadRoute(
 	) as Promise<[Layout, PreloadResult | undefined]>[];
 
 	const layoutStack = await Promise.all(promises);
+	if (prefetchOnly) return;
 
 	let meta: any;
 	let preloadNode: ReactNode[] = [];
