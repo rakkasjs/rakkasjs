@@ -23,3 +23,15 @@ For **programmatic navigation**, you can use `history.back()`, `history.forward(
 The return value of the `useLocation` custom hook from the `rakkasjs` package has the `current` and `pending` properties. You should always use these properties instead of `window.location` because, a) `window` is not available during server-side rendering, and b) you'll get the wrong URL during page transitions: When the user clicks on a `Link`, the URL in the location bar of the browser changes immediately but the old page is still shown while the new one is being loaded.
 
 The `pending` property contains the URL that the app is transitioning into. You can test if it's defined to render some loading animation for example.
+
+## Link prefetching
+
+The `Link` component accepts a `prefetch` prop that controls whether and when to load the code for the new page. It's a way to anticipate the user's next action and load the code for the next page in advance, resulting in a faster navigation experience.
+
+Options are:
+
+- `"eager"`: Load as soon as the link is rendered.
+- `"viewport"`: Load when the link enters the viewport.
+- `"hover"`: Load when the user hovers over or taps on the link. **This is the default.**
+- `"tap"`: Load when the user taps or starts clicking on the link.
+- `"never"`: Only load when the link is clicked.

@@ -278,13 +278,14 @@ export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 	 *
 	 * - `"eager"`: Load as soon as the link is rendered
 	 * - `"viewport"`: Load when the link enters the viewport
+	 * - `"idle"`: Load when the browser is idle (falls back to hover if `requestIdleCallback` is not available)
 	 * - `"hover"`: Load when the user hovers over the link
 	 * - `"tap"`: Load when the user taps or starts clicking on the link
 	 * - `"never"`: Only load when the link is clicked
 	 *
 	 * @default "hover"
 	 */
-	prefetch?: "eager" | "viewport" | "hover" | "tap" | "never";
+	prefetch?: "eager" | "viewport" | "idle" | "hover" | "tap" | "never";
 }
 
 /** Link component for client-side navigation */
@@ -307,18 +308,19 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 	) => {
 		const { ref: a, inView } = useInView<HTMLAnchorElement>();
 
+		if (prefetch === "idle" && typeof requestIdleCallback === "undefined") {
+			prefetch = "hover";
+		}
+
 		useEffect(() => {
-			if (props.href === undefined) return;
-
-			if (prefetch === "eager") {
-				prefetchRoute(props.href);
+			if (props.href === undefined) {
 				return;
-			}
-
-			if (!a.current) return;
-
-			if (prefetch === "viewport" && inView) {
+			} else if (prefetch === "eager") {
 				prefetchRoute(props.href);
+			} else if (prefetch === "viewport" && inView) {
+				prefetchRoute(props.href);
+			} else if (prefetch === "idle" && inView) {
+				requestIdleCallback(() => prefetchRoute(props.href!));
 			}
 		}, [props.href, prefetch, a, inView]);
 
