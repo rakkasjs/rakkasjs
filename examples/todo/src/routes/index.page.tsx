@@ -1,4 +1,4 @@
-import { Page } from "rakkasjs";
+import { Link, Page } from "rakkasjs";
 
 const HomePage: Page = function HomePage() {
 	return (
@@ -14,8 +14,8 @@ const HomePage: Page = function HomePage() {
 				.
 			</p>
 			<p>
-				You may also check the little <a href="/todo">todo application</a> to
-				learn about API endpoints and data fetching.
+				You may also check the little <Link href="/todo">todo application</Link>{" "}
+				to learn about API endpoints and data fetching.
 			</p>
 		</main>
 	);

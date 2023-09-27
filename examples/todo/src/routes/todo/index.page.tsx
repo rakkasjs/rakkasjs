@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Todo } from "./Todo";
 import css from "./page.module.css";
 import {
+	Page,
+	runServerSideQuery,
 	useQueryClient,
 	useServerSideMutation,
 	useServerSideQuery,
@@ -9,7 +11,7 @@ import {
 
 import { createTodo, readAllTodos } from "src/crud";
 
-export default function TodoPage() {
+const TodoPage: Page = () => {
 	const { data } = useServerSideQuery(readAllTodos, {
 		key: "todos",
 		refetchOnWindowFocus: true,
@@ -61,4 +63,15 @@ export default function TodoPage() {
 			</p>
 		</main>
 	);
-}
+};
+
+export default TodoPage;
+
+TodoPage.preload = (ctx) => {
+	if (!ctx.queryClient.getQueryData("todos")) {
+		ctx.queryClient.prefetchQuery(
+			"todos",
+			runServerSideQuery(ctx.requestContext, readAllTodos),
+		);
+	}
+};
