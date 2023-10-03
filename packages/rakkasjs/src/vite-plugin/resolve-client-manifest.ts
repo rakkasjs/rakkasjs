@@ -35,7 +35,7 @@ export function resolveClientManifest(): Plugin {
 			if (!config.build?.ssr) {
 				return {
 					build: {
-						manifest: true,
+						manifest: "vite.manifest.json",
 					},
 				};
 			}
@@ -53,14 +53,13 @@ export function resolveClientManifest(): Plugin {
 			const from = path.resolve(
 				resolvedConfig.root,
 				resolvedConfig.build.outDir,
-				"manifest.json",
+				"vite.manifest.json",
 			);
 
-			await fs.promises
-				.rename(from, resolvedConfig.root + "/dist/manifest.json")
-				.catch(() => {
-					// Just ignore
-				});
+			await fs.promises.rename(
+				from,
+				resolvedConfig.root + "/dist/manifest.json",
+			);
 		},
 	};
 }
