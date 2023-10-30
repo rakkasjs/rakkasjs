@@ -9,7 +9,7 @@ import { EventStreamContentType } from "@microsoft/fetch-event-source";
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
 		beforePages: async (ctx) => {
-			const prefix = `/_data/`;
+			const prefix = `/_app/data/`;
 			let action = ctx.url.searchParams.get("_action");
 
 			if (!ctx.url.pathname.startsWith(prefix) && !action) {
@@ -17,10 +17,27 @@ const runServerSideServerHooks: ServerHooks = {
 			}
 
 			action = action || ctx.url.pathname.slice(prefix.length);
-			const [buildId, moduleId, counter, ...closure] = action.split("/");
-			if (buildId !== import.meta.env.RAKKAS_BUILD_ID) {
+
+			const [buildId = "", ...rest] = action.split("/");
+
+			let uniqueId: string;
+			let moduleId: string;
+			let counter: string;
+			let closure: string[];
+
+			const manifest = await import(
+				"virtual:rakkasjs:run-server-side:manifest"
+			);
+
+			if (buildId === "id") {
+				[uniqueId, ...closure] = rest;
+				const callSiteId = manifest.idMap[uniqueId] || "";
+				[moduleId = "", counter = ""] = callSiteId.split("/");
+			} else if (buildId !== import.meta.env.RAKKAS_BUILD_ID) {
 				// 410 Gone would be more appropriate but it won't work with statically rendered pages
 				return new Response("Outdated client", { status: 404 });
+			} else {
+				[moduleId = "", counter = "", ...closure] = rest;
 			}
 
 			let closureContents: unknown[];
@@ -56,11 +73,7 @@ const runServerSideServerHooks: ServerHooks = {
 				return new Response("Parse error", { status: 400 });
 			}
 
-			const manifest = await import(
-				"virtual:rakkasjs:run-server-side:manifest"
-			);
-
-			const importer = manifest.default[decodeURIComponent(moduleId)];
+			const importer = manifest.moduleMap[decodeURIComponent(moduleId)];
 			if (!importer) return;
 
 			const module = await importer();

@@ -1,10 +1,13 @@
 import { QueryResult, useQuery } from "../use-query/lib";
 import { stringify } from "@brillout/json-serializer/stringify";
 import {
+	RunServerSideMutationOptions,
+	RunServerSideQueryOptions,
 	ServerSideFunction,
 	useFormAction,
 	UseFormMutationFn,
 	UseFormMutationResult,
+	UseServerSideMutationOptions,
 	UseServerSideQueryOptions,
 } from "./lib-common";
 import type { RequestContext } from "@hattip/compose";
@@ -19,64 +22,56 @@ import { EventSourceResult, useEventSource } from "../use-query/implementation";
 
 function runSSQImpl(
 	_: RequestContext,
-	desc: [moduleId: string, counter: number, closure: any[]],
+	desc: [callSiteId: string, closure: any[]],
 	usePostMethod = false,
 ): any {
-	const [moduleId, counter, closure] = desc;
+	const [callSiteId, closure] = desc;
 
 	const stringified = closure.map((x) => stringify(x));
 
-	return sendRequest(moduleId, counter, stringified, usePostMethod);
+	return sendRequest(callSiteId, stringified, usePostMethod);
 }
 
 function useSSQImpl(
-	desc: [moduleId: string, counter: number, closure: any[]],
+	desc: [callSiteId: string, closure: any[]],
 	options: UseServerSideQueryOptions = {},
 ): QueryResult<any> {
-	const [moduleId, counter, closure] = desc;
+	const [callSiteId, closure] = desc;
 	const { key: userKey, usePostMethod = false, ...useQueryOptions } = options;
 
 	const stringified = closure.map((x) => stringify(x));
-	const key = userKey ?? `$ss:${moduleId}:${counter}:${stringified}`;
+	const key = userKey ?? `$ss:${callSiteId}:${stringified}`;
 
 	return useQuery(
 		key,
-		() => sendRequest(moduleId, counter, stringified, usePostMethod),
+		() => sendRequest(callSiteId, stringified, usePostMethod),
 		useQueryOptions,
 	);
 }
 
 function useSSEImpl(
-	desc: [moduleId: string, counter: number, closure: any[]],
+	desc: [callSiteId: string, closure: any[]],
 ): EventSourceResult<any> {
-	const [moduleId, counter, closure] = desc;
+	const [callSiteId, closure] = desc;
 
 	const stringified = closure.map((x) => stringify(x));
 	let closurePath = stringified.map(encodeFileNameSafe).join("/");
 	if (closurePath) closurePath = "/" + closurePath;
 
-	const url =
-		`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
-		encodeURIComponent(moduleId) +
-		"/" +
-		counter +
-		closurePath +
-		"/d.js";
+	const url = "/_app/data/" + callSiteId + closurePath + "/d.js";
 
 	return useEventSource(url);
 }
 
-function runSSMImpl(
-	desc: [moduleId: string, counter: number, closure: any[], vars?: any],
-) {
-	const [moduleId, counter, closure, vars] = desc;
+function runSSMImpl(desc: [callSiteId: string, closure: any[], vars?: any]) {
+	const [callSiteId, closure, vars] = desc;
 	const stringified = closure.map((x) => stringify(x));
 
-	return sendRequest(moduleId, counter, stringified, true, vars);
+	return sendRequest(callSiteId, stringified, true, vars);
 }
 
 function useFormMutationImpl<T>(
-	desc: [moduleId: string, counter: number, closure: any[]],
+	desc: [callSiteId: string, closure: any[]],
 	options?: UseMutationOptions<T, any>,
 ): UseFormMutationResult<T> {
 	const action = useFormAction(desc).href;
@@ -89,52 +84,39 @@ function useFormMutationImpl<T>(
 }
 
 function useSSMImpl(
-	desc: [moduleId: string, counter: number, closure: any[]],
+	desc: [callSiteId: string, closure: any[]],
 	options?: UseMutationOptions<any, any>,
 ) {
 	return useMutation((vars) => runSSMImpl([...desc, vars]), options);
 }
 
 function sendRequest(
-	moduleId: string,
-	counter: number,
+	callSiteId: string,
 	stringified: string[],
 	usePostMethod: boolean,
 	vars?: any,
 ) {
 	let response: Promise<Response>;
+	const prefix = "_app/data/";
 
 	if (usePostMethod) {
-		response = fetch(
-			`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
-				encodeURIComponent(moduleId) +
-				"/" +
-				counter,
-			{
-				method: "POST",
-				body:
-					"[[" +
-					stringified.join(",") +
-					"]" +
-					(vars !== undefined ? "," + stringify(vars) : "") +
-					"]",
-				headers: {
-					"Content-Type": "application/json",
-				},
+		response = fetch(prefix + callSiteId, {
+			method: "POST",
+			body:
+				"[[" +
+				stringified.join(",") +
+				"]" +
+				(vars !== undefined ? "," + stringify(vars) : "") +
+				"]",
+			headers: {
+				"Content-Type": "application/json",
 			},
-		);
+		});
 	} else {
 		let closurePath = stringified.map(encodeFileNameSafe).join("/");
 		if (closurePath) closurePath = "/" + closurePath;
 
-		response = fetch(
-			`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
-				encodeURIComponent(moduleId) +
-				"/" +
-				counter +
-				closurePath +
-				"/d.js",
-		);
+		response = fetch(prefix + callSiteId + closurePath + "/d.js");
 	}
 
 	return response.then(async (r) => {
@@ -188,6 +170,7 @@ export const useServerSideQuery: <
 export const runServerSideQuery: <T>(
 	context: RequestContext | undefined,
 	fn: ServerSideFunction<T>,
+	options?: RunServerSideQueryOptions,
 ) => Promise<T> = runSSQImpl as any;
 
 /**
@@ -201,6 +184,7 @@ export const runServerSideQuery: <T>(
  */
 export const runServerSideMutation: <T>(
 	fn: ServerSideFunction<T>,
+	options?: RunServerSideMutationOptions,
 ) => Promise<T> = runSSMImpl as any;
 
 /**
@@ -214,12 +198,12 @@ export const runServerSideMutation: <T>(
  */
 export const useServerSideMutation: <T, V = void>(
 	fn: (context: RequestContext, vars: V) => T | Promise<T>,
-	options?: UseMutationOptions<T, V>,
+	options?: UseServerSideMutationOptions<T, V>,
 ) => UseMutationResult<T, V> = useSSMImpl as any;
 
 export const useFormMutation: <T>(
 	fn: UseFormMutationFn<T>,
-	options?: UseMutationOptions<T, void>,
+	options?: UseServerSideMutationOptions<T, void>,
 ) => UseFormMutationResult<T> = useFormMutationImpl as any;
 
 export const useServerSentEvents: <T>(

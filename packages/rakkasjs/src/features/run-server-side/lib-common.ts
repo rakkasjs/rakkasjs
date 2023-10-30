@@ -6,6 +6,7 @@ import {
 	UseMutationErrorResult,
 	UseMutationIdleResult,
 	UseMutationLoadingResult,
+	UseMutationOptions,
 	UseMutationSuccessResult,
 	usePageContext,
 } from "../../lib";
@@ -23,6 +24,31 @@ export function useRequestContext() {
 /** Callback passed to useServerSide/runServerside family of functions */
 export type ServerSideFunction<T> = (context: RequestContext) => T | Promise<T>;
 
+/** Options for {@link runServerSideQuery} */
+export interface RunServerSideQueryOptions {
+	/**
+	 * Unique ID for this query. Rakkas will generate a unique ID if not provided.
+	 * This must be a string literal that is unique across the entire application.
+	 */
+	uniqueId?: string;
+	/**
+	 * If true, a POST request will be sent instead of GET. It may be useful
+	 * when the query requires a large amount of data to be sent from the
+	 * client. The down side is that it cannot be prerendered or cached so it
+	 * shouldn't be used when rendering static pages.
+	 */
+	usePostMethod?: boolean;
+}
+
+/** Options for {@link runServerSideMutation} */
+export interface RunServerSideMutationOptions {
+	/**
+	 * Unique ID for this mutation. Rakkas will generate a unique ID if not provided.
+	 * This must be a string literal that is unique across the entire application.
+	 */
+	uniqueId?: string;
+}
+
 /** Options for {@link useServerSideQuery} */
 export interface UseServerSideQueryOptions<
 	T = unknown,
@@ -30,15 +56,30 @@ export interface UseServerSideQueryOptions<
 	InitialData extends T | undefined = undefined,
 	PlaceholderData = undefined,
 > extends UseQueryOptions<T, Enabled, InitialData, PlaceholderData> {
+	/**
+	 * Unique ID for this query. Rakkas will generate a unique ID if not provided.
+	 * This must be a string literal that is unique across the entire application.
+	 */
+	uniqueId?: string;
 	/** Query key. Rakkas will generate a unique key if not provided. */
 	key?: string;
 	/**
 	 * If true, a POST request will be sent instead of GET. It may be useful
 	 * when the query requires a large amount of data to be sent from the
-	 * client. The down side is that it cannot be prerendered so it shouldn't
-	 * be used when rendering static pages.
+	 * client. The down side is that it cannot be prerendered or cached so it
+	 * shouldn't be used when rendering static pages.
 	 */
 	usePostMethod?: boolean;
+}
+
+/** Options for {@link useServerSideMutation} */
+export interface UseServerSideMutationOptions<T = unknown, V = unknown>
+	extends UseMutationOptions<T, V> {
+	/**
+	 * Unique ID for this mutation. Rakkas will generate a unique ID if not provided.
+	 * This must be a string literal that is unique across the entire application.
+	 */
+	uniqueId?: string;
 }
 
 export type UseFormMutationResult<T> = {
@@ -55,24 +96,16 @@ export type UseFormMutationFn<T> = (
 	context: RequestContext,
 ) => ActionResult<T> | Promise<ActionResult<T>>;
 
-export function useFormAction(
-	desc: [moduleId: string, counter: number, closure: any[]],
-) {
+export function useFormAction(desc: [callSiteId: string, closure: any[]]) {
 	const { url } = usePageContext();
 
-	const [moduleId, counter, closure] = desc;
+	const [callSiteId, closure] = desc;
 	const stringified = closure.map((x) => stringify(x));
 
 	let closurePath = stringified.map(encodeFileNameSafe).join("/");
 	if (closurePath) closurePath = "/" + closurePath;
 
-	const actionPath =
-		import.meta.env.RAKKAS_BUILD_ID +
-		"/" +
-		encodeURIComponent(moduleId) +
-		"/" +
-		counter +
-		closurePath;
+	const actionPath = callSiteId + closurePath;
 	const actionUrl = new URL(url);
 	actionUrl.searchParams.set("_action", actionPath);
 

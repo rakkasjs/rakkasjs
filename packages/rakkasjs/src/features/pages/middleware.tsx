@@ -36,6 +36,8 @@ import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
 import { PageRequestHooks } from "../../runtime/hattip-handler";
 import { ModuleNode } from "vite";
 
+const assetPrefix = import.meta.env.BASE_URL ?? "/";
+
 const pageContextMap = new WeakMap<Request, PageContext>();
 
 export default async function renderPageRoute(
@@ -170,9 +172,10 @@ export default async function renderPageRoute(
 
 	const dataOnly =
 		ctx.request.headers.get("accept") === "application/javascript";
+
 	const headers = new Headers({
 		"Content-Type": "text/html; charset=utf-8",
-		vary: "accept",
+		Vary: "accept",
 	});
 
 	let scriptPath: string;
@@ -191,7 +194,9 @@ export default async function renderPageRoute(
 	}
 
 	if (renderMode === "client" && ctx.method === "GET" && !dataOnly) {
-		const prefetchOutput = `<script type="module" async src="/${scriptPath}"></script>`;
+		const prefetchOutput = `<script type="module" async src="${
+			assetPrefix + scriptPath
+		}"></script>`;
 		const head = renderHead(prefetchOutput, renderMode);
 		const html = head + `<div id="root"></div></body></html>`;
 
@@ -440,7 +445,9 @@ export default async function renderPageRoute(
 
 	const reactStream = await renderToReadableStream(app, {
 		// TODO: AbortController
-		bootstrapModules: renderMode === "server" ? [] : ["/" + scriptPath!],
+		bootstrapModules:
+			renderMode === "server" ? [] : [assetPrefix + scriptPath!],
+
 		onError(error: any) {
 			if (!redirected) {
 				status = 500;
@@ -655,13 +662,15 @@ function createPrefetchTags(
 			const script = clientManifest?.[moduleId].file;
 			if (script && server) {
 				result += `<link rel="modulepreload" crossorigin href="${escapeHtml(
-					"/" + script,
+					assetPrefix + script,
 				)}">`;
 			}
 		}
 
 		for (const cssFile of cssSet) {
-			result += `<link rel="stylesheet" href="${escapeHtml("/" + cssFile)}">`;
+			result += `<link rel="stylesheet" href="${escapeHtml(
+				assetPrefix + cssFile,
+			)}">`;
 		}
 
 		// TODO: Prefetch/preload assets

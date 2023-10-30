@@ -5,10 +5,16 @@ import { babelTransformClientSideHooks } from "./implementation/transform/transf
 
 export default function runServerSide(): PluginOption[] {
 	let idCounter = 0;
-	const moduleIdMap: Record<string, string> = {};
+	const moduleIdMap: Record<string, string> = Object.create(null);
+	const uniqueIdMap: Record<string, string> = Object.create(null);
 
 	let resolvedConfig: ResolvedConfig;
-	let moduleManifest: any;
+	let moduleManifest:
+		| {
+				moduleIdMap: Record<string, string>;
+				uniqueIdMap: Record<string, string>;
+		  }
+		| undefined;
 
 	return [
 		{
@@ -33,20 +39,35 @@ export default function runServerSide(): PluginOption[] {
 			async load(id) {
 				if (id === "virtual:rakkasjs:run-server-side:manifest") {
 					if (resolvedConfig.command === "serve") {
-						return `export default new Proxy({}, { get: (_, name) => () => import(/* @vite-ignore */ "/" + name) });`;
+						return `export const moduleMap = new Proxy({}, { get: (_, name) => () => import(/* @vite-ignore */ "/" + name) });`;
 					} else if (!moduleManifest) {
 						return `throw new Error("[virtual:rakkasjs:run-server-side:manifest]: Module manifest is not available on the client");`;
 					}
 
-					let code = "export default {";
+					let code = "export const moduleMap = {";
 
-					for (const [filePath, moduleId] of Object.entries(moduleManifest)) {
+					for (const [filePath, moduleId] of Object.entries(
+						moduleManifest.moduleIdMap,
+					)) {
 						code += `\n\t${JSON.stringify(
 							moduleId,
 						)}: () => import(${JSON.stringify("/" + filePath)}),`;
 					}
 
+					code += "\n};\n";
+
+					code += "export const idMap = {";
+
+					for (const [uniqueId, callSiteId] of Object.entries(
+						moduleManifest.uniqueIdMap,
+					)) {
+						code += `\n\t${JSON.stringify(uniqueId)}: ${JSON.stringify(
+							callSiteId,
+						)},`;
+					}
+
 					code += "\n};";
+
 					return code;
 				}
 			},
@@ -61,8 +82,14 @@ export default function runServerSide(): PluginOption[] {
 			},
 
 			async transform(code, id, options) {
+				const uniqueIds: Array<string | undefined> | undefined =
+					resolvedConfig.command === "build" && !options?.ssr ? [] : undefined;
 				const plugins: PluginItem[] = [];
-				const ref = { current: false };
+				const ref = {
+					moduleId: "",
+					modified: false,
+					uniqueIds,
+				};
 				let moduleId: string;
 
 				if (
@@ -76,18 +103,19 @@ export default function runServerSide(): PluginOption[] {
 					if (resolvedConfig.command === "serve") {
 						moduleId = id.slice(resolvedConfig.root.length + 1);
 					} else if (moduleManifest) {
-						moduleId = moduleManifest[id];
+						moduleId = moduleManifest.moduleIdMap[id];
 					} else {
 						moduleId = (idCounter++).toString(36);
 					}
 
-					// moduleId can be undefined if the file is not in the manifest
-					// e.g. if it hasn't been used. We can safely ignore it in that case.
+					moduleId = encodeURIComponent(moduleId);
+
 					if (moduleId) {
+						ref.moduleId = process.env.RAKKAS_BUILD_ID + "/" + moduleId;
 						plugins.push(
 							options?.ssr
-								? babelTransformServerSideHooks(moduleId)
-								: babelTransformClientSideHooks(moduleId, ref),
+								? babelTransformServerSideHooks(ref)
+								: babelTransformClientSideHooks(ref),
 						);
 					}
 				}
@@ -104,20 +132,33 @@ export default function runServerSide(): PluginOption[] {
 					sourceMaps:
 						resolvedConfig.command === "serve" ||
 						!!resolvedConfig.build.sourcemap,
+				}).catch((error) => {
+					this.error(error.message);
 				});
 
-				if (ref.current) {
-					moduleIdMap[id] = moduleId!;
+				if (!result) {
+					return null;
 				}
 
-				if (result) {
-					return {
-						code: result.code!,
-						map: result.map,
-					};
-				} else {
-					this.warn(`[rakkasjs:run-server-side]: Failed to transform ${id}`);
+				if (ref.modified) {
+					moduleIdMap[id] = moduleId!;
+
+					if (uniqueIds) {
+						for (const [i, uniqueId] of uniqueIds.entries()) {
+							if (uniqueId) {
+								if (uniqueIdMap[uniqueId]) {
+									this.error(`Duplicate unique ID ${uniqueId} in ${id}`);
+								}
+								uniqueIdMap[uniqueId] = moduleId! + "/" + i;
+							}
+						}
+					}
 				}
+
+				return {
+					code: result.code!,
+					map: result.map,
+				};
 			},
 
 			buildStepStart(_info, forwarded) {
@@ -125,7 +166,7 @@ export default function runServerSide(): PluginOption[] {
 			},
 
 			buildStepEnd() {
-				return moduleIdMap;
+				return { moduleIdMap, uniqueIdMap };
 			},
 		},
 	];

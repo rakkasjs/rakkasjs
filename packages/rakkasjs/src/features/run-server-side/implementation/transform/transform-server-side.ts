@@ -1,12 +1,19 @@
 import { PluginItem, NodePath } from "@babel/core";
 import * as t from "@babel/types";
 import {
+	extractUniqueId,
 	getAlreadyUnreferenced,
 	isRunServerSideCall,
 	removeUnreferenced,
 } from "./transform-utils";
 
-export function babelTransformServerSideHooks(moduleId: string): PluginItem {
+export function babelTransformServerSideHooks({
+	moduleId,
+	uniqueIds,
+}: {
+	moduleId: string;
+	uniqueIds?: Array<string | undefined>;
+}): PluginItem {
 	let counter = 0;
 
 	return {
@@ -24,15 +31,28 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 									return;
 								}
 
-								const argNo =
+								const fnArgNo =
 									nameRef.name === "runSSQ" ||
 									nameRef.name === "runServerSideQuery"
 										? 1
 										: 0;
-
-								let fn = call.get(`arguments.${argNo}`) as NodePath<
+								let fn = call.get(`arguments.${fnArgNo}`) as NodePath<
 									t.ArrowFunctionExpression | t.FunctionExpression
 								>;
+
+								let uniqueId: string | undefined;
+								if (uniqueIds) {
+									const optionsArgNo = fnArgNo + 1;
+
+									const options = call.get(`arguments.${optionsArgNo}`) as
+										| NodePath
+										| undefined;
+
+									uniqueId = options && extractUniqueId(options);
+									if (uniqueId) {
+										uniqueIds[counter] = uniqueId;
+									}
+								}
 
 								if (
 									!fn.isArrowFunctionExpression() &&
@@ -87,10 +107,12 @@ export function babelTransformServerSideHooks(moduleId: string): PluginItem {
 								});
 
 								const ids = [...identifiers];
+								const callSiteId = uniqueId
+									? "id/" + encodeURIComponent(uniqueId)
+									: moduleId + "/" + counter;
 
 								const replacement = t.arrayExpression([
-									t.stringLiteral(moduleId),
-									t.numericLiteral(counter),
+									t.stringLiteral(callSiteId),
 									t.arrayExpression(ids.map((id) => t.identifier(id))),
 									t.memberExpression(
 										t.identifier("$runServerSide$"),

@@ -5,10 +5,14 @@ export default function UseSsq() {
 	const b = 5;
 
 	const fetched = useQuery("run-ssq", (ctx) => {
-		return runServerSideQuery(ctx.requestContext, () => ({
-			result: a + b,
-			ssr: import.meta.env.SSR,
-		}));
+		return runServerSideQuery(
+			ctx.requestContext,
+			() => ({
+				result: a + b,
+				ssr: import.meta.env.SSR,
+			}),
+			{ uniqueId: "customId" },
+		);
 	});
 
 	return (
