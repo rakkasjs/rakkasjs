@@ -40,7 +40,7 @@ jobs:
           version: 7
 
       - name: Set node version to ${{ inputs.node_version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.node_version }}
           cache: "pnpm"
