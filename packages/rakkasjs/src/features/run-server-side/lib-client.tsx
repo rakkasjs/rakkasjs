@@ -97,9 +97,10 @@ function sendRequest(
 	vars?: any,
 ) {
 	let response: Promise<Response>;
+	const prefix = "_app/data/";
 
 	if (usePostMethod) {
-		response = fetch("/_app/data/" + callSiteId, {
+		response = fetch(prefix + callSiteId, {
 			method: "POST",
 			body:
 				"[[" +
@@ -115,7 +116,7 @@ function sendRequest(
 		let closurePath = stringified.map(encodeFileNameSafe).join("/");
 		if (closurePath) closurePath = "/" + closurePath;
 
-		response = fetch("/_app/data/" + callSiteId + closurePath + "/d.js");
+		response = fetch(prefix + callSiteId + closurePath + "/d.js");
 	}
 
 	return response.then(async (r) => {
