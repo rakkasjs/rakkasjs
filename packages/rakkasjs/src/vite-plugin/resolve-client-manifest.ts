@@ -45,12 +45,8 @@ export function resolveClientManifest(): Plugin {
 			resolvedConfig = config;
 		},
 
-		async buildEnd(error) {
-			if (
-				error ||
-				resolvedConfig.command === "serve" ||
-				resolvedConfig.build.ssr
-			) {
+		async closeBundle() {
+			if (resolvedConfig.command === "serve" || resolvedConfig.build.ssr) {
 				return;
 			}
 

@@ -58,7 +58,7 @@ function useSSEImpl(
 	let closurePath = stringified.map(encodeFileNameSafe).join("/");
 	if (closurePath) closurePath = "/" + closurePath;
 
-	const url = "/_data/" + callSiteId + closurePath + "/d.js";
+	const url = "/_app/data/" + callSiteId + closurePath + "/d.js";
 
 	return useEventSource(url);
 }
@@ -99,7 +99,7 @@ function sendRequest(
 	let response: Promise<Response>;
 
 	if (usePostMethod) {
-		response = fetch("/_data/" + callSiteId, {
+		response = fetch("/_app/data/" + callSiteId, {
 			method: "POST",
 			body:
 				"[[" +
@@ -115,7 +115,7 @@ function sendRequest(
 		let closurePath = stringified.map(encodeFileNameSafe).join("/");
 		if (closurePath) closurePath = "/" + closurePath;
 
-		response = fetch("/_data/" + callSiteId + closurePath + "/d.js");
+		response = fetch("/_app/data/" + callSiteId + closurePath + "/d.js");
 	}
 
 	return response.then(async (r) => {

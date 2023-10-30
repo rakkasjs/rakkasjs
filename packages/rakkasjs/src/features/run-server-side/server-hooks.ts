@@ -9,7 +9,7 @@ import { EventStreamContentType } from "@microsoft/fetch-event-source";
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
 		beforePages: async (ctx) => {
-			const prefix = `/_data/`;
+			const prefix = `/_app/data/`;
 			let action = ctx.url.searchParams.get("_action");
 
 			if (!ctx.url.pathname.startsWith(prefix) && !action) {
@@ -17,6 +17,7 @@ const runServerSideServerHooks: ServerHooks = {
 			}
 
 			action = action || ctx.url.pathname.slice(prefix.length);
+
 			const [buildId = "", ...rest] = action.split("/");
 
 			let uniqueId: string;

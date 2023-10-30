@@ -105,8 +105,7 @@ export function useFormAction(desc: [callSiteId: string, closure: any[]]) {
 	let closurePath = stringified.map(encodeFileNameSafe).join("/");
 	if (closurePath) closurePath = "/" + closurePath;
 
-	const actionPath =
-		import.meta.env.RAKKAS_BUILD_ID + "/" + callSiteId + closurePath;
+	const actionPath = callSiteId + closurePath;
 	const actionUrl = new URL(url);
 	actionUrl.searchParams.set("_action", actionPath);
 

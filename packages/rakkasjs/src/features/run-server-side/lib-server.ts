@@ -30,7 +30,7 @@ function runSSQImpl(
 			let closurePath = stringified.map(encodeFileNameSafe).join("/");
 			if (closurePath) closurePath = "/" + closurePath;
 
-			const url = "/_data/" + callSiteId + closurePath + "/d.js";
+			const url = "/_app/data/" + callSiteId + closurePath + "/d.js";
 
 			await (ctx.platform as any).render(
 				url,
@@ -71,7 +71,7 @@ function useSSQImpl(
 					let closurePath = stringified.map(encodeFileNameSafe).join("/");
 					if (closurePath) closurePath = "/" + closurePath;
 
-					const url = "/_data/" + callSiteId + closurePath + "/d.js";
+					const url = "/_app/data/" + callSiteId + closurePath + "/d.js";
 
 					await (ctx!.platform as any).render(
 						url,

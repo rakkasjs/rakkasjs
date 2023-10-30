@@ -39,7 +39,7 @@ export default function runServerSide(): PluginOption[] {
 			async load(id) {
 				if (id === "virtual:rakkasjs:run-server-side:manifest") {
 					if (resolvedConfig.command === "serve") {
-						return `export const  new Proxy({}, { get: (_, name) => () => import(/* @vite-ignore */ "/" + name) });`;
+						return `export const moduleMap = new Proxy({}, { get: (_, name) => () => import(/* @vite-ignore */ "/" + name) });`;
 					} else if (!moduleManifest) {
 						return `throw new Error("[virtual:rakkasjs:run-server-side:manifest]: Module manifest is not available on the client");`;
 					}

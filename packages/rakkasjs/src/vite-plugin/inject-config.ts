@@ -69,6 +69,10 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 			return {
 				buildSteps,
 
+				build: {
+					assetsDir: "_app/assets",
+				},
+
 				ssr: {
 					external: ["react-dom/server.browser"],
 					noExternal: ["rakkasjs", "@vavite/expose-vite-dev-server"],
