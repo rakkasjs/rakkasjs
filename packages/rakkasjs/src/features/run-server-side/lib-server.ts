@@ -15,18 +15,13 @@ import { EventSourceResult } from "../use-query/implementation";
 
 function runSSQImpl(
 	ctx: RequestContext,
-	desc: [
-		moduleId: string,
-		counter: number,
-		closure: any[],
-		fn: (...args: any) => any,
-	],
+	desc: [callSiteId: string, closure: any[], fn: (...args: any) => any],
 ): Promise<any> {
 	if (typeof desc === "function") {
 		return Promise.reject(new Error("runSSQ call hasn't been transformed"));
 	}
 
-	const [moduleId, counter, closure, fn] = desc;
+	const [callSiteId, closure, fn] = desc;
 
 	const stringified = closure.map((x) => stringify(x));
 
@@ -35,13 +30,7 @@ function runSSQImpl(
 			let closurePath = stringified.map(encodeFileNameSafe).join("/");
 			if (closurePath) closurePath = "/" + closurePath;
 
-			const url =
-				`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
-				moduleId +
-				"/" +
-				counter +
-				closurePath +
-				"/d.js";
+			const url = "/_data/" + callSiteId + closurePath + "/d.js";
 
 			await (ctx.platform as any).render(
 				url,
@@ -59,12 +48,7 @@ function useSSEImpl(): EventSourceResult<any> {
 }
 
 function useSSQImpl(
-	desc: [
-		moduleId: string,
-		counter: number,
-		closure: any[],
-		fn: (...args: any) => any,
-	],
+	desc: [callSiteId: string, closure: any[], fn: (...args: any) => any],
 	options: UseServerSideQueryOptions = {},
 ): QueryResult<any> {
 	if (typeof desc === "function") {
@@ -73,10 +57,10 @@ function useSSQImpl(
 
 	const { key: userKey, usePostMethod, ...useQueryOptions } = options;
 	const ctx = useRequestContext();
-	const [moduleId, counter, closure, fn] = desc;
+	const [callSiteId, closure, fn] = desc;
 
 	const stringified = closure.map((x) => stringify(x));
-	const key = userKey ?? `$ss:${moduleId}:${counter}:${stringified}`;
+	const key = userKey ?? `$ss:${callSiteId}:${stringified}`;
 	void usePostMethod;
 
 	return useQuery(
@@ -87,13 +71,7 @@ function useSSQImpl(
 					let closurePath = stringified.map(encodeFileNameSafe).join("/");
 					if (closurePath) closurePath = "/" + closurePath;
 
-					const url =
-						`/_data/${import.meta.env.RAKKAS_BUILD_ID}/` +
-						moduleId +
-						"/" +
-						counter +
-						closurePath +
-						"/d.js";
+					const url = "/_data/" + callSiteId + closurePath + "/d.js";
 
 					await (ctx!.platform as any).render(
 						url,
@@ -137,7 +115,7 @@ export const composableActionData = new WeakMap<
 >();
 
 function useFormMutationImpl<T>(
-	desc: [moduleId: string, counter: number, closure: any[]],
+	desc: [callSiteId: string, closure: any[]],
 ): UseFormMutationResult<T> {
 	const action = useFormAction(desc);
 	const ctx = useRequestContext()!;

@@ -52,12 +52,29 @@ const tests: Test[] = [
 			function x(foo) {
 				const baz = 2;
 				sharedFn();
-				useSSQ(["abc123", 0, [foo, baz]], { option: "qux" });
-				useSSQ(["abc123", 1, []]);
-				useSSQ(["abc123", 2, []]);
-				useSSQ(["abc123", 3, [baz]]);
-				useSSQ(["abc123", 4, []]);
-				runSSM(["abc123", 5, [baz]]);
+				useSSQ(["dev/abc123/0", [foo, baz]], { option: "qux" });
+				useSSQ(["dev/abc123/1", []]);
+				useSSQ(["dev/abc123/2", []]);
+				useSSQ(["dev/abc123/3", [baz]]);
+				useSSQ(["dev/abc123/4", []]);
+				runSSM(["dev/abc123/5", [baz]]);
+			};
+		`,
+	},
+	{
+		message: "honors buildId and uniqueId",
+		input: `
+			import { runSSM } from "rakkasjs";
+
+			function x(foo) {
+				runSSM(() => { console.log("foo"); }, { uniqueId: "foo" });
+			}
+		`,
+		output: `
+			import { runSSM } from "rakkasjs";
+
+			function x(foo) {
+				runSSM(["id/foo", []], { uniqueId: "foo" });
 			};
 		`,
 	},
@@ -70,7 +87,13 @@ for (const test of tests) {
 	f(test.message, async () => {
 		const result = await transformAsync(await trim(test.input), {
 			parserOpts: { plugins: ["jsx", "typescript"] },
-			plugins: [babelTransformClientSideHooks("abc123", { current: false })],
+			plugins: [
+				babelTransformClientSideHooks({
+					moduleId: "dev/abc123",
+					modified: false,
+					uniqueIds: [],
+				}),
+			],
 		});
 
 		expect(await trim(result?.code || "")).to.equal(await trim(test.output));

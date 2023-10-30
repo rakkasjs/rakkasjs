@@ -100,3 +100,31 @@ export function removeUnreferenced(
 		if (!removed) break;
 	}
 }
+
+export function extractUniqueId(optionsPath: NodePath): string | undefined {
+	if (!optionsPath.isObjectExpression()) {
+		throw optionsPath.buildCodeFrameError(
+			"The `options` argument must be a literal object",
+		);
+	}
+
+	const stableIdPath = optionsPath.get("properties").find(
+		(prop) =>
+			(prop.get("key") as NodePath<t.Identifier>)?.isIdentifier({
+				name: "uniqueId",
+			}),
+	);
+
+	if (!stableIdPath) {
+		return;
+	}
+
+	const value: NodePath = stableIdPath.get("value") as NodePath;
+	if (!value.isStringLiteral()) {
+		throw value.buildCodeFrameError(
+			"The `uniqueId` property of the `options` argument must be a string literal",
+		);
+	}
+
+	return value.node.value;
+}

@@ -1,15 +1,23 @@
 import { PluginItem, NodePath } from "@babel/core";
 import * as t from "@babel/types";
 import {
+	extractUniqueId,
 	getAlreadyUnreferenced,
 	isRunServerSideCall,
 	removeUnreferenced,
 } from "./transform-utils";
 
-export function babelTransformClientSideHooks(
-	moduleId: string,
-	modifiedRef: { current: boolean },
-): PluginItem {
+export function babelTransformClientSideHooks(args: {
+	moduleId: string;
+	/** Set if any changes are made */
+	modified: boolean;
+	/** Only exists when not in dev server */
+	buildId?: string;
+	/** Filled with custom unique IDs */
+	uniqueIds?: Array<string | undefined>;
+}): PluginItem {
+	const { moduleId, uniqueIds } = args;
+
 	return {
 		visitor: {
 			Program: {
@@ -31,22 +39,22 @@ export function babelTransformClientSideHooks(
 										? 1
 										: 0;
 
-								let fn = call.get(`arguments.${argNo}`) as NodePath<
+								const fn = call.get(`arguments.${argNo}`) as NodePath<
 									t.ArrowFunctionExpression | t.FunctionExpression
 								>;
 
-								if (
-									!fn.isArrowFunctionExpression() &&
-									!fn.isFunctionExpression()
-								) {
-									fn = fn.replaceWith(
-										t.arrowFunctionExpression(
-											[t.restElement(t.identifier("$runServerSideArgs$"))],
-											t.callExpression(fn.node, [
-												t.spreadElement(t.identifier("$runServerSideArgs$")),
-											]),
-										),
-									)[0];
+								let uniqueId: string | undefined;
+								if (uniqueIds) {
+									const optionsArgNo = argNo + 1;
+
+									const options = call.get(`arguments.${optionsArgNo}`) as
+										| NodePath
+										| undefined;
+
+									uniqueId = options && extractUniqueId(options);
+									if (uniqueId) {
+										uniqueIds[counter] = uniqueId;
+									}
 								}
 
 								let body = fn.get("body");
@@ -87,12 +95,14 @@ export function babelTransformClientSideHooks(
 									},
 								});
 
-								modifiedRef.current = true;
+								args.modified = true;
+								const callSiteId = uniqueId
+									? "id/" + encodeURIComponent(uniqueId)
+									: moduleId + "/" + counter++;
 
 								fn.replaceWith(
 									t.arrayExpression([
-										t.stringLiteral(moduleId),
-										t.numericLiteral(counter++),
+										t.stringLiteral(callSiteId),
 										t.arrayExpression(
 											[...identifiers].map((id) => t.identifier(id)),
 										),
@@ -102,7 +112,7 @@ export function babelTransformClientSideHooks(
 						},
 					});
 
-					if (!modifiedRef.current) {
+					if (!args.modified) {
 						return;
 					}
 

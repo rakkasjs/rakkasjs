@@ -7,6 +7,7 @@ interface Test {
 	message: string;
 	input: string;
 	output: string;
+	ids?: Array<string | undefined>;
 	_?: "only" | "skip";
 }
 
@@ -40,11 +41,11 @@ const tests: Test[] = [
 			function outside() {}
 			function x(foo) {
 				const baz = 2;
-				useSSQ(["abc123", 0, [foo, baz], $runServerSide$[0]], { option: "qux" });
-				useSSQ(["abc123", 1, [], $runServerSide$[1]]);
-				useSSQ(["abc123", 2, [], $runServerSide$[2]]);
-				useSSQ(["abc123", 3, [baz], $runServerSide$[3]]);
-				useSSQ(["abc123", 4, [], $runServerSide$[4]]);
+				useSSQ(["dev/abc123/0", [foo, baz], $runServerSide$[0]], { option: "qux" });
+				useSSQ(["dev/abc123/1", [], $runServerSide$[1]]);
+				useSSQ(["dev/abc123/2", [], $runServerSide$[2]]);
+				useSSQ(["dev/abc123/3", [baz], $runServerSide$[3]]);
+				useSSQ(["dev/abc123/4", [], $runServerSide$[4]]);
 				null;
 			};
 
@@ -90,13 +91,44 @@ const tests: Test[] = [
 			import { useSSM } from "rakkasjs";
 
 			function x(foo) {
-				useSSM(["abc123", 0, [foo], $runServerSide$[0]]);
+				useSSM(["dev/abc123/0", [foo], $runServerSide$[0]]);
 			}
 
 			export const $runServerSide$ = [
 				async ($runServerSideClosure$, ctx, vars) => {
 					let [foo] = $runServerSideClosure$;
 					console.log(vars, foo)
+				},
+			]
+		`,
+	},
+	{
+		message: "uses unqiue id",
+		ids: [undefined, "qux"],
+		input: `
+			import { useSSQ } from "rakkasjs";
+
+			export function x(foo) {
+				useSSQ(() => console.log(foo));
+				useSSQ(() => console.log(foo), { uniqueId: "qux" });
+			}
+		`,
+		output: `
+			import { useSSQ } from "rakkasjs";
+
+			export function x(foo) {
+				useSSQ(["dev/abc123/0", [foo], $runServerSide$[0]]);
+				useSSQ(["id/qux", [foo], $runServerSide$[1]], { uniqueId: "qux" });
+			}
+
+			export const $runServerSide$ = [
+				async ($runServerSideClosure$) => {
+					let [foo] = $runServerSideClosure$;
+					return console.log(foo)
+				},
+				async ($runServerSideClosure$) => {
+					let [foo] = $runServerSideClosure$;
+					return console.log(foo)
 				},
 			]
 		`,
@@ -108,13 +140,23 @@ for (const test of tests) {
 	const f = test._ === "skip" ? it.skip : test._ === "only" ? it.only : it;
 
 	f(test.message, async () => {
+		const ids: Array<string | undefined> = [];
 		const result = await transformAsync(await trim(test.input), {
 			parserOpts: { plugins: ["jsx", "typescript"] },
-			plugins: [babelTransformServerSideHooks("abc123")],
+			plugins: [
+				babelTransformServerSideHooks({
+					moduleId: "dev/abc123",
+					uniqueIds: ids,
+				}),
+			],
 		});
 
 		const output = await trim(result?.code || "");
 		expect(output).to.equal(await trim(test.output));
+
+		if (test.ids) {
+			expect(ids).to.deep.equal(test.ids);
+		}
 	});
 }
 

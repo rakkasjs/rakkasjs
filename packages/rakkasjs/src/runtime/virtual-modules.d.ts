@@ -74,7 +74,7 @@ declare module "virtual:rakkasjs:client-manifest" {
 }
 
 declare module "virtual:rakkasjs:run-server-side:manifest" {
-	const manifest: Record<
+	export const moduleMap: Record<
 		string,
 		() => Promise<{
 			$runServerSide$: Array<
@@ -86,7 +86,8 @@ declare module "virtual:rakkasjs:run-server-side:manifest" {
 			>;
 		}>
 	>;
-	export default manifest;
+
+	export const idMap: Record<string, string>;
 }
 
 declare module "virtual:rakkasjs:hattip-entry" {
