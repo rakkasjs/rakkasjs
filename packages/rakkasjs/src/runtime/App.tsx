@@ -65,6 +65,8 @@ export function App(props: AppProps) {
 			const url = new URL(location, pageContext.url);
 			url.hash = "";
 
+			if (url.origin !== window.location.origin) return;
+
 			loadRoute(
 				{ ...pageContext, url },
 				lastRoute.found,
@@ -244,6 +246,8 @@ export async function loadRoute(
 		found = result;
 
 		while (!found) {
+			if (prefetchOnly) return;
+
 			if (!try404) {
 				// Always try a full reload before showing a 404 page
 				// the route may be a static file or an API route.
