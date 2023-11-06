@@ -56,10 +56,11 @@ export function resolveClientManifest(): Plugin {
 				"vite.manifest.json",
 			);
 
-			await fs.promises.rename(
-				from,
-				resolvedConfig.root + "/dist/manifest.json",
-			);
+			await fs.promises
+				.rename(from, resolvedConfig.root + "/dist/manifest.json")
+				.catch(() => {
+					// Ignore if the file doesn't exist
+				});
 		},
 	};
 }
