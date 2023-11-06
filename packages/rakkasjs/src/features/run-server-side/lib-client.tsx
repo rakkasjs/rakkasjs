@@ -23,13 +23,13 @@ import { EventSourceResult, useEventSource } from "../use-query/implementation";
 function runSSQImpl(
 	_: RequestContext,
 	desc: [callSiteId: string, closure: any[]],
-	usePostMethod = false,
+	options: RunServerSideQueryOptions = {},
 ): any {
 	const [callSiteId, closure] = desc;
 
 	const stringified = closure.map((x) => stringify(x));
 
-	return sendRequest(callSiteId, stringified, usePostMethod);
+	return sendRequest(callSiteId, stringified, options.usePostMethod ?? false);
 }
 
 function useSSQImpl(
@@ -97,7 +97,7 @@ function sendRequest(
 	vars?: any,
 ) {
 	let response: Promise<Response>;
-	const prefix = "_app/data/";
+	const prefix = "/_app/data/";
 
 	if (usePostMethod) {
 		response = fetch(prefix + callSiteId, {
