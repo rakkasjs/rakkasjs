@@ -1,0 +1,24 @@
+{
+	"name": "@rakkasjs/example-react-query",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "rakkas",
+		"build": "rakkas build",
+		"start": "node dist/server"
+	},
+	"devDependencies": {
+		"@types/react": "^18.2.22",
+		"@types/react-dom": "^18.2.7",
+		"rakkasjs": "0.7.0-next.23",
+		"typescript": "^5.2.2",
+		"vite": "^4.4.9",
+		"vite-tsconfig-paths": "^4.2.1"
+	},
+	"dependencies": {
+		"@tanstack/react-query": "^5.8.1",
+		"devalue": "^4.3.2",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0"
+	}
+}

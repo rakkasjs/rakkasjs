@@ -19,7 +19,7 @@ importers:
         version: 4.1.0(vite@4.4.9)
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
     devDependencies:
       cross-env:
         specifier: ^7.0.3
@@ -69,7 +69,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -109,7 +109,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
 
   examples/empty:
     dependencies:
@@ -125,7 +125,7 @@ importers:
         version: link:../../packages/rakkasjs
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
 
   examples/express:
     dependencies:
@@ -156,7 +156,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -187,7 +187,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -221,7 +221,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
 
   examples/guide-samples:
     dependencies:
@@ -249,7 +249,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -286,7 +286,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -335,7 +335,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -366,7 +366,41 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
+
+  examples/react-query:
+    dependencies:
+      "@tanstack/react-query":
+        specifier: ^5.8.1
+        version: 5.8.1(react-dom@18.2.0)(react@18.2.0)
+      devalue:
+        specifier: ^4.3.2
+        version: 4.3.2
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+    devDependencies:
+      "@types/react":
+        specifier: ^18.2.22
+        version: 18.2.22
+      "@types/react-dom":
+        specifier: ^18.2.7
+        version: 18.2.7
+      rakkasjs:
+        specifier: 0.7.0-next.23
+        version: link:../../packages/rakkasjs
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.4.9
+        version: 4.4.9(@types/node@20.8.10)
+      vite-tsconfig-paths:
+        specifier: ^4.2.1
+        version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
 
   examples/server-sent-events:
     dependencies:
@@ -403,7 +437,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -443,7 +477,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -483,7 +517,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-plugin-cjs-interop:
         specifier: ^1.0.0
         version: 1.0.0
@@ -523,7 +557,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -560,7 +594,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -953,7 +987,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
 
   website:
     dependencies:
@@ -1056,7 +1090,7 @@ importers:
         version: 6.0.1
       vite:
         specifier: ^4.4.9
-        version: 4.4.9
+        version: 4.4.9(@types/node@20.8.10)
       vite-plugin-cjs-interop:
         specifier: ^1.0.0
         version: 1.0.0
@@ -3409,7 +3443,7 @@ packages:
       "@rollup/pluginutils": 5.0.4
       source-map: 0.7.4
       vfile: 5.3.7
-      vite: 4.4.9
+      vite: 4.4.9(@types/node@20.8.10)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -6828,6 +6862,33 @@ packages:
       defer-to-connect: 2.0.1
     dev: false
 
+  /@tanstack/query-core@5.8.1:
+    resolution:
+      {
+        integrity: sha512-Y0enatz2zQXBAsd7XmajlCs+WaitdR7dIFkqz9Xd7HL4KV04JOigWVreYseTmNH7YFSBSC/BJ9uuNp1MAf+GfA==,
+      }
+    dev: false
+
+  /@tanstack/react-query@5.8.1(react-dom@18.2.0)(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-YMagxS8iNPOLg0pK6WOjdSDlAvWKOf69udLOwQrBVmkC2SRLNLko7elo5Ro3ptlJkXvTVHidxC/h5KGi5bH1XQ==,
+      }
+    peerDependencies:
+      react: ^18.0.0 || 18
+      react-dom: ^18.0.0 || 18
+      react-native: "*"
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      "@tanstack/query-core": 5.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /@tokenizer/token@0.3.0:
     resolution:
       {
@@ -7694,7 +7755,7 @@ packages:
       "@babel/plugin-transform-react-jsx-source": 7.22.5(@babel/core@7.23.0)
       "@types/babel__core": 7.20.2
       react-refresh: 0.14.0
-      vite: 4.4.9
+      vite: 4.4.9(@types/node@20.8.10)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -10846,8 +10907,8 @@ packages:
     engines: { node: ^12.0.0 || ^14.0.0 || >=16.0.0 }
     dependencies:
       is-url: 1.2.4
-      postcss: 8.4.30
-      postcss-values-parser: 6.0.2(postcss@8.4.30)
+      postcss: 8.4.31
+      postcss-values-parser: 6.0.2(postcss@8.4.31)
     dev: false
 
   /detective-sass@5.0.3:
@@ -19195,7 +19256,7 @@ packages:
         integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==,
       }
 
-  /postcss-values-parser@6.0.2(postcss@8.4.30):
+  /postcss-values-parser@6.0.2(postcss@8.4.31):
     resolution:
       {
         integrity: sha512-YLJpK0N1brcNJrs9WatuJFtHaV9q5aAOj+S4DI5S7jgHlRfm0PIbDCAFRYMQD5SHq7Fy6xsDhyutgS0QOAs0qw==,
@@ -19206,20 +19267,9 @@ packages:
     dependencies:
       color-name: 1.1.4
       is-url-superb: 4.0.0
-      postcss: 8.4.30
+      postcss: 8.4.31
       quote-unquote: 1.0.0
     dev: false
-
-  /postcss@8.4.28:
-    resolution:
-      {
-        integrity: sha512-Z7V5j0cq8oEKyejIKfpD8b4eBy9cwW2JWPk0+fB1HOAMsfHbnAXLLS+PfVWlzMSLQaWttKDt607I0XHmpE67Vw==,
-      }
-    engines: { node: ^10 || ^12 || >=14 }
-    dependencies:
-      nanoid: 3.3.6
-      picocolors: 1.0.0
-      source-map-js: 1.0.2
 
   /postcss@8.4.30:
     resolution:
@@ -19242,7 +19292,6 @@ packages:
       nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
-    dev: true
 
   /preact-render-to-string@5.2.3(preact@10.11.3):
     resolution:
@@ -20686,16 +20735,6 @@ packages:
     dependencies:
       estree-walker: 0.6.1
     dev: true
-
-  /rollup@3.28.1:
-    resolution:
-      {
-        integrity: sha512-R9OMQmIHJm9znrU3m3cpE8uhN0fGdXiawME7aZIpQqvpS/85+Vt1Hq1/yVIcYfOmaQiHjvXkQAoJukvLpau6Yw==,
-      }
-    engines: { node: ">=14.18.0", npm: ">=8.0.0" }
-    hasBin: true
-    optionalDependencies:
-      fsevents: 2.3.3
 
   /rollup@3.29.1:
     resolution:
@@ -23660,48 +23699,11 @@ packages:
       debug: 4.3.4(supports-color@9.4.0)
       globrex: 0.1.2
       tsconfck: 2.1.2(typescript@5.2.2)
-      vite: 4.4.9
+      vite: 4.4.9(@types/node@20.8.10)
     transitivePeerDependencies:
       - supports-color
       - typescript
     dev: true
-
-  /vite@4.4.9:
-    resolution:
-      {
-        integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==,
-      }
-    engines: { node: ^14.18.0 || >=16.0.0 }
-    hasBin: true
-    peerDependencies:
-      "@types/node": ">= 14"
-      less: "*"
-      lightningcss: ^1.21.0
-      sass: "*"
-      stylus: "*"
-      sugarss: "*"
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      "@types/node":
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      esbuild: 0.18.20
-      postcss: 8.4.28
-      rollup: 3.28.1
-    optionalDependencies:
-      fsevents: 2.3.3
 
   /vite@4.4.9(@types/node@20.6.5):
     resolution:
@@ -23778,7 +23780,6 @@ packages:
       rollup: 3.29.3
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /vitest@0.34.5:
     resolution:
