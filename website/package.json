@@ -20,7 +20,7 @@
 		"ssr"
 	],
 	"dependencies": {
-		"@mdx-js/react": "^2.3.0",
+		"@mdx-js/react": "^3.0.0",
 		"@stackblitz/sdk": "^1.9.0",
 		"cookie": "^0.5.0",
 		"hamburger-react": "^2.5.0",
