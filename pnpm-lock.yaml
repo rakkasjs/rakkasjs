@@ -19,7 +19,7 @@ importers:
         version: 4.1.0(vite@4.4.9)
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
     devDependencies:
       cross-env:
         specifier: ^7.0.3
@@ -62,14 +62,14 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -102,14 +102,14 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
 
   examples/empty:
     dependencies:
@@ -121,11 +121,11 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
 
   examples/express:
     dependencies:
@@ -149,14 +149,14 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -180,14 +180,14 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -214,14 +214,14 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
 
   examples/guide-samples:
     dependencies:
@@ -242,14 +242,14 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -264,7 +264,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.22
@@ -279,14 +279,14 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -307,7 +307,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.22
@@ -328,14 +328,14 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -359,14 +359,14 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
 
   examples/react-query:
     dependencies:
@@ -390,14 +390,14 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -415,7 +415,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.22
@@ -430,14 +430,14 @@ importers:
         specifier: ^3.0.2
         version: 3.0.3
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -470,14 +470,14 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -508,16 +508,16 @@ importers:
         version: 5.1.28
       babel-plugin-styled-components:
         specifier: ^2.1.4
-        version: 2.1.4(@babel/core@7.23.2)(styled-components@6.0.8)
+        version: 2.1.4(@babel/core@7.23.3)(styled-components@6.0.8)
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-plugin-cjs-interop:
         specifier: ^1.0.0
         version: 1.0.0
@@ -535,7 +535,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.22
@@ -550,14 +550,14 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -587,14 +587,14 @@ importers:
         specifier: ^18.2.7
         version: 18.2.7
       rakkasjs:
-        specifier: 0.7.0-next.23
+        specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-tsconfig-paths:
         specifier: ^4.2.1
         version: 4.2.1(typescript@5.2.2)(vite@4.4.9)
@@ -883,7 +883,7 @@ importers:
         version: 1.0.0-rc.12
       netlify-cli:
         specifier: ^16.4.2
-        version: 16.4.2(@types/node@20.8.10)
+        version: 16.4.2(@types/node@20.9.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -938,7 +938,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       wrangler:
         specifier: ^3.9.0
         version: 3.9.0
@@ -987,7 +987,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
 
   website:
     dependencies:
@@ -1030,7 +1030,7 @@ importers:
         version: 3.5.2
       "@docsearch/react":
         specifier: ^3.5.2
-        version: 3.5.2(@algolia/client-search@4.20.0)(@types/react@18.2.22)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.9.0)
+        version: 3.5.2(@algolia/client-search@4.20.0)(@types/react@18.2.22)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.10.0)
       "@mapbox/rehype-prism":
         specifier: ^0.8.0
         version: 0.8.0
@@ -1090,7 +1090,7 @@ importers:
         version: 6.0.1
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@20.8.10)
+        version: 4.4.9(@types/node@20.9.0)
       vite-plugin-cjs-interop:
         specifier: ^1.0.0
         version: 1.0.0
@@ -1117,13 +1117,13 @@ packages:
       }
     engines: { node: ">=0.10.0" }
 
-  /@algolia/autocomplete-core@1.9.3(@algolia/client-search@4.20.0)(algoliasearch@4.19.1)(search-insights@2.9.0):
+  /@algolia/autocomplete-core@1.9.3(@algolia/client-search@4.20.0)(algoliasearch@4.19.1)(search-insights@2.10.0):
     resolution:
       {
         integrity: sha512-009HdfugtGCdC4JdXUbVJClA0q0zh24yyePn+KUGk3rP7j8FEe/m5Yo/z65gn6nP/cM39PxpzqKrL7A6fP6PPw==,
       }
     dependencies:
-      "@algolia/autocomplete-plugin-algolia-insights": 1.9.3(@algolia/client-search@4.20.0)(algoliasearch@4.19.1)(search-insights@2.9.0)
+      "@algolia/autocomplete-plugin-algolia-insights": 1.9.3(@algolia/client-search@4.20.0)(algoliasearch@4.19.1)(search-insights@2.10.0)
       "@algolia/autocomplete-shared": 1.9.3(@algolia/client-search@4.20.0)(algoliasearch@4.19.1)
     transitivePeerDependencies:
       - "@algolia/client-search"
@@ -1131,7 +1131,7 @@ packages:
       - search-insights
     dev: true
 
-  /@algolia/autocomplete-plugin-algolia-insights@1.9.3(@algolia/client-search@4.20.0)(algoliasearch@4.19.1)(search-insights@2.9.0):
+  /@algolia/autocomplete-plugin-algolia-insights@1.9.3(@algolia/client-search@4.20.0)(algoliasearch@4.19.1)(search-insights@2.10.0):
     resolution:
       {
         integrity: sha512-a/yTUkcO/Vyy+JffmAnTWbr4/90cLzw+CC3bRbhnULr/EM0fGNvM13oQQ14f2moLMcVDyAx/leczLlAOovhSZg==,
@@ -1140,7 +1140,7 @@ packages:
       search-insights: ">= 1 < 3"
     dependencies:
       "@algolia/autocomplete-shared": 1.9.3(@algolia/client-search@4.20.0)(algoliasearch@4.19.1)
-      search-insights: 2.9.0
+      search-insights: 2.10.0
     transitivePeerDependencies:
       - "@algolia/client-search"
       - algoliasearch
@@ -1451,23 +1451,23 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@babel/core@7.23.2:
+  /@babel/core@7.23.3:
     resolution:
       {
-        integrity: sha512-n7s51eWdaWZ3vGT2tD4T7J6eJs3QoBXydv7vkUM06Bf1cbVD2Kc2UrkzhiQwobfV7NwOnQXYL7UBJ5VPU+RGoQ==,
+        integrity: sha512-Jg+msLuNuCJDyBvFv5+OKOUjWMZgd85bKjbICd3zWrKAo+bJ49HJufi7CQE0q0uR8NGyO6xkCACScNqyjHSZew==,
       }
     engines: { node: ">=6.9.0" }
     dependencies:
       "@ampproject/remapping": 2.2.1
       "@babel/code-frame": 7.22.13
-      "@babel/generator": 7.23.0
+      "@babel/generator": 7.23.3
       "@babel/helper-compilation-targets": 7.22.15
-      "@babel/helper-module-transforms": 7.23.0(@babel/core@7.23.2)
+      "@babel/helper-module-transforms": 7.23.3(@babel/core@7.23.3)
       "@babel/helpers": 7.23.2
-      "@babel/parser": 7.23.0
+      "@babel/parser": 7.23.3
       "@babel/template": 7.22.15
-      "@babel/traverse": 7.23.2
-      "@babel/types": 7.23.0
+      "@babel/traverse": 7.23.3
+      "@babel/types": 7.23.3
       convert-source-map: 2.0.0
       debug: 4.3.4(supports-color@9.4.0)
       gensync: 1.0.0-beta.2
@@ -1486,6 +1486,18 @@ packages:
       "@babel/types": 7.23.0
       "@jridgewell/gen-mapping": 0.3.3
       "@jridgewell/trace-mapping": 0.3.19
+      jsesc: 2.5.2
+
+  /@babel/generator@7.23.3:
+    resolution:
+      {
+        integrity: sha512-keeZWAV4LU3tW0qRi19HRpabC/ilM0HRBBzf9/k8FFiG4KVpiv0FIy4hHfLfFQZNhziCTPTmd59zoyv6DNISzg==,
+      }
+    engines: { node: ">=6.9.0" }
+    dependencies:
+      "@babel/types": 7.23.3
+      "@jridgewell/gen-mapping": 0.3.3
+      "@jridgewell/trace-mapping": 0.3.20
       jsesc: 2.5.2
 
   /@babel/helper-annotate-as-pure@7.22.5:
@@ -1698,16 +1710,16 @@ packages:
       "@babel/helper-split-export-declaration": 7.22.6
       "@babel/helper-validator-identifier": 7.22.20
 
-  /@babel/helper-module-transforms@7.23.0(@babel/core@7.23.2):
+  /@babel/helper-module-transforms@7.23.3(@babel/core@7.23.3):
     resolution:
       {
-        integrity: sha512-WhDWw1tdrlT0gMgUJSlX0IQvoO1eN279zrAUbVB+KpV2c3Tylz8+GnKOLllCS6Z/iZQEyVYxhZVUdPTqs2YYPw==,
+        integrity: sha512-7bBs4ED9OmswdfDzpz4MpWgSrV7FXlc3zIagvLFjS5H+Mk7Snr21vQ6QwrsoCGMfNC4e4LQPdoULEt4ykz0SRQ==,
       }
     engines: { node: ">=6.9.0" }
     peerDependencies:
       "@babel/core": ^7.0.0
     dependencies:
-      "@babel/core": 7.23.2
+      "@babel/core": 7.23.3
       "@babel/helper-environment-visitor": 7.22.20
       "@babel/helper-module-imports": 7.22.15
       "@babel/helper-simple-access": 7.22.5
@@ -1869,8 +1881,8 @@ packages:
     engines: { node: ">=6.9.0" }
     dependencies:
       "@babel/template": 7.22.15
-      "@babel/traverse": 7.23.2
-      "@babel/types": 7.23.0
+      "@babel/traverse": 7.23.3
+      "@babel/types": 7.23.3
     transitivePeerDependencies:
       - supports-color
 
@@ -1894,6 +1906,16 @@ packages:
     hasBin: true
     dependencies:
       "@babel/types": 7.23.0
+
+  /@babel/parser@7.23.3:
+    resolution:
+      {
+        integrity: sha512-uVsWNvlVsIninV2prNz/3lHCb+5CJ+e+IUBfbjToAHODtfGYLfCFuY4AU7TskI+dAKk+njsPiBjq1gKTvZOBaw==,
+      }
+    engines: { node: ">=6.0.0" }
+    hasBin: true
+    dependencies:
+      "@babel/types": 7.23.3
 
   /@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@7.22.15(@babel/core@7.23.0):
     resolution:
@@ -2089,7 +2111,7 @@ packages:
       "@babel/core": 7.23.0
       "@babel/helper-plugin-utils": 7.22.5
 
-  /@babel/plugin-syntax-jsx@7.22.5(@babel/core@7.23.2):
+  /@babel/plugin-syntax-jsx@7.22.5(@babel/core@7.23.3):
     resolution:
       {
         integrity: sha512-gvyP4hZrgrs/wWMaocvxZ44Hw0b3W8Pe+cMxc8V1ULQ07oh8VNbIRaoD1LRZVTvD+0nieDKjfgKg89sD7rrKrg==,
@@ -2098,7 +2120,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.23.2
+      "@babel/core": 7.23.3
       "@babel/helper-plugin-utils": 7.22.5
 
   /@babel/plugin-syntax-logical-assignment-operators@7.10.4(@babel/core@7.23.0):
@@ -3199,21 +3221,21 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@babel/traverse@7.23.2:
+  /@babel/traverse@7.23.3:
     resolution:
       {
-        integrity: sha512-azpe59SQ48qG6nu2CzcMLbxUudtN+dOM9kDbUqGq3HXUJRlo7i8fvPoxQUzYgLZ4cMVmuZgm8vvBpNeRhd6XSw==,
+        integrity: sha512-+K0yF1/9yR0oHdE0StHuEj3uTPzwwbrLGfNOndVJVV2TqA5+j3oljJUb4nmB954FLGjNem976+B+eDuLIjesiQ==,
       }
     engines: { node: ">=6.9.0" }
     dependencies:
       "@babel/code-frame": 7.22.13
-      "@babel/generator": 7.23.0
+      "@babel/generator": 7.23.3
       "@babel/helper-environment-visitor": 7.22.20
       "@babel/helper-function-name": 7.23.0
       "@babel/helper-hoist-variables": 7.22.5
       "@babel/helper-split-export-declaration": 7.22.6
-      "@babel/parser": 7.23.0
-      "@babel/types": 7.23.0
+      "@babel/parser": 7.23.3
+      "@babel/types": 7.23.3
       debug: 4.3.4(supports-color@9.4.0)
       globals: 11.12.0
     transitivePeerDependencies:
@@ -3223,6 +3245,17 @@ packages:
     resolution:
       {
         integrity: sha512-0oIyUfKoI3mSqMvsxBdclDwxXKXAUA8v/apZbc+iSyARYou1o8ZGDxbUYyLFoW2arqS2jDGqJuZvv1d/io1axg==,
+      }
+    engines: { node: ">=6.9.0" }
+    dependencies:
+      "@babel/helper-string-parser": 7.22.5
+      "@babel/helper-validator-identifier": 7.22.20
+      to-fast-properties: 2.0.0
+
+  /@babel/types@7.23.3:
+    resolution:
+      {
+        integrity: sha512-OZnvoH2l8PK5eUvEcUyCt/sXgr/h+UWpVuBbOljwcrAgUl6lpchoQ++PHGyQy1AtYnVA6CEq3y5xeEI10brpXw==,
       }
     engines: { node: ">=6.9.0" }
     dependencies:
@@ -3443,7 +3476,7 @@ packages:
       "@rollup/pluginutils": 5.0.4
       source-map: 0.7.4
       vfile: 5.3.7
-      vite: 4.4.9(@types/node@20.8.10)
+      vite: 4.4.9(@types/node@20.9.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -3478,7 +3511,7 @@ packages:
       }
     dev: true
 
-  /@docsearch/react@3.5.2(@algolia/client-search@4.20.0)(@types/react@18.2.22)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.9.0):
+  /@docsearch/react@3.5.2(@algolia/client-search@4.20.0)(@types/react@18.2.22)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.10.0):
     resolution:
       {
         integrity: sha512-9Ahcrs5z2jq/DcAvYtvlqEBHImbm4YJI8M9y0x6Tqg598P40HTEkX7hsMcIuThI+hTFxRGZ9hll0Wygm2yEjng==,
@@ -3498,14 +3531,14 @@ packages:
       search-insights:
         optional: true
     dependencies:
-      "@algolia/autocomplete-core": 1.9.3(@algolia/client-search@4.20.0)(algoliasearch@4.19.1)(search-insights@2.9.0)
+      "@algolia/autocomplete-core": 1.9.3(@algolia/client-search@4.20.0)(algoliasearch@4.19.1)(search-insights@2.10.0)
       "@algolia/autocomplete-preset-algolia": 1.9.3(@algolia/client-search@4.20.0)(algoliasearch@4.19.1)
       "@docsearch/css": 3.5.2
       "@types/react": 18.2.22
       algoliasearch: 4.19.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      search-insights: 2.9.0
+      search-insights: 2.10.0
     transitivePeerDependencies:
       - "@algolia/client-search"
     dev: true
@@ -5068,6 +5101,15 @@ packages:
       "@jridgewell/resolve-uri": 3.1.1
       "@jridgewell/sourcemap-codec": 1.4.15
 
+  /@jridgewell/trace-mapping@0.3.20:
+    resolution:
+      {
+        integrity: sha512-R8LcPeWZol2zR8mmH3JeKQ6QRCFb7XgUhV9ZlGhHLGyg4wpPiPZNQOOWhFZhxKw8u//yTbNGI42Bx/3paXEQ+Q==,
+      }
+    dependencies:
+      "@jridgewell/resolve-uri": 3.1.1
+      "@jridgewell/sourcemap-codec": 1.4.15
+
   /@jridgewell/trace-mapping@0.3.9:
     resolution:
       {
@@ -5235,7 +5277,7 @@ packages:
       yargs: 17.7.2
     dev: false
 
-  /@netlify/build@29.21.1(@types/node@20.8.10)(debug@4.3.4):
+  /@netlify/build@29.21.1(@types/node@20.9.0)(debug@4.3.4):
     resolution:
       {
         integrity: sha512-9twzYq+X8nz16sttkjCB8F8nZIMVspa40P2u3p1h0SWwxk2zq4g3cd8QlZOaO1sfcKQDzzpQkvu+jQ06j2AMfw==,
@@ -5294,7 +5336,7 @@ packages:
       strip-ansi: 7.1.0
       supports-color: 9.4.0
       terminal-link: 3.0.0
-      ts-node: 10.9.1(@types/node@20.8.10)(typescript@5.2.2)
+      ts-node: 10.9.1(@types/node@20.9.0)(typescript@5.2.2)
       typescript: 5.2.2
       uuid: 9.0.0
       yargs: 17.7.2
@@ -7261,10 +7303,10 @@ packages:
         integrity: sha512-2qGq5LAOTh9izcc0+F+dToFigBWiK1phKPt7rNhOqJSr35y8rlIBjDwGtFSgAI6MGIhjwOVNSQZVdJsZJ2uR1w==,
       }
 
-  /@types/node@20.8.10:
+  /@types/node@20.9.0:
     resolution:
       {
-        integrity: sha512-TlgT8JntpcbmKUFzjhsyhGfP2fsiz1Mv56im6enJ905xG1DAYesxJaeSbGqQmAw8OWPdhyJGhGSQGKRNJ45u9w==,
+        integrity: sha512-nekiGu2NDb1BcVofVcEKMIwzlx4NjHlcjhoxxKBNLtz15Y1z7MYf549DFvkHSId02Ax6kGwWntIBPC3l/JZcmw==,
       }
     dependencies:
       undici-types: 5.26.5
@@ -7456,10 +7498,10 @@ packages:
       "@types/yargs-parser": 21.0.1
     dev: false
 
-  /@types/yauzl@2.10.2:
+  /@types/yauzl@2.10.3:
     resolution:
       {
-        integrity: sha512-Km7XAtUIduROw7QPgvcft0lIupeG8a8rdKL8RiSyKvlE7dYY31fEn41HVuQsRFDuROA8tA4K2UVL+WdfFmErBA==,
+        integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==,
       }
     requiresBuild: true
     dependencies:
@@ -7755,7 +7797,7 @@ packages:
       "@babel/plugin-transform-react-jsx-source": 7.22.5(@babel/core@7.23.0)
       "@types/babel__core": 7.20.2
       react-refresh: 0.14.0
-      vite: 4.4.9(@types/node@20.8.10)
+      vite: 4.4.9(@types/node@20.9.0)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -8803,7 +8845,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /babel-plugin-styled-components@2.1.4(@babel/core@7.23.2)(styled-components@6.0.8):
+  /babel-plugin-styled-components@2.1.4(@babel/core@7.23.3)(styled-components@6.0.8):
     resolution:
       {
         integrity: sha512-Xgp9g+A/cG47sUyRwwYxGM4bR/jDRg5N6it/8+HxCnbT5XNKSKDT9xm4oag/osgqjC2It/vH0yXsomOG6k558g==,
@@ -8813,7 +8855,7 @@ packages:
     dependencies:
       "@babel/helper-annotate-as-pure": 7.22.5
       "@babel/helper-module-imports": 7.22.5
-      "@babel/plugin-syntax-jsx": 7.22.5(@babel/core@7.23.2)
+      "@babel/plugin-syntax-jsx": 7.22.5(@babel/core@7.23.3)
       lodash: 4.17.21
       picomatch: 2.3.1
       styled-components: 6.0.8(babel-plugin-styled-components@2.1.4)(react-dom@18.2.0)(react@18.2.0)
@@ -12363,7 +12405,7 @@ packages:
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
-      "@types/yauzl": 2.10.2
+      "@types/yauzl": 2.10.3
     transitivePeerDependencies:
       - supports-color
 
@@ -17617,7 +17659,7 @@ packages:
       }
     dev: false
 
-  /netlify-cli@16.4.2(@types/node@20.8.10):
+  /netlify-cli@16.4.2(@types/node@20.9.0):
     resolution:
       {
         integrity: sha512-17ygfQJ7HhE+E9zn6aVUYctj+j8Js/ozNqlLbNF4/AGviCmS7phX5FdECKMbFSwC8jdHB12L9mNVfiqYGLPquw==,
@@ -17628,7 +17670,7 @@ packages:
     dependencies:
       "@bugsnag/js": 7.20.2
       "@fastify/static": 6.10.2
-      "@netlify/build": 29.21.1(@types/node@20.8.10)(debug@4.3.4)
+      "@netlify/build": 29.21.1(@types/node@20.9.0)(debug@4.3.4)
       "@netlify/build-info": 7.8.0
       "@netlify/config": 20.9.0
       "@netlify/edge-bundler": 8.19.1
@@ -20905,10 +20947,10 @@ packages:
     dependencies:
       loose-envify: 1.4.0
 
-  /search-insights@2.9.0:
+  /search-insights@2.10.0:
     resolution:
       {
-        integrity: sha512-bkWW9nIHOFkLwjQ1xqVaMbjjO5vhP26ERsH9Y3pKr8imthofEFIxlnOabkmGcw6ksRj9jWidcI65vvjJH/nTGg==,
+        integrity: sha512-pQGrOE56QuTRmq4NzliRZe9rv914hBMBjOviuDliDHoIhmBGoyZRlFsPd4RprGGNC4PKdD2Jz54YN4Cmkb44mA==,
       }
     dev: true
 
@@ -22035,7 +22077,7 @@ packages:
       "@emotion/is-prop-valid": 1.2.1
       "@emotion/unitless": 0.8.1
       "@types/stylis": 4.2.1
-      babel-plugin-styled-components: 2.1.4(@babel/core@7.23.2)(styled-components@6.0.8)
+      babel-plugin-styled-components: 2.1.4(@babel/core@7.23.3)(styled-components@6.0.8)
       css-to-react-native: 3.2.0
       csstype: 3.1.2
       postcss: 8.4.30
@@ -22621,7 +22663,7 @@ packages:
       }
     dev: true
 
-  /ts-node@10.9.1(@types/node@20.8.10)(typescript@5.2.2):
+  /ts-node@10.9.1(@types/node@20.9.0)(typescript@5.2.2):
     resolution:
       {
         integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==,
@@ -22643,7 +22685,7 @@ packages:
       "@tsconfig/node12": 1.0.11
       "@tsconfig/node14": 1.0.3
       "@tsconfig/node16": 1.0.4
-      "@types/node": 20.8.10
+      "@types/node": 20.9.0
       acorn: 8.10.0
       acorn-walk: 8.2.0
       arg: 4.1.3
@@ -23699,7 +23741,7 @@ packages:
       debug: 4.3.4(supports-color@9.4.0)
       globrex: 0.1.2
       tsconfck: 2.1.2(typescript@5.2.2)
-      vite: 4.4.9(@types/node@20.8.10)
+      vite: 4.4.9(@types/node@20.9.0)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -23743,7 +23785,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
 
-  /vite@4.4.9(@types/node@20.8.10):
+  /vite@4.4.9(@types/node@20.9.0):
     resolution:
       {
         integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==,
@@ -23774,7 +23816,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      "@types/node": 20.8.10
+      "@types/node": 20.9.0
       esbuild: 0.18.20
       postcss: 8.4.30
       rollup: 3.29.3

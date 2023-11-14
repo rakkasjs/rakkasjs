@@ -1,6 +1,6 @@
 {
 	"name": "create-rakkas-app",
-	"version": "0.7.0-next.23",
+	"version": "0.7.0-next.24",
 	"type": "module",
 	"files": [
 		"dist",
