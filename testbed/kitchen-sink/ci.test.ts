@@ -650,7 +650,9 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		test("runs runServerSideQuery on the server", async () => {
 			await page.goto(host + "/run-ssq");
 			await page.waitForFunction(
-				() => document.body?.innerText.includes("Result: 7, SSR: true"),
+				() =>
+					document.body?.innerText.includes("Result 1: 7, SSR: true") &&
+					document.body?.innerText.includes("Result 2: 7, SSR: true"),
 			);
 
 			await page.goto(host + "/run-ssq/elsewhere");
@@ -664,7 +666,9 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			await link!.click();
 
 			await page.waitForFunction(
-				() => document.body?.innerText.includes("Result: 7, SSR: true"),
+				() =>
+					document.body?.innerText.includes("Result 1: 7, SSR: true") &&
+					document.body?.innerText.includes("Result 2: 7, SSR: true"),
 			);
 		});
 

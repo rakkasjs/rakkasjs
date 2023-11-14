@@ -98,7 +98,9 @@ export function babelTransformClientSideHooks(args: {
 								args.modified = true;
 								const callSiteId = uniqueId
 									? "id/" + encodeURIComponent(uniqueId)
-									: moduleId + "/" + counter++;
+									: moduleId + "/" + counter;
+
+								counter++;
 
 								fn.replaceWith(
 									t.arrayExpression([

@@ -116,10 +116,12 @@ export function babelTransformServerSideHooks({
 									t.arrayExpression(ids.map((id) => t.identifier(id))),
 									t.memberExpression(
 										t.identifier("$runServerSide$"),
-										t.numericLiteral(counter++),
+										t.numericLiteral(counter),
 										true,
 									),
 								]);
+
+								counter++;
 
 								if (
 									t.isArrowFunctionExpression(fn.node) ||
