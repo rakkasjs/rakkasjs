@@ -43,7 +43,7 @@
 		"@types/react": "^18.2.22",
 		"@types/react-dom": "^18.2.7",
 		"cheerio": "^1.0.0-rc.12",
-		"netlify-cli": "^16.4.2",
+		"netlify-cli": "^17.5.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"web-streams-polyfill": "^3.2.1"
