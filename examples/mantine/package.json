@@ -14,20 +14,20 @@
   },
   "devDependencies": {
     "@rakkasjs/eslint-config": "0.7.0-next.24",
-    "@types/react": "^18.2.22",
-    "@types/react-dom": "^18.2.7",
-    "eslint": "^8.50.0",
-    "postcss-preset-mantine": "^1.7.0",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "eslint": "^8.54.0",
+    "postcss-preset-mantine": "^1.11.0",
     "postcss-simple-vars": "^7.0.1",
-    "prettier": "^3.0.3",
+    "prettier": "^3.1.0",
     "rakkasjs": "0.7.0-next.24",
     "typescript": "^5.2.2",
-    "vite": "^4.4.9",
+    "vite": "^5.0.0",
     "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
-    "@mantine/core": "^7.0.1",
-    "@mantine/hooks": "^7.0.1",
+    "@mantine/core": "^7.2.2",
+    "@mantine/hooks": "^7.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

@@ -7,7 +7,7 @@ const isomorphicFetchServerHooks: ServerHooks = {
 			ctx.fetch = async (input, init) => {
 				let url: URL | undefined;
 
-				if (!(input instanceof Request)) {
+				if (typeof input === "string" || input instanceof URL) {
 					url = new URL(input, ctx.url);
 					input = url.href;
 				}
@@ -15,12 +15,12 @@ const isomorphicFetchServerHooks: ServerHooks = {
 				let newRequest: Request;
 
 				try {
-					newRequest = new Request(input, init);
+					newRequest = new Request(input as any, init);
 				} catch (error) {
 					// Miniflare throws when accessing credentials
 					const newInit = { ...init };
 					delete newInit?.credentials;
-					newRequest = new Request(input, newInit);
+					newRequest = new Request(input as any, newInit);
 				}
 
 				url = url || new URL(newRequest.url, ctx.url);

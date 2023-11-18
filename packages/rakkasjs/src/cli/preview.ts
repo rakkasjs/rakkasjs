@@ -25,7 +25,6 @@ export async function preview(
 		configFile: options.config,
 		logLevel: options.logLevel,
 		clearScreen: options.clearScreen,
-		optimizeDeps: { force: options.force },
 	};
 
 	const initialConfig = await resolveConfig(inlineConfig, "serve").catch(

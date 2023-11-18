@@ -8,15 +8,15 @@
 		"start": "node dist/server"
 	},
 	"devDependencies": {
-		"@types/react": "^18.2.22",
-		"@types/react-dom": "^18.2.7",
+		"@types/react": "^18.2.37",
+		"@types/react-dom": "^18.2.15",
 		"rakkasjs": "0.7.0-next.24",
 		"typescript": "^5.2.2",
-		"vite": "^4.4.9",
+		"vite": "^5.0.0",
 		"vite-tsconfig-paths": "^4.2.1"
 	},
 	"dependencies": {
-		"@tanstack/react-query": "^5.8.1",
+		"@tanstack/react-query": "^5.8.4",
 		"devalue": "^4.3.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"

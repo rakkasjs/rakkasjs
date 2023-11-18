@@ -401,7 +401,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				)) as ElementHandle<HTMLAnchorElement> | null;
 				expect(link).toBeTruthy();
 
-				link!.click();
+				await link!.click();
 				await page.waitForFunction(
 					(host: string) =>
 						document.body?.innerText.includes(`Navigating to: ${host}/nav/a`),
@@ -446,7 +446,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 
-			link!.click();
+			await link!.click();
 
 			await page.waitForFunction(
 				() =>
@@ -481,7 +481,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 
-			link!.click();
+			await link!.click();
 			await page.waitForFunction(
 				() => document.body?.innerText.includes("Navigating to"),
 			);

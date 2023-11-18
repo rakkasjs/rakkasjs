@@ -244,8 +244,8 @@ export async function doPrerender(
 				(status < 300
 					? status
 					: status < 400
-					? pico.yellow(status)
-					: pico.red(status)) +
+					  ? pico.yellow(status)
+					  : pico.red(status)) +
 					" " +
 					pico.gray(config.build.outDir + "/client/") +
 					pico.cyan(fileName.slice(1)),

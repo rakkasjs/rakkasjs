@@ -4,7 +4,7 @@ module.exports = {
 	root: true,
 	ignorePatterns: ["node_modules", "dist", "**/*.cjs"],
 	extends: ["@cyco130/eslint-config/react"],
-	parserOptions: { tsconfigRootDir: __dirname },
+	parserOptions: { project: [__dirname + "/tsconfig.json"] },
 	settings: {
 		"import/resolver": {
 			typescript: {
