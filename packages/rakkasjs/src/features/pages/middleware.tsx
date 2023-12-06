@@ -197,7 +197,13 @@ export default async function renderPageRoute(
 		const prefetchOutput = `<script type="module" async src="${
 			assetPrefix + scriptPath
 		}"></script>`;
-		const head = renderHead(prefetchOutput, renderMode);
+		const head = renderHead(
+			prefetchOutput,
+			renderMode,
+			undefined,
+			undefined,
+			pageHooks,
+		);
 		const html = head + `<div id="root"></div></body></html>`;
 
 		return new Response(html, {
