@@ -508,7 +508,7 @@ export default async function renderPageRoute(
 		});
 	}
 
-	const prefetchOutput = createPrefetchTags(
+	const prefetchOutput = await createPrefetchTags(
 		ctx.url,
 		[scriptPath, ...found.route[4]],
 		renderMode === "server",
@@ -638,7 +638,7 @@ function makeHeaders(
 	return result;
 }
 
-function createPrefetchTags(
+async function createPrefetchTags(
 	pageUrl: URL,
 	moduleIds: string[],
 	server: boolean,
@@ -681,7 +681,7 @@ function createPrefetchTags(
 		// }
 	} else {
 		const moduleSet = new Set(moduleIds);
-		const cssSet = new Set<string>();
+		const cssSet = new Set<ModuleNode>();
 		const root = viteDevServer!.config.root.replace(/\\/g, "/");
 
 		for (const moduleId of moduleSet) {
@@ -699,30 +699,22 @@ function createPrefetchTags(
 				url.searchParams.delete("v");
 				url.searchParams.delete("t");
 				if (url.href.match(/\.(css|scss|sass|less|styl|stylus)$/)) {
-					cssSet.add(imported.url);
+					cssSet.add(imported);
 				} else if (url.href.match(/\.(js|jsx|ts|tsx)$/)) {
 					moduleSet.add(imported.id ?? imported.url);
 				}
 			}
 		}
 
-		if (cssSet.size > 0) {
-			// 1. Inject a link for each CSS file to avoid FOUC
-			for (const cssFile of cssSet) {
-				result += `<link rel="stylesheet" data-rakkas-style-sheet href=${JSON.stringify(
-					cssFile,
-				)}>`;
-			}
-
-			// 2. Inject a script that imports all CSS files so that Vite inserts the style tags
-			result += `<script type="module">`;
-
-			for (const cssFile of cssSet) {
-				result += `import ${JSON.stringify(cssFile)};`;
-			}
-
-			// 3. Once styles are inserted, remove the style sheet links to avoid duplicate styles
-			result += `document.querySelectorAll('[data-rakkas-style-sheet]').forEach((el) => el.remove())</script>`;
+		for (const module of cssSet) {
+			const { id, url } = module;
+			if (!id) continue;
+			const directUrl = url + (url.includes("?") ? "&" : "?") + "direct";
+			const transformed = await viteDevServer!.transformRequest(directUrl);
+			if (!transformed) continue;
+			result += `<style type="text/css" data-vite-dev-id=${JSON.stringify(
+				id,
+			)}>${escapeHtml(transformed.code)}</style>`;
 		}
 	}
 
