@@ -19,7 +19,7 @@ export default defineClientHooks({
 });
 
 // Rakkas Suspense Cache
-declare const $RSC: Record<string, any>;
+declare const $RSC: Record<string, any> | undefined;
 
 const queryCache: Record<string, CacheItem | undefined> = Object.create(null);
 
@@ -47,11 +47,11 @@ function Wrapper({ children }: { children: ReactNode }) {
 
 const cache: QueryCache = {
 	has(key: string) {
-		return key in queryCache || key in $RSC;
+		return key in queryCache || (typeof $RSC !== "undefined" && key in $RSC);
 	},
 
 	get(key: string) {
-		if (!queryCache[key] && key in $RSC) {
+		if (!queryCache[key] && typeof $RSC !== "undefined" && key in $RSC) {
 			queryCache[key] = {
 				value: $RSC[key],
 				subscribers: new Set(),
