@@ -77,7 +77,7 @@ export default createRequestHandler({
 						secret: SERVER_SECRET,
 						providers,
 					},
-				);
+				) as Promise<Response>;
 			},
 		],
 	},
