@@ -51,7 +51,7 @@ export const Redirect = import.meta.env.SSR
 					/>
 				</>
 			);
-	  }
+		}
 	: function Redirect(props: RedirectProps): ReactElement {
 			const redirected = useRef(false);
 
@@ -64,7 +64,7 @@ export const Redirect = import.meta.env.SSR
 			});
 
 			return null as any;
-	  };
+		};
 
 /** {@link ResponseHeaders} props */
 export interface ResponseHeadersProps {
@@ -98,11 +98,11 @@ export const ResponseHeaders = import.meta.env.SSR
 			});
 
 			return <></>;
-	  }
+		}
 	: // eslint-disable-next-line @typescript-eslint/no-unused-vars
-	  function ResponseHeaders(props: ResponseHeadersProps): ReactElement {
+		function ResponseHeaders(props: ResponseHeadersProps): ReactElement {
 			return null as any;
-	  };
+		};
 
 export interface ResponseContextProps {
 	redirect?: boolean;

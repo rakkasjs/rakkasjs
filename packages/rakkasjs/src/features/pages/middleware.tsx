@@ -552,7 +552,7 @@ export default async function renderPageRoute(
 					close() {
 						// Ignore
 					},
-			  }
+				}
 			: writable.getWriter();
 
 	async function pipe() {

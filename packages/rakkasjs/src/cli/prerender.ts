@@ -177,7 +177,7 @@ export async function doPrerender(
 								body = isRedirect
 									? `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${escapeHtml(
 											response.headers.get("location")!,
-									  )}"></head></html>`
+										)}"></head></html>`
 									: "";
 							}
 
@@ -244,8 +244,8 @@ export async function doPrerender(
 				(status < 300
 					? status
 					: status < 400
-					  ? pico.yellow(status)
-					  : pico.red(status)) +
+						? pico.yellow(status)
+						: pico.red(status)) +
 					" " +
 					pico.gray(config.build.outDir + "/client/") +
 					pico.cyan(fileName.slice(1)),

@@ -64,19 +64,19 @@
 		"@types/babel__core": "^7.20.5",
 		"@types/micromatch": "^4.0.6",
 		"@types/prettier": "^3.0.0",
-		"eslint": "^8.55.0",
-		"prettier": "^3.1.0",
-		"publint": "^0.2.6",
+		"eslint": "^8.56.0",
+		"prettier": "^3.1.1",
+		"publint": "^0.2.7",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"react-error-boundary": "^4.0.11",
+		"react-error-boundary": "^4.0.12",
 		"tsup": "^8.0.1",
-		"typescript": "^5.3.2",
-		"vite": "^5.0.6"
+		"typescript": "^5.3.3",
+		"vite": "^5.0.10"
 	},
 	"dependencies": {
-		"@babel/core": "^7.23.5",
-		"@babel/types": "^7.23.5",
+		"@babel/core": "^7.23.6",
+		"@babel/types": "^7.23.6",
 		"@hattip/adapter-node": "0.0.35",
 		"@hattip/bundler-cloudflare-workers": "0.0.35",
 		"@hattip/bundler-deno": "0.0.35",
@@ -86,9 +86,9 @@
 		"@hattip/core": "0.0.35",
 		"@hattip/polyfills": "0.0.35",
 		"@microsoft/fetch-event-source": "^2.0.1",
-		"@types/node": "^20.10.3",
-		"@types/react": "^18.2.42",
-		"@types/react-dom": "^18.2.17",
+		"@types/node": "^20.10.5",
+		"@types/react": "^18.2.45",
+		"@types/react-dom": "^18.2.18",
 		"@vavite/connect": "^3.0.0",
 		"@vavite/expose-vite-dev-server": "3.0.0",
 		"@vavite/multibuild": "^3.0.0",
@@ -101,6 +101,6 @@
 		"magic-string": "^0.30.5",
 		"micromatch": "^4.0.5",
 		"picocolors": "^1.0.0",
-		"sirv": "^2.0.3"
+		"sirv": "^2.0.4"
 	}
 }

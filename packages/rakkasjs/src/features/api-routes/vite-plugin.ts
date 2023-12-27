@@ -44,7 +44,7 @@ export default function apiRoutes(): Plugin {
 						.slice("src/routes/".length);
 					const filtered = filterRoutes(f);
 					return filtered;
-			  })
+				})
 			: fileNames;
 	}
 

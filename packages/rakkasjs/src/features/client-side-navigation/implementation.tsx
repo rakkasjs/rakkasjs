@@ -386,7 +386,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 								if (!e.defaultPrevented) {
 									prefetchRoute(e.currentTarget.href);
 								}
-						  }
+							}
 						: onMouseEnter
 				}
 				onMouseDown={
@@ -396,7 +396,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 								if (!e.defaultPrevented) {
 									prefetchRoute(e.currentTarget.href);
 								}
-						  }
+							}
 						: onMouseDown
 				}
 				onTouchStart={
@@ -406,7 +406,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 								if (!e.defaultPrevented) {
 									prefetchRoute(e.currentTarget.href);
 								}
-						  }
+							}
 						: onTouchStart
 				}
 			/>

@@ -49,7 +49,7 @@ export async function serve(
 					`(ready in ${pico.white(
 						pico.bold(Math.ceil(performance.now() - startTime)),
 					)} ms)`,
-			  )
+				)
 			: "";
 
 		info(

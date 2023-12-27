@@ -9,7 +9,7 @@
 	},
 	"devDependencies": {
 		"rakkasjs": "0.7.0-next.24",
-		"vite": "^5.0.6"
+		"vite": "^5.0.10"
 	},
 	"dependencies": {
 		"react": "^18.2.0",

@@ -90,7 +90,7 @@ export async function preview(
 					`(ready in ${pico.white(
 						pico.bold(Math.ceil(performance.now() - startTime)),
 					)} ms)`,
-			  )
+				)
 			: "";
 
 		info(

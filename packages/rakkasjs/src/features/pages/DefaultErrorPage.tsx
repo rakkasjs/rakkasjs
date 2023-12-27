@@ -11,10 +11,10 @@ export function DefaultErrorPage(props: FallbackProps) {
 		typeof props.error?.stack === "string"
 			? props.error.stack
 			: typeof props.error?.message === "string"
-			  ? props.error.message
-			  : typeof props.error === "string"
-			    ? props.error
-			    : undefined;
+				? props.error.message
+				: typeof props.error === "string"
+					? props.error
+					: undefined;
 
 	return import.meta.env.DEV ? (
 		<>
