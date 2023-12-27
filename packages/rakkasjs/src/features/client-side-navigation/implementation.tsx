@@ -59,7 +59,10 @@ export function useLocation(): UseLocationResult {
 		lastRenderedId = history.state.id;
 		previousNavigationIndex = currentNavigationIndex;
 		currentNavigationIndex = history.state.index;
-		restoreScrollPosition();
+
+		if (history.state.scroll) {
+			restoreScrollPosition();
+		}
 
 		navigationResolve?.();
 		navigationPromise = undefined;
@@ -113,8 +116,14 @@ function restoreScrollPosition() {
 	}
 
 	if (scrollPosition) {
-		const { x, y } = JSON.parse(scrollPosition);
-		scrollTo(x, y);
+		const { x, y, f } = JSON.parse(scrollPosition);
+		if (f) {
+			scrollTo(x, y);
+			sessionStorage.setItem(
+				`rakkas:${history.state?.id}`,
+				JSON.stringify({ x, y }),
+			);
+		}
 	} else {
 		const hash = location.hash;
 		if (hash) {
@@ -161,18 +170,24 @@ export async function navigate(
 		});
 	}
 
-	const { replace, data, actionData } = options || {};
+	const { replace, data, actionData, scroll = true } = options || {};
 	const id = createUniqueId();
 
 	if (replace) {
 		history.replaceState(
-			{ id, data, actionData, index: history.state.index },
+			{
+				id,
+				data,
+				actionData,
+				index: history.state.index,
+				scroll,
+			},
 			"",
 			to,
 		);
 	} else {
 		const index = nextIndex++;
-		history.pushState({ id, data, actionData, index }, "", to);
+		history.pushState({ id, data, actionData, index, scroll }, "", to);
 	}
 
 	navigationPromise =
@@ -181,9 +196,13 @@ export async function navigate(
 			navigationResolve = resolve;
 		});
 
-	handleNavigation();
+	handleNavigation(!scroll);
 
-	return navigationPromise.then(() => history.state.id === history.state.id);
+	return navigationPromise.then(() => {
+		const complete = history.state.id === history.state.id;
+
+		return complete;
+	});
 }
 
 export const LocationContext = createNamedContext<string | undefined>(
@@ -221,6 +240,7 @@ export function initialize() {
 			data: null,
 			actionData: history.state?.actionData,
 			index: 0,
+			scroll: true,
 		},
 		"",
 		location.href,
@@ -231,9 +251,8 @@ export function initialize() {
 	addEventListener("popstate", handleNavigation);
 }
 
-function handleNavigation() {
-	// Save scroll position
-	const scrollPosition = { x: scrollX, y: scrollY };
+function handleNavigation(e: unknown) {
+	const scrollPosition = { x: scrollX, y: scrollY, f: !e };
 
 	try {
 		sessionStorage.setItem(
@@ -256,7 +275,10 @@ function handleNavigation() {
 }
 
 function createUniqueId(): string {
-	return Math.random().toString(36).slice(2, 9);
+	// crypto.randomUUID is not available in some circumstances
+	return crypto.randomUUID
+		? crypto.randomUUID()
+		: Math.random().toString(36).slice(2);
 }
 
 let nextIndex = 0;
@@ -526,10 +548,11 @@ export type UseSubmitResult = {
 	| UseMutationSuccessResult<any>
 );
 
+export type UseSubmitOptions = UseMutationOptions<any, HTMLFormElement> &
+	Omit<NavigationOptions, "actionData">;
+
 // TODO: Where does this belong?
-export function useSubmit(
-	options?: UseMutationOptions<any, HTMLFormElement>,
-): UseSubmitResult {
+export function useSubmit(options?: UseSubmitOptions): UseSubmitResult {
 	const { current } = useLocation();
 	const pageContext = usePageContext();
 
@@ -563,12 +586,17 @@ export function useSubmit(
 			...options,
 			onSuccess(value) {
 				if ("redirect" in value) {
-					navigate(value.redirect).catch(ignore);
+					navigate(value.redirect, {
+						...options,
+					}).catch(ignore);
 				} else {
 					options?.onSuccess?.(value.data);
-					navigate(current, { replace: true, actionData: value.data }).catch(
-						ignore,
-					);
+
+					navigate(current, {
+						replace: true,
+						...options,
+						actionData: value.data,
+					}).catch(ignore);
 				}
 			},
 		},

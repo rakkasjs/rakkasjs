@@ -3,7 +3,7 @@ import { useCallback, useRef, useState } from "react";
 /** Function passed to useMutation */
 export type MutationFunction<T, V> = (vars: V) => T | Promise<T>;
 
-/** Optinos for useMutation */
+/** Options for useMutation */
 export interface UseMutationOptions<T, V> {
 	/** Called just before the mutation starts */
 	onMutate?(vars: V): void | Promise<void>;

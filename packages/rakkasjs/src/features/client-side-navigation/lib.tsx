@@ -3,6 +3,7 @@ export type {
 	StyledLinkProps,
 	UseLocationResult,
 	NavigationOptions,
+	UseSubmitOptions,
 } from "./implementation";
 
 export {
