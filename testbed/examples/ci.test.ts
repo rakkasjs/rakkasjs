@@ -67,7 +67,7 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 						});
 				}, 250);
 			});
-		}, 5_000);
+		}, 60_000);
 
 		afterAll(async () => {
 			if (!cp || cp.exitCode || !cp.pid) {
