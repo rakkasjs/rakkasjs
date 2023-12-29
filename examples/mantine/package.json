@@ -17,6 +17,7 @@
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
     "eslint": "^8.56.0",
+    "postcss-preset-mantine": "^1.12.2",
     "prettier": "^3.1.1",
     "rakkasjs": "0.7.0-next.24",
     "typescript": "^5.3.3",
@@ -25,6 +26,7 @@
   },
   "dependencies": {
     "@hattip/response": "0.0.37",
+    "@mantine/core": "^7.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

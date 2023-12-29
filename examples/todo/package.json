@@ -7,7 +7,8 @@
 		"build": "rakkas build",
 		"start": "node dist/server/index.js",
 		"format": "prettier --write --ignore-unknown src",
-		"test": "pnpm test:typecheck && pnpm test:format && pnpm test:lint",
+		"test": "pnpm run /^test:/",
+		"test:unit": "vitest",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit",
 		"test:format": "prettier --check --ignore-unknown src",
 		"test:lint": "eslint . --ignore-pattern dist"
@@ -21,7 +22,8 @@
 		"rakkasjs": "0.7.0-next.24",
 		"typescript": "^5.3.3",
 		"vite": "^5.0.10",
-		"vite-tsconfig-paths": "^4.2.3"
+		"vite-tsconfig-paths": "^4.2.3",
+		"vitest": "^1.1.0"
 	},
 	"dependencies": {
 		"@hattip/response": "0.0.37",
