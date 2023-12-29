@@ -28,7 +28,7 @@ declare module "@hattip/session" {
 
 export default createRequestHandler({
 	middleware: {
-		beforePages: [
+		beforeAll: [
 			cookie(),
 			session({
 				store: new EncryptedCookieStore(keys),

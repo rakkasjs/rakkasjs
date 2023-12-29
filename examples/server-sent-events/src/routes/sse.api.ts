@@ -33,7 +33,7 @@ export function get(ctx: RequestContext) {
 
 			// Send missed messages
 			const diff = Math.min(nextId - lastMessageId - 1, messageHistory.length);
-			if (diff >= 0) {
+			if (diff > 0) {
 				const start =
 					(nextMessageIndex - diff + messageHistory.length) %
 					messageHistory.length;
@@ -60,11 +60,16 @@ const connections = new Set<ServerSentEventSink>();
 
 export function broadcastMessage(data: string) {
 	const id = (nextId++).toString();
-	const message: ServerSentEvent = { data, id };
+	const message: ServerSentEvent = {
+		// event: "message",
+		data,
+		id,
+	};
+
 	messageHistory[nextMessageIndex] = message;
 	nextMessageIndex = (nextMessageIndex + 1) % messageHistory.length;
 
-	for (const sink of connections.values()) {
+	for (const sink of connections) {
 		sink.send(message);
 	}
 }

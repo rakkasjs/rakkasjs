@@ -14,17 +14,17 @@
 	},
 	"devDependencies": {
 		"@rakkasjs/eslint-config": "0.7.0-next.24",
-		"@types/react": "^18.2.45",
+		"@types/react": "^18.2.46",
 		"@types/react-dom": "^18.2.18",
 		"eslint": "^8.56.0",
 		"prettier": "^3.1.1",
 		"rakkasjs": "0.7.0-next.24",
 		"typescript": "^5.3.3",
 		"vite": "^5.0.10",
-		"vite-tsconfig-paths": "^4.2.2"
+		"vite-tsconfig-paths": "^4.2.3"
 	},
 	"dependencies": {
-		"@hattip/response": "0.0.35",
+		"@hattip/response": "0.0.37",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	}

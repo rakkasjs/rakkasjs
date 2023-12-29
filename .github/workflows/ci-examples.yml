@@ -1,0 +1,53 @@
+name: CI tests for examples
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: .
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node_version: [20]
+        include:
+          - os: ubuntu-latest
+            node_version: 18
+          - os: ubuntu-latest
+            node_version: 21
+          - os: windows-latest
+            node_version: 21 # Node 20 has a unicode file path bug on Windows
+      fail-fast: false
+    name: "CI tests on node-${{ matrix.node_version }}, ${{ matrix.os }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Set node version to ${{ matrix.node_version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: "pnpm"
+
+      - name: Install
+        run: pnpm install
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Run CI tests
+        run: pnpm run ci-examples

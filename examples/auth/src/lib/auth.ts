@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from "rakkasjs";
 import type { Session } from "@auth/core/types";
 
-export function useAuthSession(options?: UseQueryOptions): Session {
+export function useAuthSession(options?: UseQueryOptions): Session | null {
 	const { data } = useQuery<Session>(
 		"auth:session",
 		(ctx) => ctx.fetch("/auth/session").then((r) => r.json()),

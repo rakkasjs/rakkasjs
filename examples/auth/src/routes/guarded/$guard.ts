@@ -2,9 +2,9 @@ import { Session } from "@auth/core/types";
 import { LookupHookResult, PageContext } from "rakkasjs";
 
 export function pageGuard(ctx: PageContext): LookupHookResult {
-	const session: Session = ctx.queryClient.getQueryData("auth:session");
+	const session: Session | null = ctx.queryClient.getQueryData("auth:session");
 
-	if (session.user) {
+	if (session?.user) {
 		return true;
 	} else {
 		const url = new URL("/auth/signin", ctx.url);

@@ -6,7 +6,7 @@ on:
       node_version:
         description: "Node.js version"
         required: true
-        default: "16"
+        default: "20"
       os:
         description: "Operating system"
         required: true
