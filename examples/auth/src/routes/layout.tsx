@@ -20,7 +20,7 @@ export default function MainLayout({ children }: LayoutProps) {
 				}}
 			>
 				<Nav />
-				{session.user ? <LoggedIn user={session.user} /> : <LoggedOut />}
+				{session?.user ? <LoggedIn user={session?.user} /> : <LoggedOut />}
 			</header>
 			<hr />
 			<main>{children}</main>
