@@ -8,6 +8,7 @@
 		"precommit": "lint-staged",
 		"test": "pnpm run test:prettier && pnpm run test:packages && pnpm run ci",
 		"ci": "pnpm -r --stream --workspace-concurrency=1 run ci",
+		"ci-examples": "pnpm -r --stream --workspace-concurrency=1 run ci",
 		"vite-ecosystem-ci": "cross-env INCLUDE_TESTS=dev,prod pnpm -r --stream --workspace-concurrency=1 run ci",
 		"test:packages": "pnpm -r --stream run test",
 		"test:prettier": "prettier --check --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'",
@@ -22,7 +23,7 @@
 		"vitest": "^1.1.0"
 	},
 	"dependencies": {
-		"@hattip/polyfills": "0.0.35",
+		"@hattip/polyfills": "0.0.37",
 		"@vitejs/plugin-react": "^4.2.1",
 		"vite": "^5.0.10"
 	},

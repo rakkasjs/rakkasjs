@@ -1,5 +1,3 @@
-import { ResponseHeadersProps } from "rakkasjs";
-import { Suspense } from "react";
 import { useQuery } from "urql";
 
 const QUERY = `

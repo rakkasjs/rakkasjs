@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       "@hattip/polyfills":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@vitejs/plugin-react":
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.10)
@@ -53,8 +53,8 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -71,17 +71,17 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
   examples/emotion:
     dependencies:
       "@emotion/react":
         specifier: ^11.11.3
-        version: 11.11.3(@types/react@18.2.45)(react@18.2.0)
+        version: 11.11.3(@types/react@18.2.46)(react@18.2.0)
       "@emotion/styled":
         specifier: ^11.11.0
-        version: 11.11.0(@emotion/react@11.11.3)(@types/react@18.2.45)(react@18.2.0)
+        version: 11.11.0(@emotion/react@11.11.3)(@types/react@18.2.46)(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -96,8 +96,8 @@ importers:
         specifier: ^11.11.0
         version: 11.11.0
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -143,8 +143,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -158,8 +158,8 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
   examples/fastify:
     dependencies:
@@ -174,8 +174,8 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -189,14 +189,14 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
   examples/graphql:
     dependencies:
       "@hattip/graphql":
-        specifier: 0.0.35
-        version: 0.0.35(graphql@16.8.1)
+        specifier: 0.0.37
+        version: 0.0.37(graphql@16.8.1)
       graphql:
         specifier: ^16.8.1
         version: 16.8.1
@@ -208,8 +208,8 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -226,8 +226,8 @@ importers:
   examples/guide-samples:
     dependencies:
       "@hattip/response":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -236,8 +236,8 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -251,8 +251,8 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
   examples/localized-urls:
     dependencies:
@@ -267,8 +267,8 @@ importers:
         specifier: 0.7.0-next.24
         version: link:../../packages/eslint-config
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -288,14 +288,14 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
   examples/mantine:
     dependencies:
       "@mantine/core":
         specifier: ^7.3.2
-        version: 7.3.2(@mantine/hooks@7.3.2)(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0)
+        version: 7.3.2(@mantine/hooks@7.3.2)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)
       "@mantine/hooks":
         specifier: ^7.3.2
         version: 7.3.2(react@18.2.0)
@@ -310,8 +310,8 @@ importers:
         specifier: 0.7.0-next.24
         version: link:../../packages/eslint-config
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -337,8 +337,8 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
   examples/mdx:
     dependencies:
@@ -353,8 +353,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(vite@5.0.10)
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -371,8 +371,8 @@ importers:
   examples/react-query:
     dependencies:
       "@tanstack/react-query":
-        specifier: ^5.15.0
-        version: 5.15.0(react@18.2.0)
+        specifier: ^5.15.3
+        version: 5.15.3(react@18.2.0)
       devalue:
         specifier: ^4.3.2
         version: 4.3.2
@@ -384,8 +384,8 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -399,14 +399,14 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
   examples/server-sent-events:
     dependencies:
       "@hattip/response":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -418,8 +418,8 @@ importers:
         specifier: 0.7.0-next.24
         version: link:../../packages/eslint-config
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -439,17 +439,17 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
   examples/session:
     dependencies:
       "@hattip/cookie":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/session":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       dotenv-cli:
         specifier: ^7.3.0
         version: 7.3.0
@@ -461,11 +461,11 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@hattip/polyfills":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -479,8 +479,8 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
   examples/styled-components:
     dependencies:
@@ -494,12 +494,12 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0
       styled-components:
-        specifier: 6.1.4
-        version: 6.1.4(react-dom@18.2.0)(react@18.2.0)
+        specifier: 6.1.6
+        version: 6.1.6(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -508,7 +508,7 @@ importers:
         version: 5.1.34
       babel-plugin-styled-components:
         specifier: ^2.1.4
-        version: 2.1.4(@babel/core@7.23.6)(styled-components@6.1.4)
+        version: 2.1.4(@babel/core@7.23.6)(styled-components@6.1.6)
       rakkasjs:
         specifier: 0.7.0-next.24
         version: link:../../packages/rakkasjs
@@ -522,8 +522,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
   examples/todo:
     dependencies:
@@ -538,8 +538,8 @@ importers:
         specifier: 0.7.0-next.24
         version: link:../../packages/eslint-config
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -559,8 +559,8 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
       vitest:
         specifier: ^1.1.0
         version: 1.1.0(@types/node@20.10.5)
@@ -581,8 +581,8 @@ importers:
         version: 4.0.6(graphql@16.8.1)(react@18.2.0)
     devDependencies:
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -596,8 +596,8 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
       vite-tsconfig-paths:
-        specifier: ^4.2.2
-        version: 4.2.2(typescript@5.3.3)(vite@5.0.10)
+        specifier: ^4.2.3
+        version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
   packages/create-rakkas-app:
     dependencies:
@@ -743,29 +743,29 @@ importers:
         specifier: ^7.23.6
         version: 7.23.6
       "@hattip/adapter-node":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/bundler-cloudflare-workers":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/bundler-deno":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/bundler-netlify":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/bundler-vercel":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/compose":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/core":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/polyfills":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@microsoft/fetch-event-source":
         specifier: ^2.0.1
         version: 2.0.1
@@ -773,8 +773,8 @@ importers:
         specifier: ^20.10.5
         version: 20.10.5
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -861,20 +861,44 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/node@20.10.5)
 
+  testbed/examples:
+    devDependencies:
+      "@cyco130/eslint-config":
+        specifier: ^3.5.0
+        version: 3.5.0(eslint@8.56.0)(typescript@5.3.3)
+      "@types/ps-tree":
+        specifier: ^1.1.6
+        version: 1.1.6
+      eslint:
+        specifier: ^8.56.0
+        version: 8.56.0
+      ps-tree:
+        specifier: ^1.2.0
+        version: 1.2.0
+      puppeteer:
+        specifier: ^21.6.1
+        version: 21.6.1(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+      vite:
+        specifier: ^5.0.10
+        version: 5.0.10(@types/node@20.10.5)
+
   testbed/kitchen-sink:
     dependencies:
       "@hattip/adapter-cloudflare-workers":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/adapter-deno":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/adapter-vercel-edge":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -882,8 +906,8 @@ importers:
         specifier: ^1.0.0-rc.12
         version: 1.0.0-rc.12
       netlify-cli:
-        specifier: ^17.10.1
-        version: 17.10.1(@types/node@20.10.5)
+        specifier: ^17.10.2
+        version: 17.10.2(@types/node@20.10.5)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -898,17 +922,17 @@ importers:
         specifier: ^3.5.0
         version: 3.5.0(eslint@8.56.0)(typescript@5.3.3)
       "@hattip/adapter-bun":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/adapter-lagon":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/adapter-netlify-edge":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@hattip/adapter-netlify-functions":
-        specifier: 0.0.35
-        version: 0.0.35
+        specifier: 0.0.37
+        version: 0.0.37
       "@types/ps-tree":
         specifier: ^1.1.6
         version: 1.1.6
@@ -946,8 +970,8 @@ importers:
   testbed/static:
     dependencies:
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -993,7 +1017,7 @@ importers:
     dependencies:
       "@mdx-js/react":
         specifier: ^3.0.0
-        version: 3.0.0(@types/react@18.2.45)(react@18.2.0)
+        version: 3.0.0(@types/react@18.2.46)(react@18.2.0)
       "@stackblitz/sdk":
         specifier: ^1.9.0
         version: 1.9.0
@@ -1030,7 +1054,7 @@ importers:
         version: 3.5.2
       "@docsearch/react":
         specifier: ^3.5.2
-        version: 3.5.2(@algolia/client-search@4.22.0)(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.13.0)
+        version: 3.5.2(@algolia/client-search@4.22.0)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.13.0)
       "@mapbox/rehype-prism":
         specifier: ^0.9.0
         version: 0.9.0
@@ -1041,8 +1065,8 @@ importers:
         specifier: ^0.6.0
         version: 0.6.0
       "@types/react":
-        specifier: ^18.2.45
-        version: 18.2.45
+        specifier: ^18.2.46
+        version: 18.2.46
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
@@ -2064,10 +2088,10 @@ packages:
     dev: true
     optional: true
 
-  /@cloudflare/workers-types@4.20230904.0:
+  /@cloudflare/workers-types@4.20231218.0:
     resolution:
       {
-        integrity: sha512-IX4oJCe14ctblSPZBlW64BVZ9nYLUo6sD2I5gu3hX0ywByYWm1OuoKm9Xb/Zpbj8Ph18Z7Ryii6u2/ocnncXdA==,
+        integrity: sha512-Vs1FKjfUjXYGbCsXzkl+ITp0Iyb6QiW6+vTERTNThC+v96T0IvPVAioH4tT20rXwoxAfxh380mAaxYtTrJUNVg==,
       }
     dev: false
 
@@ -2167,7 +2191,7 @@ packages:
       }
     dev: true
 
-  /@docsearch/react@3.5.2(@algolia/client-search@4.22.0)(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.13.0):
+  /@docsearch/react@3.5.2(@algolia/client-search@4.22.0)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.13.0):
     resolution:
       {
         integrity: sha512-9Ahcrs5z2jq/DcAvYtvlqEBHImbm4YJI8M9y0x6Tqg598P40HTEkX7hsMcIuThI+hTFxRGZ9hll0Wygm2yEjng==,
@@ -2190,7 +2214,7 @@ packages:
       "@algolia/autocomplete-core": 1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1)(search-insights@2.13.0)
       "@algolia/autocomplete-preset-algolia": 1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1)
       "@docsearch/css": 3.5.2
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       algoliasearch: 4.19.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -2250,7 +2274,7 @@ packages:
         integrity: sha512-W2P2c/VRW1/1tLox0mVUalvnWXxavmv/Oum2aPsRcoDJuob75FC3Y8FbpfLwUegRcxINtGUMPq0tFCvYNTBXNA==,
       }
 
-  /@emotion/react@11.11.3(@types/react@18.2.45)(react@18.2.0):
+  /@emotion/react@11.11.3(@types/react@18.2.46)(react@18.2.0):
     resolution:
       {
         integrity: sha512-Cnn0kuq4DoONOMcnoVsTOR8E+AdnKFf//6kUWc4LCdnxj31pZWn7rIULd6Y7/Js1PiPHzn7SKCM9vB/jBni8eA==,
@@ -2269,7 +2293,7 @@ packages:
       "@emotion/use-insertion-effect-with-fallbacks": 1.0.1(react@18.2.0)
       "@emotion/utils": 1.2.1
       "@emotion/weak-memoize": 0.3.1
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
     dev: false
@@ -2306,7 +2330,7 @@ packages:
       }
     dev: false
 
-  /@emotion/styled@11.11.0(@emotion/react@11.11.3)(@types/react@18.2.45)(react@18.2.0):
+  /@emotion/styled@11.11.0(@emotion/react@11.11.3)(@types/react@18.2.46)(react@18.2.0):
     resolution:
       {
         integrity: sha512-hM5Nnvu9P3midq5aaXj4I+lnSfNi7Pmd4EWk1fOZ3pxookaQTNew6bp4JaCBYM4HVFZF9g7UjJmsUmC2JlxOng==,
@@ -2322,11 +2346,11 @@ packages:
       "@babel/runtime": 7.21.5
       "@emotion/babel-plugin": 11.11.0
       "@emotion/is-prop-valid": 1.2.1
-      "@emotion/react": 11.11.3(@types/react@18.2.45)(react@18.2.0)
+      "@emotion/react": 11.11.3(@types/react@18.2.46)(react@18.2.0)
       "@emotion/serialize": 1.1.2
       "@emotion/use-insertion-effect-with-fallbacks": 1.0.1(react@18.2.0)
       "@emotion/utils": 1.2.1
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       react: 18.2.0
     dev: false
 
@@ -2424,18 +2448,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@esbuild/android-arm64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-lsB65vAbe90I/Qe10OjkmrdxSX4UJDjosDgb8sZUKcg3oefEuW2OT2Vozz8ef7wrJbMcmhvCC+hciF8jY/uAkw==,
-      }
-    engines: { node: ">=12" }
-    cpu: [arm64]
-    os: [android]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@esbuild/android-arm64@0.19.6:
     resolution:
       {
@@ -2493,18 +2505,6 @@ packages:
     cpu: [arm]
     os: [android]
     requiresBuild: true
-    optional: true
-
-  /@esbuild/android-arm@0.19.2:
-    resolution:
-      {
-        integrity: sha512-tM8yLeYVe7pRyAu9VMi/Q7aunpLwD139EY1S99xbQkT4/q2qa6eA4ige/WJQYdJ8GBL1K33pPFhPfPdJ/WzT8Q==,
-      }
-    engines: { node: ">=12" }
-    cpu: [arm]
-    os: [android]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/android-arm@0.19.6:
@@ -2566,18 +2566,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@esbuild/android-x64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-qK/TpmHt2M/Hg82WXHRc/W/2SGo/l1thtDHZWqFq7oi24AjZ4O/CpPSu6ZuYKFkEgmZlFoa7CooAyYmuvnaG8w==,
-      }
-    engines: { node: ">=12" }
-    cpu: [x64]
-    os: [android]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@esbuild/android-x64@0.19.6:
     resolution:
       {
@@ -2635,18 +2623,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    optional: true
-
-  /@esbuild/darwin-arm64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-Ora8JokrvrzEPEpZO18ZYXkH4asCdc1DLdcVy8TGf5eWtPO1Ie4WroEJzwI52ZGtpODy3+m0a2yEX9l+KUn0tA==,
-      }
-    engines: { node: ">=12" }
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/darwin-arm64@0.19.6:
@@ -2708,18 +2684,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@esbuild/darwin-x64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-tP+B5UuIbbFMj2hQaUr6EALlHOIOmlLM2FK7jeFBobPy2ERdohI4Ka6ZFjZ1ZYsrHE/hZimGuU90jusRE0pwDw==,
-      }
-    engines: { node: ">=12" }
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@esbuild/darwin-x64@0.19.6:
     resolution:
       {
@@ -2777,18 +2741,6 @@ packages:
     cpu: [arm64]
     os: [freebsd]
     requiresBuild: true
-    optional: true
-
-  /@esbuild/freebsd-arm64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-YbPY2kc0acfzL1VPVK6EnAlig4f+l8xmq36OZkU0jzBVHcOTyQDhnKQaLzZudNJQyymd9OqQezeaBgkTGdTGeQ==,
-      }
-    engines: { node: ">=12" }
-    cpu: [arm64]
-    os: [freebsd]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/freebsd-arm64@0.19.6:
@@ -2850,18 +2802,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@esbuild/freebsd-x64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-nSO5uZT2clM6hosjWHAsS15hLrwCvIWx+b2e3lZ3MwbYSaXwvfO528OF+dLjas1g3bZonciivI8qKR/Hm7IWGw==,
-      }
-    engines: { node: ">=12" }
-    cpu: [x64]
-    os: [freebsd]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@esbuild/freebsd-x64@0.19.6:
     resolution:
       {
@@ -2919,18 +2859,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    optional: true
-
-  /@esbuild/linux-arm64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-ig2P7GeG//zWlU0AggA3pV1h5gdix0MA3wgB+NsnBXViwiGgY77fuN9Wr5uoCrs2YzaYfogXgsWZbm+HGr09xg==,
-      }
-    engines: { node: ">=12" }
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-arm64@0.19.6:
@@ -2992,18 +2920,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@esbuild/linux-arm@0.19.2:
-    resolution:
-      {
-        integrity: sha512-Odalh8hICg7SOD7XCj0YLpYCEc+6mkoq63UnExDCiRA2wXEmGlK5JVrW50vZR9Qz4qkvqnHcpH+OFEggO3PgTg==,
-      }
-    engines: { node: ">=12" }
-    cpu: [arm]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@esbuild/linux-arm@0.19.6:
     resolution:
       {
@@ -3061,18 +2977,6 @@ packages:
     cpu: [ia32]
     os: [linux]
     requiresBuild: true
-    optional: true
-
-  /@esbuild/linux-ia32@0.19.2:
-    resolution:
-      {
-        integrity: sha512-mLfp0ziRPOLSTek0Gd9T5B8AtzKAkoZE70fneiiyPlSnUKKI4lp+mGEnQXcQEHLJAcIYDPSyBvsUbKUG2ri/XQ==,
-      }
-    engines: { node: ">=12" }
-    cpu: [ia32]
-    os: [linux]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-ia32@0.19.6:
@@ -3134,18 +3038,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@esbuild/linux-loong64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-hn28+JNDTxxCpnYjdDYVMNTR3SKavyLlCHHkufHV91fkewpIyQchS1d8wSbmXhs1fiYDpNww8KTFlJ1dHsxeSw==,
-      }
-    engines: { node: ">=12" }
-    cpu: [loong64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@esbuild/linux-loong64@0.19.6:
     resolution:
       {
@@ -3203,18 +3095,6 @@ packages:
     cpu: [mips64el]
     os: [linux]
     requiresBuild: true
-    optional: true
-
-  /@esbuild/linux-mips64el@0.19.2:
-    resolution:
-      {
-        integrity: sha512-KbXaC0Sejt7vD2fEgPoIKb6nxkfYW9OmFUK9XQE4//PvGIxNIfPk1NmlHmMg6f25x57rpmEFrn1OotASYIAaTg==,
-      }
-    engines: { node: ">=12" }
-    cpu: [mips64el]
-    os: [linux]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-mips64el@0.19.6:
@@ -3276,18 +3156,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@esbuild/linux-ppc64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-dJ0kE8KTqbiHtA3Fc/zn7lCd7pqVr4JcT0JqOnbj4LLzYnp+7h8Qi4yjfq42ZlHfhOCM42rBh0EwHYLL6LEzcw==,
-      }
-    engines: { node: ">=12" }
-    cpu: [ppc64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@esbuild/linux-ppc64@0.19.6:
     resolution:
       {
@@ -3345,18 +3213,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
-    optional: true
-
-  /@esbuild/linux-riscv64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-7Z/jKNFufZ/bbu4INqqCN6DDlrmOTmdw6D0gH+6Y7auok2r02Ur661qPuXidPOJ+FSgbEeQnnAGgsVynfLuOEw==,
-      }
-    engines: { node: ">=12" }
-    cpu: [riscv64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-riscv64@0.19.6:
@@ -3418,18 +3274,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@esbuild/linux-s390x@0.19.2:
-    resolution:
-      {
-        integrity: sha512-U+RinR6aXXABFCcAY4gSlv4CL1oOVvSSCdseQmGO66H+XyuQGZIUdhG56SZaDJQcLmrSfRmx5XZOWyCJPRqS7g==,
-      }
-    engines: { node: ">=12" }
-    cpu: [s390x]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@esbuild/linux-s390x@0.19.6:
     resolution:
       {
@@ -3487,18 +3331,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    optional: true
-
-  /@esbuild/linux-x64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-oxzHTEv6VPm3XXNaHPyUTTte+3wGv7qVQtqaZCrgstI16gCuhNOtBXLEBkBREP57YTd68P0VgDgG73jSD8bwXQ==,
-      }
-    engines: { node: ">=12" }
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-x64@0.19.6:
@@ -3560,18 +3392,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@esbuild/netbsd-x64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-WNa5zZk1XpTTwMDompZmvQLHszDDDN7lYjEHCUmAGB83Bgs20EMs7ICD+oKeT6xt4phV4NDdSi/8OfjPbSbZfQ==,
-      }
-    engines: { node: ">=12" }
-    cpu: [x64]
-    os: [netbsd]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@esbuild/netbsd-x64@0.19.6:
     resolution:
       {
@@ -3629,18 +3449,6 @@ packages:
     cpu: [x64]
     os: [openbsd]
     requiresBuild: true
-    optional: true
-
-  /@esbuild/openbsd-x64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-S6kI1aT3S++Dedb7vxIuUOb3oAxqxk2Rh5rOXOTYnzN8JzW1VzBd+IqPiSpgitu45042SYD3HCoEyhLKQcDFDw==,
-      }
-    engines: { node: ">=12" }
-    cpu: [x64]
-    os: [openbsd]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/openbsd-x64@0.19.6:
@@ -3702,18 +3510,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@esbuild/sunos-x64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-VXSSMsmb+Z8LbsQGcBMiM+fYObDNRm8p7tkUDMPG/g4fhFX5DEFmjxIEa3N8Zr96SjsJ1woAhF0DUnS3MF3ARw==,
-      }
-    engines: { node: ">=12" }
-    cpu: [x64]
-    os: [sunos]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@esbuild/sunos-x64@0.19.6:
     resolution:
       {
@@ -3771,18 +3567,6 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    optional: true
-
-  /@esbuild/win32-arm64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-5NayUlSAyb5PQYFAU9x3bHdsqB88RC3aM9lKDAz4X1mo/EchMIT1Q+pSeBXNgkfNmRecLXA0O8xP+x8V+g/LKg==,
-      }
-    engines: { node: ">=12" }
-    cpu: [arm64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/win32-arm64@0.19.6:
@@ -3844,18 +3628,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@esbuild/win32-ia32@0.19.2:
-    resolution:
-      {
-        integrity: sha512-47gL/ek1v36iN0wL9L4Q2MFdujR0poLZMJwhO2/N3gA89jgHp4MR8DKCmwYtGNksbfJb9JoTtbkoe6sDhg2QTA==,
-      }
-    engines: { node: ">=12" }
-    cpu: [ia32]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@esbuild/win32-ia32@0.19.6:
     resolution:
       {
@@ -3913,18 +3685,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    optional: true
-
-  /@esbuild/win32-x64@0.19.2:
-    resolution:
-      {
-        integrity: sha512-tcuhV7ncXBqbt/Ybf0IyrMcwVOAPDckMK9rXNHtF17UTK18OKLpg08glminN06pt2WCoALhXdLfSPbVvK/6fxw==,
-      }
-    engines: { node: ">=12" }
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/win32-x64@0.19.6:
@@ -4083,7 +3843,7 @@ packages:
       fastify-plugin: 4.5.1
       glob: 8.1.0
       p-limit: 3.1.0
-      readable-stream: 4.5.1
+      readable-stream: 4.5.2
     dev: false
 
   /@floating-ui/core@1.5.2:
@@ -4142,47 +3902,48 @@ packages:
       }
     dev: false
 
-  /@graphql-tools/merge@9.0.0(graphql@16.8.1):
+  /@graphql-tools/merge@9.0.1(graphql@16.8.1):
     resolution:
       {
-        integrity: sha512-J7/xqjkGTTwOJmaJQJ2C+VDBDOWJL3lKrHJN4yMaRLAJH3PosB7GiPRaSDZdErs0+F77sH2MKs2haMMkywzx7Q==,
+        integrity: sha512-hIEExWO9fjA6vzsVjJ3s0cCQ+Q/BEeMVJZtMXd7nbaVefVy0YDyYlEkeoYYNV3NVVvu1G9lr6DM1Qd0DGo9Caw==,
       }
     engines: { node: ">=16.0.0" }
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      "@graphql-tools/utils": 10.0.6(graphql@16.8.1)
+      "@graphql-tools/utils": 10.0.12(graphql@16.8.1)
       graphql: 16.8.1
       tslib: 2.6.2
     dev: false
 
-  /@graphql-tools/schema@10.0.0(graphql@16.8.1):
+  /@graphql-tools/schema@10.0.2(graphql@16.8.1):
     resolution:
       {
-        integrity: sha512-kf3qOXMFcMs2f/S8Y3A8fm/2w+GaHAkfr3Gnhh2LOug/JgpY/ywgFVxO3jOeSpSEdoYcDKLcXVjMigNbY4AdQg==,
+        integrity: sha512-TbPsIZnWyDCLhgPGnDjt4hosiNU2mF/rNtSk5BVaXWnZqvKJ6gzJV4fcHcvhRIwtscDMW2/YTnK6dLVnk8pc4w==,
       }
     engines: { node: ">=16.0.0" }
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      "@graphql-tools/merge": 9.0.0(graphql@16.8.1)
-      "@graphql-tools/utils": 10.0.6(graphql@16.8.1)
+      "@graphql-tools/merge": 9.0.1(graphql@16.8.1)
+      "@graphql-tools/utils": 10.0.12(graphql@16.8.1)
       graphql: 16.8.1
       tslib: 2.6.2
       value-or-promise: 1.0.12
     dev: false
 
-  /@graphql-tools/utils@10.0.6(graphql@16.8.1):
+  /@graphql-tools/utils@10.0.12(graphql@16.8.1):
     resolution:
       {
-        integrity: sha512-hZMjl/BbX10iagovakgf3IiqArx8TPsotq5pwBld37uIX1JiZoSbgbCIFol7u55bh32o6cfDEiiJgfAD5fbeyQ==,
+        integrity: sha512-+yS1qlFwXlwU3Gv8ek/h2aJ95quog4yF22haC11M0zReMSTddbGJZ5yXKkE3sXoY2BcL1utilSFjylJ9uXpSNQ==,
       }
     engines: { node: ">=16.0.0" }
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       "@graphql-typed-document-node/core": 3.2.0(graphql@16.8.1)
-      dset: 3.1.2
+      cross-inspect: 1.0.0
+      dset: 3.1.3
       graphql: 16.8.1
       tslib: 2.6.2
     dev: false
@@ -4223,224 +3984,224 @@ packages:
       yargs: 17.7.2
     dev: false
 
-  /@hattip/adapter-bun@0.0.35:
+  /@hattip/adapter-bun@0.0.37:
     resolution:
       {
-        integrity: sha512-5F33AxY6ig8Os2aF8tfJBlIIUUqwRLQ7bPCoqvar6oK1T95Y+NFnTX60uo5qgR9pJI3RtlaAxZbPUAa8Wxd2lw==,
+        integrity: sha512-LGhbgQ0SyQFedvJXGZjaci9q2Q19EKJaj/eRTy+l1CUIsaELq352QERAmCgOs9bV9OZsRsjTvxBx+4v+3ZQwsA==,
       }
     dependencies:
-      "@hattip/core": 0.0.35
+      "@hattip/core": 0.0.37
       bun-types: 0.8.1
     dev: true
 
-  /@hattip/adapter-cloudflare-workers@0.0.35:
+  /@hattip/adapter-cloudflare-workers@0.0.37:
     resolution:
       {
-        integrity: sha512-lQKu4QqGfQFJcFULs5e8h2gFy0/axI48p4xbds+krhNW9qOU3INeZT/EDtiE5zRxpBjW+xZFJ9nDCqciPc8HDg==,
+        integrity: sha512-OWzjImMETCYiWUCHJ0fUeZJr61X9TiEeJeWPNR3elV3sD6k8LSlojzSDqmNxvhVpJBmOub4+bAmS06z/Y4MxVg==,
       }
     dependencies:
       "@cloudflare/kv-asset-handler": 0.3.0
-      "@cloudflare/workers-types": 4.20230904.0
-      "@hattip/core": 0.0.35
+      "@cloudflare/workers-types": 4.20231218.0
+      "@hattip/core": 0.0.37
     dev: false
 
-  /@hattip/adapter-deno@0.0.35:
+  /@hattip/adapter-deno@0.0.37:
     resolution:
       {
-        integrity: sha512-r2KWBICwAnEjs987725RxmXU8pJkmm2Md0l47lfIxU/YG75kHVQ23xGaH/CiXj8oHwrLcT10FFNruyBDVDSQ7A==,
+        integrity: sha512-7jN9A9rSxUCU+JN8AvY6QntDM2XMhuMA2Ej/ydNY2GOLdNdOjyTYHx+tKu0BsUZtarrO2xS0HuWn1OKu5Oaeag==,
       }
     dependencies:
-      "@hattip/core": 0.0.35
+      "@hattip/core": 0.0.37
     dev: false
 
-  /@hattip/adapter-lagon@0.0.35:
+  /@hattip/adapter-lagon@0.0.37:
     resolution:
       {
-        integrity: sha512-wxeNU7B1FLGHKIQGEwJXE3JYybJuqbu1b/R9dT6eteHu4/GTmVWvEbL2nF/imDbK43RkZoX+djg2MgDbMNgwhw==,
+        integrity: sha512-mtDfvhPAj/plRAOc7VACVOI9Qp0dCJpF7fmeL4/wN84YXPnVT7ANtoFJXyCJwp4wol4fakI0aXiEcWnOEuBZJw==,
       }
     dependencies:
-      "@hattip/core": 0.0.35
+      "@hattip/core": 0.0.37
     dev: true
 
-  /@hattip/adapter-netlify-edge@0.0.35:
+  /@hattip/adapter-netlify-edge@0.0.37:
     resolution:
       {
-        integrity: sha512-K32JThQGamD/2owMznUM5im07k0X3eRf0fSzQTIGsMWAyUbPQ12LtRMtp6UExdwx7mkhgcI8uM3Fidu0IRC8fg==,
+        integrity: sha512-xEnJeMqFOMGTLoIu+atMEvbs+yXAPdEQXqrE2A/uHOm8TXlvUaQQmYmRxWRUMxwl/dP4Qab1x0nOpMAV3cuTNw==,
       }
     dependencies:
-      "@hattip/core": 0.0.35
+      "@hattip/core": 0.0.37
     dev: true
 
-  /@hattip/adapter-netlify-functions@0.0.35:
+  /@hattip/adapter-netlify-functions@0.0.37:
     resolution:
       {
-        integrity: sha512-CBKv2Uac1WSad/vPEXdS3GxREj7Wvo6xfi6Mu7+vegc7zeDKTeErJpqcywcj8WAfVrIRR3S7Th8Gzw6idQKHwA==,
+        integrity: sha512-UZShzmM0TKmx/VE41iZtoyVyCM6EvG8PHu3ciFNTFMiyo6l+Q6LoFDhBxNJsRzn9oyM+nrrwkA+5Aa2EGpNpiw==,
       }
     dependencies:
-      "@hattip/adapter-node": 0.0.35
-      "@hattip/core": 0.0.35
-      "@hattip/polyfills": 0.0.35
+      "@hattip/adapter-node": 0.0.37
+      "@hattip/core": 0.0.37
+      "@hattip/polyfills": 0.0.37
       netlify-lambda-types: 1.0.0
     dev: true
 
-  /@hattip/adapter-node@0.0.35:
+  /@hattip/adapter-node@0.0.37:
     resolution:
       {
-        integrity: sha512-KzPpwJv5lt0Msqfi2sxR+FMbiIMO/xEuUfALvrmFRRsSMfNErfT0krVmx+dkSWPTFeoc4xxiwbQr1xE16rHiow==,
+        integrity: sha512-UaFWfv6E9nmWWAwmW3eDqDzjsZ/NZxoYcd5P1g9cLT5/Ew6covX4nI2t6fmF00vz179RnZ2plG7AMgrQ64a5Rw==,
       }
     dependencies:
-      "@hattip/core": 0.0.35
-      "@hattip/polyfills": 0.0.35
-      "@hattip/walk": 0.0.35
+      "@hattip/core": 0.0.37
+      "@hattip/polyfills": 0.0.37
+      "@hattip/walk": 0.0.37
 
-  /@hattip/adapter-vercel-edge@0.0.35:
+  /@hattip/adapter-vercel-edge@0.0.37:
     resolution:
       {
-        integrity: sha512-lZzAkIEQ08C1cum3NjbTohev53bnNQKebAoxjkmRlbx3Vya9CIp4z0b8bdKFeV5qW4Mk+XQkAgaqh7zVS5LJmw==,
+        integrity: sha512-a/W8+tb7NiuXSeXiJuzzQvhaY3Imt3zFpVQcH2xfKBQgiJK3MWpnz+RIWHXbGJIwoQvp0mzyY2ImlXhqy0IQcA==,
       }
     dependencies:
-      "@hattip/core": 0.0.35
+      "@hattip/core": 0.0.37
     dev: false
 
-  /@hattip/bundler-cloudflare-workers@0.0.35:
+  /@hattip/bundler-cloudflare-workers@0.0.37:
     resolution:
       {
-        integrity: sha512-qIKKdSV7dGP4hYAcrprGli0W/qd7sqSIR3Y+qojhss4WAw06OBbDSjH9gCYLIRdaeplC/fwCn5j+FXkQzKiCkw==,
+        integrity: sha512-zkdL0sxlGSkiu9MWP5UVYOe76rzrKjcrA5ur0nzf2vJlzmZ8Ia1KJrIq0FlzIR5t6CcblJHSezKKGpNI85lukQ==,
       }
     hasBin: true
     dependencies:
       cac: 6.7.14
-      esbuild: 0.19.2
+      esbuild: 0.19.10
     dev: false
 
-  /@hattip/bundler-deno@0.0.35:
+  /@hattip/bundler-deno@0.0.37:
     resolution:
       {
-        integrity: sha512-9GY0LwmqcjYLOTi4SXnQ/WsHoV8JKqmMYA1AGz/+b/B4IKdPMstLpc8/HhQMtk56Ctx4PVJHhkQfVuXPH6rQEQ==,
-      }
-    hasBin: true
-    dependencies:
-      cac: 6.7.14
-      cpr: 3.0.1
-      esbuild: 0.19.2
-    dev: false
-
-  /@hattip/bundler-netlify@0.0.35:
-    resolution:
-      {
-        integrity: sha512-VDLQOmQGY/UHNfSpgqBTfeWuxPw1khJ/DfBv4fGdirVDv+R1R6hF62HJuhWXHAAJ/nDHkPEZw7s/eMqozC1L6Q==,
+        integrity: sha512-UjvldTrbXipNUA6+UQQUjmefB2ZXqEGA75eatuCRlWx0BwubeZD/FneCNBIBXC0K77G1IsTaxzsrDPKjMX9ozg==,
       }
     hasBin: true
     dependencies:
       cac: 6.7.14
       cpr: 3.0.1
-      esbuild: 0.19.2
+      esbuild: 0.19.10
     dev: false
 
-  /@hattip/bundler-vercel@0.0.35:
+  /@hattip/bundler-netlify@0.0.37:
     resolution:
       {
-        integrity: sha512-+s4cpf+4aNIddFW7uqndL057nFhvkYeCKgs2aLZTj3owWk/5UIFS/MOVhQpFAPKFj6zjDEAbYZ+WagcHdqz9fQ==,
+        integrity: sha512-LivoFfBglF9TY0S3/YgSkN7ppc+1c4x1FEVh5u5kGROYd4yp/6TchDEvQBL+SX/YChowkEiyMwjWa+EJq0M4aw==,
       }
     hasBin: true
     dependencies:
       cac: 6.7.14
       cpr: 3.0.1
-      esbuild: 0.19.2
+      esbuild: 0.19.10
     dev: false
 
-  /@hattip/compose@0.0.35:
+  /@hattip/bundler-vercel@0.0.37:
     resolution:
       {
-        integrity: sha512-IL3kt22JfcYvgHetaDaNYavhwVQN/cl3Y/DrK9rQsfYV+dbcVBfFn1lxLpghUpXZ106CV69ahcTlBFM1GGGDJQ==,
+        integrity: sha512-Y3k49H5aG8VvytyJTqZWTxRyWJBc/UWDolJA8njx4T7i3IrnS/3txPk+r0V6lrmz9L+mn8iEDpXv5ohc7ikIPA==,
       }
+    hasBin: true
     dependencies:
-      "@hattip/core": 0.0.35
+      cac: 6.7.14
+      cpr: 3.0.1
+      esbuild: 0.19.10
     dev: false
 
-  /@hattip/cookie@0.0.35:
+  /@hattip/compose@0.0.37:
     resolution:
       {
-        integrity: sha512-7soQ23PXaqW9a1nQH8rWYph49klNkhH5WZCdISRu1wRLV1g00I8+3sJZ52Zg/i3JFJM7mDUoSMUzONJfxi8ALQ==,
+        integrity: sha512-TAWzyv2RT4K99c1mw1KYYaNMOptnc8Kekw5GpIFzF6Tb0I6IJGK0xcDtCze9U/rzJksCFrI8PGNHrmS710UZxA==,
       }
     dependencies:
-      "@hattip/compose": 0.0.35
-      "@hattip/core": 0.0.35
-      "@types/cookie": 0.5.2
+      "@hattip/core": 0.0.37
+    dev: false
+
+  /@hattip/cookie@0.0.37:
+    resolution:
+      {
+        integrity: sha512-ef0Avdjg+mQrYzK4dF6hmJm+4+6CXLe4Vmo/piqGB2bt7roCK+RwAY39UHmz187yTLQjir5DxALtNUbJtYwe7A==,
+      }
+    dependencies:
+      "@hattip/compose": 0.0.37
+      "@hattip/core": 0.0.37
+      "@types/cookie": 0.5.4
       cookie: 0.5.0
     dev: false
 
-  /@hattip/core@0.0.35:
+  /@hattip/core@0.0.37:
     resolution:
       {
-        integrity: sha512-KHCnjYe/TCUMeEKuuRqQO4q2SicjVMtL/7uADfo1Y3HshHxH7J6f91XcHi3V4jThW4rGZYK5Ma36Bp31KXoM2Q==,
+        integrity: sha512-speHE2pqs6C/A5fQyFVSeGIUjaxDzLLppyHcS7c+51sC08DA7y0D6aknP5m0ZLUqa3uOpsCZFq7I2V5Y8wkqjw==,
       }
 
-  /@hattip/graphql@0.0.35(graphql@16.8.1):
+  /@hattip/graphql@0.0.37(graphql@16.8.1):
     resolution:
       {
-        integrity: sha512-X77YlA/boo8BRDHbn8prgNbcBewPySpNJ/vBS4En6boacRmQtJwa6HAL4uWo1f6HJm5BlpjHQlGWv3QCqZgd5w==,
+        integrity: sha512-6TIxmcv1dAMt4SympAF0EIO03YP5megRETOBEPxRL6SG7Kz0Tv3K9A2xsmOrYbl1S/6X3HEi5Rp/PXlPXGWtcA==,
       }
     peerDependencies:
       graphql: "16"
     dependencies:
-      "@graphql-tools/schema": 10.0.0(graphql@16.8.1)
-      "@graphql-tools/utils": 10.0.6(graphql@16.8.1)
+      "@graphql-tools/schema": 10.0.2(graphql@16.8.1)
+      "@graphql-tools/utils": 10.0.12(graphql@16.8.1)
       "@graphql-typed-document-node/core": 3.2.0(graphql@16.8.1)
-      "@hattip/compose": 0.0.35
-      "@hattip/core": 0.0.35
-      dset: 3.1.2
+      "@hattip/compose": 0.0.37
+      "@hattip/core": 0.0.37
+      dset: 3.1.3
       graphql: 16.8.1
       tslib: 2.6.2
       urlpattern-polyfill: 9.0.0
     dev: false
 
-  /@hattip/headers@0.0.35:
+  /@hattip/headers@0.0.37:
     resolution:
       {
-        integrity: sha512-v9YAlhHzSD/JvMce+iQQ9TfOIEjMYBciDrcY2yYeLJMlO9axk3SRXZNlXx+R4qZDYmsbwYWccKdEWZjhKK+Zhw==,
+        integrity: sha512-R7r3FihlJUxXUIIHqY0JQ2sKectsWIf9sJl4QDglsCOLgNQCiaDF/9ciDsZeAll/va3IgHGpnLDs3EJiif0nRA==,
       }
     dependencies:
-      "@hattip/core": 0.0.35
+      "@hattip/core": 0.0.37
 
-  /@hattip/polyfills@0.0.35:
+  /@hattip/polyfills@0.0.37:
     resolution:
       {
-        integrity: sha512-o7q7PoeE0tVpuLU6JXvWGIt4EfkAY5dRiThak3jxLmgOjojb+tx5OqHA1bdKU/l4PO+9Zl7vS8tYA5CVqXZVCA==,
+        integrity: sha512-KjdSNcDeiv3GsCEXOqBBXFTENDdzajxf83oWk1bfbdNOWFCcfboYCPNxQ3UuFQ56rh/Y97v0VbUKjv8pzuFrPQ==,
       }
     dependencies:
-      "@hattip/core": 0.0.35
-      "@whatwg-node/fetch": 0.9.13
-      node-fetch-native: 1.4.0
+      "@hattip/core": 0.0.37
+      "@whatwg-node/fetch": 0.9.14
+      node-fetch-native: 1.6.1
 
-  /@hattip/response@0.0.35:
+  /@hattip/response@0.0.37:
     resolution:
       {
-        integrity: sha512-09NdREWhYeZPgxUQeiw5NXONPxgwKO5v9LMSmnDdtV+Sd8JgSNzuoRSqwyWgRkua9z+9q5apzbWqJbXABVgI0Q==,
+        integrity: sha512-OUgI0SESBgKLXULgD7VJOS+GH9r+hMl/BrM+t4gTdTMsCDjBD311YfNBDUz2OhEHew3NU+FAquyrjRHAtNiXsg==,
       }
     dependencies:
-      "@hattip/core": 0.0.35
+      "@hattip/core": 0.0.37
     dev: false
 
-  /@hattip/session@0.0.35:
+  /@hattip/session@0.0.37:
     resolution:
       {
-        integrity: sha512-gwlFpxb0XylF8CQDN2tfOf9r5MBGinUsCEyQXIWpOjArDkRC6vzOgMPN03lQXLxrdwZrzc0JUGCPdokfylR/UA==,
+        integrity: sha512-lMpTGcwrmVLrPq7vEK+6Sc9NreHDclKvOfwQDSy81zaL7AbQNAxo6+w8uV7P8oiKTfqDv3pwxs7AwsAgdvLTAQ==,
       }
     dependencies:
-      "@hattip/compose": 0.0.35
-      "@hattip/cookie": 0.0.35
-      "@hattip/core": 0.0.35
+      "@hattip/compose": 0.0.37
+      "@hattip/cookie": 0.0.37
+      "@hattip/core": 0.0.37
     dev: false
 
-  /@hattip/walk@0.0.35:
+  /@hattip/walk@0.0.37:
     resolution:
       {
-        integrity: sha512-11pQw9qtGU/iqWV7UdKKRW6yKS+sFXHgdNmSrBJ57YsgrwV5Kl+N38goKMjxGFVDUbXEZOxEZNTXZbVso0WSdg==,
+        integrity: sha512-e4vE5IH1a2DMpmGyoipl9sWqPTdcQB4Y3orQ/HDSqW66ZG4Up5r6bh9wpQ2nt4Tm8SuDaTw0o4Brnk75SmZt6A==,
       }
     hasBin: true
     dependencies:
-      "@hattip/headers": 0.0.35
+      "@hattip/headers": 0.0.37
       cac: 6.7.14
       mime-types: 2.1.35
 
@@ -4603,6 +4364,12 @@ packages:
       "@jridgewell/resolve-uri": 3.1.1
       "@jridgewell/sourcemap-codec": 1.4.15
 
+  /@kamilkisiela/fast-url-parser@1.1.4:
+    resolution:
+      {
+        integrity: sha512-gbkePEBupNydxCelHCESvFSFM8XPh1Zs/OAVRW/rKpEqPAl5PbOM90Si8mv9bvnR53uPD2s/FiRxdvSejpRJew==,
+      }
+
   /@ljharb/through@2.3.11:
     resolution:
       {
@@ -4621,7 +4388,7 @@ packages:
     engines: { node: ">=8" }
     dev: false
 
-  /@mantine/core@7.3.2(@mantine/hooks@7.3.2)(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0):
+  /@mantine/core@7.3.2(@mantine/hooks@7.3.2)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
         integrity: sha512-CwAuQogVLcLR7O9e1eOgi3gtk4XX6cnaqevAxzJJpIOIyCnHiQ3cEGINVXyUUjUUipBlvK3sqz3NPGJ2ekLFDQ==,
@@ -4637,8 +4404,8 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-number-format: 5.3.1(react-dom@18.2.0)(react@18.2.0)
-      react-remove-scroll: 2.5.7(@types/react@18.2.45)(react@18.2.0)
-      react-textarea-autosize: 8.5.3(@types/react@18.2.45)(react@18.2.0)
+      react-remove-scroll: 2.5.7(@types/react@18.2.46)(react@18.2.0)
+      react-textarea-autosize: 8.5.3(@types/react@18.2.46)(react@18.2.0)
       type-fest: 3.13.1
     transitivePeerDependencies:
       - "@types/react"
@@ -4715,7 +4482,7 @@ packages:
       - supports-color
     dev: true
 
-  /@mdx-js/react@3.0.0(@types/react@18.2.45)(react@18.2.0):
+  /@mdx-js/react@3.0.0(@types/react@18.2.46)(react@18.2.0):
     resolution:
       {
         integrity: sha512-nDctevR9KyYFyV+m+/+S4cpzCWHqj+iHDHq3QrsWezcC+B17uZdIWgCguESUkwFhM3n/56KxWVE3V6EokrmONQ==,
@@ -4725,7 +4492,7 @@ packages:
       react: ">=16 || 18"
     dependencies:
       "@types/mdx": 2.0.10
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       react: 18.2.0
     dev: false
 
@@ -6274,6 +6041,7 @@ packages:
     dependencies:
       is-glob: 4.0.3
       micromatch: 4.0.5
+      napi-wasm: 1.1.0
     dev: false
     bundledDependencies:
       - napi-wasm
@@ -6858,10 +6626,10 @@ packages:
       }
     dev: false
 
-  /@tanstack/react-query@5.15.0(react@18.2.0):
+  /@tanstack/react-query@5.15.3(react@18.2.0):
     resolution:
       {
-        integrity: sha512-hWLuZ2Hg9HzmHJ3VtWzhvK+sTxPz+rIIujYUxzapPoU9PPXe7NCm8k8EaKpm+Sc65FM7Dljfk/Ov9yYMhwg9vw==,
+        integrity: sha512-FP30X1oLUJGcekg92cwpRk6+wtzWcsvbz+ezoxOovI8VhtmTKe7R/hDmdPyFML1RVht01ugq/jmJOKygas61EA==,
       }
     peerDependencies:
       react: ^18.0.0 || 18
@@ -6929,10 +6697,10 @@ packages:
       "@types/estree": 1.0.2
     dev: true
 
-  /@types/aws-lambda@8.10.120:
+  /@types/aws-lambda@8.10.130:
     resolution:
       {
-        integrity: sha512-ReLUWj/2EYNx7qs17bkBkgSmr0jB1GGTRyorhHJmq8nqlWxEyWyto1GFsGTGdbLI0cAj1AcbBAA1oZYUQEqZng==,
+        integrity: sha512-HxTfLeGvD1wTJqIGwcBCpNmHKenja+We1e0cuzeIDFfbEj3ixnlTInyPR/81zAe0Ss/Ip12rFK6XNeMLVucOSg==,
       }
     dev: true
 
@@ -6999,10 +6767,10 @@ packages:
       "@types/node": 20.10.5
     dev: true
 
-  /@types/cookie@0.5.2:
+  /@types/cookie@0.5.4:
     resolution:
       {
-        integrity: sha512-DBpRoJGKJZn7RY92dPrgoMew8xCWc2P71beqsjyhEI/Ds9mOyVmBwtekyfhpwFIVt1WrxTonFifiOZ62V8CnNA==,
+        integrity: sha512-7z/eR6O859gyWIAjuvBWFzNURmf2oPBmJlfVWkwehU5nzIyjwBsTh7WMmEEV4JFnHuQ3ex4oyTvfKzcyJVDBNA==,
       }
     dev: false
 
@@ -7108,7 +6876,7 @@ packages:
         integrity: sha512-SbcrWzkKBw2cdwRTwQAswfpB9g9LJWfjtUeW/jvNwbhC8cpmmNYVePa+ncbUe0rGTQ7G3Ff6mYUN2VMfLVr+Sg==,
       }
     dependencies:
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       hoist-non-react-statics: 3.3.2
     dev: true
 
@@ -7331,12 +7099,12 @@ packages:
         integrity: sha512-TJxDm6OfAX2KJWJdMEVTwWke5Sc/E/RlnPGvGfS0W7+6ocy2xhDVQVh/KvC2Uf7kACs+gDytdusDSdWfWkaNzw==,
       }
     dependencies:
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
 
-  /@types/react@18.2.45:
+  /@types/react@18.2.46:
     resolution:
       {
-        integrity: sha512-TtAxCNrlrBp8GoeEp1npd5g+d/OejJHFxS3OWmrPBMFaVQMSN0OFySozJio5BHxTuTeug00AVXVAjfDSfk+lUg==,
+        integrity: sha512-nNCvVBcZlvX4NU1nRRNV/mFl1nNRuTuslAJglQsq+8ldXe5Xv0Wd2f7WTE3jOxhLH2BFfiZGC6GCp+kHQbgG+w==,
       }
     dependencies:
       "@types/prop-types": 15.7.11
@@ -7398,7 +7166,7 @@ packages:
       }
     dependencies:
       "@types/hoist-non-react-statics": 3.3.5
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       csstype: 3.1.2
     dev: true
 
@@ -7916,7 +7684,7 @@ packages:
     dependencies:
       "@mapbox/node-pre-gyp": 1.0.11(supports-color@9.4.0)
       "@rollup/pluginutils": 4.2.1
-      acorn: 8.11.2
+      acorn: 8.11.3
       async-sema: 3.1.1
       bindings: 1.5.0
       estree-walker: 2.0.2
@@ -7940,7 +7708,7 @@ packages:
     dependencies:
       "@mapbox/node-pre-gyp": 1.0.11(supports-color@9.4.0)
       "@rollup/pluginutils": 4.2.1
-      acorn: 8.11.2
+      acorn: 8.11.3
       async-sema: 3.1.1
       bindings: 1.5.0
       estree-walker: 2.0.2
@@ -8082,27 +7850,27 @@ packages:
       }
     engines: { node: ">=16.0.0" }
 
-  /@whatwg-node/fetch@0.9.13:
+  /@whatwg-node/fetch@0.9.14:
     resolution:
       {
-        integrity: sha512-PPtMwhjtS96XROnSpowCQM85gCUG2m7AXZFw0PZlGbhzx2GK7f2iOXilfgIJ0uSlCuuGbOIzfouISkA7C4FJOw==,
+        integrity: sha512-wurZC82zzZwXRDSW0OS9l141DynaJQh7Yt0FD1xZ8niX7/Et/7RoiLiltbVU1fSF1RR9z6ndEaTUQBAmddTm1w==,
       }
     engines: { node: ">=16.0.0" }
     dependencies:
-      "@whatwg-node/node-fetch": 0.4.18
+      "@whatwg-node/node-fetch": 0.5.3
       urlpattern-polyfill: 9.0.0
 
-  /@whatwg-node/node-fetch@0.4.18:
+  /@whatwg-node/node-fetch@0.5.3:
     resolution:
       {
-        integrity: sha512-zdey6buMKCqDVDq+tMqcjopO75Fb6iLqWo+g6cWwN5kiwctEHtVcbws2lJUFhCbo+TLZeH6bMDRUXEo5bkPtcQ==,
+        integrity: sha512-toMC8N53RxgprcuU7Fc05KOrJhZV49njJCHPZvXBsjZMQBKrDm9o14Y56CsrUC85cvjQu862MaYOjd8rKgHdDw==,
       }
     engines: { node: ">=16.0.0" }
     dependencies:
+      "@kamilkisiela/fast-url-parser": 1.1.4
       "@whatwg-node/events": 0.1.1
       busboy: 1.6.0
       fast-querystring: 1.1.2
-      fast-url-parser: 1.1.3
       tslib: 2.6.2
 
   /@xhmikosr/archive-type@6.0.1:
@@ -8279,6 +8047,15 @@ packages:
       }
     engines: { node: ">=0.4.0" }
     hasBin: true
+
+  /acorn@8.11.3:
+    resolution:
+      {
+        integrity: sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==,
+      }
+    engines: { node: ">=0.4.0" }
+    hasBin: true
+    dev: false
 
   /agent-base@6.0.2(supports-color@9.4.0):
     resolution:
@@ -9005,7 +8782,7 @@ packages:
       cosmiconfig: 7.1.0
       resolve: 1.22.2
 
-  /babel-plugin-styled-components@2.1.4(@babel/core@7.23.6)(styled-components@6.1.4):
+  /babel-plugin-styled-components@2.1.4(@babel/core@7.23.6)(styled-components@6.1.6):
     resolution:
       {
         integrity: sha512-Xgp9g+A/cG47sUyRwwYxGM4bR/jDRg5N6it/8+HxCnbT5XNKSKDT9xm4oag/osgqjC2It/vH0yXsomOG6k558g==,
@@ -9018,7 +8795,7 @@ packages:
       "@babel/plugin-syntax-jsx": 7.22.5(@babel/core@7.23.6)
       lodash: 4.17.21
       picomatch: 2.3.1
-      styled-components: 6.1.4(react-dom@18.2.0)(react@18.2.0)
+      styled-components: 6.1.6(react-dom@18.2.0)(react@18.2.0)
     transitivePeerDependencies:
       - "@babel/core"
     dev: true
@@ -10480,6 +10257,16 @@ packages:
       - encoding
     dev: true
 
+  /cross-inspect@1.0.0:
+    resolution:
+      {
+        integrity: sha512-4PFfn4b5ZN6FMNGSZlyb7wUhuN8wvj8t/VQHZdM4JsDcruGJ8L2kf9zao98QIrBPFCpdk27qst/AGTl7pL3ypQ==,
+      }
+    engines: { node: ">=16.0.0" }
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
   /cross-spawn@7.0.3:
     resolution:
       {
@@ -11241,10 +11028,10 @@ packages:
       }
     engines: { node: ">=12" }
 
-  /dset@3.1.2:
+  /dset@3.1.3:
     resolution:
       {
-        integrity: sha512-g/M9sqy3oHe477Ar4voQxWtaPIFw1jTdKZuomOjhCcBx9nHUNn0pu6NopuFFrTh/TRZIKEj+76vLWFu9BNKk+Q==,
+        integrity: sha512-20TuZZHCEZ2O71q9/+8BwKwZ0QtD9D8ObhrihJPr+vLLYlSuAU3/zL4cSlgbfeoGHTjCSJBa7NGcrF9/Bx/WJQ==,
       }
     engines: { node: ">=4" }
     dev: false
@@ -11699,39 +11486,6 @@ packages:
       "@esbuild/win32-ia32": 0.19.10
       "@esbuild/win32-x64": 0.19.10
 
-  /esbuild@0.19.2:
-    resolution:
-      {
-        integrity: sha512-G6hPax8UbFakEj3hWO0Vs52LQ8k3lnBhxZWomUJDxfz3rZTLqF5k/FCzuNdLx2RbpBiQQF9H9onlDDH1lZsnjg==,
-      }
-    engines: { node: ">=12" }
-    hasBin: true
-    requiresBuild: true
-    optionalDependencies:
-      "@esbuild/android-arm": 0.19.2
-      "@esbuild/android-arm64": 0.19.2
-      "@esbuild/android-x64": 0.19.2
-      "@esbuild/darwin-arm64": 0.19.2
-      "@esbuild/darwin-x64": 0.19.2
-      "@esbuild/freebsd-arm64": 0.19.2
-      "@esbuild/freebsd-x64": 0.19.2
-      "@esbuild/linux-arm": 0.19.2
-      "@esbuild/linux-arm64": 0.19.2
-      "@esbuild/linux-ia32": 0.19.2
-      "@esbuild/linux-loong64": 0.19.2
-      "@esbuild/linux-mips64el": 0.19.2
-      "@esbuild/linux-ppc64": 0.19.2
-      "@esbuild/linux-riscv64": 0.19.2
-      "@esbuild/linux-s390x": 0.19.2
-      "@esbuild/linux-x64": 0.19.2
-      "@esbuild/netbsd-x64": 0.19.2
-      "@esbuild/openbsd-x64": 0.19.2
-      "@esbuild/sunos-x64": 0.19.2
-      "@esbuild/win32-arm64": 0.19.2
-      "@esbuild/win32-ia32": 0.19.2
-      "@esbuild/win32-x64": 0.19.2
-    dev: false
-
   /esbuild@0.19.6:
     resolution:
       {
@@ -11953,7 +11707,7 @@ packages:
       eslint: 8.56.0
       eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.11.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@6.11.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       get-tsconfig: 4.7.2
       is-core-module: 2.13.1
       is-glob: 4.0.3
@@ -12821,14 +12575,6 @@ packages:
         integrity: sha512-eel5UKGn369gGEWOqBShmFJWfq/xSJvsgDzgLYC845GneayWvXBf0lJCBn5qTABfewy1ZDPoaR5OZCP+kssfuw==,
       }
     dev: false
-
-  /fast-url-parser@1.1.3:
-    resolution:
-      {
-        integrity: sha512-5jOCVXADYNuRkKFzNJ0dCCewsZiYo0dz8QNYljkOpFC6r2U4OBmKtvm/Tsuh4w1YYdDqDb31a8TVhBJ2OJKdqQ==,
-      }
-    dependencies:
-      punycode: 1.4.1
 
   /fastest-levenshtein@1.0.16:
     resolution:
@@ -17615,6 +17361,7 @@ packages:
       {
         integrity: sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==,
       }
+    dev: true
 
   /minimist@1.2.8:
     resolution:
@@ -17689,7 +17436,7 @@ packages:
       }
     hasBin: true
     dependencies:
-      minimist: 1.2.7
+      minimist: 1.2.8
     dev: false
 
   /mkdirp@1.0.4:
@@ -17885,6 +17632,13 @@ packages:
       }
     dev: false
 
+  /napi-wasm@1.1.0:
+    resolution:
+      {
+        integrity: sha512-lHwIAJbmLSjF9VDRm9GoVOy9AGp3aIvkjv+Kvz9h16QR3uSVYH78PNQUnT2U4X53mhlnV2M7wrhibQ3GHicDmg==,
+      }
+    dev: false
+
   /natural-compare@1.4.0:
     resolution:
       {
@@ -17906,10 +17660,10 @@ packages:
       }
     dev: false
 
-  /netlify-cli@17.10.1(@types/node@20.10.5):
+  /netlify-cli@17.10.2(@types/node@20.10.5):
     resolution:
       {
-        integrity: sha512-y9UBZQ+Zx85MJVAjXnuWrVwdymBnXxKXzXMTObs2ONaTm/cqYPo9HB1vChQSUrEajB6H36zwNdWaNnoCRLs3SA==,
+        integrity: sha512-pKXL+w5/vm4ld6IUotBEse3KvN4+WCComLP6a73OiOvy8uM6uxtDUiuL+uAhRaozohjjaU/Ym4q1TqwbqWF5rA==,
       }
     engines: { node: ">=18.14.0" }
     hasBin: true
@@ -17987,7 +17741,6 @@ packages:
       lodash: 4.17.21
       log-symbols: 5.1.0
       log-update: 5.0.1
-      minimist: 1.2.8
       multiparty: 4.2.3
       netlify: 13.1.11
       netlify-headers-parser: 7.1.2
@@ -18071,7 +17824,7 @@ packages:
         integrity: sha512-MRm3o0OSrl5kjz1Wwb+SjT7dX2JRaYt8gYjGaGHJyw4PLfPTPsBdZn37hISMU6xLh3JAeyGQ16OGfg645Z1ovQ==,
       }
     dependencies:
-      "@types/aws-lambda": 8.10.120
+      "@types/aws-lambda": 8.10.130
       "@types/node": 14.18.63
     dev: true
 
@@ -18169,18 +17922,11 @@ packages:
       }
     engines: { node: ">=10.5.0" }
 
-  /node-fetch-native@1.4.0:
-    resolution:
-      {
-        integrity: sha512-F5kfEj95kX8tkDhUCYdV8dg3/8Olx/94zB8+ZNthFs6Bz31UpUi8Xh40TN3thLwXgrwXry1pEg9lJ++tLWTcqA==,
-      }
-
   /node-fetch-native@1.6.1:
     resolution:
       {
         integrity: sha512-bW9T/uJDPAJB2YNYEpWzE54U5O3MQidXsOyTfnbKYtTtFexRvGzb1waphBN4ZwP6EcIvYYEOwW0b72BpAqydTw==,
       }
-    dev: false
 
   /node-fetch@1.7.3:
     resolution:
@@ -19911,12 +19657,6 @@ packages:
       end-of-stream: 1.4.4
       once: 1.4.0
 
-  /punycode@1.4.1:
-    resolution:
-      {
-        integrity: sha512-jmYNElW7yvO7TV33CjSmvSiE2yco3bV2czu/OzDKdMNVZQWfxCblURLhf+47syQRBntjfLdd/H0egrzIG+oaFQ==,
-      }
-
   /punycode@2.3.1:
     resolution:
       {
@@ -20155,7 +19895,7 @@ packages:
     engines: { node: ">=0.10.0" }
     dev: false
 
-  /react-remove-scroll-bar@2.3.4(@types/react@18.2.45)(react@18.2.0):
+  /react-remove-scroll-bar@2.3.4(@types/react@18.2.46)(react@18.2.0):
     resolution:
       {
         integrity: sha512-63C4YQBUt0m6ALadE9XV56hV8BgJWDmmTPY758iIJjfQKt2nYwoUrPk0LXRXcB/yIj82T1/Ixfdpdk68LwIB0A==,
@@ -20168,13 +19908,13 @@ packages:
       "@types/react":
         optional: true
     dependencies:
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       react: 18.2.0
-      react-style-singleton: 2.2.1(@types/react@18.2.45)(react@18.2.0)
+      react-style-singleton: 2.2.1(@types/react@18.2.46)(react@18.2.0)
       tslib: 2.6.2
     dev: false
 
-  /react-remove-scroll@2.5.7(@types/react@18.2.45)(react@18.2.0):
+  /react-remove-scroll@2.5.7(@types/react@18.2.46)(react@18.2.0):
     resolution:
       {
         integrity: sha512-FnrTWO4L7/Bhhf3CYBNArEG/yROV0tKmTv7/3h9QCFvH6sndeFf1wPqOcbFVu5VAulS5dV1wGT3GZZ/1GawqiA==,
@@ -20187,16 +19927,16 @@ packages:
       "@types/react":
         optional: true
     dependencies:
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       react: 18.2.0
-      react-remove-scroll-bar: 2.3.4(@types/react@18.2.45)(react@18.2.0)
-      react-style-singleton: 2.2.1(@types/react@18.2.45)(react@18.2.0)
+      react-remove-scroll-bar: 2.3.4(@types/react@18.2.46)(react@18.2.0)
+      react-style-singleton: 2.2.1(@types/react@18.2.46)(react@18.2.0)
       tslib: 2.6.2
-      use-callback-ref: 1.3.1(@types/react@18.2.45)(react@18.2.0)
-      use-sidecar: 1.1.2(@types/react@18.2.45)(react@18.2.0)
+      use-callback-ref: 1.3.1(@types/react@18.2.46)(react@18.2.0)
+      use-sidecar: 1.1.2(@types/react@18.2.46)(react@18.2.0)
     dev: false
 
-  /react-style-singleton@2.2.1(@types/react@18.2.45)(react@18.2.0):
+  /react-style-singleton@2.2.1(@types/react@18.2.46)(react@18.2.0):
     resolution:
       {
         integrity: sha512-ZWj0fHEMyWkHzKYUr2Bs/4zU6XLmq9HsgBURm7g5pAVfyn49DgUiNgY2d4lXRlYSiCif9YBGpQleewkcqddc7g==,
@@ -20209,14 +19949,14 @@ packages:
       "@types/react":
         optional: true
     dependencies:
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 18.2.0
       tslib: 2.6.2
     dev: false
 
-  /react-textarea-autosize@8.5.3(@types/react@18.2.45)(react@18.2.0):
+  /react-textarea-autosize@8.5.3(@types/react@18.2.46)(react@18.2.0):
     resolution:
       {
         integrity: sha512-XT1024o2pqCuZSuBt9FwHlaDeNtVrtCXu0Rnz88t1jUGheCLa3PhjE1GH8Ctm2axEtvdCl5SUHYschyQ0L5QHQ==,
@@ -20228,7 +19968,7 @@ packages:
       "@babel/runtime": 7.23.6
       react: 18.2.0
       use-composed-ref: 1.3.0(react@18.2.0)
-      use-latest: 1.2.1(@types/react@18.2.45)(react@18.2.0)
+      use-latest: 1.2.1(@types/react@18.2.46)(react@18.2.0)
     transitivePeerDependencies:
       - "@types/react"
     dev: false
@@ -20298,6 +20038,20 @@ packages:
     resolution:
       {
         integrity: sha512-uQjbf34vmf/asGnOHQEw07Q4llgMACQZTWWa4MmICS0IKJoHbLwKCy71H3eR99Dw5iYejc6W+pqZZEeqRtUFAw==,
+      }
+    engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
+    dependencies:
+      abort-controller: 3.0.0
+      buffer: 6.0.3
+      events: 3.3.0
+      process: 0.11.10
+      string_decoder: 1.3.0
+    dev: false
+
+  /readable-stream@4.5.2:
+    resolution:
+      {
+        integrity: sha512-yjavECdqeZ3GLXNgRXgeQEdz9fvDDkNKyHnbHRFtOr7/LcfgBcmct7t/ET+HaCTqfh06OzoAxrkN/IfjJBVe+g==,
       }
     engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
     dependencies:
@@ -22171,10 +21925,10 @@ packages:
       inline-style-parser: 0.1.1
     dev: true
 
-  /styled-components@6.1.4(react-dom@18.2.0)(react@18.2.0):
+  /styled-components@6.1.6(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
-        integrity: sha512-VFlzze2LFUgLbjrYVZIhQaIJLyIdkq+7Tm7IW+chiIhEe4LRwMk8JJw/IG+Gxeaubv29BVwxt+zgXnewyi5gOg==,
+        integrity: sha512-DgTLULSC29xpabJ24bbn1+hulU6vvGFQf4RPwBOJrm8WJFnN42yXpo5voBt3jDSJBa5tBd1L6PqswJjQ0wRKdg==,
       }
     engines: { node: ">= 16" }
     peerDependencies:
@@ -22190,7 +21944,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       shallowequal: 1.1.0
-      stylis: 4.3.0
+      stylis: 4.3.1
       tslib: 2.5.0
 
   /stylis@4.2.0:
@@ -22199,10 +21953,10 @@ packages:
         integrity: sha512-Orov6g6BB1sDfYgzWfTHDOxamtX1bE/zo104Dh9e6fqJ3PooipYyfJ0pUmrZO2wAvO8YbEyeFrkV91XTsGMSrw==,
       }
 
-  /stylis@4.3.0:
+  /stylis@4.3.1:
     resolution:
       {
-        integrity: sha512-E87pIogpwUsUwXw7dNyU4QDjdgVMy52m+XEOPEKUn161cCzWjjhPSQhByfd1CcNvrOLnXQ6OnnZDwnJrz/Z4YQ==,
+        integrity: sha512-EQepAV+wMsIaGVGX1RECzgrcqRRU/0sYOHkeLsZ3fzHaHXZy4DaOOX0vOlGQdlsjkh3mFHAIlVimpwAs4dslyQ==,
       }
 
   /sucrase@3.34.0:
@@ -22792,7 +22546,7 @@ packages:
       "@tsconfig/node14": 1.0.3
       "@tsconfig/node16": 1.0.4
       "@types/node": 20.10.5
-      acorn: 8.11.2
+      acorn: 8.11.3
       acorn-walk: 8.3.1
       arg: 4.1.3
       create-require: 1.1.1
@@ -23580,7 +23334,7 @@ packages:
       - graphql
     dev: false
 
-  /use-callback-ref@1.3.1(@types/react@18.2.45)(react@18.2.0):
+  /use-callback-ref@1.3.1(@types/react@18.2.46)(react@18.2.0):
     resolution:
       {
         integrity: sha512-Lg4Vx1XZQauB42Hw3kK7JM6yjVjgFmFC5/Ab797s79aARomD2nEErc4mCgM8EZrARLmmbWpi5DGCadmK50DcAQ==,
@@ -23593,7 +23347,7 @@ packages:
       "@types/react":
         optional: true
     dependencies:
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       react: 18.2.0
       tslib: 2.6.2
     dev: false
@@ -23609,7 +23363,7 @@ packages:
       react: 18.2.0
     dev: false
 
-  /use-isomorphic-layout-effect@1.1.2(@types/react@18.2.45)(react@18.2.0):
+  /use-isomorphic-layout-effect@1.1.2(@types/react@18.2.46)(react@18.2.0):
     resolution:
       {
         integrity: sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==,
@@ -23621,11 +23375,11 @@ packages:
       "@types/react":
         optional: true
     dependencies:
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       react: 18.2.0
     dev: false
 
-  /use-latest@1.2.1(@types/react@18.2.45)(react@18.2.0):
+  /use-latest@1.2.1(@types/react@18.2.46)(react@18.2.0):
     resolution:
       {
         integrity: sha512-xA+AVm/Wlg3e2P/JiItTziwS7FK92LWrDB0p+hgXloIMuVCeJJ8v6f0eeHyPZaJrM+usM1FkFfbNCrJGs8A/zw==,
@@ -23637,12 +23391,12 @@ packages:
       "@types/react":
         optional: true
     dependencies:
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       react: 18.2.0
-      use-isomorphic-layout-effect: 1.1.2(@types/react@18.2.45)(react@18.2.0)
+      use-isomorphic-layout-effect: 1.1.2(@types/react@18.2.46)(react@18.2.0)
     dev: false
 
-  /use-sidecar@1.1.2(@types/react@18.2.45)(react@18.2.0):
+  /use-sidecar@1.1.2(@types/react@18.2.46)(react@18.2.0):
     resolution:
       {
         integrity: sha512-epTbsLuzZ7lPClpz2TyryBfztm7m+28DlEv2ZCQ3MDr5ssiwyOwGH/e5F9CkfWjJ1t4clvI58yF822/GUkjjhw==,
@@ -23655,7 +23409,7 @@ packages:
       "@types/react":
         optional: true
     dependencies:
-      "@types/react": 18.2.45
+      "@types/react": 18.2.46
       detect-node-es: 1.1.0
       react: 18.2.0
       tslib: 2.6.2
@@ -23834,10 +23588,10 @@ packages:
       minimatch: 9.0.3
     dev: true
 
-  /vite-tsconfig-paths@4.2.2(typescript@5.3.3)(vite@5.0.10):
+  /vite-tsconfig-paths@4.2.3(typescript@5.3.3)(vite@5.0.10):
     resolution:
       {
-        integrity: sha512-dq0FjyxHHDnp0uS3P12WEOX2W7NeuLzX9AWP38D7Zw2CTbFErapwQVlCiT5DMJcVWKQ1MMdTe92PZl/rBQ7qcw==,
+        integrity: sha512-xVsA2xe6QSlzBujtWF8q2NYexh7PAUYfzJ4C8Axpe/7d2pcERYxuxGgph9F4f0iQO36g5tyGq6eBUYIssdUrVw==,
       }
     peerDependencies:
       vite: "*"

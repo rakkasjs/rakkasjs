@@ -1,7 +1,6 @@
 import { createRequestHandler } from "rakkasjs";
 import {
 	createClient,
-	dedupExchange,
 	cacheExchange,
 	fetchExchange,
 	ssrExchange,
@@ -15,7 +14,7 @@ export default createRequestHandler({
 		const client = createClient({
 			url: "https://swapi-graphql.netlify.app/.netlify/functions/index",
 			suspense: true,
-			exchanges: [dedupExchange, cacheExchange, ssr, fetchExchange],
+			exchanges: [cacheExchange, ssr, fetchExchange],
 		});
 
 		return {

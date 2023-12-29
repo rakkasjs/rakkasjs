@@ -25,5 +25,5 @@ export default function HomePage() {
 
 const messages = {
 	en: "Hello, world!",
-	fr: "Salut, le monde!",
+	fr: "Bonjour, le monde !",
 };
