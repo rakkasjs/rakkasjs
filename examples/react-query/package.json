@@ -16,7 +16,7 @@
 		"vite-tsconfig-paths": "^4.2.3"
 	},
 	"dependencies": {
-		"@tanstack/react-query": "^5.15.3",
+		"@tanstack/react-query": "^5.15.4",
 		"devalue": "^4.3.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"

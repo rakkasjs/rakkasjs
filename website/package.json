@@ -32,7 +32,7 @@
 	},
 	"devDependencies": {
 		"@cyco130/eslint-config": "^3.5.0",
-		"@cyco130/vite-plugin-mdx": "^0.1.0",
+		"@cyco130/vite-plugin-mdx": "^1.0.1",
 		"@docsearch/css": "^3.5.2",
 		"@docsearch/react": "^3.5.2",
 		"@mapbox/rehype-prism": "^0.9.0",
@@ -55,6 +55,6 @@
 		"typescript": "^5.3.3",
 		"vfile": "^6.0.1",
 		"vite": "^5.0.10",
-		"vite-plugin-cjs-interop": "^1.2.0"
+		"vite-plugin-cjs-interop": "^2.0.0"
 	}
 }
