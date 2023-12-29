@@ -76,7 +76,7 @@ yarn create rakkas-app my-rakkas-app
 >
 > - Start a development server with `npx rakkas`
 > - Build with `npx rakkas build`
-> - Launch with `node dist/server`
+> - Launch with `node dist/server/index.js`
 
 ## Credits
 

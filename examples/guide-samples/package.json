@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "rakkas",
 		"build": "rakkas build",
-		"start": "node dist/server"
+		"start": "node dist/server/index.js"
 	},
 	"devDependencies": {
 		"@types/react": "^18.2.46",

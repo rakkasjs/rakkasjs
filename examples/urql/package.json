@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "rakkas",
 		"build": "rakkas build",
-		"start": "node dist/server",
+		"start": "node dist/server/index.js",
 		"test": "pnpm test:typecheck",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit"
 	},

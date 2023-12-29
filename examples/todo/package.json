@@ -1,17 +1,16 @@
 {
-	"name": "@rakkasjs/example-todo",
+	"name": "@rakkasjs/example-server-sent-events",
 	"type": "module",
 	"private": true,
 	"scripts": {
 		"dev": "rakkas",
 		"build": "rakkas build",
-		"start": "node dist/server",
+		"start": "node dist/server/index.js",
 		"format": "prettier --write --ignore-unknown src",
-		"test": "npm run test:typecheck && npm run test:format && npm run test:lint && npm run test:unit",
+		"test": "pnpm test:typecheck && pnpm test:format && pnpm test:lint",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit",
 		"test:format": "prettier --check --ignore-unknown src",
-		"test:lint": "eslint . --ignore-pattern dist",
-		"test:unit": "vitest run"
+		"test:lint": "eslint . --ignore-pattern dist"
 	},
 	"devDependencies": {
 		"@rakkasjs/eslint-config": "0.7.0-next.24",
@@ -22,10 +21,10 @@
 		"rakkasjs": "0.7.0-next.24",
 		"typescript": "^5.3.3",
 		"vite": "^5.0.10",
-		"vite-tsconfig-paths": "^4.2.3",
-		"vitest": "^1.1.0"
+		"vite-tsconfig-paths": "^4.2.3"
 	},
 	"dependencies": {
+		"@hattip/response": "0.0.37",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	}

@@ -37,7 +37,7 @@ title: Migration guide
 
 - Remove the `@rakkasjs/runner-node` package.
 - Upgrade to `rakkasjs@0.5.0` and `@rakkasjs/cli@0.5.0`.
-- Update your `start` script to `node dist/server` instead of `@rakkasjs/runner-node`.
+- Update your `start` script to `node dist/server/index.js` instead of `@rakkasjs/runner-node`.
 - If you were using `rakkas export` to generate a static site:
   - Change your build command to `rakkas build -d static`.
   - Serve your static site from `dist` instead of `dist/static`.

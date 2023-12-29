@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "rakkas",
 		"build": "rakkas build",
-		"start": "node dist/server"
+		"start": "node dist/server/index.js"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.21",

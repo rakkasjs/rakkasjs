@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "dotenv rakkas",
 		"build": "rakkas build",
-		"start": "dotenv node dist/server",
+		"start": "dotenv node dist/server/index.js",
 		"gen-secret": "node src/gen-secret.js",
 		"test": "pnpm test:typecheck",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit"

@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "rakkas",
 		"build": "rakkas build",
-		"start": "node dist/server",
+		"start": "node dist/server/index.js",
 		"format": "prettier --write --ignore-unknown src",
 		"test": "pnpm test:typecheck && pnpm test:format && pnpm test:lint",
 		"test:typecheck": "tsc -p tsconfig.json --noEmit",

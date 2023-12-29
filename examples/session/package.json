@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "dotenv rakkas",
 		"build": "rakkas build",
-		"start": "dotenv node dist/server"
+		"start": "dotenv node dist/server/index.js"
 	},
 	"devDependencies": {
 		"@hattip/polyfills": "0.0.37",

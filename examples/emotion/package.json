@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "rakkas",
 		"build": "rakkas build",
-		"start": "node dist/server"
+		"start": "node dist/server/index.js"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.23.6",

@@ -11,7 +11,7 @@
 		"build:deno": "cross-env RAKKAS_TARGET=deno rakkas build",
 		"build:vercel": "cross-env RAKKAS_TARGET=vercel rakkas build",
 		"build:vercel-edge": "cross-env RAKKAS_TARGET=vercel-edge rakkas build",
-		"start": "node dist/server",
+		"start": "node dist/server/index.js",
 		"ci": "vitest run --reporter=verbose",
 		"ci:local": "TEST_HOST=http://localhost:3000 pnpm run ci",
 		"test": "pnpm test:typecheck && pnpm test:lint",
