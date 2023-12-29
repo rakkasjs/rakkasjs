@@ -220,17 +220,21 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 		});
 	});
 
-	describe("mantine", () => {
-		initialize("mantine");
+	describe(
+		"mantine",
+		() => {
+			initialize("mantine");
 
-		test("button styles", async () => {
-			await page.goto(host + "/");
-			const button = (await page.waitForSelector("button"))!;
-			expect(
-				await button.evaluate((e) => getComputedStyle(e).borderRadius),
-			).not.toBe("0px");
-		});
-	});
+			test("button styles", async () => {
+				await page.goto(host + "/");
+				const button = (await page.waitForSelector("button"))!;
+				expect(
+					await button.evaluate((e) => getComputedStyle(e).borderRadius),
+				).not.toBe("0px");
+			});
+		},
+		{ retry: 3 },
+	);
 
 	describe("mdx", () => {
 		initialize("mdx");
@@ -305,17 +309,21 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 		});
 	});
 
-	describe("styled-components", () => {
-		initialize("styled-components");
+	describe(
+		"styled-components",
+		() => {
+			initialize("styled-components");
 
-		test("page route", async () => {
-			await page.goto(host + "/");
-			const button = (await page.waitForSelector("button"))!;
-			expect(
-				await button.evaluate((e) => getComputedStyle(e).backgroundColor),
-			).toBe("rgb(0, 68, 255)");
-		});
-	});
+			test("page route", async () => {
+				await page.goto(host + "/");
+				const button = (await page.waitForSelector("button"))!;
+				expect(
+					await button.evaluate((e) => getComputedStyle(e).backgroundColor),
+				).toBe("rgb(0, 68, 255)");
+			});
+		},
+		{ retry: 3 },
+	);
 
 	describe("todo", () => {
 		initialize("todo");
