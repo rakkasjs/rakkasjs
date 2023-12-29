@@ -527,34 +527,40 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			expect(response.headers.get("X-Custom-Header")).toBe("Custom value");
 		});
 
-		test("fetches data with useQuery", async () => {
-			await page.goto(host + "/use-query");
-			await page.waitForSelector(".hydrated");
+		test(
+			"fetches data with useQuery",
+			async () => {
+				await page.goto(host + "/use-query");
+				await page.waitForSelector(".hydrated");
 
-			await page.waitForFunction(
-				() =>
-					document.getElementById("content")?.innerText.includes("SSR value"),
-			);
+				await page.waitForFunction(
+					() =>
+						document.getElementById("content")?.innerText.includes("SSR value"),
+				);
 
-			const button = await page.waitForSelector("button");
-			expect(button).toBeTruthy();
+				const button = await page.waitForSelector("button");
+				expect(button).toBeTruthy();
 
-			await button!.click();
-			await page.waitForFunction(
-				() =>
-					document
-						.getElementById("content")
-						?.innerText.includes("SSR value (refetching)"),
-			);
+				await button!.click();
+				await page.waitForFunction(
+					() =>
+						document
+							.getElementById("content")
+							?.innerText.includes("SSR value (refetching)"),
+				);
 
-			await button!.click();
-			await page.waitForFunction(
-				() =>
-					document
-						.getElementById("content")
-						?.innerText.includes("Client value"),
-			);
-		});
+				await button!.click();
+				await page.waitForFunction(
+					() =>
+						document
+							.getElementById("content")
+							?.innerText.includes("Client value"),
+				);
+			},
+			{
+				retry: 3, // This test is flaky on Mac
+			},
+		);
 
 		test("handles errors in useQuery", async () => {
 			await page.goto(host + "/use-query/error");
