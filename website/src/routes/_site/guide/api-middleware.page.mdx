@@ -9,14 +9,14 @@ import { RequestContext } from "rakkasjs";
 import { Session, getSession } from "./session";
 
 declare module "rakkasjs" {
-	// Redefine to provide types for ctx.locals
-	interface ServerSideLocals {
-		session: Session;
-	}
+  // Redefine to provide types for ctx.locals
+  interface ServerSideLocals {
+    session: Session;
+  }
 }
 
 export default async function sessionMiddleware(ctx: RequestContext) {
-	ctx.locals.session = await getSession(ctx);
-	// The session will be available as ctx.locals in subsequent handlers
+  ctx.locals.session = await getSession(ctx);
+  // The session will be available as ctx.locals in subsequent handlers
 }
 ```

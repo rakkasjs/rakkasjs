@@ -25,12 +25,12 @@ You can export a `prerender` function from pages and layouts and return an objec
 ```tsx
 /** Return type of the prerender function \*/
 export interface PrerenderResult {
-	/** Should this page be prerendered? Defaults to true */
-	shouldPrerender?: boolean;
-	/** Should the prerenderer crawl this page? Defaults to the value of prerender */
-	shouldCrawl?: boolean;
-	/** More links to prerender */
-	links?: (URL | string)[];
+  /** Should this page be prerendered? Defaults to true */
+  shouldPrerender?: boolean;
+  /** Should the prerenderer crawl this page? Defaults to the value of prerender */
+  shouldCrawl?: boolean;
+  /** More links to prerender */
+  links?: (URL | string)[];
 }
 ```
 

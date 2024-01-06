@@ -1,106 +1,106 @@
 {
-	"name": "rakkasjs",
-	"version": "0.7.0-next.25",
-	"type": "module",
-	"bin": {
-		"rakkas": "./cli.js",
-		"rakkasjs": "./cli.js"
-	},
-	"files": [
-		"dist",
-		"cli.js",
-		"node-loader.mjs",
-		"suppress-loader-warnings.cjs",
-		"*.d.ts",
-		"vite-license.md",
-		"json-s-license.md"
-	],
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"browser": "./dist/client.js",
-			"default": "./dist/server.js"
-		},
-		"./node-adapter": "./dist/node-adapter.js",
-		"./vite-plugin": "./dist/vite-plugin.js",
-		"./node-loader": "./node-loader.mjs",
-		"./suppress-loader-warnings": "./suppress-loader-warnings.cjs"
-	},
-	"typesVersions": {
-		"*": {
-			"*": [
-				"dist/*.d.ts"
-			]
-		}
-	},
-	"scripts": {
-		"build": "tsup",
-		"dev": "tsup --watch",
-		"prepack": "rm -rf dist && pnpm build",
-		"test": "pnpm test:typecheck && pnpm test:lint && pnpm test:unit && pnpm test:package",
-		"test:unit": "vitest run --reporter=verbose",
-		"test:typecheck": "tsc -p tsconfig.json --noEmit",
-		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist",
-		"test:package": "publint --strict"
-	},
-	"description": "Bleeding-edge React framework powered by Vite",
-	"license": "MIT",
-	"repository": "https://github.com/rakkasjs/rakkasjs",
-	"homepage": "https://rakkasjs.org",
-	"keywords": [
-		"react",
-		"vite",
-		"nextjs",
-		"ssr"
-	],
-	"peerDependencies": {
-		"react": "18",
-		"react-dom": "18",
-		"vite": "5"
-	},
-	"devDependencies": {
-		"@brillout/json-serializer": "^0.5.8",
-		"@cyco130/eslint-config": "^3.5.0",
-		"@types/babel__core": "^7.20.5",
-		"@types/micromatch": "^4.0.6",
-		"@types/prettier": "^3.0.0",
-		"eslint": "^8.56.0",
-		"prettier": "^3.1.1",
-		"publint": "^0.2.7",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"react-error-boundary": "^4.0.12",
-		"tsup": "^8.0.1",
-		"typescript": "^5.3.3",
-		"vite": "^5.0.10"
-	},
-	"dependencies": {
-		"@babel/core": "^7.23.6",
-		"@babel/types": "^7.23.6",
-		"@hattip/adapter-node": "0.0.37",
-		"@hattip/bundler-cloudflare-workers": "0.0.37",
-		"@hattip/bundler-deno": "0.0.37",
-		"@hattip/bundler-netlify": "0.0.37",
-		"@hattip/bundler-vercel": "0.0.37",
-		"@hattip/compose": "0.0.37",
-		"@hattip/core": "0.0.37",
-		"@hattip/polyfills": "0.0.37",
-		"@microsoft/fetch-event-source": "^2.0.1",
-		"@types/node": "^20.10.5",
-		"@types/react": "^18.2.46",
-		"@types/react-dom": "^18.2.18",
-		"@vavite/connect": "^3.0.0",
-		"@vavite/expose-vite-dev-server": "3.0.0",
-		"@vavite/multibuild": "^3.0.0",
-		"@vavite/node-loader": "^3.0.0",
-		"@vitejs/plugin-react": "^4.2.1",
-		"cac": "^6.7.14",
-		"cheerio": "^1.0.0-rc.12",
-		"devalue": "^4.3.2",
-		"fast-glob": "^3.3.2",
-		"magic-string": "^0.30.5",
-		"micromatch": "^4.0.5",
-		"picocolors": "^1.0.0",
-		"sirv": "^2.0.4"
-	}
+  "name": "rakkasjs",
+  "version": "0.7.0-next.25",
+  "type": "module",
+  "bin": {
+    "rakkas": "./cli.js",
+    "rakkasjs": "./cli.js"
+  },
+  "files": [
+    "dist",
+    "cli.js",
+    "node-loader.mjs",
+    "suppress-loader-warnings.cjs",
+    "*.d.ts",
+    "vite-license.md",
+    "json-s-license.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/client.js",
+      "default": "./dist/server.js"
+    },
+    "./node-adapter": "./dist/node-adapter.js",
+    "./vite-plugin": "./dist/vite-plugin.js",
+    "./node-loader": "./node-loader.mjs",
+    "./suppress-loader-warnings": "./suppress-loader-warnings.cjs"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepack": "rm -rf dist && pnpm build",
+    "test": "pnpm run /^test:/",
+    "test:unit": "vitest run --reporter=verbose",
+    "test:typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:lint": "eslint . --max-warnings 0 --ignore-pattern dist",
+    "test:package": "publint --strict"
+  },
+  "description": "Bleeding-edge React framework powered by Vite",
+  "license": "MIT",
+  "repository": "https://github.com/rakkasjs/rakkasjs",
+  "homepage": "https://rakkasjs.org",
+  "keywords": [
+    "react",
+    "vite",
+    "nextjs",
+    "ssr"
+  ],
+  "peerDependencies": {
+    "react": "18",
+    "react-dom": "18",
+    "vite": "5"
+  },
+  "devDependencies": {
+    "@brillout/json-serializer": "^0.5.8",
+    "@cyco130/eslint-config": "^3.5.0",
+    "@types/babel__core": "^7.20.5",
+    "@types/micromatch": "^4.0.6",
+    "@types/prettier": "^3.0.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1",
+    "publint": "^0.2.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-error-boundary": "^4.0.12",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10"
+  },
+  "dependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/types": "^7.23.6",
+    "@hattip/adapter-node": "0.0.37",
+    "@hattip/bundler-cloudflare-workers": "0.0.37",
+    "@hattip/bundler-deno": "0.0.37",
+    "@hattip/bundler-netlify": "0.0.37",
+    "@hattip/bundler-vercel": "0.0.37",
+    "@hattip/compose": "0.0.37",
+    "@hattip/core": "0.0.37",
+    "@hattip/polyfills": "0.0.37",
+    "@microsoft/fetch-event-source": "^2.0.1",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "@vavite/connect": "^3.0.0",
+    "@vavite/expose-vite-dev-server": "3.0.0",
+    "@vavite/multibuild": "^3.0.0",
+    "@vavite/node-loader": "^3.0.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "cac": "^6.7.14",
+    "cheerio": "^1.0.0-rc.12",
+    "devalue": "^4.3.2",
+    "fast-glob": "^3.3.2",
+    "magic-string": "^0.30.5",
+    "micromatch": "^4.0.5",
+    "picocolors": "^1.0.0",
+    "sirv": "^2.0.4"
+  }
 }

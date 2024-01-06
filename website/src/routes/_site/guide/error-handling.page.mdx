@@ -11,25 +11,25 @@ import { ErrorBoundary } from "rakkasjs";
 import { ComponentThatMayThrow } from "./ComponentThatMayThrow";
 
 export default function MyComponent() {
-	return (
-		<ErrorBoundary
-			fallbackRender={({ error, resetErrorBoundary }) => (
-				<div>
-					<h1>An error has occurred</h1>
-					<pre>{error.message}</pre>
-					<button
-						onClick={() => {
-							resetErrorBoundary();
-						}}
-					>
-						Try again
-					</button>
-				</div>
-			)}
-		>
-			<ComponentThatMayThrow />
-		</ErrorBoundary>
-	);
+  return (
+    <ErrorBoundary
+      fallbackRender={({ error, resetErrorBoundary }) => (
+        <div>
+          <h1>An error has occurred</h1>
+          <pre>{error.message}</pre>
+          <button
+            onClick={() => {
+              resetErrorBoundary();
+            }}
+          >
+            Try again
+          </button>
+        </div>
+      )}
+    >
+      <ComponentThatMayThrow />
+    </ErrorBoundary>
+  );
 }
 ```
 
@@ -41,17 +41,17 @@ You should be aware that **React doesn't render error boundaries during SSR**. I
 
 // Do this instead:
 const { data: result } = useQuery(() => {
-	try {
-		const data = tryToFetchSomeData();
-		return { data };
-	} catch (error) {
-		return { error: error.message };
-	}
+  try {
+    const data = tryToFetchSomeData();
+    return { data };
+  } catch (error) {
+    return { error: error.message };
+  }
 });
 
 if ("error" in result) {
-	// Handle error
+  // Handle error
 } else {
-	// Use data
+  // Use data
 }
 ```

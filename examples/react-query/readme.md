@@ -10,19 +10,19 @@ This is a port of Rakkas's simple TODO demo to use `@tanstack/react-query` inste
 
 ```json
 {
-	"rules": {
-		"no-restricted-imports": [
-			"error",
-			{
-				"paths": [
-					{
-						"name": "rakkasjs",
-						"importNames": ["useQuery", "useMutation"],
-						"message": "import from '@tanstack/react-query' instead"
-					}
-				]
-			}
-		]
-	}
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "rakkasjs",
+            "importNames": ["useQuery", "useMutation"],
+            "message": "import from '@tanstack/react-query' instead"
+          }
+        ]
+      }
+    ]
+  }
 }
 ```

@@ -5,9 +5,9 @@ title: preload function
 Page and layout components can have a `preload` property that is a function that will be called before the page is rendered:
 
 <CodeViewer
-	name="guide-samples"
-	openFiles={["src/routes/preload/index.page.tsx"]}
-	url="/preload"
+  name="guide-samples"
+  openFiles={["src/routes/preload/index.page.tsx"]}
+  url="/preload"
 />
 
 ## Avoiding waterfalls
@@ -28,9 +28,9 @@ Another important thing to consider is out-of-order hydration. React may hydrate
 
 ```js
 return {
-	redirect: {
-		href: "/redirect/to",
-		permanent: true,
-	},
+  redirect: {
+    href: "/redirect/to",
+    permanent: true,
+  },
 };
 ```

@@ -1,33 +1,33 @@
 {
-	"name": "@rakkasjs/testbed-static",
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"dev": "rakkas --port 3000",
-		"build": "rakkas build",
-		"start": "sirv dist/client --port 3000",
-		"ci": "vitest run --reporter=verbose",
-		"ci:local": "TEST_HOST=http://localhost:3000 pnpm run ci",
-		"test": "pnpm test:typecheck && pnpm test:lint",
-		"test:typecheck": "tsc -p tsconfig.json --noEmit",
-		"test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
-	},
-	"devDependencies": {
-		"@cyco130/eslint-config": "^3.5.0",
-		"@types/ps-tree": "^1.1.6",
-		"eslint": "^8.56.0",
-		"node-fetch": "^3.3.2",
-		"ps-tree": "^1.2.0",
-		"puppeteer": "^21.6.1",
-		"rakkasjs": "workspace:*",
-		"typescript": "^5.3.3",
-		"vite": "^5.0.10"
-	},
-	"dependencies": {
-		"@types/react": "^18.2.46",
-		"@types/react-dom": "^18.2.18",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"sirv-cli": "^2.0.2"
-	}
+  "name": "@rakkasjs/testbed-static",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "rakkas --port 3000",
+    "build": "rakkas build",
+    "start": "sirv dist/client --port 3000",
+    "ci": "vitest run --reporter=verbose",
+    "ci:local": "TEST_HOST=http://localhost:3000 pnpm run ci",
+    "test": "pnpm run /^test:/",
+    "test:typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
+  },
+  "devDependencies": {
+    "@cyco130/eslint-config": "^3.5.0",
+    "@types/ps-tree": "^1.1.6",
+    "eslint": "^8.56.0",
+    "node-fetch": "^3.3.2",
+    "ps-tree": "^1.2.0",
+    "puppeteer": "^21.6.1",
+    "rakkasjs": "workspace:*",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10"
+  },
+  "dependencies": {
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sirv-cli": "^2.0.2"
+  }
 }

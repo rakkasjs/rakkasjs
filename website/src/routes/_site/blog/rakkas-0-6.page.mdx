@@ -29,24 +29,24 @@ We believe we've one-upped the ease of use of this data fetching method. Enter `
 import db from "./my-db-access-lib";
 
 export default function UserCard(props) {
-	const userName = props.userName;
+  const userName = props.userName;
 
-	const userQuery = useServerSideQuery(() => {
-		if (typeof userName !== "string") {
-			// This is server-side code,
-			// always validate user input!
-			throw new Error("Invalid request");
-		}
+  const userQuery = useServerSideQuery(() => {
+    if (typeof userName !== "string") {
+      // This is server-side code,
+      // always validate user input!
+      throw new Error("Invalid request");
+    }
 
-		return db.user.findOne(userName);
-	});
+    return db.user.findOne(userName);
+  });
 
-	return (
-		<div class="card">
-			<img src={userQuery.data.image} />
-			<caption>{userQuery.data.fullName}</caption>
-		</div>
-	);
+  return (
+    <div class="card">
+      <img src={userQuery.data.image} />
+      <caption>{userQuery.data.fullName}</caption>
+    </div>
+  );
 }
 ```
 
@@ -58,9 +58,9 @@ One practical application of `useSSQ` that may not be immediately obvious is cir
 
 ```ts
 const result = useServerSideQuery(() =>
-	fetch("https://some.cors.restricted.api.example.com").then((res) =>
-		res.json(),
-	),
+  fetch("https://some.cors.restricted.api.example.com").then((res) =>
+    res.json(),
+  ),
 );
 ```
 

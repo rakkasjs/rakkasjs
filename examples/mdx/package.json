@@ -1,22 +1,22 @@
 {
-	"name": "@rakkasjs/example-mdx",
-	"type": "module",
-	"private": true,
-	"scripts": {
-		"dev": "rakkas",
-		"build": "rakkas build",
-		"start": "node dist/server/index.js"
-	},
-	"devDependencies": {
-		"@cyco130/vite-plugin-mdx": "^0.1.0",
-		"@types/react": "^18.2.46",
-		"@types/react-dom": "^18.2.18",
-		"rakkasjs": "0.7.0-next.25",
-		"typescript": "^5.3.3",
-		"vite": "^5.0.10"
-	},
-	"dependencies": {
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
-	}
+  "name": "@rakkasjs/example-mdx",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "rakkas",
+    "build": "rakkas build",
+    "start": "node dist/server/index.js"
+  },
+  "devDependencies": {
+    "@cyco130/vite-plugin-mdx": "^1.0.1",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "rakkasjs": "0.7.0-next.25",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
 }

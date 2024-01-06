@@ -5,20 +5,12 @@
   "scripts": {
     "dev": "rakkas",
     "build": "rakkas build",
-    "start": "node dist/server/index.js",
-    "format": "prettier --write --ignore-unknown src",
-    "test": "pnpm test:typecheck && pnpm test:format && pnpm test:lint",
-    "test:typecheck": "tsc -p tsconfig.json --noEmit",
-    "test:format": "prettier --check --ignore-unknown src",
-    "test:lint": "eslint . --ignore-pattern dist"
+    "start": "node dist/server/index.js"
   },
   "devDependencies": {
-    "@rakkasjs/eslint-config": "0.7.0-next.25",
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
-    "eslint": "^8.56.0",
     "postcss-preset-mantine": "^1.12.2",
-    "prettier": "^3.1.1",
     "rakkasjs": "0.7.0-next.25",
     "typescript": "^5.3.3",
     "vite": "^5.0.10",

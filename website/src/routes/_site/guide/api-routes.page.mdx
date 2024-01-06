@@ -22,13 +22,13 @@ You can call the `new Response` constructor or use the helper functions from the
 import { json } from "@hattip/response";
 
 export function get() {
-	return json({ hello: "world" });
+  return json({ hello: "world" });
 
-	// Shorthand for:
+  // Shorthand for:
 
-	// return new Response(JSON.stringify({ hello: "world" }), {
-	// 	headers: { "content-type": "application/json" },
-	// });
+  // return new Response(JSON.stringify({ hello: "world" }), {
+  // 	headers: { "content-type": "application/json" },
+  // });
 }
 ```
 

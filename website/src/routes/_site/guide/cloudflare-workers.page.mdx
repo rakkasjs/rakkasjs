@@ -15,11 +15,11 @@ import { defineConfig } from "vite";
 import rakkas from "rakkasjs/vite-plugin";
 
 export default defineConfig({
-	plugins: [
-		rakkas({
-			adapter: "cloudflare-workers",
-		}),
-	],
+  plugins: [
+    rakkas({
+      adapter: "cloudflare-workers",
+    }),
+  ],
 });
 ```
 
@@ -58,13 +58,13 @@ import fs from "node:fs";
 fs.mkdirSync("./data", { recursive: true });
 
 const dbPromise = Promise.resolve()
-	.then(() => createSQLiteDB("./data/data.db"))
-	.then((sqliteDb) => new D1Database(new D1DatabaseAPI(sqliteDb)));
+  .then(() => createSQLiteDB("./data/data.db"))
+  .then((sqliteDb) => new D1Database(new D1DatabaseAPI(sqliteDb)));
 
 export default createMiddleware(async (context) => {
-	const db = await dbPromise;
-	context.platform.env = context.platform.env ?? {};
-	context.platform.env.CLOUDFLARE_DB = db;
-	return hattipHandler(context);
+  const db = await dbPromise;
+  context.platform.env = context.platform.env ?? {};
+  context.platform.env.CLOUDFLARE_DB = db;
+  return hattipHandler(context);
 });
 ```

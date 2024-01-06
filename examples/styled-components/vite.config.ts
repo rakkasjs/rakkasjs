@@ -7,7 +7,7 @@ export default defineConfig({
 	plugins: [
 		tsconfigPaths(),
 		rakkas({ react: { babel: { plugins: ["styled-components"] } } }),
-		cjsInterop({ dependencies: ["styled-components"], apply: "both" }),
+		cjsInterop({ dependencies: ["styled-components"] }),
 	],
 	optimizeDeps: {
 		include: ["styled-components"],

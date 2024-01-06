@@ -7,9 +7,9 @@ title: useQuery
 Let's see an example that uses the free [Pokéapi](https://pokeapi.co/):
 
 <CodeViewer
-	name="guide-samples"
-	openFiles={["src/routes/use-query/[pokemon].page.tsx"]}
-	url="/use-query/pikachu"
+  name="guide-samples"
+  openFiles={["src/routes/use-query/[pokemon].page.tsx"]}
+  url="/use-query/pikachu"
 />
 
 `useQuery` takes a query key that uniquely identifies the fetched data and a query function that does the actual fetching. The function must be isomorphic, which means it must be able to run on the server as well as on the client. That means you can't use server-only APIs (database, filesystem etc.) or client-only APIs (`window`, `document`, `localStorage` etc.).

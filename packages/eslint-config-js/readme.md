@@ -10,9 +10,9 @@ Install with `npm install -D @rakkasjs/eslint-config-js` and create a `.eslintrc
 require("@rakkasjs/eslint-config-js/patch");
 
 module.exports = {
-	root: true,
-	ignorePatterns: ["node_modules", "dist", "**/*.cjs"],
-	extends: ["@rakkasjs/eslint-config-js"],
+  root: true,
+  ignorePatterns: ["node_modules", "dist", "**/*.cjs"],
+  extends: ["@rakkasjs/eslint-config-js"],
 };
 ```
 
