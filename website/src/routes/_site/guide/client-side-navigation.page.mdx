@@ -9,9 +9,9 @@ Rakkas provides a `Link` component (in the `rakkasjs` package) for SPA-style cli
 Let's add client-side navigation to the previous example by replacing the `<a>` elements with `StyledLink` and by adding some inline styling for the active link. Notice how the page refreshes without a full reload now when you click on a link:
 
 <CodeViewer
-	name="guide-samples"
-	openFiles={["src/routes/nav/[userName].page.tsx"]}
-	url="/nav/Fatih"
+  name="guide-samples"
+  openFiles={["src/routes/nav/[userName].page.tsx"]}
+  url="/nav/Fatih"
 />
 
 For **programmatic navigation**, you can use `history.back()`, `history.forward()` and `history.go()` to navigate back and forward in the browser history but _you can't_ use `history.pushState()` or `history.replaceState()` because Rakkas would have no way of knowing they were called. It provides the `navigate` function for this purpose.

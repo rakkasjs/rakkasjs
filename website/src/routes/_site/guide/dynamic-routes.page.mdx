@@ -5,9 +5,9 @@ title: Dynamic routes
 You often need to encode parameters in the URL path like `/post/1`, `/post/2` etc. Dynamic routes like this are handled using square brackets (`[]`). If you have a file named `/src/routes/profile/[userName].page.jsx`, for instance, and you visit `/profile/Fatih`, your page component will receive `{ userName: "Fatih" }` in `props.params` like in the example below.
 
 <CodeViewer
-	name="guide-samples"
-	openFiles={["src/routes/dynamic/[userName].page.tsx"]}
-	url="/dynamic/Fatih"
+  name="guide-samples"
+  openFiles={["src/routes/dynamic/[userName].page.tsx"]}
+  url="/dynamic/Fatih"
 />
 
 You can use more than one dynamic parameter like `/user/[userName]/posts/[postId]`. You can even put multiple parameters in a single path segment like `/user-[name]-[surname]/contact-info` (matches `/user-fatih-aygun/contact-info` with `params: { name: "fatih", surname: "aygun" }` for instance).

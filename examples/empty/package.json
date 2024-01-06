@@ -1,18 +1,18 @@
 {
-	"name": "@rakkasjs/examples-empty",
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"dev": "rakkas",
-		"build": "rakkas build",
-		"start": "node dist/server/index.js"
-	},
-	"devDependencies": {
-		"rakkasjs": "0.7.0-next.25",
-		"vite": "^5.0.10"
-	},
-	"dependencies": {
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
-	}
+  "name": "@rakkasjs/examples-empty",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "rakkas",
+    "build": "rakkas build",
+    "start": "node dist/server/index.js"
+  },
+  "devDependencies": {
+    "rakkasjs": "0.7.0-next.24",
+    "vite": "^5.0.10"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
 }

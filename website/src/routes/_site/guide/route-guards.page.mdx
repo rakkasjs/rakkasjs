@@ -27,7 +27,7 @@ Another use case for route guards is to disable catch-all page routes that shado
 import type { LookupHookResult, PageContext } from "rakkasjs";
 
 export function pageGuard(ctx: PageContext): LookupHookResult {
-	// Selectively disable the catch-all page route for /foo/bar
-	return ctx.url.pathname !== "/foo/bar";
+  // Selectively disable the catch-all page route for /foo/bar
+  return ctx.url.pathname !== "/foo/bar";
 }
 ```

@@ -1,42 +1,42 @@
 {
-	"name": "rakkas-workspace-root",
-	"private": "true",
-	"scripts": {
-		"dev": "pnpm -r --parallel --filter \"./packages/*\" run dev",
-		"build": "pnpm -r --filter \"./packages/*\" run build",
-		"prepare": "husky install",
-		"precommit": "lint-staged",
-		"test": "pnpm run test:prettier && pnpm run test:packages && pnpm run ci",
-		"ci": "pnpm -r --stream --workspace-concurrency=1 run ci",
-		"ci-examples": "pnpm -r --stream --workspace-concurrency=1 run ci-examples",
-		"vite-ecosystem-ci": "cross-env INCLUDE_TESTS=dev,prod pnpm -r --stream --workspace-concurrency=1 run ci",
-		"test:packages": "pnpm -r --stream run test",
-		"test:prettier": "prettier --check --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'",
-		"format": "prettier --write --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'"
-	},
-	"devDependencies": {
-		"cross-env": "^7.0.3",
-		"husky": "^8.0.3",
-		"lint-staged": "^15.2.0",
-		"prettier": "^3.1.1",
-		"typescript": "^5.3.3",
-		"vitest": "^1.1.0"
-	},
-	"dependencies": {
-		"@hattip/polyfills": "0.0.37",
-		"@vitejs/plugin-react": "^4.2.1",
-		"vite": "^5.0.10"
-	},
-	"pnpm": {
-		"peerDependencyRules": {
-			"allowedVersions": {
-				"react": "18",
-				"react-dom": "18"
-			}
-		},
-		"overrides": {
-			"--": "Uncomment the next option to test against a local Vite package",
-			"--vite": "link:../vite/packages/vite"
-		}
-	}
+  "name": "rakkas-workspace-root",
+  "private": "true",
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter \"./packages/*\" run dev",
+    "build": "pnpm -r --filter \"./packages/*\" run build",
+    "prepare": "husky install",
+    "precommit": "lint-staged",
+    "test": "pnpm run /^test:/ && pnpm run ci",
+    "ci": "pnpm -r --stream --workspace-concurrency=1 run ci",
+    "ci-examples": "pnpm -r --stream --workspace-concurrency=1 run ci-examples",
+    "vite-ecosystem-ci": "cross-env INCLUDE_TESTS=dev,prod pnpm -r --stream --workspace-concurrency=1 run ci",
+    "test:packages": "pnpm -r --stream --filter '!./examples/**' run test",
+    "test:format": "prettier --check --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'",
+    "format": "prettier --write --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  },
+  "dependencies": {
+    "@hattip/polyfills": "0.0.37",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.10"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": "18",
+        "react-dom": "18"
+      }
+    },
+    "overrides": {
+      "--": "Uncomment the next option to test against a local Vite package",
+      "--vite": "link:../vite/packages/vite"
+    }
+  }
 }

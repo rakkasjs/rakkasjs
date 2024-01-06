@@ -5,70 +5,70 @@ title: Refetching
 `useQuery` and `useServerSideQuery` return a `QueryResult` object. Apart from the `data` property, it also has a `refetch` method that can be used to refetch the data on demand:
 
 <CodeViewer
-	name="guide-samples"
-	openFiles={["src/routes/refetch/index.page.tsx"]}
-	url="/refetch"
+  name="guide-samples"
+  openFiles={["src/routes/refetch/index.page.tsx"]}
+  url="/refetch"
 />
 
 `useQuery` and `useServerSideQuery` takes an options argument that controls how and when to cache a query and when to refetch automatically:
 
 ```ts
 export interface UseQueryOptions {
-	/**
-	 * Time in milliseconds after which the value will be evicted from the
-	 * cache when there are no subscribers. Use 0 for immediate eviction and
-	 * `Infinity` to disable.
-	 *
-	 * @default 300_000 (5 minutes)
-	 */
-	cacheTime?: number;
-	/**
-	 * Time in milliseconds after which a cached value will be considered
-	 * stale.
-	 *
-	 * @default 100
-	 */
-	staleTime?: number;
-	/**
-	 * Refetch the query when the component is mounted. If set to `true`, a stale
-	 * query will be refetched when the component is mounted. If set to `"always"`,
-	 * the query will be refetched when the component is mounted regardless of
-	 * staleness. `false` disables this behavior.
-	 *
-	 * @default true
-	 */
-	refetchOnMount?: boolean | "always";
-	/**
-	 * Refetch the query when the window gains focus. If set to `true`, the
-	 * query will be refetched on window focus if it is stale. If set to
-	 * `"always"`, the query will be refetched on window focus regardless of
-	 * staleness. `false` disables this behavior.
-	 *
-	 * @default false
-	 */
-	refetchOnWindowFocus?: boolean | "always";
-	/**
-	 * Continuously refetch every `refetchInterval` milliseconds. Set to false
-	 * to disable.
-	 *
-	 * @default false
-	 */
-	refetchInterval?: number | false;
-	/**
-	 * Perform continuous refetching even when the window is in the background.
-	 *
-	 * @default false
-	 */
-	refetchIntervalInBackground?: boolean;
-	/**
-	 * Refetch the query when the internet connection is restored. If set to
-	 * `true`, a stale query will be refetched when the internet connection is
-	 * restored. If set to `"always"`, the query will be refetched when the
-	 * internet connection is restored regardless of staleness. `false` disables
-	 * this behavior.
-	 *
-	 * @default false
-	 */
-	refetchOnReconnect?: boolean | "always";
+  /**
+   * Time in milliseconds after which the value will be evicted from the
+   * cache when there are no subscribers. Use 0 for immediate eviction and
+   * `Infinity` to disable.
+   *
+   * @default 300_000 (5 minutes)
+   */
+  cacheTime?: number;
+  /**
+   * Time in milliseconds after which a cached value will be considered
+   * stale.
+   *
+   * @default 100
+   */
+  staleTime?: number;
+  /**
+   * Refetch the query when the component is mounted. If set to `true`, a stale
+   * query will be refetched when the component is mounted. If set to `"always"`,
+   * the query will be refetched when the component is mounted regardless of
+   * staleness. `false` disables this behavior.
+   *
+   * @default true
+   */
+  refetchOnMount?: boolean | "always";
+  /**
+   * Refetch the query when the window gains focus. If set to `true`, the
+   * query will be refetched on window focus if it is stale. If set to
+   * `"always"`, the query will be refetched on window focus regardless of
+   * staleness. `false` disables this behavior.
+   *
+   * @default false
+   */
+  refetchOnWindowFocus?: boolean | "always";
+  /**
+   * Continuously refetch every `refetchInterval` milliseconds. Set to false
+   * to disable.
+   *
+   * @default false
+   */
+  refetchInterval?: number | false;
+  /**
+   * Perform continuous refetching even when the window is in the background.
+   *
+   * @default false
+   */
+  refetchIntervalInBackground?: boolean;
+  /**
+   * Refetch the query when the internet connection is restored. If set to
+   * `true`, a stale query will be refetched when the internet connection is
+   * restored. If set to `"always"`, the query will be refetched when the
+   * internet connection is restored regardless of staleness. `false` disables
+   * this behavior.
+   *
+   * @default false
+   */
+  refetchOnReconnect?: boolean | "always";
 }
 ```

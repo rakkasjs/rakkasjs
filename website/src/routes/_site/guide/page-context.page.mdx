@@ -7,16 +7,16 @@ Rakkas passes a page context object to various callbacks and components. You can
 ```ts
 /** Context within which the page is being rendered */
 interface PageContext {
-	/** Request URL */
-	url: URL;
-	/** Isomorphic fetch function */
-	fetch: typeof fetch;
-	/** Query client used by useQuery */
-	queryClient: QueryClient;
-	/** Request context, only defined on the server! */
-	requestContext?: RequestContext;
-	/** Application-specific stuff */
-	locals: PageLocals;
+  /** Request URL */
+  url: URL;
+  /** Isomorphic fetch function */
+  fetch: typeof fetch;
+  /** Query client used by useQuery */
+  queryClient: QueryClient;
+  /** Request context, only defined on the server! */
+  requestContext?: RequestContext;
+  /** Application-specific stuff */
+  locals: PageLocals;
 }
 ```
 
@@ -24,10 +24,10 @@ You can add new properties to this object using the `extendPageContext` customiz
 
 ```ts
 declare module "rakkasjs" {
-	interface PageLocals {
-		/** My application-specific stuff */
-		myAppSpecificStuff: string;
-	}
+  interface PageLocals {
+    /** My application-specific stuff */
+    myAppSpecificStuff: string;
+  }
 }
 ```
 

@@ -5,12 +5,12 @@ title: Client rendering
 Rakkas provides a `ClientOnly` component for opting out of server-side rendering. It renders a fallback on the server and renders its children only on the client. `ClientSuspense` is similar but also acts as a suspense boundary and is usually the better choice. You can use [`React.lazy`](https://reactjs.org/docs/code-splitting.html#reactlazy) in combination with `ClientSuspense` to load components that don't support server-side rendering:
 
 <CodeViewer
-	name="guide-samples"
-	openFiles={[
-		"src/routes/client-suspense/index.page.tsx",
-		"src/routes/client-suspense/ClientComponent.tsx",
-	]}
-	url="/client-suspense"
+  name="guide-samples"
+  openFiles={[
+    "src/routes/client-suspense/index.page.tsx",
+    "src/routes/client-suspense/ClientComponent.tsx",
+  ]}
+  url="/client-suspense"
 />
 
 Another use of `ClientOnly` and `ClientSuspense` is to wrap a layout's children to disable SSR for parts of an application.
