@@ -11,6 +11,9 @@ export const defaultHeadTags: HeadProps = {
 	charset: "utf-8",
 	viewport: "width=device-width, initial-scale=1",
 	title: "Rakkas App",
+	htmlAttributes: {},
+	headAttributes: {},
+	bodyAttributes: {},
 };
 
 export const clientHeadTags: HeadProps = { ...defaultHeadTags };
@@ -33,6 +36,17 @@ export function scheduleHeadUpdate() {
 			const updated = new Set<HTMLElement>();
 
 			for (const [name, attributes] of Object.entries(clientHeadTags)) {
+				if (name === "htmlAttributes") {
+					handleAttributes(document.documentElement, attributes);
+					continue;
+				} else if (name === "headAttributes") {
+					handleAttributes(document.head, attributes);
+					continue;
+				} else if (name === "bodyAttributes") {
+					handleAttributes(document.body, attributes);
+					continue;
+				}
+
 				delete clientHeadTags[name];
 
 				let el: HTMLElement | null | undefined;
@@ -135,4 +149,23 @@ export function scheduleHeadUpdate() {
 
 function select(selector: string) {
 	return document.head.querySelector(selector) as HTMLElement | null;
+}
+
+function handleAttributes(
+	el: HTMLElement,
+	attributes: Record<string, string> | null | string,
+) {
+	if (!attributes || typeof attributes === "string") {
+		throw new Error(`Invalid attributes for ${el.tagName}: ${attributes}`);
+	}
+
+	for (const attr of el.attributes) {
+		if (!(attr.name in attributes)) {
+			el.removeAttribute(attr.name);
+		}
+	}
+
+	for (const [attr, value] of Object.entries(attributes)) {
+		el.setAttribute(attr, value);
+	}
 }

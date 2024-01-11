@@ -13,7 +13,7 @@ const headServerHooks: ServerHooks = {
 				return <HeadContext.Provider value={tags}>{app}</HeadContext.Provider>;
 			},
 
-			emitToDocumentHead() {
+			emitToDocumentHead(speciallAttributes) {
 				let result = "";
 
 				const sorted = Object.entries(tags).sort(
@@ -42,6 +42,18 @@ const headServerHooks: ServerHooks = {
 								attributes,
 							)}">`;
 						}
+					} else if (
+						["htmlAttributes", "headAttributes", "bodyAttributes"].includes(
+							name,
+						)
+					) {
+						if (!attributes || typeof attributes === "string") {
+							throw new Error(`Invalid ${name} attribute`);
+						}
+						Object.assign(
+							speciallAttributes[name as keyof typeof speciallAttributes],
+							attributes,
+						);
 					} else {
 						result += "<" + tag;
 						for (const [attr, value] of Object.entries(attributes)) {

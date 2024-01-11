@@ -2,7 +2,7 @@
 import { ReactElement, useContext, useEffect } from "react";
 import { HeadContext, scheduleHeadUpdate } from "./implementation";
 
-export type HeadProps = Record<
+export type HeadProps = (Record<
 	string,
 	string | Record<string, string> | null
 > & {
@@ -56,29 +56,45 @@ export type HeadProps = Record<
 	"twitter:title"?: string | null;
 	"twitter:description"?: string | null;
 	"twitter:image"?: string | null;
+}) & {
+	htmlAttributes?: Record<string, string>;
+	headAttributes?: Record<string, string>;
+	bodyAttributes?: Record<string, string>;
 };
 
 export function Head(props: HeadProps): ReactElement {
 	const tags = useContext(HeadContext);
 
 	if (import.meta.env.SSR) {
-		Object.assign(tags, props);
-	} else {
-		// eslint-disable-next-line react-hooks/rules-of-hooks
-		useEffect(() => {
-			for (const [name, value] of Object.entries(props)) {
-				tags[name] = value;
-			}
-
-			scheduleHeadUpdate();
-			return () => {
-				for (const name of Object.keys(props)) {
-					delete tags[name];
-				}
-				scheduleHeadUpdate();
-			};
-		});
+		const { htmlAttributes, headAttributes, bodyAttributes, ...rest } = props;
+		Object.assign(tags, rest);
+		Object.assign(tags.htmlAttributes!, htmlAttributes);
+		Object.assign(tags.headAttributes!, headAttributes);
+		Object.assign(tags.bodyAttributes!, bodyAttributes);
 	}
+
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	useEffect(() => {
+		for (const [name, value] of Object.entries(props)) {
+			if (
+				["htmlAttributes", "headAttributes", "bodyAttributes"].includes(name)
+			) {
+				tags[name] = tags[name] ?? {};
+				Object.assign(tags[name]!, value);
+				continue;
+			}
+			tags[name] = value;
+		}
+
+		scheduleHeadUpdate();
+
+		return () => {
+			for (const name of Object.keys(props)) {
+				delete tags[name];
+			}
+			scheduleHeadUpdate();
+		};
+	});
 
 	return null as any;
 }
