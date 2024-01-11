@@ -6,6 +6,6 @@ export { DefaultErrorPage } from "./DefaultErrorPage";
 /**
  * Hook for getting the route parameters.
  */
-export function useRouteParams(): Record<string, string> {
+export function useRouteParams<T extends Record<string, string>>(): T {
 	return useContext(RouteParamsContext);
 }
