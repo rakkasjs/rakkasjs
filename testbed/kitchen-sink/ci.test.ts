@@ -252,6 +252,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			const dom = load(html);
 
 			expect(dom("p#param").text()).toBe("unescape me");
+			expect(dom("p#param2").text()).toBe("unescape me");
 		});
 
 		test("doesn't unescape spread page params", async () => {

@@ -25,6 +25,7 @@ import { Head, LookupHookResult, PageContext, Redirect } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 import { createNamedContext } from "./named-context";
 import { prefetcher } from "../features/client-side-navigation/implementation";
+import { RouteParamsContext } from "../features/pages/route-params-context";
 
 export interface AppProps {
 	beforePageLookupHandlers: Array<
@@ -398,14 +399,12 @@ export async function loadRoute(
 		null as any as ReactElement,
 	);
 
-	if (preloadNode.length) {
-		app = (
-			<>
-				{preloadNode}
-				{app}
-			</>
-		);
-	}
+	app = (
+		<RouteParamsContext.Provider value={found.params}>
+			{preloadNode}
+			{app}
+		</RouteParamsContext.Provider>
+	);
 
 	return {
 		pathname: originalPathname,
