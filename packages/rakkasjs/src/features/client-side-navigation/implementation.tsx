@@ -249,6 +249,20 @@ export function initialize() {
 	lastLocation = [location.href, serialId];
 
 	addEventListener("popstate", handleNavigation);
+	addEventListener("hashchange", () => {
+		const id = createUniqueId();
+		const index = nextIndex++;
+
+		history.replaceState(
+			{
+				id,
+				index,
+				scroll: true,
+			},
+			"",
+			location.href,
+		);
+	});
 }
 
 function handleNavigation(e: unknown) {
