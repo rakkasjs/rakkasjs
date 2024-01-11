@@ -1041,6 +1041,17 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			const text = await r.text();
 			expect(text).toContain("Flat Route");
 		});
+
+		test("hash anchors don't crash", async () => {
+			await page.goto(host + "/hash-anchor");
+			await page.waitForSelector(".hydrated");
+
+			await page.click("a");
+
+			await page.waitForFunction(
+				() => document.documentElement.scrollTop !== 0,
+			);
+		});
 	});
 }
 
