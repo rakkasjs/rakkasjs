@@ -17,17 +17,15 @@ export default createRequestHandler({
 		let thereIsUnsentData = false;
 		let unsentData: Record<string, unknown> = Object.create(null);
 
-		const queryCache = new QueryCache({
-			onSuccess(data, query) {
-				unsentData[query.queryHash] = data;
-				thereIsUnsentData = true;
-			},
+		const queryClient = new QueryClient();
+		queryClient.getQueryCache().subscribe(({ type, query }) => {
+			if (type !== "updated" || query.state.status !== "success") return;
+			unsentData[query.queryHash] = query.state.data;
+			thereIsUnsentData = true;
 		});
 
-		const queryClient = new QueryClient({ queryCache });
-
 		return {
-			extendPageContext(ctx) {
+			async extendPageContext(ctx) {
 				ctx.reactQueryClient = queryClient;
 			},
 
