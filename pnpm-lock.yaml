@@ -19,7 +19,7 @@ importers:
         version: 4.2.1(vite@5.0.10)
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
     devDependencies:
       cross-env:
         specifier: ^7.0.3
@@ -62,14 +62,14 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
@@ -102,14 +102,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
 
   examples/empty:
     dependencies:
@@ -121,11 +121,11 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
 
   examples/express:
     dependencies:
@@ -149,14 +149,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
@@ -180,14 +180,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
@@ -214,14 +214,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
 
   examples/guide-samples:
     dependencies:
@@ -242,14 +242,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
@@ -273,14 +273,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
@@ -310,14 +310,14 @@ importers:
         specifier: ^1.12.2
         version: 1.12.2(postcss@8.4.33)
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
@@ -341,14 +341,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
 
   examples/react-query:
     dependencies:
@@ -372,14 +372,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
@@ -403,14 +403,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
@@ -443,14 +443,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
@@ -483,14 +483,14 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4(@babel/core@7.23.7)(styled-components@6.1.6)
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-plugin-cjs-interop:
         specifier: ^2.0.0
         version: 2.0.0
@@ -511,7 +511,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.46
@@ -526,14 +526,14 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
@@ -563,14 +563,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.25
+        specifier: 0.7.0-next.26
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
@@ -856,7 +856,7 @@ importers:
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
 
   testbed/kitchen-sink:
     dependencies:
@@ -880,7 +880,7 @@ importers:
         version: 1.0.0-rc.12
       netlify-cli:
         specifier: ^17.10.2
-        version: 17.10.2(@types/node@20.10.6)
+        version: 17.10.2(@types/node@20.11.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -935,7 +935,7 @@ importers:
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       wrangler:
         specifier: ^3.22.1
         version: 3.22.1
@@ -984,7 +984,7 @@ importers:
         version: 5.3.3
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
 
   website:
     dependencies:
@@ -1027,7 +1027,7 @@ importers:
         version: 3.5.2
       "@docsearch/react":
         specifier: ^3.5.2
-        version: 3.5.2(@algolia/client-search@4.22.0)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.13.0)
+        version: 3.5.2(@algolia/client-search@4.22.1)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.13.0)
       "@mapbox/rehype-prism":
         specifier: ^0.9.0
         version: 0.9.0
@@ -1087,7 +1087,7 @@ importers:
         version: 6.0.1
       vite:
         specifier: ^5.0.10
-        version: 5.0.10(@types/node@20.10.6)
+        version: 5.0.10(@types/node@20.11.0)
       vite-plugin-cjs-interop:
         specifier: ^2.0.0
         version: 2.0.0
@@ -1114,21 +1114,21 @@ packages:
       }
     engines: { node: ">=0.10.0" }
 
-  /@algolia/autocomplete-core@1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1)(search-insights@2.13.0):
+  /@algolia/autocomplete-core@1.9.3(@algolia/client-search@4.22.1)(algoliasearch@4.19.1)(search-insights@2.13.0):
     resolution:
       {
         integrity: sha512-009HdfugtGCdC4JdXUbVJClA0q0zh24yyePn+KUGk3rP7j8FEe/m5Yo/z65gn6nP/cM39PxpzqKrL7A6fP6PPw==,
       }
     dependencies:
-      "@algolia/autocomplete-plugin-algolia-insights": 1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1)(search-insights@2.13.0)
-      "@algolia/autocomplete-shared": 1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1)
+      "@algolia/autocomplete-plugin-algolia-insights": 1.9.3(@algolia/client-search@4.22.1)(algoliasearch@4.19.1)(search-insights@2.13.0)
+      "@algolia/autocomplete-shared": 1.9.3(@algolia/client-search@4.22.1)(algoliasearch@4.19.1)
     transitivePeerDependencies:
       - "@algolia/client-search"
       - algoliasearch
       - search-insights
     dev: true
 
-  /@algolia/autocomplete-plugin-algolia-insights@1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1)(search-insights@2.13.0):
+  /@algolia/autocomplete-plugin-algolia-insights@1.9.3(@algolia/client-search@4.22.1)(algoliasearch@4.19.1)(search-insights@2.13.0):
     resolution:
       {
         integrity: sha512-a/yTUkcO/Vyy+JffmAnTWbr4/90cLzw+CC3bRbhnULr/EM0fGNvM13oQQ14f2moLMcVDyAx/leczLlAOovhSZg==,
@@ -1136,14 +1136,14 @@ packages:
     peerDependencies:
       search-insights: ">= 1 < 3"
     dependencies:
-      "@algolia/autocomplete-shared": 1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1)
+      "@algolia/autocomplete-shared": 1.9.3(@algolia/client-search@4.22.1)(algoliasearch@4.19.1)
       search-insights: 2.13.0
     transitivePeerDependencies:
       - "@algolia/client-search"
       - algoliasearch
     dev: true
 
-  /@algolia/autocomplete-preset-algolia@1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1):
+  /@algolia/autocomplete-preset-algolia@1.9.3(@algolia/client-search@4.22.1)(algoliasearch@4.19.1):
     resolution:
       {
         integrity: sha512-d4qlt6YmrLMYy95n5TB52wtNDr6EgAIPH81dvvvW8UmuWRgxEtY0NJiPwl/h95JtG2vmRM804M0DSwMCNZlzRA==,
@@ -1152,12 +1152,12 @@ packages:
       "@algolia/client-search": ">= 4.9.1 < 6"
       algoliasearch: ">= 4.9.1 < 6"
     dependencies:
-      "@algolia/autocomplete-shared": 1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1)
-      "@algolia/client-search": 4.22.0
+      "@algolia/autocomplete-shared": 1.9.3(@algolia/client-search@4.22.1)(algoliasearch@4.19.1)
+      "@algolia/client-search": 4.22.1
       algoliasearch: 4.19.1
     dev: true
 
-  /@algolia/autocomplete-shared@1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1):
+  /@algolia/autocomplete-shared@1.9.3(@algolia/client-search@4.22.1)(algoliasearch@4.19.1):
     resolution:
       {
         integrity: sha512-Wnm9E4Ye6Rl6sTTqjoymD+l8DjSTHsHboVRYrKgEt8Q7UHm9nYbqhN/i0fhUYA3OAEH7WA8x3jfpnmJm3rKvaQ==,
@@ -1166,7 +1166,7 @@ packages:
       "@algolia/client-search": ">= 4.9.1 < 6"
       algoliasearch: ">= 4.9.1 < 6"
     dependencies:
-      "@algolia/client-search": 4.22.0
+      "@algolia/client-search": 4.22.1
       algoliasearch: 4.19.1
     dev: true
 
@@ -1186,10 +1186,10 @@ packages:
       }
     dev: true
 
-  /@algolia/cache-common@4.22.0:
+  /@algolia/cache-common@4.22.1:
     resolution:
       {
-        integrity: sha512-TPwUMlIGPN16eW67qamNQUmxNiGHg/WBqWcrOoCddhqNTqGDPVqmgfaM85LPbt24t3r1z0zEz/tdsmuq3Q6oaA==,
+        integrity: sha512-TJMBKqZNKYB9TptRRjSUtevJeQVXRmg6rk9qgFKWvOy8jhCPdyNZV1nB3SKGufzvTVbomAukFR8guu/8NRKBTA==,
       }
     dev: true
 
@@ -1235,14 +1235,14 @@ packages:
       "@algolia/transporter": 4.19.1
     dev: true
 
-  /@algolia/client-common@4.22.0:
+  /@algolia/client-common@4.22.1:
     resolution:
       {
-        integrity: sha512-BlbkF4qXVWuwTmYxVWvqtatCR3lzXwxx628p1wj1Q7QP2+LsTmGt1DiUYRuy9jG7iMsnlExby6kRMOOlbhv2Ag==,
+        integrity: sha512-IvaL5v9mZtm4k4QHbBGDmU3wa/mKokmqNBqPj0K7lcR8ZDKzUorhcGp/u8PkPC/e0zoHSTvRh7TRkGX3Lm7iOQ==,
       }
     dependencies:
-      "@algolia/requester-common": 4.22.0
-      "@algolia/transporter": 4.22.0
+      "@algolia/requester-common": 4.22.1
+      "@algolia/transporter": 4.22.1
     dev: true
 
   /@algolia/client-personalization@4.19.1:
@@ -1267,15 +1267,15 @@ packages:
       "@algolia/transporter": 4.19.1
     dev: true
 
-  /@algolia/client-search@4.22.0:
+  /@algolia/client-search@4.22.1:
     resolution:
       {
-        integrity: sha512-bn4qQiIdRPBGCwsNuuqB8rdHhGKKWIij9OqidM1UkQxnSG8yzxHdb7CujM30pvp5EnV7jTqDZRbxacbjYVW20Q==,
+        integrity: sha512-yb05NA4tNaOgx3+rOxAmFztgMTtGBi97X7PC3jyNeGiwkAjOZc2QrdZBYyIdcDLoI09N0gjtpClcackoTN0gPA==,
       }
     dependencies:
-      "@algolia/client-common": 4.22.0
-      "@algolia/requester-common": 4.22.0
-      "@algolia/transporter": 4.22.0
+      "@algolia/client-common": 4.22.1
+      "@algolia/requester-common": 4.22.1
+      "@algolia/transporter": 4.22.1
     dev: true
 
   /@algolia/logger-common@4.19.1:
@@ -1285,10 +1285,10 @@ packages:
       }
     dev: true
 
-  /@algolia/logger-common@4.22.0:
+  /@algolia/logger-common@4.22.1:
     resolution:
       {
-        integrity: sha512-HMUQTID0ucxNCXs5d1eBJ5q/HuKg8rFVE/vOiLaM4Abfeq1YnTtGV3+rFEhOPWhRQxNDd+YHa4q864IMc0zHpQ==,
+        integrity: sha512-OnTFymd2odHSO39r4DSWRFETkBufnY2iGUZNrMXpIhF5cmFE8pGoINNPzwg02QLBlGSaLqdKy0bM8S0GyqPLBg==,
       }
     dev: true
 
@@ -1317,10 +1317,10 @@ packages:
       }
     dev: true
 
-  /@algolia/requester-common@4.22.0:
+  /@algolia/requester-common@4.22.1:
     resolution:
       {
-        integrity: sha512-Y9cEH/cKjIIZgzvI1aI0ARdtR/xRrOR13g5psCxkdhpgRN0Vcorx+zePhmAa4jdQNqexpxtkUdcKYugBzMZJgQ==,
+        integrity: sha512-dgvhSAtg2MJnR+BxrIFqlLtkLlVVhas9HgYKMk2Uxiy5m6/8HZBL40JVAMb2LovoPFs9I/EWIoFVjOrFwzn5Qg==,
       }
     dev: true
 
@@ -1344,15 +1344,15 @@ packages:
       "@algolia/requester-common": 4.19.1
     dev: true
 
-  /@algolia/transporter@4.22.0:
+  /@algolia/transporter@4.22.1:
     resolution:
       {
-        integrity: sha512-ieO1k8x2o77GNvOoC+vAkFKppydQSVfbjM3YrSjLmgywiBejPTvU1R1nEvG59JIIUvtSLrZsLGPkd6vL14zopA==,
+        integrity: sha512-kzWgc2c9IdxMa3YqA6TN0NW5VrKYYW/BELIn7vnLyn+U/RFdZ4lxxt9/8yq3DKV5snvoDzzO4ClyejZRdV3lMQ==,
       }
     dependencies:
-      "@algolia/cache-common": 4.22.0
-      "@algolia/logger-common": 4.22.0
-      "@algolia/requester-common": 4.22.0
+      "@algolia/cache-common": 4.22.1
+      "@algolia/logger-common": 4.22.1
+      "@algolia/requester-common": 4.22.1
     dev: true
 
   /@ampproject/remapping@2.2.1:
@@ -2220,7 +2220,7 @@ packages:
       "@rollup/pluginutils": 5.1.0
       source-map: 0.7.4
       vfile: 6.0.1
-      vite: 5.0.10(@types/node@20.10.6)
+      vite: 5.0.10(@types/node@20.11.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -2255,7 +2255,7 @@ packages:
       }
     dev: true
 
-  /@docsearch/react@3.5.2(@algolia/client-search@4.22.0)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.13.0):
+  /@docsearch/react@3.5.2(@algolia/client-search@4.22.1)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.13.0):
     resolution:
       {
         integrity: sha512-9Ahcrs5z2jq/DcAvYtvlqEBHImbm4YJI8M9y0x6Tqg598P40HTEkX7hsMcIuThI+hTFxRGZ9hll0Wygm2yEjng==,
@@ -2275,8 +2275,8 @@ packages:
       search-insights:
         optional: true
     dependencies:
-      "@algolia/autocomplete-core": 1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1)(search-insights@2.13.0)
-      "@algolia/autocomplete-preset-algolia": 1.9.3(@algolia/client-search@4.22.0)(algoliasearch@4.19.1)
+      "@algolia/autocomplete-core": 1.9.3(@algolia/client-search@4.22.1)(algoliasearch@4.19.1)(search-insights@2.13.0)
+      "@algolia/autocomplete-preset-algolia": 1.9.3(@algolia/client-search@4.22.1)(algoliasearch@4.19.1)
       "@docsearch/css": 3.5.2
       "@types/react": 18.2.46
       algoliasearch: 4.19.1
@@ -4607,7 +4607,7 @@ packages:
       yargs: 17.7.2
     dev: false
 
-  /@netlify/build@29.31.0(@types/node@20.10.6)(debug@4.3.4):
+  /@netlify/build@29.31.0(@types/node@20.11.0)(debug@4.3.4):
     resolution:
       {
         integrity: sha512-XtUXnj3LtdWxcgP4kz1k0creF9bZa7eGNh85B89sw4V99Mtsn1Sl89yAZJkEH6rtuGJIs1eiQ261nlhUZ6+C6Q==,
@@ -4675,7 +4675,7 @@ packages:
       strip-ansi: 7.1.0
       supports-color: 9.4.0
       terminal-link: 3.0.0
-      ts-node: 10.9.2(@types/node@20.10.6)(typescript@5.3.3)
+      ts-node: 10.9.2(@types/node@20.11.0)(typescript@5.3.3)
       typescript: 5.3.3
       uuid: 9.0.0
       yargs: 17.7.2
@@ -7049,10 +7049,10 @@ packages:
     dependencies:
       undici-types: 5.26.5
 
-  /@types/node@20.10.6:
+  /@types/node@20.11.0:
     resolution:
       {
-        integrity: sha512-Vac8H+NlRNNlAmDfGUP7b5h/KA+AtWIzuXy0E6OyP8f1tCLYAtPvKRRDJjAPqhpCb0t6U2j7/xqAuLEebW2kiw==,
+        integrity: sha512-o9bjXmDNcF7GbM4CNQpmi+TutCgap/K3w1JyKgxAjqx41zp9qlIAVFi0IhCNsJcXolEqLWhbFbEeL0PvYm4pcQ==,
       }
     dependencies:
       undici-types: 5.26.5
@@ -7743,7 +7743,7 @@ packages:
       "@babel/plugin-transform-react-jsx-source": 7.23.3(@babel/core@7.23.7)
       "@types/babel__core": 7.20.5
       react-refresh: 0.14.0
-      vite: 5.0.10(@types/node@20.10.6)
+      vite: 5.0.10(@types/node@20.11.0)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -17381,7 +17381,7 @@ packages:
       }
     dev: false
 
-  /netlify-cli@17.10.2(@types/node@20.10.6):
+  /netlify-cli@17.10.2(@types/node@20.11.0):
     resolution:
       {
         integrity: sha512-pKXL+w5/vm4ld6IUotBEse3KvN4+WCComLP6a73OiOvy8uM6uxtDUiuL+uAhRaozohjjaU/Ym4q1TqwbqWF5rA==,
@@ -17393,7 +17393,7 @@ packages:
       "@bugsnag/js": 7.20.2
       "@fastify/static": 6.10.2
       "@netlify/blobs": 6.3.1
-      "@netlify/build": 29.31.0(@types/node@20.10.6)(debug@4.3.4)
+      "@netlify/build": 29.31.0(@types/node@20.11.0)(debug@4.3.4)
       "@netlify/build-info": 7.11.3
       "@netlify/config": 20.10.0
       "@netlify/edge-bundler": 10.1.3(supports-color@9.4.0)
@@ -22242,7 +22242,7 @@ packages:
       }
     dev: true
 
-  /ts-node@10.9.2(@types/node@20.10.6)(typescript@5.3.3):
+  /ts-node@10.9.2(@types/node@20.11.0)(typescript@5.3.3):
     resolution:
       {
         integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==,
@@ -22264,7 +22264,7 @@ packages:
       "@tsconfig/node12": 1.0.11
       "@tsconfig/node14": 1.0.3
       "@tsconfig/node16": 1.0.4
-      "@types/node": 20.10.6
+      "@types/node": 20.11.0
       acorn: 8.11.3
       acorn-walk: 8.3.1
       arg: 4.1.3
@@ -23205,7 +23205,7 @@ packages:
       debug: 4.3.4(supports-color@9.4.0)
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 5.0.10(@types/node@20.10.6)
+      vite: 5.0.10(@types/node@20.11.0)
     transitivePeerDependencies:
       - "@types/node"
       - less
@@ -23267,7 +23267,7 @@ packages:
       debug: 4.3.4(supports-color@9.4.0)
       globrex: 0.1.2
       tsconfck: 2.1.2(typescript@5.3.3)
-      vite: 5.0.10(@types/node@20.10.6)
+      vite: 5.0.10(@types/node@20.11.0)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -23311,7 +23311,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
 
-  /vite@5.0.10(@types/node@20.10.6):
+  /vite@5.0.10(@types/node@20.11.0):
     resolution:
       {
         integrity: sha512-2P8J7WWgmc355HUMlFrwofacvr98DAjoE52BfdbwQtyLH06XKwaL/FMnmKM2crF0iX4MpmMKoDlNCB1ok7zHCw==,
@@ -23342,7 +23342,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      "@types/node": 20.10.6
+      "@types/node": 20.11.0
       esbuild: 0.19.10
       postcss: 8.4.32
       rollup: 4.9.1
@@ -23395,7 +23395,7 @@ packages:
       strip-literal: 1.3.0
       tinybench: 2.5.1
       tinypool: 0.8.1
-      vite: 5.0.10(@types/node@20.10.6)
+      vite: 5.0.10(@types/node@20.11.0)
       vite-node: 1.1.0
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
