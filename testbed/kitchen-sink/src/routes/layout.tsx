@@ -3,7 +3,7 @@ import { PreloadResult, useLocation } from "rakkasjs";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
 	useEffect(() => {
-		document.body.classList.add("hydrated");
+		document.getElementById("root")!.classList.add("hydrated");
 	});
 
 	const { pending } = useLocation();
@@ -24,5 +24,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
 
 MainLayout.preload = (): PreloadResult => ({
 	meta: { key: 1 },
-	head: {},
+	head: {
+		htmlAttributes: { lang: "en" },
+	},
 });

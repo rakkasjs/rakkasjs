@@ -712,10 +712,20 @@ function renderHead(
 	pageHooks: Array<PageRequestHooks | undefined> = [],
 ) {
 	// TODO: Customize HTML document
-	let result = `<!DOCTYPE html><html><head>`;
+	const specialAttributes: {
+		htmlAttributes: Record<string, string>;
+		headAttributes: Record<string, string>;
+		bodyAttributes: Record<string, string>;
+	} = {
+		htmlAttributes: {},
+		headAttributes: {},
+		bodyAttributes: {},
+	};
+
+	let result = "";
 
 	for (const hooks of pageHooks) {
-		const head = hooks?.emitToDocumentHead?.();
+		const head = hooks?.emitToDocumentHead?.(specialAttributes);
 		if (!head) continue;
 
 		const headStr =
@@ -723,6 +733,11 @@ function renderHead(
 
 		result += headStr;
 	}
+
+	result =
+		`<!DOCTYPE html><html${stringifyAttributes(
+			specialAttributes.htmlAttributes,
+		)}><head${stringifyAttributes(specialAttributes.headAttributes)}>` + result;
 
 	if (actionErrorIndex >= 0 && renderMode !== "server") {
 		result += `<script>$RAKKAS_ACTION_ERROR_INDEX=${actionErrorIndex}</script>`;
@@ -744,7 +759,18 @@ function renderHead(
 			`<script type="module" async>${REACT_FAST_REFRESH_PREAMBLE}</script>`;
 	}
 
-	result += `</head><body>`;
+	result += `</head><body${stringifyAttributes(
+		specialAttributes.bodyAttributes,
+	)}>`;
+
+	return result;
+}
+
+function stringifyAttributes(attributes: Record<string, string>) {
+	let result = "";
+	for (const [key, value] of Object.entries(attributes)) {
+		result += ` ${escapeHtml(key)}="${escapeHtml(value)}"`;
+	}
 
 	return result;
 }

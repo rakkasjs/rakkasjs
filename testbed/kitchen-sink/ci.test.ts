@@ -1015,13 +1015,25 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		});
 
 		test("sets head tags", async () => {
-			const r = await fetch(host + "/head");
-			const text = await r.text();
-			expect(text).toContain(
-				'<meta charset="utf-8">' +
-					'<meta name="viewport" content="width=device-width, initial-scale=1">' +
-					"<title>The head page</title>" +
-					'<link rel="canonical" href="http://localhost:3000/head" data-rh="canonical">',
+			await page.goto(host + "/head");
+			await page.waitForSelector(".hydrated");
+
+			await page.waitForFunction(
+				() => document.querySelector("link[rel=canonical]") !== null,
+			);
+
+			await page.waitForFunction(() => document.documentElement.lang === "en");
+			await page.waitForFunction(
+				() => document.documentElement.className === "head-page",
+			);
+
+			await page.waitForSelector(".hydrated");
+
+			await page.click("a");
+
+			await page.waitForFunction(() => document.documentElement.lang === "en");
+			await page.waitForFunction(
+				() => document.documentElement.className === "",
 			);
 		});
 

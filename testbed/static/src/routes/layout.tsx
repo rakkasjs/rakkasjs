@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 export default function MainLayout({ children }: LayoutProps) {
 	useEffect(() => {
-		document.body.classList.add("hydrated");
+		document.getElementById("root")!.classList.add("hydrated");
 	});
 
 	return (
