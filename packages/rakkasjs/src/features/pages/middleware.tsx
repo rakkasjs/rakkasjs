@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import React, { Fragment, ReactNode, StrictMode, Suspense } from "react";
+import React, { StrictMode, Suspense } from "react";
 import {
 	renderToReadableStream,
 	renderToStaticMarkup,
@@ -10,7 +10,6 @@ import { App, RouteContext } from "../../runtime/App";
 import { isBot } from "../../runtime/isbot";
 import { findPage, RouteMatch } from "../../internal/find-page";
 import {
-	Redirect,
 	ResponseContext,
 	ResponseContextProps,
 } from "../response-manipulation/implementation";
@@ -30,7 +29,7 @@ import {
 	PrerenderResult,
 	ServerSidePageContext,
 } from "../../runtime/page-types";
-import { Head, LookupHookResult } from "../../lib";
+import { LookupHookResult } from "../../lib";
 import { uneval } from "devalue";
 import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
 import { PageRequestHooks } from "../../runtime/hattip-handler";
@@ -346,19 +345,6 @@ export default async function renderPageRoute(
 		typeof p?.meta === "function" ? p.meta(meta) : Object.assign(meta, p?.meta),
 	);
 
-	const preloadNode: ReactNode[] = preloaded
-		.map((result, i) => {
-			return (
-				(result?.head || result?.redirect) && (
-					<Fragment key={i}>
-						{<Head {...result?.head} />}
-						{result?.redirect && <Redirect {...result?.redirect} />}
-					</Fragment>
-				)
-			);
-		})
-		.filter(Boolean);
-
 	let app = (
 		<App
 			beforePageLookupHandlers={beforePageLookupHandlers}
@@ -368,15 +354,6 @@ export default async function renderPageRoute(
 			ssrModules={modules}
 		/>
 	);
-
-	if (preloadNode.length) {
-		app = (
-			<>
-				{preloadNode}
-				{app}
-			</>
-		);
-	}
 
 	if (commonHooks.wrapApp) {
 		app = commonHooks.wrapApp(app);

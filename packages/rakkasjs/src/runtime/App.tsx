@@ -355,6 +355,18 @@ export async function loadRoute(
 
 	if (import.meta.env.SSR) {
 		meta = ssrMeta;
+		preloadNode = ssrPreloaded!
+			.map((result, i) => {
+				return (
+					(result?.head || result?.redirect) && (
+						<Fragment key={i}>
+							{<Head {...result?.head} />}
+							{result?.redirect && <Redirect {...result?.redirect} />}
+						</Fragment>
+					)
+				);
+			})
+			.filter(Boolean);
 	} else {
 		const preloaded = layoutStack.map((r) => r[1]).reverse();
 
