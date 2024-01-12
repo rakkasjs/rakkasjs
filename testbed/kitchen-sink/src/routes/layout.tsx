@@ -22,4 +22,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
 	);
 }
 
-MainLayout.preload = (): PreloadResult => ({ meta: { key: 1 } });
+MainLayout.preload = (): PreloadResult => ({
+	meta: { key: 1 },
+	head: {},
+});
