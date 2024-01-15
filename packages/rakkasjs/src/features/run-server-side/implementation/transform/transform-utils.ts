@@ -108,11 +108,10 @@ export function extractUniqueId(optionsPath: NodePath): string | undefined {
 		);
 	}
 
-	const stableIdPath = optionsPath.get("properties").find(
-		(prop) =>
-			(prop.get("key") as NodePath<t.Identifier>)?.isIdentifier({
-				name: "uniqueId",
-			}),
+	const stableIdPath = optionsPath.get("properties").find((prop) =>
+		(prop.get("key") as NodePath<t.Identifier>)?.isIdentifier({
+			name: "uniqueId",
+		}),
 	);
 
 	if (!stableIdPath) {

@@ -120,11 +120,10 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 		test("page route", async () => {
 			await page.goto(host + "/");
 
-			await page.waitForFunction(
-				() =>
-					document
-						.querySelector("h1")
-						?.textContent?.includes("Hello from Express!"),
+			await page.waitForFunction(() =>
+				document
+					.querySelector("h1")
+					?.textContent?.includes("Hello from Express!"),
 			);
 		});
 	});
@@ -146,11 +145,10 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 		test("page route", async () => {
 			await page.goto(host + "/");
 
-			await page.waitForFunction(
-				() =>
-					document
-						.querySelector("h1")
-						?.textContent?.includes("Hello from Fastify!"),
+			await page.waitForFunction(() =>
+				document
+					.querySelector("h1")
+					?.textContent?.includes("Hello from Fastify!"),
 			);
 		});
 	});
@@ -178,11 +176,8 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 		test("page route", async () => {
 			await page.goto(host + "/");
 
-			await page.waitForFunction(
-				() =>
-					document
-						.querySelector("pre")
-						?.textContent?.includes(`"Hello world!"`),
+			await page.waitForFunction(() =>
+				document.querySelector("pre")?.textContent?.includes(`"Hello world!"`),
 			);
 		});
 	});
@@ -193,29 +188,26 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 		test("english", async () => {
 			await page.goto(host + "/en");
 
-			await page.waitForFunction(
-				() =>
-					document.querySelector("h1")?.textContent?.includes("Hello, world!"),
+			await page.waitForFunction(() =>
+				document.querySelector("h1")?.textContent?.includes("Hello, world!"),
 			);
 		});
 
 		test("french", async () => {
 			await page.goto(host + "/fr");
 
-			await page.waitForFunction(
-				() =>
-					document
-						.querySelector("h1")
-						?.textContent?.includes("Bonjour, le monde !"),
+			await page.waitForFunction(() =>
+				document
+					.querySelector("h1")
+					?.textContent?.includes("Bonjour, le monde !"),
 			);
 		});
 
 		test("auto", async () => {
 			await page.goto(host + "/");
 
-			await page.waitForFunction(
-				() =>
-					document.querySelector("h1")?.textContent?.includes("Hello, world!"),
+			await page.waitForFunction(() =>
+				document.querySelector("h1")?.textContent?.includes("Hello, world!"),
 			);
 		});
 	});
@@ -242,9 +234,8 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 		test("page route", async () => {
 			await page.goto(host + "/");
 
-			await page.waitForFunction(
-				() =>
-					document.querySelector("h1")?.textContent?.includes("Hello world 👋"),
+			await page.waitForFunction(() =>
+				document.querySelector("h1")?.textContent?.includes("Hello world 👋"),
 			);
 		});
 	});
@@ -259,11 +250,10 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 				await page.type("input:not([type])", "Hello world!");
 				await page.click("input+button");
 
-				await page.waitForFunction(
-					() =>
-						document
-							.querySelectorAll("label")[2]
-							?.textContent?.includes("Hello world!"),
+				await page.waitForFunction(() =>
+					document
+						.querySelectorAll("label")[2]
+						?.textContent?.includes("Hello world!"),
 				);
 			},
 			{ retry: 3 },
@@ -281,9 +271,8 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 			await page.type("[name=password]", "password");
 			await page.click("button");
 
-			await page.waitForFunction(
-				() =>
-					document.querySelector("p")?.textContent?.includes("Hi John Doe!"),
+			await page.waitForFunction(() =>
+				document.querySelector("p")?.textContent?.includes("Hi John Doe!"),
 			);
 		});
 	});
@@ -293,8 +282,8 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 
 		test("chat", async () => {
 			await page.goto(host + "/");
-			await page.waitForFunction(
-				() => document.querySelector("p")?.textContent?.includes("Connected"),
+			await page.waitForFunction(() =>
+				document.querySelector("p")?.textContent?.includes("Connected"),
 			);
 
 			// Fill textarea
@@ -302,9 +291,8 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 
 			await page.click("button");
 
-			await page.waitForFunction(
-				() =>
-					document.querySelector("li")?.textContent?.includes("Hello world!"),
+			await page.waitForFunction(() =>
+				document.querySelector("li")?.textContent?.includes("Hello world!"),
 			);
 		});
 	});
@@ -335,11 +323,10 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 				await page.type("input:not([type])", "Hello world!");
 				await page.click("input+button");
 
-				await page.waitForFunction(
-					() =>
-						document
-							.querySelectorAll("label")[2]
-							?.textContent?.includes("Hello world!"),
+				await page.waitForFunction(() =>
+					document
+						.querySelectorAll("label")[2]
+						?.textContent?.includes("Hello world!"),
 				);
 			},
 			{ retry: 3 },
@@ -351,11 +338,10 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 
 		test("page route", async () => {
 			await page.goto(host + "/");
-			await page.waitForFunction(
-				() =>
-					document
-						.querySelector("pre")
-						?.textContent?.includes(`"name": "Millennium Falcon"`),
+			await page.waitForFunction(() =>
+				document
+					.querySelector("pre")
+					?.textContent?.includes(`"name": "Millennium Falcon"`),
 			);
 		});
 	});
