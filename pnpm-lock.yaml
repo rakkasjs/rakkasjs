@@ -19,7 +19,7 @@ importers:
         version: 4.2.1(vite@5.0.11)
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
     devDependencies:
       cross-env:
         specifier: ^7.0.3
@@ -38,7 +38,7 @@ importers:
         version: 5.3.3
       vitest:
         specifier: ^1.2.0
-        version: 1.2.0(@types/node@20.11.1)
+        version: 1.2.0
 
   examples/auth:
     dependencies:
@@ -62,14 +62,14 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.11)
@@ -102,14 +102,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
 
   examples/empty:
     dependencies:
@@ -121,11 +121,11 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
 
   examples/express:
     dependencies:
@@ -149,14 +149,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.11)
@@ -180,14 +180,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.11)
@@ -214,14 +214,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
 
   examples/guide-samples:
     dependencies:
@@ -242,14 +242,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.11)
@@ -273,14 +273,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.11)
@@ -310,14 +310,14 @@ importers:
         specifier: ^1.12.3
         version: 1.12.3(postcss@8.4.33)
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.11)
@@ -341,14 +341,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
 
   examples/react-query:
     dependencies:
@@ -372,14 +372,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.11)
@@ -403,14 +403,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.11)
@@ -443,14 +443,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.11)
@@ -483,14 +483,14 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4(@babel/core@7.23.7)(styled-components@6.1.8)
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-plugin-cjs-interop:
         specifier: ^2.0.2
         version: 2.0.2
@@ -511,7 +511,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.48
@@ -526,20 +526,20 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.11)
       vitest:
         specifier: ^1.2.0
-        version: 1.2.0(@types/node@20.11.1)
+        version: 1.2.0
 
   examples/urql:
     dependencies:
@@ -563,14 +563,14 @@ importers:
         specifier: ^18.2.18
         version: 18.2.18
       rakkasjs:
-        specifier: 0.7.0-next.26
+        specifier: 0.7.0-next.27
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-tsconfig-paths:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.11)
@@ -686,7 +686,7 @@ importers:
         version: 2.12.0(eslint@8.56.0)
       eslint-plugin-import:
         specifier: ^2.29.1
-        version: 2.29.1(@typescript-eslint/parser@6.16.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
+        version: 2.29.1(@typescript-eslint/parser@6.18.1)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
       eslint-plugin-no-only-tests:
         specifier: ^3.1.0
         version: 3.1.0
@@ -856,7 +856,7 @@ importers:
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
 
   testbed/kitchen-sink:
     dependencies:
@@ -880,7 +880,7 @@ importers:
         version: 1.0.0-rc.12
       netlify-cli:
         specifier: ^17.13.2
-        version: 17.13.2(@types/node@20.11.1)
+        version: 17.13.2(@types/node@20.11.2)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -935,7 +935,7 @@ importers:
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       wrangler:
         specifier: ^3.22.4
         version: 3.22.4
@@ -984,7 +984,7 @@ importers:
         version: 5.3.3
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
 
   website:
     dependencies:
@@ -1087,7 +1087,7 @@ importers:
         version: 6.0.1
       vite:
         specifier: ^5.0.11
-        version: 5.0.11(@types/node@20.11.1)
+        version: 5.0.11(@types/node@20.11.2)
       vite-plugin-cjs-interop:
         specifier: ^2.0.2
         version: 2.0.2
@@ -2103,7 +2103,7 @@ packages:
       "@mdx-js/mdx": 3.0.0
       source-map: 0.7.4
       vfile: 6.0.1
-      vite: 5.0.11(@types/node@20.11.1)
+      vite: 5.0.11(@types/node@20.11.2)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4789,7 +4789,7 @@ packages:
       yargs: 17.7.2
     dev: false
 
-  /@netlify/build@29.32.0(@types/node@20.11.1):
+  /@netlify/build@29.32.0(@types/node@20.11.2):
     resolution:
       {
         integrity: sha512-J0Zx2MCrtFqN9Nmp1uE4exB/5Fqlf/5YuSgaRu6GsjLINzEbhCKVv2ZksMbbMxc0c/cuemcmK9IomFT3GWIeTA==,
@@ -4856,7 +4856,7 @@ packages:
       strip-ansi: 7.1.0
       supports-color: 9.4.0
       terminal-link: 3.0.0
-      ts-node: 10.9.2(@types/node@20.11.1)(typescript@5.3.3)
+      ts-node: 10.9.2(@types/node@20.11.2)(typescript@5.3.3)
       typescript: 5.3.3
       uuid: 9.0.0
       yargs: 17.7.2
@@ -6484,6 +6484,14 @@ packages:
     dependencies:
       undici-types: 5.26.5
 
+  /@types/node@20.11.2:
+    resolution:
+      {
+        integrity: sha512-cZShBaVa+UO1LjWWBPmWRR4+/eY/JR/UIEcDlVsw3okjWEu+rB7/mH6X3B/L+qJVHDLjk9QW/y2upp9wp1yDXA==,
+      }
+    dependencies:
+      undici-types: 5.26.5
+
   /@types/normalize-package-data@2.4.4:
     resolution:
       {
@@ -6719,30 +6727,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@typescript-eslint/parser@6.16.0(eslint@8.56.0)(typescript@5.3.3):
-    resolution:
-      {
-        integrity: sha512-H2GM3eUo12HpKZU9njig3DF5zJ58ja6ahj1GoHEHOgQvYxzoFJJEvC1MQ7T2l9Ha+69ZSOn7RTxOdpC/y3ikMw==,
-      }
-    engines: { node: ^16.0.0 || >=18.0.0 }
-    peerDependencies:
-      eslint: ^7.0.0 || ^8.0.0
-      typescript: "*"
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      "@typescript-eslint/scope-manager": 6.16.0
-      "@typescript-eslint/types": 6.16.0
-      "@typescript-eslint/typescript-estree": 6.16.0(typescript@5.3.3)
-      "@typescript-eslint/visitor-keys": 6.16.0
-      debug: 4.3.4(supports-color@9.4.0)
-      eslint: 8.56.0
-      typescript: 5.3.3
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
   /@typescript-eslint/parser@6.18.1(eslint@8.56.0)(typescript@5.3.3):
     resolution:
       {
@@ -6765,17 +6749,6 @@ packages:
       typescript: 5.3.3
     transitivePeerDependencies:
       - supports-color
-
-  /@typescript-eslint/scope-manager@6.16.0:
-    resolution:
-      {
-        integrity: sha512-0N7Y9DSPdaBQ3sqSCwlrm9zJwkpOuc6HYm7LpzLAPqBL7dmzAUimr4M29dMkOP/tEwvOCC/Cxo//yOfJD3HUiw==,
-      }
-    engines: { node: ^16.0.0 || >=18.0.0 }
-    dependencies:
-      "@typescript-eslint/types": 6.16.0
-      "@typescript-eslint/visitor-keys": 6.16.0
-    dev: false
 
   /@typescript-eslint/scope-manager@6.18.1:
     resolution:
@@ -6817,14 +6790,6 @@ packages:
     engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
     dev: false
 
-  /@typescript-eslint/types@6.16.0:
-    resolution:
-      {
-        integrity: sha512-hvDFpLEvTJoHutVl87+MG/c5C8I6LOgEx05zExTSJDEVU7hhR3jhV8M5zuggbdFCw98+HhZWPHZeKS97kS3JoQ==,
-      }
-    engines: { node: ^16.0.0 || >=18.0.0 }
-    dev: false
-
   /@typescript-eslint/types@6.18.1:
     resolution:
       {
@@ -6851,31 +6816,6 @@ packages:
       is-glob: 4.0.3
       semver: 7.5.4
       tsutils: 3.21.0(typescript@5.3.3)
-      typescript: 5.3.3
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  /@typescript-eslint/typescript-estree@6.16.0(typescript@5.3.3):
-    resolution:
-      {
-        integrity: sha512-VTWZuixh/vr7nih6CfrdpmFNLEnoVBF1skfjdyGnNwXOH1SLeHItGdZDHhhAIzd3ACazyY2Fg76zuzOVTaknGA==,
-      }
-    engines: { node: ^16.0.0 || >=18.0.0 }
-    peerDependencies:
-      typescript: "*"
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      "@typescript-eslint/types": 6.16.0
-      "@typescript-eslint/visitor-keys": 6.16.0
-      debug: 4.3.4(supports-color@9.4.0)
-      globby: 11.1.0
-      is-glob: 4.0.3
-      minimatch: 9.0.3
-      semver: 7.5.4
-      ts-api-utils: 1.0.3(typescript@5.3.3)
       typescript: 5.3.3
     transitivePeerDependencies:
       - supports-color
@@ -6934,17 +6874,6 @@ packages:
     engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
     dependencies:
       "@typescript-eslint/types": 5.62.0
-      eslint-visitor-keys: 3.4.3
-    dev: false
-
-  /@typescript-eslint/visitor-keys@6.16.0:
-    resolution:
-      {
-        integrity: sha512-QSFQLruk7fhs91a/Ep/LqRdbJCZ1Rq03rqBdKT5Ky17Sz8zRLUksqIe9DW0pKtg/Z35/ztbLQ6qpOCN6rOC11A==,
-      }
-    engines: { node: ^16.0.0 || >=18.0.0 }
-    dependencies:
-      "@typescript-eslint/types": 6.16.0
       eslint-visitor-keys: 3.4.3
     dev: false
 
@@ -7087,7 +7016,7 @@ packages:
       "@babel/plugin-transform-react-jsx-source": 7.23.3(@babel/core@7.23.7)
       "@types/babel__core": 7.20.5
       react-refresh: 0.14.0
-      vite: 5.0.11(@types/node@20.11.1)
+      vite: 5.0.11(@types/node@20.11.2)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -11018,32 +10947,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.16.0)(eslint-plugin-import@2.29.1)(eslint@8.56.0):
-    resolution:
-      {
-        integrity: sha512-xgdptdoi5W3niYeuQxKmzVDTATvLYqhpwmykwsh7f6HIOStGWEIL9iqZgQDF9u9OEzrRwR8no5q2VT+bjAujTg==,
-      }
-    engines: { node: ^14.18.0 || >=16.0.0 }
-    peerDependencies:
-      eslint: "*"
-      eslint-plugin-import: "*"
-    dependencies:
-      debug: 4.3.4(supports-color@9.4.0)
-      enhanced-resolve: 5.15.0
-      eslint: 8.56.0
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.16.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.16.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
-      fast-glob: 3.3.1
-      get-tsconfig: 4.7.2
-      is-core-module: 2.13.0
-      is-glob: 4.0.3
-    transitivePeerDependencies:
-      - "@typescript-eslint/parser"
-      - eslint-import-resolver-node
-      - eslint-import-resolver-webpack
-      - supports-color
-    dev: false
-
   /eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.18.1)(eslint-plugin-import@2.29.1)(eslint@8.56.0):
     resolution:
       {
@@ -11068,39 +10971,6 @@ packages:
       - eslint-import-resolver-node
       - eslint-import-resolver-webpack
       - supports-color
-
-  /eslint-module-utils@2.8.0(@typescript-eslint/parser@6.16.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0):
-    resolution:
-      {
-        integrity: sha512-aWajIYfsqCKRDgUfjEXNN/JlrzauMuSEy5sbd7WXbtW3EH6A6MpwEh42c7qD+MqQo9QMJ6fWLAeIJynx0g6OAw==,
-      }
-    engines: { node: ">=4" }
-    peerDependencies:
-      "@typescript-eslint/parser": "*"
-      eslint: "*"
-      eslint-import-resolver-node: "*"
-      eslint-import-resolver-typescript: "*"
-      eslint-import-resolver-webpack: "*"
-    peerDependenciesMeta:
-      "@typescript-eslint/parser":
-        optional: true
-      eslint:
-        optional: true
-      eslint-import-resolver-node:
-        optional: true
-      eslint-import-resolver-typescript:
-        optional: true
-      eslint-import-resolver-webpack:
-        optional: true
-    dependencies:
-      "@typescript-eslint/parser": 6.16.0(eslint@8.56.0)(typescript@5.3.3)
-      debug: 3.2.7
-      eslint: 8.56.0
-      eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.16.0)(eslint-plugin-import@2.29.1)(eslint@8.56.0)
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
 
   /eslint-module-utils@2.8.0(@typescript-eslint/parser@6.18.1)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0):
     resolution:
@@ -11164,44 +11034,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.16.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0):
-    resolution:
-      {
-        integrity: sha512-BbPC0cuExzhiMo4Ff1BTVwHpjjv28C5R+btTOGaCRC7UEz801up0JadwkeSk5Ued6TG34uaczuVuH6qyy5YUxw==,
-      }
-    engines: { node: ">=4" }
-    peerDependencies:
-      "@typescript-eslint/parser": "*"
-      eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
-    peerDependenciesMeta:
-      "@typescript-eslint/parser":
-        optional: true
-    dependencies:
-      "@typescript-eslint/parser": 6.16.0(eslint@8.56.0)(typescript@5.3.3)
-      array-includes: 3.1.7
-      array.prototype.findlastindex: 1.2.3
-      array.prototype.flat: 1.3.2
-      array.prototype.flatmap: 1.3.2
-      debug: 3.2.7
-      doctrine: 2.1.0
-      eslint: 8.56.0
-      eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.16.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
-      hasown: 2.0.0
-      is-core-module: 2.13.1
-      is-glob: 4.0.3
-      minimatch: 3.1.2
-      object.fromentries: 2.0.7
-      object.groupby: 1.0.1
-      object.values: 1.1.7
-      semver: 6.3.1
-      tsconfig-paths: 3.15.0
-    transitivePeerDependencies:
-      - eslint-import-resolver-typescript
-      - eslint-import-resolver-webpack
-      - supports-color
-    dev: false
 
   /eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.18.1)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0):
     resolution:
@@ -16706,7 +16538,7 @@ packages:
       }
     dev: false
 
-  /netlify-cli@17.13.2(@types/node@20.11.1):
+  /netlify-cli@17.13.2(@types/node@20.11.2):
     resolution:
       {
         integrity: sha512-KoQiLKh8Dp9DmJ3IL2thz1jwZCMh32Z2ooJgsRWEceNfSwZEuXMbDIDWodSEvhCGuriJHRDS5yI3IaKft1kF4g==,
@@ -16718,7 +16550,7 @@ packages:
       "@bugsnag/js": 7.20.2
       "@fastify/static": 6.10.2
       "@netlify/blobs": 6.4.1
-      "@netlify/build": 29.32.0(@types/node@20.11.1)
+      "@netlify/build": 29.32.0(@types/node@20.11.2)
       "@netlify/build-info": 7.11.4
       "@netlify/config": 20.10.1
       "@netlify/edge-bundler": 11.0.0
@@ -21472,7 +21304,7 @@ packages:
       }
     dev: true
 
-  /ts-node@10.9.2(@types/node@20.11.1)(typescript@5.3.3):
+  /ts-node@10.9.2(@types/node@20.11.2)(typescript@5.3.3):
     resolution:
       {
         integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==,
@@ -21494,7 +21326,7 @@ packages:
       "@tsconfig/node12": 1.0.11
       "@tsconfig/node14": 1.0.3
       "@tsconfig/node16": 1.0.4
-      "@types/node": 20.11.1
+      "@types/node": 20.11.2
       acorn: 8.11.3
       acorn-walk: 8.3.2
       arg: 4.1.3
@@ -22418,6 +22250,30 @@ packages:
       vfile-message: 4.0.1
     dev: true
 
+  /vite-node@1.2.0:
+    resolution:
+      {
+        integrity: sha512-ETnQTHeAbbOxl7/pyBck9oAPZZZo+kYnFt1uQDD+hPReOc+wCjXw4r4jHriBRuVDB5isHmPXxrfc1yJnfBERqg==,
+      }
+    engines: { node: ^18.0.0 || >=20.0.0 }
+    hasBin: true
+    dependencies:
+      cac: 6.7.14
+      debug: 4.3.4(supports-color@9.4.0)
+      pathe: 1.1.2
+      picocolors: 1.0.0
+      vite: 5.0.11(@types/node@20.11.2)
+    transitivePeerDependencies:
+      - "@types/node"
+      - less
+      - lightningcss
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+    dev: true
+
   /vite-node@1.2.0(@types/node@20.11.1):
     resolution:
       {
@@ -22468,7 +22324,7 @@ packages:
       debug: 4.3.4(supports-color@9.4.0)
       globrex: 0.1.2
       tsconfck: 2.1.2(typescript@5.3.3)
-      vite: 5.0.11(@types/node@20.11.1)
+      vite: 5.0.11(@types/node@20.11.2)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -22511,6 +22367,103 @@ packages:
       rollup: 4.9.5
     optionalDependencies:
       fsevents: 2.3.3
+
+  /vite@5.0.11(@types/node@20.11.2):
+    resolution:
+      {
+        integrity: sha512-XBMnDjZcNAw/G1gEiskiM1v6yzM4GE5aMGvhWTlHAYYhxb7S3/V1s3m2LDHa8Vh6yIWYYB0iJwsEaS523c4oYA==,
+      }
+    engines: { node: ^18.0.0 || >=20.0.0 }
+    hasBin: true
+    peerDependencies:
+      "@types/node": ^18.0.0 || >=20.0.0
+      less: "*"
+      lightningcss: ^1.21.0
+      sass: "*"
+      stylus: "*"
+      sugarss: "*"
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      "@types/node":
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      "@types/node": 20.11.2
+      esbuild: 0.19.11
+      postcss: 8.4.33
+      rollup: 4.9.5
+    optionalDependencies:
+      fsevents: 2.3.3
+
+  /vitest@1.2.0:
+    resolution:
+      {
+        integrity: sha512-Ixs5m7BjqvLHXcibkzKRQUvD/XLw0E3rvqaCMlrm/0LMsA0309ZqYvTlPzkhh81VlEyVZXFlwWnkhb6/UMtcaQ==,
+      }
+    engines: { node: ^18.0.0 || >=20.0.0 }
+    hasBin: true
+    peerDependencies:
+      "@edge-runtime/vm": "*"
+      "@types/node": ^18.0.0 || >=20.0.0
+      "@vitest/browser": ^1.0.0
+      "@vitest/ui": ^1.0.0
+      happy-dom: "*"
+      jsdom: "*"
+    peerDependenciesMeta:
+      "@edge-runtime/vm":
+        optional: true
+      "@types/node":
+        optional: true
+      "@vitest/browser":
+        optional: true
+      "@vitest/ui":
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true
+    dependencies:
+      "@vitest/expect": 1.2.0
+      "@vitest/runner": 1.2.0
+      "@vitest/snapshot": 1.2.0
+      "@vitest/spy": 1.2.0
+      "@vitest/utils": 1.2.0
+      acorn-walk: 8.3.2
+      cac: 6.7.14
+      chai: 4.4.1
+      debug: 4.3.4(supports-color@9.4.0)
+      execa: 8.0.1
+      local-pkg: 0.5.0
+      magic-string: 0.30.5
+      pathe: 1.1.2
+      picocolors: 1.0.0
+      std-env: 3.7.0
+      strip-literal: 1.3.0
+      tinybench: 2.5.1
+      tinypool: 0.8.1
+      vite: 5.0.11(@types/node@20.11.2)
+      vite-node: 1.2.0
+      why-is-node-running: 2.2.2
+    transitivePeerDependencies:
+      - less
+      - lightningcss
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+    dev: true
 
   /vitest@1.2.0(@types/node@20.11.1):
     resolution:
