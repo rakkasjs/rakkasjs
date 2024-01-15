@@ -316,8 +316,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					await fs.promises.writeFile(filePath, newContent);
 
 					try {
-						await page.waitForFunction(
-							() => document.body?.textContent?.includes("Hot reloadin'!"),
+						await page.waitForFunction(() =>
+							document.body?.textContent?.includes("Hot reloadin'!"),
 						);
 						await page.waitForFunction(
 							() =>
@@ -348,8 +348,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					await fs.promises.writeFile(filePath, content);
 
 					try {
-						await page.waitForFunction(
-							() => document.body?.textContent?.includes("I'm a new page!"),
+						await page.waitForFunction(() =>
+							document.body?.textContent?.includes("I'm a new page!"),
 						);
 
 						await fs.promises.rm(filePath);
@@ -418,15 +418,14 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					(window as any).RESOLVE_QUERY();
 				});
 
-				await page.waitForFunction(
-					() =>
-						document.body?.innerText.includes(
-							"Client-side navigation test page A",
-						),
+				await page.waitForFunction(() =>
+					document.body?.innerText.includes(
+						"Client-side navigation test page A",
+					),
 				);
 
-				await page.waitForFunction(
-					() => document.body?.innerText.includes("State test: 1"),
+				await page.waitForFunction(() =>
+					document.body?.innerText.includes("State test: 1"),
 				);
 			},
 			{ retry: 3, timeout: 15_000 },
@@ -437,8 +436,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			await page.waitForSelector(".hydrated");
 
 			// Scroll to the bottom
-			await page.evaluate(
-				() => document.querySelector("footer")?.scrollIntoView(),
+			await page.evaluate(() =>
+				document.querySelector("footer")?.scrollIntoView(),
 			);
 			await page.waitForFunction(() => window.scrollY > 0);
 
@@ -449,11 +448,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			await link!.click();
 
-			await page.waitForFunction(
-				() =>
-					document.body?.innerText.includes(
-						"Client-side navigation test page B",
-					),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Client-side navigation test page B"),
 			);
 
 			// Make sure it scrolled to the top
@@ -462,11 +458,10 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			// Go back to the first page
 			await page.goBack();
-			await page.waitForFunction(
-				() =>
-					document.body?.innerText.includes(
-						"Client-side navigation test page home",
-					),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes(
+					"Client-side navigation test page home",
+				),
 			);
 
 			// Make sure it scrolls to the bottom
@@ -483,8 +478,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			expect(link).toBeTruthy();
 
 			await link!.click();
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Navigating to"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Navigating to"),
 			);
 
 			const x = await page.evaluate(
@@ -496,13 +491,13 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 		test("redirects", async () => {
 			await page.goto(host + "/redirect/shallow");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Redirected"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Redirected"),
 			);
 
 			await page.goto(host + "/redirect/deep");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Redirected"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Redirected"),
 			);
 		});
 
@@ -534,28 +529,25 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				await page.goto(host + "/use-query");
 				await page.waitForSelector(".hydrated");
 
-				await page.waitForFunction(
-					() =>
-						document.getElementById("content")?.innerText.includes("SSR value"),
+				await page.waitForFunction(() =>
+					document.getElementById("content")?.innerText.includes("SSR value"),
 				);
 
 				const button = await page.waitForSelector("button");
 				expect(button).toBeTruthy();
 
 				await button!.click();
-				await page.waitForFunction(
-					() =>
-						document
-							.getElementById("content")
-							?.innerText.includes("SSR value (refetching)"),
+				await page.waitForFunction(() =>
+					document
+						.getElementById("content")
+						?.innerText.includes("SSR value (refetching)"),
 				);
 
 				await button!.click();
-				await page.waitForFunction(
-					() =>
-						document
-							.getElementById("content")
-							?.innerText.includes("Client value"),
+				await page.waitForFunction(() =>
+					document
+						.getElementById("content")
+						?.innerText.includes("Client value"),
 				);
 			},
 			{
@@ -567,16 +559,15 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			await page.goto(host + "/use-query/error");
 			await page.waitForSelector(".hydrated");
 
-			await page.waitForFunction(
-				() => document.getElementById("content")?.innerText.includes("Error!"),
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("Error!"),
 			);
 
 			let button = await page.waitForSelector("button");
 			expect(button).toBeTruthy();
 			await button!.click();
-			await page.waitForFunction(
-				() =>
-					document.getElementById("content")?.innerText.includes("Loading..."),
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("Loading..."),
 			);
 
 			button = await page.waitForSelector("button");
@@ -584,9 +575,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			await button!.click();
 
-			await page.waitForFunction(
-				() =>
-					document.getElementById("content")?.innerText.includes("Hello world"),
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("Hello world"),
 			);
 		});
 
@@ -594,9 +584,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			await page.goto(host + "/use-query");
 			await page.waitForSelector(".hydrated");
 
-			await page.waitForFunction(
-				() =>
-					document.getElementById("content")?.innerText.includes("SSR value"),
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("SSR value"),
 			);
 
 			await new Promise((resolve) => setTimeout(resolve, 200));
@@ -605,11 +594,10 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				document.dispatchEvent(new Event("visibilitychange"));
 			});
 
-			await page.waitForFunction(
-				() =>
-					document
-						.getElementById("content")
-						?.innerText.includes("SSR value (refetching)"),
+			await page.waitForFunction(() =>
+				document
+					.getElementById("content")
+					?.innerText.includes("SSR value (refetching)"),
 			);
 		});
 
@@ -617,8 +605,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			await page.goto(host + "/use-query/interval");
 			await page.waitForSelector(".hydrated");
 
-			await page.waitForFunction(
-				() => document.getElementById("content")?.innerText.includes("2"),
+			await page.waitForFunction(() =>
+				document.getElementById("content")?.innerText.includes("2"),
 			);
 		});
 
@@ -635,8 +623,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 		test("runs useServerSideQuery on the server", async () => {
 			await page.goto(host + "/use-ssq");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Result: 7, SSR: true"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Result: 7, SSR: true"),
 			);
 
 			await page.goto(host + "/use-ssq/elsewhere");
@@ -649,8 +637,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			await link!.click();
 
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Result: 7, SSR: true"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Result: 7, SSR: true"),
 			);
 		});
 
@@ -683,8 +671,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			await page.goto(host + "/run-ssm");
 			await page.waitForSelector(".hydrated");
 
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Not fetched"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Not fetched"),
 			);
 
 			const btn: ElementHandle<HTMLButtonElement> | null =
@@ -693,8 +681,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			await btn!.click();
 
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Computed on the server: 7"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Computed on the server: 7"),
 			);
 		});
 
@@ -702,8 +690,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			await page.goto(host + "/use-ssm");
 			await page.waitForSelector(".hydrated");
 
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Not fetched"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Not fetched"),
 			);
 
 			const btn: ElementHandle<HTMLButtonElement> | null =
@@ -712,8 +700,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			await btn!.click();
 
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Computed on the server: 14"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Computed on the server: 14"),
 			);
 		});
 
@@ -741,8 +729,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			expect(link).toBeTruthy();
 
 			await link!.click();
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Deep 404"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Deep 404"),
 			);
 		});
 
@@ -756,8 +744,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		test("handles error with message", async () => {
 			await page.goto(host + "/error");
 
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Internal Error"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Internal Error"),
 			);
 		});
 
@@ -770,8 +758,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			expect(link).toBeTruthy();
 
 			await link!.click();
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Internal Error"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Internal Error"),
 			);
 		});
 
@@ -785,12 +773,12 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			await btn!.click();
 
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Loading"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Loading"),
 			);
 
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Done"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Done"),
 			);
 		});
 
@@ -804,45 +792,45 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			await btn!.click();
 
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Loading"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Loading"),
 			);
 
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Error"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Error"),
 			);
 		});
 
 		test("route guards work", async () => {
 			await page.goto(host + "/guard");
 
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Not Found"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Not Found"),
 			);
 
 			await page.goto(host + "/guard?allow-outer");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Not Found"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Not Found"),
 			);
 
 			await page.goto(host + "/guard?allow-inner");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Not Found"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Not Found"),
 			);
 
 			await page.goto(host + "/guard?allow-outer&allow-inner");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Found!"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Found!"),
 			);
 
 			await page.goto(host + "/guard?allow-outer&rewrite");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Rewritten!"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Rewritten!"),
 			);
 
 			await page.goto(host + "/guard?allow-outer&redirect");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Redirected!"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Redirected!"),
 			);
 		});
 
@@ -857,8 +845,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		test("beforePageLookup redirect works on the client", async () => {
 			await page.goto(host + "/before-route/redirect");
 			await page.waitForSelector(".hydrated");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Redirected"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Redirected"),
 			);
 		});
 
@@ -872,8 +860,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			expect(link).toBeTruthy();
 
 			await link!.click();
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Redirected"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Redirected"),
 			);
 		});
 
@@ -886,8 +874,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 		test("beforePageLookup rewrite works on the client", async () => {
 			await page.goto(host + "/before-route/rewrite");
 			await page.waitForSelector(".hydrated");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Rewritten"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Rewritten"),
 			);
 		});
 
@@ -901,8 +889,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			expect(link).toBeTruthy();
 
 			await link!.click();
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Rewritten"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Rewritten"),
 			);
 		});
 
@@ -942,8 +930,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			await page.type("input[name=name]", "wrong");
 			await page.click("button[type=submit]");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Incorrect name"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Incorrect name"),
 			);
 
 			await page.evaluate(
@@ -954,8 +942,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			);
 			await page.type("input[name=name]", "correct");
 			await page.click("button[type=submit]");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Thank you for your feedback!"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Thank you for your feedback!"),
 			);
 		});
 
@@ -965,8 +953,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 
 			await page.type("input[name=name]", "wrong");
 			await page.click("button[type=submit]");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Incorrect name"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Incorrect name"),
 			);
 
 			await page.evaluate(
@@ -977,8 +965,8 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 			);
 			await page.type("input[name=name]", "correct");
 			await page.click("button[type=submit]");
-			await page.waitForFunction(
-				() => document.body?.innerText.includes("Thank you for your feedback!"),
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Thank you for your feedback!"),
 			);
 		});
 

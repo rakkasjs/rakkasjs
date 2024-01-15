@@ -19,33 +19,33 @@
     "test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^3.5.0",
-    "@hattip/adapter-bun": "0.0.37",
-    "@hattip/adapter-lagon": "0.0.37",
-    "@hattip/adapter-netlify-edge": "0.0.37",
-    "@hattip/adapter-netlify-functions": "0.0.37",
+    "@cyco130/eslint-config": "^3.6.1",
+    "@hattip/adapter-bun": "0.0.39",
+    "@hattip/adapter-lagon": "0.0.39",
+    "@hattip/adapter-netlify-edge": "0.0.39",
+    "@hattip/adapter-netlify-functions": "0.0.39",
     "@types/ps-tree": "^1.1.6",
     "cross-env": "^7.0.3",
     "eslint": "^8.56.0",
     "node-fetch": "^3.3.2",
     "ps-tree": "^1.2.0",
-    "puppeteer": "^21.6.1",
+    "puppeteer": "^21.7.0",
     "rakkasjs": "workspace:*",
     "rimraf": "^5.0.5",
     "typescript": "^5.3.3",
-    "vite": "^5.0.10",
-    "wrangler": "^3.22.1"
+    "vite": "^5.0.11",
+    "wrangler": "^3.22.4"
   },
   "dependencies": {
-    "@hattip/adapter-cloudflare-workers": "0.0.37",
-    "@hattip/adapter-deno": "0.0.37",
-    "@hattip/adapter-vercel-edge": "0.0.37",
-    "@types/react": "^18.2.46",
+    "@hattip/adapter-cloudflare-workers": "0.0.39",
+    "@hattip/adapter-deno": "0.0.39",
+    "@hattip/adapter-vercel-edge": "0.0.39",
+    "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "cheerio": "^1.0.0-rc.12",
-    "netlify-cli": "^17.10.2",
+    "netlify-cli": "^17.13.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "web-streams-polyfill": "^3.2.1"
+    "web-streams-polyfill": "^3.3.2"
   }
 }

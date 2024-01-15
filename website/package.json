@@ -31,20 +31,20 @@
     "sanitize.css": "^13.0.0"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^3.5.0",
-    "@cyco130/vite-plugin-mdx": "^1.0.1",
+    "@cyco130/eslint-config": "^3.6.1",
+    "@cyco130/vite-plugin-mdx": "^1.0.3",
     "@docsearch/css": "^3.5.2",
     "@docsearch/react": "^3.5.2",
     "@mapbox/rehype-prism": "^0.9.0",
     "@rollup/pluginutils": "^5.1.0",
     "@types/cookie": "^0.6.0",
-    "@types/react": "^18.2.46",
+    "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "eslint": "^8.56.0",
     "gray-matter": "^4.0.3",
     "install": "^0.13.0",
     "node-dev": "^8.0.0",
-    "prettier": "^3.1.1",
+    "prettier": "^3.2.2",
     "rakkasjs": "workspace:*",
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.0",
@@ -54,7 +54,7 @@
     "source-map": "^0.7.4",
     "typescript": "^5.3.3",
     "vfile": "^6.0.1",
-    "vite": "^5.0.10",
-    "vite-plugin-cjs-interop": "^2.0.0"
+    "vite": "^5.0.11",
+    "vite-plugin-cjs-interop": "^2.0.2"
   }
 }
