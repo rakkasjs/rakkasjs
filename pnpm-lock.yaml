@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@hattip/polyfills':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@vitejs/plugin-react':
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.11)
@@ -196,8 +196,8 @@ importers:
   examples/graphql:
     dependencies:
       '@hattip/graphql':
-        specifier: 0.0.39
-        version: 0.0.39(graphql@16.8.1)
+        specifier: 0.0.40
+        version: 0.0.40(graphql@16.8.1)
       graphql:
         specifier: ^16.8.1
         version: 16.8.1
@@ -227,8 +227,8 @@ importers:
   examples/guide-samples:
     dependencies:
       '@hattip/response':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -258,8 +258,8 @@ importers:
   examples/localized-urls:
     dependencies:
       '@hattip/response':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -289,8 +289,8 @@ importers:
   examples/mantine:
     dependencies:
       '@hattip/response':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@mantine/core':
         specifier: ^7.4.2
         version: 7.4.2(@mantine/hooks@7.4.2)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
@@ -388,8 +388,8 @@ importers:
   examples/server-sent-events:
     dependencies:
       '@hattip/response':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -419,11 +419,11 @@ importers:
   examples/session:
     dependencies:
       '@hattip/cookie':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@hattip/session':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       dotenv-cli:
         specifier: ^7.3.0
         version: 7.3.0
@@ -502,8 +502,8 @@ importers:
   examples/todo:
     dependencies:
       '@hattip/response':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -717,29 +717,29 @@ importers:
         specifier: ^7.23.6
         version: 7.23.6
       '@hattip/adapter-node':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@hattip/bundler-cloudflare-workers':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@hattip/bundler-deno':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@hattip/bundler-netlify':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@hattip/bundler-vercel':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@hattip/compose':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@hattip/core':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@hattip/polyfills':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@microsoft/fetch-event-source':
         specifier: ^2.0.1
         version: 2.0.1
@@ -862,14 +862,14 @@ importers:
   testbed/kitchen-sink:
     dependencies:
       '@hattip/adapter-cloudflare-workers':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@hattip/adapter-deno':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@hattip/adapter-vercel-edge':
-        specifier: 0.0.39
-        version: 0.0.39
+        specifier: 0.0.40
+        version: 0.0.40
       '@types/react':
         specifier: ^18.2.48
         version: 18.2.48
@@ -3436,18 +3436,18 @@ packages:
       bun-types: 1.0.22
     dev: true
 
-  /@hattip/adapter-cloudflare-workers@0.0.39:
-    resolution: {integrity: sha512-ZFrBkMwLb9gzY7b7034IjFDXmNdMcQCtF85ME6c1L1MSitJmZgoIyDNN7O64CdPFWEdOoAPJG6EC6wJduD5w7A==}
+  /@hattip/adapter-cloudflare-workers@0.0.40:
+    resolution: {integrity: sha512-IfO5NmPGbNpDRaRrfFUuwEJA+RTGZiiglnKge/MTJ/hjbeX+3dMgk3K86txa/8TmgBDAPDLcLDoP1nqXZWKc7w==}
     dependencies:
       '@cloudflare/kv-asset-handler': 0.3.0
       '@cloudflare/workers-types': 4.20231218.0
-      '@hattip/core': 0.0.39
+      '@hattip/core': 0.0.40
     dev: false
 
-  /@hattip/adapter-deno@0.0.39:
-    resolution: {integrity: sha512-pC1bBIB4jvBmWTvSMbI3x6crDJA9B8qT5JZvN5Z2c2zcGlzKlxtg9Zb1W8eZNtKF+ZZVSsL/hCsW6U/oxjSWsA==}
+  /@hattip/adapter-deno@0.0.40:
+    resolution: {integrity: sha512-PPr4RBpr/uR3EJy9PswhefXMM/VQDdqOheJ4IyA5PaUk31ZL+JXOv/lf0Zod2rNYpXOv6e6auGZkn1haqerbbw==}
     dependencies:
-      '@hattip/core': 0.0.39
+      '@hattip/core': 0.0.40
     dev: false
 
   /@hattip/adapter-lagon@0.0.39:
@@ -3477,41 +3477,32 @@ packages:
       '@hattip/core': 0.0.39
       '@hattip/polyfills': 0.0.39
       '@hattip/walk': 0.0.39
+    dev: true
 
-  /@hattip/adapter-vercel-edge@0.0.39:
-    resolution: {integrity: sha512-JpVxvuRCSN84fsDlAOekUpyD0wl8luf0VHrRyn+vlc+n1n+9IKxfeQNhmzQ8cBiiw3oBjwv318WVVkY+JCZC+Q==}
+  /@hattip/adapter-node@0.0.40:
+    resolution: {integrity: sha512-HGclyPTunVBCRcG1fbMEQVZkvpKA5sqfup5KwTK3JTDi8ATogHZHF36ZgFswzbyzzvn42b07ltudZZ0u6iA7sw==}
     dependencies:
-      '@hattip/core': 0.0.39
+      '@hattip/core': 0.0.40
+      '@hattip/polyfills': 0.0.40
+      '@hattip/walk': 0.0.40
     dev: false
 
-  /@hattip/bundler-cloudflare-workers@0.0.39:
-    resolution: {integrity: sha512-3PdzXzZVAlD2cYjU0++rYz69UEtziIdRjYqjEu/cfmFudGq+M7uWKIOVbu/6tzxs7/DdHl60guoOVMlXJJAwcQ==}
+  /@hattip/adapter-vercel-edge@0.0.40:
+    resolution: {integrity: sha512-vKr9l4E/ChubdaUnhcIrtFVKZqSL7F0HzJA//avXTuXVEnAy6nBTRtkITQgkeZDQX+j6vZ5KnHm+eDcLmohxVA==}
+    dependencies:
+      '@hattip/core': 0.0.40
+    dev: false
+
+  /@hattip/bundler-cloudflare-workers@0.0.40:
+    resolution: {integrity: sha512-EOn+oYVJRMpb7ebruuFsnxE22D26IdTL9hT4EVhaz83IIe1jfEP8VDCOjVhPEl5fHHPGBjV21YFCVDe4vVj3hA==}
     hasBin: true
     dependencies:
       cac: 6.7.14
       esbuild: 0.19.11
     dev: false
 
-  /@hattip/bundler-deno@0.0.39:
-    resolution: {integrity: sha512-FOf5zBvMNgi3MGbjoPFi2WeYkdy+APMFvhGuRrT+pjCinBMng/ubNiAZaUiWLOUsP82AuchjjKdCcHTuPatmbQ==}
-    hasBin: true
-    dependencies:
-      cac: 6.7.14
-      cpr: 3.0.1
-      esbuild: 0.19.11
-    dev: false
-
-  /@hattip/bundler-netlify@0.0.39:
-    resolution: {integrity: sha512-0+jSoMZd4HkwVaIyEoBpFf4ytWc0BuFk1rznL5xVHQg01NrEfbzRZ0f/P+saWMd0DJeh/R0CT7KJnc9cS/iypQ==}
-    hasBin: true
-    dependencies:
-      cac: 6.7.14
-      cpr: 3.0.1
-      esbuild: 0.19.11
-    dev: false
-
-  /@hattip/bundler-vercel@0.0.39:
-    resolution: {integrity: sha512-j123+CYvWQG549jTjwVvErKS5qIblz9raFwykdABNio4Vjd1FVNo855bG+EfzSrljLeiZ0Z2A4edW3ukNeTitA==}
+  /@hattip/bundler-deno@0.0.40:
+    resolution: {integrity: sha512-kdptJ4uH/9b2w7NBQzM2rkwkF8Nzo36k9LLWiWIdiQgOsBr8FX3f8r1KdigYtHgZRqLhzMs5gy/dtn2n2QdqfA==}
     hasBin: true
     dependencies:
       cac: 6.7.14
@@ -3519,34 +3510,57 @@ packages:
       esbuild: 0.19.11
     dev: false
 
-  /@hattip/compose@0.0.39:
-    resolution: {integrity: sha512-6x5rMq/9NwAvo3wpRkWdDrj8VRcEJAdkPWqfmLRu3fB81HLYKLZpb32xwUoPv6GFF++FTt7Jelh9cjq5/HWJmg==}
+  /@hattip/bundler-netlify@0.0.40:
+    resolution: {integrity: sha512-CXa7Kqk8C8r+0iqPvY4P54lbQ1TC8JmF5ogjUx/ozt1nMlgekDaEzEh1SB3WvBEWBcC40CwFEzPeMfO4HmBFXA==}
+    hasBin: true
     dependencies:
-      '@hattip/core': 0.0.39
+      cac: 6.7.14
+      cpr: 3.0.1
+      esbuild: 0.19.11
     dev: false
 
-  /@hattip/cookie@0.0.39:
-    resolution: {integrity: sha512-yaFA3m3DMU7c0+FBsEpnrU+l92HJD6yLdJqQYPAwyuVjEWaxgbAxVdD3zy+TXz189qXmwRiR4qqeAX0pCCnc7w==}
+  /@hattip/bundler-vercel@0.0.40:
+    resolution: {integrity: sha512-aTJ5b2XvVs1XVMRZttX1ofjNLe4PkKTnH7eqAEVDmfuXFpDW8Cb3roVQ/oBl1xxx4h/VxtF+C0Zx60UO7khVYQ==}
+    hasBin: true
     dependencies:
-      '@hattip/compose': 0.0.39
-      '@hattip/core': 0.0.39
+      cac: 6.7.14
+      cpr: 3.0.1
+      esbuild: 0.19.11
+    dev: false
+
+  /@hattip/compose@0.0.40:
+    resolution: {integrity: sha512-fFUZojZcmQfbQgoAruyv9DPK9Citih1pJbZIHwf7X5DNrpUVOArGqMN4pcniB+pG6tmHvpKzDp1DJdUgDrBARg==}
+    dependencies:
+      '@hattip/core': 0.0.40
+    dev: false
+
+  /@hattip/cookie@0.0.40:
+    resolution: {integrity: sha512-/t5Cu5Uy3xIZ7V6MUqZrBwiVz5is3O0nABejvEVDvRHyQRGhN4HCJNuLYjS7MDXKPvmkRjeLTcClPWKbY3CeXA==}
+    dependencies:
+      '@hattip/compose': 0.0.40
+      '@hattip/core': 0.0.40
       '@types/cookie': 0.6.0
       cookie: 0.6.0
     dev: false
 
   /@hattip/core@0.0.39:
     resolution: {integrity: sha512-z/bXu24RYostljiWU3fjsfdOgc2QtNfn5MBYvVa1dZRtkraUdSkuGpcXHctxBZbL9/pmcseX1RarwUMYdz30dQ==}
+    dev: true
 
-  /@hattip/graphql@0.0.39(graphql@16.8.1):
-    resolution: {integrity: sha512-T1m7LbUbt/14r5hcBDbkrabcIMpRnvVWyPBFpjiYQ4yXUl7NIM6DEO7jWaKIn/KlF4prtSUtLoarPzF7COlXgQ==}
+  /@hattip/core@0.0.40:
+    resolution: {integrity: sha512-A03Olov83yWFrvH/rYeGjvXlVONnVU+ezm3qM7ZujkA8CUtSr+T30oYs+crabqWVMt87hWCVuEiRJXHB1rL44g==}
+    dev: false
+
+  /@hattip/graphql@0.0.40(graphql@16.8.1):
+    resolution: {integrity: sha512-TBGjM3kMU1NOpOnvP6A/wZJ75Qzle+o1So/u2kVAnPaz+zAGGvu5T8hZUBWop/DxvP8InxCIdtnIDT4nw96ZJA==}
     peerDependencies:
       graphql: ^16.8.1
     dependencies:
       '@graphql-tools/schema': 10.0.2(graphql@16.8.1)
       '@graphql-tools/utils': 10.0.12(graphql@16.8.1)
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
-      '@hattip/compose': 0.0.39
-      '@hattip/core': 0.0.39
+      '@hattip/compose': 0.0.40
+      '@hattip/core': 0.0.40
       dset: 3.1.3
       graphql: 16.8.1
       graphql-yoga: 5.1.1(graphql@16.8.1)
@@ -3558,6 +3572,13 @@ packages:
     resolution: {integrity: sha512-kMZb/5hkwVjyak7vwDz3yWg7jY+aL9WX2ufc6bzWx3IsotGmdohKCLUO2KmuZOK1usI5iKJaQX3GpQelR2jUgw==}
     dependencies:
       '@hattip/core': 0.0.39
+    dev: true
+
+  /@hattip/headers@0.0.40:
+    resolution: {integrity: sha512-vhC07+PG5BG4N2bHrfZNLnp1YcaD+bXV0z6paAOJAK3TgNAB3J58euhlMuU695LR2kl4eVEKRNvGbnTaC9/bXQ==}
+    dependencies:
+      '@hattip/core': 0.0.40
+    dev: false
 
   /@hattip/polyfills@0.0.39:
     resolution: {integrity: sha512-Jb5MNJ7QyBG1220GpZbqWKaNYXEVzJq/GiiFkslFOCXmhhNI2QVYQyJkJG6xv2uISb+75LdUDyXxQBJ5dWihyw==}
@@ -3565,19 +3586,28 @@ packages:
       '@hattip/core': 0.0.39
       '@whatwg-node/fetch': 0.9.15
       node-fetch-native: 1.6.1
+    dev: true
 
-  /@hattip/response@0.0.39:
-    resolution: {integrity: sha512-C+33xHtK6tJJ5mOGFJ4tI17p9WwOj9qlTutbKPvqze35n+PQBxkxXL4kiPKfwXHdJjUJpXd3hDPLvL/aV7OJiw==}
+  /@hattip/polyfills@0.0.40:
+    resolution: {integrity: sha512-H4xoviA0J1ElS5h0MFApC/GyP7TvWNzEmN1kHYZrJAskLdWOtCFsWZoOPgdg7OrAxOCVOoEULk0Swn/eZuy0Sg==}
     dependencies:
-      '@hattip/core': 0.0.39
+      '@hattip/core': 0.0.40
+      '@whatwg-node/fetch': 0.9.15
+      node-fetch-native: 1.6.1
     dev: false
 
-  /@hattip/session@0.0.39:
-    resolution: {integrity: sha512-/hYa9gAEn97QNlQeIrX3ZO4b4usasyus73/uAldM6OuNjZQqpQoU+mlTWLq+HnLsgyBM9EEs03prv7C1cfIMSg==}
+  /@hattip/response@0.0.40:
+    resolution: {integrity: sha512-6R2OPykx8UEaNYoRqmXCIgQ+78sSAZeWGsFGy7BDwvOqnmOx52iYAMec749y02FJixi0iiuASYDeaKFttFBCvg==}
     dependencies:
-      '@hattip/compose': 0.0.39
-      '@hattip/cookie': 0.0.39
-      '@hattip/core': 0.0.39
+      '@hattip/core': 0.0.40
+    dev: false
+
+  /@hattip/session@0.0.40:
+    resolution: {integrity: sha512-nhf27TAtUe7MG/AoGkxPYI4mP/Dvkw+ivkFQUJTF+EqL9kc2kCMhwNqZLavnub6yyrmerk2aB+402DxqYFIBmw==}
+    dependencies:
+      '@hattip/compose': 0.0.40
+      '@hattip/cookie': 0.0.40
+      '@hattip/core': 0.0.40
     dev: false
 
   /@hattip/walk@0.0.39:
@@ -3587,6 +3617,16 @@ packages:
       '@hattip/headers': 0.0.39
       cac: 6.7.14
       mime-types: 2.1.35
+    dev: true
+
+  /@hattip/walk@0.0.40:
+    resolution: {integrity: sha512-bj1sZfA5m8HIvzqaxQ96LLgIf9vJ7y4uAnqpc15nRXXCyouXwoaiaWF69X97/HToCdtlsD0tRD96DErP9R0sVA==}
+    hasBin: true
+    dependencies:
+      '@hattip/headers': 0.0.40
+      cac: 6.7.14
+      mime-types: 2.1.35
+    dev: false
 
   /@humanwhocodes/config-array@0.11.13:
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
@@ -11373,16 +11413,9 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: false
 
-  /lru-cache@10.0.2:
-    resolution: {integrity: sha512-Yj9mA8fPiVgOUpByoTZO5pNrcl5Yk37FcSHsUINpAsaBIEZIuqcCclDZJCVxqQShDsmYX8QG63svJiTbOATZwg==}
-    engines: {node: 14 || >=16.14}
-    dependencies:
-      semver: 7.5.4
-
   /lru-cache@10.1.0:
     resolution: {integrity: sha512-/1clY/ui8CzjKFyjdvwPWJUYKiFVXG2I2cY0ssG7h4+hwk+XOIX7ZSG9Q7TW8TW3Kp3BUSqgFWBLgL4PJ+Blag==}
     engines: {node: 14 || >=16.14}
-    dev: false
 
   /lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -13311,7 +13344,7 @@ packages:
     resolution: {integrity: sha512-MkhCqzzBEpPvxxQ71Md0b1Kk51W01lrYvlMzSUaIzNsODdd7mqhiimSZlr+VegAz5Z6Vzt9Xg2ttE//XBhH3EQ==}
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
-      lru-cache: 10.0.2
+      lru-cache: 10.1.0
       minipass: 7.0.4
 
   /path-to-regexp@0.1.7:
