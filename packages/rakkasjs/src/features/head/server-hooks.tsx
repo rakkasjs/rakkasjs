@@ -25,9 +25,6 @@ const headServerHooks: ServerHooks = {
 						continue;
 					}
 
-					const tag = (attributes as Record<string, string>)?.tagName ?? "meta";
-					delete (attributes as Record<string, string>)?.tagName;
-
 					if (typeof attributes === "string") {
 						if (name === "charset") {
 							result += `<meta charset="${escapeHtml(attributes)}">`;
@@ -55,8 +52,13 @@ const headServerHooks: ServerHooks = {
 							attributes,
 						);
 					} else {
-						result += "<" + tag;
+						const tagName = attributes?.tagName ?? "meta";
+
+						result += "<" + tagName;
 						for (const [attr, value] of Object.entries(attributes)) {
+							if (attr === "tagName") {
+								continue;
+							}
 							result += ` ${attr}="${escapeHtml(value)}"`;
 						}
 						result += ` data-rh="${escapeHtml(name)}">`;

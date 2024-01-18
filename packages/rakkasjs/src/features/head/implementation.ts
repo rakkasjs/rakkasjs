@@ -51,9 +51,6 @@ export function scheduleHeadUpdate() {
 
 				let el: HTMLElement | null | undefined;
 
-				const tag = (attributes as Record<string, string>)?.tagName ?? "meta";
-				delete (attributes as Record<string, string>)?.tagName;
-
 				if (typeof attributes === "string") {
 					if (name === "charset") {
 						el = select("meta[charset]");
@@ -103,21 +100,28 @@ export function scheduleHeadUpdate() {
 						}
 					}
 				} else {
-					el = select(`${tag}[data-rh="${escapeHtml(name)}"]`);
+					const tagName = attributes?.tagName ?? "meta";
+
+					el = select(`${tagName}[data-rh="${escapeHtml(name)}"]`);
 					if (attributes === null) {
 						el?.remove();
 					} else if (el) {
 						for (const attr of el.attributes) {
-							if (attr.name in attributes) {
+							if (attr.name === "tagName") {
+								continue;
+							} else if (attr.name in attributes) {
 								attr.value = attributes[attr.name];
 							} else if (attr.name !== "data-rh") {
 								el.removeAttribute(attr.name);
 							}
 						}
 					} else {
-						el = document.createElement(tag);
+						el = document.createElement(tagName);
 						document.head.appendChild(el);
 						for (const [attr, value] of Object.entries(attributes)) {
+							if (attr === "tagName") {
+								continue;
+							}
 							el.setAttribute(attr, value);
 						}
 						el.setAttribute("data-rh", name);
