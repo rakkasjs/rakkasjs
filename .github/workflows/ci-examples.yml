@@ -20,7 +20,7 @@ jobs:
           - os: ubuntu-latest
             node_version: 21
           - os: windows-latest
-            node_version: 21 # Node 20 has a unicode file path bug on Windows
+            node_version: 21.5 # Node 20 has a unicode file path bug on Windows and Node 21.6 has a bug that causes a crash
       fail-fast: false
     name: "CI tests on node-${{ matrix.node_version }}, ${{ matrix.os }}"
     steps:
