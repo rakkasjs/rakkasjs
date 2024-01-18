@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@hattip/response": "0.0.39",
-    "@mantine/core": "^7.4.1",
+    "@mantine/core": "^7.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

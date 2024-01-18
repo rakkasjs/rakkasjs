@@ -86,7 +86,7 @@
     "@hattip/core": "0.0.39",
     "@hattip/polyfills": "0.0.39",
     "@microsoft/fetch-event-source": "^2.0.1",
-    "@types/node": "^20.11.1",
+    "@types/node": "^20.11.5",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@vavite/connect": "^4.0.1",
