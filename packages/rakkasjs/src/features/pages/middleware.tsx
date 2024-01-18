@@ -34,6 +34,7 @@ import { uneval } from "devalue";
 import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
 import { PageRequestHooks } from "../../runtime/hattip-handler";
 import { ModuleNode } from "vite";
+import { escapeCss, escapeHtml } from "../../runtime/utils";
 
 const assetPrefix = import.meta.env.BASE_URL ?? "/";
 
@@ -575,15 +576,6 @@ export default async function renderPageRoute(
 	return new Response(readable, { status, headers });
 }
 
-function escapeHtml(text: string): string {
-	return text
-		.replace(/&/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&#x27;");
-}
-
 const REACT_FAST_REFRESH_PREAMBLE = `import RefreshRuntime from '/@react-refresh'
 RefreshRuntime.injectIntoGlobalHook(window)
 window.$RefreshReg$ = () => {}
@@ -697,7 +689,7 @@ async function createPrefetchTags(
 			if (!transformed) continue;
 			result += `<style type="text/css" data-vite-dev-id=${JSON.stringify(
 				id,
-			)}>${escapeHtml(transformed.code)}</style>`;
+			)}>${escapeCss(transformed.code)}</style>`;
 		}
 	}
 

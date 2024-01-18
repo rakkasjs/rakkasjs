@@ -24,3 +24,7 @@ export function escapeHtml(text: string): string {
 		.replace(/"/g, "&quot;")
 		.replace(/'/g, "&#x27;");
 }
+
+export function escapeCss(text: string): string {
+	return text.replace(/\\/g, "\\\\").replace(/</g, "\\<");
+}
