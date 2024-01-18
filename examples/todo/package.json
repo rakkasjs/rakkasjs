@@ -26,7 +26,7 @@
     "vitest": "^1.2.0"
   },
   "dependencies": {
-    "@hattip/response": "0.0.39",
+    "@hattip/response": "0.0.40",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }
