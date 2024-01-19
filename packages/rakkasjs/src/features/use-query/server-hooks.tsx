@@ -47,7 +47,7 @@ const useQueryServerHooks: ServerHooks = {
 				return result as any;
 			},
 
-			set(key: string, valueOrPromise: Promise<any>) {
+			set(key: string, valueOrPromise: any) {
 				this._items[key] = valueOrPromise;
 				if (valueOrPromise instanceof Promise) {
 					valueOrPromise.then(
@@ -89,7 +89,7 @@ const useQueryServerHooks: ServerHooks = {
 			},
 
 			extendPageContext(ctx) {
-				ctx.queryClient = createQueryClient(cache);
+				ctx.queryClient = createQueryClient(cache, ctx);
 			},
 
 			emitToDocumentHead() {
