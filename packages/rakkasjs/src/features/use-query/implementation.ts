@@ -321,11 +321,11 @@ function useQueryBase<
 
 	const cache = useContext(QueryCacheContext);
 
-	useMemo(
+	const memoizedTags = useMemo(
 		() => {
 			const set = new Set(options.tags);
 			const hash = JSON.stringify([...set].sort());
-			cache.setTags(queryKey, set, hash);
+			return { set, hash };
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[...options.tags],
@@ -360,10 +360,11 @@ function useQueryBase<
 
 	useEffect(() => {
 		const cacheItem = queryKey ? cache.get(queryKey) : undefined;
-
 		if (cacheItem === undefined) {
 			return;
 		}
+
+		cache.setTags(queryKey!, memoizedTags.set, memoizedTags.hash);
 
 		if (
 			enabled &&
@@ -377,6 +378,7 @@ function useQueryBase<
 		) {
 			const promiseOrValue = queryFn(ctx);
 			cache.set(queryKey!, promiseOrValue, cacheTime);
+			cache.setTags(queryKey!, memoizedTags.set, memoizedTags.hash);
 		}
 
 		cacheItem.hydrated = false;
@@ -391,9 +393,10 @@ function useQueryBase<
 			const item = cache.get(queryKey!);
 			if (!item?.promise) {
 				cache.set(queryKey!, queryFn(ctx), cacheTime);
+				cache.setTags(queryKey!, memoizedTags.set, memoizedTags.hash);
 			}
 		},
-		[cache, cacheTime, ctx, queryFn, queryKey],
+		[cache, cacheTime, ctx, queryFn, queryKey, memoizedTags],
 	);
 
 	if (item && "value" in item) {
@@ -448,6 +451,7 @@ function useQueryBase<
 
 	if (shouldCache) {
 		cache.set(queryKey, result, cacheTime);
+		cache.setTags(queryKey, memoizedTags.set, memoizedTags.hash);
 	}
 
 	if (result instanceof Promise) {
