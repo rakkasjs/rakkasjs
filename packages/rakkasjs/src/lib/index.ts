@@ -60,3 +60,5 @@ export type {
 	ServerHooks,
 	PageRequestHooks as PageHooks,
 } from "../runtime/hattip-handler";
+
+export type { getRequestContext } from "../features/async-local-request-context/lib-server";

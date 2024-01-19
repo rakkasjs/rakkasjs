@@ -89,6 +89,7 @@ export default defineConfig([
 		platform: "node",
 		shims: false,
 		external: [
+			"node:async_hooks",
 			"virtual:rakkasjs:hattip-entry",
 			"virtual:rakkasjs:common-hooks",
 			"virtual:rakkasjs:api-routes",
