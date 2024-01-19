@@ -1087,6 +1087,21 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 					document.body?.innerText.includes("2 * 5 = 10"),
 			);
 		});
+
+		test("server-only and client-only files are stripped", async () => {
+			await page.goto(host + "/only");
+
+			const body = (await page.waitForSelector("body"))!;
+			// Should be red
+			expect(await body.evaluate((e) => getComputedStyle(e).color)).toBe(
+				"rgb(255, 0, 0)",
+			);
+
+			await page.waitForSelector(".hydrated");
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Pass"),
+			);
+		});
 	});
 }
 
