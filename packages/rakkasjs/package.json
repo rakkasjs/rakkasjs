@@ -97,6 +97,7 @@
     "cac": "^6.7.14",
     "cheerio": "^1.0.0-rc.12",
     "devalue": "^4.3.2",
+    "es-module-lexer": "^1.4.1",
     "fast-glob": "^3.3.2",
     "magic-string": "^0.30.5",
     "micromatch": "^4.0.5",

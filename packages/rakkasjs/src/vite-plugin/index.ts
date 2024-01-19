@@ -1,4 +1,4 @@
-import { PluginOption, ResolvedConfig } from "vite";
+import { FilterPattern, PluginOption, ResolvedConfig } from "vite";
 import react, { Options as ReactPluginOptions } from "@vitejs/plugin-react";
 import { injectConfig } from "./inject-config";
 import { preventViteBuild } from "./prevent-vite-build";
@@ -14,6 +14,7 @@ import pageRoutes from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
 import { adapters, RakkasAdapter } from "./adapters";
 import { babelTransformClientSidePages } from "../features/run-server-side/implementation/transform/transform-client-page";
+import { serverOnlyClientOnly } from "./server-only-client-only";
 
 export interface RakkasOptions {
 	/** Options passed to @vite/plugin-react */
@@ -40,6 +41,24 @@ export interface RakkasOptions {
 		| "bun"
 		| "lagon"
 		| RakkasAdapter;
+	/**
+	 * Filter patterns for server-only files that should not be included in the client bundle.
+	 *
+	 * @default { include: ["**\/*.server.*", "**\/server/**"] }
+	 */
+	serverOnlyFiles?: {
+		include?: FilterPattern;
+		exclude?: FilterPattern;
+	};
+	/**
+	 * Filter patterns for client-only files that should not be included in the server bundle.
+	 *
+	 * @default { include: ["**\/*.client.*", "**\/client/**"] }
+	 */
+	clientOnlyFiles?: {
+		include?: FilterPattern;
+		exclude?: FilterPattern;
+	};
 }
 
 export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
@@ -135,6 +154,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 				}
 			},
 		}),
+		serverOnlyClientOnly(options),
 	];
 }
 
