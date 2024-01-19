@@ -3,6 +3,7 @@ import { Todo } from "./Todo";
 import css from "./page.module.css";
 import {
 	Page,
+	getRequestContext,
 	runServerSideMutation,
 	runServerSideQuery,
 	useRequestContext,
@@ -11,16 +12,14 @@ import {
 	useQueryClient,
 	useSuspenseQuery,
 	useMutation,
+	queryOptions,
 } from "@tanstack/react-query";
 
 import { createTodo, readAllTodos } from "src/crud";
 
 const TodoPage: Page = () => {
 	const ctx = useRequestContext();
-	const { data: todos } = useSuspenseQuery({
-		queryKey: ["todos"],
-		queryFn: () => runServerSideQuery(ctx, readAllTodos),
-	});
+	const { data: todos } = useSuspenseQuery(todoOptions);
 
 	const [text, setText] = useState("");
 
@@ -74,10 +73,10 @@ const TodoPage: Page = () => {
 export default TodoPage;
 
 TodoPage.preload = (ctx) => {
-	if (!ctx.reactQueryClient.getQueryData(["todos"])) {
-		ctx.reactQueryClient.prefetchQuery({
-			queryKey: ["todos"],
-			queryFn: () => runServerSideQuery(ctx.requestContext, readAllTodos),
-		});
-	}
+	ctx.reactQueryClient.prefetchQuery(todoOptions);
 };
+
+const todoOptions = queryOptions({
+	queryKey: ["todos"],
+	queryFn: () => runServerSideQuery(getRequestContext(), readAllTodos),
+});

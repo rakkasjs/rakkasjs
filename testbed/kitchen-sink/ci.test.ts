@@ -1068,6 +1068,25 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				document.body?.innerText.includes("Success"),
 			);
 		});
+
+		test("queryOptions work", async () => {
+			await page.goto(host + "/query-options");
+			await page.waitForFunction(
+				() =>
+					document.body?.innerText.includes("2 * 2 = 4") &&
+					document.body?.innerText.includes("2 * 5 = 10"),
+			);
+
+			await page.goto(host + "/query-options/elsewhere");
+			await page.waitForSelector(".hydrated");
+			await page.click("a");
+
+			await page.waitForFunction(
+				() =>
+					document.body?.innerText.includes("2 * 2 = 4") &&
+					document.body?.innerText.includes("2 * 5 = 10"),
+			);
+		});
 	});
 }
 

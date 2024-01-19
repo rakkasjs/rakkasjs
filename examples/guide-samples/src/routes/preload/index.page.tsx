@@ -1,7 +1,7 @@
-import { Page, createQuery, useQuery } from "rakkasjs";
+import { Page, queryOptions, useQuery } from "rakkasjs";
 
 const PreloadPage: Page = () => {
-	const preloaded = useQuery(fakeDataQuery());
+	const preloaded = useQuery(fakeDataQuery);
 
 	return (
 		<div>
@@ -17,7 +17,7 @@ export default PreloadPage;
 PreloadPage.preload = (ctx) => {
 	// Prefetch a query to avoid waterfalls caused by late discovery of data
 	// dependencies.
-	ctx.queryClient.prefetchQuery(fakeDataQuery());
+	ctx.queryClient.prefetchQuery(fakeDataQuery);
 
 	return {
 		// Set head meta tags. Unlike a Head component rendered in a page,
@@ -27,8 +27,8 @@ PreloadPage.preload = (ctx) => {
 	};
 };
 
-const fakeDataQuery = createQuery({
-	createKey: () => "preload",
+const fakeDataQuery = queryOptions({
+	queryKey: "preload",
 	queryFn() {
 		return "some fake data";
 	},

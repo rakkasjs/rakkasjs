@@ -16,7 +16,7 @@ You may think that the `preload` function is similar to `getServerSideProps` or 
 
 Consider a scenario where both a page and its parent layout need to fetch some data. Since the page is a child of the layout, its data fetching hook will not be rendered until the parent layout is rendered. If the data fetched by the page is not dependent on the data fetched by the layout, there is no reason to wait until the parent finishes. In this case, you can use the page's `preload` function like in the above example to start fetching immediately. This works because `preload` functions of the page and all its parent layouts are called in parallel.
 
-For this purpose, you can use the `ctx.queryClient.prefetchQuery` function in your `preload` function. To avoid repeating the same code in multiple places, you can use the `createQuery` API that returns a function that can build query options suitable to be passed to `prefetchQuery` and `useQuery`. There us no separate ~~`createServerSideQuery`~~ API, you can use `runServerSideQuery` in your query function to run code on the server.
+For this purpose, you can use the `ctx.queryClient.prefetchQuery` function in your `preload` function. To avoid repeating the same code in multiple places, you can use the `queryOptions` API to define a function that can build query options suitable to be passed to `prefetchQuery` and `useQuery`. There us no separate ~~`serverSideQueryOptions`~~ API, you can use `runServerSideQuery` in your query function to run code on the server.
 
 ## Head tags
 

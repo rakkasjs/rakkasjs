@@ -3,7 +3,7 @@ import { Todo } from "./Todo";
 import css from "./page.module.css";
 import {
 	Page,
-	createQuery,
+	queryOptions,
 	runServerSideQuery,
 	useQuery,
 	useQueryClient,
@@ -13,7 +13,7 @@ import {
 import { createTodo, readAllTodos } from "src/crud";
 
 const TodoPage: Page = () => {
-	const { data } = useQuery(todos());
+	const { data } = useQuery(todos);
 
 	const [text, setText] = useState("");
 
@@ -65,11 +65,11 @@ const TodoPage: Page = () => {
 export default TodoPage;
 
 TodoPage.preload = (ctx) => {
-	ctx.queryClient.prefetchQuery(todos());
+	ctx.queryClient.prefetchQuery(todos);
 };
 
-const todos = createQuery({
-	createKey: () => "todos",
+const todos = queryOptions({
+	queryKey: "todos",
 	queryFn(ctx) {
 		return runServerSideQuery(ctx.requestContext, readAllTodos);
 	},
