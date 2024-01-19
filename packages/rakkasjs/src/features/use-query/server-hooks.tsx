@@ -25,6 +25,8 @@ const useQueryServerHooks: ServerHooks = {
 				return items;
 			},
 
+			setTags() {},
+
 			has(key: string) {
 				return key in this._items;
 			},

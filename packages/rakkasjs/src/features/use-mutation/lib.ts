@@ -231,8 +231,14 @@ export interface UseMutationsOptions<T, V> {
 	onSettled?(id: number, data?: T, error?: unknown): void;
 	/** Called when the mutation completes successfully */
 	onSuccess?(id: number, data: T): void;
+	/** Query tags to invalidate when the mutation settles */
+	invalidateTags?:
+		| string[]
+		| Set<string>
+		| ((id: number, data?: T, error?: unknown) => string[] | Set<string>);
 }
 
+/** Return value of useMutations */
 export interface UseMutationsResult<T, V> {
 	/** Fire the mutation */
 	mutate(vars: V): void;
@@ -262,6 +268,8 @@ export function useMutations<T, V = void>(
 	const [pending, setPending] = useState<{ id: number; vars: V }[]>([]);
 	const idRef = useRef(0);
 
+	const queryClient = useQueryClient();
+
 	async function mutate(vars: V) {
 		const id = idRef.current++;
 		setPending((pending) => [...pending, { id, vars }]);
@@ -283,6 +291,13 @@ export function useMutations<T, V = void>(
 		} finally {
 			try {
 				options.onSettled?.(id, data, error);
+				if (options.invalidateTags) {
+					const tags =
+						typeof options.invalidateTags === "function"
+							? options.invalidateTags(id, data, error)
+							: options.invalidateTags;
+					queryClient.invalidateTags(tags);
+				}
 			} finally {
 				setPending((pending) => pending.filter((p) => p.id !== id));
 			}

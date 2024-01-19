@@ -28,21 +28,18 @@ export interface CacheItem {
 	cacheTime: number;
 	evictionTimeout?: ReturnType<typeof setTimeout>;
 	invalid?: boolean;
-	tags: Set<string>;
+	tags?: Set<string>;
+	tagsHash?: string;
 }
 
 export interface QueryCache {
 	has(key: string): boolean;
-	get(key: string, tags?: string[] | Set<string>): CacheItem | undefined;
-	set(
-		key: string,
-		value: any,
-		cacheTime?: number,
-		tags?: string[] | Set<string>,
-	): void;
+	get(key: string): CacheItem | undefined;
+	set(key: string, value: any, cacheTime?: number): void;
 	invalidate(key: string): void;
 	subscribe(key: string, fn: () => void): () => void;
 	enumerate(): Iterable<string>;
+	setTags(key: string, tags: Set<string>, tagsHash: string): void;
 }
 
 export const QueryCacheContext = createNamedContext<QueryCache>(
@@ -188,6 +185,7 @@ export function usePageContext(): PageContext {
 /** Function passed to useQuery */
 export type QueryFn<T> = (ctx: PageContext) => T | Promise<T>;
 
+/** Utility function to create typed queries and query factories */
 export function queryOptions<
 	T,
 	Enabled extends boolean = true,
@@ -319,11 +317,21 @@ function useQueryBase<
 		initialData,
 		placeholderData,
 		keepPreviousData,
-		tags,
 	} = options;
 
-	const [initialEnabled] = useState(enabled);
 	const cache = useContext(QueryCacheContext);
+
+	useMemo(
+		() => {
+			const set = new Set(options.tags);
+			const hash = JSON.stringify([...set].sort());
+			cache.setTags(queryKey, set, hash);
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[...options.tags],
+	);
+
+	const [initialEnabled] = useState(enabled);
 
 	const item = useSyncExternalStore(
 		(onStoreChange) => {
@@ -337,8 +345,8 @@ function useQueryBase<
 				};
 			}
 		},
-		() => (queryKey === undefined ? undefined : cache.get(queryKey, tags)),
-		() => (queryKey === undefined ? undefined : cache.get(queryKey, tags)),
+		() => (queryKey === undefined ? undefined : cache.get(queryKey)),
+		() => (queryKey === undefined ? undefined : cache.get(queryKey)),
 	);
 
 	const ctx = usePageContext();
@@ -351,7 +359,7 @@ function useQueryBase<
 	}, [item, keepPreviousData]);
 
 	useEffect(() => {
-		const cacheItem = queryKey ? cache.get(queryKey, tags) : undefined;
+		const cacheItem = queryKey ? cache.get(queryKey) : undefined;
 
 		if (cacheItem === undefined) {
 			return;
@@ -368,7 +376,7 @@ function useQueryBase<
 			!cacheItem.hydrated
 		) {
 			const promiseOrValue = queryFn(ctx);
-			cache.set(queryKey!, promiseOrValue, cacheTime, tags);
+			cache.set(queryKey!, promiseOrValue, cacheTime);
 		}
 
 		cacheItem.hydrated = false;
@@ -380,12 +388,12 @@ function useQueryBase<
 
 	const refetch = useCallback(
 		function refetch() {
-			const item = cache.get(queryKey!, tags);
+			const item = cache.get(queryKey!);
 			if (!item?.promise) {
-				cache.set(queryKey!, queryFn(ctx), cacheTime, tags);
+				cache.set(queryKey!, queryFn(ctx), cacheTime);
 			}
 		},
-		[cache, cacheTime, ctx, queryFn, queryKey, tags],
+		[cache, cacheTime, ctx, queryFn, queryKey],
 	);
 
 	if (item && "value" in item) {
@@ -439,7 +447,7 @@ function useQueryBase<
 	}
 
 	if (shouldCache) {
-		cache.set(queryKey, result, cacheTime, tags);
+		cache.set(queryKey, result, cacheTime);
 	}
 
 	if (result instanceof Promise) {
@@ -690,7 +698,9 @@ export function createQueryClient(
 			}
 
 			try {
-				cache.set(queryKey, queryFn(ctx), cacheTime, tags);
+				cache.set(queryKey, queryFn(ctx), cacheTime);
+				const set = new Set(tags);
+				cache.setTags(queryKey, set, JSON.stringify([...set].sort()));
 			} catch {
 				// Do nothing
 			}
