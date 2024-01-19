@@ -17,3 +17,5 @@ export {
 export { createRequestHandler } from "../runtime/hattip-handler";
 
 export * from "../features/pages/lib";
+
+export { getRequestContext } from "../features/async-local-request-context/lib-server";

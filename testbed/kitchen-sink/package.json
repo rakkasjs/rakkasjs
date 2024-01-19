@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "rakkas --port 3000",
     "build": "rakkas build",
-    "build:cfw": "cross-env RAKKAS_TARGET=cloudflare-workers rakkas build",
+    "build:cfw": "cross-env RAKKAS_TARGET=cloudflare-workers-node-compat rakkas build",
     "build:netlify": "rimraf .netlify/edge-functions-dist && cross-env RAKKAS_TARGET=netlify rakkas build",
     "build:netlify-edge": "cross-env RAKKAS_TARGET=netlify-edge rakkas build",
     "build:deno": "cross-env RAKKAS_TARGET=deno rakkas build",

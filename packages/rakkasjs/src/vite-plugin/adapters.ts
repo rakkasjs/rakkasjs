@@ -4,6 +4,9 @@ import cloudflareWorkers from "@hattip/bundler-cloudflare-workers";
 import { bundle as netlify } from "@hattip/bundler-netlify";
 import { bundle as vercel } from "@hattip/bundler-vercel";
 import deno from "@hattip/bundler-deno";
+import { builtinModules } from "node:module";
+
+const nodePrefixedModules = builtinModules.map((m) => "node:" + m);
 
 export interface RakkasAdapter {
 	name: string;
@@ -38,6 +41,54 @@ export const adapters: Record<string, RakkasAdapter> = {
 					options.define = options.define || {};
 					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
 					options.define["global"] = "globalThis";
+					options.plugins = options.plugins || [];
+					options.plugins.push({
+						name: "async-hooks-stub",
+						setup(build) {
+							build.onResolve({ filter: /^node:async_hooks$/ }, () => ({
+								namespace: "node",
+								path: "async_hooks",
+							}));
+
+							build.onLoad(
+								{ namespace: "node", filter: /^async_hooks$/ },
+								() => ({
+									contents: ASYNC_HOOKS_STUB,
+								}),
+							);
+						},
+					});
+				},
+			);
+		},
+	},
+
+	"cloudflare-workers-node-compat": {
+		name: "cloudflare-workers",
+		async bundle(root: string) {
+			let entry = findEntry(root, "src/entry-cloudflare-workers");
+
+			if (!entry) {
+				entry = path.resolve(root, "dist/server/entry-cloudflare-workers.js");
+				await fs.promises.writeFile(entry, CLOUDFLARE_WORKERS_ENTRY);
+			}
+
+			await cloudflareWorkers(
+				{
+					output: path.resolve(
+						root,
+						"dist/server/cloudflare-workers-bundle.js",
+					),
+					cfwEntry: entry,
+				},
+				(options) => {
+					options.define = options.define || {};
+					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
+					options.define["global"] = "globalThis";
+					options.external = [
+						...(options.external ?? []),
+						...nodePrefixedModules,
+					];
 				},
 			);
 		},
@@ -86,6 +137,10 @@ export const adapters: Record<string, RakkasAdapter> = {
 					options.define = options.define || {};
 					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
 					options.define["global"] = "globalThis";
+					options.external = [
+						...(options.external ?? []),
+						...nodePrefixedModules,
+					];
 				},
 			});
 		},
@@ -136,6 +191,10 @@ export const adapters: Record<string, RakkasAdapter> = {
 					options.define = options.define || {};
 					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
 					options.define["global"] = "globalThis";
+					options.external = [
+						...(options.external ?? []),
+						...nodePrefixedModules,
+					];
 				},
 			});
 		},
@@ -191,12 +250,41 @@ export const adapters: Record<string, RakkasAdapter> = {
 		disableStreaming: true,
 
 		async bundle(root) {
-			let input = findEntry(root, "src/entry-lagon");
+			let entry = findEntry(root, "src/entry-lagon");
 
-			if (!input) {
-				input = path.resolve(root, "dist/server/entry-lagon.js");
-				await fs.promises.writeFile(input, LAGON_ENTRY);
+			if (!entry) {
+				entry = path.resolve(root, "dist/server/entry-lagon.js");
+				await fs.promises.writeFile(entry, LAGON_ENTRY);
 			}
+
+			await cloudflareWorkers(
+				{
+					output: path.resolve(root, "dist/server/lagon-bundle.js"),
+					cfwEntry: entry,
+				},
+				(options) => {
+					options.define = options.define || {};
+					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
+					options.define["global"] = "globalThis";
+					options.plugins = options.plugins || [];
+					options.plugins.push({
+						name: "async-hooks-stub",
+						setup(build) {
+							build.onResolve({ filter: /^node:async_hooks$/ }, () => ({
+								namespace: "node",
+								path: "async_hooks",
+							}));
+
+							build.onLoad(
+								{ namespace: "node", filter: /^async_hooks$/ },
+								() => ({
+									contents: ASYNC_HOOKS_STUB,
+								}),
+							);
+						},
+					});
+				},
+			);
 		},
 	},
 };
@@ -375,4 +463,8 @@ const LAGON_ENTRY = `
 	};
 
 	export const handler = lagonAdapter(hattipHandler);
+`;
+
+const ASYNC_HOOKS_STUB = `
+export const AsyncLocalStorage = undefined;
 `;

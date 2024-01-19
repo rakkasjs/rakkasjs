@@ -1,8 +1,6 @@
 
-compatibility_date = "2021-11-01"
-compatibility_flags = [
-  "streams_enable_constructors",
-]
+compatibility_date = "2023-12-18"
+compatibility_flags = ["nodejs_compat"]
 main = "dist/server/cloudflare-workers-bundle.js"
 name = "rakkas-testbed"
 usage_model = 'bundled'

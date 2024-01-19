@@ -1053,6 +1053,21 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				() => document.documentElement.scrollTop !== 0,
 			);
 		});
+
+		test("getRequestContext works", async () => {
+			await page.goto(host + "/alsrc");
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Success"),
+			);
+
+			await page.goto(host + "/alsrc/elsewhere");
+			await page.waitForSelector(".hydrated");
+			await page.click("a");
+
+			await page.waitForFunction(() =>
+				document.body?.innerText.includes("Success"),
+			);
+		});
 	});
 }
 

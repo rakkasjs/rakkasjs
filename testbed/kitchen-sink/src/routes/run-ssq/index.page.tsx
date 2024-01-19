@@ -4,7 +4,7 @@ export default function UseSsq() {
 	const a = 2;
 	const b = 5;
 
-	const fetched1 = useQuery("run-ssq", (ctx) => {
+	const fetched1 = useQuery("run-ssq-1", (ctx) => {
 		return runServerSideQuery(
 			ctx.requestContext,
 			() => ({
@@ -15,7 +15,7 @@ export default function UseSsq() {
 		);
 	});
 
-	const fetched2 = useQuery("run-ssq", (ctx) => {
+	const fetched2 = useQuery("run-ssq-2", (ctx) => {
 		return runServerSideQuery(
 			ctx.requestContext,
 			() => ({
