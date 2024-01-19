@@ -177,38 +177,15 @@ export function usePageContext(): PageContext {
 /** Function passed to useQuery */
 export type QueryFn<T> = (ctx: PageContext) => T | Promise<T>;
 
-export interface CreateQueryOptions<
-	Args extends any[],
-	T,
-	Enabled extends boolean = true,
-	InitialData extends T | undefined = undefined,
-	PlaceholderData = undefined,
-> extends UseQueryOptions<T, Enabled, InitialData, PlaceholderData> {
-	createKey(...args: Args): string;
-	queryFn(ctx: PageContext, ...args: Args): T | Promise<T>;
-}
-
-export function createQuery<
-	Args extends any[],
+export function queryOptions<
 	T,
 	Enabled extends boolean = true,
 	InitialData extends T | undefined = undefined,
 	PlaceholderData = undefined,
 >(
-	options: CreateQueryOptions<Args, T, Enabled, InitialData, PlaceholderData>,
-): (
-	...args: Args
-) => CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData> {
-	const { createKey, queryFn, ...useQueryOptions } = options;
-
-	return (...args: Args) => {
-		const key = createKey(...args);
-		return {
-			...useQueryOptions,
-			queryKey: key,
-			queryFn: (ctx) => queryFn(ctx, ...args),
-		};
-	};
+	options: CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData>,
+): CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData> {
+	return options;
 }
 
 /**

@@ -4,11 +4,10 @@ export type {
 	QueryFn,
 	PageContext,
 	QueryClient,
-	CreateQueryOptions,
 } from "./implementation";
 export {
 	useQuery,
 	useQueryClient,
 	usePageContext,
-	createQuery,
+	queryOptions,
 } from "./implementation";
