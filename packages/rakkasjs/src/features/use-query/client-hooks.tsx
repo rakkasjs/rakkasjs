@@ -50,7 +50,7 @@ const cache: QueryCache = {
 		return key in queryCache || (typeof $RSC !== "undefined" && key in $RSC);
 	},
 
-	get(key: string) {
+	get(key: string, tags) {
 		if (!queryCache[key] && typeof $RSC !== "undefined" && key in $RSC) {
 			queryCache[key] = {
 				value: $RSC[key],
@@ -58,6 +58,7 @@ const cache: QueryCache = {
 				date: Date.now(),
 				hydrated: true,
 				cacheTime: DEFAULT_QUERY_OPTIONS.cacheTime,
+				tags: new Set(tags),
 			};
 
 			delete $RSC[key];
@@ -70,6 +71,7 @@ const cache: QueryCache = {
 		key: string,
 		valueOrPromise: any,
 		cacheTime = DEFAULT_QUERY_OPTIONS.cacheTime,
+		tags: string[] | Set<string>,
 	) {
 		if (valueOrPromise instanceof Promise) {
 			queryCache[key] ||= {
@@ -77,7 +79,9 @@ const cache: QueryCache = {
 				hydrated: false,
 				subscribers: new Set(),
 				cacheTime,
+				tags: new Set(tags),
 			};
+
 			queryCache[key] = {
 				...queryCache[key]!,
 				promise: valueOrPromise,
@@ -109,6 +113,7 @@ const cache: QueryCache = {
 				hydrated: false,
 				subscribers: new Set(),
 				cacheTime,
+				tags: new Set(tags),
 			};
 			queryCache[key] = {
 				...queryCache[key]!,
@@ -130,6 +135,7 @@ const cache: QueryCache = {
 			date: Date.now(),
 			hydrated: false,
 			cacheTime: DEFAULT_QUERY_OPTIONS.cacheTime,
+			tags: new Set([]),
 		};
 		queryCache[key]!.subscribers.add(fn);
 		if (queryCache[key]!.evictionTimeout !== undefined) {

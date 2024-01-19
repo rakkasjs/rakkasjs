@@ -1102,6 +1102,27 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 				document.body?.innerText.includes("Pass"),
 			);
 		});
+
+		test("queries can be invalidated by tags", async () => {
+			await page.goto(host + "/query-tags");
+			await page.waitForSelector(".hydrated");
+
+			await page.waitForFunction(
+				() =>
+					document.body?.innerText.includes("data1: 0") &&
+					document.body?.innerText.includes("data2: 0") &&
+					document.body?.innerText.includes("data3: 0"),
+			);
+
+			await page.click("button");
+
+			await page.waitForFunction(
+				() =>
+					document.body?.innerText.includes("data1: 1") &&
+					document.body?.innerText.includes("data2: 0") &&
+					document.body?.innerText.includes("data3: 1"),
+			);
+		});
 	});
 }
 
