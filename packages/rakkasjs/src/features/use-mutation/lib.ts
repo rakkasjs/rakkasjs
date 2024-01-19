@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from "react";
+import { useQueryClient } from "../use-query/implementation";
 
 /** Function passed to useMutation */
 export type MutationFunction<T, V> = (vars: V) => T | Promise<T>;
@@ -13,6 +14,11 @@ export interface UseMutationOptions<T, V> {
 	onSettled?(data?: T, error?: unknown): void;
 	/** Called when the mutation completes successfully */
 	onSuccess?(data: T): void;
+	/** Query tags to invalidate when the mutation settles */
+	invalidateTags?:
+		| string[]
+		| Set<string>
+		| ((data?: T, error?: unknown) => string[] | Set<string>);
 }
 
 /** Initial mutation state */
@@ -124,7 +130,9 @@ export function useMutation<T, V = void>(
 	const [error, setError] = useState<unknown | undefined>(undefined);
 	const resetRef = useRef(false);
 
-	const { onMutate, onError, onSettled, onSuccess } = options;
+	const { onMutate, onError, onSettled, onSuccess, invalidateTags } = options;
+
+	const queryClient = useQueryClient();
 
 	const doMutate = useCallback(
 		async function doMutate(vars: V): Promise<T> {
@@ -152,9 +160,27 @@ export function useMutation<T, V = void>(
 				if (!resetRef.current) {
 					onSettled?.(data, error);
 				}
+
+				if (invalidateTags) {
+					const tags =
+						typeof invalidateTags === "function"
+							? invalidateTags(data, error)
+							: invalidateTags;
+					queryClient.invalidateTags(tags);
+				}
 			}
 		},
-		[data, error, mutationFn, onError, onMutate, onSettled, onSuccess],
+		[
+			data,
+			error,
+			mutationFn,
+			onError,
+			onMutate,
+			onSettled,
+			onSuccess,
+			invalidateTags,
+			queryClient,
+		],
 	);
 
 	const mutateAsync = useCallback(

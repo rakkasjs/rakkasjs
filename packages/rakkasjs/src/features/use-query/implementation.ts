@@ -28,12 +28,18 @@ export interface CacheItem {
 	cacheTime: number;
 	evictionTimeout?: ReturnType<typeof setTimeout>;
 	invalid?: boolean;
+	tags: Set<string>;
 }
 
 export interface QueryCache {
 	has(key: string): boolean;
-	get(key: string): CacheItem | undefined;
-	set(key: string, value: any, cacheTime?: number): void;
+	get(key: string, tags?: string[] | Set<string>): CacheItem | undefined;
+	set(
+		key: string,
+		value: any,
+		cacheTime?: number,
+		tags?: string[] | Set<string>,
+	): void;
 	invalidate(key: string): void;
 	subscribe(key: string, fn: () => void): () => void;
 	enumerate(): Iterable<string>;
@@ -125,6 +131,10 @@ export interface UseQueryOptions<
 	 * If set, any previous data will be kept when fetching new data because the query key changed.
 	 */
 	keepPreviousData?: boolean;
+	/**
+	 * Query tags that can be used to invalidate queries after a mutation.
+	 */
+	tags?: string[] | Set<string>;
 }
 
 export interface CompleteUseQueryOptions<
@@ -152,6 +162,7 @@ export const DEFAULT_QUERY_OPTIONS: RequiredUseQueryOptions = {
 	refetchOnReconnect: false,
 	enabled: true,
 	keepPreviousData: false,
+	tags: [],
 };
 
 /** Context within which the page is being rendered */
@@ -308,6 +319,7 @@ function useQueryBase<
 		initialData,
 		placeholderData,
 		keepPreviousData,
+		tags,
 	} = options;
 
 	const [initialEnabled] = useState(enabled);
@@ -325,8 +337,8 @@ function useQueryBase<
 				};
 			}
 		},
-		() => (queryKey === undefined ? undefined : cache.get(queryKey)),
-		() => (queryKey === undefined ? undefined : cache.get(queryKey)),
+		() => (queryKey === undefined ? undefined : cache.get(queryKey, tags)),
+		() => (queryKey === undefined ? undefined : cache.get(queryKey, tags)),
 	);
 
 	const ctx = usePageContext();
@@ -339,7 +351,7 @@ function useQueryBase<
 	}, [item, keepPreviousData]);
 
 	useEffect(() => {
-		const cacheItem = queryKey ? cache.get(queryKey) : undefined;
+		const cacheItem = queryKey ? cache.get(queryKey, tags) : undefined;
 
 		if (cacheItem === undefined) {
 			return;
@@ -356,7 +368,7 @@ function useQueryBase<
 			!cacheItem.hydrated
 		) {
 			const promiseOrValue = queryFn(ctx);
-			cache.set(queryKey!, promiseOrValue, cacheTime);
+			cache.set(queryKey!, promiseOrValue, cacheTime, tags);
 		}
 
 		cacheItem.hydrated = false;
@@ -368,12 +380,12 @@ function useQueryBase<
 
 	const refetch = useCallback(
 		function refetch() {
-			const item = cache.get(queryKey!);
+			const item = cache.get(queryKey!, tags);
 			if (!item?.promise) {
-				cache.set(queryKey!, queryFn(ctx), cacheTime);
+				cache.set(queryKey!, queryFn(ctx), cacheTime, tags);
 			}
 		},
-		[cache, cacheTime, ctx, queryFn, queryKey],
+		[cache, cacheTime, ctx, queryFn, queryKey, tags],
 	);
 
 	if (item && "value" in item) {
@@ -427,7 +439,7 @@ function useQueryBase<
 	}
 
 	if (shouldCache) {
-		cache.set(queryKey, result, cacheTime);
+		cache.set(queryKey, result, cacheTime, tags);
 	}
 
 	if (result instanceof Promise) {
@@ -603,6 +615,10 @@ export interface QueryClient {
 	invalidateQueries(
 		keys?: string | string[] | ((key: string) => boolean),
 	): void;
+	/**
+	 * Invalidate queries by tag.
+	 */
+	invalidateTags(tags: string[] | Set<string>): void;
 }
 
 export interface PrefetchQueryOptions {
@@ -625,6 +641,10 @@ export interface PrefetchQueryOptions {
 	 * @default 100
 	 */
 	staleTime?: number;
+	/**
+	 * Query tags that can be used to invalidate queries after a mutation.
+	 */
+	tags?: string[] | Set<string>;
 }
 
 /** Access the query client that manages the cache used by useQuery */
@@ -654,6 +674,7 @@ export function createQueryClient(
 			const {
 				queryKey,
 				queryFn,
+				tags = DEFAULT_QUERY_OPTIONS.tags,
 				cacheTime = DEFAULT_QUERY_OPTIONS.cacheTime,
 				staleTime = DEFAULT_QUERY_OPTIONS.staleTime,
 			} = options;
@@ -669,7 +690,7 @@ export function createQueryClient(
 			}
 
 			try {
-				cache.set(queryKey, queryFn(ctx), cacheTime);
+				cache.set(queryKey, queryFn(ctx), cacheTime, tags);
 			} catch {
 				// Do nothing
 			}
@@ -688,6 +709,20 @@ export function createQueryClient(
 				const shouldInvalidate = keys === undefined || keys(key);
 				if (shouldInvalidate) {
 					cache.invalidate(key);
+				}
+			}
+		},
+
+		invalidateTags(tags) {
+			for (const key of cache.enumerate()) {
+				const item = cache.get(key);
+				if (item && item.tags) {
+					for (const tag of tags) {
+						if (item.tags.has(tag)) {
+							cache.invalidate(key);
+							break;
+						}
+					}
 				}
 			}
 		},
