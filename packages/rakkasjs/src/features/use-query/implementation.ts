@@ -127,6 +127,16 @@ export interface UseQueryOptions<
 	keepPreviousData?: boolean;
 }
 
+export interface CompleteUseQueryOptions<
+	T = unknown,
+	Enabled extends boolean = true,
+	InitialData extends T | undefined = undefined,
+	PlaceholderData = undefined,
+> extends UseQueryOptions<T, Enabled, InitialData, PlaceholderData> {
+	queryKey: string;
+	queryFn: QueryFn<T>;
+}
+
 type RequiredUseQueryOptions<T = unknown> = Required<
 	Omit<UseQueryOptions<T>, "initialData" | "placeholderData">
 > &
@@ -167,14 +177,42 @@ export function usePageContext(): PageContext {
 /** Function passed to useQuery */
 export type QueryFn<T> = (ctx: PageContext) => T | Promise<T>;
 
+export interface CreateQueryOptions<
+	Args extends any[],
+	T,
+	Enabled extends boolean = true,
+	InitialData extends T | undefined = undefined,
+	PlaceholderData = undefined,
+> extends UseQueryOptions<T, Enabled, InitialData, PlaceholderData> {
+	createKey(...args: Args): string;
+	queryFn(ctx: PageContext, ...args: Args): T | Promise<T>;
+}
+
+export function createQuery<
+	Args extends any[],
+	T,
+	Enabled extends boolean = true,
+	InitialData extends T | undefined = undefined,
+	PlaceholderData = undefined,
+>(
+	options: CreateQueryOptions<Args, T, Enabled, InitialData, PlaceholderData>,
+): (
+	...args: Args
+) => CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData> {
+	const { createKey, queryFn, ...useQueryOptions } = options;
+
+	return (...args: Args) => {
+		const key = createKey(...args);
+		return {
+			...useQueryOptions,
+			queryKey: key,
+			queryFn: (ctx) => queryFn(ctx, ...args),
+		};
+	};
+}
+
 /**
  * Fetches data
- *
- * @template T      Type of data
- * @param key       Query key. Queries with the same key are considered identical. Pass undefined to disable the query.
- * @param fn        Query function that does the actual data fetching
- * @param [options] Query options
- * @returns query   Query result
  */
 export function useQuery<
 	T,
@@ -182,10 +220,8 @@ export function useQuery<
 	InitialData extends T | undefined = undefined,
 	PlaceholderData = undefined,
 >(
-	key: undefined,
-	fn: QueryFn<T>,
-	options?: UseQueryOptions<T, Enabled, InitialData, PlaceholderData>,
-): undefined;
+	options: CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData>,
+): QueryResult<T, Enabled, InitialData, PlaceholderData>;
 
 export function useQuery<
 	T,
@@ -200,22 +236,38 @@ export function useQuery<
 
 export function useQuery<
 	T,
-	Enabled extends boolean = true,
-	InitialData extends T | undefined = undefined,
+	Enabled extends boolean,
+	InitialData extends T | undefined,
 	PlaceholderData = undefined,
 >(
-	key: string | undefined,
-	fn: QueryFn<T>,
-	options?: UseQueryOptions<T, Enabled, InitialData, PlaceholderData>,
-): QueryResult<T, Enabled, InitialData, PlaceholderData> | undefined;
+	keyOrOptions:
+		| string
+		| CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData>,
+	maybeFn?: QueryFn<T>,
+	maybeOptions?: UseQueryOptions<T, Enabled, InitialData, PlaceholderData>,
+): QueryResult<T, Enabled, InitialData, PlaceholderData> {
+	const {
+		queryKey: key,
+		queryFn: fn,
+		...options
+	} = typeof keyOrOptions === "string"
+		? {
+				queryKey: keyOrOptions,
+				queryFn: maybeFn!,
+				...maybeOptions,
+			}
+		: keyOrOptions;
 
-export function useQuery<T>(
-	key: string | undefined,
-	fn: QueryFn<T>,
-	options: UseQueryOptions<T> = {},
-): QueryResult<T> | undefined {
-	const fullOptions = { ...DEFAULT_QUERY_OPTIONS, ...options };
-	const result = useQueryBase(key, fn, fullOptions);
+	const fullOptions = {
+		...DEFAULT_QUERY_OPTIONS,
+		...options,
+		queryKey: key,
+		queryFn: fn,
+	} as Required<
+		CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData>
+	>;
+
+	const result = useQueryBase(fullOptions);
 	useRefetch(result, fullOptions);
 
 	return result;
@@ -259,12 +311,19 @@ export function useEventSource<T>(url: string): EventSourceResult<T> {
 	return result;
 }
 
-function useQueryBase<T>(
-	key: string | undefined,
-	fn: QueryFn<T>,
-	options: RequiredUseQueryOptions,
-): QueryResult<T> | undefined {
+function useQueryBase<
+	T,
+	Enabled extends boolean = true,
+	InitialData extends T | undefined = undefined,
+	PlaceholderData = undefined,
+>(
+	options: Required<
+		CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData>
+	>,
+): QueryResult<T, Enabled, InitialData, PlaceholderData> {
 	const {
+		queryKey,
+		queryFn,
 		cacheTime,
 		staleTime,
 		refetchOnMount,
@@ -279,8 +338,8 @@ function useQueryBase<T>(
 
 	const item = useSyncExternalStore(
 		(onStoreChange) => {
-			if (key !== undefined) {
-				return cache.subscribe(key, () => {
+			if (queryKey !== undefined) {
+				return cache.subscribe(queryKey, () => {
 					onStoreChange();
 				});
 			} else {
@@ -289,8 +348,8 @@ function useQueryBase<T>(
 				};
 			}
 		},
-		() => (key === undefined ? undefined : cache.get(key)),
-		() => (key === undefined ? undefined : cache.get(key)),
+		() => (queryKey === undefined ? undefined : cache.get(queryKey)),
+		() => (queryKey === undefined ? undefined : cache.get(queryKey)),
 	);
 
 	const ctx = usePageContext();
@@ -303,7 +362,7 @@ function useQueryBase<T>(
 	}, [item, keepPreviousData]);
 
 	useEffect(() => {
-		const cacheItem = key ? cache.get(key) : undefined;
+		const cacheItem = queryKey ? cache.get(queryKey) : undefined;
 
 		if (cacheItem === undefined) {
 			return;
@@ -319,30 +378,26 @@ function useQueryBase<T>(
 			!cacheItem.promise &&
 			!cacheItem.hydrated
 		) {
-			const promiseOrValue = fn(ctx);
-			cache.set(key!, promiseOrValue, cacheTime);
+			const promiseOrValue = queryFn(ctx);
+			cache.set(queryKey!, promiseOrValue, cacheTime);
 		}
 
 		cacheItem.hydrated = false;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [key, item?.invalid]);
+	}, [queryKey, item?.invalid]);
 
 	// preserve reference between calls
 	const queryResultReference = useMemo(() => ({}) as QueryResult<T>, []);
 
 	const refetch = useCallback(
 		function refetch() {
-			const item = cache.get(key!);
+			const item = cache.get(queryKey!);
 			if (!item?.promise) {
-				cache.set(key!, fn(ctx), cacheTime);
+				cache.set(queryKey!, queryFn(ctx), cacheTime);
 			}
 		},
-		[cache, cacheTime, ctx, fn, key],
+		[cache, cacheTime, ctx, queryFn, queryKey],
 	);
-
-	if (key === undefined) {
-		return;
-	}
 
 	if (item && "value" in item) {
 		return Object.assign(queryResultReference, {
@@ -368,7 +423,7 @@ function useQueryBase<T>(
 			isRefetching: enabled,
 			refetch,
 			dataUpdatedAt: Date.now(),
-		});
+		}) as any;
 	}
 
 	const returnPreviousOrSuspend = (promise: Promise<any>) => {
@@ -391,11 +446,11 @@ function useQueryBase<T>(
 	let shouldCache = initialData !== undefined;
 	if (initialData === undefined && enabled) {
 		shouldCache = true;
-		result = fn(ctx);
+		result = queryFn(ctx);
 	}
 
 	if (shouldCache) {
-		cache.set(key, result, cacheTime);
+		cache.set(queryKey, result, cacheTime);
 	}
 
 	if (result instanceof Promise) {
@@ -407,7 +462,7 @@ function useQueryBase<T>(
 		refetch,
 		isRefetching: false,
 		dataUpdatedAt: item?.date ?? Date.now(),
-	});
+	}) as any;
 }
 
 /** Return value of useQuery */
@@ -442,9 +497,18 @@ export interface EventSourceResult<T> {
 	dataUpdatedAt?: number;
 }
 
-function useRefetch<T>(
-	queryResult: QueryResult<T> | undefined,
-	options: RequiredUseQueryOptions,
+function useRefetch<
+	T,
+	Enabled extends boolean,
+	InitialData extends T | undefined,
+	PlaceholderData,
+>(
+	queryResult:
+		| QueryResult<T, Enabled, InitialData, PlaceholderData>
+		| undefined,
+	options: Required<
+		CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData>
+	>,
 ) {
 	const {
 		refetchOnWindowFocus,
@@ -555,13 +619,35 @@ export interface QueryClient {
 	/**
 	 * Start fetching the data for the given key.
 	 */
-	prefetchQuery(key: string, data: Promise<any>): void;
+	prefetchQuery(options: PrefetchQueryOptions): void;
 	/**
 	 * Invalidate one or more queries.
 	 */
 	invalidateQueries(
 		keys?: string | string[] | ((key: string) => boolean),
 	): void;
+}
+
+export interface PrefetchQueryOptions {
+	/** Query key */
+	queryKey: string;
+	/** Query function */
+	queryFn: QueryFn<any>;
+	/**
+	 * Time in milliseconds after which the value will be evicted from the
+	 * cache when there are no subscribers. Use 0 for immediate eviction and
+	 * `Infinity` to disable.
+	 *
+	 * @default 300_000 (5 minutes)
+	 */
+	cacheTime?: number;
+	/**
+	 * Time in milliseconds after which a cached value will be considered
+	 * stale.
+	 *
+	 * @default 100
+	 */
+	staleTime?: number;
 }
 
 /** Access the query client that manages the cache used by useQuery */
@@ -571,7 +657,10 @@ export function useQueryClient(): QueryClient {
 	return ctx.queryClient;
 }
 
-export function createQueryClient(cache: QueryCache): QueryClient {
+export function createQueryClient(
+	cache: QueryCache,
+	ctx: PageContext,
+): QueryClient {
 	return {
 		getQueryData(key: string) {
 			return cache.get(key)?.value;
@@ -584,8 +673,29 @@ export function createQueryClient(cache: QueryCache): QueryClient {
 			cache.set(key, data);
 		},
 
-		prefetchQuery(key: string, data: Promise<any>) {
-			cache.set(key, data);
+		prefetchQuery(options: PrefetchQueryOptions) {
+			const {
+				queryKey,
+				queryFn,
+				cacheTime = DEFAULT_QUERY_OPTIONS.cacheTime,
+				staleTime = DEFAULT_QUERY_OPTIONS.staleTime,
+			} = options;
+
+			const current = cache.get(options.queryKey);
+			if (
+				current?.value !== undefined &&
+				!current.invalid &&
+				current.date !== undefined &&
+				staleTime > Date.now() - current.date
+			) {
+				return;
+			}
+
+			try {
+				cache.set(queryKey, queryFn(ctx), cacheTime);
+			} catch {
+				// Do nothing
+			}
 		},
 
 		invalidateQueries(keys) {

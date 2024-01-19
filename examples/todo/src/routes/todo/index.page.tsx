@@ -3,20 +3,17 @@ import { Todo } from "./Todo";
 import css from "./page.module.css";
 import {
 	Page,
+	createQuery,
 	runServerSideQuery,
+	useQuery,
 	useQueryClient,
 	useServerSideMutation,
-	useServerSideQuery,
 } from "rakkasjs";
 
 import { createTodo, readAllTodos } from "src/crud";
 
 const TodoPage: Page = () => {
-	const { data } = useServerSideQuery(readAllTodos, {
-		key: "todos",
-		refetchOnWindowFocus: true,
-		refetchOnReconnect: true,
-	});
+	const { data } = useQuery(todos());
 
 	const [text, setText] = useState("");
 
@@ -68,10 +65,14 @@ const TodoPage: Page = () => {
 export default TodoPage;
 
 TodoPage.preload = (ctx) => {
-	if (!ctx.queryClient.getQueryData("todos")) {
-		ctx.queryClient.prefetchQuery(
-			"todos",
-			runServerSideQuery(ctx.requestContext, readAllTodos),
-		);
-	}
+	ctx.queryClient.prefetchQuery(todos());
 };
+
+const todos = createQuery({
+	createKey: () => "todos",
+	queryFn(ctx) {
+		return runServerSideQuery(ctx.requestContext, readAllTodos);
+	},
+	refetchOnWindowFocus: true,
+	refetchOnReconnect: true,
+});
