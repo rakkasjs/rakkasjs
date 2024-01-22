@@ -6,10 +6,11 @@
     "build": "pnpm -r --filter \"./packages/*\" run build",
     "prepare": "husky install",
     "precommit": "lint-staged",
-    "test": "pnpm run /^test:/ && pnpm run ci",
+    "test": "pnpm run \"/^(cq|ci)$/\"",
     "ci": "pnpm -r --stream --workspace-concurrency=1 run ci",
     "ci-examples": "pnpm -r --stream --workspace-concurrency=1 run ci-examples",
     "vite-ecosystem-ci": "cross-env INCLUDE_TESTS=dev,prod pnpm -r --stream --workspace-concurrency=1 run ci",
+    "cq": "pnpm run /^test:/",
     "test:packages": "pnpm -r --stream --filter '!./examples/**' run test",
     "test:format": "prettier --check --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'",
     "format": "prettier --write --ignore-path .gitignore --ignore-unknown . '!pnpm-lock.yaml'"
