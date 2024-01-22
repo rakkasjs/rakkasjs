@@ -1,12 +1,24 @@
 import React from "react";
 import type { ServerHooks } from "../../runtime/hattip-handler";
-import { escapeHtml } from "../../runtime/utils";
-import { defaultHeadTags, HeadContext } from "./implementation";
-import { HeadProps } from "./lib";
+import { escapeCss, escapeHtml } from "../../runtime/utils";
+import { NormalizedHeadProps, mergeHeadProps } from "./implementation/merge";
+import { defaultHeadProps } from "./implementation/defaults";
+import { HeadContext } from "./implementation/context";
+import { sortHeadTags } from "./implementation/sort";
 
 const headServerHooks: ServerHooks = {
-	createPageHooks() {
-		const tags: HeadProps = { ...defaultHeadTags };
+	createPageHooks(ctx) {
+		const tags: NormalizedHeadProps = {
+			keyed: {
+				base: {
+					tagName: "base",
+					href: ctx.url.pathname + ctx.url.search,
+				},
+			},
+			unkeyed: [],
+		};
+
+		mergeHeadProps(tags, defaultHeadProps);
 
 		return {
 			wrapApp: (app) => {
@@ -16,56 +28,25 @@ const headServerHooks: ServerHooks = {
 			emitToDocumentHead(speciallAttributes) {
 				let result = "";
 
-				const sorted = Object.entries(tags).sort(
-					([ak, av], [bk, bv]) => rank(ak, av) - rank(bk, bv),
-				);
+				const elements = sortHeadTags(tags);
 
-				for (const [name, attributes] of sorted) {
-					if (attributes === null) {
+				for (const element of elements) {
+					const { tagName = "meta", ...attributes } = element;
+					if (tagName === "head") {
+						speciallAttributes.headAttributes = attributes;
+						continue;
+					} else if (tagName === "body") {
+						speciallAttributes.bodyAttributes = attributes;
+						continue;
+					} else if (tagName === "html") {
+						speciallAttributes.htmlAttributes = attributes;
 						continue;
 					}
 
-					if (typeof attributes === "string") {
-						if (name === "charset") {
-							result += `<meta charset="${escapeHtml(attributes)}">`;
-						} else if (name === "title") {
-							result += `<title>${escapeHtml(attributes)}</title>`;
-						} else if (name.startsWith("og:")) {
-							result += `<meta property="${escapeHtml(
-								name,
-							)}" content="${escapeHtml(attributes)}">`;
-						} else {
-							result += `<meta name="${escapeHtml(name)}" content="${escapeHtml(
-								attributes,
-							)}">`;
-						}
-					} else if (
-						["htmlAttributes", "headAttributes", "bodyAttributes"].includes(
-							name,
-						)
-					) {
-						if (!attributes || typeof attributes === "string") {
-							throw new Error(`Invalid ${name} attribute`);
-						}
-						Object.assign(
-							speciallAttributes[name as keyof typeof speciallAttributes],
-							attributes,
-						);
-					} else {
-						const tagName = attributes?.tagName ?? "meta";
-
-						result += "<" + tagName;
-						for (const [attr, value] of Object.entries(attributes)) {
-							if (attr === "tagName") {
-								continue;
-							}
-							result += ` ${attr}="${escapeHtml(value)}"`;
-						}
-						result += ` data-rh="${escapeHtml(name)}">`;
-					}
+					result += renderElement(tagName as string, attributes);
 				}
 
-				return result;
+				return result + "<!-- head end -->";
 			},
 		};
 	},
@@ -73,16 +54,51 @@ const headServerHooks: ServerHooks = {
 
 export default headServerHooks;
 
-function rank(k: string, v: string | Record<string, string> | null): number {
-	if (k === "charset") {
-		return 0;
-	} else if (typeof v === "object" && v && "http-equiv" in v) {
-		return 1;
-	} else if (k === "viewport") {
-		return 2;
-	} else if (k === "title") {
-		return 3;
-	} else {
-		return 4;
+function renderElement(
+	tagName: string,
+	attributes: Record<string, string | number | boolean | undefined>,
+) {
+	let result = "<" + tagName;
+	for (const [attr, value] of Object.entries(attributes)) {
+		if (attr === "key") {
+			continue;
+		}
+
+		if (
+			attr === "innerText" ||
+			attr === "innerHTML" ||
+			attr === "children" ||
+			attr === "tagName"
+		) {
+			continue;
+		}
+
+		if (value === false || value === undefined) continue;
+
+		if (value === true) {
+			result += ` ${attr}`;
+			continue;
+		}
+		result += ` ${attr}="${escapeHtml(String(value))}"`;
 	}
+
+	if (attributes.innerText) {
+		const value = attributes.innerText;
+		const escaped =
+			tagName === "style"
+				? escapeCss(String(value))
+				: escapeHtml(String(value));
+		result += `>${escaped}</${tagName}>`;
+	} else if (attributes.innerHTML) {
+		result += `>${String(attributes.innerHTML)}</${tagName}>`;
+	} else if (attributes.children) {
+		const children = (attributes.children as any as any[])
+			.map((child) => renderElement(child.tagName ?? "meta", child))
+			.join("");
+		result += `>${children}</${tagName}>`;
+	} else {
+		result += `></${tagName}>`;
+	}
+
+	return result;
 }
