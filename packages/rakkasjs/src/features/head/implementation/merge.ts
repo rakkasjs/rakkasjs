@@ -97,10 +97,28 @@ function getKey(attributes: Attributes): string | undefined {
 		return "title";
 	} else if (tagName === "meta" && attributes.charset) {
 		return "charset";
-	} else if (tagName === "meta" && attributes.name === "viewport") {
-		return "viewport";
-	} else if (tagName === "meta" && attributes.name === "description") {
-		return "description";
+	} else if (tagName === "meta") {
+		if (
+			[
+				"name",
+				"description",
+				"viewport",
+				"twitter:card",
+				"twitter:title",
+				"twitter:description",
+				"twitter:image",
+			].includes(attributes.name as string)
+		) {
+			return attributes.name as string;
+		}
+
+		if (
+			["og:title", "og:description", "og:image", "og:url", "og:type"].includes(
+				attributes.property as string,
+			)
+		) {
+			return attributes.property as string;
+		}
 	} else if (tagName === "link" && attributes.rel === "canonical") {
 		return "canonical";
 	} else if (tagName === "html") {

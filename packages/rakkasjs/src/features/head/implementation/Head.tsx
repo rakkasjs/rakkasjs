@@ -45,7 +45,7 @@ function updateHead() {
 		keyed: {
 			base: {
 				tagName: "base",
-				href: document.baseURI,
+				href: document.head.querySelector("base")?.href,
 			},
 		},
 		unkeyed: [],
