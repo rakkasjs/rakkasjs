@@ -12,7 +12,7 @@ const headServerHooks: ServerHooks = {
 			keyed: {
 				base: {
 					tagName: "base",
-					href: ctx.url.href,
+					href: ctx.url.pathname + ctx.url.search,
 				},
 			},
 			unkeyed: [],
