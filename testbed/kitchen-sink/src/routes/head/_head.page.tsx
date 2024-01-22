@@ -12,11 +12,7 @@ export default HeadPage;
 HeadPage.preload = () => ({
 	head: {
 		title: "The head page",
-		canonical: {
-			tagName: "link",
-			rel: "canonical",
-			href: "http://localhost:3000/head",
-		},
+		canonical: "http://localhost:3000/head",
 		htmlAttributes: {
 			class: "head-page",
 		},

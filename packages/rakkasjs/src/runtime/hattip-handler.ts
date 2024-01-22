@@ -52,9 +52,9 @@ export interface PageRequestHooks {
 	wrapApp?(app: ReactElement): ReactElement;
 	/** Write to the document's head section */
 	emitToDocumentHead?(specialAttributes: {
-		htmlAttributes: Record<string, string>;
-		headAttributes: Record<string, string>;
-		bodyAttributes: Record<string, string>;
+		htmlAttributes: Record<string, string | number | boolean | undefined>;
+		headAttributes: Record<string, string | number | boolean | undefined>;
+		bodyAttributes: Record<string, string | number | boolean | undefined>;
 	}): ReactElement | string | undefined;
 	/** Emit a chunk of HTML before each time React emits a chunk */
 	emitBeforeSsrChunk?(): string | undefined;

@@ -1,11 +1,13 @@
 import React from "react";
 import { defineClientHooks } from "../../runtime/client-hooks";
-import { clientHeadTags, HeadContext } from "./implementation";
+import { HeadContext } from "./implementation/context";
 
 export default defineClientHooks({
 	wrapApp(app) {
 		return (
-			<HeadContext.Provider value={clientHeadTags}>{app}</HeadContext.Provider>
+			<HeadContext.Provider value={{ keyed: {}, unkeyed: [] }}>
+				{app}
+			</HeadContext.Provider>
 		);
 	},
 });
