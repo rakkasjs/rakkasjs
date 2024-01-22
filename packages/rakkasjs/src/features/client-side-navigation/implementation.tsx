@@ -55,7 +55,7 @@ export function useLocation(): UseLocationResult {
 	const [deferredLocation] = JSON.parse(deferredLocationId);
 
 	useEffect(() => {
-		base.href = deferredLocation;
+		base().href = deferredLocation;
 		lastRenderedId = history.state.id;
 		previousNavigationIndex = currentNavigationIndex;
 		currentNavigationIndex = history.state.index;
@@ -224,15 +224,18 @@ function getLocationSnapshot() {
 	return JSON.stringify(lastLocation);
 }
 
-let base: HTMLBaseElement;
+function base(): HTMLBaseElement {
+	const result = document.head.querySelector("base")!;
+	if (result) return result;
+
+	return document.head.insertBefore(
+		document.createElement("base"),
+		document.head.firstChild,
+	);
+}
 
 export function initialize() {
-	base = document.head.querySelector("base")!;
-	if (!base) {
-		base = document.createElement("base");
-		document.head.insertBefore(base, document.head.firstChild);
-	}
-	base.href = location.href;
+	base().href = location.href;
 
 	history.replaceState(
 		{
