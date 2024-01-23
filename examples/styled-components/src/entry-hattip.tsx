@@ -1,4 +1,4 @@
-import { createRequestHandler } from "rakkasjs";
+import { createRequestHandler } from "rakkasjs/server";
 import { ServerStyleSheet } from "styled-components";
 
 export default createRequestHandler({

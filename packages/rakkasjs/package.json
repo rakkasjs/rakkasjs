@@ -18,9 +18,11 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "browser": "./dist/client.js",
-      "default": "./dist/server.js"
+      "browser": "./dist/index.client.js",
+      "default": "./dist/index.server.js"
     },
+    "./client": "./dist/client.js",
+    "./server": "./dist/server.js",
     "./node-adapter": "./dist/node-adapter.js",
     "./vite-plugin": "./dist/vite-plugin.js",
     "./node-loader": "./node-loader.mjs",

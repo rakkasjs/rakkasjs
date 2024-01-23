@@ -1,11 +1,12 @@
-import { ComponentType, ReactNode } from "react";
-import { ResolvedConfig } from "vite";
-import {
-	PageContext,
+import type { ComponentType, ReactNode } from "react";
+import type { ResolvedConfig } from "vite";
+import type {
 	RedirectProps,
 	ResponseHeadersProps,
 	RequestContext,
 	HeadProps,
+	QueryClient,
+	PageLocals,
 } from "../lib";
 
 export type PageImporter = () => Promise<PageModule>;
@@ -214,4 +215,20 @@ export interface RouteConfig extends BaseRouteConfig {
 export interface BaseRouteConfig {
 	disabled?: boolean;
 	renderingMode?: "hydrate" | "server" | "client";
+}
+
+/** Context within which the page is being rendered */
+export interface PageContext {
+	/** URL */
+	url: URL;
+	/** Isomorphic fetch function */
+	fetch: typeof fetch;
+	/** Query client used by useQuery */
+	queryClient: QueryClient;
+	/** Request context, only defined on the server */
+	requestContext?: RequestContext;
+	/** Application-specific stuff */
+	locals: PageLocals;
+	/** Page action data */
+	actionData?: any;
 }

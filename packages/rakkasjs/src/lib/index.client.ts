@@ -14,8 +14,6 @@ export {
 	useFormMutation,
 } from "../features/run-server-side/lib-client";
 
-export { startClient } from "../runtime/client-entry";
-
 export * from "../features/pages/lib";
 
 export { getRequestContext } from "../features/async-local-request-context/lib-client";

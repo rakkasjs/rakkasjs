@@ -21,6 +21,7 @@ export type {
 	RouteConfigExport,
 	RouteConfig,
 	BaseRouteConfig,
+	PageContext,
 } from "../runtime/page-types";
 
 export * from "../runtime/common-hooks";
@@ -48,17 +49,5 @@ export type {
 	useSSM,
 	useFormMutation,
 } from "../features/run-server-side/lib-client";
-
-export type {
-	startClient,
-	ClientHooks,
-	StartClientOptions,
-} from "../runtime/client-entry";
-
-export type {
-	createRequestHandler,
-	ServerHooks,
-	PageRequestHooks as PageHooks,
-} from "../runtime/hattip-handler";
 
 export type { getRequestContext } from "../features/async-local-request-context/lib-server";

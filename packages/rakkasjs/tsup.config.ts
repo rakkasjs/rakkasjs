@@ -49,7 +49,10 @@ export default defineConfig([
 		dts: true,
 	},
 	{
-		entry: ["./src/lib/client.ts"],
+		entry: {
+			"index.client": "./src/lib/index.client.ts",
+			client: "./src/runtime/client-entry.tsx",
+		},
 		target: "node18",
 		format: ["esm"],
 		platform: "node",
@@ -78,13 +81,19 @@ export default defineConfig([
 			"@microsoft/fetch-event-source",
 		],
 		dts: {
-			entry: "./src/lib/index.ts",
-			resolve: ["react-error-boundary"],
+			entry: {
+				index: "./src/lib/index.client.ts",
+				client: "./src/runtime/client-entry.tsx",
+				server: "./src/runtime/hattip-handler.ts",
+			},
 		},
 		plugins: [namedExports()],
 	},
 	{
-		entry: ["./src/lib/server.ts"],
+		entry: {
+			"index.server": "./src/lib/index.server.ts",
+			server: "./src/runtime/hattip-handler.ts",
+		},
 		format: ["esm"],
 		platform: "node",
 		shims: false,

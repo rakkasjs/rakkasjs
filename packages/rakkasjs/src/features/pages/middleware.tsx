@@ -18,7 +18,7 @@ import {
 	IsomorphicContext,
 	ServerSideContext,
 } from "../../runtime/isomorphic-context";
-import { PageContext } from "../use-query/implementation";
+import type { PageContext } from "../../runtime/page-types";
 import { Default404Page } from "./Default404Page";
 import commonHooks from "virtual:rakkasjs:common-hooks";
 import {

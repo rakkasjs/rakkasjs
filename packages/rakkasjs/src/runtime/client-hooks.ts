@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { PageContext } from "../lib";
+import { PageContext } from "../runtime/page-types";
 
 /** Client-side customization hooks */
 export interface ClientHooks {

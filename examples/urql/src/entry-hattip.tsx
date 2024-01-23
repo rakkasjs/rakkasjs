@@ -1,4 +1,4 @@
-import { createRequestHandler } from "rakkasjs";
+import { createRequestHandler } from "rakkasjs/server";
 import {
 	createClient,
 	cacheExchange,

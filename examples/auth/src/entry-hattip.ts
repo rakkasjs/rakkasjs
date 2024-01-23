@@ -1,4 +1,4 @@
-import { createRequestHandler, PageLocals } from "rakkasjs";
+import { createRequestHandler } from "rakkasjs/server";
 import { Auth } from "@auth/core";
 import type { Provider } from "@auth/core/providers";
 import GitHubProvider from "@auth/core/providers/github";

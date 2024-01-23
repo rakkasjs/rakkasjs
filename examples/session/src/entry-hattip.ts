@@ -1,4 +1,4 @@
-import { createRequestHandler } from "rakkasjs";
+import { createRequestHandler } from "rakkasjs/server";
 import { cookie } from "@hattip/cookie";
 import { session, EncryptedCookieStore } from "@hattip/session";
 

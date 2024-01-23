@@ -2,7 +2,7 @@ import { compose, RequestContext, RequestHandlerStack } from "@hattip/compose";
 import { ReactElement } from "react";
 import renderApiRoute from "../features/api-routes/middleware";
 import renderPageRoute from "../features/pages/middleware";
-import { PageContext } from "../lib";
+import { PageContext } from "../runtime/page-types";
 import serverHooks from "./feature-server-hooks";
 
 declare module "@hattip/compose" {

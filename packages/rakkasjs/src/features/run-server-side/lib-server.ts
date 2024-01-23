@@ -8,10 +8,13 @@ import {
 	UseServerSideQueryOptions,
 } from "./lib-common";
 import { uneval } from "devalue";
-import { RequestContext } from "@hattip/compose";
-import { UseMutationOptions, UseMutationResult } from "../use-mutation/lib";
+import type { RequestContext } from "@hattip/compose";
+import type {
+	UseMutationOptions,
+	UseMutationResult,
+} from "../use-mutation/lib";
 import { encodeFileNameSafe } from "../../runtime/utils";
-import { EventSourceResult } from "../use-query/implementation";
+import type { EventSourceResult } from "../use-query/implementation";
 
 function runSSQImpl(
 	ctx: RequestContext,

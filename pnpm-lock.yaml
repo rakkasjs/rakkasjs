@@ -993,6 +993,9 @@ importers:
       vite:
         specifier: ^5.0.12
         version: 5.0.12(@types/node@20.11.5)
+      vite-plugin-inspect:
+        specifier: ^0.8.2
+        version: 0.8.2(vite@5.0.12)
       wrangler:
         specifier: ^3.23.0
         version: 3.23.0
@@ -1427,6 +1430,13 @@ packages:
     dependencies:
       "@jridgewell/gen-mapping": 0.3.3
       "@jridgewell/trace-mapping": 0.3.20
+
+  /@antfu/utils@0.7.7:
+    resolution:
+      {
+        integrity: sha512-gFPqTG7otEJ8uP6wrhDv6mqwGWYZKNvAcCq6u9hOj0c+IKCEsY4L1oC9trPq2SaWIzAfHvqfBDxF591JkMf+kg==,
+      }
+    dev: true
 
   /@auth/core@0.22.0:
     resolution:
@@ -8296,6 +8306,16 @@ packages:
       undici-types: 5.28.2
     dev: true
 
+  /bundle-name@4.1.0:
+    resolution:
+      {
+        integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==,
+      }
+    engines: { node: ">=18" }
+    dependencies:
+      run-applescript: 7.0.0
+    dev: true
+
   /bundle-require@4.0.2(esbuild@0.19.8):
     resolution:
       {
@@ -9712,6 +9732,25 @@ packages:
     engines: { node: ">=0.10.0" }
     dev: false
 
+  /default-browser-id@5.0.0:
+    resolution:
+      {
+        integrity: sha512-A6p/pu/6fyBcA1TRz/GqWYPViplrftcW2gZC9q79ngNCKAeR/X3gcEdXQHl4KNXV+3wgIJ1CPkJQ3IHM6lcsyA==,
+      }
+    engines: { node: ">=18" }
+    dev: true
+
+  /default-browser@5.2.1:
+    resolution:
+      {
+        integrity: sha512-WY/3TUME0x3KPYdRRxEJJvXRHV4PyPoUsxtZa78lwItwRQRHhd2U9xOscaT/YTf8uCXIAjeJOFBVEh/7FtD8Xg==,
+      }
+    engines: { node: ">=18" }
+    dependencies:
+      bundle-name: 4.1.0
+      default-browser-id: 5.0.0
+    dev: true
+
   /defaults@1.0.4:
     resolution:
       {
@@ -9747,6 +9786,14 @@ packages:
       }
     engines: { node: ">=8" }
     dev: false
+
+  /define-lazy-prop@3.0.0:
+    resolution:
+      {
+        integrity: sha512-N+MeXYoqr3pOgn8xfyRPREN7gHakLYjhsHhWGT3fWAiL4IkAt0iDw14QiiEm2bE30c5XX5q0FtAA3CK5f9/BUg==,
+      }
+    engines: { node: ">=12" }
+    dev: true
 
   /define-properties@1.2.1:
     resolution:
@@ -10324,6 +10371,13 @@ packages:
       }
     dependencies:
       is-arrayish: 0.2.1
+
+  /error-stack-parser-es@0.1.1:
+    resolution:
+      {
+        integrity: sha512-g/9rfnvnagiNf+DRMHEVGuGuIBlCIMDFoTA616HaP2l9PlCjGjVhD98PNbVSJvmK4TttqT5mV5tInMhoFgi+aA==,
+      }
+    dev: true
 
   /error-stack-parser@2.1.4:
     resolution:
@@ -11991,6 +12045,18 @@ packages:
       }
     dev: false
 
+  /fs-extra@11.2.0:
+    resolution:
+      {
+        integrity: sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw==,
+      }
+    engines: { node: ">=14.14" }
+    dependencies:
+      graceful-fs: 4.2.11
+      jsonfile: 6.1.0
+      universalify: 2.0.1
+    dev: true
+
   /fs-extra@8.1.0:
     resolution:
       {
@@ -13585,7 +13651,6 @@ packages:
       }
     engines: { node: ^12.20.0 || ^14.13.1 || >=16.0.0 }
     hasBin: true
-    dev: false
 
   /is-extendable@0.1.1:
     resolution:
@@ -13692,7 +13757,6 @@ packages:
     hasBin: true
     dependencies:
       is-docker: 3.0.0
-    dev: false
 
   /is-installed-globally@0.4.0:
     resolution:
@@ -14008,7 +14072,6 @@ packages:
     engines: { node: ">=16" }
     dependencies:
       is-inside-container: 1.0.0
-    dev: false
 
   /is-yarn-global@0.4.1:
     resolution:
@@ -14261,6 +14324,17 @@ packages:
       {
         integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==,
       }
+    optionalDependencies:
+      graceful-fs: 4.2.11
+    dev: true
+
+  /jsonfile@6.1.0:
+    resolution:
+      {
+        integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==,
+      }
+    dependencies:
+      universalify: 2.0.1
     optionalDependencies:
       graceful-fs: 4.2.11
     dev: true
@@ -14597,7 +14671,6 @@ packages:
       {
         integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==,
       }
-    dev: false
 
   /lodash.defaults@4.2.0:
     resolution:
@@ -16922,6 +16995,19 @@ packages:
     dependencies:
       mimic-fn: 4.0.0
 
+  /open@10.0.3:
+    resolution:
+      {
+        integrity: sha512-dtbI5oW7987hwC9qjJTyABldTaa19SuyJse1QboWv3b0qCcrrLNVDqBx1XgELAjh9QTVQaP/C5b1nhQebd1H2A==,
+      }
+    engines: { node: ">=18" }
+    dependencies:
+      default-browser: 5.2.1
+      define-lazy-prop: 3.0.0
+      is-inside-container: 1.0.0
+      is-wsl: 3.1.0
+    dev: true
+
   /open@8.4.2:
     resolution:
       {
@@ -19056,6 +19142,14 @@ packages:
       "@rollup/rollup-win32-ia32-msvc": 4.9.6
       "@rollup/rollup-win32-x64-msvc": 4.9.6
       fsevents: 2.3.3
+
+  /run-applescript@7.0.0:
+    resolution:
+      {
+        integrity: sha512-9by4Ij99JUr/MCFBUkDKLWK3G9HVXmabKz9U5MlIAIuvuzkiOicRYs8XJLxX+xahD+mLiiCYDqF9dKAgtzKP1A==,
+      }
+    engines: { node: ">=18" }
+    dev: true
 
   /run-async@2.4.1:
     resolution:
@@ -21393,6 +21487,14 @@ packages:
     engines: { node: ">= 4.0.0" }
     dev: true
 
+  /universalify@2.0.1:
+    resolution:
+      {
+        integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==,
+      }
+    engines: { node: ">= 10.0.0" }
+    dev: true
+
   /unix-dgram@2.0.6:
     resolution:
       {
@@ -21829,6 +21931,34 @@ packages:
       estree-walker: 3.0.3
       magic-string: 0.30.5
       minimatch: 9.0.3
+    dev: true
+
+  /vite-plugin-inspect@0.8.2(vite@5.0.12):
+    resolution:
+      {
+        integrity: sha512-lMqPHkh1UNev0CwuO1g2naDfUanHRM7aorjx52SGrcVmAnhNxnbWzIuFNI3nCOXsSiOUeff4ZJSmR9tMAyMaSg==,
+      }
+    engines: { node: ">=14" }
+    peerDependencies:
+      "@nuxt/kit": "*"
+      vite: ^3.1.0 || ^4.0.0 || ^5.0.0-0
+    peerDependenciesMeta:
+      "@nuxt/kit":
+        optional: true
+    dependencies:
+      "@antfu/utils": 0.7.7
+      "@rollup/pluginutils": 5.1.0
+      debug: 4.3.4(supports-color@9.4.0)
+      error-stack-parser-es: 0.1.1
+      fs-extra: 11.2.0
+      lodash-es: 4.17.21
+      open: 10.0.3
+      picocolors: 1.0.0
+      sirv: 2.0.4
+      vite: 5.0.12(@types/node@20.11.5)
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
     dev: true
 
   /vite-tsconfig-paths@4.3.1(typescript@5.3.3)(vite@5.0.12):

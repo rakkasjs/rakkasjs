@@ -1,5 +1,6 @@
-import { createRequestHandler, RequestContext } from "rakkasjs";
+import { createRequestHandler } from "rakkasjs/server";
 import { yoga, createSchema } from "@hattip/graphql";
+import type { RequestContext } from "rakkasjs";
 
 let yogaMiddleware: ReturnType<typeof yoga> | undefined;
 
