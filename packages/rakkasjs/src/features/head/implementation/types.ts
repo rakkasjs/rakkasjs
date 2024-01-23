@@ -53,7 +53,7 @@ export interface BodyAttributes extends CommonAttributes {
 
 export interface TitleElement extends CommonAttributes {
 	tagName: "title";
-	innerText: string;
+	textContent: string;
 }
 
 export type MetaElement =
@@ -190,7 +190,7 @@ export interface CommonLinkAttributes extends CommonAttributes {
 
 export interface StyleElement extends CommonAttributes {
 	tagName: "style";
-	innerText: string;
+	textContent: string;
 	blocking?: boolean;
 	media?: string | false;
 	nonce?: string | false;
@@ -218,7 +218,7 @@ export interface ScriptElement extends CommonAttributes {
 		| false;
 	src?: string | false;
 	type?: "importmap" | "module" | "text/javascript" | (string & {}) | false;
-	innerText?: string;
+	textContent?: string;
 }
 
 export interface NoScriptElement extends CommonAttributes {

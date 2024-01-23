@@ -65,7 +65,7 @@ function renderElement(
 		}
 
 		if (
-			attr === "innerText" ||
+			attr === "textContent" ||
 			attr === "innerHTML" ||
 			attr === "children" ||
 			attr === "tagName"
@@ -82,8 +82,8 @@ function renderElement(
 		result += ` ${attr}="${escapeHtml(String(value))}"`;
 	}
 
-	if (attributes.innerText) {
-		const value = attributes.innerText;
+	if (attributes.textContent) {
+		const value = attributes.textContent;
 		const escaped =
 			tagName === "style"
 				? escapeCss(String(value))
