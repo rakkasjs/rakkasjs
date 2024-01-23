@@ -159,10 +159,10 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 
 			config.configFileDependencies.push(...routeConfigFiles);
 
+			// TODO: Clean this mess up!
 			// Illegally write to the config object
 			// Rakkas will only access these late in the process
 			const writable = config as unknown as UserConfig;
-
 			writable.api = writable.api || {};
 			writable.api.rakkas = writable.api.rakkas || {};
 			writable.api.rakkas.routeConfigs = [];

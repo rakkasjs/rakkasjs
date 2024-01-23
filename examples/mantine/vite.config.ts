@@ -1,9 +1,10 @@
 import { defineConfig } from "vite";
-import rakkas from "rakkasjs/vite-plugin";
 import tsconfigPaths from "vite-tsconfig-paths";
+import react from "@vitejs/plugin-react";
+import rakkas from "rakkasjs/vite-plugin";
 
 export default defineConfig({
-	plugins: [tsconfigPaths(), rakkas()],
+	plugins: [tsconfigPaths(), react(), rakkas()],
 	optimizeDeps: {
 		include: ["@mantine/core"],
 	},

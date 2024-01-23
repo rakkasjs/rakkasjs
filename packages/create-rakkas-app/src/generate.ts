@@ -104,6 +104,12 @@ async function copyFiles(dir: string, options: Options, command: string) {
 		fs.readFileSync(dir + "/package.json", "utf8"),
 	) as DeepPartial<typeof import("../../../examples/todo/package.json")>;
 
+	if (options.swc) {
+		delete pkg.devDependencies!["@vitejs/plugin-react"];
+	} else {
+		delete pkg.devDependencies!["@vitejs/plugin-react-swc"];
+	}
+
 	if (!options.typescript) {
 		delete pkg.scripts!["test:typecheck"];
 	}
@@ -143,6 +149,16 @@ async function copyFiles(dir: string, options: Options, command: string) {
 		JSON.stringify(pkg, undefined, 2),
 		"utf8",
 	);
+
+	if (options.swc) {
+		const ext = options.typescript ? "ts" : "js";
+		let viteConfig = fs.readFileSync(dir + "/vite.config." + ext, "utf8");
+		viteConfig = viteConfig.replace(
+			/@vitejs\/plugin-react/,
+			"@vitejs/plugin-react-swc",
+		);
+		fs.writeFileSync(dir + "/vite.config." + ext, viteConfig, "utf8");
+	}
 
 	if (!options.demo) {
 		await mkdirp(dir + "/src/routes");

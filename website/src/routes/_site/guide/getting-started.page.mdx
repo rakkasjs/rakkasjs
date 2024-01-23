@@ -25,10 +25,22 @@ yarn create rakkas-app my-rakkas-app
 >
 > ```bash
 > npm install --save react react-dom
-> npm install --save-dev vite rakkasjs
+> npm install --save-dev rakkasjs vite @vitejs/plugin-react # or @vitejs/plugin-react-swc
 > ```
 >
-> Then create a `src/routes/index.page.jsx` file like this:
+> Then create a `vite.config.js` file like this:
+>
+> ```js
+> import { defineConfig } from "vite";
+> import react from "@vitejs/plugin-react";
+> import rakkas from "rakkasjs/vite-plugin";
+>
+> export default defineConfig({
+>   plugins: [react(), rakkas()],
+> });
+> ```
+>
+> And finally create a `src/routes/index.page.jsx` file like this:
 >
 > ```jsx
 > export default function HomePage() {

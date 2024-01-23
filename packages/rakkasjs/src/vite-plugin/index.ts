@@ -1,5 +1,4 @@
-import { FilterPattern, PluginOption, ResolvedConfig } from "vite";
-import react, { Options as ReactPluginOptions } from "@vitejs/plugin-react";
+import { FilterPattern, PluginOption } from "vite";
 import { injectConfig } from "./inject-config";
 import { preventViteBuild } from "./prevent-vite-build";
 import { vaviteConnect } from "@vavite/connect";
@@ -13,12 +12,9 @@ import apiRoutes from "../features/api-routes/vite-plugin";
 import pageRoutes from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
 import { adapters, RakkasAdapter } from "./adapters";
-import { babelTransformClientSidePages } from "../features/run-server-side/implementation/transform/transform-client-page";
 import { serverOnlyClientOnly } from "./server-only-client-only";
 
 export interface RakkasOptions {
-	/** Options passed to @vite/plugin-react */
-	react?: ReactPluginOptions;
 	/** File extensions for pages and layouts @default ["jsx","tsx"] */
 	pageExtensions?: string[];
 	/**
@@ -73,8 +69,6 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		adapter = adapters[adapter];
 	}
 
-	let resolvedConfig: ResolvedConfig;
-
 	return [
 		globalThis.__vavite_loader__ && nodeLoaderPlugin(),
 		...vaviteConnect({
@@ -123,37 +117,6 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		}),
 		resolveClientManifest(),
 		...runServerSide(),
-		{
-			name: "rakkasjs:resolve-config",
-			configResolved(config) {
-				resolvedConfig = config;
-			},
-		},
-		...react({
-			...options.react,
-			babel(id, opts) {
-				const inputOptions =
-					typeof options.react?.babel === "function"
-						? options.react.babel(id, opts)
-						: options.react?.babel;
-
-				if (
-					!opts?.ssr &&
-					((resolvedConfig as any).api.rakkas.isPage(id) ||
-						(resolvedConfig as any).api.rakkas.isLayout(id))
-				) {
-					return {
-						...inputOptions,
-						plugins: [
-							babelTransformClientSidePages(),
-							...(inputOptions?.plugins ?? []),
-						],
-					};
-				} else {
-					return inputOptions || {};
-				}
-			},
-		}),
 		serverOnlyClientOnly(options),
 	];
 }

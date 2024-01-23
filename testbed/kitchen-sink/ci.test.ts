@@ -35,8 +35,22 @@ if (import.meta.env.TEST_HOST) {
 		testCase("Development Mode", true, TEST_HOST, "pnpm dev");
 	}
 
+	if (include.includes("dev-swc")) {
+		testCase("Development Mode with SWC", true, TEST_HOST, "pnpm dev", true);
+	}
+
 	if (include.includes("prod")) {
 		testCase("Production Mode", false, TEST_HOST, "pnpm build && pnpm start");
+	}
+
+	if (include.includes("prod-swc")) {
+		testCase(
+			"Production Mode with SWC",
+			false,
+			TEST_HOST,
+			"pnpm build && pnpm start",
+			true,
+		);
 	}
 
 	const nodeVersions = process.versions.node.split(".");
@@ -97,7 +111,13 @@ const browser = await puppeteer.launch({
 const pages = await browser.pages();
 const page = pages[0];
 
-function testCase(title: string, dev: boolean, host: string, command?: string) {
+function testCase(
+	title: string,
+	dev: boolean,
+	host: string,
+	command?: string,
+	swc?: boolean,
+) {
 	describe(title, () => {
 		if (command) {
 			let cp: ChildProcess | undefined;
@@ -111,6 +131,7 @@ function testCase(title: string, dev: boolean, host: string, command?: string) {
 						...process.env,
 						BROWSER: "none",
 						HOST: "127.0.0.1",
+						USE_SWC: swc ? "1" : undefined,
 					},
 				});
 

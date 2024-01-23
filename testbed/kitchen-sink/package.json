@@ -25,6 +25,8 @@
     "@hattip/adapter-netlify-edge": "0.0.41",
     "@hattip/adapter-netlify-functions": "0.0.41",
     "@types/ps-tree": "^1.1.6",
+    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-react-swc": "^3.5.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.56.0",
     "node-fetch": "^3.3.2",

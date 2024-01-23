@@ -6,6 +6,8 @@ import glob from "fast-glob";
 import { routeToRegExp, sortRoutes } from "../../internal/route-utils";
 import MagicString from "magic-string";
 import { BaseRouteConfig } from "../../lib";
+import { transformAsync } from "@babel/core";
+import { babelTransformClientSidePages } from "../run-server-side/implementation/transform/transform-client-page";
 
 export interface PageRoutesOptions {
 	pageExtensions?: string[];
@@ -262,11 +264,6 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 						.resolve(routesRoot + "/" + singlePageGuardPattern)
 						.replace(/\\/g, "/"),
 				);
-
-				// This is ugly but it's the easiest way to pass some info
-				// to the Babel transform
-				(config as any).api.rakkas.isPage = isPage;
-				(config as any).api.rakkas.isLayout = isLayout;
 			},
 
 			configureServer(server) {
@@ -322,6 +319,36 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 						return code + PAGE_HOT_RELOAD;
 					}
 				}
+			},
+		},
+		{
+			name: "rakkasjs:strip-server-exports",
+			async transform(code, id, options) {
+				if (options?.ssr) return;
+
+				if (!isPage(id) && !isLayout(id)) {
+					return;
+				}
+
+				const result = await transformAsync(code, {
+					filename: id,
+					code: true,
+					plugins: [babelTransformClientSidePages()],
+					sourceMaps:
+						resolvedConfig.command === "serve" ||
+						!!resolvedConfig.build.sourcemap,
+				}).catch((error) => {
+					this.error(error.message);
+				});
+
+				if (!result) {
+					return null;
+				}
+
+				return {
+					code: result.code!,
+					map: result.map,
+				};
 			},
 		},
 	];

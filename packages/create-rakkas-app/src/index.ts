@@ -12,6 +12,7 @@ export interface Options {
 	skipPrompt?: boolean;
 	force?: boolean;
 
+	swc?: boolean;
 	typescript?: boolean;
 	prettier?: boolean;
 	eslint?: boolean;
@@ -25,6 +26,11 @@ cli
 	.option(
 		"-f, --force",
 		"[boolean] Generate even if the directory is not empty",
+	)
+	.option(
+		"-s, --swc",
+		"[boolean] Use @vitejs/plugin-react-swc (faster) instead of @vitejs/plugin-react (smaller)",
+		{ default: false },
 	)
 	.option("-t, --typescript", "[boolean] Use TypeScript for static typing", {
 		default: true,
@@ -97,6 +103,12 @@ async function prompt(options: Options) {
 			pageSize: Infinity,
 			choices: [
 				{
+					name: " @vitejs/plugin-react-swc for faster builds",
+					short: "SWC",
+					value: "swc",
+					checked: options.swc,
+				},
+				{
 					name: " TypeScript for static typing",
 					short: "TypeScript",
 					value: "typescript",
@@ -130,6 +142,7 @@ async function prompt(options: Options) {
 		},
 	]);
 
+	options.swc = answers.features.includes("swc");
 	options.typescript = answers.features.includes("typescript");
 	options.prettier = answers.features.includes("prettier");
 	options.eslint = answers.features.includes("eslint");

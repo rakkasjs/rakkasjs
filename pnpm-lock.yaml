@@ -58,6 +58,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       dotenv-cli:
         specifier: ^7.3.0
         version: 7.3.0
@@ -101,6 +104,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -120,6 +126,9 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -148,6 +157,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -179,6 +191,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -213,6 +228,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -241,6 +259,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -272,6 +293,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -306,6 +330,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       postcss-preset-mantine:
         specifier: ^1.12.3
         version: 1.12.3(postcss@8.4.33)
@@ -340,6 +367,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -371,6 +401,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -402,6 +435,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -442,6 +478,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -479,6 +518,9 @@ importers:
       "@types/styled-components":
         specifier: ^5.1.34
         version: 5.1.34
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       babel-plugin-styled-components:
         specifier: ^2.1.4
         version: 2.1.4(@babel/core@7.23.7)(styled-components@6.1.8)
@@ -519,6 +561,12 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
+      "@vitejs/plugin-react-swc":
+        specifier: ^3.5.0
+        version: 3.5.0(vite@5.0.12)
       eslint:
         specifier: ^8.56.0
         version: 8.56.0
@@ -562,6 +610,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       rakkasjs:
         specifier: 0.7.0-next.33
         version: link:../../packages/rakkasjs
@@ -763,9 +814,6 @@ importers:
       "@vavite/node-loader":
         specifier: ^4.0.2
         version: 4.0.2(vite@5.0.12)
-      "@vitejs/plugin-react":
-        specifier: ^4.2.1
-        version: 4.2.1(vite@5.0.12)
       cac:
         specifier: ^6.7.14
         version: 6.7.14
@@ -912,6 +960,12 @@ importers:
       "@types/ps-tree":
         specifier: ^1.1.6
         version: 1.1.6
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
+      "@vitejs/plugin-react-swc":
+        specifier: ^3.5.0
+        version: 3.5.0(vite@5.0.12)
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -967,6 +1021,9 @@ importers:
       "@types/ps-tree":
         specifier: ^1.1.6
         version: 1.1.6
+      "@vitejs/plugin-react":
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.0.12)
       eslint:
         specifier: ^8.56.0
         version: 8.56.0
@@ -1046,6 +1103,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@vitejs/plugin-react-swc":
+        specifier: ^3.5.0
+        version: 3.5.0(vite@5.0.12)
       eslint:
         specifier: ^8.56.0
         version: 8.56.0
@@ -1756,7 +1816,6 @@ packages:
     dependencies:
       "@babel/core": 7.23.7
       "@babel/helper-plugin-utils": 7.22.5
-    dev: false
 
   /@babel/plugin-transform-react-jsx-source@7.23.3(@babel/core@7.23.7):
     resolution:
@@ -1769,7 +1828,6 @@ packages:
     dependencies:
       "@babel/core": 7.23.7
       "@babel/helper-plugin-utils": 7.22.5
-    dev: false
 
   /@babel/plugin-transform-typescript@7.23.6(@babel/core@7.23.7):
     resolution:
@@ -5845,6 +5903,168 @@ packages:
       }
     dev: false
 
+  /@swc/core-darwin-arm64@1.3.105:
+    resolution:
+      {
+        integrity: sha512-buWeweLVDXXmcnfIemH4PGnpjwsDTUGitnPchdftb0u1FU8zSSP/lw/pUCBDG/XvWAp7c/aFxgN4CyG0j7eayA==,
+      }
+    engines: { node: ">=10" }
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@swc/core-darwin-x64@1.3.105:
+    resolution:
+      {
+        integrity: sha512-hFmXPApqjA/8sy/9NpljHVaKi1OvL9QkJ2MbbTCCbJERuHMpMUeMBUWipHRfepGHFhU+9B9zkEup/qJaJR4XIg==,
+      }
+    engines: { node: ">=10" }
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@swc/core-linux-arm-gnueabihf@1.3.105:
+    resolution:
+      {
+        integrity: sha512-mwXyMC41oMKkKrPpL8uJpOxw7fyfQoVtIw3Y5p0Blabk+espNYqix0E8VymHdRKuLmM//z5wVmMsuHdGBHvZeg==,
+      }
+    engines: { node: ">=10" }
+    cpu: [arm]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@swc/core-linux-arm64-gnu@1.3.105:
+    resolution:
+      {
+        integrity: sha512-H7yEIVydnUtqBSUxwmO6vpIQn7j+Rr0DF6ZOORPyd/SFzQJK9cJRtmJQ3ZMzlJ1Bb+1gr3MvjgLEnmyCYEm2Hg==,
+      }
+    engines: { node: ">=10" }
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@swc/core-linux-arm64-musl@1.3.105:
+    resolution:
+      {
+        integrity: sha512-Jg7RTFT3pGFdGt5elPV6oDkinRy7q9cXpenjXnJnM2uvx3jOwnsAhexPyCDHom8SHL0j+9kaLLC66T3Gz1E4UA==,
+      }
+    engines: { node: ">=10" }
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@swc/core-linux-x64-gnu@1.3.105:
+    resolution:
+      {
+        integrity: sha512-DJghplpyusAmp1X5pW/y93MmS/u83Sx5GrpJxI6KLPa82+NItTgMcl8KBQmW5GYAJpVKZyaIvBanS5TdR8aN2w==,
+      }
+    engines: { node: ">=10" }
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@swc/core-linux-x64-musl@1.3.105:
+    resolution:
+      {
+        integrity: sha512-wD5jL2dZH/5nPNssBo6jhOvkI0lmWnVR4vnOXWjuXgjq1S0AJpO5jdre/6pYLmf26hft3M42bteDnjR4AAZ38w==,
+      }
+    engines: { node: ">=10" }
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@swc/core-win32-arm64-msvc@1.3.105:
+    resolution:
+      {
+        integrity: sha512-UqJtwILUHRw2+3UTPnRkZrzM/bGdQtbR4UFdp79mZQYfryeOUVNg7aJj/bWUTkKtLiZ3o+FBNrM/x2X1mJX5bA==,
+      }
+    engines: { node: ">=10" }
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@swc/core-win32-ia32-msvc@1.3.105:
+    resolution:
+      {
+        integrity: sha512-Z95C6vZgBEJ1snidYyjVKnVWiy/ZpPiIFIXGWkDr4ZyBgL3eZX12M6LzZ+NApHKffrbO4enbFyFomueBQgS2oA==,
+      }
+    engines: { node: ">=10" }
+    cpu: [ia32]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@swc/core-win32-x64-msvc@1.3.105:
+    resolution:
+      {
+        integrity: sha512-3J8fkyDPFsS3mszuYUY4Wfk7/B2oio9qXUwF3DzOs2MK+XgdyMLIptIxL7gdfitXJBH8k39uVjrIw1JGJDjyFA==,
+      }
+    engines: { node: ">=10" }
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@swc/core@1.3.105:
+    resolution:
+      {
+        integrity: sha512-me2VZyr3OjqRpFrYQJJYy7x/zbFSl9nt+MAGnIcBtjDsN00iTVqEaKxBjPBFQV9BDAgPz2SRWes/DhhVm5SmMw==,
+      }
+    engines: { node: ">=10" }
+    requiresBuild: true
+    peerDependencies:
+      "@swc/helpers": ^0.5.0
+    peerDependenciesMeta:
+      "@swc/helpers":
+        optional: true
+    dependencies:
+      "@swc/counter": 0.1.2
+      "@swc/types": 0.1.5
+    optionalDependencies:
+      "@swc/core-darwin-arm64": 1.3.105
+      "@swc/core-darwin-x64": 1.3.105
+      "@swc/core-linux-arm-gnueabihf": 1.3.105
+      "@swc/core-linux-arm64-gnu": 1.3.105
+      "@swc/core-linux-arm64-musl": 1.3.105
+      "@swc/core-linux-x64-gnu": 1.3.105
+      "@swc/core-linux-x64-musl": 1.3.105
+      "@swc/core-win32-arm64-msvc": 1.3.105
+      "@swc/core-win32-ia32-msvc": 1.3.105
+      "@swc/core-win32-x64-msvc": 1.3.105
+    dev: true
+
+  /@swc/counter@0.1.2:
+    resolution:
+      {
+        integrity: sha512-9F4ys4C74eSTEUNndnER3VJ15oru2NumfQxS8geE+f3eB5xvfxpWyqE5XlVnxb/R14uoXi6SLbBwwiDSkv+XEw==,
+      }
+    dev: true
+
+  /@swc/types@0.1.5:
+    resolution:
+      {
+        integrity: sha512-myfUej5naTBWnqOCc/MdVOLVjXUXtIA+NpDrDBKJtLLg2shUjBu3cZmB/85RyitKc55+lUUyl7oRfLOvkr2hsw==,
+      }
+    dev: true
+
   /@szmarczak/http-timer@5.0.1:
     resolution:
       {
@@ -6735,6 +6955,20 @@ packages:
       - supports-color
     dev: false
 
+  /@vitejs/plugin-react-swc@3.5.0(vite@5.0.12):
+    resolution:
+      {
+        integrity: sha512-1PrOvAaDpqlCV+Up8RkAh9qaiUjoDUcjtttyhXDKw53XA6Ve16SOp6cCOpRs8Dj8DqUQs6eTW5YkLcLJjrXAig==,
+      }
+    peerDependencies:
+      vite: ^4 || ^5
+    dependencies:
+      "@swc/core": 1.3.105
+      vite: 5.0.12(@types/node@20.11.5)
+    transitivePeerDependencies:
+      - "@swc/helpers"
+    dev: true
+
   /@vitejs/plugin-react@4.2.1(vite@5.0.12):
     resolution:
       {
@@ -6752,7 +6986,6 @@ packages:
       vite: 5.0.12(@types/node@20.11.5)
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@vitest/expect@1.2.1:
     resolution:
@@ -18091,7 +18324,6 @@ packages:
         integrity: sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==,
       }
     engines: { node: ">=0.10.0" }
-    dev: false
 
   /react-remove-scroll-bar@2.3.4(@types/react@18.2.48)(react@18.2.0):
     resolution:
