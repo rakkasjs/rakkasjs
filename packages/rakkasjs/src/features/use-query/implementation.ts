@@ -1,6 +1,4 @@
 /// <reference types="vite/client" />
-
-import type { RequestContext } from "@hattip/compose";
 import {
 	useCallback,
 	useContext,
@@ -10,13 +8,14 @@ import {
 	useState,
 	useSyncExternalStore,
 } from "react";
-import { PageLocals, useErrorBoundary } from "../../lib";
+import { useErrorBoundary } from "../../lib";
 import { IsomorphicContext } from "../../runtime/isomorphic-context";
 import { createNamedContext } from "../../runtime/named-context";
 import {
 	EventStreamContentType,
 	fetchEventSource,
 } from "@microsoft/fetch-event-source";
+import type { PageContext } from "../../runtime/page-types";
 
 export interface CacheItem {
 	value?: any;
@@ -161,22 +160,6 @@ export const DEFAULT_QUERY_OPTIONS: RequiredUseQueryOptions = {
 	keepPreviousData: false,
 	tags: [],
 };
-
-/** Context within which the page is being rendered */
-export interface PageContext {
-	/** URL */
-	url: URL;
-	/** Isomorphic fetch function */
-	fetch: typeof fetch;
-	/** Query client used by useQuery */
-	queryClient: QueryClient;
-	/** Request context, only defined on the server */
-	requestContext?: RequestContext;
-	/** Application-specific stuff */
-	locals: PageLocals;
-	/** Page action data */
-	actionData?: any;
-}
 
 export function usePageContext(): PageContext {
 	return useContext(IsomorphicContext);

@@ -337,18 +337,17 @@ function testCase(
 					await fs.promises.writeFile(filePath, newContent);
 
 					try {
-						await page.waitForFunction(() =>
-							document.body?.textContent?.includes("Hot reloadin'!"),
-						);
 						await page.waitForFunction(
 							() =>
+								document.body?.textContent?.includes("Hot reloadin'!") &&
 								document.querySelector("button")?.textContent === "Clicked: 1",
+							{ timeout: 15_000 },
 						);
 					} finally {
 						await fs.promises.writeFile(filePath, oldContent);
 					}
 				},
-				{ retry: 3, timeout: 15_000 },
+				{ retry: 3, timeout: 20_000 },
 			);
 
 			test(

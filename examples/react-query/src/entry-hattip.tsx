@@ -1,9 +1,5 @@
-import { createRequestHandler } from "rakkasjs";
-import {
-	QueryCache,
-	QueryClient,
-	QueryClientProvider,
-} from "@tanstack/react-query";
+import { createRequestHandler } from "rakkasjs/server";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { uneval } from "devalue";
 
 declare module "rakkasjs" {

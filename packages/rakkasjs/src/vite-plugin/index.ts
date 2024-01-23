@@ -129,12 +129,12 @@ const DEFAULT_NODE_ENTRY_CONTENTS = `
 `;
 
 const DEFAULT_HATTIP_ENTRY_CONTENTS = `
-	import { createRequestHandler } from "rakkasjs";
+	import { createRequestHandler } from "rakkasjs/server";
 	export default createRequestHandler();
 `;
 
 const DEFAULT_CLIENT_ENTRY_CONTENTS = `
-	import { startClient } from "rakkasjs";
+	import { startClient } from "rakkasjs/client";
 	startClient();
 `;
 

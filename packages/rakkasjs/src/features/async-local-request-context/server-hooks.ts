@@ -1,4 +1,4 @@
-import { ServerHooks } from "../../lib";
+import type { ServerHooks } from "../../runtime/hattip-handler";
 import { requestContextStorage } from "./implementation";
 
 const asyncLocalRequestContextServerHooks: ServerHooks = {

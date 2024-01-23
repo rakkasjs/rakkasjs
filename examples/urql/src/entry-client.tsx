@@ -1,4 +1,4 @@
-import { startClient } from "rakkasjs";
+import { startClient } from "rakkasjs/client";
 import {
 	createClient,
 	dedupExchange,

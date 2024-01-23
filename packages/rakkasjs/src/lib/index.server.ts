@@ -14,8 +14,6 @@ export {
 	useFormMutation,
 } from "../features/run-server-side/lib-server";
 
-export { createRequestHandler } from "../runtime/hattip-handler";
-
 export * from "../features/pages/lib";
 
 export { getRequestContext } from "../features/async-local-request-context/lib-server";

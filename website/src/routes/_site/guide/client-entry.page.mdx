@@ -2,10 +2,10 @@
 title: Client entry
 ---
 
-The main client-side entry point of a Rakkas application is the `src/entry-client.js` (or `.ts`, `.jsx`, `.tsx`) file. Rakkas has a default implementation, so you don't have to provide one. But it exposes advanced customization features that you might find useful. If provided, it should call the `startClient` function to start the client.
+The main client-side entry point of a Rakkas application is the `src/entry-client.js` (or `.ts`, `.jsx`, `.tsx`) file. Rakkas has a default implementation, so you don't have to provide one. But it exposes advanced customization features that you might find useful. If provided, it should call the `startClient` function from the `rakkasjs/client` module to start the client.
 
 ```tsx
-import { startClient } from "rakkasjs";
+import { startClient } from "rakkasjs/client";
 
 startClient({
   hooks: {

@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-import { startClient } from "rakkasjs";
+import { startClient } from "rakkasjs/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function setQueryData(data: Record<string, unknown>) {

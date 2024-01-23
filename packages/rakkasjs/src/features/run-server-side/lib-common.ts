@@ -2,7 +2,6 @@ import { stringify } from "@brillout/json-serializer/stringify";
 import type { RequestContext } from "@hattip/compose";
 import { FormEvent, useContext } from "react";
 import {
-	ActionResult,
 	UseMutationErrorResult,
 	UseMutationIdleResult,
 	UseMutationLoadingResult,
@@ -12,7 +11,8 @@ import {
 } from "../../lib";
 import { ServerSideContext } from "../../runtime/isomorphic-context";
 import { encodeFileNameSafe } from "../../runtime/utils";
-import { UseQueryOptions } from "../use-query/implementation";
+import type { UseQueryOptions } from "../use-query/implementation";
+import type { ActionResult } from "../../runtime/page-types";
 
 /**
  * Hook for getting the request context. Returns undefined on the client.
