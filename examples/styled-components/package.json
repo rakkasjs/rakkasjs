@@ -13,6 +13,7 @@
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@types/styled-components": "^5.1.34",
+    "@vitejs/plugin-react": "^4.2.1",
     "babel-plugin-styled-components": "^2.1.4",
     "rakkasjs": "0.7.0-next.33",
     "typescript": "^5.3.3",

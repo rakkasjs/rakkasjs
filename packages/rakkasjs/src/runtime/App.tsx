@@ -17,15 +17,16 @@ import {
 	PreloadContext,
 	PreloadResult,
 } from "./page-types";
-import prodRoutes, {
-	notFoundRoutes as prodNotFoundRoutes,
-} from "virtual:rakkasjs:client-page-routes";
 import { Default404Page } from "../features/pages/Default404Page";
 import { Head, LookupHookResult, PageContext, Redirect } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 import { createNamedContext } from "./named-context";
 import { prefetcher } from "../features/client-side-navigation/implementation";
 import { RouteParamsContext } from "../features/pages/route-params-context";
+
+type Routes = (typeof import("virtual:rakkasjs:client-page-routes"))["default"];
+type NotFoundRoutes =
+	(typeof import("virtual:rakkasjs:client-page-routes"))["notFoundRoutes"];
 
 export interface AppProps {
 	beforePageLookupHandlers: Array<
@@ -192,14 +193,15 @@ export async function loadRoute(
 	let updatedComponents: Layout[] | undefined;
 
 	if (!found || import.meta.hot) {
-		let routes: typeof prodRoutes;
-		let updatedRoutes: typeof prodRoutes;
-		let notFoundRoutes: typeof prodNotFoundRoutes;
-		let updatedNotFoundRoutes: typeof prodNotFoundRoutes;
+		let routes: Routes;
+		let updatedRoutes: Routes;
+		let notFoundRoutes: NotFoundRoutes;
+		let updatedNotFoundRoutes: NotFoundRoutes;
 
 		if (import.meta.env.PROD) {
-			routes = prodRoutes;
-			notFoundRoutes = prodNotFoundRoutes;
+			const prodModule = await import("virtual:rakkasjs:client-page-routes");
+			routes = prodModule.default;
+			notFoundRoutes = prodModule.notFoundRoutes;
 		} else {
 			// This whole dance is about rendering the old component (which
 			// React updates internally via Fast Refresh), but calling the

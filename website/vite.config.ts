@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
 import rakkas from "rakkasjs/vite-plugin";
 import codeViewer from "./vite-plugins/code-viewer";
 import sampleLoader from "./vite-plugins/sample-loader";
@@ -47,6 +48,8 @@ export default defineConfig({
 			rehypePlugins: [rhypePrism],
 			providerImportSource: "@mdx-js/react",
 		}),
+
+		react(),
 
 		rakkas({
 			pageExtensions: ["jsx", "tsx", "mdx"],

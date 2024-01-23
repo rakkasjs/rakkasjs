@@ -15,6 +15,7 @@
   "devDependencies": {
     "@cyco130/eslint-config": "^3.6.2",
     "@types/ps-tree": "^1.1.6",
+    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.56.0",
     "node-fetch": "^3.3.2",
     "ps-tree": "^1.2.0",

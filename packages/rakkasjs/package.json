@@ -93,7 +93,6 @@
     "@vavite/expose-vite-dev-server": "4.0.2",
     "@vavite/multibuild": "^4.0.2",
     "@vavite/node-loader": "^4.0.2",
-    "@vitejs/plugin-react": "^4.2.1",
     "cac": "^6.7.14",
     "cheerio": "^1.0.0-rc.12",
     "devalue": "^4.3.2",

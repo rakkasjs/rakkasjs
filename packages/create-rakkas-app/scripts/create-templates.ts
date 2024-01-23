@@ -86,7 +86,7 @@ async function main() {
 	contents = contents
 		.replace(`tsconfigPaths(), `, "")
 		.replace(
-			/import tsconfigPaths from "vite-tsconfig-paths";/,
+			/import tsconfigPaths from "vite-tsconfig-paths";\r?\n/,
 			`import path from "node:path";\n`,
 		)
 		.replace(
