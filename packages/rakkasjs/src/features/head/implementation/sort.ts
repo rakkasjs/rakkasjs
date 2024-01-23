@@ -58,7 +58,7 @@ export function sortHeadTags(tags: NormalizedHeadProps): Array<Attributes> {
 				return 16;
 
 			case "style":
-				if ((tag.innerText as string | undefined)?.includes("@import"))
+				if ((tag.textContent as string | undefined)?.includes("@import"))
 					return 9;
 				return 11;
 

@@ -31,19 +31,20 @@ const headServerHooks: ServerHooks = {
 				const elements = sortHeadTags(tags);
 
 				for (const element of elements) {
-					const { tagName = "meta", ...attributes } = element;
+					const tagName = element.tagName;
+
 					if (tagName === "head") {
-						speciallAttributes.headAttributes = attributes;
+						speciallAttributes.headAttributes = element;
 						continue;
 					} else if (tagName === "body") {
-						speciallAttributes.bodyAttributes = attributes;
+						speciallAttributes.bodyAttributes = element;
 						continue;
 					} else if (tagName === "html") {
-						speciallAttributes.htmlAttributes = attributes;
+						speciallAttributes.htmlAttributes = element;
 						continue;
 					}
 
-					result += renderElement(tagName as string, attributes);
+					result += renderElement(element);
 				}
 
 				return result + "<!-- head end -->";
@@ -55,20 +56,14 @@ const headServerHooks: ServerHooks = {
 export default headServerHooks;
 
 function renderElement(
-	tagName: string,
 	attributes: Record<string, string | number | boolean | undefined>,
 ) {
+	const tagName = (attributes.tagName ?? "meta") as string;
+
 	let result = "<" + tagName;
 	for (const [attr, value] of Object.entries(attributes)) {
-		if (attr === "key") {
-			continue;
-		}
-
 		if (
-			attr === "innerText" ||
-			attr === "innerHTML" ||
-			attr === "children" ||
-			attr === "tagName"
+			["key", "textContent", "innerHTML", "children", "tagName"].includes(attr)
 		) {
 			continue;
 		}
@@ -82,8 +77,8 @@ function renderElement(
 		result += ` ${attr}="${escapeHtml(String(value))}"`;
 	}
 
-	if (attributes.innerText) {
-		const value = attributes.innerText;
+	if (attributes.textContent) {
+		const value = attributes.textContent;
 		const escaped =
 			tagName === "style"
 				? escapeCss(String(value))
@@ -93,11 +88,14 @@ function renderElement(
 		result += `>${String(attributes.innerHTML)}</${tagName}>`;
 	} else if (attributes.children) {
 		const children = (attributes.children as any as any[])
-			.map((child) => renderElement(child.tagName ?? "meta", child))
+			.map((child) => renderElement(child))
 			.join("");
 		result += `>${children}</${tagName}>`;
 	} else {
-		result += `></${tagName}>`;
+		result += ">";
+		if (!["base", "link", "meta"].includes(tagName)) {
+			result += `</${tagName}>`;
+		}
 	}
 
 	return result;

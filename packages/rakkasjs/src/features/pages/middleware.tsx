@@ -761,6 +761,11 @@ function renderHead(
 function stringifyAttributes(attributes: Record<string, string>) {
 	let result = "";
 	for (const [key, value] of Object.entries(attributes)) {
+		if (
+			["key", "textContent", "innerHTML", "children", "tagName"].includes(key)
+		) {
+			continue;
+		}
 		result += ` ${escapeHtml(key)}="${escapeHtml(value)}"`;
 	}
 

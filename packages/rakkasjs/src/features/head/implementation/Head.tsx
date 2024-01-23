@@ -57,25 +57,11 @@ function updateHead() {
 		mergeHeadProps(tags, props);
 	}
 
-	const sorted = sortHeadTags(tags);
+	let newElements = sortHeadTags(tags);
 
-	// Delete all head tags
-	for (const node of document.head.childNodes) {
-		if (
-			node.nodeType === Node.COMMENT_NODE &&
-			node.nodeValue === " head end "
-		) {
-			while (node.previousSibling) {
-				node.previousSibling.remove();
-			}
-			break;
-		}
-	}
-
-	// Add new head tags
-	let last = document.head.firstChild;
-	for (const element of sorted.reverse()) {
-		const { tagName = "meta", children, ...attributes } = element;
+	// Handle <html>, <head>, and <body>
+	for (const element of newElements) {
+		const { tagName, ...attributes } = element;
 
 		if (tagName === "head") {
 			setAttributes(document.head, attributes, true);
@@ -91,14 +77,75 @@ function updateHead() {
 			setAttributes(document.documentElement, attributes, true);
 			continue;
 		}
+	}
 
-		const el = document.createElement(tagName as string);
-		setAttributes(el, attributes);
+	newElements = newElements.filter(
+		(elt) => !["head", "body", "html"].includes(elt.tagName as string),
+	);
 
-		// Only noscript can have children and if this is running, noscript has no effect
-		void children;
+	const currentElements: HTMLElement[] = [];
+	let endNode: Node | null = null;
+	for (const node of document.head.childNodes) {
+		if (
+			node.nodeType === Node.COMMENT_NODE &&
+			node.nodeValue === " head end "
+		) {
+			endNode = node;
+			break;
+		}
 
-		last = document.head.insertBefore(el, last);
+		if (node.nodeType === Node.ELEMENT_NODE) {
+			currentElements.push(node as HTMLElement);
+		}
+	}
+
+	let iNew = 0;
+	let iCur = 0;
+	while (iNew < newElements.length || iCur < currentElements.length) {
+		const newElement = newElements[iNew];
+		let currentElement = currentElements[iCur];
+
+		if (!newElement) {
+			do {
+				currentElement.remove();
+				currentElement = currentElements[++iCur];
+			} while (currentElement);
+			break;
+		}
+
+		if (!currentElement) {
+			do {
+				const { tagName = "meta", ...attributes } = newElement;
+				iNew++;
+				const el = document.createElement(tagName as string);
+				setAttributes(el, attributes);
+				document.head.insertBefore(el, endNode);
+			} while (newElements[iNew]);
+			break;
+		}
+
+		const { tagName = "meta", ...attributes } = newElement;
+
+		if (tagName === currentElement.tagName.toLowerCase()) {
+			setAttributes(currentElement, attributes, true);
+			iNew++;
+			iCur++;
+			continue;
+		}
+
+		// Simple heuristic: We'll decide to insert or remove based on how
+		// many elements are left on each side.
+		if (newElements.length - iNew > currentElements.length - iCur) {
+			// Insert
+			const el = document.createElement(tagName as string);
+			setAttributes(el, attributes);
+			document.head.insertBefore(el, currentElement);
+			iNew++;
+		} else {
+			// Remove
+			currentElement.remove();
+			iCur++;
+		}
 	}
 }
 
@@ -112,13 +159,19 @@ function setAttributes(
 			continue;
 		}
 
-		if (attr === "innerText") {
-			el.innerText = value as string;
+		if (attr === "textContent") {
+			el.textContent = value as string;
 			continue;
 		}
 
 		if (attr === "innerHTML") {
 			el.innerHTML = value as string;
+			continue;
+		}
+
+		if (attr === "children") {
+			// Only noscript can have children
+			// and if we're running, it's not noscript
 			continue;
 		}
 

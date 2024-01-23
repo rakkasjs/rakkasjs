@@ -164,7 +164,7 @@ const autoKeys: Record<
 	| "og"
 	| "twitter"
 > = {
-	title: [{ tagName: "title" }, "innerText"],
+	title: [{ tagName: "title" }, "textContent"],
 	viewport: [{ tagName: "meta", name: "viewport" }, "content"],
 	description: [{ tagName: "meta", name: "description" }, "content"],
 	canonical: [{ tagName: "link", rel: "canonical" }, "href"],
