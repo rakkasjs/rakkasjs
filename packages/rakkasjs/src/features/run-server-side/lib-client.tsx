@@ -4,7 +4,6 @@ import {
 	RunServerSideMutationOptions,
 	RunServerSideQueryOptions,
 	ServerSideFunction,
-	useFormAction,
 	UseFormMutationFn,
 	UseFormMutationResult,
 	UseServerSideMutationOptions,
@@ -19,6 +18,7 @@ import {
 import { encodeFileNameSafe } from "../../runtime/utils";
 import { useSubmit } from "../client-side-navigation/implementation";
 import { EventSourceResult, useEventSource } from "../use-query/implementation";
+import { useFormAction } from "./implementation/use-form-action";
 
 function runSSQImpl(
 	_: RequestContext,
@@ -37,7 +37,14 @@ function useSSQImpl(
 	options: UseServerSideQueryOptions = {},
 ): QueryResult<any> {
 	const [callSiteId, closure] = desc;
-	const { key: userKey, usePostMethod = false, ...useQueryOptions } = options;
+	const {
+		// eslint-disable-next-line deprecation/deprecation
+		key: oldKey,
+		queryKey,
+		usePostMethod = false,
+		...useQueryOptions
+	} = options;
+	const userKey = queryKey ?? oldKey;
 
 	const stringified = closure.map((x) => stringify(x));
 	const key = userKey ?? `$ss:${callSiteId}:${stringified}`;

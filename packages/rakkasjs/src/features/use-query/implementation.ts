@@ -168,6 +168,9 @@ export function usePageContext(): PageContext {
 /** Function passed to useQuery */
 export type QueryFn<T> = (ctx: PageContext) => T | Promise<T>;
 
+declare const QUERY_BRAND: unique symbol;
+type BrandedQueryKey<T> = string & { [QUERY_BRAND]: T };
+
 /** Utility function to create typed queries and query factories */
 export function queryOptions<
 	T,
@@ -176,8 +179,10 @@ export function queryOptions<
 	PlaceholderData = undefined,
 >(
 	options: CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData>,
-): CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData> {
-	return options;
+): CompleteUseQueryOptions<T, Enabled, InitialData, PlaceholderData> & {
+	queryKey: string & BrandedQueryKey<T>;
+} {
+	return options as any;
 }
 
 /**
@@ -594,21 +599,28 @@ function useRefetch<
 /** Query client that manages the cache used by useQuery */
 export interface QueryClient {
 	/** Get the data cached for the given key */
-	getQueryData(key: string): any;
+	getQueryData<Q extends string>(
+		key: Q,
+	): Q extends BrandedQueryKey<infer T> ? T | undefined : any;
 	/**
 	 * Set the data associated for the given key.
 	 * You can also pass a promise here.
 	 */
-	setQueryData(key: string, data: any): void;
+	setQueryData<Q extends string>(
+		key: Q,
+		data: Q extends BrandedQueryKey<infer T> ? T | Promise<T> : any,
+	): void;
 	/**
 	 * Start fetching the data for the given key.
 	 */
-	prefetchQuery(options: PrefetchQueryOptions): void;
+	prefetchQuery<T>(options: PrefetchQueryOptions<T>): void;
+	/** */
+	ensureQueryData<T>(options: PrefetchQueryOptions<T>): Promise<Awaited<T>>;
 	/**
 	 * Invalidate one or more queries.
 	 */
 	invalidateQueries(
-		keys?: string | string[] | ((key: string) => boolean),
+		keys?: string | string[] | Set<string> | ((key: string) => boolean),
 	): void;
 	/**
 	 * Invalidate queries by tag.
@@ -616,11 +628,11 @@ export interface QueryClient {
 	invalidateTags(tags: string[] | Set<string>): void;
 }
 
-export interface PrefetchQueryOptions {
+export interface PrefetchQueryOptions<T = any> {
 	/** Query key */
-	queryKey: string;
+	queryKey: string & BrandedQueryKey<Awaited<T>>;
 	/** Query function */
-	queryFn: QueryFn<any>;
+	queryFn: QueryFn<T>;
 	/**
 	 * Time in milliseconds after which the value will be evicted from the
 	 * cache when there are no subscribers. Use 0 for immediate eviction and
@@ -674,12 +686,12 @@ export function createQueryClient(
 				staleTime = DEFAULT_QUERY_OPTIONS.staleTime,
 			} = options;
 
-			const current = cache.get(options.queryKey);
+			const current = cache.get(queryKey);
 			if (
-				current?.value !== undefined &&
-				!current.invalid &&
-				current.date !== undefined &&
-				staleTime > Date.now() - current.date
+				current &&
+				"value" in current &&
+				current.invalid !== false &&
+				(current.date === undefined || staleTime > Date.now() - current.date)
 			) {
 				return;
 			}
@@ -693,20 +705,52 @@ export function createQueryClient(
 			}
 		},
 
+		async ensureQueryData(options) {
+			const {
+				queryKey,
+				queryFn,
+				tags = DEFAULT_QUERY_OPTIONS.tags,
+				cacheTime = DEFAULT_QUERY_OPTIONS.cacheTime,
+				staleTime = DEFAULT_QUERY_OPTIONS.staleTime,
+			} = options;
+
+			const current = cache.get(queryKey);
+
+			if (
+				current &&
+				"value" in current &&
+				current.invalid !== false &&
+				(current.date === undefined || staleTime > Date.now() - current.date)
+			) {
+				return current.value;
+			}
+
+			const result = queryFn(ctx);
+			cache.set(queryKey, result, cacheTime);
+			const set = new Set(tags);
+			cache.setTags(queryKey, set, JSON.stringify([...set].sort()));
+
+			if (!(result instanceof Promise)) {
+				return result;
+			}
+
+			return cache.get(queryKey)!.promise;
+		},
+
 		invalidateQueries(keys) {
 			if (typeof keys === "string") {
 				cache.invalidate(keys);
 				return;
-			} else if (Array.isArray(keys)) {
-				keys.forEach((key) => cache.invalidate(key));
-				return;
-			}
-
-			for (const key of cache.enumerate()) {
-				const shouldInvalidate = keys === undefined || keys(key);
-				if (shouldInvalidate) {
-					cache.invalidate(key);
+			} else if (typeof keys === "function") {
+				for (const key of cache.enumerate()) {
+					const shouldInvalidate = keys === undefined || keys(key);
+					if (shouldInvalidate) {
+						cache.invalidate(key);
+					}
 				}
+				return;
+			} else if (keys) {
+				keys.forEach((key) => cache.invalidate(key));
 			}
 		},
 

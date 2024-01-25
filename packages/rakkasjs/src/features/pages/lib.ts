@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { RouteParamsContext } from "./route-params-context";
+import { RouteParamsContext } from "./contexts";
 
 export { DefaultErrorPage } from "./DefaultErrorPage";
 

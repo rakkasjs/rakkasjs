@@ -44,10 +44,10 @@ export async function startClient(options: StartClientOptions = {}) {
 	await commonHooks.extendPageContext?.(pageContext);
 
 	const beforePageLookupHandlers: Array<
-		(ctx: PageContext, url: URL) => LookupHookResult
+		(ctx: PageContext, url: URL) => LookupHookResult | Promise<LookupHookResult>
 	> = [commonHooks.beforePageLookup].filter(Boolean) as any;
 
-	let app = <App beforePageLookupHandlers={beforePageLookupHandlers} />;
+	let app = <App />;
 
 	if (commonHooks.wrapApp) {
 		app = commonHooks.wrapApp(app);
@@ -76,6 +76,7 @@ export async function startClient(options: StartClientOptions = {}) {
 
 	const route = await loadRoute(
 		pageContext,
+		new URL(window.location.href),
 		undefined,
 		true,
 		beforePageLookupHandlers,

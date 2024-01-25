@@ -18,20 +18,20 @@ import {
 	PreloadResult,
 } from "./page-types";
 import { Default404Page } from "../features/pages/Default404Page";
-import { Head, LookupHookResult, PageContext, Redirect } from "../lib";
+import { Head, PageContext, Redirect } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 import { createNamedContext } from "./named-context";
 import { prefetcher } from "../features/client-side-navigation/implementation";
-import { RouteParamsContext } from "../features/pages/route-params-context";
+import {
+	RenderedUrlContext,
+	RouteParamsContext,
+} from "../features/pages/contexts";
 
 type Routes = (typeof import("virtual:rakkasjs:client-page-routes"))["default"];
 type NotFoundRoutes =
 	(typeof import("virtual:rakkasjs:client-page-routes"))["notFoundRoutes"];
 
 export interface AppProps {
-	beforePageLookupHandlers: Array<
-		(ctx: PageContext, url: URL) => LookupHookResult
-	>;
 	ssrMeta?: any;
 	ssrActionData?: any;
 	ssrPreloaded?: (void | PreloadResult<Record<string, unknown>>)[];
@@ -39,7 +39,7 @@ export interface AppProps {
 }
 
 export function App(props: AppProps) {
-	const { current: url } = useLocation();
+	const { current: currentUrl } = useLocation();
 
 	const lastRoute = useContext(RouteContext);
 	// Force update
@@ -59,21 +59,20 @@ export function App(props: AppProps) {
 
 	const pageContext = useContext(IsomorphicContext);
 
-	pageContext.url = new URL(url);
 	pageContext.actionData = actionData;
 
 	if (!import.meta.env.SSR) {
 		prefetcher.prefetch = function prefetch(location) {
-			const url = new URL(location, pageContext.url);
+			const url = new URL(location, currentUrl);
 			url.hash = "";
 
 			if (url.origin !== window.location.origin) return;
 
 			loadRoute(
-				{ ...pageContext, url },
+				pageContext,
+				url,
 				lastRoute.found,
 				false,
-				props.beforePageLookupHandlers,
 				actionData,
 				props.ssrMeta,
 				props.ssrPreloaded,
@@ -91,17 +90,17 @@ export function App(props: AppProps) {
 
 	if (
 		!lastRoute.last ||
-		lastRoute.last.pathname !== pageContext.url.pathname ||
-		lastRoute.last.search !== pageContext.url.search ||
+		lastRoute.last.pathname !== currentUrl.pathname ||
+		lastRoute.last.search !== currentUrl.search ||
 		// lastRoute.last.actionData !== actionData ||
 		forcedUpdate
 	) {
 		lastRoute.updateCounter = updateCounter;
 		throw loadRoute(
 			pageContext,
+			currentUrl,
 			lastRoute.found,
 			false,
-			props.beforePageLookupHandlers,
 			actionData,
 			props.ssrMeta,
 			props.ssrPreloaded,
@@ -150,11 +149,9 @@ interface RouteContextContent {
 
 export async function loadRoute(
 	pageContext: PageContext,
+	url: URL,
 	lastFound: RouteContextContent["found"],
 	try404: boolean,
-	beforePageLookupHandlers: Array<
-		(ctx: PageContext, url: URL) => LookupHookResult
-	>,
 	actionData: any,
 	ssrMeta?: any,
 	ssrPreloaded?: (void | PreloadResult<Record<string, unknown>>)[],
@@ -162,33 +159,7 @@ export async function loadRoute(
 	prefetchOnly = false,
 ) {
 	let found = lastFound;
-	const { pathname: originalPathname } = pageContext.url;
-
-	for (const hook of beforePageLookupHandlers) {
-		const result = hook(pageContext, pageContext.url);
-
-		if (!result) break;
-		if (result === true) continue;
-
-		if ("redirect" in result) {
-			const location = String(result.redirect);
-			return {
-				pathname: originalPathname,
-				search: pageContext.url.search,
-				actionData,
-				app: (
-					<Redirect
-						href={location}
-						status={result.status}
-						permanent={result.permanent}
-					/>
-				),
-			};
-		} else {
-			// Rewrite
-			pageContext.url = new URL(result.rewrite, pageContext.url);
-		}
-	}
+	const { pathname: originalPathname } = url;
 
 	let updatedComponents: Layout[] | undefined;
 
@@ -223,18 +194,18 @@ export async function loadRoute(
 			}
 		}
 
-		let pathname = pageContext.url.pathname;
-		let result = findPage(routes, pathname, pageContext);
+		let pathname = url.pathname;
+		let result = findPage(routes, url, pathname, pageContext, false);
 
 		if (import.meta.hot && !result) {
-			result = findPage(updatedRoutes!, pathname, pageContext);
+			result = findPage(updatedRoutes!, url, pathname, pageContext, false);
 		}
 
 		if (result && "redirect" in result) {
 			const location = String(result.redirect);
 			return {
 				pathname: originalPathname,
-				search: pageContext.url.search,
+				search: url.search,
 				actionData,
 				app: (
 					<Redirect
@@ -259,7 +230,7 @@ export async function loadRoute(
 					window.addEventListener("popstate", resolve, { once: true });
 				});
 
-				location.assign(pageContext.url.href);
+				location.assign(url.href);
 				await new Promise(() => {
 					// Wait forever
 				});
@@ -269,12 +240,24 @@ export async function loadRoute(
 				pathname += "/";
 			}
 
-			const result = findPage(notFoundRoutes, pathname + "$404");
+			const result = findPage(
+				notFoundRoutes,
+				url,
+				pathname + "$404",
+				pageContext,
+				true,
+			);
 			if (import.meta.hot && !result) {
-				findPage(updatedNotFoundRoutes!, pathname + "$404");
+				findPage(
+					updatedNotFoundRoutes!,
+					url,
+					pathname + "$404",
+					pageContext,
+					true,
+				);
 			}
 
-			found = result;
+			found = result as any;
 
 			if (!found && pathname === "/") {
 				found = {
@@ -286,6 +269,7 @@ export async function loadRoute(
 						undefined,
 						[],
 					],
+					renderedUrl: url,
 				};
 			}
 
@@ -310,6 +294,8 @@ export async function loadRoute(
 
 	const preloadContext: PreloadContext = {
 		...pageContext,
+		url,
+		renderedUrl: found.renderedUrl,
 		params: found.params,
 	};
 
@@ -402,7 +388,8 @@ export async function loadRoute(
 	let app = components.reduce(
 		(prev, Component) => (
 			<Component
-				url={pageContext.url}
+				url={url}
+				renderedUrl={found!.renderedUrl}
 				params={found!.params}
 				meta={meta}
 				actionData={actionData}
@@ -414,15 +401,17 @@ export async function loadRoute(
 	);
 
 	app = (
-		<RouteParamsContext.Provider value={found.params}>
-			{preloadNode}
-			{app}
-		</RouteParamsContext.Provider>
+		<RenderedUrlContext.Provider value={found.renderedUrl}>
+			<RouteParamsContext.Provider value={found.params}>
+				{preloadNode}
+				{app}
+			</RouteParamsContext.Provider>
+		</RenderedUrlContext.Provider>
 	);
 
 	return {
 		pathname: originalPathname,
-		search: pageContext.url.search,
+		search: url.search,
 		actionData,
 		app,
 	};

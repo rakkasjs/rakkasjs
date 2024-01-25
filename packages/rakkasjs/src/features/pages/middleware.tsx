@@ -29,7 +29,6 @@ import {
 	PrerenderResult,
 	ServerSidePageContext,
 } from "../../runtime/page-types";
-import { LookupHookResult } from "../../lib";
 import { uneval } from "devalue";
 import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
 import { PageRequestHooks } from "../../runtime/hattip-handler";
@@ -84,17 +83,20 @@ export default async function renderPageRoute(
 		  >
 		| undefined;
 
-	const beforePageLookupHandlers: Array<
-		(ctx: PageContext, url: URL) => LookupHookResult
-	> = [commonHooks.beforePageLookup].filter(Boolean) as any;
-
 	if (ctx.notFound) {
 		do {
 			if (!pathname.endsWith("/")) {
 				pathname += "/";
 			}
 
-			found = findPage(notFoundRoutes, pathname + "$404");
+			found = findPage(
+				notFoundRoutes,
+				ctx.url,
+				pathname + "$404",
+				pageContext,
+				true,
+			) as any;
+
 			if (found) {
 				break;
 			}
@@ -109,6 +111,7 @@ export default async function renderPageRoute(
 						undefined,
 						[],
 					],
+					renderedUrl: ctx.url,
 				};
 			}
 
@@ -116,35 +119,8 @@ export default async function renderPageRoute(
 			pathname = pathname.split("/").slice(0, -2).join("/") || "/";
 		} while (!found);
 	} else {
-		for (const hook of beforePageLookupHandlers) {
-			const result = hook(pageContext, pageContext.url);
-
-			if (!result) return;
-
-			if (result === true) continue;
-
-			if ("redirect" in result) {
-				const location = String(result.redirect);
-				return new Response(redirectBody(location), {
-					status: result.status ?? result.permanent ? 301 : 302,
-					headers: makeHeaders(
-						{
-							location: new URL(location, ctx.url.origin).href,
-							"content-type": "text/html; charset=utf-8",
-							vary: "accept",
-						},
-						result.headers,
-					),
-				});
-			} else {
-				// Rewrite
-				pageContext.url = new URL(result.rewrite, pageContext.url);
-			}
-		}
-
-		pathname = pageContext.url.pathname;
-
-		const result = findPage(routes, pathname, pageContext);
+		pathname = ctx.url.pathname;
+		const result = findPage(routes, ctx.url, pathname, pageContext, false);
 
 		if (result && "redirect" in result) {
 			const location = String(result.redirect);
@@ -348,7 +324,6 @@ export default async function renderPageRoute(
 
 	let app = (
 		<App
-			beforePageLookupHandlers={beforePageLookupHandlers}
 			ssrActionData={actionResult?.data}
 			ssrMeta={meta}
 			ssrPreloaded={preloaded}

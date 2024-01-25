@@ -21,7 +21,7 @@ const hooks: CommonHooks = {
     // component.
     return <SomeProvider>{app}</SomeProvider>;
   },
-  beforePageLookup(ctx, url) {
+  beforePageLookup(ctx) {
     // This will be called before the page route
     // lookup is performed.
     // - Return `false` to prevent the page from rendering.

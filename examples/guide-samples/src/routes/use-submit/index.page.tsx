@@ -44,8 +44,15 @@ export default function FormsPage({ actionData }: PageProps) {
 	);
 }
 
-export async function action(ctx: ActionContext): Promise<ActionResult> {
+export async function action(
+	ctx: ActionContext,
+): Promise<
+	ActionResult<{ message: string; userName: string; password: string }>
+> {
 	const formData = await ctx.requestContext.request.formData();
+
+	const userName = String(formData.get("userName") ?? "");
+	const password = String(formData.get("password") ?? "");
 
 	if (
 		formData.get("userName") === "admin" &&
@@ -60,8 +67,8 @@ export async function action(ctx: ActionContext): Promise<ActionResult> {
 		data: {
 			message: "Incorrect username or password",
 			// We'll echo the data back so that the form doesn't get reset
-			userName: formData.get("userName"),
-			password: formData.get("password"),
+			userName,
+			password,
 		},
 	};
 }

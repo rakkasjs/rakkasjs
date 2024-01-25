@@ -2,7 +2,6 @@ import { QueryResult, useQuery } from "../use-query/lib";
 import { stringify } from "@brillout/json-serializer/stringify";
 import {
 	ServerSideFunction,
-	useFormAction,
 	UseFormMutationResult,
 	useRequestContext,
 	UseServerSideQueryOptions,
@@ -15,6 +14,7 @@ import type {
 } from "../use-mutation/lib";
 import { encodeFileNameSafe } from "../../runtime/utils";
 import type { EventSourceResult } from "../use-query/implementation";
+import { useFormAction } from "./implementation/use-form-action";
 
 function runSSQImpl(
 	ctx: RequestContext,
@@ -58,9 +58,17 @@ function useSSQImpl(
 		throw new Error("useSSQ call hasn't been transformed");
 	}
 
-	const { key: userKey, usePostMethod, ...useQueryOptions } = options;
+	const {
+		// eslint-disable-next-line deprecation/deprecation
+		key: oldKey,
+		queryKey,
+		usePostMethod,
+		...useQueryOptions
+	} = options;
 	const ctx = useRequestContext();
 	const [callSiteId, closure, fn] = desc;
+
+	const userKey = queryKey ?? oldKey;
 
 	const stringified = closure.map((x) => stringify(x));
 	const key = userKey ?? `$ss:${callSiteId}:${stringified}`;

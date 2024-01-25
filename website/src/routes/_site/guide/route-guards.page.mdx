@@ -24,10 +24,10 @@ A route guard can also guard all pages under a directory if it's named `$guard.j
 Another use case for route guards is to disable catch-all page routes that shadow API routes. For example, `/foo/[...slug].page.tsx` will match `/foo/bar` before an API route `/foo/bar.api.ts` is matched, effectively shadowing it. To prevent this, you can create a guard file `foo/[...slug].guard.ts` with the following content:
 
 ```ts
-import type { LookupHookResult, PageContext } from "rakkasjs";
+import type { LookupHookResult, PageRouteGuard } from "rakkasjs";
 
-export function pageGuard(ctx: PageContext): LookupHookResult {
+export const pageGuard: PageRouteGuard = (ctx) => {
   // Selectively disable the catch-all page route for /foo/bar
   return ctx.url.pathname !== "/foo/bar";
-}
+};
 ```

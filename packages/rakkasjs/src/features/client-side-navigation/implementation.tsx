@@ -24,6 +24,7 @@ import {
 	usePageContext,
 } from "../../lib";
 import { createNamedContext } from "../../runtime/named-context";
+import { RenderedUrlContext } from "../pages/contexts";
 
 let lastRenderedId: string;
 let navigationPromise: Promise<void> | undefined;
@@ -31,8 +32,12 @@ let navigationResolve: (() => void) | undefined;
 
 /** Return value of useLocation */
 export interface UseLocationResult {
-	current: Readonly<URL>;
-	pending: Readonly<URL> | undefined;
+	/** The URL of the current page before any rewrites */
+	current: URL;
+	/** The URL of the current page after rewrites */
+	rendered: URL;
+	/** The URL of the page that is being navigated to, if any */
+	pending: URL | undefined;
 }
 
 let previousNavigationIndex: number | undefined;
@@ -41,6 +46,7 @@ let currentNavigationIndex = 0;
 /** Hook to get the navigation state */
 export function useLocation(): UseLocationResult {
 	const staticLocation = useContext(LocationContext);
+	const rendered = useContext(RenderedUrlContext);
 
 	const ssrLocation = JSON.stringify([staticLocation!, 0]);
 
@@ -83,6 +89,7 @@ export function useLocation(): UseLocationResult {
 	return {
 		current,
 		pending,
+		rendered,
 	};
 }
 
@@ -565,7 +572,10 @@ export type UseSubmitResult = {
 	| UseMutationSuccessResult<any>
 );
 
-export type UseSubmitOptions = UseMutationOptions<any, HTMLFormElement> &
+export type UseSubmitOptions = UseMutationOptions<
+	any,
+	{ form: HTMLFormElement; formData: FormData }
+> &
 	Omit<NavigationOptions, "actionData">;
 
 // TODO: Where does this belong?
@@ -573,9 +583,11 @@ export function useSubmit(options?: UseSubmitOptions): UseSubmitResult {
 	const { current } = useLocation();
 	const pageContext = usePageContext();
 
-	const mutation = useMutation<any, HTMLFormElement>(
-		async (form: HTMLFormElement) => {
-			const formData = new FormData(form);
+	const mutation = useMutation<
+		any,
+		{ form: HTMLFormElement; formData: FormData }
+	>(
+		async ({ form, formData }) => {
 			let body: FormData | URLSearchParams = formData;
 
 			if (form.enctype === "application/x-www-form-urlencoded") {
@@ -621,7 +633,10 @@ export function useSubmit(options?: UseSubmitOptions): UseSubmitResult {
 
 	function submitHandler(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		mutation.mutate(e.currentTarget);
+		mutation.mutate({
+			form: e.currentTarget,
+			formData: new FormData(e.currentTarget),
+		});
 	}
 
 	mutation.data = mutation.data?.data ?? pageContext.actionData;
