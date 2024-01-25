@@ -1,4 +1,3 @@
-import { stringify } from "@brillout/json-serializer/stringify";
 import type { RequestContext } from "@hattip/compose";
 import { FormEvent, useContext } from "react";
 import {
@@ -7,10 +6,8 @@ import {
 	UseMutationLoadingResult,
 	UseMutationOptions,
 	UseMutationSuccessResult,
-	usePageContext,
 } from "../../lib";
 import { ServerSideContext } from "../../runtime/isomorphic-context";
-import { encodeFileNameSafe } from "../../runtime/utils";
 import type { UseQueryOptions } from "../use-query/implementation";
 import type { ActionResult } from "../../runtime/page-types";
 
@@ -95,19 +92,3 @@ export type UseFormMutationResult<T> = {
 export type UseFormMutationFn<T> = (
 	context: RequestContext,
 ) => ActionResult<T> | Promise<ActionResult<T>>;
-
-export function useFormAction(desc: [callSiteId: string, closure: any[]]) {
-	const { url } = usePageContext();
-
-	const [callSiteId, closure] = desc;
-	const stringified = closure.map((x) => stringify(x));
-
-	let closurePath = stringified.map(encodeFileNameSafe).join("/");
-	if (closurePath) closurePath = "/" + closurePath;
-
-	const actionPath = callSiteId + closurePath;
-	const actionUrl = new URL(url);
-	actionUrl.searchParams.set("_action", actionPath);
-
-	return actionUrl;
-}

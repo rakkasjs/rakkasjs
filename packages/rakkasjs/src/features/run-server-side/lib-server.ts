@@ -2,7 +2,6 @@ import { QueryResult, useQuery } from "../use-query/lib";
 import { stringify } from "@brillout/json-serializer/stringify";
 import {
 	ServerSideFunction,
-	useFormAction,
 	UseFormMutationResult,
 	useRequestContext,
 	UseServerSideQueryOptions,
@@ -15,6 +14,7 @@ import type {
 } from "../use-mutation/lib";
 import { encodeFileNameSafe } from "../../runtime/utils";
 import type { EventSourceResult } from "../use-query/implementation";
+import { useFormAction } from "./implementation/use-form-action";
 
 function runSSQImpl(
 	ctx: RequestContext,

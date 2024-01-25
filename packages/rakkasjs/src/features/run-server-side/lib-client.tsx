@@ -4,7 +4,6 @@ import {
 	RunServerSideMutationOptions,
 	RunServerSideQueryOptions,
 	ServerSideFunction,
-	useFormAction,
 	UseFormMutationFn,
 	UseFormMutationResult,
 	UseServerSideMutationOptions,
@@ -19,6 +18,7 @@ import {
 import { encodeFileNameSafe } from "../../runtime/utils";
 import { useSubmit } from "../client-side-navigation/implementation";
 import { EventSourceResult, useEventSource } from "../use-query/implementation";
+import { useFormAction } from "./implementation/use-form-action";
 
 function runSSQImpl(
 	_: RequestContext,
