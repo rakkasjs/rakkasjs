@@ -80,7 +80,7 @@ function renderElement(
 	if (attributes.textContent) {
 		const value = attributes.textContent;
 		const escaped =
-			tagName === "style"
+			tagName === "style" || tagName === "script"
 				? escapeCss(String(value))
 				: escapeHtml(String(value));
 		result += `>${escaped}</${tagName}>`;

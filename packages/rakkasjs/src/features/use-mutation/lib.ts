@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useQueryClient } from "../use-query/implementation";
 
 /** Function passed to useMutation */
@@ -14,11 +14,10 @@ export interface UseMutationOptions<T, V> {
 	onSettled?(data?: T, error?: unknown): void;
 	/** Called when the mutation completes successfully */
 	onSuccess?(data: T): void;
+	/** Query keys to invalidate when the mutation settles */
+	invalidateKeys?: string[];
 	/** Query tags to invalidate when the mutation settles */
-	invalidateTags?:
-		| string[]
-		| Set<string>
-		| ((data?: T, error?: unknown) => string[] | Set<string>);
+	invalidateTags?: string[];
 }
 
 /** Initial mutation state */
@@ -130,9 +129,28 @@ export function useMutation<T, V = void>(
 	const [error, setError] = useState<unknown | undefined>(undefined);
 	const resetRef = useRef(false);
 
-	const { onMutate, onError, onSettled, onSuccess, invalidateTags } = options;
+	const {
+		onMutate,
+		onError,
+		onSettled,
+		onSuccess,
+		invalidateKeys: unstableInvalidateKeys = [],
+		invalidateTags: unstableInvalidateTags = [],
+	} = options;
 
 	const queryClient = useQueryClient();
+
+	const invalidateKeys = useMemo(
+		() => unstableInvalidateKeys,
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		unstableInvalidateKeys,
+	);
+
+	const invalidateTags = useMemo(
+		() => unstableInvalidateTags,
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		unstableInvalidateTags,
+	);
 
 	const doMutate = useCallback(
 		async function doMutate(vars: V): Promise<T> {
@@ -161,13 +179,8 @@ export function useMutation<T, V = void>(
 					onSettled?.(data, error);
 				}
 
-				if (invalidateTags) {
-					const tags =
-						typeof invalidateTags === "function"
-							? invalidateTags(data, error)
-							: invalidateTags;
-					queryClient.invalidateTags(tags);
-				}
+				queryClient.invalidateQueries(invalidateKeys);
+				queryClient.invalidateTags(invalidateTags);
 			}
 		},
 		[
@@ -178,6 +191,7 @@ export function useMutation<T, V = void>(
 			onMutate,
 			onSettled,
 			onSuccess,
+			invalidateKeys,
 			invalidateTags,
 			queryClient,
 		],

@@ -50,8 +50,10 @@ export interface PageProps<
 	P = Record<string, string>,
 	M = Record<string, unknown>,
 > {
-	/** Current URL */
+	/** Current URL before rewrites */
 	url: URL;
+	/** Rendered URL after rewrites */
+	renderedUrl: URL;
 	/** Route parameters */
 	params: P;
 	/** Action data */
@@ -82,7 +84,7 @@ export interface LayoutProps<
  * 	};
  * ```
  * You can also handle redirections by returning a
- * {@link PreloadResult.redirect redirect} prop.
+ * {@link PreloadResult["redirect"] redirect} prop.
  */
 export type PreloadFunction<
 	P = Record<string, string>,
@@ -102,6 +104,10 @@ export interface ActionContext<P = Record<string, string>> extends PageContext {
 /** Arguments passed to the preload function */
 export interface PreloadContext<P = Record<string, string>>
 	extends PageContext {
+	/** The URL before rewrites */
+	url: URL;
+	/** The URL after rewrites */
+	renderedUrl: URL;
 	/** Route parameters */
 	params: P;
 	/** Action data */
@@ -129,11 +135,15 @@ export interface PreloadResult<M = Record<string, unknown>> {
 
 export interface PageRouteGuardContext<P = Record<string, string>>
 	extends PageContext {
+	/** The URL before rewrites */
+	url: URL;
+	/** The URL after rewrites */
+	renderedUrl: URL;
 	/** Dynamic path parameters */
 	params: P;
 }
 
-/** Type for the default export of page guards */
+/** Page guard */
 export type PageRouteGuard<P = Record<string, string>> = (
 	ctx: PageRouteGuardContext<P>,
 ) => LookupHookResult;
@@ -162,6 +172,13 @@ export interface PrerenderResult {
 	shouldCrawl?: boolean;
 	/** More links to prerender */
 	links?: (URL | string)[];
+}
+
+export interface LookupHookContext extends PageContext {
+	/** The URL before rewrites */
+	url: URL;
+	/** The URL after rewrites */
+	renderedUrl: URL;
 }
 
 /**
@@ -219,8 +236,6 @@ export interface BaseRouteConfig {
 
 /** Context within which the page is being rendered */
 export interface PageContext {
-	/** URL */
-	url: URL;
 	/** Isomorphic fetch function */
 	fetch: typeof fetch;
 	/** Query client used by useQuery */

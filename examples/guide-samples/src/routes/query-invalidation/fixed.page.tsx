@@ -12,7 +12,7 @@ import { getUserName, setUserName } from "./db";
 
 export default function FormsPage({ actionData }: PageProps) {
 	const { data: userName } = useServerSideQuery(() => getUserName(), {
-		key: "userName",
+		queryKey: "userName",
 	});
 
 	const queryClient = useQueryClient();

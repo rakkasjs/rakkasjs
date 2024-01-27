@@ -1,7 +1,7 @@
-import { Link, usePageContext } from "rakkasjs";
+import { Link, usePageContext, useRouteParams } from "rakkasjs";
 
 export default function HomePage() {
-	const { lang } = usePageContext();
+	const { lang } = useRouteParams<{ lang: "en" | "fr" }>();
 
 	return (
 		<main>

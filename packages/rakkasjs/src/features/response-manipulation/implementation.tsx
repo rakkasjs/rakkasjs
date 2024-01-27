@@ -21,12 +21,16 @@ export interface RedirectProps {
 	status?: number;
 }
 
-// @ts-ignore
 /**
- * Component for redirecting the user to a different URL. Handling redirections
- * in {@link CommonHooks["beforePageLookup"] beforePageLookup hook} or in the
- * {@link PreloadFunction preload function} function results in better SEO so
- * it's recommended over using this component.
+ * Component for redirecting the user to a different URL.
+ *
+ * Note that if this component is deep inside a suspense boundary, it won't
+ * be able to return a redirect response after the response stream has started
+ * and it will attempt to redirect from the client using JavaScript. If
+ * JavaScript is disabled, the redirect won't work in this case. For this
+ * reason, either use this component at the top level of your page or layout,
+ * or use the {@link PreloadFunction} to redirect before the response stream
+ * starts.
  */
 export const Redirect = import.meta.env.SSR
 	? function Redirect(props: RedirectProps): ReactElement {
@@ -80,12 +84,16 @@ export interface ResponseHeadersProps {
 	throttleRenderStream?: number | true;
 }
 
-// @ts-ignore
 /**
  * Component for setting response status, respnse headers, and throttling the
- * SSR stream. Exporting a {@link HeadersFunction headers()} function from your
- * pages or layouts usually works better for SEO and is recommended over this
- * component.
+ * SSR stream.
+ *
+ * Note that if this component is deep inside a suspense boundary, it won't
+ * be able to set the response headers after the response stream has started.
+ * Rakkas disables streaming for bots, so this is usually not a problem for
+ * SEO. But if you want to be absolutely sure that the headers are set, you
+ * can export a {@link HeadersFunction headers()} function from your page
+ * or layout to set the headers.
  */
 export const ResponseHeaders = import.meta.env.SSR
 	? function ResponseHeaders(props: ResponseHeadersProps): ReactElement {

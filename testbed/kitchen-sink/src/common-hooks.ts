@@ -1,7 +1,7 @@
 import type { CommonHooks } from "rakkasjs";
 
 const hooks: CommonHooks = {
-	beforePageLookup(_ctx, url) {
+	beforePageLookup({ url }) {
 		if (url.pathname === "/before-route/redirect") {
 			return { redirect: "/before-route/redirected" };
 		} else if (url.pathname === "/before-route/rewrite") {

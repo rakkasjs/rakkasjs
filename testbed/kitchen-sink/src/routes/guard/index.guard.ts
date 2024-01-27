@@ -1,13 +1,13 @@
-import { LookupHookResult, PageContext } from "rakkasjs";
+import { LookupHookResult, PageRouteGuardContext } from "rakkasjs";
 
-export function pageGuard(ctx: PageContext): LookupHookResult {
-	if (ctx.url.searchParams.has("rewrite")) {
+export function pageGuard({ url }: PageRouteGuardContext): LookupHookResult {
+	if (url.searchParams.has("rewrite")) {
 		return { rewrite: "/guard/rewritten?allow-outer" };
 	}
 
-	if (ctx.url.searchParams.has("redirect")) {
+	if (url.searchParams.has("redirect")) {
 		return { redirect: "/guard/redirected?allow-outer" };
 	}
 
-	return ctx.url.searchParams.has("allow-inner");
+	return url.searchParams.has("allow-inner");
 }

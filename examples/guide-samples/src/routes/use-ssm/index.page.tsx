@@ -9,7 +9,7 @@ import { getUserName, setUserName } from "./db";
 
 export default function FormsPage() {
 	const { data: currentUserName } = useServerSideQuery(() => getUserName(), {
-		key: "userName",
+		queryKey: "userName",
 	});
 
 	const [localUserName, setLocalUserName] = useState(currentUserName);

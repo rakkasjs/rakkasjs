@@ -16,7 +16,7 @@ export function Cart() {
 
 			return { userName: ctx.session.data.userName, cart };
 		},
-		{ key: "session" },
+		{ queryKey: "session" },
 	);
 
 	const queryClient = useQueryClient();
