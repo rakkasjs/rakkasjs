@@ -52,29 +52,27 @@ export function findPage<
 			const params = unescapeParams(match.groups || {}, route[3]);
 			const guardContext = { ...pageContext, url, renderedUrl, params };
 
-			if (!notFound) {
-				const guards = (route[2] as Array<PageRouteGuard>) || [];
+			const guards = (route[2] as Array<PageRouteGuard>) || [];
 
-				for (const guard of guards) {
-					const result = guard(guardContext);
-					if (!result) {
-						// Try next match
-						continue outer;
-					} else if (result === true) {
-						// Continue with the next guard
-						continue;
-					} else if ("rewrite" in result) {
-						renderedUrl = new URL(result.rewrite, renderedUrl);
-						path = renderedUrl.pathname;
+			for (const guard of guards) {
+				const result = guard(guardContext);
+				if (!result) {
+					// Try next match
+					continue outer;
+				} else if (result === true) {
+					// Continue with the next guard
+					continue;
+				} else if ("rewrite" in result) {
+					renderedUrl = new URL(result.rewrite, renderedUrl);
+					path = renderedUrl.pathname;
 
-						if (url.href !== renderedUrl.href) {
-							rewritten = true;
-						}
-						// Try again with the new path
-						break outer;
-					} else {
-						return result;
+					if (url.href !== renderedUrl.href) {
+						rewritten = true;
 					}
+					// Try again with the new path
+					break outer;
+				} else {
+					return result;
 				}
 			}
 
