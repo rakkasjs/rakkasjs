@@ -154,25 +154,26 @@ export default async function renderPageRoute(
 		Vary: "accept",
 	});
 
-	let scriptPath: string;
+	let scriptId: string;
+	let scriptPath: string | undefined;
 
 	if (import.meta.env.PROD) {
-		for (const entry of Object.values(clientManifest!)) {
+		for (const [id, entry] of Object.entries(clientManifest!)) {
 			if (entry.isEntry) {
+				scriptId = "/" + id;
 				scriptPath = entry.file;
 				break;
 			}
 		}
 
-		if (!scriptPath!) throw new Error("Entry not found in client manifest");
+		if (!scriptId!) throw new Error("Entry not found in client manifest");
 	} else {
-		scriptPath = "virtual:rakkasjs:client-entry";
+		scriptId = "virtual:rakkasjs:client-entry";
 	}
 
 	if (renderMode === "client" && ctx.method === "GET" && !dataOnly) {
-		const prefetchOutput = `<script type="module" async src="${
-			assetPrefix + scriptPath
-		}"></script>`;
+		const prefetchOutput = await createPrefetchTags(ctx.url, [scriptId]);
+
 		const head = renderHead(
 			prefetchOutput,
 			renderMode,
@@ -405,7 +406,11 @@ export default async function renderPageRoute(
 	const reactStream = await renderToReadableStream(app, {
 		// TODO: AbortController
 		bootstrapModules:
-			renderMode === "server" ? [] : [assetPrefix + scriptPath!],
+			renderMode === "server"
+				? []
+				: scriptPath
+					? [assetPrefix + scriptPath]
+					: ["/" + scriptId],
 
 		onError(error: any) {
 			if (!redirected) {
@@ -467,11 +472,10 @@ export default async function renderPageRoute(
 		});
 	}
 
-	const prefetchOutput = await createPrefetchTags(
-		ctx.url,
-		[scriptPath, ...found.route[4]],
-		renderMode === "server",
-	);
+	const prefetchOutput = await createPrefetchTags(ctx.url, [
+		scriptId,
+		...found.route[4].map((id) => "/" + id),
+	]);
 
 	const head = renderHead(
 		prefetchOutput,
@@ -588,14 +592,13 @@ function makeHeaders(
 	return result;
 }
 
-async function createPrefetchTags(
-	pageUrl: URL,
-	moduleIds: string[],
-	server: boolean,
-) {
+async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
 	let result = "";
 
-	if (import.meta.env.PROD) {
+	if (!viteDevServer) {
+		moduleIds = moduleIds.map((id) => id.slice(1));
+		// Add this manually because it's a dynamic import
+		moduleIds.push("virtual:rakkasjs:client-page-routes");
 		const moduleSet = new Set(moduleIds);
 		const cssSet = new Set<string>();
 		// const assetSet = new Set<string>();
@@ -610,7 +613,7 @@ async function createPrefetchTags(
 			// manifestEntry.assets?.forEach((id) => assetSet.add(id));
 
 			const script = clientManifest?.[moduleId].file;
-			if (script && server) {
+			if (script) {
 				result += `<link rel="modulepreload" crossorigin href="${escapeHtml(
 					assetPrefix + script,
 				)}">`;
@@ -630,37 +633,42 @@ async function createPrefetchTags(
 		// 	)}">`;
 		// }
 	} else {
-		const moduleSet = new Set(moduleIds);
-		const cssSet = new Set<ModuleNode>();
-		const root = viteDevServer!.config.root.replace(/\\/g, "/");
+		// Force loading the client entry module so that we can get the list of
+		// modules imported by it.
+		await viteDevServer
+			.transformRequest("virtual:rakkasjs:client-entry")
+			.catch(() => null);
 
-		for (const moduleId of moduleSet) {
+		const moduleSet = new Set(moduleIds);
+		const cssSet = new Map<string, string>();
+
+		for (const moduleUrl of moduleSet) {
 			const module:
 				| (ModuleNode & { ssrImportedModules?: Set<ModuleNode> })
-				| undefined =
-				viteDevServer!.moduleGraph.getModuleById(moduleId) ??
-				viteDevServer!.moduleGraph.getModuleById(root + "/" + moduleId);
+				| undefined = await viteDevServer.moduleGraph.getModuleByUrl(moduleUrl);
 
 			if (!module) continue;
 
-			for (const imported of module.ssrImportedModules ??
-				module.importedModules) {
+			const importedModules = [
+				...(module.ssrImportedModules ?? []),
+				...(module.clientImportedModules ?? []),
+			].map((m) => ({ id: m.id, url: m.url }));
+
+			for (const imported of importedModules) {
 				const url = new URL(imported.url, pageUrl);
 				url.searchParams.delete("v");
 				url.searchParams.delete("t");
 				if (url.href.match(/\.(css|scss|sass|less|styl|stylus)$/)) {
-					cssSet.add(imported);
+					if (imported.id) cssSet.set(imported.id, imported.url);
 				} else if (url.href.match(/\.(js|jsx|ts|tsx)$/)) {
-					moduleSet.add(imported.id ?? imported.url);
+					moduleSet.add(imported.url);
 				}
 			}
 		}
 
-		for (const module of cssSet) {
-			const { id, url } = module;
-			if (!id) continue;
+		for (const [id, url] of cssSet) {
 			const directUrl = url + (url.includes("?") ? "&" : "?") + "direct";
-			const transformed = await viteDevServer!.transformRequest(directUrl);
+			const transformed = await viteDevServer.transformRequest(directUrl);
 			if (!transformed) continue;
 			result += `<style type="text/css" data-vite-dev-id=${JSON.stringify(
 				id,
