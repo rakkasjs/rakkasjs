@@ -26,5 +26,5 @@ export function escapeHtml(text: string): string {
 }
 
 export function escapeCss(text: string): string {
-	return text.replace(/\\/g, "\\\\").replace(/</g, "\\<");
+	return text.replace(/</g, "\\<");
 }
