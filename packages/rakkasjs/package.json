@@ -77,8 +77,8 @@
     "vite": "^5.0.12"
   },
   "dependencies": {
-    "@babel/core": "^7.23.7",
-    "@babel/types": "^7.23.6",
+    "@babel/core": "^7.23.9",
+    "@babel/types": "^7.23.9",
     "@hattip/adapter-node": "0.0.41",
     "@hattip/bundler-cloudflare-workers": "0.0.41",
     "@hattip/bundler-deno": "0.0.41",
@@ -88,7 +88,7 @@
     "@hattip/core": "0.0.41",
     "@hattip/polyfills": "0.0.41",
     "@microsoft/fetch-event-source": "^2.0.1",
-    "@types/node": "^20.11.5",
+    "@types/node": "^20.11.10",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@vavite/connect": "^4.0.2",
