@@ -224,21 +224,21 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 			name: "rakkasjs:page-router",
 
 			resolveId(id) {
-				if (id === "virtual:rakkasjs:server-page-routes") {
-					return id;
-				} else if (id.includes("virtual:rakkasjs:client-page-routes")) {
-					return "virtual:rakkasjs:client-page-routes";
+				if (id === "rakkasjs:server-page-routes") {
+					return "\0virtual:" + id;
+				} else if (id.includes("rakkasjs:client-page-routes")) {
+					return "\0virtual:rakkasjs:client-page-routes";
 				}
 			},
 
 			async load(id, options) {
-				if (id === "virtual:rakkasjs:server-page-routes") {
+				if (id === "\0virtual:rakkasjs:server-page-routes") {
 					if (!options?.ssr) {
 						return "export default null; export const notFoundRoutes = null;";
 					}
 
 					return generateRoutesModule();
-				} else if (id === "virtual:rakkasjs:client-page-routes") {
+				} else if (id === "\0virtual:rakkasjs:client-page-routes") {
 					if (options?.ssr) {
 						return "export default null; export const notFoundRoutes = null;";
 					}
@@ -276,11 +276,11 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 						(isGuardFile && e === "change")
 					) {
 						const serverModule = server.moduleGraph.getModuleById(
-							"virtual:rakkasjs:server-page-routes",
+							"\0virtual:rakkasjs:server-page-routes",
 						);
 
 						const clientModule = server.moduleGraph.getModuleById(
-							"virtual:rakkasjs:client-page-routes",
+							"\0virtual:rakkasjs:client-page-routes",
 						);
 
 						if (serverModule) {

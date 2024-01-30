@@ -12,9 +12,9 @@ export function resolveClientManifest(): Plugin {
 		enforce: "pre",
 
 		resolveId(id, _, options) {
-			if (id === "virtual:rakkasjs:client-manifest") {
+			if (id === "rakkasjs:client-manifest") {
 				if (dev || !options.ssr) {
-					return id;
+					return "\0virtual:" + id;
 				} else {
 					return this.resolve(
 						path.resolve(resolvedConfig.root, "dist/manifest.json"),
@@ -24,7 +24,7 @@ export function resolveClientManifest(): Plugin {
 		},
 
 		load(id) {
-			if (id === "virtual:rakkasjs:client-manifest") {
+			if (id === "\0virtual:rakkasjs:client-manifest") {
 				return "export default undefined";
 			}
 		},

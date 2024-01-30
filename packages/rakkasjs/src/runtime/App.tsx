@@ -27,9 +27,9 @@ import {
 	RouteParamsContext,
 } from "../features/pages/contexts";
 
-type Routes = (typeof import("virtual:rakkasjs:client-page-routes"))["default"];
+type Routes = (typeof import("rakkasjs:client-page-routes"))["default"];
 type NotFoundRoutes =
-	(typeof import("virtual:rakkasjs:client-page-routes"))["notFoundRoutes"];
+	(typeof import("rakkasjs:client-page-routes"))["notFoundRoutes"];
 
 export interface AppProps {
 	ssrMeta?: any;
@@ -133,8 +133,8 @@ export const RouteContext = createNamedContext<RouteContextContent>(
 
 interface RouteContextContent {
 	found?: RouteMatch<
-		| (typeof import("virtual:rakkasjs:client-page-routes").default)[0]
-		| (typeof import("virtual:rakkasjs:server-page-routes").default)[0]
+		| (typeof import("rakkasjs:client-page-routes").default)[0]
+		| (typeof import("rakkasjs:server-page-routes").default)[0]
 	>;
 	last?: {
 		pathname: string;
@@ -170,14 +170,14 @@ export async function loadRoute(
 		let updatedNotFoundRoutes: NotFoundRoutes;
 
 		if (import.meta.env.PROD) {
-			const prodModule = await import("virtual:rakkasjs:client-page-routes");
+			const prodModule = await import("rakkasjs:client-page-routes");
 			routes = prodModule.default;
 			notFoundRoutes = prodModule.notFoundRoutes;
 		} else {
 			// This whole dance is about rendering the old component (which
 			// React updates internally via Fast Refresh), but calling the
 			// preload function of the new component.
-			const updatedModule = await import("virtual:rakkasjs:client-page-routes");
+			const updatedModule = await import("rakkasjs:client-page-routes");
 			routes = updatedModule.default;
 			notFoundRoutes = updatedModule.notFoundRoutes;
 
@@ -186,9 +186,7 @@ export async function loadRoute(
 				const updatedModule =
 					// ESBuild strips vite-ignore comments, so we have to use
 					// eval to make Vite ignore this import.
-					await (0, eval)(
-						`import("/virtual:rakkasjs:client-page-routes?" + Date.now())`,
-					);
+					await import("rakkasjs:client-page-routes");
 				updatedRoutes = updatedModule.default;
 				updatedNotFoundRoutes = updatedModule.notFoundRoutes;
 			}
@@ -418,7 +416,7 @@ export async function loadRoute(
 }
 
 if (import.meta.hot) {
-	import.meta.hot.accept("/@id/virtual:rakkasjs:client-page-routes", () => {
+	import.meta.hot.accept("/@id/rakkasjs:client-page-routes", () => {
 		// Ignore
 	});
 }

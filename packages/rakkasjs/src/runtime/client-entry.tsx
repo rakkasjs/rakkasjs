@@ -6,8 +6,8 @@ import { App, loadRoute, RouteContext } from "./App";
 import { ClientHooks } from "./client-hooks";
 import featureHooks from "./feature-client-hooks";
 import { IsomorphicContext } from "./isomorphic-context";
-import ErrorComponent from "virtual:rakkasjs:error-page";
-import commonHooks from "virtual:rakkasjs:common-hooks";
+import ErrorComponent from "rakkasjs:error-page";
+import commonHooks from "rakkasjs:common-hooks";
 import { PageContext } from "./page-types";
 
 export type { ClientHooks };

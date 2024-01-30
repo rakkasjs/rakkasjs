@@ -72,7 +72,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 	return [
 		globalThis.__vavite_loader__ && nodeLoaderPlugin(),
 		...vaviteConnect({
-			handlerEntry: "/virtual:rakkasjs:node-entry",
+			handlerEntry: "/rakkasjs:node-entry",
 			clientAssetsDir: "dist/client",
 			serveClientAssetsInDev: true,
 		}),
@@ -124,7 +124,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 const DEFAULT_NODE_ENTRY_CONTENTS = `
 	import { createMiddleware } from "rakkasjs/node-adapter";
 	export default createMiddleware(
-		(req, res, next) => import("virtual:rakkasjs:hattip-entry").then((m) => m.default(req, res, next)),
+		(req, res, next) => import("rakkasjs:hattip-entry").then((m) => m.default(req, res, next)),
 	);
 `;
 

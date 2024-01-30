@@ -1,11 +1,11 @@
-import commonHooks from "virtual:rakkasjs:common-hooks";
+import commonHooks from "rakkasjs:common-hooks";
 import { PageContext } from "../lib";
 import { PageRouteGuard, Redirection } from "../runtime/page-types";
 
 export function findPage<
 	T extends
-		| (typeof import("virtual:rakkasjs:server-page-routes").default)[0]
-		| (typeof import("virtual:rakkasjs:client-page-routes").default)[0],
+		| (typeof import("rakkasjs:server-page-routes").default)[0]
+		| (typeof import("rakkasjs:client-page-routes").default)[0],
 >(
 	routes: T[],
 	url: URL,

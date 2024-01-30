@@ -11,12 +11,4 @@ module.exports = {
 		".vercel/**/*",
 		".netlify/**/*",
 	],
-	rules: {
-		"import/no-unresolved": [
-			"error",
-			{
-				ignore: ["virtual:rakkasjs:api-routes"],
-			},
-		],
-	},
 };

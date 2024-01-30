@@ -111,13 +111,13 @@ export default function apiRoutes(): Plugin {
 		name: "rakkasjs:endpoint-router",
 
 		resolveId(id) {
-			if (id === "virtual:rakkasjs:api-routes") {
-				return id;
+			if (id === "rakkasjs:api-routes") {
+				return "\0virtual:" + id;
 			}
 		},
 
 		async load(id) {
-			if (id === "virtual:rakkasjs:api-routes") {
+			if (id === "\0virtual:rakkasjs:api-routes") {
 				return generateRoutesModule();
 			}
 		},
@@ -136,7 +136,7 @@ export default function apiRoutes(): Plugin {
 					(e === "add" || e === "unlink")
 				) {
 					const module = server.moduleGraph.getModuleById(
-						"virtual:rakkasjs:api-routes",
+						"\0virtual:rakkasjs:api-routes",
 					);
 
 					if (module) {

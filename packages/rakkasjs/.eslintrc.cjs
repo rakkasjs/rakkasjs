@@ -6,12 +6,6 @@ module.exports = {
 	extends: ["@cyco130/eslint-config/react"],
 	parserOptions: { tsconfigRootDir: __dirname, project: ["./tsconfig.json"] },
 	rules: {
-		"import/no-unresolved": [
-			"error",
-			{
-				ignore: ["^virtual:"],
-			},
-		],
 		"@typescript-eslint/no-floating-promises": "error",
 	},
 };
