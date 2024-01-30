@@ -6,7 +6,7 @@ import {
 import { unescapeParams } from "../../internal/find-page";
 
 export default async function renderApiRoute(ctx: RequestContext) {
-	const apiRoutes = await import("virtual:rakkasjs:api-routes");
+	const apiRoutes = await import("rakkasjs:api-routes");
 
 	for (const [regex, importers, rest] of apiRoutes.default) {
 		const match = regex.exec(ctx.url.pathname);

@@ -25,19 +25,19 @@ export default function runServerSide(): PluginOption[] {
 			config() {
 				return {
 					ssr: {
-						noExternal: ["virtual:rakkasjs:run-server-side:manifest"],
+						noExternal: ["rakkasjs:run-server-side:manifest"],
 					},
 				};
 			},
 
 			resolveId(id) {
-				if (id === "virtual:rakkasjs:run-server-side:manifest") {
-					return id;
+				if (id === "rakkasjs:run-server-side:manifest") {
+					return "\0virtual:" + id;
 				}
 			},
 
 			async load(id) {
-				if (id === "virtual:rakkasjs:run-server-side:manifest") {
+				if (id === "\0virtual:rakkasjs:run-server-side:manifest") {
 					if (resolvedConfig.command === "serve") {
 						return `export const moduleMap = new Proxy({}, { get: (_, name) => () => import(/* @vite-ignore */ "/" + name) });`;
 					} else if (!moduleManifest) {

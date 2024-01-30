@@ -368,14 +368,16 @@ function testCase(
 					await fs.promises.writeFile(filePath, content);
 
 					try {
-						await page.waitForFunction(() =>
-							document.body?.textContent?.includes("I'm a new page!"),
+						await page.waitForFunction(
+							() => document.body?.textContent?.includes("I'm a new page!"),
+							{ timeout: 5_000 },
 						);
 
 						await fs.promises.rm(filePath);
 
 						await page.waitForFunction(
 							() => !document.body?.textContent?.includes("Not Found"),
+							{ timeout: 5_000 },
 						);
 					} finally {
 						await fs.promises.rm(filePath).catch(() => {
@@ -384,6 +386,47 @@ function testCase(
 					}
 				},
 				{ retry: 3, timeout: 15_000 },
+			);
+
+			test(
+				"newly created layout appears",
+				async () => {
+					await page.goto(host + "/new-layout");
+
+					// Wait a little (for some reason Windows requires this)
+					await new Promise((resolve) => setTimeout(resolve, 1_000));
+
+					await page.waitForSelector(".hydrated");
+
+					const filePath = path.resolve(
+						__dirname,
+						"src/routes/new-layout/layout.tsx",
+					);
+					const content = `export default ({ children }) => <div id="new-layout"><h1>New layout</h1>{children}</div>`;
+					await fs.promises.writeFile(filePath, content);
+
+					try {
+						await page.waitForFunction(
+							() => document.body?.textContent?.includes("New layout"),
+							{ timeout: 5_000 },
+						);
+
+						await fs.promises.rm(filePath);
+
+						await page.waitForFunction(
+							() => !document.body?.textContent?.includes("New layout"),
+							{ timeout: 5_000 },
+						);
+					} finally {
+						await fs.promises.rm(filePath).catch(() => {
+							// Ignore
+						});
+					}
+				},
+				{
+					retry: 3,
+					timeout: 15_000,
+				},
 			);
 		}
 

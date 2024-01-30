@@ -1,4 +1,4 @@
-import hattipHandler from "virtual:rakkasjs:hattip-entry";
+import hattipHandler from "rakkasjs:hattip-entry";
 import type { ServerHooks } from "../../runtime/hattip-handler";
 
 const isomorphicFetchServerHooks: ServerHooks = {

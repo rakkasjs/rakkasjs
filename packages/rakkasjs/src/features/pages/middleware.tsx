@@ -5,7 +5,7 @@ import {
 	renderToReadableStream,
 	renderToStaticMarkup,
 } from "react-dom/server.browser";
-import clientManifest from "virtual:rakkasjs:client-manifest";
+import clientManifest from "rakkasjs:client-manifest";
 import { App, RouteContext } from "../../runtime/App";
 import { isBot } from "../../runtime/isbot";
 import { findPage, RouteMatch } from "../../internal/find-page";
@@ -20,7 +20,7 @@ import {
 } from "../../runtime/isomorphic-context";
 import type { PageContext } from "../../runtime/page-types";
 import { Default404Page } from "./Default404Page";
-import commonHooks from "virtual:rakkasjs:common-hooks";
+import commonHooks from "rakkasjs:common-hooks";
 import {
 	ActionResult,
 	LayoutImporter,
@@ -49,7 +49,7 @@ export default async function renderPageRoute(
 	const pageHooks = ctx.hooks.map((hook) => hook.createPageHooks?.(ctx));
 
 	const { default: routes, notFoundRoutes } = await import(
-		"virtual:rakkasjs:server-page-routes"
+		"rakkasjs:server-page-routes"
 	);
 
 	let {
@@ -168,7 +168,7 @@ export default async function renderPageRoute(
 
 		if (!scriptId!) throw new Error("Entry not found in client manifest");
 	} else {
-		scriptId = "virtual:rakkasjs:client-entry";
+		scriptId = "rakkasjs:client-entry";
 	}
 
 	if (renderMode === "client" && ctx.method === "GET" && !dataOnly) {
@@ -598,7 +598,7 @@ async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
 	if (!viteDevServer) {
 		moduleIds = moduleIds.map((id) => id.slice(1));
 		// Add this manually because it's a dynamic import
-		moduleIds.push("virtual:rakkasjs:client-page-routes");
+		moduleIds.push("rakkasjs:client-page-routes");
 		const moduleSet = new Set(moduleIds);
 		const cssSet = new Set<string>();
 		// const assetSet = new Set<string>();
@@ -636,7 +636,7 @@ async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
 		// Force loading the client entry module so that we can get the list of
 		// modules imported by it.
 		await viteDevServer
-			.transformRequest("virtual:rakkasjs:client-entry")
+			.transformRequest("rakkasjs:client-entry")
 			.catch(() => null);
 
 		const moduleSet = new Set(moduleIds);

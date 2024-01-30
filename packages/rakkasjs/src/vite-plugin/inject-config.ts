@@ -42,7 +42,7 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 							outDir: "dist/client",
 							rollupOptions: {
 								input: {
-									index: "/virtual:rakkasjs:client-entry",
+									index: "/rakkasjs:client-entry",
 								},
 							},
 						},
@@ -57,7 +57,7 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 							rollupOptions: {
 								input: {
 									index: "/virtual:vavite-connect-server",
-									hattip: "virtual:rakkasjs:hattip-entry",
+									hattip: "rakkasjs:hattip-entry",
 								},
 							},
 							target: "node18",
@@ -80,12 +80,12 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 						exclude: [
 							"rakkasjs",
 							"@vavite/expose-vite-dev-server",
-							"virtual:rakkasjs:client-manifest",
-							"virtual:rakkasjs:client-page-routes",
-							"virtual:rakkasjs:api-routes",
-							"virtual:rakkasjs:run-server-side:manifest",
-							"virtual:rakkasjs:server-page-routes",
-							"virtual:rakkasjs:error-page",
+							"rakkasjs:client-manifest",
+							"rakkasjs:client-page-routes",
+							"rakkasjs:api-routes",
+							"rakkasjs:run-server-side:manifest",
+							"rakkasjs:server-page-routes",
+							"rakkasjs:error-page",
 						],
 					},
 				},
@@ -97,12 +97,12 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 					// TODO: Remove this when https://github.com/vitejs/vite/pull/8917 is merged
 					exclude: [
 						"rakkasjs",
-						"virtual:rakkasjs:client-manifest",
-						"virtual:rakkasjs:client-page-routes",
-						"virtual:rakkasjs:api-routes",
-						"virtual:rakkasjs:run-server-side:manifest",
-						"virtual:rakkasjs:server-page-routes",
-						"virtual:rakkasjs:error-page",
+						"rakkasjs:client-manifest",
+						"rakkasjs:client-page-routes",
+						"rakkasjs:api-routes",
+						"rakkasjs:run-server-side:manifest",
+						"rakkasjs:server-page-routes",
+						"rakkasjs:error-page",
 						"@vavite/expose-vite-dev-server",
 					],
 				},

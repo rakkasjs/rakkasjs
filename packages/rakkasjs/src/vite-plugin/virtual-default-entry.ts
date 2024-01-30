@@ -25,14 +25,14 @@ export function virtualDefaultEntry(
 					.resolve(config.root, entry.slice(1) + ".default.js")
 					.replace(/\\/g, "/");
 			} else {
-				fallback = "virtual:rakkasjs:" + virtualName;
+				fallback = "\0virtual:rakkasjs:" + virtualName;
 			}
 		},
 
 		async resolveId(id) {
 			if (
-				id === "virtual:rakkasjs:" + virtualName ||
-				id === "/virtual:rakkasjs:" + virtualName ||
+				id === "rakkasjs:" + virtualName ||
+				id === "/rakkasjs:" + virtualName ||
 				id === entry + ".default.js"
 			) {
 				const userEntry = await this.resolve(entry);

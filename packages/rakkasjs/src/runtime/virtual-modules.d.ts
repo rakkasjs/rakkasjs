@@ -1,4 +1,4 @@
-declare module "virtual:rakkasjs:api-routes" {
+declare module "rakkasjs:api-routes" {
 	type Handler = import("@hattip/core").Handler;
 
 	const routes: Array<
@@ -21,7 +21,7 @@ declare module "virtual:rakkasjs:api-routes" {
 	export default routes;
 }
 
-declare module "virtual:rakkasjs:server-page-routes" {
+declare module "rakkasjs:server-page-routes" {
 	const routes: Array<
 		[
 			regexp: RegExp,
@@ -44,7 +44,7 @@ declare module "virtual:rakkasjs:server-page-routes" {
 	export const notFoundRoutes: typeof routes;
 }
 
-declare module "virtual:rakkasjs:client-page-routes" {
+declare module "rakkasjs:client-page-routes" {
 	const routes: Array<
 		[
 			regexp: RegExp,
@@ -68,12 +68,12 @@ declare module "virtual:rakkasjs:client-page-routes" {
 	export const notFoundRoutes: typeof routes;
 }
 
-declare module "virtual:rakkasjs:client-manifest" {
+declare module "rakkasjs:client-manifest" {
 	const manifest: undefined | import("vite").Manifest;
 	export default manifest;
 }
 
-declare module "virtual:rakkasjs:run-server-side:manifest" {
+declare module "rakkasjs:run-server-side:manifest" {
 	export const moduleMap: Record<
 		string,
 		() => Promise<{
@@ -90,17 +90,17 @@ declare module "virtual:rakkasjs:run-server-side:manifest" {
 	export const idMap: Record<string, string>;
 }
 
-declare module "virtual:rakkasjs:hattip-entry" {
+declare module "rakkasjs:hattip-entry" {
 	const handler: import("@hattip/core").HattipHandler;
 	export default handler;
 }
 
-declare module "virtual:rakkasjs:common-hooks" {
+declare module "rakkasjs:common-hooks" {
 	const handler: import("./common-hooks").CommonHooks;
 	export default handler;
 }
 
-declare module "virtual:rakkasjs:error-page" {
+declare module "rakkasjs:error-page" {
 	const ErrorComponent: import("React").ComponentType<
 		import("react-error-boundary").FallbackProps
 	>;
