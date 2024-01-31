@@ -9,3 +9,9 @@ export default function EnvPage() {
 
 	return <pre>{JSON.stringify(data, null, 2)}</pre>;
 }
+
+export type EnvPageSearch = {
+	foo: string;
+};
+
+export type EnvPageHash = "bar" | "baz";

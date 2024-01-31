@@ -179,6 +179,19 @@ cli
 		import("./prerender").then(({ prerender }) => prerender(paths, options)),
 	);
 
+cli
+	.command("page-urls", "Generate a URL builder for pages")
+	.option(
+		"-s, --search <search-param-serializer-module[::export-name]>",
+		"Module name that default exports a search param serializer. E.g. qs::stringify.",
+	)
+	.action((options: { search?: string }) =>
+		import("./page-urls").then(
+			({ generatePageUrlBuilder: generateUrlBuilder }) =>
+				generateUrlBuilder(options),
+		),
+	);
+
 cli.help();
 cli.version(version);
 
