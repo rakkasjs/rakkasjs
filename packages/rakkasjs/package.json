@@ -1,6 +1,6 @@
 {
   "name": "rakkasjs",
-  "version": "0.7.0-next.36",
+  "version": "0.7.0-next.37",
   "type": "module",
   "bin": {
     "rakkas": "./cli.js",

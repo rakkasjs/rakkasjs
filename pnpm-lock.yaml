@@ -65,7 +65,7 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -108,7 +108,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -130,7 +130,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       vite:
         specifier: ^5.0.12
@@ -161,7 +161,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -195,7 +195,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -232,7 +232,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -263,7 +263,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -297,7 +297,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -337,7 +337,7 @@ importers:
         specifier: ^1.12.3
         version: 1.12.3(postcss@8.4.33)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -371,7 +371,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -405,7 +405,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -439,7 +439,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -482,7 +482,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -525,7 +525,7 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4(@babel/core@7.23.9)(styled-components@6.1.8)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -565,7 +565,7 @@ importers:
         specifier: ^8.4.33
         version: 8.4.33
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       tailwindcss:
         specifier: ^3.4.1
@@ -590,7 +590,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.48
@@ -611,7 +611,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -651,7 +651,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.36
+        specifier: 0.7.0-next.37
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
