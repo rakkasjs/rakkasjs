@@ -58,7 +58,13 @@
   "peerDependencies": {
     "react": "18",
     "react-dom": "18",
+    "typescript": "5",
     "vite": "5"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@brillout/json-serializer": "^0.5.8",
