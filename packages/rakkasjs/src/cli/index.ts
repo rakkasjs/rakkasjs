@@ -179,6 +179,21 @@ cli
 		import("./prerender").then(({ prerender }) => prerender(paths, options)),
 	);
 
+cli.command("run <script>", "Run a script transpiled with Vite").action(
+	(
+		script: string,
+		options: {
+			config?: string;
+			base?: string;
+			logLevel?: LogLevel;
+			clearScreen?: boolean;
+			debug?: boolean | string;
+			filter?: string;
+			mode?: string;
+		},
+	) => import("./run").then(({ run }) => run(script, cleanOptions(options))),
+);
+
 cli
 	.command("page-urls", "Generate a URL builder for pages")
 	.option(

@@ -7,7 +7,7 @@ const base64Key = process.env.SECRET_SESSION_KEY;
 if (!base64Key) {
 	console.error(
 		"Please set the SECRET_SESSION_KEY environment variable. " +
-			"You can generate a random key with `node scripts/generate-key` " +
+			"You can generate a random key with `rakkas run scripts/generate-key.ts` " +
 			"and put it in a .env file.",
 	);
 	throw new Error("Missing environment variable SECRET_SESSION_KEY");
