@@ -15,7 +15,7 @@
     "@types/styled-components": "^5.1.34",
     "@vitejs/plugin-react": "^4.2.1",
     "babel-plugin-styled-components": "^2.1.4",
-    "rakkasjs": "0.7.0-next.35",
+    "rakkasjs": "0.7.0-next.36",
     "typescript": "^5.3.3",
     "vite": "^5.0.12",
     "vite-plugin-cjs-interop": "^2.0.3",

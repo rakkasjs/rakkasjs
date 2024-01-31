@@ -12,7 +12,7 @@
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.1",
     "postcss-preset-mantine": "^1.12.3",
-    "rakkasjs": "0.7.0-next.35",
+    "rakkasjs": "0.7.0-next.36",
     "typescript": "^5.3.3",
     "vite": "^5.0.12",
     "vite-tsconfig-paths": "^4.3.1"
