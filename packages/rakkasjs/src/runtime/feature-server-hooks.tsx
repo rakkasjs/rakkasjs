@@ -6,7 +6,7 @@ import isomorphicFetchHooks from "../features/isomorphic-fetch/server-hooks";
 import clientSideNavigationHooks from "../features/client-side-navigation/server-hooks";
 import { ServerHooks } from "./hattip-handler";
 
-const serverHooks: ServerHooks[] = [
+const serverFeatureHooks: ServerHooks[] = [
 	asyncLocalRequestContextServerHooks,
 	headHooks,
 	useQueryHooks,
@@ -15,4 +15,4 @@ const serverHooks: ServerHooks[] = [
 	clientSideNavigationHooks,
 ];
 
-export default serverHooks;
+export default serverFeatureHooks;

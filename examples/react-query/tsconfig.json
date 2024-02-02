@@ -9,6 +9,7 @@
 		"moduleResolution": "Node",
 		"resolveJsonModule": true,
 		"jsx": "react-jsx",
+		"allowJs": true,
 		"baseUrl": ".",
 		"types": ["vite/client"],
 	},

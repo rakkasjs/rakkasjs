@@ -4,6 +4,7 @@ import {
 	LookupHookResult,
 	PageContext,
 } from "../runtime/page-types";
+import { HookDefinition } from "./utils";
 
 /** Page hooks common to the server and client */
 export interface CommonHooks {
@@ -11,16 +12,24 @@ export interface CommonHooks {
 	 * properties to the page context. This is always called *after* the
 	 * server-side or client-side `extendPageContext` hooks.
 	 */
-	extendPageContext?(ctx: PageContext): void;
+	extendPageContext?: HookDefinition<(ctx: PageContext) => void>;
+
 	/**
 	 * Called before attempting to match the URL to a page. It's used for
 	 * rewriting or redirecting the URL.
 	 */
-	beforePageLookup?(ctx: LookupHookContext): LookupHookResult;
+	beforePageLookup?: HookDefinition<
+		(ctx: LookupHookContext) => LookupHookResult
+	>;
+
 	/**
 	 * This hook is intended for wrapping the React app with provider
 	 * components. This is always called *after* the server-side or client-side
 	 * `wrapApp` hooks.
 	 */
-	wrapApp?(app: ReactElement): ReactElement;
+	wrapApp?: HookDefinition<(app: ReactElement) => ReactElement>;
 }
+
+export interface CommonPluginOptions {}
+
+export type CommonPluginFactory = (options: CommonPluginOptions) => CommonHooks;

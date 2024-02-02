@@ -1,6 +1,11 @@
-import commonHooks from "rakkasjs:common-hooks";
 import { PageContext } from "../lib";
+import { commonHooks } from "../runtime/feature-common-hooks";
 import { PageRouteGuard, Redirection } from "../runtime/page-types";
+import { sortHooks } from "../runtime/utils";
+
+export const beforePageLookupHandlers = sortHooks(
+	commonHooks.map((hook) => hook.beforePageLookup),
+);
 
 export function findPage<
 	T extends
@@ -16,15 +21,11 @@ export function findPage<
 	let rewritten: boolean;
 	let renderedUrl: URL = url;
 
-	const beforePageLookupHandlers: Array<
-		Required<typeof commonHooks>["beforePageLookup"]
-	> = [commonHooks.beforePageLookup].filter(Boolean) as any;
-
 	const lookupContext = { ...pageContext, url, renderedUrl };
 
 	if (!notFound) {
-		for (const hook of beforePageLookupHandlers) {
-			const result = hook(lookupContext);
+		for (const handler of beforePageLookupHandlers) {
+			const result = handler(lookupContext);
 
 			if (!result) return undefined;
 

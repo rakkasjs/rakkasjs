@@ -73,7 +73,7 @@ const TodoPage: Page = () => {
 export default TodoPage;
 
 TodoPage.preload = (ctx) => {
-	ctx.reactQueryClient.prefetchQuery(todoOptions);
+	ctx.tanstackQueryClient.prefetchQuery(todoOptions);
 };
 
 const todoOptions = queryOptions({

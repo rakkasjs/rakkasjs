@@ -13,6 +13,15 @@ import pageRoutes from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
 import { adapters, RakkasAdapter } from "./adapters";
 import { serverOnlyClientOnly } from "./server-only-client-only";
+import { RakkasPluginApi, rakkasPlugins } from "./rakkas-plugins";
+
+declare module "vite" {
+	interface Plugin {
+		api?: {
+			rakkas?: RakkasPluginApi;
+		};
+	}
+}
 
 export interface RakkasOptions {
 	/** File extensions for pages and layouts @default ["jsx","tsx"] */
@@ -118,6 +127,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		resolveClientManifest(),
 		...runServerSide(),
 		serverOnlyClientOnly(options),
+		rakkasPlugins(),
 	];
 }
 

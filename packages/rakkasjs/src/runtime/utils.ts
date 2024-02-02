@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 export function escapeJson(json: string): string {
 	return json.replace(/</g, "\\u003c");
 }
@@ -27,4 +28,22 @@ export function escapeHtml(text: string): string {
 
 export function escapeCss(text: string): string {
 	return text.replace(/</g, "\\<");
+}
+
+export type HookDefinition<F extends Function> =
+	| F
+	| { order?: "pre" | "post"; handler: F };
+
+export function sortHooks<T extends Function>(
+	hooks: Array<false | null | undefined | HookDefinition<T>>,
+): T[] {
+	const filtered = hooks.filter(Boolean) as HookDefinition<T>[];
+	return filtered
+		.sort((a, b) => orderRank(a) - orderRank(b))
+		.map((x) => (typeof x === "object" ? x.handler : x));
+}
+
+function orderRank(x: HookDefinition<Function>): number {
+	const order = typeof x === "object" ? x.order : undefined;
+	return order === "pre" ? -1 : order === "post" ? 1 : 0;
 }

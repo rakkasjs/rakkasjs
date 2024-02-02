@@ -6,12 +6,10 @@ import isomorphicFetchHooks from "../features/isomorphic-fetch/client-hooks";
 
 import { ClientHooks } from "./client-hooks";
 
-const clientHooks: ClientHooks[] = [
+export const featureClientHooks: ClientHooks[] = [
 	useQueryHooks,
 	headHooks,
 	clientOnlyHooks,
 	clientSideNavigationHooks,
 	isomorphicFetchHooks,
 ];
-
-export default clientHooks;

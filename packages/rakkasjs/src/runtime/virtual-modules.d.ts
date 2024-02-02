@@ -96,8 +96,11 @@ declare module "rakkasjs:hattip-entry" {
 }
 
 declare module "rakkasjs:common-hooks" {
-	const handler: import("./common-hooks").CommonHooks;
-	export default handler;
+	const hooks: import("./common-hooks").CommonHooks;
+	export default hooks;
+	export const commonPluginOptions:
+		| import("./common-hooks").CommonPluginOptions
+		| undefined;
 }
 
 declare module "rakkasjs:error-page" {
@@ -105,4 +108,40 @@ declare module "rakkasjs:error-page" {
 		import("react-error-boundary").FallbackProps
 	>;
 	export default ErrorComponent;
+}
+
+declare module "rakkasjs:plugin-server-hooks" {
+	import { ServerHooks, ServerPluginOptions } from "./hattip-handler";
+	import { CommonPluginOptions } from "./common-hooks";
+
+	const pluginServerHookFactories: Array<
+		(
+			serverOptions: ServerPluginOptions,
+			commonOptions: CommonPluginOptions,
+		) => ServerHooks
+	>;
+
+	export default pluginServerHookFactories;
+}
+
+declare module "rakkasjs:plugin-client-hooks" {
+	import { ClientHooks } from "./client-hooks";
+	import { ClientPluginOptions } from "./client-entry";
+	import { CommonPluginOptions } from "./common-hooks";
+
+	const pluginClientHookFactories: Array<
+		(
+			clientOptions: ClientPluginOptions,
+			commonOptions: CommonPluginOptions,
+		) => ClientHooks
+	>;
+	export default pluginClientHookFactories;
+}
+
+declare module "rakkasjs:plugin-common-hooks" {
+	import { CommonHooks, CommonPluginOptions } from "./common-hooks";
+	const pluginCommonHookFactories: Array<
+		(commonOptions: CommonPluginOptions) => CommonHooks
+	>;
+	export default pluginCommonHookFactories;
 }
