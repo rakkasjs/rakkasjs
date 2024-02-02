@@ -1,9 +1,13 @@
-import { compose, RequestContext, RequestHandlerStack } from "@hattip/compose";
+import { compose, RequestContext, RequestHandler } from "@hattip/compose";
 import { ReactElement } from "react";
 import renderApiRoute from "../features/api-routes/middleware";
 import renderPageRoute from "../features/pages/middleware";
 import { PageContext } from "../runtime/page-types";
-import serverHooks from "./feature-server-hooks";
+import serverFeatureHooks from "./feature-server-hooks";
+import { HookDefinition, sortHooks } from "./utils";
+import pluginFactories from "rakkasjs:plugin-server-hooks";
+import * as commonHooksModule from "rakkasjs:common-hooks";
+import { CommonPluginOptions } from "./common-hooks";
 
 declare module "@hattip/compose" {
 	interface RequestContextExtensions {
@@ -26,17 +30,33 @@ export interface ServerHooks {
 	 */
 	middleware?: {
 		/** Middlewares to be run before everything */
-		beforeAll?: RequestHandlerStack;
-		/** Middlewares to be run before mathcing pages */
-		beforePages?: RequestHandlerStack;
+		beforeAll?: Array<
+			false | null | undefined | HookDefinition<RequestHandler>
+		>;
+		/** Middlewares to be run before matching pages */
+		beforePages?: Array<
+			false | null | undefined | HookDefinition<RequestHandler>
+		>;
 		/** Middlewares to be run before matching API routes */
-		beforeApiRoutes?: RequestHandlerStack;
+		beforeApiRoutes?: Array<
+			false | null | undefined | HookDefinition<RequestHandler>
+		>;
 		/** Middlewares to be run before not-found handling */
-		beforeNotFound?: RequestHandlerStack;
+		beforeNotFound?: Array<
+			false | null | undefined | HookDefinition<RequestHandler>
+		>;
 	};
+
 	/** Create server-side page rendering hooks */
 	createPageHooks?(ctx: RequestContext): PageRequestHooks;
 }
+
+export interface ServerPluginOptions {}
+
+export type ServerPluginFactory = (
+	options: ServerPluginOptions,
+	commonOptions: CommonPluginOptions,
+) => ServerHooks;
 
 /** Hooks for customizing the page rendering on the server */
 export interface PageRequestHooks {
@@ -44,30 +64,60 @@ export interface PageRequestHooks {
 	 * This is called before the page is rendered. It's used for adding custom
 	 * data to the page context.
 	 */
-	extendPageContext?(ctx: PageContext): void | Promise<void>;
+	extendPageContext?: HookDefinition<
+		(ctx: PageContext) => void | Promise<void>
+	>;
+
 	/**
 	 * This hook is intended for wrapping the React app with provider
 	 * components on the server only.
 	 */
-	wrapApp?(app: ReactElement): ReactElement;
+	wrapApp?: HookDefinition<(app: ReactElement) => ReactElement>;
+
 	/** Write to the document's head section */
-	emitToDocumentHead?(specialAttributes: {
-		htmlAttributes: Record<string, string | number | boolean | undefined>;
-		headAttributes: Record<string, string | number | boolean | undefined>;
-		bodyAttributes: Record<string, string | number | boolean | undefined>;
-	}): ReactElement | string | undefined;
+	emitToDocumentHead?: HookDefinition<
+		(specialAttributes: {
+			htmlAttributes: Record<string, string | number | boolean | undefined>;
+			headAttributes: Record<string, string | number | boolean | undefined>;
+			bodyAttributes: Record<string, string | number | boolean | undefined>;
+		}) => ReactElement | string | undefined
+	>;
+
 	/** Emit a chunk of HTML before each time React emits a chunk */
-	emitBeforeSsrChunk?(): string | undefined;
+	emitBeforeSsrChunk?: HookDefinition<() => string | undefined>;
+
 	/** Wrap React's SSR stream */
-	wrapSsrStream?(stream: ReadableStream): ReadableStream;
+	wrapSsrStream?: HookDefinition<(stream: ReadableStream) => ReadableStream>;
 }
 
 /**
  * Creates a HatTip request handler. Call this to create a HatTip request
  * handler and fefault export it from your HatTip entry.
  */
-export function createRequestHandler(userHooks: ServerHooks = {}) {
-	const hooks = [...serverHooks, userHooks];
+export function createRequestHandler(
+	userHooks: ServerHooks = {},
+	pluginOptions: ServerPluginOptions = {},
+): RequestHandler {
+	const hooks = [
+		...pluginFactories.map((factory) =>
+			factory(pluginOptions, commonHooksModule.commonPluginOptions ?? {}),
+		),
+		...serverFeatureHooks,
+		userHooks,
+	];
+
+	const beforeAll = sortHooks(
+		hooks.map((hook) => hook.middleware?.beforeAll).flat(),
+	);
+	const beforePages = sortHooks(
+		hooks.map((hook) => hook.middleware?.beforePages).flat(),
+	);
+	const beforeApiRoutes = sortHooks(
+		hooks.map((hook) => hook.middleware?.beforeApiRoutes).flat(),
+	);
+	const beforeNotFound = sortHooks(
+		hooks.map((hook) => hook.middleware?.beforeNotFound).flat(),
+	);
 
 	return compose(
 		[
@@ -75,10 +125,8 @@ export function createRequestHandler(userHooks: ServerHooks = {}) {
 
 			init(hooks),
 
-			hooks.map((hook) => hook.middleware?.beforeAll).flat(),
-
-			hooks.map((hook) => hook.middleware?.beforePages).flat(),
-
+			beforeAll,
+			beforePages,
 			async (ctx: RequestContext) => {
 				try {
 					return await renderPageRoute(ctx);
@@ -89,11 +137,12 @@ export function createRequestHandler(userHooks: ServerHooks = {}) {
 				}
 			},
 
-			hooks.map((hook) => hook.middleware?.beforeApiRoutes).flat(),
+			beforeApiRoutes,
 			renderApiRoute,
 
-			hooks.map((hook) => hook.middleware?.beforeNotFound).flat(),
+			beforeNotFound,
 			notFound,
+
 			async (ctx: RequestContext) => {
 				try {
 					return await renderPageRoute(ctx);

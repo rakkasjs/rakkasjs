@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import { PageContext } from "../runtime/page-types";
+import { HookDefinition } from "./utils";
 
 /** Client-side customization hooks */
 export interface ClientHooks {
@@ -9,7 +10,7 @@ export interface ClientHooks {
 	 * This is called before the page is rendered. It's used for adding custom
 	 * data to the page context.
 	 */
-	extendPageContext?(ctx: PageContext): void;
+	extendPageContext?: HookDefinition<(ctx: PageContext) => void>;
 	/**
 	 * This hook is intended for wrapping the React app with provider
 	 * components on the client only.

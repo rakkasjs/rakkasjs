@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-
 import React, { StrictMode, Suspense } from "react";
 import {
 	renderToReadableStream,
@@ -20,7 +19,6 @@ import {
 } from "../../runtime/isomorphic-context";
 import type { PageContext } from "../../runtime/page-types";
 import { Default404Page } from "./Default404Page";
-import commonHooks from "rakkasjs:common-hooks";
 import {
 	ActionResult,
 	LayoutImporter,
@@ -33,7 +31,8 @@ import { uneval } from "devalue";
 import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
 import { PageRequestHooks } from "../../runtime/hattip-handler";
 import { ModuleNode } from "vite";
-import { escapeCss, escapeHtml } from "../../runtime/utils";
+import { escapeCss, escapeHtml, sortHooks } from "../../runtime/utils";
+import { commonHooks } from "../../runtime/feature-common-hooks";
 
 const assetPrefix = import.meta.env.BASE_URL ?? "/";
 
@@ -48,6 +47,11 @@ export default async function renderPageRoute(
 
 	const pageHooks = ctx.hooks.map((hook) => hook.createPageHooks?.(ctx));
 
+	const extendPageContextHandlers = sortHooks([
+		...pageHooks.map((hook) => hook?.extendPageContext),
+		...commonHooks.map((hook) => hook.extendPageContext),
+	]);
+
 	const { default: routes, notFoundRoutes } = await import(
 		"rakkasjs:server-page-routes"
 	);
@@ -61,10 +65,9 @@ export default async function renderPageRoute(
 	if (!pageContext) {
 		pageContext = { url: ctx.url, locals: {} } as any as PageContext;
 
-		for (const hook of pageHooks) {
-			await hook?.extendPageContext?.(pageContext);
+		for (const handler of extendPageContextHandlers) {
+			await handler(pageContext);
 		}
-		await commonHooks.extendPageContext?.(pageContext);
 
 		pageContextMap.set(ctx.request, pageContext);
 	}
@@ -332,15 +335,13 @@ export default async function renderPageRoute(
 		/>
 	);
 
-	if (commonHooks.wrapApp) {
-		app = commonHooks.wrapApp(app);
-	}
+	const wrapAppHandlers = sortHooks([
+		...pageHooks.map((hook) => hook?.wrapApp),
+		...commonHooks.map((hook) => hook.wrapApp),
+	]).reverse();
 
-	const reversePageHooks = [...pageHooks].reverse();
-	for (const hooks of reversePageHooks) {
-		if (hooks?.wrapApp) {
-			app = hooks.wrapApp(app);
-		}
+	for (const handler of wrapAppHandlers) {
+		app = handler(app);
 	}
 
 	app = (
@@ -485,11 +486,13 @@ export default async function renderPageRoute(
 		pageHooks,
 	);
 
+	const wrapSsrStreamHandlers = sortHooks(
+		pageHooks.map((hook) => hook?.wrapSsrStream),
+	);
+
 	let wrapperStream: ReadableStream = reactStream;
-	for (const hooks of pageHooks) {
-		if (hooks?.wrapSsrStream) {
-			wrapperStream = hooks.wrapSsrStream(wrapperStream);
-		}
+	for (const handler of wrapSsrStreamHandlers) {
+		wrapperStream = handler(wrapperStream);
 	}
 
 	const textEncoder = new TextEncoder();
@@ -512,15 +515,17 @@ export default async function renderPageRoute(
 				}
 			: writable.getWriter();
 
+	const emitBeforeSsrChunkHandlers = sortHooks(
+		pageHooks.map((hook) => hook?.emitBeforeSsrChunk),
+	);
+
 	async function pipe() {
 		await writer.write(textEncoder.encode(head));
 		for await (const chunk of wrapperStream as any) {
-			for (const hooks of pageHooks) {
-				if (hooks?.emitBeforeSsrChunk) {
-					const text = hooks.emitBeforeSsrChunk();
-					if (text) {
-						await writer.write(textEncoder.encode(text));
-					}
+			for (const handler of emitBeforeSsrChunkHandlers) {
+				const text = handler();
+				if (text) {
+					await writer.write(textEncoder.encode(text));
 				}
 			}
 
@@ -699,8 +704,12 @@ function renderHead(
 
 	let result = "";
 
-	for (const hooks of pageHooks) {
-		const head = hooks?.emitToDocumentHead?.(specialAttributes);
+	const emitToDocumentHeadHandlers = sortHooks(
+		pageHooks.map((hook) => hook?.emitToDocumentHead),
+	);
+
+	for (const handler of emitToDocumentHeadHandlers) {
+		const head = handler(specialAttributes);
 		if (!head) continue;
 
 		const headStr =

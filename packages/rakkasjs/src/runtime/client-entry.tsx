@@ -1,14 +1,17 @@
 import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot, createRoot } from "react-dom/client";
 import { DEFAULT_QUERY_OPTIONS } from "../features/use-query/implementation";
-import { UseQueryOptions, ErrorBoundary, LookupHookResult } from "../lib";
+import { UseQueryOptions, ErrorBoundary, CommonPluginOptions } from "../lib";
 import { App, loadRoute, RouteContext } from "./App";
 import { ClientHooks } from "./client-hooks";
-import featureHooks from "./feature-client-hooks";
+import { featureClientHooks } from "./feature-client-hooks";
 import { IsomorphicContext } from "./isomorphic-context";
 import ErrorComponent from "rakkasjs:error-page";
-import commonHooks from "rakkasjs:common-hooks";
 import { PageContext } from "./page-types";
+import { sortHooks } from "./utils";
+import { commonHooks } from "./feature-common-hooks";
+import factories from "rakkasjs:plugin-client-hooks";
+import * as commonHooksModule from "rakkasjs:common-hooks";
 
 export type { ClientHooks };
 
@@ -20,44 +23,61 @@ export interface StartClientOptions {
 	hooks?: ClientHooks;
 }
 
+export interface ClientPluginOptions {}
+
+export type ClientPluginFactory = (
+	options: ClientPluginOptions,
+	commonOptions: CommonPluginOptions,
+) => ClientHooks;
+
 /** Starts the client. */
-export async function startClient(options: StartClientOptions = {}) {
+export async function startClient(
+	options: StartClientOptions = {},
+	pluginOptions: ClientPluginOptions = {},
+) {
 	Object.assign(DEFAULT_QUERY_OPTIONS, options.defaultQueryOptions);
 
-	const clientHooks = options.hooks
-		? [...featureHooks, options.hooks]
-		: featureHooks;
+	const hooks = [
+		...factories.map((factory) =>
+			factory(pluginOptions, commonHooksModule.commonPluginOptions ?? {}),
+		),
+		...featureClientHooks,
+	];
 
-	for (const hooks of clientHooks) {
-		if (hooks.beforeStart) {
-			await hooks.beforeStart();
-		}
+	const beforeStartHandlers = sortHooks([
+		...hooks.map((hook) => hook.beforeStart),
+		options.hooks?.beforeStart,
+	]);
+
+	for (const handler of beforeStartHandlers) {
+		await handler();
 	}
 
 	const pageContext: PageContext = {
 		url: new URL(window.location.href),
 		locals: {},
 	} as any;
-	for (const hooks of clientHooks) {
-		await hooks.extendPageContext?.(pageContext);
-	}
-	await commonHooks.extendPageContext?.(pageContext);
 
-	const beforePageLookupHandlers: Array<
-		(ctx: PageContext, url: URL) => LookupHookResult | Promise<LookupHookResult>
-	> = [commonHooks.beforePageLookup].filter(Boolean) as any;
+	const extendPageContextHandlers = sortHooks([
+		...hooks.map((hook) => hook.extendPageContext),
+		options.hooks?.extendPageContext,
+		...commonHooks.map((hook) => hook.extendPageContext),
+	]);
+
+	for (const handler of extendPageContextHandlers) {
+		await handler(pageContext);
+	}
+
+	const wrapAppHandlers = sortHooks([
+		...hooks.map((hook) => hook.wrapApp),
+		options.hooks?.wrapApp,
+		...commonHooks.map((hook) => hook.wrapApp),
+	]).reverse();
 
 	let app = <App />;
 
-	if (commonHooks.wrapApp) {
-		app = commonHooks.wrapApp(app);
-	}
-
-	const reverseHooks = [...clientHooks].reverse();
-	for (const hooks of reverseHooks) {
-		if (hooks.wrapApp) {
-			app = hooks.wrapApp(app);
-		}
+	for (const handler of wrapAppHandlers) {
+		app = handler(app);
 	}
 
 	app = (
@@ -79,7 +99,6 @@ export async function startClient(options: StartClientOptions = {}) {
 		new URL(window.location.href),
 		undefined,
 		true,
-		beforePageLookupHandlers,
 		(window as any).$RAKKAS_ACTION_DATA,
 	).catch((error) => {
 		return { error };
