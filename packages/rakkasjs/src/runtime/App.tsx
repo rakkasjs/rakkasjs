@@ -62,7 +62,7 @@ export function App(props: AppProps) {
 	pageContext.actionData = actionData;
 
 	if (!import.meta.env.SSR) {
-		prefetcher.prefetch = function prefetch(location) {
+		prefetcher.prefetch = function prefetch(location, preload) {
 			const url = new URL(location, currentUrl);
 			url.hash = "";
 
@@ -77,7 +77,7 @@ export function App(props: AppProps) {
 				props.ssrMeta,
 				props.ssrPreloaded,
 				props.ssrModules,
-				true,
+				preload ? "preload" : true,
 			).catch((e) => {
 				console.error(e);
 			});
@@ -156,7 +156,7 @@ export async function loadRoute(
 	ssrMeta?: any,
 	ssrPreloaded?: (void | PreloadResult<Record<string, unknown>>)[],
 	ssrModules?: (PageModule | LayoutModule)[],
-	prefetchOnly = false,
+	prefetchOnly: boolean | "preload" = false,
 ) {
 	let found = lastFound;
 	const { pathname: originalPathname } = url;
@@ -300,7 +300,7 @@ export async function loadRoute(
 	const promises = importers.map(async (importer, i) =>
 		Promise.resolve(ssrModules?.[importers.length - 1 - i] || importer()).then(
 			async (module) => {
-				if (prefetchOnly) return;
+				if (prefetchOnly === true) return;
 
 				const preload =
 					import.meta.hot && updatedComponents

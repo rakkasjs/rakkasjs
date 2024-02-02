@@ -332,6 +332,10 @@ export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 	 * @default "hover"
 	 */
 	prefetch?: "eager" | "viewport" | "idle" | "hover" | "tap" | "never";
+	/**
+	 * Whether to preload the data for the new page. This is only effective when `prefetch` is enabled.
+	 */
+	preload?: boolean;
 }
 
 /** Link component for client-side navigation */
@@ -348,6 +352,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 			onTouchStart,
 			onMouseDown,
 			prefetch = "hover",
+			preload = false,
 			...props
 		},
 		ref,
@@ -362,13 +367,13 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 			if (props.href === undefined) {
 				return;
 			} else if (prefetch === "eager") {
-				prefetchRoute(props.href);
+				prefetchRoute(props.href, preload);
 			} else if (prefetch === "viewport" && inView) {
-				prefetchRoute(props.href);
+				prefetchRoute(props.href, preload);
 			} else if (prefetch === "idle" && inView) {
-				requestIdleCallback(() => prefetchRoute(props.href!));
+				requestIdleCallback(() => prefetchRoute(props.href!, preload));
 			}
-		}, [props.href, prefetch, a, inView]);
+		}, [props.href, prefetch, a, inView, preload]);
 
 		return (
 			<a
@@ -408,7 +413,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 						? (e) => {
 								onMouseEnter?.(e);
 								if (!e.defaultPrevented) {
-									prefetchRoute(e.currentTarget.href);
+									prefetchRoute(e.currentTarget.href, preload);
 								}
 							}
 						: onMouseEnter
@@ -418,7 +423,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 						? (e) => {
 								onMouseDown?.(e);
 								if (!e.defaultPrevented) {
-									prefetchRoute(e.currentTarget.href);
+									prefetchRoute(e.currentTarget.href, preload);
 								}
 							}
 						: onMouseDown
@@ -428,7 +433,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 						? (e) => {
 								onTouchStart?.(e);
 								if (!e.defaultPrevented) {
-									prefetchRoute(e.currentTarget.href);
+									prefetchRoute(e.currentTarget.href, preload);
 								}
 							}
 						: onTouchStart
@@ -662,16 +667,19 @@ function ignore() {
 
 export const prefetcher = {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	prefetch(location: URL | string) {
+	prefetch(location: URL | string, preload: boolean) {
 		// Do nothing until initialized
 	},
 };
 
 /**
  * Preload a page's code and possibly data.
+ *
+ * @param location URL of the page to preload
+ * @param preload Whether to also preload the data
  */
-export function prefetchRoute(location: URL | string) {
-	prefetcher.prefetch(location);
+export function prefetchRoute(location: URL | string, preload = false) {
+	prefetcher.prefetch(location, preload);
 }
 
 function useInView<T extends HTMLElement>() {
