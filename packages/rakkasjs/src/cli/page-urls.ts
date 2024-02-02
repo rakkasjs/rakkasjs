@@ -44,10 +44,19 @@ export async function generatePageUrlBuilder({
 	let hasSearch = false;
 
 	for (const path of pageModules) {
-		const sf = program.getSourceFile("src/routes/" + path);
+		const sourceFile = program.getSourceFile("src/routes/" + path);
+		if (!sourceFile) {
+			console.warn(`Failed to parse ${path}`);
+			continue;
+		}
 
 		const checker = program.getTypeChecker();
-		const sourceFileSymbol = checker.getSymbolAtLocation(sf!)!;
+		const sourceFileSymbol = checker.getSymbolAtLocation(sourceFile);
+		if (!sourceFileSymbol) {
+			console.warn(`Failed to get symbol of ${path}`);
+			continue;
+		}
+
 		const exports = checker.getExportsOfModule(sourceFileSymbol);
 
 		// Get default export's local name
