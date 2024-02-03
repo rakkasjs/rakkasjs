@@ -332,7 +332,22 @@ export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 	 * @default "hover"
 	 */
 	prefetch?: "eager" | "viewport" | "idle" | "hover" | "tap" | "never";
+	/**
+	 * Whether and when to preload the data for the new page. Note that you can't
+	 * preload without prefetching, so a more eager preload setting will also
+	 * prefetch the code. `true` means preload when the link is prefetched.
+	 */
+	preload?: "eager" | "viewport" | "idle" | "hover" | "tap" | "never" | true;
 }
+
+const prefetchRanks = {
+	never: 0,
+	tap: 1,
+	hover: 2,
+	idle: 3,
+	viewport: 4,
+	eager: 5,
+};
 
 /** Link component for client-side navigation */
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
@@ -348,27 +363,58 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 			onTouchStart,
 			onMouseDown,
 			prefetch = "hover",
+			preload = "never",
 			...props
 		},
 		ref,
 	) => {
 		const { ref: a, inView } = useInView<HTMLAnchorElement>();
 
-		if (prefetch === "idle" && typeof requestIdleCallback === "undefined") {
-			prefetch = "hover";
+		if (typeof requestIdleCallback === "undefined") {
+			if (prefetch === "idle") {
+				prefetch = "hover";
+			}
+
+			if (preload === "idle") {
+				preload = "hover";
+			}
 		}
+
+		const prefetchRank = prefetchRanks[prefetch] ?? 0;
+		const preloadRank =
+			prefetchRanks[preload === true ? prefetch : preload] ?? 0;
+		const rank = Math.max(prefetchRank, preloadRank);
+
+		const shouldAct = useCallback(
+			function shouldPrefetch(action: keyof typeof prefetchRanks): boolean {
+				return (
+					prefetchRank === prefetchRanks[action] ||
+					preloadRank === prefetchRanks[action]
+				);
+			},
+			[prefetchRank, preloadRank],
+		);
+
+		const shouldPreload = useCallback(
+			function shouldPreload(action: keyof typeof prefetchRanks): boolean {
+				return preloadRank === prefetchRanks[action];
+			},
+			[preloadRank],
+		);
 
 		useEffect(() => {
 			if (props.href === undefined) {
 				return;
-			} else if (prefetch === "eager") {
-				prefetchRoute(props.href);
-			} else if (prefetch === "viewport" && inView) {
-				prefetchRoute(props.href);
-			} else if (prefetch === "idle" && inView) {
-				requestIdleCallback(() => prefetchRoute(props.href!));
+			} else if (shouldAct("eager")) {
+				prefetchRoute(props.href, shouldPreload("eager"));
+			} else if (inView && shouldAct("viewport")) {
+				prefetchRoute(props.href, shouldPreload("viewport"));
+			} else if (inView && shouldAct("idle")) {
+				requestIdleCallback(() =>
+					prefetchRoute(props.href!, shouldPreload("idle")),
+				);
 			}
-		}, [props.href, prefetch, a, inView]);
+		}, [inView, preloadRank, props.href, rank, shouldAct, shouldPreload]);
 
 		return (
 			<a
@@ -404,31 +450,34 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 						});
 				}}
 				onMouseEnter={
-					prefetch === "hover"
+					shouldAct("hover")
 						? (e) => {
 								onMouseEnter?.(e);
 								if (!e.defaultPrevented) {
-									prefetchRoute(e.currentTarget.href);
+									prefetchRoute(props.href, shouldPreload("hover"));
 								}
 							}
 						: onMouseEnter
 				}
 				onMouseDown={
-					prefetch === "tap"
+					shouldAct("tap")
 						? (e) => {
 								onMouseDown?.(e);
 								if (!e.defaultPrevented) {
-									prefetchRoute(e.currentTarget.href);
+									prefetchRoute(props.href, shouldPreload("tap"));
 								}
 							}
 						: onMouseDown
 				}
 				onTouchStart={
-					prefetch === "tap" || prefetch === "hover"
+					shouldAct("tap") || shouldAct("hover")
 						? (e) => {
 								onTouchStart?.(e);
 								if (!e.defaultPrevented) {
-									prefetchRoute(e.currentTarget.href);
+									prefetchRoute(
+										props.href,
+										shouldPreload("tap") || shouldPreload("hover"),
+									);
 								}
 							}
 						: onTouchStart
@@ -662,16 +711,20 @@ function ignore() {
 
 export const prefetcher = {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	prefetch(location: URL | string) {
+	prefetch(location: URL | string, preload: boolean) {
 		// Do nothing until initialized
 	},
 };
 
 /**
  * Preload a page's code and possibly data.
+ *
+ * @param location URL of the page to preload
+ * @param preload Whether to also preload the data
  */
-export function prefetchRoute(location: URL | string) {
-	prefetcher.prefetch(location);
+export function prefetchRoute(location?: URL | string, preload = false) {
+	if (location === undefined) return;
+	prefetcher.prefetch(location, preload);
 }
 
 function useInView<T extends HTMLElement>() {

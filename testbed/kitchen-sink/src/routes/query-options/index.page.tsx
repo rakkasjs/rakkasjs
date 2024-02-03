@@ -28,6 +28,6 @@ function doubler(x: number) {
 				return x * 2;
 			});
 		},
-		staleTime: 1000,
+		staleTime: 15_000,
 	});
 }
