@@ -603,7 +603,7 @@ async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
 	if (!viteDevServer) {
 		moduleIds = moduleIds.map((id) => id.slice(1));
 		// Add this manually because it's a dynamic import
-		moduleIds.push("rakkasjs:client-page-routes");
+		moduleIds.push("virtual:rakkasjs:client-page-routes");
 		const moduleSet = new Set(moduleIds);
 		const cssSet = new Set<string>();
 		// const assetSet = new Set<string>();
