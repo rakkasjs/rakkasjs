@@ -357,7 +357,7 @@ export default function pageRoutes(options: PageRoutesOptions = {}): Plugin[] {
 const PAGE_HOT_RELOAD = `
 	if (import.meta.hot) {
 		import.meta.hot.accept(() => {
-			$RAKKAS_UPDATE?.();
+			rakkas.update();
 		});
 	}
 `;

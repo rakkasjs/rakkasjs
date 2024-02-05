@@ -33,6 +33,12 @@ import { PageRequestHooks } from "../../runtime/hattip-handler";
 import { ModuleNode } from "vite";
 import { escapeCss, escapeHtml, sortHooks } from "../../runtime/utils";
 import { commonHooks } from "../../runtime/feature-common-hooks";
+import {
+	currentDefaultHeadProps,
+	defaultHeadProps,
+} from "../head/implementation/defaults";
+import { HeadProps } from "../head/lib";
+import { HeadElement } from "../head/implementation/types";
 
 const assetPrefix = import.meta.env.BASE_URL ?? "/";
 
@@ -175,15 +181,38 @@ export default async function renderPageRoute(
 	}
 
 	if (renderMode === "client" && ctx.method === "GET" && !dataOnly) {
-		const prefetchOutput = await createPrefetchTags(ctx.url, [scriptId]);
+		const { html: prefetchOutput, elements: prefetchElements } =
+			await createPrefetchTags(renderMode, ctx.url, [
+				scriptId,
+				...found.route[4].map((id) => "/" + id),
+			]);
 
-		const head = renderHead(
-			prefetchOutput,
-			renderMode,
-			undefined,
-			undefined,
-			pageHooks,
+		const emitToSyncHeadScriptHandlers = sortHooks(
+			pageHooks.map((hook) => hook?.emitToSyncHeadScript),
 		);
+
+		let syncScriptContent = "rakkas={};";
+		for (const handler of emitToSyncHeadScriptHandlers) {
+			const code = handler();
+			if (code) {
+				syncScriptContent += code;
+			}
+		}
+
+		const syncScript = {
+			tagName: "script" as const,
+			textContent: syncScriptContent,
+			"data-sr": true,
+		};
+
+		// TODO: This is a hacky way of passing the default head props to the server
+		const initialHeadProps: HeadProps = structuredClone(defaultHeadProps);
+		currentDefaultHeadProps.current = initialHeadProps;
+
+		initialHeadProps.elements ??= [];
+		initialHeadProps.elements.push(...prefetchElements, syncScript);
+
+		const head = renderHead(prefetchOutput, pageHooks);
 		const html = head + `<div id="root"></div></body></html>`;
 
 		return new Response(html, {
@@ -243,6 +272,15 @@ export default async function renderPageRoute(
 	} as ServerSidePageContext;
 
 	const modules = await Promise.all(importers.map((importer) => importer()));
+
+	if (viteDevServer && renderMode !== "server") {
+		const ids = found.route[4];
+		await Promise.all(
+			ids.map((importer) =>
+				viteDevServer!.transformRequest(importer).catch(() => null),
+			),
+		);
+	}
 
 	let actionResult: ActionResult<any> | undefined;
 	let actionErrorIndex = -1;
@@ -334,6 +372,48 @@ export default async function renderPageRoute(
 			ssrModules={modules}
 		/>
 	);
+
+	const { html: prefetchOutput, elements: prefetchElements } =
+		await createPrefetchTags(renderMode, ctx.url, [
+			scriptId,
+			...found.route[4].map((id) => "/" + id),
+		]);
+
+	const emitToSyncHeadScriptHandlers = sortHooks(
+		pageHooks.map((hook) => hook?.emitToSyncHeadScript),
+	);
+
+	let syncScriptContent = "rakkas={};";
+	for (const handler of emitToSyncHeadScriptHandlers) {
+		const code = handler();
+		if (code) {
+			syncScriptContent += code;
+		}
+	}
+
+	const syncScript = {
+		tagName: "script" as const,
+		textContent: syncScriptContent,
+		"data-sr": true,
+	};
+
+	// TODO: This is a hacky way of passing the default head props to the server
+	const initialHeadProps: HeadProps = structuredClone(defaultHeadProps);
+	currentDefaultHeadProps.current = initialHeadProps;
+
+	initialHeadProps.elements ??= [];
+	initialHeadProps.elements.push(...prefetchElements, syncScript);
+
+	if (actionErrorIndex >= 0 && renderMode !== "server") {
+		syncScript.textContent += `rakkas.actionIndex=${actionErrorIndex};`;
+	}
+
+	syncScript.textContent +=
+		(renderMode === "hydrate" ? "" : "rakkas.spa=true;") +
+		// TODO: Refactor this. Probably belongs to client-side-navigation
+		(actionResult?.data === undefined && renderMode !== "server"
+			? ""
+			: `rakkas.actionData=${uneval(actionResult?.data)};`);
 
 	const wrapAppHandlers = sortHooks([
 		...pageHooks.map((hook) => hook?.wrapApp),
@@ -473,18 +553,7 @@ export default async function renderPageRoute(
 		});
 	}
 
-	const prefetchOutput = await createPrefetchTags(ctx.url, [
-		scriptId,
-		...found.route[4].map((id) => "/" + id),
-	]);
-
-	const head = renderHead(
-		prefetchOutput,
-		renderMode,
-		actionResult?.data,
-		actionErrorIndex,
-		pageHooks,
-	);
+	const head = renderHead(prefetchOutput, pageHooks);
 
 	const wrapSsrStreamHandlers = sortHooks(
 		pageHooks.map((hook) => hook?.wrapSsrStream),
@@ -597,13 +666,21 @@ function makeHeaders(
 	return result;
 }
 
-async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
-	let result = "";
+async function createPrefetchTags(
+	renderMode: "server" | "client" | "hydrate",
+	pageUrl: URL,
+	moduleIds: string[],
+): Promise<{
+	html: string;
+	elements: HeadElement[];
+}> {
+	let html = "";
+	const elements: HeadElement[] = [];
 
 	if (!viteDevServer) {
 		moduleIds = moduleIds.map((id) => id.slice(1));
 		// Add this manually because it's a dynamic import
-		moduleIds.push("rakkasjs:client-page-routes");
+		moduleIds.push("virtual:rakkasjs:client-page-routes");
 		const moduleSet = new Set(moduleIds);
 		const cssSet = new Set<string>();
 		// const assetSet = new Set<string>();
@@ -619,16 +696,23 @@ async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
 
 			const script = clientManifest?.[moduleId].file;
 			if (script) {
-				result += `<link rel="modulepreload" crossorigin href="${escapeHtml(
-					assetPrefix + script,
-				)}">`;
+				elements.push({
+					tagName: "link",
+					rel: "modulepreload",
+					crossorigin: true,
+					href: assetPrefix + script,
+					"data-sr": true,
+				});
 			}
 		}
 
 		for (const cssFile of cssSet) {
-			result += `<link rel="stylesheet" href="${escapeHtml(
-				assetPrefix + cssFile,
-			)}">`;
+			elements.push({
+				tagName: "link",
+				rel: "stylesheet",
+				href: assetPrefix + cssFile,
+				"data-sr": true,
+			});
 		}
 
 		// TODO: Prefetch/preload assets
@@ -675,20 +759,17 @@ async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
 			const directUrl = url + (url.includes("?") ? "&" : "?") + "direct";
 			const transformed = await viteDevServer.transformRequest(directUrl);
 			if (!transformed) continue;
-			result += `<style type="text/css" data-vite-dev-id=${JSON.stringify(
+			html += `<style type="text/css" data-vite-dev-id=${JSON.stringify(
 				id,
 			)}>${escapeCss(transformed.code)}</style>`;
 		}
 	}
 
-	return result;
+	return { html, elements };
 }
 
 function renderHead(
 	prefetchOutput: string,
-	renderMode: "server" | "hydrate" | "client",
-	actionData: unknown = undefined,
-	actionErrorIndex = -1,
 	pageHooks: Array<PageRequestHooks | undefined> = [],
 ) {
 	// TODO: Customize HTML document
@@ -705,6 +786,7 @@ function renderHead(
 	let result = "";
 
 	const emitToDocumentHeadHandlers = sortHooks(
+		// eslint-disable-next-line deprecation/deprecation
 		pageHooks.map((hook) => hook?.emitToDocumentHead),
 	);
 
@@ -723,25 +805,13 @@ function renderHead(
 			specialAttributes.htmlAttributes,
 		)}><head${stringifyAttributes(specialAttributes.headAttributes)}>` + result;
 
-	if (actionErrorIndex >= 0 && renderMode !== "server") {
-		result += `<script>$RAKKAS_ACTION_ERROR_INDEX=${actionErrorIndex}</script>`;
-	}
-
-	result +=
-		prefetchOutput +
-		(renderMode === "hydrate"
-			? `<script>$RAKKAS_HYDRATE="hydrate"</script>`
-			: "") +
-		// TODO: Refactor this. Probably belongs to client-side-navigation
-		(actionData === undefined && renderMode !== "server"
-			? ""
-			: `<script>$RAKKAS_ACTION_DATA=${uneval(actionData)}</script>`);
-
 	if (import.meta.env.DEV) {
 		result +=
 			`<script type="module" src="/@vite/client"></script>` +
 			`<script type="module" async>${REACT_FAST_REFRESH_PREAMBLE}</script>`;
 	}
+
+	result += prefetchOutput;
 
 	result += `</head><body${stringifyAttributes(
 		specialAttributes.bodyAttributes,

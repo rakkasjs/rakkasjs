@@ -6,3 +6,5 @@ export const defaultHeadProps: HeadProps = {
 	htmlAttributes: { lang: "en" },
 	elements: [{ charset: "utf-8" }],
 };
+
+export const currentDefaultHeadProps = { current: defaultHeadProps };

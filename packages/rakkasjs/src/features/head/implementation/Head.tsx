@@ -84,14 +84,24 @@ function updateHead() {
 	);
 
 	const currentElements: HTMLElement[] = [];
+
 	let endNode: Node | null = null;
+	let started = false;
 	for (const node of document.head.childNodes) {
-		if (
-			node.nodeType === Node.COMMENT_NODE &&
-			node.nodeValue === " head end "
-		) {
-			endNode = node;
-			break;
+		if (node.nodeType === Node.COMMENT_NODE) {
+			if (node.nodeValue === " head start ") {
+				started = true;
+				continue;
+			}
+
+			if (node.nodeValue === " head end ") {
+				endNode = node;
+				break;
+			}
+		}
+
+		if (!started) {
+			continue;
 		}
 
 		if (node.nodeType === Node.ELEMENT_NODE) {
@@ -104,6 +114,10 @@ function updateHead() {
 	while (iNew < newElements.length || iCur < currentElements.length) {
 		const newElement = newElements[iNew];
 		let currentElement = currentElements[iCur];
+
+		if (currentElement?.hasAttribute("data:sr")) {
+			continue;
+		}
 
 		if (!newElement) {
 			do {

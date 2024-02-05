@@ -41,7 +41,7 @@ export function sortHeadTags(tags: NormalizedHeadProps): Array<Attributes> {
 			case "link":
 				if (tag.rel === "preconnect") return 5;
 				if (tag.rel === "stylesheet") return 11;
-				if (tag.rel === "preload") return 12;
+				if (tag.rel === "preload" || tag.rel === "modulepreload") return 12;
 				if (tag.rel === "prefetch" || tag.rel === "prerender") return 15;
 				return 16;
 

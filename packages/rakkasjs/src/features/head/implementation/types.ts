@@ -168,7 +168,7 @@ export interface OtherLinkTag extends CommonLinkAttributes {
 
 export interface CommonLinkAttributes extends CommonAttributes {
 	blocking?: boolean;
-	crossorigin?: "anonymous" | "use-credentials" | false;
+	crossorigin?: "anonymous" | "use-credentials" | boolean;
 	fetchpriority?: "auto" | "high" | "low" | false;
 	href: string;
 	hreflang?: string | false;
@@ -256,7 +256,6 @@ export interface CommonAttributes {
 	autofocus?: boolean;
 	class?: string | false;
 	contenteditable?: boolean;
-	["data-*"]?: string | false;
 	dir?: "ltr" | "rtl" | "auto" | (string & {}) | false;
 	draggable?: boolean;
 	enterkeyhint?:
@@ -303,4 +302,5 @@ export interface CommonAttributes {
 	virtualkeyboardpolicy?: "auto" | "manual" | (string & {}) | false;
 	"xml:lang"?: string | false;
 	"xmlns:base"?: string | false;
+	[key: `data-${string}`]: string | boolean;
 }

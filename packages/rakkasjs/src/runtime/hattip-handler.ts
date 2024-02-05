@@ -74,7 +74,11 @@ export interface PageRequestHooks {
 	 */
 	wrapApp?: HookDefinition<(app: ReactElement) => ReactElement>;
 
-	/** Write to the document's head section */
+	/**
+	 * Write to the document's head section
+	 *
+	 * @deprecated Use the Head component or emitToSyncHeadScript hook instead.
+	 */
 	emitToDocumentHead?: HookDefinition<
 		(specialAttributes: {
 			htmlAttributes: Record<string, string | number | boolean | undefined>;
@@ -82,6 +86,9 @@ export interface PageRequestHooks {
 			bodyAttributes: Record<string, string | number | boolean | undefined>;
 		}) => ReactElement | string | undefined
 	>;
+
+	/** Emit code into the head section of the document */
+	emitToSyncHeadScript?: HookDefinition<() => string | undefined>;
 
 	/** Emit a chunk of HTML before each time React emits a chunk */
 	emitBeforeSsrChunk?: HookDefinition<() => string | undefined>;

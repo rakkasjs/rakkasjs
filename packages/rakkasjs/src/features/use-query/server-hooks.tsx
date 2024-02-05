@@ -94,15 +94,15 @@ const useQueryServerHooks: ServerHooks = {
 				ctx.queryClient = createQueryClient(cache, ctx);
 			},
 
-			emitToDocumentHead() {
+			emitToSyncHeadScript() {
 				const newItemsString = uneval(cache._getNewItems());
-				return `<script>$RSC=${newItemsString}</script>`;
+				return `rakkas.cache=${newItemsString};`;
 			},
 
 			emitBeforeSsrChunk() {
 				if (cache._hasNewItems) {
 					const newItemsString = uneval(cache._getNewItems());
-					return `<script>Object.assign($RSC,${newItemsString})</script>`;
+					return `<script>Object.assign(rakkas.cache,${newItemsString})</script>`;
 				}
 			},
 		};

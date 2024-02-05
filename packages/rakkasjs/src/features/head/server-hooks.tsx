@@ -2,7 +2,7 @@ import React from "react";
 import type { ServerHooks } from "../../runtime/hattip-handler";
 import { escapeCss, escapeHtml } from "../../runtime/utils";
 import { NormalizedHeadProps, mergeHeadProps } from "./implementation/merge";
-import { defaultHeadProps } from "./implementation/defaults";
+import { currentDefaultHeadProps } from "./implementation/defaults";
 import { HeadContext } from "./implementation/context";
 import { sortHeadTags } from "./implementation/sort";
 
@@ -18,36 +18,39 @@ const headServerHooks: ServerHooks = {
 			unkeyed: [],
 		};
 
-		mergeHeadProps(tags, defaultHeadProps);
-
 		return {
 			wrapApp: (app) => {
+				mergeHeadProps(tags, currentDefaultHeadProps.current);
 				return <HeadContext.Provider value={tags}>{app}</HeadContext.Provider>;
 			},
 
-			emitToDocumentHead(speciallAttributes) {
-				let result = "";
+			emitToDocumentHead: {
+				order: "pre",
 
-				const elements = sortHeadTags(tags);
+				handler(speciallAttributes) {
+					let result = "<!-- head start -->";
 
-				for (const element of elements) {
-					const tagName = element.tagName;
+					const elements = sortHeadTags(tags);
 
-					if (tagName === "head") {
-						speciallAttributes.headAttributes = element;
-						continue;
-					} else if (tagName === "body") {
-						speciallAttributes.bodyAttributes = element;
-						continue;
-					} else if (tagName === "html") {
-						speciallAttributes.htmlAttributes = element;
-						continue;
+					for (const element of elements) {
+						const tagName = element.tagName;
+
+						if (tagName === "head") {
+							speciallAttributes.headAttributes = element;
+							continue;
+						} else if (tagName === "body") {
+							speciallAttributes.bodyAttributes = element;
+							continue;
+						} else if (tagName === "html") {
+							speciallAttributes.htmlAttributes = element;
+							continue;
+						}
+
+						result += renderElement(element);
 					}
 
-					result += renderElement(element);
-				}
-
-				return result + "<!-- head end -->";
+					return result + "<!-- head end -->";
+				},
 			},
 		};
 	},

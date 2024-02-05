@@ -89,7 +89,7 @@ export async function startClient(
 	history.replaceState(
 		{
 			...history.state,
-			actionData: (window as any).$RAKKAS_ACTION_DATA,
+			actionData: rakkas.actionData,
 		},
 		"",
 	);
@@ -99,7 +99,7 @@ export async function startClient(
 		new URL(window.location.href),
 		undefined,
 		true,
-		(window as any).$RAKKAS_ACTION_DATA,
+		rakkas.actionData,
 	).catch((error) => {
 		return { error };
 	});
@@ -118,7 +118,5 @@ export async function startClient(
 
 	const container = document.getElementById("root")!;
 
-	(window as any).$RAKKAS_HYDRATE
-		? hydrateRoot(container, app)
-		: createRoot(container).render(app);
+	rakkas.spa ? createRoot(container).render(app) : hydrateRoot(container, app);
 }

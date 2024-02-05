@@ -55,7 +55,7 @@ export function App(props: AppProps) {
 
 	// TODO: Warn when a page doesn't export a default component
 
-	if (!import.meta.env.SSR) (window as any).$RAKKAS_UPDATE = update;
+	if (!import.meta.env.SSR) rakkas.update = update;
 
 	const pageContext = useContext(IsomorphicContext);
 
@@ -308,11 +308,8 @@ export async function loadRoute(
 						: module.default?.preload;
 
 				try {
-					if (
-						!import.meta.env.SSR &&
-						i === (window as any).$RAKKAS_ACTION_ERROR_INDEX
-					) {
-						delete (window as any).$RAKKAS_ACTION_ERROR_INDEX;
+					if (!import.meta.env.SSR && i === rakkas.actionIndex) {
+						delete rakkas.actionIndex;
 						throw new Error("Action error");
 					}
 					const preloaded =
