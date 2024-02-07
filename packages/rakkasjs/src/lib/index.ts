@@ -51,3 +51,6 @@ export type {
 } from "../features/run-server-side/lib-client";
 
 export type { getRequestContext } from "../features/async-local-request-context/lib-server";
+
+export type {} from "../runtime/hattip-handler";
+export type {} from "../runtime/client-entry";
