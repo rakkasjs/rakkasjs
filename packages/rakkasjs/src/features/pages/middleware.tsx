@@ -45,7 +45,7 @@ export default async function renderPageRoute(
 		return;
 	}
 
-	const pageHooks = ctx.hooks.map((hook) => hook.createPageHooks?.(ctx));
+	const pageHooks = ctx.rakkas.hooks.map((hook) => hook.createPageHooks?.(ctx));
 
 	const extendPageContextHandlers = sortHooks([
 		...pageHooks.map((hook) => hook?.extendPageContext),
@@ -86,7 +86,7 @@ export default async function renderPageRoute(
 		  >
 		| undefined;
 
-	if (ctx.notFound) {
+	if (ctx.rakkas.notFound) {
 		do {
 			if (!pathname.endsWith("/")) {
 				pathname += "/";
@@ -294,7 +294,7 @@ export default async function renderPageRoute(
 		});
 	}
 
-	status = actionResult?.status ?? (ctx.notFound ? 404 : 200);
+	status = actionResult?.status ?? (ctx.rakkas.notFound ? 404 : 200);
 
 	pageContext.actionData = actionResult?.data;
 	preloadContext.actionData = actionResult?.data;

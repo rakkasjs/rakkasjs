@@ -15,10 +15,17 @@ declare module "@hattip/compose" {
 		params: Record<string, string>;
 		/** Isomorphic fetch function */
 		fetch: typeof fetch;
-		/** Server-side customiization hooks */
-		hooks: ServerHooks[];
-		/** Set to true when searching for a not found page */
-		notFound?: boolean;
+		/**
+		 * Internal stuff, don't use it in user code.
+		 *
+		 * @internal
+		 */
+		rakkas: {
+			/** Server-side customiization hooks */
+			hooks: ServerHooks[];
+			/** Set to true when searching for a not found page */
+			notFound: boolean;
+		};
 	}
 }
 
@@ -158,12 +165,15 @@ export function createRequestHandler(
 
 function init(hooks: ServerHooks[]) {
 	return (ctx: RequestContext) => {
-		ctx.hooks = hooks;
+		ctx.rakkas = {
+			hooks,
+			notFound: false,
+		};
 	};
 }
 
 function notFound(ctx: RequestContext) {
-	ctx.notFound = true;
+	ctx.rakkas.notFound = true;
 }
 
 async function prerender(ctx: RequestContext) {
