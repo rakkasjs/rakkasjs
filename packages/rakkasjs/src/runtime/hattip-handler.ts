@@ -7,7 +7,9 @@ import serverFeatureHooks from "./feature-server-hooks";
 import { HookDefinition, sortHooks } from "./utils";
 import pluginFactories from "rakkasjs:plugin-server-hooks";
 import * as commonHooksModule from "rakkasjs:common-hooks";
-import { CommonPluginOptions } from "./common-hooks";
+import type { CommonPluginOptions } from "./common-hooks";
+import type { NormalizedHeadProps } from "../features/head/implementation/merge";
+import { HeadElement } from "../features/head/implementation/types";
 
 declare module "@hattip/compose" {
 	interface RequestContextExtensions {
@@ -15,10 +17,19 @@ declare module "@hattip/compose" {
 		params: Record<string, string>;
 		/** Isomorphic fetch function */
 		fetch: typeof fetch;
-		/** Server-side customiization hooks */
-		hooks: ServerHooks[];
-		/** Set to true when searching for a not found page */
-		notFound?: boolean;
+		/**
+		 * Internal stuff, don't use it in user code.
+		 *
+		 * @internal
+		 */
+		rakkas: {
+			/** Server-side customiization hooks */
+			hooks: ServerHooks[];
+			/** Set to true when searching for a not found page */
+			notFound: boolean;
+			/** Head tags */
+			head: NormalizedHeadProps;
+		};
 	}
 }
 
@@ -74,14 +85,19 @@ export interface PageRequestHooks {
 	 */
 	wrapApp?: HookDefinition<(app: ReactElement) => ReactElement>;
 
+	/**
+	 * Write to the document's head section.
+	 *
+	 * @deprecated Use `emitToSyncHeadScript`, `emitServerOnlyHeadElements` or
+	 * the normal Head component instead.
+	 */
+	emitToDocumentHead?: HookDefinition<() => ReactElement | string | undefined>;
+
 	/** Write to the document's head section */
-	emitToDocumentHead?: HookDefinition<
-		(specialAttributes: {
-			htmlAttributes: Record<string, string | number | boolean | undefined>;
-			headAttributes: Record<string, string | number | boolean | undefined>;
-			bodyAttributes: Record<string, string | number | boolean | undefined>;
-		}) => ReactElement | string | undefined
-	>;
+	emitServerOnlyHeadElements?: HookDefinition<() => HeadElement[] | undefined>;
+
+	/** Emit a piece of code to be inserted into a script tag in the head. */
+	emitToSyncHeadScript?: HookDefinition<() => string | undefined>;
 
 	/** Emit a chunk of HTML before each time React emits a chunk */
 	emitBeforeSsrChunk?: HookDefinition<() => string | undefined>;
@@ -158,12 +174,19 @@ export function createRequestHandler(
 
 function init(hooks: ServerHooks[]) {
 	return (ctx: RequestContext) => {
-		ctx.hooks = hooks;
+		ctx.rakkas = {
+			hooks,
+			notFound: false,
+			head: {
+				keyed: {},
+				unkeyed: [],
+			},
+		};
 	};
 }
 
 function notFound(ctx: RequestContext) {
-	ctx.notFound = true;
+	ctx.rakkas.notFound = true;
 }
 
 async function prerender(ctx: RequestContext) {

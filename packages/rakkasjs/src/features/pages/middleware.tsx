@@ -33,6 +33,9 @@ import { PageRequestHooks } from "../../runtime/hattip-handler";
 import { ModuleNode } from "vite";
 import { escapeCss, escapeHtml, sortHooks } from "../../runtime/utils";
 import { commonHooks } from "../../runtime/feature-common-hooks";
+import { renderHeadContent } from "../head/server-hooks";
+import { mergeHeadProps } from "../head/implementation/merge";
+import { HeadElement } from "../head/implementation/types";
 
 const assetPrefix = import.meta.env.BASE_URL ?? "/";
 
@@ -45,7 +48,7 @@ export default async function renderPageRoute(
 		return;
 	}
 
-	const pageHooks = ctx.hooks.map((hook) => hook.createPageHooks?.(ctx));
+	const pageHooks = ctx.rakkas.hooks.map((hook) => hook.createPageHooks?.(ctx));
 
 	const extendPageContextHandlers = sortHooks([
 		...pageHooks.map((hook) => hook?.extendPageContext),
@@ -86,7 +89,7 @@ export default async function renderPageRoute(
 		  >
 		| undefined;
 
-	if (ctx.notFound) {
+	if (ctx.rakkas.notFound) {
 		do {
 			if (!pathname.endsWith("/")) {
 				pathname += "/";
@@ -175,9 +178,10 @@ export default async function renderPageRoute(
 	}
 
 	if (renderMode === "client" && ctx.method === "GET" && !dataOnly) {
-		const prefetchOutput = await createPrefetchTags(ctx.url, [scriptId]);
+		const prefetchOutput = await createPrefetchTags(ctx, [scriptId]);
 
 		const head = renderHead(
+			ctx,
 			prefetchOutput,
 			renderMode,
 			undefined,
@@ -294,7 +298,7 @@ export default async function renderPageRoute(
 		});
 	}
 
-	status = actionResult?.status ?? (ctx.notFound ? 404 : 200);
+	status = actionResult?.status ?? (ctx.rakkas.notFound ? 404 : 200);
 
 	pageContext.actionData = actionResult?.data;
 	preloadContext.actionData = actionResult?.data;
@@ -473,12 +477,13 @@ export default async function renderPageRoute(
 		});
 	}
 
-	const prefetchOutput = await createPrefetchTags(ctx.url, [
+	const prefetchOutput = await createPrefetchTags(ctx, [
 		scriptId,
 		...found.route[4].map((id) => "/" + id),
 	]);
 
 	const head = renderHead(
+		ctx,
 		prefetchOutput,
 		renderMode,
 		actionResult?.data,
@@ -597,7 +602,8 @@ function makeHeaders(
 	return result;
 }
 
-async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
+async function createPrefetchTags(ctx: RequestContext, moduleIds: string[]) {
+	const pageUrl = ctx.url;
 	let result = "";
 
 	if (!viteDevServer) {
@@ -619,16 +625,23 @@ async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
 
 			const script = clientManifest?.[moduleId].file;
 			if (script) {
-				result += `<link rel="modulepreload" crossorigin href="${escapeHtml(
-					assetPrefix + script,
-				)}">`;
+				ctx.rakkas.head.unkeyed.push({
+					tagName: "link",
+					rel: "modulepreload",
+					href: assetPrefix + script,
+					crossorigin: true,
+					"data-sr": true,
+				});
 			}
 		}
 
 		for (const cssFile of cssSet) {
-			result += `<link rel="stylesheet" href="${escapeHtml(
-				assetPrefix + cssFile,
-			)}">`;
+			ctx.rakkas.head.unkeyed.push({
+				tagName: "link",
+				rel: "stylesheet",
+				href: assetPrefix + cssFile,
+				"data-sr": true,
+			});
 		}
 
 		// TODO: Prefetch/preload assets
@@ -685,6 +698,7 @@ async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
 }
 
 function renderHead(
+	ctx: RequestContext,
 	prefetchOutput: string,
 	renderMode: "server" | "hydrate" | "client",
 	actionData: unknown = undefined,
@@ -692,24 +706,66 @@ function renderHead(
 	pageHooks: Array<PageRequestHooks | undefined> = [],
 ) {
 	// TODO: Customize HTML document
-	const specialAttributes: {
-		htmlAttributes: Record<string, string>;
-		headAttributes: Record<string, string>;
-		bodyAttributes: Record<string, string>;
-	} = {
-		htmlAttributes: {},
-		headAttributes: {},
-		bodyAttributes: {},
+
+	const browserGlobal: typeof rakkas = {};
+	if (actionErrorIndex >= 0 && renderMode !== "server") {
+		browserGlobal.actionErrorIndex = actionErrorIndex;
+	}
+
+	if (actionData !== undefined && renderMode !== "server") {
+		// TODO: Refactor this. Probably belongs to client-side-navigation
+		browserGlobal.actionData = actionData;
+	}
+
+	if (renderMode === "client") {
+		browserGlobal.clientRender = true;
+	}
+
+	const script: HeadElement = {
+		tagName: "script",
+		"data-sr": true,
+		textContent: `rakkas=${uneval(browserGlobal)};`,
 	};
 
-	let result = "";
+	const emitToSyncHeadScriptHandlers = sortHooks(
+		pageHooks.map((hook) => hook?.emitToSyncHeadScript),
+	);
+
+	for (const handler of emitToSyncHeadScriptHandlers) {
+		const body = handler();
+		if (!body) continue;
+
+		script.textContent += body;
+	}
+
+	mergeHeadProps(ctx.rakkas.head, { elements: [script] });
+
+	const emitServerOnlyHeadElementsHandlers = sortHooks(
+		pageHooks.map((hook) => hook?.emitServerOnlyHeadElements),
+	);
+
+	for (const handler of emitServerOnlyHeadElementsHandlers) {
+		const head = handler();
+		if (!head) continue;
+
+		mergeHeadProps(ctx.rakkas.head, {
+			elements: head.map((e) => ({ ...e, "data-sr": true })),
+		});
+	}
+
+	const { specialAttributes, content: managedHead } = renderHeadContent(
+		ctx.rakkas.head,
+	);
+
+	let result = managedHead;
 
 	const emitToDocumentHeadHandlers = sortHooks(
+		// eslint-disable-next-line deprecation/deprecation
 		pageHooks.map((hook) => hook?.emitToDocumentHead),
 	);
 
 	for (const handler of emitToDocumentHeadHandlers) {
-		const head = handler(specialAttributes);
+		const head = handler();
 		if (!head) continue;
 
 		const headStr =
@@ -723,19 +779,7 @@ function renderHead(
 			specialAttributes.htmlAttributes,
 		)}><head${stringifyAttributes(specialAttributes.headAttributes)}>` + result;
 
-	if (actionErrorIndex >= 0 && renderMode !== "server") {
-		result += `<script>$RAKKAS_ACTION_ERROR_INDEX=${actionErrorIndex}</script>`;
-	}
-
-	result +=
-		prefetchOutput +
-		(renderMode === "hydrate"
-			? `<script>$RAKKAS_HYDRATE="hydrate"</script>`
-			: "") +
-		// TODO: Refactor this. Probably belongs to client-side-navigation
-		(actionData === undefined && renderMode !== "server"
-			? ""
-			: `<script>$RAKKAS_ACTION_DATA=${uneval(actionData)}</script>`);
+	result += prefetchOutput;
 
 	if (import.meta.env.DEV) {
 		result +=
@@ -750,15 +794,27 @@ function renderHead(
 	return result;
 }
 
-function stringifyAttributes(attributes: Record<string, string>) {
+function stringifyAttributes(
+	attributes: Record<string, string | number | boolean | undefined>,
+) {
 	let result = "";
 	for (const [key, value] of Object.entries(attributes)) {
 		if (
-			["key", "textContent", "innerHTML", "children", "tagName"].includes(key)
+			["key", "textContent", "innerHTML", "children", "tagName"].includes(
+				key,
+			) ||
+			value === false ||
+			value === undefined
 		) {
 			continue;
 		}
-		result += ` ${escapeHtml(key)}="${escapeHtml(value)}"`;
+
+		if (value === true) {
+			result += ` ${escapeHtml(key)}`;
+			continue;
+		}
+
+		result += ` ${escapeHtml(key)}="${escapeHtml(String(value))}"`;
 	}
 
 	return result;

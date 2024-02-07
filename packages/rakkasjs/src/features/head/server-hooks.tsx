@@ -8,14 +8,10 @@ import { sortHeadTags } from "./implementation/sort";
 
 const headServerHooks: ServerHooks = {
 	createPageHooks(ctx) {
-		const tags: NormalizedHeadProps = {
-			keyed: {
-				base: {
-					tagName: "base",
-					href: ctx.url.pathname + ctx.url.search,
-				},
-			},
-			unkeyed: [],
+		const tags = ctx.rakkas.head;
+		tags.keyed.base = {
+			tagName: "base",
+			href: ctx.url.pathname + ctx.url.search,
 		};
 
 		mergeHeadProps(tags, defaultHeadProps);
@@ -24,36 +20,51 @@ const headServerHooks: ServerHooks = {
 			wrapApp: (app) => {
 				return <HeadContext.Provider value={tags}>{app}</HeadContext.Provider>;
 			},
-
-			emitToDocumentHead(speciallAttributes) {
-				let result = "";
-
-				const elements = sortHeadTags(tags);
-
-				for (const element of elements) {
-					const tagName = element.tagName;
-
-					if (tagName === "head") {
-						speciallAttributes.headAttributes = element;
-						continue;
-					} else if (tagName === "body") {
-						speciallAttributes.bodyAttributes = element;
-						continue;
-					} else if (tagName === "html") {
-						speciallAttributes.htmlAttributes = element;
-						continue;
-					}
-
-					result += renderElement(element);
-				}
-
-				return result + "<!-- head end -->";
-			},
 		};
 	},
 };
 
 export default headServerHooks;
+
+export function renderHeadContent(tags: NormalizedHeadProps) {
+	const specialAttributes: {
+		htmlAttributes: Record<string, string | number | boolean | undefined>;
+		headAttributes: Record<string, string | number | boolean | undefined>;
+		bodyAttributes: Record<string, string | number | boolean | undefined>;
+	} = {
+		htmlAttributes: {},
+		headAttributes: {},
+		bodyAttributes: {},
+	};
+
+	let result = "";
+
+	const elements = sortHeadTags(tags);
+
+	for (const element of elements) {
+		const tagName = element.tagName;
+
+		if (tagName === "head") {
+			specialAttributes.headAttributes = element;
+			continue;
+		} else if (tagName === "body") {
+			specialAttributes.bodyAttributes = element;
+			continue;
+		} else if (tagName === "html") {
+			specialAttributes.htmlAttributes = element;
+			continue;
+		}
+
+		result += renderElement(element);
+	}
+
+	result += "<!-- head end -->";
+
+	return {
+		specialAttributes,
+		content: result,
+	};
+}
 
 function renderElement(
 	attributes: Record<string, string | number | boolean | undefined>,

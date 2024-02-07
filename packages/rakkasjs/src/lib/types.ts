@@ -6,3 +6,13 @@ export type {
 
 /** An object for storing stuff local to your app */
 export interface PageLocals {}
+
+declare global {
+	/** Browser global for holding Rakkas specific data */
+	const rakkas: {
+		cache?: Record<string, any>;
+		actionErrorIndex?: number;
+		actionData?: any;
+		clientRender?: boolean;
+	};
+}

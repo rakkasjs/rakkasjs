@@ -1,7 +1,7 @@
 import { ReactElement, useContext, useEffect } from "react";
 import { HeadContext } from "./context";
 import type { HeadProps } from "./types";
-import { NormalizedHeadProps, mergeHeadProps } from "./merge";
+import { Attributes, NormalizedHeadProps, mergeHeadProps } from "./merge";
 import { defaultHeadProps } from "./defaults";
 import { sortHeadTags } from "./sort";
 
@@ -94,7 +94,10 @@ function updateHead() {
 			break;
 		}
 
-		if (node.nodeType === Node.ELEMENT_NODE) {
+		if (
+			node.nodeType === Node.ELEMENT_NODE &&
+			!(node as HTMLElement).hasAttribute?.("data-sr")
+		) {
 			currentElements.push(node as HTMLElement);
 		}
 	}
@@ -102,12 +105,12 @@ function updateHead() {
 	let iNew = 0;
 	let iCur = 0;
 	while (iNew < newElements.length || iCur < currentElements.length) {
-		const newElement = newElements[iNew];
-		let currentElement = currentElements[iCur];
+		const newElement = newElements[iNew] as Attributes | undefined;
+		let currentElement = currentElements[iCur] as HTMLElement | undefined;
 
 		if (!newElement) {
 			do {
-				currentElement.remove();
+				currentElement?.remove();
 				currentElement = currentElements[++iCur];
 			} while (currentElement);
 			break;

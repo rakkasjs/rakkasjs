@@ -256,7 +256,7 @@ export interface CommonAttributes {
 	autofocus?: boolean;
 	class?: string | false;
 	contenteditable?: boolean;
-	["data-*"]?: string | false;
+	[key: `data-${string}`]: string | boolean;
 	dir?: "ltr" | "rtl" | "auto" | (string & {}) | false;
 	draggable?: boolean;
 	enterkeyhint?:
