@@ -33,6 +33,7 @@ import { PageRequestHooks } from "../../runtime/hattip-handler";
 import { ModuleNode } from "vite";
 import { escapeCss, escapeHtml, sortHooks } from "../../runtime/utils";
 import { commonHooks } from "../../runtime/feature-common-hooks";
+import { renderHeadContent } from "../head/server-hooks";
 
 const assetPrefix = import.meta.env.BASE_URL ?? "/";
 
@@ -178,6 +179,7 @@ export default async function renderPageRoute(
 		const prefetchOutput = await createPrefetchTags(ctx.url, [scriptId]);
 
 		const head = renderHead(
+			ctx,
 			prefetchOutput,
 			renderMode,
 			undefined,
@@ -479,6 +481,7 @@ export default async function renderPageRoute(
 	]);
 
 	const head = renderHead(
+		ctx,
 		prefetchOutput,
 		renderMode,
 		actionResult?.data,
@@ -685,6 +688,7 @@ async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
 }
 
 function renderHead(
+	ctx: RequestContext,
 	prefetchOutput: string,
 	renderMode: "server" | "hydrate" | "client",
 	actionData: unknown = undefined,
@@ -692,24 +696,18 @@ function renderHead(
 	pageHooks: Array<PageRequestHooks | undefined> = [],
 ) {
 	// TODO: Customize HTML document
-	const specialAttributes: {
-		htmlAttributes: Record<string, string>;
-		headAttributes: Record<string, string>;
-		bodyAttributes: Record<string, string>;
-	} = {
-		htmlAttributes: {},
-		headAttributes: {},
-		bodyAttributes: {},
-	};
+	const { specialAttributes, content: managedHead } = renderHeadContent(
+		ctx.rakkas.head,
+	);
 
-	let result = "";
+	let result = managedHead;
 
 	const emitToDocumentHeadHandlers = sortHooks(
 		pageHooks.map((hook) => hook?.emitToDocumentHead),
 	);
 
 	for (const handler of emitToDocumentHeadHandlers) {
-		const head = handler(specialAttributes);
+		const head = handler();
 		if (!head) continue;
 
 		const headStr =
@@ -750,15 +748,27 @@ function renderHead(
 	return result;
 }
 
-function stringifyAttributes(attributes: Record<string, string>) {
+function stringifyAttributes(
+	attributes: Record<string, string | number | boolean | undefined>,
+) {
 	let result = "";
 	for (const [key, value] of Object.entries(attributes)) {
 		if (
-			["key", "textContent", "innerHTML", "children", "tagName"].includes(key)
+			["key", "textContent", "innerHTML", "children", "tagName"].includes(
+				key,
+			) ||
+			value === false ||
+			value === undefined
 		) {
 			continue;
 		}
-		result += ` ${escapeHtml(key)}="${escapeHtml(value)}"`;
+
+		if (value === true) {
+			result += ` ${escapeHtml(key)}`;
+			continue;
+		}
+
+		result += ` ${escapeHtml(key)}="${escapeHtml(String(value))}"`;
 	}
 
 	return result;

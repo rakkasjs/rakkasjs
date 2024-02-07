@@ -7,7 +7,8 @@ import serverFeatureHooks from "./feature-server-hooks";
 import { HookDefinition, sortHooks } from "./utils";
 import pluginFactories from "rakkasjs:plugin-server-hooks";
 import * as commonHooksModule from "rakkasjs:common-hooks";
-import { CommonPluginOptions } from "./common-hooks";
+import type { CommonPluginOptions } from "./common-hooks";
+import type { NormalizedHeadProps } from "../features/head/implementation/merge";
 
 declare module "@hattip/compose" {
 	interface RequestContextExtensions {
@@ -25,6 +26,8 @@ declare module "@hattip/compose" {
 			hooks: ServerHooks[];
 			/** Set to true when searching for a not found page */
 			notFound: boolean;
+			/** Head tags */
+			head: NormalizedHeadProps;
 		};
 	}
 }
@@ -82,13 +85,7 @@ export interface PageRequestHooks {
 	wrapApp?: HookDefinition<(app: ReactElement) => ReactElement>;
 
 	/** Write to the document's head section */
-	emitToDocumentHead?: HookDefinition<
-		(specialAttributes: {
-			htmlAttributes: Record<string, string | number | boolean | undefined>;
-			headAttributes: Record<string, string | number | boolean | undefined>;
-			bodyAttributes: Record<string, string | number | boolean | undefined>;
-		}) => ReactElement | string | undefined
-	>;
+	emitToDocumentHead?: HookDefinition<() => ReactElement | string | undefined>;
 
 	/** Emit a chunk of HTML before each time React emits a chunk */
 	emitBeforeSsrChunk?: HookDefinition<() => string | undefined>;
@@ -168,6 +165,10 @@ function init(hooks: ServerHooks[]) {
 		ctx.rakkas = {
 			hooks,
 			notFound: false,
+			head: {
+				keyed: {},
+				unkeyed: [],
+			},
 		};
 	};
 }
