@@ -8,7 +8,7 @@
 		"skipLibCheck": true,
 		"moduleResolution": "Node",
 		"resolveJsonModule": true,
-		"jsx": "react-jsx",
+		"jsx": "react-jsx"
 	},
-	"exclude": ["dist", "netlify", ".vercel", ".netlify"],
+	"exclude": ["dist", "netlify", ".vercel", ".netlify"]
 }

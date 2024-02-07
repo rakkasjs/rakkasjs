@@ -7,7 +7,7 @@
 		"strict": true,
 		"skipLibCheck": true,
 		"moduleResolution": "Node",
-		"resolveJsonModule": true,
+		"resolveJsonModule": true
 	},
-	"exclude": ["templates/**/*"],
+	"exclude": ["templates/**/*"]
 }
