@@ -730,6 +730,19 @@ function testCase(
 			);
 		});
 
+		test.runIf(!dev)("runSSQ honors uniqueId", async () => {
+			const result = await fetch(host + "/_app/data/id/customId/2/5/d.js")
+				.then((r) => r.text())
+				.then((t) => (0, eval)(`(${t})`));
+
+			expect(result).toMatchObject({ result: 7, ssr: true });
+		});
+
+		test.runIf(!dev)("runSSQ sets headers", async () => {
+			const result = await fetch(host + "/_app/data/id/customId/2/5/d.js");
+			expect(result.headers.get("x-test")).toBe("test");
+		});
+
 		test("runs runServerSideMutation on the server", async () => {
 			await page.goto(host + "/run-ssm");
 			await page.waitForSelector(".hydrated");

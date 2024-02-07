@@ -1,6 +1,7 @@
 import { QueryResult, useQuery } from "../use-query/lib";
 import { stringify } from "@brillout/json-serializer/stringify";
 import {
+	RunServerSideContext,
 	RunServerSideMutationOptions,
 	RunServerSideQueryOptions,
 	ServerSideFunction,
@@ -204,7 +205,7 @@ export const runServerSideMutation: <T>(
  * @param options Options for the mutation
  */
 export const useServerSideMutation: <T, V = void>(
-	fn: (context: RequestContext, vars: V) => T | Promise<T>,
+	fn: (context: RunServerSideContext, vars: V) => T | Promise<T>,
 	options?: UseServerSideMutationOptions<T, V>,
 ) => UseMutationResult<T, V> = useSSMImpl as any;
 
