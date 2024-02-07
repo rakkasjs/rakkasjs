@@ -19,7 +19,14 @@ export function useRequestContext() {
 }
 
 /** Callback passed to useServerSide/runServerside family of functions */
-export type ServerSideFunction<T> = (context: RequestContext) => T | Promise<T>;
+export type ServerSideFunction<T> = (
+	context: RunServerSideContext,
+) => T | Promise<T>;
+
+export interface RunServerSideContext extends RequestContext {
+	/** Response headers. Especially useful for setting cache control headers. */
+	headers: Headers;
+}
 
 /** Options for {@link runServerSideQuery} */
 export interface RunServerSideQueryOptions {
@@ -92,5 +99,5 @@ export type UseFormMutationResult<T> = {
 );
 
 export type UseFormMutationFn<T> = (
-	context: RequestContext,
+	context: RunServerSideContext,
 ) => ActionResult<T> | Promise<ActionResult<T>>;

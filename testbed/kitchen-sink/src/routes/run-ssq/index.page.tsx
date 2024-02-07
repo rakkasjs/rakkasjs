@@ -7,10 +7,14 @@ export default function UseSsq() {
 	const fetched1 = useQuery("run-ssq-1", (ctx) => {
 		return runServerSideQuery(
 			ctx.requestContext,
-			() => ({
-				result: a + b,
-				ssr: import.meta.env.SSR,
-			}),
+			(ctx) => {
+				ctx.headers.set("x-test", "test");
+
+				return {
+					result: a + b,
+					ssr: import.meta.env.SSR,
+				};
+			},
 			{ uniqueId: "customId" },
 		);
 	});

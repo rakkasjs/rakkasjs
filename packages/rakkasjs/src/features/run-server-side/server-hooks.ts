@@ -5,6 +5,7 @@ import { decodeFileNameSafe } from "../../runtime/utils";
 import renderPageRoute from "../pages/middleware";
 import { composableActionData } from "./lib-server";
 import { EventStreamContentType } from "@microsoft/fetch-event-source";
+import { RunServerSideContext } from "./lib-common";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
@@ -80,7 +81,9 @@ const runServerSideServerHooks: ServerHooks = {
 
 				const fn = module.$runServerSide$[Number(counter)];
 
-				const result = await fn(closureContents, ctx, vars);
+				const headers = new Headers();
+				const ssCtx: RunServerSideContext = Object.assign(ctx, { headers });
+				const result = await fn(closureContents, ssCtx, vars);
 
 				if (
 					ctx.request.headers.get("accept") === EventStreamContentType &&
@@ -98,26 +101,24 @@ const runServerSideServerHooks: ServerHooks = {
 						}),
 					);
 
+					headers.set("Content-Type", EventStreamContentType);
+					headers.set("Cache-Control", "no-cache");
+					headers.set("Connection", "keep-alive");
 					return new Response(readable, {
 						status: 200,
-						headers: {
-							"Content-Type": EventStreamContentType,
-							"Cache-Control": "no-cache",
-							Connection: "keep-alive",
-						},
+						headers,
 					});
 				}
 
 				if (isFormMutation) {
 					if (ctx.request.headers.get("accept") === "application/javascript") {
-						return new Response(uneval(result));
+						return new Response(uneval(result), { headers });
 					} else {
 						if (result.redirect) {
+							headers.set("location", new URL(result.redirect, ctx.url).href);
 							return new Response(null, {
 								status: 302,
-								headers: {
-									location: new URL(result.redirect, ctx.url).href,
-								},
+								headers,
 							});
 						}
 
@@ -128,7 +129,7 @@ const runServerSideServerHooks: ServerHooks = {
 					}
 				}
 
-				return new Response(uneval(result));
+				return new Response(uneval(result), { headers });
 			},
 		],
 	},
