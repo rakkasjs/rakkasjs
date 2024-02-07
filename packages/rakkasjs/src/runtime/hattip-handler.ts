@@ -9,6 +9,7 @@ import pluginFactories from "rakkasjs:plugin-server-hooks";
 import * as commonHooksModule from "rakkasjs:common-hooks";
 import type { CommonPluginOptions } from "./common-hooks";
 import type { NormalizedHeadProps } from "../features/head/implementation/merge";
+import { HeadElement } from "../features/head/implementation/types";
 
 declare module "@hattip/compose" {
 	interface RequestContextExtensions {
@@ -84,8 +85,19 @@ export interface PageRequestHooks {
 	 */
 	wrapApp?: HookDefinition<(app: ReactElement) => ReactElement>;
 
-	/** Write to the document's head section */
+	/**
+	 * Write to the document's head section.
+	 *
+	 * @deprecated Use `emitToSyncHeadScript`, `emitServerOnlyHeadElements` or
+	 * the normal Head component instead.
+	 */
 	emitToDocumentHead?: HookDefinition<() => ReactElement | string | undefined>;
+
+	/** Write to the document's head section */
+	emitServerOnlyHeadElements?: HookDefinition<() => HeadElement[] | undefined>;
+
+	/** Emit a piece of code to be inserted into a script tag in the head. */
+	emitToSyncHeadScript?: HookDefinition<() => string | undefined>;
 
 	/** Emit a chunk of HTML before each time React emits a chunk */
 	emitBeforeSsrChunk?: HookDefinition<() => string | undefined>;

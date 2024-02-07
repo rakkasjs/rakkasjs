@@ -34,6 +34,8 @@ import { ModuleNode } from "vite";
 import { escapeCss, escapeHtml, sortHooks } from "../../runtime/utils";
 import { commonHooks } from "../../runtime/feature-common-hooks";
 import { renderHeadContent } from "../head/server-hooks";
+import { mergeHeadProps } from "../head/implementation/merge";
+import { HeadElement } from "../head/implementation/types";
 
 const assetPrefix = import.meta.env.BASE_URL ?? "/";
 
@@ -704,6 +706,39 @@ function renderHead(
 	pageHooks: Array<PageRequestHooks | undefined> = [],
 ) {
 	// TODO: Customize HTML document
+
+	const script: HeadElement = {
+		tagName: "script",
+		textContent: "",
+		"data-sr": true,
+	};
+
+	const emitToSyncHeadScriptHandlers = sortHooks(
+		pageHooks.map((hook) => hook?.emitToSyncHeadScript),
+	);
+
+	for (const handler of emitToSyncHeadScriptHandlers) {
+		const body = handler();
+		if (!body) continue;
+
+		script.textContent += body;
+	}
+
+	mergeHeadProps(ctx.rakkas.head, { elements: [script] });
+
+	const emitServerOnlyHeadElementsHandlers = sortHooks(
+		pageHooks.map((hook) => hook?.emitServerOnlyHeadElements),
+	);
+
+	for (const handler of emitServerOnlyHeadElementsHandlers) {
+		const head = handler();
+		if (!head) continue;
+
+		mergeHeadProps(ctx.rakkas.head, {
+			elements: head.map((e) => ({ ...e, "data-sr": true })),
+		});
+	}
+
 	const { specialAttributes, content: managedHead } = renderHeadContent(
 		ctx.rakkas.head,
 	);
@@ -711,6 +746,7 @@ function renderHead(
 	let result = managedHead;
 
 	const emitToDocumentHeadHandlers = sortHooks(
+		// eslint-disable-next-line deprecation/deprecation
 		pageHooks.map((hook) => hook?.emitToDocumentHead),
 	);
 

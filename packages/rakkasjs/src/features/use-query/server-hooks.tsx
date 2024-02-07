@@ -94,9 +94,9 @@ const useQueryServerHooks: ServerHooks = {
 				ctx.queryClient = createQueryClient(cache, ctx);
 			},
 
-			emitToDocumentHead() {
+			emitToSyncHeadScript() {
 				const newItemsString = uneval(cache._getNewItems());
-				return `<script>$RSC=${newItemsString}</script>`;
+				return `$RSC=${newItemsString};`;
 			},
 
 			emitBeforeSsrChunk() {
