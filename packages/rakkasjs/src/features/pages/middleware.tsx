@@ -176,7 +176,7 @@ export default async function renderPageRoute(
 	}
 
 	if (renderMode === "client" && ctx.method === "GET" && !dataOnly) {
-		const prefetchOutput = await createPrefetchTags(ctx.url, [scriptId]);
+		const prefetchOutput = await createPrefetchTags(ctx, [scriptId]);
 
 		const head = renderHead(
 			ctx,
@@ -475,7 +475,7 @@ export default async function renderPageRoute(
 		});
 	}
 
-	const prefetchOutput = await createPrefetchTags(ctx.url, [
+	const prefetchOutput = await createPrefetchTags(ctx, [
 		scriptId,
 		...found.route[4].map((id) => "/" + id),
 	]);
@@ -600,7 +600,8 @@ function makeHeaders(
 	return result;
 }
 
-async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
+async function createPrefetchTags(ctx: RequestContext, moduleIds: string[]) {
+	const pageUrl = ctx.url;
 	let result = "";
 
 	if (!viteDevServer) {
@@ -622,16 +623,23 @@ async function createPrefetchTags(pageUrl: URL, moduleIds: string[]) {
 
 			const script = clientManifest?.[moduleId].file;
 			if (script) {
-				result += `<link rel="modulepreload" crossorigin href="${escapeHtml(
-					assetPrefix + script,
-				)}">`;
+				ctx.rakkas.head.unkeyed.push({
+					tagName: "link",
+					rel: "modulepreload",
+					href: assetPrefix + script,
+					crossorigin: true,
+					"data-sr": true,
+				});
 			}
 		}
 
 		for (const cssFile of cssSet) {
-			result += `<link rel="stylesheet" href="${escapeHtml(
-				assetPrefix + cssFile,
-			)}">`;
+			ctx.rakkas.head.unkeyed.push({
+				tagName: "link",
+				rel: "stylesheet",
+				href: assetPrefix + cssFile,
+				"data-sr": true,
+			});
 		}
 
 		// TODO: Prefetch/preload assets
