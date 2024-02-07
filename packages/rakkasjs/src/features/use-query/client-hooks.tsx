@@ -18,9 +18,6 @@ export default defineClientHooks({
 	},
 });
 
-// Rakkas Suspense Cache
-declare const $RSC: Record<string, any> | undefined;
-
 const queryCache: Record<string, CacheItem | undefined> = Object.create(null);
 
 export function resetErrors() {
@@ -59,20 +56,20 @@ const cache: QueryCache = {
 	},
 
 	has(key: string) {
-		return key in queryCache || (typeof $RSC !== "undefined" && key in $RSC);
+		return key in queryCache || (!!rakkas.cache && key in rakkas.cache);
 	},
 
 	get(key: string) {
-		if (!queryCache[key] && typeof $RSC !== "undefined" && key in $RSC) {
+		if (!queryCache[key] && rakkas.cache && key in rakkas.cache) {
 			queryCache[key] = {
-				value: $RSC[key],
+				value: rakkas.cache[key],
 				subscribers: new Set(),
 				date: Date.now(),
 				hydrated: true,
 				cacheTime: DEFAULT_QUERY_OPTIONS.cacheTime,
 			};
 
-			delete $RSC[key];
+			delete rakkas.cache[key];
 		}
 
 		return queryCache[key];

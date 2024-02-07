@@ -707,10 +707,24 @@ function renderHead(
 ) {
 	// TODO: Customize HTML document
 
+	const browserGlobal: typeof rakkas = {};
+	if (actionErrorIndex >= 0 && renderMode !== "server") {
+		browserGlobal.actionErrorIndex = actionErrorIndex;
+	}
+
+	if (actionData !== undefined && renderMode !== "server") {
+		// TODO: Refactor this. Probably belongs to client-side-navigation
+		browserGlobal.actionData = actionData;
+	}
+
+	if (renderMode === "client") {
+		browserGlobal.clientRender = true;
+	}
+
 	const script: HeadElement = {
 		tagName: "script",
-		textContent: "",
 		"data-sr": true,
+		textContent: `rakkas=${uneval(browserGlobal)};`,
 	};
 
 	const emitToSyncHeadScriptHandlers = sortHooks(
@@ -765,19 +779,7 @@ function renderHead(
 			specialAttributes.htmlAttributes,
 		)}><head${stringifyAttributes(specialAttributes.headAttributes)}>` + result;
 
-	if (actionErrorIndex >= 0 && renderMode !== "server") {
-		result += `<script>$RAKKAS_ACTION_ERROR_INDEX=${actionErrorIndex}</script>`;
-	}
-
-	result +=
-		prefetchOutput +
-		(renderMode === "hydrate"
-			? `<script>$RAKKAS_HYDRATE="hydrate"</script>`
-			: "") +
-		// TODO: Refactor this. Probably belongs to client-side-navigation
-		(actionData === undefined && renderMode !== "server"
-			? ""
-			: `<script>$RAKKAS_ACTION_DATA=${uneval(actionData)}</script>`);
+	result += prefetchOutput;
 
 	if (import.meta.env.DEV) {
 		result +=
