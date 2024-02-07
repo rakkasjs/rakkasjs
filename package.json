@@ -6,7 +6,7 @@
     "build": "pnpm -r --filter \"./packages/*\" run build",
     "prepare": "husky install",
     "precommit": "lint-staged",
-    "test": "pnpm run \"/^(cq|ci)$/\"",
+    "test": "pnpm run \"/^(test|cq|ci)$/\"",
     "ci": "pnpm -r --stream --workspace-concurrency=1 run ci",
     "ci-examples": "pnpm -r --stream --workspace-concurrency=1 run ci-examples",
     "vite-ecosystem-ci": "cross-env INCLUDE_TESTS=dev,prod pnpm -r --stream --workspace-concurrency=1 run ci",
@@ -17,14 +17,14 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.2.0",
-    "prettier": "^3.2.4",
+    "husky": "^9.0.10",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
     "typescript": "^5.3.3",
-    "vitest": "^1.2.1"
+    "vitest": "^1.2.2"
   },
   "dependencies": {
-    "@hattip/polyfills": "0.0.41",
+    "@hattip/polyfills": "0.0.42",
     "@vitejs/plugin-react": "^4.2.1",
     "vite": "^5.0.12"
   },

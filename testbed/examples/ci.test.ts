@@ -9,7 +9,7 @@ import psTree from "ps-tree";
 import puppeteer from "puppeteer";
 
 const browser = await puppeteer.launch({
-	headless: "new",
+	headless: true,
 	defaultViewport: { width: 1200, height: 800 },
 });
 

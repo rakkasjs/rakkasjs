@@ -9,7 +9,7 @@
     "start": "node dist/server/index.js"
   },
   "devDependencies": {
-    "@types/react": "^18.2.48",
+    "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.1",
     "rakkasjs": "0.7.0-next.38",
@@ -18,7 +18,7 @@
     "vite-tsconfig-paths": "^4.3.1"
   },
   "dependencies": {
-    "@hattip/response": "0.0.41",
+    "@hattip/response": "0.0.42",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

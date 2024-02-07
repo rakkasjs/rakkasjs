@@ -11,6 +11,6 @@
 		"jsx": "react-jsx",
 		"allowJs": true,
 		"baseUrl": ".",
-		"types": ["vite/client"],
-	},
+		"types": ["vite/client"]
+	}
 }
