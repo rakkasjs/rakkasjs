@@ -282,7 +282,10 @@ function filenameToPathPattern(filename: string) {
 		"/" +
 		withoutExtension(filename)
 			.split(/(?:--|\/)/)
-			.filter((s) => !s.startsWith("_") && s !== "index")
+			.filter(
+				(s) =>
+					s[0] !== "_" && s !== "index" && !(s[0] === "(" && s.endsWith(")")),
+			)
 			.join("/")
 	);
 }

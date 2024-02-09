@@ -18,7 +18,6 @@ export function routeToRegExp(
 			"^" +
 				route
 					.split("/")
-					.filter((segment) => segment !== "index" && !segment.startsWith("_"))
 					.map((segment) =>
 						/* Split subsegments. E.g. hello-[name]-[surname] => hello-, [name], -, [surname]*/ segment
 							.split(/(?=\[)|(?<=\])/g)
