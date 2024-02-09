@@ -65,7 +65,7 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -108,7 +108,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -130,7 +130,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       vite:
         specifier: ^5.0.12
@@ -161,7 +161,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -195,7 +195,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -232,7 +232,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -263,7 +263,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -297,7 +297,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -337,7 +337,7 @@ importers:
         specifier: ^1.13.0
         version: 1.13.0(postcss@8.4.35)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -371,7 +371,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -405,7 +405,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -439,7 +439,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -482,7 +482,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -525,7 +525,7 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4(@babel/core@7.23.9)(styled-components@6.1.8)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -565,7 +565,7 @@ importers:
         specifier: ^8.4.34
         version: 8.4.34
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       tailwindcss:
         specifier: ^3.4.1
@@ -590,7 +590,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.55
@@ -611,7 +611,7 @@ importers:
         specifier: ^3.2.5
         version: 3.2.5
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -651,7 +651,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.39
+        specifier: 0.7.0-next.40
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -968,7 +968,7 @@ importers:
         version: 1.0.0-rc.12
       netlify-cli:
         specifier: ^17.16.0
-        version: 17.16.0(@types/node@20.11.16)
+        version: 17.16.0(@types/node@20.11.17)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -1029,7 +1029,7 @@ importers:
         version: 5.3.3
       vite:
         specifier: ^5.0.12
-        version: 5.0.12(@types/node@20.11.16)
+        version: 5.0.12(@types/node@20.11.17)
       vite-plugin-inspect:
         specifier: ^0.8.3
         version: 0.8.3(vite@5.0.12)
@@ -5015,7 +5015,7 @@ packages:
       yargs: 17.7.2
     dev: false
 
-  /@netlify/build@29.33.5(@types/node@20.11.16):
+  /@netlify/build@29.33.5(@types/node@20.11.17):
     resolution:
       {
         integrity: sha512-aQvzWA0ENJjeSPj/HmZj1tT6dzrpn3C5DtZ+tOEOTe6N6wPDVqg0W25tnuRlwpxrQpapb4v6rci3vh8sfSkPVA==,
@@ -5082,7 +5082,7 @@ packages:
       strip-ansi: 7.1.0
       supports-color: 9.4.0
       terminal-link: 3.0.0
-      ts-node: 10.9.2(@types/node@20.11.16)(typescript@5.3.3)
+      ts-node: 10.9.2(@types/node@20.11.17)(typescript@5.3.3)
       typescript: 5.3.3
       uuid: 9.0.0
       yargs: 17.7.2
@@ -6832,6 +6832,14 @@ packages:
     resolution:
       {
         integrity: sha512-gKb0enTmRCzXSSUJDq6/sPcqrfCv2mkkG6Jt/clpn5eiCbKTY+SgZUxo+p8ZKMof5dCp9vHQUAB7wOUTod22wQ==,
+      }
+    dependencies:
+      undici-types: 5.26.5
+
+  /@types/node@20.11.17:
+    resolution:
+      {
+        integrity: sha512-QmgQZGWu1Yw9TDyAP9ZzpFJKynYNeOvwMJmaxABfieQoVoiVOS6MN1WSpqpRcbeA5+RW82kraAVxCCJg+780Qw==,
       }
     dependencies:
       undici-types: 5.26.5
@@ -16827,7 +16835,7 @@ packages:
       }
     dev: false
 
-  /netlify-cli@17.16.0(@types/node@20.11.16):
+  /netlify-cli@17.16.0(@types/node@20.11.17):
     resolution:
       {
         integrity: sha512-OjYRW/tf6r1wA7pm4OnvXdOXdud0U5MXdy46pnST0Se4xRN2g/lZuPIrme4OfsoETMK5uK+D2tRqpAaH+PP09g==,
@@ -16839,7 +16847,7 @@ packages:
       "@bugsnag/js": 7.20.2
       "@fastify/static": 6.10.2
       "@netlify/blobs": 6.4.2
-      "@netlify/build": 29.33.5(@types/node@20.11.16)
+      "@netlify/build": 29.33.5(@types/node@20.11.17)
       "@netlify/build-info": 7.12.0
       "@netlify/config": 20.11.0
       "@netlify/edge-bundler": 11.2.2(supports-color@9.4.0)
@@ -21710,7 +21718,7 @@ packages:
       }
     dev: true
 
-  /ts-node@10.9.2(@types/node@20.11.16)(typescript@5.3.3):
+  /ts-node@10.9.2(@types/node@20.11.17)(typescript@5.3.3):
     resolution:
       {
         integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==,
@@ -21732,7 +21740,7 @@ packages:
       "@tsconfig/node12": 1.0.11
       "@tsconfig/node14": 1.0.3
       "@tsconfig/node16": 1.0.4
-      "@types/node": 20.11.16
+      "@types/node": 20.11.17
       acorn: 8.11.3
       acorn-walk: 8.3.2
       arg: 4.1.3
@@ -22739,7 +22747,7 @@ packages:
       perfect-debounce: 1.0.0
       picocolors: 1.0.0
       sirv: 2.0.4
-      vite: 5.0.12(@types/node@20.11.16)
+      vite: 5.0.12(@types/node@20.11.17)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -22839,6 +22847,45 @@ packages:
       rollup: 4.9.6
     optionalDependencies:
       fsevents: 2.3.3
+
+  /vite@5.0.12(@types/node@20.11.17):
+    resolution:
+      {
+        integrity: sha512-4hsnEkG3q0N4Tzf1+t6NdN9dg/L3BM+q8SWgbSPnJvrgH2kgdyzfVJwbR1ic69/4uMJJ/3dqDZZE5/WwqW8U1w==,
+      }
+    engines: { node: ^18.0.0 || >=20.0.0 }
+    hasBin: true
+    peerDependencies:
+      "@types/node": ^18.0.0 || >=20.0.0
+      less: "*"
+      lightningcss: ^1.21.0
+      sass: "*"
+      stylus: "*"
+      sugarss: "*"
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      "@types/node":
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      "@types/node": 20.11.17
+      esbuild: 0.19.12
+      postcss: 8.4.34
+      rollup: 4.9.6
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
 
   /vitest@1.2.2:
     resolution:
