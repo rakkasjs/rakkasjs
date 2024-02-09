@@ -4,6 +4,32 @@ export interface RakkasPluginApi {
 	clientHooks?: string | string[];
 	serverHooks?: string | string[];
 	commonHooks?: string | string[];
+	getRoutes?: () => RouteDefinition[] | Promise<RouteDefinition[]>;
+	routesChanged?: () => void;
+	routesResolved?: (
+		routes: ReadonlyArray<RouteDefinition>,
+	) => void | Promise<void>;
+}
+
+export type RouteDefinition = PageRouteDefinition | ApiRouteDefinition;
+
+export interface PageRouteDefinition extends CommonRouteDefinition {
+	type: "page";
+	layouts?: string[];
+	guards?: string[];
+	page: string;
+	is404?: boolean;
+	renderingMode?: "hydrate" | "server" | "client";
+}
+
+export interface ApiRouteDefinition extends CommonRouteDefinition {
+	type: "api";
+	middleware?: string[];
+	handler: string;
+}
+
+export interface CommonRouteDefinition {
+	path: string;
 }
 
 export function rakkasPlugins(): Plugin {

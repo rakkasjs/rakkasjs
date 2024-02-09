@@ -54,13 +54,10 @@ export function sortRoutes<R extends Route>(routes: R[]) {
 		original: route,
 		dynamicCount: route[0].match(/\[/g)?.length || 0,
 		isRest: !!route[0].match(/\/\[\.\.\.([a-zA-Z_][a-zA-Z0-9_]*)\]$/),
-		segments: route[0]
-			.split("/")
-			.filter((x) => !x.startsWith("_") && x !== "index")
-			.map((seg) => ({
-				content: seg,
-				paramCount: seg.split("[").length - 1,
-			})),
+		segments: route[0].split("/").map((seg) => ({
+			content: seg,
+			paramCount: seg.split("[").length - 1,
+		})),
 	}));
 
 	const processedRoutes = processedRoutes1.sort((a, b) => {

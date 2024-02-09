@@ -1,14 +1,7 @@
 import { spawn } from "node:child_process";
-import path from "node:path";
-import { pathToFileURL } from "node:url";
-import { Plugin, UserConfig } from "vite";
+import { Plugin } from "vite";
 import { RakkasAdapter } from "./adapters";
-// eslint-disable-next-line import/no-named-as-default
-import glob from "fast-glob";
 import { BuildStep } from "@vavite/multibuild";
-import pico from "picocolors";
-import micromatch from "micromatch";
-import { RouteConfig } from "../lib";
 
 export interface InjectConfigOptions {
 	prerender: string[];
@@ -123,103 +116,6 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 				},
 			};
 		},
-
-		async configResolved(config) {
-			const routeConfigFiles = await glob(
-				config.root + "/src/routes/**/route.config.js",
-			);
-
-			const routeConfigContents = await Promise.allSettled(
-				routeConfigFiles.map((file) => {
-					const specifier = pathToFileURL(file) + `?${cacheBuster}`;
-					return import(specifier).then((module) => module.default);
-				}),
-			);
-			cacheBuster++;
-
-			const routeConfigs = routeConfigContents.map((result, i) => ({
-				file: routeConfigFiles[i].slice(
-					config.root.length + "/src/routes/".length,
-				),
-				...result,
-			}));
-
-			const failed = routeConfigs.find(
-				(c) => c.status === "rejected",
-			) as PromiseRejectedResult & { file: string };
-
-			if (failed) {
-				const message = `Failed to load ${failed.file}: ${failed.reason.stack}`;
-				if (config.command === "build") {
-					throw new Error(message);
-				} else {
-					config.logger.error(pico.red(message));
-				}
-			}
-
-			config.configFileDependencies.push(...routeConfigFiles);
-
-			// TODO: Clean this mess up!
-			// Illegally write to the config object
-			// Rakkas will only access these late in the process
-			const writable = config as unknown as UserConfig;
-			writable.api = writable.api || {};
-			writable.api.rakkas = writable.api.rakkas || {};
-			writable.api.rakkas.routeConfigs = [];
-
-			for (const routeConfig of routeConfigs) {
-				if (routeConfig.status === "fulfilled") {
-					try {
-						const value =
-							typeof routeConfig.value === "function"
-								? routeConfig.value(config)
-								: routeConfig.value;
-
-						writable.api.rakkas.routeConfigs.push({
-							dir: routeConfig.file
-								.slice(0, -"route.config.js".length)
-								.replace(/\\/g, "/"),
-							value,
-						});
-					} catch (error: any) {
-						const message = `Failed to evaluate ${routeConfig.file}: ${error?.stack}`;
-						if (config.command === "build") {
-							throw new Error(message);
-						} else {
-							config.logger.error(pico.red(message));
-						}
-					}
-				}
-			}
-
-			// Shortest first
-			writable.api!.rakkas.routeConfigs.sort(
-				(a, b) => a.dir.length - b.dir.length,
-			);
-		},
-
-		configureServer(server) {
-			const isRouteConfigFile = micromatch.matcher(
-				server.config.root + "/src/routes/**/route.config.js",
-			);
-
-			server.watcher.addListener("all", (ev: string, file: string) => {
-				if (isRouteConfigFile(file) && (ev === "add" || ev === "unlink")) {
-					server.config.logger.info(
-						pico.green(
-							`${path.relative(
-								process.cwd(),
-								file,
-							)} changed, restarting server...`,
-						),
-						{ clear: true, timestamp: true },
-					);
-					server.restart().catch(() => {
-						// Ignore
-					});
-				}
-			});
-		},
 	};
 }
 
@@ -249,21 +145,4 @@ async function getBuildId(): Promise<string> {
 		// Return a random hash if git fails
 		return Math.random().toString(36).substring(2, 15);
 	});
-}
-
-let cacheBuster = 0;
-
-declare module "vite" {
-	interface UserConfig {
-		api?: {
-			rakkas?: {
-				prerender?: string[];
-				adapter?: RakkasAdapter;
-				routeConfigs?: Array<{
-					dir: string;
-					value: RouteConfig;
-				}>;
-			};
-		};
-	}
 }

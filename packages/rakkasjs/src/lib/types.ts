@@ -14,5 +14,6 @@ declare global {
 		actionErrorIndex?: number;
 		actionData?: any;
 		clientRender?: boolean;
+		update?: () => void;
 	};
 }

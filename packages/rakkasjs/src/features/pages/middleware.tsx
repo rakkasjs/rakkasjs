@@ -479,7 +479,7 @@ export default async function renderPageRoute(
 
 	const prefetchOutput = await createPrefetchTags(ctx, [
 		scriptId,
-		...found.route[4].map((id) => "/" + id),
+		...found.route[4],
 	]);
 
 	const head = renderHead(

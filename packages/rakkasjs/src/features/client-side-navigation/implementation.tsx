@@ -294,7 +294,7 @@ function handleNavigation(e: unknown) {
 
 	startTransition(() => {
 		locationChangeListeners.forEach((listener) => listener());
-		(window as any).$RAKKAS_UPDATE?.();
+		rakkas.update?.();
 	});
 }
 

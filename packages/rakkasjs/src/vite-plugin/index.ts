@@ -8,12 +8,13 @@ import { virtualDefaultEntry } from "./virtual-default-entry";
 import { nodeLoaderPlugin } from "@vavite/node-loader/plugin";
 
 // Feature plugins
-import apiRoutes from "../features/api-routes/vite-plugin";
-import pageRoutes from "../features/pages/vite-plugin";
+import pages from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
 import { adapters, RakkasAdapter } from "./adapters";
 import { serverOnlyClientOnly } from "./server-only-client-only";
 import { RakkasPluginApi, rakkasPlugins } from "./rakkas-plugins";
+import { fsRoutes } from "./fs-routes";
+import { routes } from "./routes";
 
 declare module "vite" {
 	interface Plugin {
@@ -93,10 +94,9 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 			adapter,
 			strictMode: options.strictMode ?? true,
 		}),
-		apiRoutes(),
-		pageRoutes({
-			pageExtensions: options.pageExtensions,
-		}),
+		fsRoutes(),
+		routes(),
+		pages(),
 		virtualDefaultEntry({
 			entry: "/src/entry-node",
 			virtualName: "node-entry",
