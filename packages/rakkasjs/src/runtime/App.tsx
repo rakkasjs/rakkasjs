@@ -55,7 +55,7 @@ export function App(props: AppProps) {
 
 	// TODO: Warn when a page doesn't export a default component
 
-	if (!import.meta.env.SSR) (window as any).$RAKKAS_UPDATE = update;
+	if (!import.meta.env.SSR) rakkas.update = update;
 
 	const pageContext = useContext(IsomorphicContext);
 

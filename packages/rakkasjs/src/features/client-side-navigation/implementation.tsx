@@ -212,6 +212,10 @@ export async function navigate(
 	});
 }
 
+if (!import.meta.env.SSR) {
+	rakkas.navigate = navigate;
+}
+
 export const LocationContext = createNamedContext<string | undefined>(
 	"LocationContext",
 	undefined,
@@ -294,7 +298,7 @@ function handleNavigation(e: unknown) {
 
 	startTransition(() => {
 		locationChangeListeners.forEach((listener) => listener());
-		(window as any).$RAKKAS_UPDATE?.();
+		rakkas.update?.();
 	});
 }
 

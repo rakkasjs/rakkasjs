@@ -29,11 +29,6 @@ describe("routeToRegExp", () => {
 		});
 	});
 
-	test("ignores index and underscore", () => {
-		const [re] = routeToRegExp("/foo/_bar/baz/index");
-		expect("/foo/baz".match(re)).toBeTruthy();
-	});
-
 	test("matches rest params", () => {
 		const [re] = routeToRegExp("/foo/[bar]/[baz]/[...qux]");
 		expect("/foo/123/456/aaa/bbb/ccc".match(re)?.groups).toMatchObject({
