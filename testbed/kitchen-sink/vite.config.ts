@@ -14,6 +14,17 @@ export default defineConfig({
 		rakkas({
 			adapter: (process.env.RAKKAS_TARGET as any) || "node",
 			prerender: ["/prerender"],
+			routes: [
+				{
+					type: "page",
+					path: "/custom",
+					layouts: [
+						"/src/custom-routes/custom-layout-outer.tsx",
+						"/src/custom-routes/custom-layout-inner.tsx",
+					],
+					page: "/src/custom-routes/custom-page.tsx",
+				},
+			],
 		}),
 	],
 });

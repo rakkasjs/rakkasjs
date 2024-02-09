@@ -50,23 +50,23 @@ export function routes(): Plugin {
 					try {
 						debouncing = true;
 						await new Promise((resolve) => setTimeout(resolve, 100));
-
-						routes = await collectRoutes(plugins);
-
-						invalidateModuleByName("\0virtual:rakkasjs:server-page-routes");
-						invalidateModuleByName("\0virtual:rakkasjs:client-page-routes");
-						invalidateModuleByName("\0virtual:rakkasjs:api-routes");
-
-						await routesResolved();
-
-						if (server.ws) {
-							server.ws.send({
-								type: "full-reload",
-								path: "*",
-							});
-						}
 					} finally {
 						debouncing = false;
+					}
+
+					routes = await collectRoutes(plugins);
+
+					invalidateModuleByName("\0virtual:rakkasjs:server-page-routes");
+					invalidateModuleByName("\0virtual:rakkasjs:client-page-routes");
+					invalidateModuleByName("\0virtual:rakkasjs:api-routes");
+
+					await routesResolved();
+
+					if (server.ws) {
+						server.ws.send({
+							type: "full-reload",
+							path: "*",
+						});
 					}
 				},
 			},
@@ -161,16 +161,20 @@ function generateServerPageRoutesModule(routes: RouteDefinition[]) {
 			result += re.toString() + ", ";
 			const importers = [
 				`p${pi}`,
-				...(page.layouts?.map((layout) => "l" + layoutNameMap.get(layout)!) ||
-					[]),
+				...(
+					page.layouts?.map((layout) => "l" + layoutNameMap.get(layout)!) || []
+				).reverse(),
 			];
 			result += "[" + importers.join(", ") + "], ";
 
 			const guards = page.guards?.map(
 				(guard) => "g" + guardNameMap.get(guard)!,
 			);
+
 			if (guards) {
 				result += "[" + guards.join(", ") + "], ";
+			} else {
+				result += ", ";
 			}
 
 			if (restName) {
@@ -257,16 +261,20 @@ function generateClientPageRoutesModule(routes: RouteDefinition[]) {
 			result += re.toString() + ", ";
 			const importers = [
 				`p${pi}`,
-				...(page.layouts?.map((layout) => "l" + layoutNameMap.get(layout)!) ||
-					[]),
+				...(
+					page.layouts?.map((layout) => "l" + layoutNameMap.get(layout)!) || []
+				).reverse(),
 			];
 			result += "[" + importers.join(", ") + "], ";
 
 			const guards = page.guards?.map(
 				(guard) => "g" + guardNameMap.get(guard)!,
 			);
+
 			if (guards) {
 				result += "[" + guards.join(", ") + "], ";
+			} else {
+				result += ", ";
 			}
 
 			if (restName) {
@@ -324,9 +332,9 @@ function generateApiRoutesModule(routes: RouteDefinition[]) {
 		const [re, restName] = routeToRegExp(route.path);
 		result += re.toString() + ", ";
 		const importers =
-			route.middleware?.map(
-				(middleware) => "m" + middlewareNameMap.get(middleware)!,
-			) || [];
+			route.middleware
+				?.map((middleware) => "m" + middlewareNameMap.get(middleware)!)
+				.reverse() || [];
 		importers.unshift(`e${ei}`);
 
 		result += "[" + importers.join(", ") + "], ";

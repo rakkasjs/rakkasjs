@@ -430,6 +430,12 @@ function testCase(
 			);
 		}
 
+		test("renders custom pages", async () => {
+			await page.goto(host + "/custom");
+			const text = await page.evaluate(() => document.body.textContent);
+			expect(text).toEqual("Custom Layout OuterCustom Layout InnerCustom Page");
+		});
+
 		test(
 			"sets page title",
 			async () => {
@@ -975,6 +981,19 @@ function testCase(
 			expect(r.status).toBe(400);
 			expect(r.headers.get("X-Test-1")).toBe("1234");
 			expect(r.headers.get("X-Test-2")).toBe("GET");
+		});
+
+		test("headers function works on custom routes", async () => {
+			const r = await fetch(host + "/custom");
+			expect(r.headers.get("X-Custom-Header")).toBe("custom");
+		});
+
+		test.runIf(dev)("headers function is stripped from client", async () => {
+			const test = await fetch(
+				host + "/src/custom-routes/custom-page.tsx",
+			).then((r) => r.text());
+
+			expect(test).not.toContain("headers");
 		});
 
 		if (!dev) {

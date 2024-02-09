@@ -12,9 +12,21 @@ import pages from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
 import { adapters, RakkasAdapter } from "./adapters";
 import { serverOnlyClientOnly } from "./server-only-client-only";
-import { RakkasPluginApi, rakkasPlugins } from "./rakkas-plugins";
+import {
+	type RakkasPluginApi,
+	rakkasPlugins,
+	RouteDefinition,
+} from "./rakkas-plugins";
 import { fsRoutes } from "./fs-routes";
 import { routes } from "./routes";
+
+export type { RakkasPluginApi };
+export type {
+	ApiRouteDefinition,
+	CommonRouteDefinition,
+	PageRouteDefinition,
+	RouteDefinition,
+} from "./rakkas-plugins";
 
 declare module "vite" {
 	interface Plugin {
@@ -25,8 +37,6 @@ declare module "vite" {
 }
 
 export interface RakkasOptions {
-	/** File extensions for pages and layouts @default ["jsx","tsx"] */
-	pageExtensions?: string[];
 	/**
 	 * Paths to start crawling when prerendering static pages.
 	 * `true` is the same as `["/"]` and `false` is the same as `[]`.
@@ -65,10 +75,20 @@ export interface RakkasOptions {
 		include?: FilterPattern;
 		exclude?: FilterPattern;
 	};
+	/**
+	 * Enable/disable file system routes
+	 */
+	fsRoutes?: boolean;
+	/**
+	 * Config-based routes
+	 */
+	routes?: RouteDefinition[];
 }
 
 export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
+	const { fsRoutes: enableFsRoutes = true, routes: customRoutes } = options;
 	let { prerender = [], adapter = "node" } = options;
+
 	if (prerender === true) {
 		prerender = ["/"];
 	} else if (prerender === false) {
@@ -94,7 +114,17 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 			adapter,
 			strictMode: options.strictMode ?? true,
 		}),
-		fsRoutes(),
+		enableFsRoutes && fsRoutes(),
+		customRoutes && {
+			name: "rakkasjs:custom-routes",
+			api: {
+				rakkas: {
+					getRoutes() {
+						return customRoutes!;
+					},
+				},
+			},
+		},
 		routes(),
 		pages(),
 		virtualDefaultEntry({

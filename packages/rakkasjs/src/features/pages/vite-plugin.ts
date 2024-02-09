@@ -8,6 +8,7 @@ export default function pages(): Plugin {
 	let sourcemap: boolean;
 	let isPage: (id: string) => boolean;
 	let isLayout: (id: string) => boolean;
+	let root: string;
 
 	return {
 		name: "rakkasjs:strip-server-exports",
@@ -39,10 +40,15 @@ export default function pages(): Plugin {
 		configResolved(config) {
 			command = config.command;
 			sourcemap = !!config.build.sourcemap;
+			root = config.root;
 		},
 
 		async transform(code, id, options) {
 			if (options?.ssr) return;
+
+			if (id.startsWith(root)) {
+				id = id.slice(root.length);
+			}
 
 			if (!isPage(id) && !isLayout(id)) {
 				return;

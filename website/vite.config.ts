@@ -51,10 +51,7 @@ export default defineConfig({
 
 		react(),
 
-		rakkas({
-			pageExtensions: ["jsx", "tsx", "mdx"],
-			prerender: true,
-		}),
+		rakkas({ prerender: true }),
 
 		cjsInterop({
 			dependencies: ["@docsearch/react"],
