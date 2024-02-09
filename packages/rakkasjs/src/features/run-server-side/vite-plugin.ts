@@ -93,7 +93,6 @@ export default function runServerSide(): PluginOption[] {
 				let moduleId: string;
 
 				if (
-					id.startsWith(resolvedConfig.root) &&
 					code.match(
 						/\buseServerSideQuery|useServerSentEvents|useServerSideMutation|useSSQ|useSSM|useSSE|runServerSideQuery|runServerSideMutation|runSSQ|runSSM|useFormMutation\b/,
 					) &&

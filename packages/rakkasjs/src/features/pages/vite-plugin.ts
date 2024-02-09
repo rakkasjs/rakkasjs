@@ -8,7 +8,8 @@ export default function pages(): Plugin {
 	let sourcemap: boolean;
 	let isPage: (id: string) => boolean;
 	let isLayout: (id: string) => boolean;
-	let root: string;
+
+	const transformSet = new Set<string>();
 
 	return {
 		name: "rakkasjs:strip-server-exports",
@@ -37,40 +38,64 @@ export default function pages(): Plugin {
 			},
 		},
 
+		enforce: "pre",
+
 		configResolved(config) {
 			command = config.command;
 			sourcemap = !!config.build.sourcemap;
-			root = config.root;
 		},
 
-		async transform(code, id, options) {
-			if (options?.ssr) return;
-
-			if (id.startsWith(root)) {
-				id = id.slice(root.length);
-			}
-
-			if (!isPage(id) && !isLayout(id)) {
+		async resolveId(source, importer, options) {
+			// TODO: Using module meta would be better but there seems to be a bug in Vite
+			if (options.ssr) {
 				return;
 			}
 
-			const result = await transformAsync(code, {
-				filename: id,
-				code: true,
-				plugins: [babelTransformClientSidePages()],
-				sourceMaps: command === "serve" || sourcemap,
-			}).catch((error) => {
-				this.error(error.message);
+			const resolved = await this.resolve(source, importer, {
+				...options,
+				skipSelf: true,
 			});
 
-			if (!result) {
-				return null;
+			if (!resolved) return null;
+
+			if (isPage(source) || isLayout(source)) {
+				transformSet.add(resolved.id);
+			} else {
+				transformSet.delete(resolved.id);
 			}
 
-			return {
-				code: result.code! + PAGE_HOT_RELOAD,
-				map: result.map,
-			};
+			return resolved;
+		},
+
+		transform: {
+			order: "post",
+
+			async handler(code, id, options) {
+				if (options?.ssr || !transformSet.has(id)) return;
+
+				const result = await transformAsync(code, {
+					filename: id,
+					code: true,
+					plugins: [babelTransformClientSidePages()],
+					sourceMaps: command === "serve" || sourcemap,
+				}).catch((error) => {
+					this.error(error.message);
+				});
+
+				if (!result) {
+					return null;
+				}
+
+				let output = result.code ?? "";
+				if (command === "serve") {
+					output += PAGE_HOT_RELOAD;
+				}
+
+				return {
+					code: output,
+					map: result.map,
+				};
+			},
 		},
 	};
 }
