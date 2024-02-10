@@ -37,10 +37,10 @@ export async function startClient(
 ) {
 	Object.assign(DEFAULT_QUERY_OPTIONS, options.defaultQueryOptions);
 
+	const { commonPluginOptions = {} } = commonHooksModule;
+
 	const hooks = [
-		...factories.map((factory) =>
-			factory(pluginOptions, commonHooksModule.commonPluginOptions ?? {}),
-		),
+		...factories.map((factory) => factory(pluginOptions, commonPluginOptions)),
 		...featureClientHooks,
 	];
 

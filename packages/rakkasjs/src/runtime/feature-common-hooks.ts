@@ -3,8 +3,9 @@ import pluginFactories from "rakkasjs:plugin-common-hooks";
 import { CommonHooks } from "./common-hooks";
 
 export const commonHooks: CommonHooks[] = [
-	...pluginFactories.map((factory) =>
-		factory(commonHooksModule.commonPluginOptions ?? {}),
-	),
+	...pluginFactories.map((factory) => {
+		const { commonPluginOptions = {} } = commonHooksModule;
+		return factory(commonPluginOptions);
+	}),
 	commonHooksModule.default,
 ];

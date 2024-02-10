@@ -115,9 +115,10 @@ export function createRequestHandler(
 	pluginOptions: ServerPluginOptions = {},
 ): RequestHandler {
 	const hooks = [
-		...pluginFactories.map((factory) =>
-			factory(pluginOptions, commonHooksModule.commonPluginOptions ?? {}),
-		),
+		...pluginFactories.map((factory) => {
+			const { commonPluginOptions = {} } = commonHooksModule;
+			return factory(pluginOptions, commonPluginOptions);
+		}),
 		...serverFeatureHooks,
 		userHooks,
 	];
