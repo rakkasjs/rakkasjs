@@ -618,7 +618,6 @@ async function createPrefetchTags(ctx: RequestContext, moduleIds: string[]) {
 			const manifestEntry = clientManifest?.[moduleId];
 			if (!manifestEntry) continue;
 
-			// TODO: Prefetch modules and other assets
 			manifestEntry.imports?.forEach((id) => moduleSet.add(id));
 			manifestEntry.css?.forEach((id) => cssSet.add(id));
 			// manifestEntry.assets?.forEach((id) => assetSet.add(id));

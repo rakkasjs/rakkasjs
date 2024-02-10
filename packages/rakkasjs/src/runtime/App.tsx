@@ -169,6 +169,7 @@ export async function loadRoute(
 		let notFoundRoutes: NotFoundRoutes;
 		let updatedNotFoundRoutes: NotFoundRoutes;
 
+		// TODO: Clean this up
 		if (import.meta.env.PROD) {
 			const prodModule = await import("rakkasjs:client-page-routes");
 			routes = prodModule.default;
@@ -182,11 +183,7 @@ export async function loadRoute(
 			notFoundRoutes = updatedModule.notFoundRoutes;
 
 			if (import.meta.hot) {
-				// TODO: This leaks memory
-				const updatedModule =
-					// ESBuild strips vite-ignore comments, so we have to use
-					// eval to make Vite ignore this import.
-					await import("rakkasjs:client-page-routes");
+				const updatedModule = await import("rakkasjs:client-page-routes");
 				updatedRoutes = updatedModule.default;
 				updatedNotFoundRoutes = updatedModule.notFoundRoutes;
 			}
