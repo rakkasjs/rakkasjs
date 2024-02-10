@@ -2,6 +2,7 @@ import { Plugin } from "vite";
 import { transformAsync } from "@babel/core";
 import { babelTransformClientSidePages } from "../run-server-side/implementation/transform/transform-client-page";
 import { PageRouteDefinition } from "../../vite-plugin/rakkas-plugins";
+import { init, parse } from "es-module-lexer";
 
 export default function pages(): Plugin {
 	let command: "serve" | "build";
@@ -88,6 +89,13 @@ export default function pages(): Plugin {
 
 				let output = result.code ?? "";
 				if (command === "serve") {
+					await init;
+					const [, exports] = parse(output);
+
+					if (!exports.some((e) => e.n === "default")) {
+						output += `export default { moduleId: ${JSON.stringify(this.getModuleInfo(id)?.id ?? id)} };\n`;
+					}
+
 					output += PAGE_HOT_RELOAD;
 				}
 
