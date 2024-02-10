@@ -10,6 +10,7 @@ import * as commonHooksModule from "rakkasjs:common-hooks";
 import type { CommonPluginOptions } from "./common-hooks";
 import type { NormalizedHeadProps } from "../features/head/implementation/merge";
 import { HeadElement } from "../features/head/implementation/types";
+import { HattipHandler } from "@hattip/core";
 
 declare module "@hattip/compose" {
 	interface RequestContextExtensions {
@@ -110,10 +111,10 @@ export interface PageRequestHooks {
  * Creates a HatTip request handler. Call this to create a HatTip request
  * handler and fefault export it from your HatTip entry.
  */
-export function createRequestHandler(
+export function createRequestHandler<T>(
 	userHooks: ServerHooks = {},
 	pluginOptions: ServerPluginOptions = {},
-): RequestHandler {
+): HattipHandler<T> {
 	const hooks = [
 		...pluginFactories.map((factory) => {
 			const { commonPluginOptions = {} } = commonHooksModule;
@@ -138,6 +139,15 @@ export function createRequestHandler(
 
 	return compose(
 		[
+			// Disable compose's default error handling in development
+			// so that we can forward errors to Vite for a nice error overlay
+			import.meta.env.DEV &&
+				((ctx: RequestContext) => {
+					ctx.handleError = (error: unknown) => {
+						throw error;
+					};
+				}),
+
 			process.env.RAKKAS_PRERENDER === "true" && prerender,
 
 			init(hooks),
