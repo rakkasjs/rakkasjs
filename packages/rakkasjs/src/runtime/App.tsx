@@ -377,20 +377,43 @@ export async function loadRoute(
 		(m) => m[0] || (({ children }: any) => children),
 	);
 
+	const errorFiles = new Set<string>();
+
 	let app = components.reduce(
-		(prev, Component) => (
-			<Component
-				url={url}
-				renderedUrl={found!.renderedUrl}
-				params={found!.params}
-				meta={meta}
-				actionData={actionData}
-			>
-				{prev}
-			</Component>
-		),
+		(prev, Component) => {
+			if (import.meta.env.DEV && typeof Component === "object") {
+				errorFiles.add((Component as any).moduleId);
+				Component = ({ children }) => children;
+			}
+
+			return (
+				<Component
+					url={url}
+					renderedUrl={found!.renderedUrl}
+					params={found!.params}
+					meta={meta}
+					actionData={actionData}
+				>
+					{prev}
+				</Component>
+			);
+		},
 		null as any as ReactElement,
 	);
+
+	if (import.meta.env.DEV && !import.meta.env.SSR && errorFiles.size) {
+		const message = `The following files don't have a default export:\n\n${[
+			...errorFiles,
+		].join("\n")}`;
+
+		await (0, eval)(`(async (message) => {
+			const { ErrorOverlay } = await import("/@vite/client");
+			document.querySelectorAll("vite-error-overlay").forEach((n) => n.close());
+			const error = new Error(message);
+			error.stack = message;
+			document.body.appendChild(new ErrorOverlay(error))
+		})`)(message);
+	}
 
 	app = (
 		<RenderedUrlContext.Provider value={found.renderedUrl}>
