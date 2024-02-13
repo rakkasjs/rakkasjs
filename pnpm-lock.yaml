@@ -65,7 +65,7 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -108,7 +108,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -130,7 +130,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       vite:
         specifier: ^5.0.12
@@ -161,7 +161,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -195,7 +195,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -232,7 +232,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -263,7 +263,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -297,7 +297,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -316,7 +316,7 @@ importers:
         version: 0.0.42
       "@mantine/core":
         specifier: ^7.5.1
-        version: 7.5.1(@mantine/hooks@7.5.2)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
+        version: 7.5.1(@mantine/hooks@7.5.1)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -337,7 +337,7 @@ importers:
         specifier: ^1.13.0
         version: 1.13.0(postcss@8.4.35)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -371,7 +371,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -405,7 +405,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -439,7 +439,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -482,7 +482,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -525,7 +525,7 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4(@babel/core@7.23.9)(styled-components@6.1.8)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -565,7 +565,7 @@ importers:
         specifier: ^8.4.34
         version: 8.4.34
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       tailwindcss:
         specifier: ^3.4.1
@@ -590,7 +590,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.55
@@ -611,7 +611,7 @@ importers:
         specifier: ^3.2.5
         version: 3.2.5
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -651,7 +651,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
       rakkasjs:
-        specifier: 0.7.0-next.40
+        specifier: 0.7.0-next.41
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -4860,7 +4860,7 @@ packages:
     engines: { node: ">=8" }
     dev: false
 
-  /@mantine/core@7.5.1(@mantine/hooks@7.5.2)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0):
+  /@mantine/core@7.5.1(@mantine/hooks@7.5.1)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
         integrity: sha512-V7apuQuRubqxTRXb1uxOM43K7tkLRzpbb1ONJ/sj8QRp/26bShkdYp7EVuSKyrQ8DQ5EGYyBBGyzBOQARh41gA==,
@@ -4871,7 +4871,7 @@ packages:
       react-dom: ^18.2.0 || 18
     dependencies:
       "@floating-ui/react": 0.24.8(react-dom@18.2.0)(react@18.2.0)
-      "@mantine/hooks": 7.5.2(react@18.2.0)
+      "@mantine/hooks": 7.5.1(react@18.2.0)
       clsx: 2.0.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -4883,10 +4883,10 @@ packages:
       - "@types/react"
     dev: false
 
-  /@mantine/hooks@7.5.2(react@18.2.0):
+  /@mantine/hooks@7.5.1(react@18.2.0):
     resolution:
       {
-        integrity: sha512-4POujH5Xx84VB/xfM6EttDq725dqqL2DntoeMjHz3Ua94aK5Y0VSc1IwlETxCuF7yNV5/w/Z8kgeVVa5cDgrPg==,
+        integrity: sha512-LfrEOkX8U2KbkYAU5BMA7FPbMva/TSd65c45W35wHSx3iqYMsoPN9+Ll1zc/HT0XNFp73jGet9cU7VREbAl0/A==,
       }
     peerDependencies:
       react: ^18.2.0 || 18
