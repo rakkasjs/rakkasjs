@@ -17,7 +17,7 @@ const tanstackQueryServerHooksFactory: ServerPluginFactory = (_, options) => ({
 		});
 
 		return {
-			async extendPageContext(ctx) {
+			extendPageContext(ctx) {
 				ctx.tanstackQueryClient = queryClient;
 			},
 
@@ -27,11 +27,11 @@ const tanstackQueryServerHooksFactory: ServerPluginFactory = (_, options) => ({
 				);
 			},
 
-			emitToDocumentHead() {
+			emitToSyncHeadScript() {
 				const serialized = uneval(unsentData);
 				unsentData = Object.create(null);
 				thereIsUnsentData = false;
-				return `<script>window.__rakkas??={};__rakkas.tanstackQuery={queryData:${serialized},setQueryData:data=>Object.assign(__rakkas.tanstackQuery.queryData,data)};</script>`;
+				return `rakkas.tanstackQuery={queryData:${serialized},setQueryData:data=>Object.assign(rakkas.tanstackQuery.queryData,data)};`;
 			},
 
 			emitBeforeSsrChunk() {
@@ -41,7 +41,7 @@ const tanstackQueryServerHooksFactory: ServerPluginFactory = (_, options) => ({
 				unsentData = Object.create(null);
 				thereIsUnsentData = false;
 
-				return `<script>__rakkas.tanstackQuery.setQueryData(${serialized})</script>`;
+				return `<script>rakkas.tanstackQuery.setQueryData(${serialized})</script>`;
 			},
 		};
 	},

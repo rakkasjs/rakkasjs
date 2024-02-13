@@ -1,4 +1,9 @@
-export type { ServerSideLocals, PageLocals, RequestContext } from "./types";
+export type {
+	ServerSideLocals,
+	PageLocals,
+	RequestContext,
+	RakkasBrowserGlobal,
+} from "./types";
 
 export type {
 	Page,

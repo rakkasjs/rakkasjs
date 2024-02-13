@@ -8,13 +8,11 @@ declare module "rakkasjs" {
 	interface CommonPluginOptions {
 		defaultTanstackQueryOptions?: import("@tanstack/react-query").DefaultOptions;
 	}
-}
 
-declare global {
-	var __rakkas: {
+	interface RakkasBrowserGlobal {
 		tanstackQuery: {
 			queryData?: Record<string, unknown>;
-			setQueryData?: typeof import("@tanstack/react-query").setQueryData;
+			setQueryData?: (data: Record<string, unknown>) => void;
 		};
-	};
+	}
 }
