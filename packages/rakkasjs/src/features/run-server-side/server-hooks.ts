@@ -111,8 +111,22 @@ const runServerSideServerHooks: ServerHooks = {
 				}
 
 				if (isFormMutation) {
+					for (const [key, value] of Object.entries(
+						result.headers || {},
+					) as any) {
+						headers.set(key, value);
+					}
+
 					if (ctx.request.headers.get("accept") === "application/javascript") {
-						return new Response(uneval(result), { headers });
+						if (result.redirect) {
+							delete result.headers;
+							return new Response(uneval(result), { headers });
+						}
+
+						return new Response(uneval({ data: result.data }), {
+							status: result.status,
+							headers,
+						});
 					} else {
 						if (result.redirect) {
 							headers.set("location", new URL(result.redirect, ctx.url).href);
