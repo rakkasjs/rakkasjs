@@ -14,7 +14,7 @@ const tanstackQueryClientHooksFactory: ClientPluginFactory = (_, options) => {
 		}
 	}
 
-	const tq = window.__rakkas.tanstackQuery;
+	const tq = rakkas.tanstackQuery;
 
 	// Insert data that was already streamed before this point
 	doSetQueryData(tq.queryData ?? Object.create(null));
