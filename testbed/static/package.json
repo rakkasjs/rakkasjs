@@ -22,7 +22,7 @@
     "puppeteer": "^22.0.0",
     "rakkasjs": "workspace:*",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12"
+    "vite": "^5.1.2"
   },
   "dependencies": {
     "@types/react": "^18.2.55",

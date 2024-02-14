@@ -83,6 +83,12 @@ export interface RakkasOptions {
 	 * Config-based routes
 	 */
 	routes?: RouteDefinition[];
+	/**
+	 * Use Vite runtime to load the server-side code
+	 * @experimental
+	 * @default false (can be overridden by setting the environment variable USE_VITE_RUNTIME to "true")
+	 */
+	useViteRuntime?: boolean;
 }
 
 export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
@@ -105,6 +111,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 			handlerEntry: "/rakkasjs:node-entry",
 			clientAssetsDir: "dist/client",
 			serveClientAssetsInDev: true,
+			useViteRuntime: options.useViteRuntime,
 		}),
 		exposeViteDevServer(),
 

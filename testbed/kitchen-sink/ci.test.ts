@@ -39,6 +39,17 @@ if (import.meta.env.TEST_HOST) {
 		testCase("Development Mode with SWC", true, TEST_HOST, "pnpm dev", true);
 	}
 
+	if (include.includes("dev-vite-runtime")) {
+		testCase(
+			"Development Mode with Vite Runtime",
+			true,
+			TEST_HOST,
+			"pnpm dev",
+			false,
+			true,
+		);
+	}
+
 	if (include.includes("prod")) {
 		testCase("Production Mode", false, TEST_HOST, "pnpm build && pnpm start");
 	}
@@ -117,6 +128,7 @@ function testCase(
 	host: string,
 	command?: string,
 	swc?: boolean,
+	viteRuntime?: boolean,
 ) {
 	describe(title, () => {
 		if (command) {
@@ -132,6 +144,7 @@ function testCase(
 						BROWSER: "none",
 						HOST: "127.0.0.1",
 						USE_SWC: swc ? "1" : undefined,
+						USE_VITE_RUNTIME: viteRuntime ? "true" : undefined,
 					},
 				});
 
