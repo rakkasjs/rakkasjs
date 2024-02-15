@@ -186,6 +186,9 @@ export interface CommonLinkAttributes extends CommonAttributes {
 		| false;
 	sizes?: string | false;
 	type?: string | false;
+
+	// Non-standard attributes
+	color?: string | false;
 }
 
 export interface StyleElement extends CommonAttributes {
