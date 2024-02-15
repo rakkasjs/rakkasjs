@@ -40,8 +40,7 @@ export interface UseLocationResult {
 	pending: URL | undefined;
 }
 
-let previousNavigationIndex: number | undefined;
-let currentNavigationIndex = 0;
+let lastRenderedIndex: number | undefined;
 
 /** Hook to get the navigation state */
 export function useLocation(): UseLocationResult {
@@ -63,8 +62,7 @@ export function useLocation(): UseLocationResult {
 	useEffect(() => {
 		base().href = deferredLocation;
 		lastRenderedId = history.state.id;
-		previousNavigationIndex = currentNavigationIndex;
-		currentNavigationIndex = history.state.index;
+		lastRenderedIndex = history.state.index;
 
 		if (history.state.scroll) {
 			restoreScrollPosition();
@@ -93,24 +91,104 @@ export function useLocation(): UseLocationResult {
 	};
 }
 
-/** Cancel the last navigation. Returns a function that "redoes" the cancelled navigation. */
-export function cancelLastNavigation(): () => void {
-	if (previousNavigationIndex === undefined) {
+/** Cancel the last navigation. Returns a function to redo the navigation. */
+export function cancelLastNavigation() {
+	if (lastRenderedIndex === undefined) {
 		throw new Error("No previous navigation to cancel");
 	}
 
-	const delta = previousNavigationIndex - currentNavigationIndex;
+	const delta = lastRenderedIndex - history.state.index;
 
 	history.go(delta);
 
-	currentNavigationIndex = previousNavigationIndex;
-	previousNavigationIndex = undefined;
-
-	return () => {
+	return function redoNavigation() {
 		history.go(-delta);
-		previousNavigationIndex = currentNavigationIndex;
-		currentNavigationIndex = previousNavigationIndex + delta;
 	};
+}
+
+function handleBeforeUnload(e: BeforeUnloadEvent) {
+	if (findBlocker()) {
+		e.preventDefault();
+		e.returnValue = "";
+	}
+}
+
+interface Blocker {
+	notify(): void;
+	redo?(): void;
+	enabled: boolean;
+}
+
+const blockers = new Set<Blocker>();
+
+export type NavigationBlockerResult =
+	| {
+			isBlocking: false;
+			leave?: undefined;
+			stay?: undefined;
+	  }
+	| {
+			isBlocking: true;
+			leave(): void;
+			stay(): void;
+	  };
+
+/**
+ * Add a navigation blocker.
+ *
+ * When a navigation blocker is active, the hook will return an object with
+ * `isBlocking` set to `true`. The `leave` method will allow the navigation to
+ * proceed, while the `stay` method will keep the navigation from happening.
+ *
+ * @param condition Whether to block navigation
+ */
+export function useNavigationBlocker(
+	condition: boolean,
+): NavigationBlockerResult {
+	const [isBlocking, setIsBlocking] = useState(false);
+	const blocker = useRef<Blocker>({
+		notify() {
+			setIsBlocking(true);
+		},
+		enabled: true,
+	});
+
+	useEffect(() => {
+		if (!condition && !isBlocking) {
+			return;
+		}
+
+		const current = blocker.current;
+
+		blockers.add(current);
+		if (blockers.size === 1) {
+			addEventListener("beforeunload", handleBeforeUnload);
+		}
+
+		return () => {
+			blockers.delete(current);
+			if (blockers.size === 0) {
+				removeEventListener("beforeunload", handleBeforeUnload);
+			}
+		};
+	}, [condition, isBlocking]);
+
+	if (isBlocking) {
+		return {
+			isBlocking,
+			leave() {
+				const current = blocker.current;
+				current.enabled = false;
+				current.redo?.();
+				setIsBlocking(false);
+			},
+			stay() {
+				setIsBlocking(false);
+			},
+		};
+	}
+
+	return { isBlocking: false };
 }
 
 function restoreScrollPosition() {
@@ -168,6 +246,13 @@ export async function navigate(
 	to: string | Readonly<URL>,
 	options?: NavigationOptions,
 ): Promise<boolean> {
+	const blocker = findBlocker();
+	if (blocker) {
+		blocker.redo = () => navigate(to, options);
+		blocker.notify();
+		return false;
+	}
+
 	const url = new URL(to, location.href);
 
 	if (url.origin !== location.origin) {
@@ -193,7 +278,7 @@ export async function navigate(
 			to,
 		);
 	} else {
-		const index = nextIndex++;
+		const index = history.length;
 		history.pushState({ id, data, actionData, index, scroll }, "", to);
 	}
 
@@ -245,6 +330,14 @@ function base(): HTMLBaseElement {
 	);
 }
 
+function findBlocker(): Blocker | undefined {
+	for (const blocker of blockers) {
+		if (blocker.enabled) {
+			return blocker;
+		}
+	}
+}
+
 export function initialize() {
 	base().href = location.href;
 
@@ -253,7 +346,7 @@ export function initialize() {
 			id: createUniqueId(),
 			data: null,
 			actionData: history.state?.actionData,
-			index: 0,
+			index: history.length - 1,
 			scroll: true,
 		},
 		"",
@@ -265,12 +358,10 @@ export function initialize() {
 	addEventListener("popstate", handleNavigation);
 	addEventListener("hashchange", () => {
 		const id = createUniqueId();
-		const index = nextIndex++;
-
 		history.replaceState(
 			{
 				id,
-				index,
+				index: history.length - 1,
 				scroll: true,
 			},
 			"",
@@ -279,7 +370,28 @@ export function initialize() {
 	});
 }
 
-function handleNavigation(e: unknown) {
+let canceling = false;
+
+function handleNavigation(e: PopStateEvent | boolean) {
+	if (canceling) {
+		canceling = false;
+		return;
+	}
+
+	if (typeof e === "object") {
+		const blocker = findBlocker();
+		if (blocker) {
+			canceling = true;
+			blocker.redo = cancelLastNavigation();
+			blocker.notify();
+			return;
+		}
+	}
+
+	for (const blocker of blockers) {
+		blocker.enabled = true;
+	}
+
 	const scrollPosition = { x: scrollX, y: scrollY, f: !e };
 
 	try {
@@ -308,8 +420,6 @@ function createUniqueId(): string {
 		? crypto.randomUUID()
 		: Math.random().toString(36).slice(2);
 }
-
-let nextIndex = 0;
 
 /** {@link Link} props */
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
