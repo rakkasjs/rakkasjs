@@ -1223,6 +1223,7 @@ function testCase(
 			await page.goto(host + "/blocker");
 			await page.waitForSelector(".hydrated");
 
+			await page.waitForSelector("input", { timeout: 10_000 });
 			await page.type("input", "Hello");
 
 			await page.click("a");
@@ -1240,13 +1241,14 @@ function testCase(
 			await page.waitForFunction(() =>
 				window.location.href.includes("elsewhere"),
 			);
-		});
+		}, 20_000);
 
 		test("blocks back navigation", async () => {
 			await page.goto(host + "/blocker/elsewhere");
 			await page.waitForSelector(".hydrated");
 			await page.click("a");
 
+			await page.waitForSelector("input", { timeout: 10_000 });
 			await page.type("input", "Hello");
 
 			await page.goBack();
@@ -1264,7 +1266,7 @@ function testCase(
 			await page.waitForFunction(() =>
 				window.location.href.includes("elsewhere"),
 			);
-		});
+		}, 20_000);
 	});
 }
 
