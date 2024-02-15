@@ -14,4 +14,5 @@ export {
 	useSubmit,
 	cancelLastNavigation,
 	prefetchRoute,
+	useNavigationBlocker,
 } from "./implementation";

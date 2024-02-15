@@ -1218,6 +1218,53 @@ function testCase(
 					document.body?.innerText.includes("data3: 1"),
 			);
 		});
+
+		test("blocks link navigation", async () => {
+			await page.goto(host + "/blocker");
+			await page.waitForSelector(".hydrated");
+
+			await page.type("input", "Hello");
+
+			await page.click("a");
+			await page.click("#stay");
+
+			await page.waitForFunction(() => !document.getElementById("stay"));
+			await page.waitForFunction(
+				() => !window.location.href.includes("elsewhere"),
+			);
+
+			await page.click("a");
+			await page.click("#leave");
+
+			await page.waitForFunction(() => !document.getElementById("leave"));
+			await page.waitForFunction(() =>
+				window.location.href.includes("elsewhere"),
+			);
+		});
+
+		test("blocks back navigation", async () => {
+			await page.goto(host + "/blocker/elsewhere");
+			await page.waitForSelector(".hydrated");
+			await page.click("a");
+
+			await page.type("input", "Hello");
+
+			await page.goBack();
+			await page.click("#stay");
+
+			await page.waitForFunction(() => !document.getElementById("stay"));
+			await page.waitForFunction(
+				() => !window.location.href.includes("elsewhere"),
+			);
+
+			await page.goBack();
+			await page.click("#leave");
+
+			await page.waitForFunction(() => !document.getElementById("leave"));
+			await page.waitForFunction(() =>
+				window.location.href.includes("elsewhere"),
+			);
+		});
 	});
 }
 
