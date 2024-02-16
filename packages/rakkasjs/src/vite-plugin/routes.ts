@@ -62,8 +62,10 @@ export function routes(): Plugin {
 
 					await routesResolved();
 
-					if (server.ws) {
-						server.ws.send({
+					// eslint-disable-next-line deprecation/deprecation
+					const hot = server.hot ?? server.ws;
+					if (hot) {
+						hot.send({
 							type: "full-reload",
 							path: "*",
 						});
