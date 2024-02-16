@@ -1,9 +1,9 @@
 import path from "node:path";
-import { PluginOption } from "vite";
+import { Plugin } from "vite";
 
 const FROM_REPO = true;
 
-export default function frontmatterLoader(): PluginOption {
+export default function frontmatterLoader(): Plugin {
 	let root: string;
 
 	return {

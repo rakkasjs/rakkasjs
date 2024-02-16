@@ -1,4 +1,4 @@
-import { FilterPattern, PluginOption } from "vite";
+import { FilterPattern, Plugin } from "vite";
 import { injectConfig } from "./inject-config";
 import { preventViteBuild } from "./prevent-vite-build";
 import { vaviteConnect } from "@vavite/connect";
@@ -85,7 +85,7 @@ export interface RakkasOptions {
 	routes?: RouteDefinition[];
 }
 
-export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
+export default function rakkas(options: RakkasOptions = {}): Plugin[] {
 	const { fsRoutes: enableFsRoutes = true, routes: customRoutes } = options;
 	let { prerender = [], adapter = "node" } = options;
 
@@ -99,7 +99,7 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		adapter = adapters[adapter];
 	}
 
-	return [
+	const result: Array<Plugin | false | undefined> = [
 		globalThis.__vavite_loader__ && nodeLoaderPlugin(),
 		...vaviteConnect({
 			handlerEntry: "/rakkasjs:node-entry",
@@ -159,6 +159,8 @@ export default function rakkas(options: RakkasOptions = {}): PluginOption[] {
 		serverOnlyClientOnly(options),
 		rakkasPlugins(),
 	];
+
+	return result.filter(Boolean) as Plugin[];
 }
 
 const DEFAULT_NODE_ENTRY_CONTENTS = `
