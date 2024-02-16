@@ -1,9 +1,9 @@
-import { PluginOption, ResolvedConfig } from "vite";
+import { Plugin, ResolvedConfig } from "vite";
 import { PluginItem, transformAsync } from "@babel/core";
 import { babelTransformServerSideHooks } from "./implementation/transform/transform-server-side";
 import { babelTransformClientSideHooks } from "./implementation/transform/transform-client-side";
 
-export default function runServerSide(): PluginOption[] {
+export default function runServerSide(): Plugin[] {
 	let idCounter = 0;
 	const moduleIdMap: Record<string, string> = Object.create(null);
 	const uniqueIdMap: Record<string, string> = Object.create(null);
