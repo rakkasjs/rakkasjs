@@ -82,6 +82,7 @@ const runServerSideServerHooks: ServerHooks = {
 				const fn = module.$runServerSide$[Number(counter)];
 
 				const headers = new Headers();
+
 				const ssCtx: RunServerSideContext = Object.assign(ctx, { headers });
 				const result = await fn(closureContents, ssCtx, vars);
 
@@ -118,6 +119,8 @@ const runServerSideServerHooks: ServerHooks = {
 					}
 
 					if (ctx.request.headers.get("accept") === "application/javascript") {
+						headers.set("Content-Type", "application/javascript");
+
 						if (result.redirect) {
 							delete result.headers;
 							return new Response(uneval(result), { headers });
@@ -143,6 +146,11 @@ const runServerSideServerHooks: ServerHooks = {
 					}
 				}
 
+				headers.set("Content-Type", "application/javascript");
+				if (!headers.has("Cache-Control")) {
+					// CloudFlare caches responses with the .js extension by default
+					headers.set("Cache-Control", "no-store");
+				}
 				return new Response(uneval(result), { headers });
 			},
 		],
