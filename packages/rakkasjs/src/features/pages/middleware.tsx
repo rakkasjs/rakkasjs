@@ -188,7 +188,14 @@ export default async function renderPageRoute(
 			undefined,
 			pageHooks,
 		);
-		const html = head + `<div id="root"></div></body></html>`;
+
+		let html = head + `<div id="root"></div></body>`;
+
+		html += `<script type="module" src="${
+			scriptPath ? [assetPrefix + scriptPath] : ["/" + scriptId]
+		}"></script>`;
+
+		html += `</html>`;
 
 		return new Response(html, {
 			status: 200,
