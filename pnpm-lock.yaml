@@ -65,7 +65,7 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -108,7 +108,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -130,7 +130,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       vite:
         specifier: ^5.1.3
@@ -161,7 +161,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -195,7 +195,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -232,7 +232,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -263,7 +263,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -297,7 +297,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -337,7 +337,7 @@ importers:
         specifier: ^1.13.0
         version: 1.13.0(postcss@8.4.35)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -371,7 +371,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -405,7 +405,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -439,7 +439,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -482,7 +482,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -525,7 +525,7 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4(@babel/core@7.23.9)(styled-components@6.1.8)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -565,7 +565,7 @@ importers:
         specifier: ^8.4.35
         version: 8.4.35
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       tailwindcss:
         specifier: ^3.4.1
@@ -590,7 +590,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.2.55
@@ -611,7 +611,7 @@ importers:
         specifier: ^3.2.5
         version: 3.2.5
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -651,7 +651,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.3)
       rakkasjs:
-        specifier: 0.7.0-next.42
+        specifier: 0.7.0-next.43
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.3.3
@@ -808,7 +808,7 @@ importers:
         version: 2.12.0(eslint@8.56.0)
       eslint-plugin-import:
         specifier: ^2.29.1
-        version: 2.29.1(eslint@8.56.0)
+        version: 2.29.1(@typescript-eslint/parser@7.0.1)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
       eslint-plugin-no-only-tests:
         specifier: ^3.1.0
         version: 3.1.0
@@ -11110,7 +11110,7 @@ packages:
       eslint: 8.56.0
       eslint-import-resolver-node: 0.3.9
       eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
-      hasown: 2.0.1
+      hasown: 2.0.0
       is-core-module: 2.13.1
       is-glob: 4.0.3
       minimatch: 3.1.2
@@ -11149,43 +11149,6 @@ packages:
       eslint-import-resolver-node: 0.3.9
       eslint-module-utils: 2.8.0(@typescript-eslint/parser@7.0.1)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
       hasown: 2.0.0
-      is-core-module: 2.13.1
-      is-glob: 4.0.3
-      minimatch: 3.1.2
-      object.fromentries: 2.0.7
-      object.groupby: 1.0.1
-      object.values: 1.1.7
-      semver: 6.3.1
-      tsconfig-paths: 3.15.0
-    transitivePeerDependencies:
-      - eslint-import-resolver-typescript
-      - eslint-import-resolver-webpack
-      - supports-color
-    dev: false
-
-  /eslint-plugin-import@2.29.1(eslint@8.56.0):
-    resolution:
-      {
-        integrity: sha512-BbPC0cuExzhiMo4Ff1BTVwHpjjv28C5R+btTOGaCRC7UEz801up0JadwkeSk5Ued6TG34uaczuVuH6qyy5YUxw==,
-      }
-    engines: { node: ">=4" }
-    peerDependencies:
-      "@typescript-eslint/parser": "*"
-      eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
-    peerDependenciesMeta:
-      "@typescript-eslint/parser":
-        optional: true
-    dependencies:
-      array-includes: 3.1.7
-      array.prototype.findlastindex: 1.2.3
-      array.prototype.flat: 1.3.2
-      array.prototype.flatmap: 1.3.2
-      debug: 3.2.7
-      doctrine: 2.1.0
-      eslint: 8.56.0
-      eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@7.0.1)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.56.0)
-      hasown: 2.0.1
       is-core-module: 2.13.1
       is-glob: 4.0.3
       minimatch: 3.1.2
@@ -13166,6 +13129,7 @@ packages:
     engines: { node: ">= 0.4" }
     dependencies:
       function-bind: 1.1.2
+    dev: false
 
   /hast-util-parse-selector@2.2.5:
     resolution:

@@ -1,6 +1,6 @@
 {
   "name": "@rakkasjs/css",
-  "version": "0.7.0-next.42",
+  "version": "0.7.0-next.43",
   "type": "module",
   "files": [
     "dist",
