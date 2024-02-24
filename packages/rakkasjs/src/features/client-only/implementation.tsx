@@ -2,10 +2,9 @@ import React, {
 	ReactElement,
 	ReactNode,
 	Suspense,
-	useContext,
 	useEffect,
+	useState,
 } from "react";
-import { createNamedContext } from "../../runtime/named-context";
 
 /** {@link ClientOnly} props */
 export interface ClientOnlyProps {
@@ -19,15 +18,15 @@ export interface ClientOnlyProps {
 
 /** Opt out of server-side rendering */
 export function ClientOnly(props: ClientOnlyProps): ReactElement {
-	const context = useContext(ClientOnlyContext);
+	const [hydrated, setHydrated] = useState(false);
 
 	useEffect(() => {
-		if (!context.hydrated) {
-			context.setHydrated();
+		if (!hydrated) {
+			setHydrated(true);
 		}
-	}, [context]);
+	}, [hydrated]);
 
-	return <>{context && context.hydrated ? props.children : props.fallback}</>;
+	return <>{hydrated ? props.children : props.fallback}</>;
 }
 
 /** Suspense boundary that only runs on the client */
@@ -38,8 +37,3 @@ export function ClientSuspense(props: ClientOnlyProps): ReactElement {
 		</ClientOnly>
 	);
 }
-
-export const ClientOnlyContext = createNamedContext<{
-	hydrated: boolean;
-	setHydrated: () => void;
-}>("ClientOnlyContext", undefined as any);
