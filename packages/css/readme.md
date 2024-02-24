@@ -5,7 +5,7 @@
 ## Installation
 
 ```bash
-npm install -S @rakkasjs/css
+npm install -D @rakkasjs/css
 ```
 
 ## Usage
