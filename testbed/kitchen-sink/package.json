@@ -24,6 +24,7 @@
     "@hattip/adapter-lagon": "0.0.42",
     "@hattip/adapter-netlify-edge": "0.0.42",
     "@hattip/adapter-netlify-functions": "0.0.42",
+    "@rakkasjs/css": "workspace:*",
     "@types/ps-tree": "^1.1.6",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitejs/plugin-react-swc": "^3.6.0",

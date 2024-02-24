@@ -1,0 +1,58 @@
+{
+  "name": "@rakkasjs/css",
+  "version": "0.7.0-next.41",
+  "type": "module",
+  "files": [
+    "dist",
+    "*.d.ts"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./vite-plugin": "./dist/vite-plugin.js",
+    "./server-hooks": "./dist/server-hooks.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepack": "rm -rf dist && pnpm build",
+    "test": "pnpm run /^test:/",
+    "--test:unit": "vitest run",
+    "test:typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:lint": "eslint . --max-warnings 0 --ignore-pattern dist",
+    "test:package": "publint"
+  },
+  "description": "TODO",
+  "license": "MIT",
+  "repository": "https://github.com/TODO/TODO",
+  "keywords": [
+    "react",
+    "vite",
+    "nextjs",
+    "ssr"
+  ],
+  "peerDependencies": {
+    "rakkasjs": "*",
+    "vite": "5"
+  },
+  "dependencies": {
+    "@types/react": "^18.2.55"
+  },
+  "devDependencies": {
+    "@cyco130/eslint-config": "^3.6.4",
+    "@types/node": "^20.11.19",
+    "eslint": "^8.56.0",
+    "publint": "^0.2.7",
+    "rakkasjs": "workspace:*",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3",
+    "vitest": "^1.3.0",
+    "vite": "^5.1.3"
+  }
+}
