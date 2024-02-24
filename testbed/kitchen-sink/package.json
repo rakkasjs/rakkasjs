@@ -41,9 +41,9 @@
     "wrangler": "^3.28.2"
   },
   "dependencies": {
-    "@hattip/adapter-cloudflare-workers": "0.0.42",
-    "@hattip/adapter-deno": "0.0.42",
-    "@hattip/adapter-vercel-edge": "0.0.42",
+    "@hattip/adapter-cloudflare-workers": "0.0.43",
+    "@hattip/adapter-deno": "0.0.43",
+    "@hattip/adapter-vercel-edge": "0.0.43",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "cheerio": "^1.0.0-rc.12",
