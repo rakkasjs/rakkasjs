@@ -50,6 +50,6 @@
     "netlify-cli": "^17.16.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "web-streams-polyfill": "^3.3.2"
+    "web-streams-polyfill": "^4.0.0"
   }
 }
