@@ -31,17 +31,17 @@
     "sanitize.css": "^13.0.0"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^3.6.4",
+    "@cyco130/eslint-config": "^3.7.0",
     "@cyco130/vite-plugin-mdx": "^1.0.4",
-    "@docsearch/css": "^3.5.2",
-    "@docsearch/react": "^3.5.2",
+    "@docsearch/css": "^3.6.0",
+    "@docsearch/react": "^3.6.0",
     "@mapbox/rehype-prism": "^0.9.0",
     "@rollup/pluginutils": "^5.1.0",
     "@types/cookie": "^0.6.0",
-    "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
     "@vitejs/plugin-react-swc": "^3.6.0",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "gray-matter": "^4.0.3",
     "install": "^0.13.0",
     "node-dev": "^8.0.0",
@@ -53,9 +53,9 @@
     "sirv": "^2.0.4",
     "sirv-cli": "^2.0.2",
     "source-map": "^0.7.4",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.2",
     "vfile": "^6.0.1",
-    "vite": "^5.1.3",
-    "vite-plugin-cjs-interop": "^2.0.6"
+    "vite": "^5.1.5",
+    "vite-plugin-cjs-interop": "^2.1.0"
   }
 }
