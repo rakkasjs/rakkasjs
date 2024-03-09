@@ -109,6 +109,7 @@ export function cancelLastNavigation() {
 function handleBeforeUnload(e: BeforeUnloadEvent) {
 	if (findBlocker()) {
 		e.preventDefault();
+		// eslint-disable-next-line deprecation/deprecation
 		e.returnValue = "";
 	}
 }

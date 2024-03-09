@@ -87,21 +87,17 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 		});
 	}
 
-	describe(
-		"emotion",
-		() => {
-			initialize("emotion");
+	describe("emotion", { retry: 3 }, () => {
+		initialize("emotion");
 
-			test("page route", async () => {
-				await page.goto(host + "/");
-				const h1 = (await page.waitForSelector("h1"))!;
-				expect(await h1.evaluate((e) => getComputedStyle(e).color)).toBe(
-					"rgb(255, 0, 0)",
-				);
-			});
-		},
-		{ retry: 3 },
-	);
+		test("page route", async () => {
+			await page.goto(host + "/");
+			const h1 = (await page.waitForSelector("h1"))!;
+			expect(await h1.evaluate((e) => getComputedStyle(e).color)).toBe(
+				"rgb(255, 0, 0)",
+			);
+		});
+	});
 
 	describe("express", () => {
 		initialize("express");
@@ -212,21 +208,17 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 		});
 	});
 
-	describe(
-		"mantine",
-		() => {
-			initialize("mantine");
+	describe("mantine", { retry: 3 }, () => {
+		initialize("mantine");
 
-			test("button styles", async () => {
-				await page.goto(host + "/");
-				const button = (await page.waitForSelector("button"))!;
-				expect(
-					await button.evaluate((e) => getComputedStyle(e).borderRadius),
-				).not.toBe("0px");
-			});
-		},
-		{ retry: 3 },
-	);
+		test("button styles", async () => {
+			await page.goto(host + "/");
+			const button = (await page.waitForSelector("button"))!;
+			expect(
+				await button.evaluate((e) => getComputedStyle(e).borderRadius),
+			).not.toBe("0px");
+		});
+	});
 
 	describe("mdx", () => {
 		initialize("mdx");
@@ -243,21 +235,17 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 	describe("react-query", () => {
 		initialize("react-query");
 
-		test(
-			"page route",
-			async () => {
-				await page.goto(host + "/todo");
-				await page.type("input:not([type])", "Hello world!");
-				await page.click("input+button");
+		test("page route", { retry: 3 }, async () => {
+			await page.goto(host + "/todo");
+			await page.type("input:not([type])", "Hello world!");
+			await page.click("input+button");
 
-				await page.waitForFunction(() =>
-					document
-						.querySelectorAll("label")[2]
-						?.textContent?.includes("Hello world!"),
-				);
-			},
-			{ retry: 3 },
-		);
+			await page.waitForFunction(() =>
+				document
+					.querySelectorAll("label")[2]
+					?.textContent?.includes("Hello world!"),
+			);
+		});
 	});
 
 	describe("session", () => {
@@ -297,37 +285,29 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 		});
 	});
 
-	describe(
-		"styled-components",
-		() => {
-			initialize("styled-components");
+	describe("styled-components", { retry: 3 }, () => {
+		initialize("styled-components");
 
-			test("page route", async () => {
-				await page.goto(host + "/");
-				const button = (await page.waitForSelector("button"))!;
-				expect(
-					await button.evaluate((e) => getComputedStyle(e).backgroundColor),
-				).toBe("rgb(0, 68, 255)");
-			});
-		},
-		{ retry: 3 },
-	);
+		test("page route", async () => {
+			await page.goto(host + "/");
+			const button = (await page.waitForSelector("button"))!;
+			expect(
+				await button.evaluate((e) => getComputedStyle(e).backgroundColor),
+			).toBe("rgb(0, 68, 255)");
+		});
+	});
 
-	describe(
-		"styled-components",
-		() => {
-			initialize("styled-components");
+	describe("styled-components", { retry: 3 }, () => {
+		initialize("styled-components");
 
-			test("page route", async () => {
-				await page.goto(host + "/");
-				const button = (await page.waitForSelector("button"))!;
-				expect(
-					await button.evaluate((e) => getComputedStyle(e).backgroundColor),
-				).toBe("rgb(0, 68, 255)");
-			});
-		},
-		{ retry: 3 },
-	);
+		test("page route", async () => {
+			await page.goto(host + "/");
+			const button = (await page.waitForSelector("button"))!;
+			expect(
+				await button.evaluate((e) => getComputedStyle(e).backgroundColor),
+			).toBe("rgb(0, 68, 255)");
+		});
+	});
 
 	describe("tailwind", () => {
 		initialize("tailwind");
@@ -345,21 +325,17 @@ describe.each([{ env: "dev" }, { env: "prod" }] as const)("$env", ({ env }) => {
 	describe("todo", () => {
 		initialize("todo");
 
-		test(
-			"page route",
-			async () => {
-				await page.goto(host + "/todo");
-				await page.type("input:not([type])", "Hello world!");
-				await page.click("input+button");
+		test("page route", { retry: 3 }, async () => {
+			await page.goto(host + "/todo");
+			await page.type("input:not([type])", "Hello world!");
+			await page.click("input+button");
 
-				await page.waitForFunction(() =>
-					document
-						.querySelectorAll("label")[2]
-						?.textContent?.includes("Hello world!"),
-				);
-			},
-			{ retry: 3 },
-		);
+			await page.waitForFunction(() =>
+				document
+					.querySelectorAll("label")[2]
+					?.textContent?.includes("Hello world!"),
+			);
+		});
 	});
 
 	describe("urql", () => {

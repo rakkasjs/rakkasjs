@@ -80,7 +80,7 @@ if (import.meta.env.TEST_HOST) {
 			"Netlify functions",
 			false,
 			TEST_HOST,
-			"pnpm build:netlify && netlify serve -op 3000",
+			"pnpm build:netlify && netlify dev -op 3000",
 		);
 	}
 
@@ -89,7 +89,7 @@ if (import.meta.env.TEST_HOST) {
 			"Netlify edge",
 			false,
 			TEST_HOST,
-			"pnpm build:netlify-edge && netlify serve -op 3000",
+			"pnpm build:netlify-edge && netlify dev -op 3000",
 		);
 	}
 
@@ -306,52 +306,45 @@ function testCase(
 		});
 
 		if (dev) {
-			test(
-				"hot reloads page",
-				async () => {
-					await page.goto(host + "/");
+			test("hot reloads page", { retry: 3, timeout: 20_000 }, async () => {
+				await page.goto(host + "/");
 
-					// Wait a little (for some reason Windows requires this)
-					await new Promise((resolve) => setTimeout(resolve, 1_000));
+				// Wait a little (for some reason Windows requires this)
+				await new Promise((resolve) => setTimeout(resolve, 1_000));
 
-					await page.waitForSelector(".hydrated");
+				await page.waitForSelector(".hydrated");
 
-					const button: ElementHandle<HTMLButtonElement> | null =
-						await page.waitForSelector("button");
+				const button: ElementHandle<HTMLButtonElement> | null =
+					await page.waitForSelector("button");
 
-					await button!.click();
+				await button!.click();
 
+				await page.waitForFunction(
+					() => document.querySelector("button")?.textContent === "Clicked: 1",
+				);
+
+				const filePath = path.resolve(__dirname, "src/routes/index.page.tsx");
+
+				const oldContent = await fs.promises.readFile(filePath, "utf8");
+				const newContent = oldContent.replace("Hello world!", "Hot reloadin'!");
+
+				await fs.promises.writeFile(filePath, newContent);
+
+				try {
 					await page.waitForFunction(
 						() =>
+							document.body?.textContent?.includes("Hot reloadin'!") &&
 							document.querySelector("button")?.textContent === "Clicked: 1",
+						{ timeout: 15_000 },
 					);
-
-					const filePath = path.resolve(__dirname, "src/routes/index.page.tsx");
-
-					const oldContent = await fs.promises.readFile(filePath, "utf8");
-					const newContent = oldContent.replace(
-						"Hello world!",
-						"Hot reloadin'!",
-					);
-
-					await fs.promises.writeFile(filePath, newContent);
-
-					try {
-						await page.waitForFunction(
-							() =>
-								document.body?.textContent?.includes("Hot reloadin'!") &&
-								document.querySelector("button")?.textContent === "Clicked: 1",
-							{ timeout: 15_000 },
-						);
-					} finally {
-						await fs.promises.writeFile(filePath, oldContent);
-					}
-				},
-				{ retry: 3, timeout: 20_000 },
-			);
+				} finally {
+					await fs.promises.writeFile(filePath, oldContent);
+				}
+			});
 
 			test(
 				"newly created page appears",
+				{ retry: 3, timeout: 15_000 },
 				async () => {
 					await page.goto(host + "/not-yet-created");
 
@@ -385,11 +378,11 @@ function testCase(
 						});
 					}
 				},
-				{ retry: 3, timeout: 15_000 },
 			);
 
 			test(
 				"newly created layout appears",
+				{ retry: 3, timeout: 15_000 },
 				async () => {
 					await page.goto(host + "/new-layout");
 
@@ -423,10 +416,6 @@ function testCase(
 						});
 					}
 				},
-				{
-					retry: 3,
-					timeout: 15_000,
-				},
 			);
 		}
 
@@ -438,18 +427,19 @@ function testCase(
 
 		test(
 			"sets page title",
+			// This is flaky on Mac, probably because it can't recover from the
+			// previous test's hot reload.
+			{ retry: 3 },
 			async () => {
 				await page.goto(host + "/title");
 
 				await page.waitForFunction(() => document.title === "Page title");
 			},
-			// This is flaky on Mac, probably because it can't recover from the
-			// previous test's hot reload.
-			{ retry: 3 },
 		);
 
 		test(
 			"performs client-side navigation",
+			{ retry: 3, timeout: 15_000 },
 			async () => {
 				await page.goto(host + "/nav");
 
@@ -497,7 +487,6 @@ function testCase(
 					document.body?.innerText.includes("State test: 1"),
 				);
 			},
-			{ retry: 3, timeout: 15_000 },
 		);
 
 		test("restores scroll position", async () => {
@@ -594,6 +583,8 @@ function testCase(
 
 		test(
 			"fetches data with useQuery",
+			// This test is flaky on Mac
+			{ retry: 3 },
 			async () => {
 				await page.goto(host + "/use-query");
 				await page.waitForSelector(".hydrated");
@@ -618,9 +609,6 @@ function testCase(
 						.getElementById("content")
 						?.innerText.includes("Client value"),
 				);
-			},
-			{
-				retry: 3, // This test is flaky on Mac
 			},
 		);
 

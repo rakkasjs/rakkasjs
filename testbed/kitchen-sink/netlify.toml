@@ -2,6 +2,9 @@
 base = "testbed/kitchen-sink"
 publish = "netlify/static"
 
+[dev]
+framework = "#static"
+
 [[edge_functions]]
 function = "edge"
 path = "/*"

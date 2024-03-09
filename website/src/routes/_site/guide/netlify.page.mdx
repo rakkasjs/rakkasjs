@@ -31,13 +31,16 @@ Then create a `netlify.toml` file like this:
 [build]
 publish = "netlify/static"
 
+[dev]
+framework = "#static"
+
 # Uncomment for Netlify Edge
 # [[edge_functions]]
 # function = "edge"
 # path = "/*"
 ```
 
-After building with `rakkas build`, you can preview your app with `netlify serve` or publish with `netlify deploy`.
+After building with `rakkas build`, you can preview your app with `netlify dev` or publish with `netlify deploy`.
 
 ## Deno-specific APIs
 
