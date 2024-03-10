@@ -256,21 +256,27 @@ export async function loadRoute(
 				pathname += "/";
 			}
 
-			const result = findPage(
+			let result = findPage(
 				notFoundRoutes,
 				url,
 				pathname + "$404",
 				pageContext,
 				true,
 			);
+
 			if (import.meta.hot && !result) {
-				findPage(
+				result = findPage(
 					updatedNotFoundRoutes!,
 					url,
 					pathname + "$404",
 					pageContext,
 					true,
 				);
+			}
+
+			if (result && "redirect" in result) {
+				location.assign(result.redirect);
+				await new Promise(() => {});
 			}
 
 			found = result as any;

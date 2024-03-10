@@ -21,8 +21,16 @@
       "browser": "./dist/index.client.js",
       "default": "./dist/index.server.js"
     },
-    "./client": "./dist/client.js",
-    "./server": "./dist/server.js",
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "browser": "./dist/client.js",
+      "default": "./dist/client-stub.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "browser": "./dist/server-stub.js",
+      "default": "./dist/server.js"
+    },
     "./node-adapter": "./dist/node-adapter.js",
     "./vite-plugin": "./dist/vite-plugin.js",
     "./node-loader": "./node-loader.mjs",
