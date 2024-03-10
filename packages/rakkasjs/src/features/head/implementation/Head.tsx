@@ -14,11 +14,13 @@ export function useHead(props: HeadProps): void {
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(() => {
-		usedTags.add(props);
+		usedTags.push(props);
 		scheduleUpdate();
 
 		return () => {
-			usedTags.delete(props);
+			const index = usedTags.indexOf(props);
+			if (index === -1) return;
+			usedTags.splice(usedTags.indexOf(props), Infinity);
 			scheduleUpdate();
 		};
 	});
@@ -29,7 +31,7 @@ export function Head(props: HeadProps): ReactElement {
 	return null as any;
 }
 
-const usedTags = new Set<HeadProps>();
+const usedTags: HeadProps[] = [];
 
 let scheduled = false;
 function scheduleUpdate() {
@@ -53,7 +55,7 @@ function updateHead() {
 
 	mergeHeadProps(tags, defaultHeadProps);
 
-	for (const props of usedTags) {
+	for (const props of [...usedTags].reverse()) {
 		mergeHeadProps(tags, props);
 	}
 

@@ -1108,6 +1108,17 @@ function testCase(
 			);
 		});
 
+		test("cascade head tags", async () => {
+			await page.goto(host + "/head");
+			await page.waitForSelector(".hydrated");
+
+			await page.waitForFunction(() => document.title === "The head page");
+
+			await page.click("a");
+
+			await page.waitForFunction(() => document.title === "Head page 2");
+		});
+
 		test("disables guarded catch-all route", async () => {
 			const r = await fetch(host + "/guarded-catch-all");
 			const text = await r.text();
