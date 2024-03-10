@@ -18,7 +18,6 @@ const MainLayout: Layout = ({ children }) => (
 			<MDXProvider
 				components={{
 					// TODO: Typing problem
-					// @ts-expect-error: To fix
 					a: MdxLink,
 					// eslint-disable-next-line react/display-name
 					table: (props) => (

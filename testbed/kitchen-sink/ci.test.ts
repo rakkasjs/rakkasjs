@@ -500,7 +500,7 @@ function testCase(
 			await page.waitForFunction(() => window.scrollY > 0);
 
 			const link = (await page.waitForSelector(
-				"a[href='/nav/b']",
+				"a[href='/nav/b?scroll=1']",
 			)) as ElementHandle<HTMLAnchorElement> | null;
 			expect(link).toBeTruthy();
 

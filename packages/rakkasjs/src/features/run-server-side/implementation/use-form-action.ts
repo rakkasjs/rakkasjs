@@ -1,6 +1,6 @@
 import { stringify } from "@brillout/json-serializer/stringify";
 import { encodeFileNameSafe } from "../../../runtime/utils";
-import { useLocation } from "../../client-side-navigation/implementation";
+import { useLocation } from "../../client-side-navigation/lib";
 
 export function useFormAction(desc: [callSiteId: string, closure: any[]]) {
 	const { current: url } = useLocation();

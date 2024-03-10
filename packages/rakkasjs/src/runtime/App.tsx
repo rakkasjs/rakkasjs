@@ -1,9 +1,14 @@
 import React, {
+	Dispatch,
 	Fragment,
 	ReactElement,
 	ReactNode,
+	SetStateAction,
 	useContext,
+	useDeferredValue,
+	useEffect,
 	useReducer,
+	useState,
 } from "react";
 import {
 	cancelLastNavigation,
@@ -21,11 +26,18 @@ import { Default404Page } from "../features/pages/Default404Page";
 import { Head, PageContext, Redirect } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 import { createNamedContext } from "./named-context";
-import { prefetcher } from "../features/client-side-navigation/implementation";
+import {
+	LocationContext,
+	prefetcher,
+} from "../features/client-side-navigation/implementation/link";
 import {
 	RenderedUrlContext,
 	RouteParamsContext,
 } from "../features/pages/contexts";
+import {
+	navigationResolve,
+	restoreScrollPosition,
+} from "../features/client-side-navigation/implementation/history";
 
 type Routes = (typeof import("rakkasjs:client-page-routes"))["default"];
 type NotFoundRoutes =
@@ -38,8 +50,18 @@ export interface AppProps {
 	ssrModules?: (PageModule | LayoutModule)[];
 }
 
+export let setNextId: Dispatch<SetStateAction<string>>;
+
+function useCurrentUrl() {
+	const ssrHref = useContext(LocationContext);
+	return new URL(import.meta.env.SSR ? ssrHref! : location.href);
+}
+
 export function App(props: AppProps) {
-	const { current: currentUrl } = useLocation();
+	const [id, setId] = useState("initial");
+
+	const currentUrl = useCurrentUrl();
+	setNextId = setId;
 
 	const lastRoute = useContext(RouteContext);
 	// Force update
@@ -90,9 +112,7 @@ export function App(props: AppProps) {
 
 	if (
 		!lastRoute.last ||
-		lastRoute.last.pathname !== currentUrl.pathname ||
-		lastRoute.last.search !== currentUrl.search ||
-		// lastRoute.last.actionData !== actionData ||
+		(lastRoute.last.id !== undefined && lastRoute.last.id !== id) ||
 		forcedUpdate
 	) {
 		lastRoute.updateCounter = updateCounter;
@@ -107,7 +127,7 @@ export function App(props: AppProps) {
 			props.ssrModules,
 		)
 			.then((route) => {
-				lastRoute.last = route;
+				lastRoute.last = route && { id, ...route };
 				lastRoute.onRendered?.();
 			})
 			.catch(async () => {
@@ -118,6 +138,8 @@ export function App(props: AppProps) {
 				});
 			});
 	}
+
+	lastRoute.last!.id = id;
 
 	const app = lastRoute.last.app;
 
@@ -137,6 +159,7 @@ interface RouteContextContent {
 		| (typeof import("rakkasjs:server-page-routes").default)[0]
 	>;
 	last?: {
+		id?: string;
 		pathname: string;
 		search: string;
 		app: ReactElement;
@@ -420,6 +443,7 @@ export async function loadRoute(
 			<RouteParamsContext.Provider value={found.params}>
 				{preloadNode}
 				{app}
+				<Finish />
 			</RouteParamsContext.Provider>
 		</RenderedUrlContext.Provider>
 	);
@@ -430,6 +454,29 @@ export async function loadRoute(
 		actionData,
 		app,
 	};
+}
+
+function Finish() {
+	const resolve = navigationResolve;
+
+	useEffect(() => {
+		resolve?.();
+	}, [resolve]);
+
+	return <Scroll />;
+}
+
+function Scroll() {
+	const { pending } = useLocation();
+	const href = useDeferredValue(pending?.href);
+
+	useEffect(() => {
+		if (!href) {
+			restoreScrollPosition();
+		}
+	}, [href]);
+
+	return null;
 }
 
 if (import.meta.hot) {
