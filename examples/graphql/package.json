@@ -11,7 +11,7 @@
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
     "@vitejs/plugin-react": "^4.2.1",
-    "rakkasjs": "0.7.0-next.43",
+    "rakkasjs": "0.7.0-next.44",
     "typescript": "^5.4.2",
     "vite": "^5.1.5"
   },
