@@ -2,7 +2,6 @@ import { Link, useHead, type Page } from "rakkasjs";
 
 const HeadPage: Page = () => {
 	useHead({
-		title: "The head page",
 		canonical: "http://localhost:3000/head",
 		htmlAttributes: {
 			class: "head-page",
@@ -18,3 +17,5 @@ const HeadPage: Page = () => {
 };
 
 export default HeadPage;
+
+HeadPage.preload = () => ({ head: { title: "The head page" } });

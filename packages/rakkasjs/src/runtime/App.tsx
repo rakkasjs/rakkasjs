@@ -1,8 +1,6 @@
 import React, {
 	Dispatch,
-	Fragment,
 	ReactElement,
-	ReactNode,
 	SetStateAction,
 	useContext,
 	useDeferredValue,
@@ -354,24 +352,12 @@ export async function loadRoute(
 	if (prefetchOnly) return;
 
 	let meta: any;
-	let preloadNode: ReactNode[] = [];
+	let preloaded = ssrPreloaded!;
 
 	if (import.meta.env.SSR) {
 		meta = ssrMeta;
-		preloadNode = ssrPreloaded!
-			.map((result, i) => {
-				return (
-					(result?.head || result?.redirect) && (
-						<Fragment key={i}>
-							{<Head {...result?.head} />}
-							{result?.redirect && <Redirect {...result?.redirect} />}
-						</Fragment>
-					)
-				);
-			})
-			.filter(Boolean);
 	} else {
-		const preloaded = layoutStack.map((r) => r[1]).reverse();
+		preloaded = layoutStack.map((r) => r[1]).reverse();
 
 		meta = {};
 		preloaded.forEach((p) =>
@@ -379,18 +365,6 @@ export async function loadRoute(
 				? p.meta(meta)
 				: Object.assign(meta, p?.meta),
 		);
-
-		preloadNode = preloaded
-			.map(
-				(result, i) =>
-					(result?.head || result?.redirect) && (
-						<Fragment key={i}>
-							{<Head {...result?.head} />}
-							{result?.redirect && <Redirect {...result?.redirect} />}
-						</Fragment>
-					),
-			)
-			.filter(Boolean);
 	}
 
 	// If it's a forced update due to hot module
@@ -403,22 +377,27 @@ export async function loadRoute(
 	const errorFiles = new Set<string>();
 
 	let app = components.reduce(
-		(prev, Component) => {
+		(prev, Component, i) => {
 			if (import.meta.env.DEV && typeof Component === "object") {
 				errorFiles.add((Component as any).moduleId);
 				Component = ({ children }) => children;
 			}
 
+			const preloadResult = preloaded[i];
+
 			return (
-				<Component
-					url={url}
-					renderedUrl={found!.renderedUrl}
-					params={found!.params}
-					meta={meta}
-					actionData={actionData}
-				>
-					{prev}
-				</Component>
+				<>
+					{preloadResult?.head && <Head {...preloadResult.head} />}
+					<Component
+						url={url}
+						renderedUrl={found!.renderedUrl}
+						params={found!.params}
+						meta={meta}
+						actionData={actionData}
+					>
+						{prev}
+					</Component>
+				</>
 			);
 		},
 		null as any as ReactElement,
@@ -438,10 +417,12 @@ export async function loadRoute(
 		})`)(message);
 	}
 
+	const preloadedRedirect = preloaded.find((p) => p?.redirect)?.redirect;
+
 	app = (
 		<RenderedUrlContext.Provider value={found.renderedUrl}>
 			<RouteParamsContext.Provider value={found.params}>
-				{preloadNode}
+				{preloadedRedirect && <Redirect {...preloadedRedirect} />}
 				{app}
 				<Finish />
 			</RouteParamsContext.Provider>
