@@ -52,6 +52,7 @@ export default defineConfig([
 		entry: {
 			"index.client": "./src/lib/index.client.ts",
 			client: "./src/runtime/client-entry.tsx",
+			"server-stub": "./src/runtime/server-stub.ts",
 		},
 		target: "node18",
 		format: ["esm"],
@@ -86,6 +87,7 @@ export default defineConfig([
 		entry: {
 			"index.server": "./src/lib/index.server.ts",
 			server: "./src/runtime/hattip-handler.ts",
+			"client-stub": "./src/runtime/client-stub.ts",
 		},
 		format: ["esm"],
 		platform: "node",
