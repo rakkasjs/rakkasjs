@@ -1,6 +1,6 @@
 import React from "react";
 import type { ServerHooks } from "../../runtime/hattip-handler";
-import { LocationContext } from "./implementation";
+import { LocationContext } from "./implementation/link";
 
 const clientSideNavigationServerHooks: ServerHooks = {
 	createPageHooks(ctx) {

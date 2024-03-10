@@ -3,13 +3,8 @@ import React, {
 	CSSProperties,
 	forwardRef,
 	useCallback,
-	useContext,
-	useDeferredValue,
 	useEffect,
-	useMemo,
 	useState,
-	useSyncExternalStore,
-	startTransition,
 	FormEvent,
 	useRef,
 } from "react";
@@ -22,405 +17,14 @@ import {
 	UseMutationOptions,
 	UseMutationSuccessResult,
 	usePageContext,
-} from "../../lib";
-import { createNamedContext } from "../../runtime/named-context";
-import { RenderedUrlContext } from "../pages/contexts";
-
-let lastRenderedId: string;
-let navigationPromise: Promise<void> | undefined;
-let navigationResolve: (() => void) | undefined;
-
-/** Return value of useLocation */
-export interface UseLocationResult {
-	/** The URL of the current page before any rewrites */
-	current: URL;
-	/** The URL of the current page after rewrites */
-	rendered: URL;
-	/** The URL of the page that is being navigated to, if any */
-	pending: URL | undefined;
-}
-
-let lastRenderedIndex: number | undefined;
-
-/** Hook to get the navigation state */
-export function useLocation(): UseLocationResult {
-	const staticLocation = useContext(LocationContext);
-	const rendered = useContext(RenderedUrlContext);
-
-	const ssrLocation = JSON.stringify([staticLocation!, 0]);
-
-	const currentLocationId = useSyncExternalStore(
-		subscribeToLocation,
-		getLocationSnapshot,
-		useCallback(() => ssrLocation, [ssrLocation]),
-	);
-
-	const deferredLocationId = useDeferredValue(currentLocationId);
-	const [currentLocation] = JSON.parse(currentLocationId);
-	const [deferredLocation] = JSON.parse(deferredLocationId);
-
-	useEffect(() => {
-		base().href = deferredLocation;
-		lastRenderedId = history.state.id;
-		lastRenderedIndex = history.state.index;
-
-		if (history.state.scroll) {
-			restoreScrollPosition();
-		}
-
-		navigationResolve?.();
-		navigationPromise = undefined;
-		navigationResolve = undefined;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [deferredLocationId]);
-
-	const current = useMemo(() => new URL(deferredLocation), [deferredLocation]);
-	const pending = useMemo(
-		() =>
-			currentLocationId === deferredLocationId
-				? undefined
-				: new URL(currentLocation),
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[currentLocationId, deferredLocationId],
-	);
-
-	return {
-		current,
-		pending,
-		rendered,
-	};
-}
-
-/** Cancel the last navigation. Returns a function to redo the navigation. */
-export function cancelLastNavigation() {
-	if (lastRenderedIndex === undefined) {
-		throw new Error("No previous navigation to cancel");
-	}
-
-	const delta = lastRenderedIndex - history.state.index;
-
-	history.go(delta);
-
-	return function redoNavigation() {
-		history.go(-delta);
-	};
-}
-
-function handleBeforeUnload(e: BeforeUnloadEvent) {
-	if (findBlocker()) {
-		e.preventDefault();
-		// eslint-disable-next-line deprecation/deprecation
-		e.returnValue = "";
-	}
-}
-
-interface Blocker {
-	notify(): void;
-	redo?(): void;
-	enabled: boolean;
-}
-
-const blockers = new Set<Blocker>();
-
-export type NavigationBlockerResult =
-	| {
-			isBlocking: false;
-			leave?: undefined;
-			stay?: undefined;
-	  }
-	| {
-			isBlocking: true;
-			leave(): void;
-			stay(): void;
-	  };
-
-/**
- * Add a navigation blocker.
- *
- * When a navigation blocker is active, the hook will return an object with
- * `isBlocking` set to `true`. The `leave` method will allow the navigation to
- * proceed, while the `stay` method will keep the navigation from happening.
- *
- * @param condition Whether to block navigation
- */
-export function useNavigationBlocker(
-	condition: boolean,
-): NavigationBlockerResult {
-	const [isBlocking, setIsBlocking] = useState(false);
-	const blocker = useRef<Blocker>({
-		notify() {
-			setIsBlocking(true);
-		},
-		enabled: true,
-	});
-
-	useEffect(() => {
-		if (!condition && !isBlocking) {
-			return;
-		}
-
-		const current = blocker.current;
-
-		blockers.add(current);
-		if (blockers.size === 1) {
-			addEventListener("beforeunload", handleBeforeUnload);
-		}
-
-		return () => {
-			blockers.delete(current);
-			if (blockers.size === 0) {
-				removeEventListener("beforeunload", handleBeforeUnload);
-			}
-		};
-	}, [condition, isBlocking]);
-
-	if (isBlocking) {
-		return {
-			isBlocking,
-			leave() {
-				const current = blocker.current;
-				current.enabled = false;
-				current.redo?.();
-				setIsBlocking(false);
-			},
-			stay() {
-				setIsBlocking(false);
-			},
-		};
-	}
-
-	return { isBlocking: false };
-}
-
-function restoreScrollPosition() {
-	let scrollPosition: string | null = null;
-
-	try {
-		scrollPosition = sessionStorage.getItem(`rakkas:${history.state?.id}`);
-	} catch {
-		// Ignore
-	}
-
-	if (scrollPosition) {
-		const { x, y, f } = JSON.parse(scrollPosition);
-		if (f) {
-			scrollTo(x, y);
-			sessionStorage.setItem(
-				`rakkas:${history.state?.id}`,
-				JSON.stringify({ x, y }),
-			);
-		}
-	} else {
-		const hash = location.hash;
-		if (hash) {
-			const element = document.querySelector(hash);
-			if (element) {
-				element.scrollIntoView();
-			} else {
-				scrollTo(0, 0);
-			}
-		} else {
-			scrollTo(0, 0);
-		}
-	}
-}
-
-/** Navigation options */
-export interface NavigationOptions {
-	/** Replace the current history entry */
-	replace?: boolean;
-	/** Restore scroll position (or scroll to top) */
-	scroll?: boolean;
-	/** Custom user data to be stored in the history entry */
-	data?: any;
-	/** Action data */
-	actionData?: any;
-}
-
-/**
- * Navigate, using client-side navigation if possible.
- * @param to URL to navigate to
- * @param options Navigation options
- * @returns Whether the navigation was completed or cancelled
- */
-export async function navigate(
-	to: string | Readonly<URL>,
-	options?: NavigationOptions,
-): Promise<boolean> {
-	const blocker = findBlocker();
-	if (blocker) {
-		blocker.redo = () => navigate(to, options);
-		blocker.notify();
-		return false;
-	}
-
-	const url = new URL(to, location.href);
-
-	if (url.origin !== location.origin) {
-		location.href = url.href;
-		return new Promise<boolean>(() => {
-			// Never resolves
-		});
-	}
-
-	const { replace, data, actionData, scroll = true } = options || {};
-	const id = createUniqueId();
-
-	if (replace) {
-		history.replaceState(
-			{
-				id,
-				data,
-				actionData,
-				index: history.state.index,
-				scroll,
-			},
-			"",
-			to,
-		);
-	} else {
-		const index = history.length;
-		history.pushState({ id, data, actionData, index, scroll }, "", to);
-	}
-
-	navigationPromise =
-		navigationPromise ||
-		new Promise<void>((resolve) => {
-			navigationResolve = resolve;
-		});
-
-	handleNavigation(!scroll);
-
-	return navigationPromise.then(() => {
-		const complete = history.state.id === history.state.id;
-
-		return complete;
-	});
-}
-
-if (!import.meta.env.SSR) {
-	rakkas.navigate = navigate;
-}
+} from "../../../lib";
+import { createNamedContext } from "../../../runtime/named-context";
+import { NavigationOptions, navigate, useLocation } from "./history";
 
 export const LocationContext = createNamedContext<string | undefined>(
 	"LocationContext",
 	undefined,
 );
-
-const locationChangeListeners = new Set<() => void>();
-
-function subscribeToLocation(onStoreChange: () => void): () => void {
-	locationChangeListeners.add(onStoreChange);
-	return () => locationChangeListeners.delete(onStoreChange);
-}
-
-let serialId = 0;
-let lastLocation: Readonly<[href: string, id: number]>;
-
-function getLocationSnapshot() {
-	return JSON.stringify(lastLocation);
-}
-
-function base(): HTMLBaseElement {
-	const result = document.head.querySelector("base")!;
-	if (result) return result;
-
-	return document.head.insertBefore(
-		document.createElement("base"),
-		document.head.firstChild,
-	);
-}
-
-function findBlocker(): Blocker | undefined {
-	for (const blocker of blockers) {
-		if (blocker.enabled) {
-			return blocker;
-		}
-	}
-}
-
-export function initialize() {
-	base().href = location.href;
-
-	history.replaceState(
-		{
-			id: createUniqueId(),
-			data: null,
-			actionData: history.state?.actionData,
-			index: history.length - 1,
-			scroll: true,
-		},
-		"",
-		location.href,
-	);
-
-	lastLocation = [location.href, serialId];
-
-	addEventListener("popstate", handleNavigation);
-	addEventListener("hashchange", () => {
-		const id = createUniqueId();
-		history.replaceState(
-			{
-				id,
-				index: history.length - 1,
-				scroll: true,
-			},
-			"",
-			location.href,
-		);
-	});
-}
-
-let canceling = false;
-
-function handleNavigation(e: PopStateEvent | boolean) {
-	if (canceling) {
-		canceling = false;
-		return;
-	}
-
-	if (typeof e === "object") {
-		const blocker = findBlocker();
-		if (blocker) {
-			canceling = true;
-			blocker.redo = cancelLastNavigation();
-			blocker.notify();
-			return;
-		}
-	}
-
-	for (const blocker of blockers) {
-		blocker.enabled = true;
-	}
-
-	const scrollPosition = { x: scrollX, y: scrollY, f: !e };
-
-	try {
-		sessionStorage.setItem(
-			`rakkas:${lastRenderedId}`,
-			JSON.stringify(scrollPosition),
-		);
-	} catch {
-		// Ignore
-	}
-
-	if (!import.meta.env.SSR) {
-		serialId = (serialId + 1) % 0xfff_ffff;
-		lastLocation = [location.href, serialId];
-	}
-
-	startTransition(() => {
-		locationChangeListeners.forEach((listener) => listener());
-		rakkas.update?.();
-	});
-}
-
-function createUniqueId(): string {
-	// crypto.randomUUID is not available in some circumstances
-	return crypto.randomUUID
-		? crypto.randomUUID()
-		: Math.random().toString(36).slice(2);
-}
 
 /** {@link Link} props */
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -867,3 +471,24 @@ function useInView<T extends HTMLElement>() {
 
 	return { ref, inView };
 }
+
+declare global {
+	interface PromiseConstructor {
+		withResolvers<T>(): {
+			promise: Promise<T>;
+			resolve: (value: T) => void;
+			reject: (reason: any) => void;
+		};
+	}
+}
+
+Promise.withResolvers ??= function withResolvers<T>() {
+	let resolve: (value: T) => void;
+	let reject: (reason: any) => void;
+	const promise = new Promise<T>((res, rej) => {
+		resolve = res;
+		reject = rej;
+	});
+
+	return { promise, resolve: resolve!, reject: reject! };
+};

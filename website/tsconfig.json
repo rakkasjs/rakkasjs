@@ -11,6 +11,7 @@
 		"baseUrl": "./src",
 		"paths": {
 			"examples": ["examples/*"]
-		}
+		},
+		"outDir": "dist"
 	}
 }

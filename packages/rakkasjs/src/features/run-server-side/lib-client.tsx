@@ -17,7 +17,7 @@ import {
 	UseMutationResult,
 } from "../use-mutation/lib";
 import { encodeFileNameSafe } from "../../runtime/utils";
-import { useSubmit } from "../client-side-navigation/implementation";
+import { useSubmit } from "../client-side-navigation/implementation/link";
 import { EventSourceResult, useEventSource } from "../use-query/implementation";
 import { useFormAction } from "./implementation/use-form-action";
 

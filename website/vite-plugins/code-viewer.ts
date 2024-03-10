@@ -38,7 +38,7 @@ export default function frontmatterLoader(): Plugin {
 							name,
 						)} files={import.meta.glob(${JSON.stringify(
 							pattern,
-						)}, { as: "raw", eager: true })}`;
+						)}, { query: "?raw", eager: true })}`;
 					}
 
 					if (!importInjected) {

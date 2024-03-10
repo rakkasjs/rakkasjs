@@ -1,18 +1,25 @@
 export type {
 	LinkProps,
 	StyledLinkProps,
+	UseSubmitOptions,
+} from "./implementation/link";
+
+export type {
 	UseLocationResult,
 	NavigationOptions,
-	UseSubmitOptions,
-} from "./implementation";
+} from "./implementation/history";
+
+export {
+	Link,
+	StyledLink,
+	useSubmit,
+	prefetchRoute,
+} from "./implementation/link";
 
 export {
 	navigate,
 	useLocation,
-	Link,
-	StyledLink,
-	useSubmit,
 	cancelLastNavigation,
-	prefetchRoute,
-	useNavigationBlocker,
-} from "./implementation";
+} from "./implementation/history";
+
+export { useNavigationBlocker } from "./implementation/blocker";

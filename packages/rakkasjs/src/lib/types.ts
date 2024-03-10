@@ -3,7 +3,7 @@ export type {
 	RequestContext,
 	Locals as ServerSideLocals,
 } from "@hattip/compose";
-import type { navigate } from "../features/client-side-navigation/implementation";
+import type { navigate } from "../features/client-side-navigation/implementation/history";
 
 /** An object for storing stuff local to your app */
 export interface PageLocals {}
