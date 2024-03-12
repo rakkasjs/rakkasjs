@@ -153,7 +153,10 @@ export async function generatePageUrlBuilder({
 				.replace(/\\|--/g, "/")
 				.slice(0, -9)
 				.split("/")
-				.filter((segment) => segment !== "index" && !segment.startsWith("_"))
+				.filter(
+					(s) =>
+						s[0] !== "_" && s !== "index" && !(s[0] === "(" && s.endsWith(")")),
+				)
 				.map((segment) =>
 					/* Split subsegments. E.g. hello-[name]-[surname] => hello-, [name], -, [surname]*/ segment
 						.split(/(?=\[)|(?<=\])/g)
