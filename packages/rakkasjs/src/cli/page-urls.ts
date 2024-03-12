@@ -96,7 +96,7 @@ export async function generatePageUrlBuilder({
 
 		if (names.has(defaultExportName)) {
 			console.warn(
-				`Duplicate default export name "${defaultExportName}" found in "${path}" (previously used in "${names.get(defaultExportName)}").`,
+				`Duplicate default export name "${defaultExportName}" found in "${path}" (previously used in "${names.get(defaultExportName)!.path}").`,
 			);
 		}
 
