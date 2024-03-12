@@ -5,7 +5,7 @@ import { LocationContext } from "./link";
 import { RenderedUrlContext } from "../../pages/contexts";
 
 let lastRenderedId: string;
-let lastRenderedHref: string;
+let lastRenderedHref: string | undefined;
 
 let navigationPromise: Promise<void> | undefined;
 export let navigationResolve: (() => void) | undefined;
@@ -322,6 +322,11 @@ export function useLocation(): UseLocationResult {
 			};
 		},
 		() => {
+			if (!lastRenderedHref) {
+				// Hot reload may cause this
+				lastRenderedHref = location.href;
+			}
+
 			const snapshot = JSON.stringify({
 				current: lastRenderedHref,
 				pending: location.href === lastRenderedHref ? undefined : location.href,
