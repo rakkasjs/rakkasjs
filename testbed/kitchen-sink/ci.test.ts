@@ -1119,6 +1119,12 @@ function testCase(
 			await page.waitForFunction(() => document.title === "Head page 2");
 		});
 
+		test("cascade head tags in SSR", async () => {
+			const html = await fetch(host + "/head").then((r) => r.text());
+			const dom = load(html);
+			expect(dom("title").text()).toBe("The head page");
+		});
+
 		test("disables guarded catch-all route", async () => {
 			const r = await fetch(host + "/guarded-catch-all");
 			const text = await r.text();
