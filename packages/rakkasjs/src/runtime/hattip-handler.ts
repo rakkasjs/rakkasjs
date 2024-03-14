@@ -8,8 +8,10 @@ import { HookDefinition, sortHooks } from "./utils";
 import pluginFactories from "rakkasjs:plugin-server-hooks";
 import * as commonHooksModule from "rakkasjs:common-hooks";
 import type { CommonPluginOptions } from "./common-hooks";
-import type { NormalizedHeadProps } from "../features/head/implementation/merge";
-import { HeadElement } from "../features/head/implementation/types";
+import type {
+	HeadElement,
+	HeadProps,
+} from "../features/head/implementation/types";
 import { HattipHandler } from "@hattip/core";
 
 declare module "@hattip/compose" {
@@ -29,7 +31,7 @@ declare module "@hattip/compose" {
 			/** Set to true when searching for a not found page */
 			notFound: boolean;
 			/** Head tags */
-			head: NormalizedHeadProps;
+			head: HeadProps[];
 		};
 	}
 }
@@ -188,10 +190,7 @@ function init(hooks: ServerHooks[]) {
 		ctx.rakkas = {
 			hooks,
 			notFound: false,
-			head: {
-				keyed: {},
-				unkeyed: [],
-			},
+			head: [],
 		};
 	};
 }

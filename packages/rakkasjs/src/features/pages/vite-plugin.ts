@@ -111,6 +111,7 @@ export default function pages(): Plugin {
 const PAGE_HOT_RELOAD = `
 	if (import.meta.hot) {
 		import.meta.hot.accept(() => {
+			console.log("Update", import.meta.url);
 			rakkas.update?.();
 		});
 	}
