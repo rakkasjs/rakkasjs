@@ -1,4 +1,4 @@
-import { FilterPattern, Plugin } from "vite";
+import type { FilterPattern, Plugin } from "vite";
 import { injectConfig } from "./inject-config";
 import { preventViteBuild } from "./prevent-vite-build";
 import { vaviteConnect } from "@vavite/connect";
@@ -10,12 +10,12 @@ import { nodeLoaderPlugin } from "@vavite/node-loader/plugin";
 // Feature plugins
 import pages from "../features/pages/vite-plugin";
 import runServerSide from "../features/run-server-side/vite-plugin";
-import { adapters, RakkasAdapter } from "./adapters";
+import { adapters, type RakkasAdapter } from "./adapters";
 import { serverOnlyClientOnly } from "./server-only-client-only";
 import {
 	type RakkasPluginApi,
 	rakkasPlugins,
-	RouteDefinition,
+	type RouteDefinition,
 } from "./rakkas-plugins";
 import { fsRoutes } from "./fs-routes";
 import { routes } from "./routes";

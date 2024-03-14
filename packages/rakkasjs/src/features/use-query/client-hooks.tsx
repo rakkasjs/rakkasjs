@@ -1,10 +1,10 @@
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { defineClientHooks } from "../../runtime/client-hooks";
 import {
-	CacheItem,
+	type CacheItem,
 	createQueryClient,
 	DEFAULT_QUERY_OPTIONS,
-	QueryCache,
+	type QueryCache,
 	QueryCacheContext,
 } from "./implementation";
 

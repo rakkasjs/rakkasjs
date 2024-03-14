@@ -1,5 +1,5 @@
-import { Plugin, ViteDevServer } from "vite";
-import {
+import type { Plugin, ViteDevServer } from "vite";
+import type {
 	ApiRouteDefinition,
 	PageRouteDefinition,
 	RouteDefinition,

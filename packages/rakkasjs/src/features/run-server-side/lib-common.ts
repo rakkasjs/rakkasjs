@@ -1,6 +1,6 @@
 import type { RequestContext } from "@hattip/compose";
-import { FormEvent, useContext } from "react";
-import {
+import { type FormEvent, useContext } from "react";
+import type {
 	UseMutationErrorResult,
 	UseMutationIdleResult,
 	UseMutationLoadingResult,

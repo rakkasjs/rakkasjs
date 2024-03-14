@@ -1,10 +1,10 @@
-import { BuildOptions, ResolvedConfig } from "vite";
+import type { BuildOptions, ResolvedConfig } from "vite";
 import { multibuild } from "@vavite/multibuild";
 import { version } from "../../package.json";
 import pico from "picocolors";
 import { doPrerender } from "./prerender";
-import { cleanOptions, GlobalCLIOptions } from ".";
-import { RakkasAdapter } from "../vite-plugin/adapters";
+import { cleanOptions, type GlobalCLIOptions } from ".";
+import type { RakkasAdapter } from "../vite-plugin/adapters";
 
 export async function build(
 	root: string,

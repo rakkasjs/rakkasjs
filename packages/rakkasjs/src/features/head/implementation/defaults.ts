@@ -1,4 +1,4 @@
-import { HeadProps } from "./types";
+import type { HeadProps } from "./types";
 
 export const defaultHeadProps: HeadProps = {
 	title: import.meta.env.RAKKAS_DEFAULT_APP_TITLE || "Rakkas App",

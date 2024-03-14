@@ -1,10 +1,14 @@
-import { compose, RequestContext, RequestHandler } from "@hattip/compose";
-import { ReactElement } from "react";
+import {
+	compose,
+	type RequestContext,
+	type RequestHandler,
+} from "@hattip/compose";
+import type { ReactElement } from "react";
 import renderApiRoute from "../features/api-routes/middleware";
 import renderPageRoute from "../features/pages/middleware";
-import { PageContext } from "../runtime/page-types";
+import type { PageContext } from "../runtime/page-types";
 import serverFeatureHooks from "./feature-server-hooks";
-import { HookDefinition, sortHooks } from "./utils";
+import { type HookDefinition, sortHooks } from "./utils";
 import pluginFactories from "rakkasjs:plugin-server-hooks";
 import * as commonHooksModule from "rakkasjs:common-hooks";
 import type { CommonPluginOptions } from "./common-hooks";
@@ -12,7 +16,7 @@ import type {
 	HeadElement,
 	HeadProps,
 } from "../features/head/implementation/types";
-import { HattipHandler } from "@hattip/core";
+import type { HattipHandler } from "@hattip/core";
 
 declare module "@hattip/compose" {
 	interface RequestContextExtensions {

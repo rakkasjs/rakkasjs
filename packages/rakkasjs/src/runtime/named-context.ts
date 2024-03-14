@@ -1,4 +1,4 @@
-import { createContext, Context } from "react";
+import { createContext, type Context } from "react";
 
 /**
  * Creates a React context and saves it in the global object to work around

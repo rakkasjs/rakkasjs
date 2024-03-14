@@ -1,25 +1,25 @@
 import React, {
-	AnchorHTMLAttributes,
-	CSSProperties,
+	type AnchorHTMLAttributes,
+	type CSSProperties,
 	forwardRef,
 	useCallback,
 	useEffect,
 	useState,
-	FormEvent,
+	type FormEvent,
 	useRef,
 } from "react";
 import {
-	ActionResult,
+	type ActionResult,
 	useMutation,
-	UseMutationErrorResult,
-	UseMutationIdleResult,
-	UseMutationLoadingResult,
-	UseMutationOptions,
-	UseMutationSuccessResult,
+	type UseMutationErrorResult,
+	type UseMutationIdleResult,
+	type UseMutationLoadingResult,
+	type UseMutationOptions,
+	type UseMutationSuccessResult,
 	usePageContext,
 } from "../../../lib";
 import { createNamedContext } from "../../../runtime/named-context";
-import { NavigationOptions, navigate, useLocation } from "./history";
+import { type NavigationOptions, navigate, useLocation } from "./history";
 
 export const LocationContext = createNamedContext<string | undefined>(
 	"LocationContext",

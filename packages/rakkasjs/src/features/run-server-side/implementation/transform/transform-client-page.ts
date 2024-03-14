@@ -1,4 +1,4 @@
-import { NodePath, PluginItem } from "@babel/core";
+import { NodePath, type PluginItem } from "@babel/core";
 import * as t from "@babel/types";
 import { getAlreadyUnreferenced, removeUnreferenced } from "./transform-utils";
 

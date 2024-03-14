@@ -1,11 +1,11 @@
 import React from "react";
 import {
-	CacheItem,
+	type CacheItem,
 	createQueryClient,
 	QueryCacheContext,
 } from "./implementation";
 import { uneval } from "devalue";
-import { ServerHooks } from "../../runtime/hattip-handler";
+import type { ServerHooks } from "../../runtime/hattip-handler";
 
 const useQueryServerHooks: ServerHooks = {
 	createPageHooks() {

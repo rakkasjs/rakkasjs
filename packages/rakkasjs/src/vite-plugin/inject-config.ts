@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
-import { Plugin } from "vite";
-import { RakkasAdapter } from "./adapters";
-import { BuildStep } from "@vavite/multibuild";
+import type { Plugin } from "vite";
+import type { RakkasAdapter } from "./adapters";
+import type { BuildStep } from "@vavite/multibuild";
 
 export interface InjectConfigOptions {
 	prerender: string[];

@@ -7,34 +7,34 @@ import {
 import clientManifest from "rakkasjs:client-manifest";
 import { App, RouteContext } from "../../runtime/App";
 import { isBot } from "../../runtime/isbot";
-import { findPage, RouteMatch } from "../../internal/find-page";
+import { findPage, type RouteMatch } from "../../internal/find-page";
 import {
 	ResponseContext,
-	ResponseContextProps,
+	type ResponseContextProps,
 } from "../response-manipulation/implementation";
-import { RequestContext } from "@hattip/compose";
+import type { RequestContext } from "@hattip/compose";
 import {
 	IsomorphicContext,
 	ServerSideContext,
 } from "../../runtime/isomorphic-context";
-import type { PageContext } from "../../runtime/page-types";
 import { Default404Page } from "./Default404Page";
-import {
+import type {
 	ActionResult,
 	LayoutImporter,
 	PageImporter,
 	PageRouteGuard,
 	PrerenderResult,
 	ServerSidePageContext,
+	PageContext,
 } from "../../runtime/page-types";
 import { uneval } from "devalue";
 import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
-import { PageRequestHooks } from "../../runtime/hattip-handler";
-import { ModuleNode } from "vite";
+import type { PageRequestHooks } from "../../runtime/hattip-handler";
+import type { ModuleNode } from "vite";
 import { escapeCss, escapeHtml, sortHooks } from "../../runtime/utils";
 import { commonHooks } from "../../runtime/feature-common-hooks";
 import { renderHeadContent } from "../head/server-hooks";
-import { HeadElement } from "../head/implementation/types";
+import type { HeadElement } from "../head/implementation/types";
 
 const assetPrefix = import.meta.env.BASE_URL ?? "/";
 

@@ -1,4 +1,4 @@
-import { PluginItem, NodePath } from "@babel/core";
+import { type PluginItem, NodePath } from "@babel/core";
 import * as t from "@babel/types";
 import {
 	extractUniqueId,

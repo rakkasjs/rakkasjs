@@ -9,6 +9,7 @@
 		"moduleResolution": "Node",
 		"resolveJsonModule": true,
 		"jsx": "react",
+		"verbatimModuleSyntax": true,
 		"outDir": "dist"
 	},
 	"exclude": ["dist", "*.d.ts"]
