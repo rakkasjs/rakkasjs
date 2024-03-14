@@ -4,6 +4,7 @@ export type {
 	Locals as ServerSideLocals,
 } from "@hattip/compose";
 import type { navigate } from "../features/client-side-navigation/implementation/history";
+import type { HeadProps } from "../features/head/implementation/types";
 
 /** An object for storing stuff local to your app */
 export interface PageLocals {}
@@ -16,6 +17,8 @@ export interface RakkasBrowserGlobal {
 	clientRender?: boolean;
 	update?: () => void;
 	navigate?: typeof navigate;
+	headTagStack: (HeadProps & { order: number })[];
+	headOrder: number;
 }
 
 declare global {

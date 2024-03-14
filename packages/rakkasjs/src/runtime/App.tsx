@@ -389,7 +389,7 @@ export async function loadRoute(
 				Component = ({ children }) => children;
 			}
 
-			const preloadResult = preloaded[i];
+			const preloadResult = preloaded[components.length - i - 1];
 
 			return (
 				<>

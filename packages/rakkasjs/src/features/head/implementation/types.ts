@@ -168,7 +168,7 @@ export interface OtherLinkTag extends CommonLinkAttributes {
 
 export interface CommonLinkAttributes extends CommonAttributes {
 	blocking?: boolean;
-	crossorigin?: "anonymous" | "use-credentials" | false;
+	crossorigin?: "anonymous" | "use-credentials" | boolean;
 	fetchpriority?: "auto" | "high" | "low" | false;
 	href: string;
 	hreflang?: string | false;
@@ -204,7 +204,7 @@ export interface ScriptElement extends CommonAttributes {
 	tagName: "script";
 	async?: boolean;
 	blocking?: boolean;
-	crossorigin?: "anonymous" | "use-credentials" | false;
+	crossorigin?: "anonymous" | "use-credentials" | boolean;
 	defer?: boolean;
 	fetchpriority?: "auto" | "high" | "low" | false;
 	integrity?: string | false;

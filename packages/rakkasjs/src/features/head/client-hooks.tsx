@@ -5,7 +5,7 @@ import { HeadContext } from "./implementation/context";
 export default defineClientHooks({
 	wrapApp(app) {
 		return (
-			<HeadContext.Provider value={{ keyed: {}, unkeyed: [] }}>
+			<HeadContext.Provider value={{ stack: rakkas.headTagStack }}>
 				{app}
 			</HeadContext.Provider>
 		);

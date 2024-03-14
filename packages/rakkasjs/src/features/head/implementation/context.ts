@@ -1,7 +1,7 @@
 import { createNamedContext } from "../../../runtime/named-context";
-import { NormalizedHeadProps } from "./merge";
+import { HeadProps } from "./types";
 
-export const HeadContext = createNamedContext<NormalizedHeadProps>(
+export const HeadContext = createNamedContext<{ stack: HeadProps[] }>(
 	"ServerHeadContext",
-	{ keyed: {}, unkeyed: [] },
+	{ stack: [] },
 );

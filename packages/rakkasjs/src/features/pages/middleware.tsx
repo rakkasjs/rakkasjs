@@ -34,7 +34,6 @@ import { ModuleNode } from "vite";
 import { escapeCss, escapeHtml, sortHooks } from "../../runtime/utils";
 import { commonHooks } from "../../runtime/feature-common-hooks";
 import { renderHeadContent } from "../head/server-hooks";
-import { mergeHeadProps } from "../head/implementation/merge";
 import { HeadElement } from "../head/implementation/types";
 
 const assetPrefix = import.meta.env.BASE_URL ?? "/";
@@ -621,6 +620,7 @@ async function createPrefetchTags(ctx: RequestContext, moduleIds: string[]) {
 		const cssSet = new Set<string>();
 		// const assetSet = new Set<string>();
 
+		const elements: HeadElement[] = [];
 		for (const moduleId of moduleSet) {
 			const manifestEntry = clientManifest?.[moduleId];
 			if (!manifestEntry) continue;
@@ -631,24 +631,26 @@ async function createPrefetchTags(ctx: RequestContext, moduleIds: string[]) {
 
 			const script = clientManifest?.[moduleId].file;
 			if (script) {
-				ctx.rakkas.head.unkeyed.push({
+				elements.push({
 					tagName: "link",
 					rel: "modulepreload",
 					href: assetPrefix + script,
-					crossorigin: true,
+					crossorigin: "" as any,
 					"data-sr": true,
 				});
 			}
 		}
 
 		for (const cssFile of cssSet) {
-			ctx.rakkas.head.unkeyed.push({
+			elements.push({
 				tagName: "link",
 				rel: "stylesheet",
 				href: assetPrefix + cssFile,
 				"data-sr": true,
 			});
 		}
+
+		ctx.rakkas.head.push({ elements });
 
 		// TODO: Prefetch/preload assets
 		// for (const assetFile of assetSet) {
@@ -713,7 +715,7 @@ function renderHead(
 ) {
 	// TODO: Customize HTML document
 
-	const browserGlobal: typeof rakkas = {};
+	const browserGlobal: typeof rakkas = { headTagStack: [], headOrder: 0 };
 	if (actionErrorIndex >= 0 && renderMode !== "server") {
 		browserGlobal.actionErrorIndex = actionErrorIndex;
 	}
@@ -744,7 +746,7 @@ function renderHead(
 		script.textContent += body;
 	}
 
-	mergeHeadProps(ctx.rakkas.head, { elements: [script] });
+	ctx.rakkas.head.push({ elements: [script] });
 
 	const emitServerOnlyHeadElementsHandlers = sortHooks(
 		pageHooks.map((hook) => hook?.emitServerOnlyHeadElements),
@@ -754,12 +756,13 @@ function renderHead(
 		const head = handler();
 		if (!head) continue;
 
-		mergeHeadProps(ctx.rakkas.head, {
+		ctx.rakkas.head.push({
 			elements: head.map((e) => ({ ...e, "data-sr": true })),
 		});
 	}
 
 	const { specialAttributes, content: managedHead } = renderHeadContent(
+		ctx.url.pathname + ctx.url.search,
 		ctx.rakkas.head,
 	);
 

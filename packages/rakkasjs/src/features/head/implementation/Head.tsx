@@ -1,26 +1,55 @@
-import { ReactElement, useContext, useEffect } from "react";
+import { ReactElement, useContext, useEffect, useRef } from "react";
 import { HeadContext } from "./context";
 import type { HeadProps } from "./types";
 import { Attributes, NormalizedHeadProps, mergeHeadProps } from "./merge";
 import { defaultHeadProps } from "./defaults";
 import { sortHeadTags } from "./sort";
 
+/**
+ * Control head tags in your document head.
+ */
 export function useHead(props: HeadProps): void {
-	const tags = useContext(HeadContext);
+	const { stack: ssrStack } = useContext(HeadContext);
+	const ref = useRef<HeadProps & { order: number }>(undefined as any);
 
 	if (import.meta.env.SSR) {
-		mergeHeadProps(tags, props);
+		ssrStack.push({ ...props });
+	} else if (!ref.current) {
+		ref.current = { ...props, order: rakkas.headOrder++ };
 	}
 
-	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(() => {
-		usedTags.push(props);
+		const { current } = ref;
+
+		return () => {
+			const index = rakkas.headTagStack.indexOf(current);
+			if (index !== -1) {
+				rakkas.headTagStack.splice(index, 1);
+			}
+		};
+	}, []);
+
+	useEffect(() => {
+		const { current } = ref;
+
+		for (const key of Object.keys(current)) {
+			if (key === "order") continue;
+			delete current[key as keyof HeadProps];
+		}
+		Object.assign(current, props);
+
+		if (!rakkas.headTagStack.includes(current)) {
+			rakkas.headTagStack.push(current);
+		}
+
 		scheduleUpdate();
 
 		return () => {
-			const index = usedTags.indexOf(props);
-			if (index === -1) return;
-			usedTags.splice(usedTags.indexOf(props), Infinity);
+			for (const key of Object.keys(props)) {
+				if (key === "order") continue;
+				delete current[key as keyof HeadProps];
+			}
+
 			scheduleUpdate();
 		};
 	});
@@ -30,8 +59,6 @@ export function Head(props: HeadProps): ReactElement {
 	useHead(props);
 	return null as any;
 }
-
-const usedTags: HeadProps[] = [];
 
 let scheduled = false;
 function scheduleUpdate() {
@@ -55,7 +82,9 @@ function updateHead() {
 
 	mergeHeadProps(tags, defaultHeadProps);
 
-	for (const props of [...usedTags].reverse()) {
+	rakkas.headTagStack.sort((a, b) => a.order - b.order);
+
+	for (const props of rakkas.headTagStack) {
 		mergeHeadProps(tags, props);
 	}
 

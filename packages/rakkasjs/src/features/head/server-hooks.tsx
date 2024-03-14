@@ -1,24 +1,21 @@
 import React from "react";
 import type { ServerHooks } from "../../runtime/hattip-handler";
 import { escapeCss, escapeHtml } from "../../runtime/utils";
-import { NormalizedHeadProps, mergeHeadProps } from "./implementation/merge";
-import { defaultHeadProps } from "./implementation/defaults";
 import { HeadContext } from "./implementation/context";
 import { sortHeadTags } from "./implementation/sort";
+import { HeadProps } from "./lib";
+import { NormalizedHeadProps, mergeHeadProps } from "./implementation/merge";
+import { defaultHeadProps } from "./implementation/defaults";
 
 const headServerHooks: ServerHooks = {
 	createPageHooks(ctx) {
-		const tags = ctx.rakkas.head;
-		tags.keyed.base = {
-			tagName: "base",
-			href: ctx.url.pathname + ctx.url.search,
-		};
-
-		mergeHeadProps(tags, defaultHeadProps);
-
 		return {
 			wrapApp: (app) => {
-				return <HeadContext.Provider value={tags}>{app}</HeadContext.Provider>;
+				return (
+					<HeadContext.Provider value={{ stack: ctx.rakkas.head }}>
+						{app}
+					</HeadContext.Provider>
+				);
 			},
 		};
 	},
@@ -26,7 +23,22 @@ const headServerHooks: ServerHooks = {
 
 export default headServerHooks;
 
-export function renderHeadContent(tags: NormalizedHeadProps) {
+export function renderHeadContent(href: string, stack: HeadProps[]) {
+	const tags: NormalizedHeadProps = {
+		keyed: {
+			base: {
+				tagName: "base",
+				href,
+			},
+		},
+		unkeyed: [],
+	};
+
+	mergeHeadProps(tags, defaultHeadProps);
+	for (const props of stack.reverse()) {
+		mergeHeadProps(tags, props);
+	}
+
 	const specialAttributes: {
 		htmlAttributes: Record<string, string | number | boolean | undefined>;
 		headAttributes: Record<string, string | number | boolean | undefined>;
