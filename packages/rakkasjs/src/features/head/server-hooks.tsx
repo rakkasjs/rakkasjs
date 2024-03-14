@@ -35,7 +35,7 @@ export function renderHeadContent(href: string, stack: HeadProps[]) {
 	};
 
 	mergeHeadProps(tags, defaultHeadProps);
-	for (const props of stack.reverse()) {
+	for (const props of stack) {
 		mergeHeadProps(tags, props);
 	}
 
