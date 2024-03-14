@@ -36,10 +36,7 @@ import {
 	navigationResolve,
 	restoreScrollPosition,
 } from "../features/client-side-navigation/implementation/history";
-
-type Routes = (typeof import("rakkasjs:client-page-routes"))["default"];
-type NotFoundRoutes =
-	(typeof import("rakkasjs:client-page-routes"))["notFoundRoutes"];
+import * as prodModule from "rakkasjs:client-page-routes";
 
 export interface AppProps {
 	ssrMeta?: any;
@@ -185,37 +182,11 @@ export async function loadRoute(
 	let updatedComponents: Layout[] | undefined;
 
 	if (!found || import.meta.hot) {
-		let routes: Routes;
-		let updatedRoutes: Routes;
-		let notFoundRoutes: NotFoundRoutes;
-		let updatedNotFoundRoutes: NotFoundRoutes;
-
-		// TODO: Clean this up
-		if (import.meta.env.PROD) {
-			const prodModule = await import("rakkasjs:client-page-routes");
-			routes = prodModule.default;
-			notFoundRoutes = prodModule.notFoundRoutes;
-		} else {
-			// This whole dance is about rendering the old component (which
-			// React updates internally via Fast Refresh), but calling the
-			// preload function of the new component.
-			const updatedModule = await import("rakkasjs:client-page-routes");
-			routes = updatedModule.default;
-			notFoundRoutes = updatedModule.notFoundRoutes;
-
-			if (import.meta.hot) {
-				const updatedModule = await import("rakkasjs:client-page-routes");
-				updatedRoutes = updatedModule.default;
-				updatedNotFoundRoutes = updatedModule.notFoundRoutes;
-			}
-		}
+		const routes = prodModule.default;
+		const notFoundRoutes = prodModule.notFoundRoutes;
 
 		let pathname = url.pathname;
-		let result = findPage(routes, url, pathname, pageContext, false);
-
-		if (import.meta.hot && !result) {
-			result = findPage(updatedRoutes!, url, pathname, pageContext, false);
-		}
+		const result = findPage(routes, url, pathname, pageContext, false);
 
 		if (result && "redirect" in result) {
 			const location = String(result.redirect);
@@ -256,23 +227,13 @@ export async function loadRoute(
 				pathname += "/";
 			}
 
-			let result = findPage(
+			const result = findPage(
 				notFoundRoutes,
 				url,
 				pathname + "$404",
 				pageContext,
 				true,
 			);
-
-			if (import.meta.hot && !result) {
-				result = findPage(
-					updatedNotFoundRoutes!,
-					url,
-					pathname + "$404",
-					pageContext,
-					true,
-				);
-			}
 
 			if (result && "redirect" in result) {
 				location.assign(result.redirect);
@@ -297,18 +258,6 @@ export async function loadRoute(
 
 			// Throw away the last path segment
 			pathname = pathname.split("/").slice(0, -2).join("/") || "/";
-		}
-
-		if (import.meta.hot) {
-			const foundIndex = routes.findIndex((route) => route === found!.route);
-			const updatedRoute = updatedRoutes![foundIndex];
-			if (updatedRoute) {
-				updatedComponents = (await Promise.all(
-					updatedRoute?.[1].map((importer) =>
-						importer().then((module) => module.default),
-					),
-				)) as any;
-			}
 		}
 	}
 

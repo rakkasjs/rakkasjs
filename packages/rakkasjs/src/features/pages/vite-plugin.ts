@@ -110,9 +110,13 @@ export default function pages(): Plugin {
 
 const PAGE_HOT_RELOAD = `
 	if (import.meta.hot) {
-		import.meta.hot.accept(() => {
-			console.log("Update", import.meta.url);
-			rakkas.update?.();
+		RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+			import.meta.hot.accept((nextExports) => {
+				if (currentExports.default) {
+					currentExports.default.preload = nextExports.default?.preload;
+				}
+				rakkas.update?.();
+			});
 		});
 	}
 `;
