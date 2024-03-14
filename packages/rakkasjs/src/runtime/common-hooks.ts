@@ -1,10 +1,10 @@
-import { ReactElement } from "react";
-import {
+import type { ReactElement } from "react";
+import type {
 	LookupHookContext,
 	LookupHookResult,
 	PageContext,
 } from "../runtime/page-types";
-import { HookDefinition } from "./utils";
+import type { HookDefinition } from "./utils";
 
 /** Page hooks common to the server and client */
 export interface CommonHooks {

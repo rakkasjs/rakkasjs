@@ -1,7 +1,7 @@
-import { Plugin } from "vite";
+import type { Plugin } from "vite";
 import { transformAsync } from "@babel/core";
 import { babelTransformClientSidePages } from "../run-server-side/implementation/transform/transform-client-page";
-import { PageRouteDefinition } from "../../vite-plugin/rakkas-plugins";
+import type { PageRouteDefinition } from "../../vite-plugin/rakkas-plugins";
 import { init, parse } from "es-module-lexer";
 
 export default function pages(): Plugin {

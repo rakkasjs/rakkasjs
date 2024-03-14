@@ -1,5 +1,5 @@
 import { performance } from "node:perf_hooks";
-import { BuildOptions, ServerOptions, LogLevel } from "vite";
+import type { BuildOptions, ServerOptions, LogLevel } from "vite";
 import { cac } from "cac";
 import { version } from "../../package.json";
 import { spawn } from "node:child_process";

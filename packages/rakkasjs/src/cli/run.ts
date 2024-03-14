@@ -1,4 +1,4 @@
-import { LogLevel, createServer } from "vite";
+import { type LogLevel, createServer } from "vite";
 
 export async function run(
 	script: string,

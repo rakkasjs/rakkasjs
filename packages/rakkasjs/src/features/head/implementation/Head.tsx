@@ -1,7 +1,11 @@
-import { ReactElement, useContext, useEffect, useRef } from "react";
+import { type ReactElement, useContext, useEffect, useRef } from "react";
 import { HeadContext } from "./context";
 import type { HeadProps } from "./types";
-import { Attributes, NormalizedHeadProps, mergeHeadProps } from "./merge";
+import {
+	type Attributes,
+	type NormalizedHeadProps,
+	mergeHeadProps,
+} from "./merge";
 import { defaultHeadProps } from "./defaults";
 import { sortHeadTags } from "./sort";
 

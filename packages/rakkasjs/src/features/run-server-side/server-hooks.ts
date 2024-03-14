@@ -5,7 +5,7 @@ import { decodeFileNameSafe } from "../../runtime/utils";
 import renderPageRoute from "../pages/middleware";
 import { composableActionData } from "./lib-server";
 import { EventStreamContentType } from "@microsoft/fetch-event-source";
-import { RunServerSideContext } from "./lib-common";
+import type { RunServerSideContext } from "./lib-common";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {

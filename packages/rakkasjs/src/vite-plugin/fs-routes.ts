@@ -5,7 +5,7 @@ import path from "node:path";
 import micromatch from "micromatch";
 import { pathToFileURL } from "node:url";
 import pico from "picocolors";
-import { BaseRouteConfig, RouteConfig } from "../lib";
+import type { BaseRouteConfig, RouteConfig } from "../lib";
 
 export function fsRoutes(): Plugin {
 	let resolveConfigResolvedPromise: () => void;

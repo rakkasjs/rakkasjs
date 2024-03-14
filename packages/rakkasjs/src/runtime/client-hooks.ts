@@ -1,6 +1,6 @@
-import { ReactElement } from "react";
-import { PageContext } from "../runtime/page-types";
-import { HookDefinition } from "./utils";
+import type { ReactElement } from "react";
+import type { PageContext } from "../runtime/page-types";
+import type { HookDefinition } from "./utils";
 
 /** Client-side customization hooks */
 export interface ClientHooks {

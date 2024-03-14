@@ -2,12 +2,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import type { HattipHandler } from "@hattip/core";
-import { ResolvedConfig, resolveConfig } from "vite";
+import { type ResolvedConfig, resolveConfig } from "vite";
 import pico from "picocolors";
-import { GlobalCLIOptions } from ".";
+import type { GlobalCLIOptions } from ".";
 import { version } from "../../package.json";
 import { load } from "cheerio";
-import { PrerenderResult } from "../runtime/page-types";
+import type { PrerenderResult } from "../runtime/page-types";
 import { escapeHtml } from "../runtime/utils";
 import installFetch from "@hattip/polyfills/node-fetch";
 

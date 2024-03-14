@@ -4,12 +4,12 @@ import sirv from "sirv";
 import { createMiddleware } from "@hattip/adapter-node";
 import pico from "picocolors";
 import {
-	InlineConfig,
+	type InlineConfig,
 	preview as previewServer,
 	resolveConfig,
-	ServerOptions,
+	type ServerOptions,
 } from "vite";
-import { cleanOptions, GlobalCLIOptions, startTime } from ".";
+import { cleanOptions, type GlobalCLIOptions, startTime } from ".";
 import { version } from "../../package.json";
 
 export async function preview(

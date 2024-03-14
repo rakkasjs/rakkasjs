@@ -1,5 +1,5 @@
 import type { RequestContext } from "@hattip/compose";
-import { PageContext } from "../lib";
+import type { PageContext } from "../lib";
 import { createNamedContext } from "./named-context";
 
 export const IsomorphicContext = createNamedContext<PageContext>(

@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from "react";
+import React, { type FC, type PropsWithChildren } from "react";
 import { ErrorBoundary as OriginalErrorBoundary } from "react-error-boundary";
 import { resetErrors } from "../use-query/client-hooks";
 import type { ErrorBoundaryProps } from "./lib";

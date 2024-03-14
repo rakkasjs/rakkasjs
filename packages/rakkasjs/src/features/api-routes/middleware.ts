@@ -1,7 +1,7 @@
 import {
 	composePartial,
-	RequestHandler,
-	RequestContext,
+	type RequestHandler,
+	type RequestContext,
 } from "@hattip/compose";
 import { unescapeParams } from "../../internal/find-page";
 

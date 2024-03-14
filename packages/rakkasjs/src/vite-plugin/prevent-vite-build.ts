@@ -1,4 +1,4 @@
-import { Plugin } from "vite";
+import type { Plugin } from "vite";
 
 export function preventViteBuild(): Plugin {
 	let buildStepStartCalled = false;

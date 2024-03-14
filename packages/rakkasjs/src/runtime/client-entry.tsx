@@ -1,13 +1,17 @@
 import React, { StrictMode, Suspense } from "react";
 import { hydrateRoot, createRoot } from "react-dom/client";
 import { DEFAULT_QUERY_OPTIONS } from "../features/use-query/implementation";
-import { UseQueryOptions, ErrorBoundary, CommonPluginOptions } from "../lib";
+import {
+	type UseQueryOptions,
+	ErrorBoundary,
+	type CommonPluginOptions,
+} from "../lib";
 import { App, loadRoute, RouteContext } from "./App";
-import { ClientHooks } from "./client-hooks";
+import type { ClientHooks } from "./client-hooks";
 import { featureClientHooks } from "./feature-client-hooks";
 import { IsomorphicContext } from "./isomorphic-context";
 import ErrorComponent from "rakkasjs:error-page";
-import { PageContext } from "./page-types";
+import type { PageContext } from "./page-types";
 import { sortHooks } from "./utils";
 import { commonHooks } from "./feature-common-hooks";
 import factories from "rakkasjs:plugin-client-hooks";

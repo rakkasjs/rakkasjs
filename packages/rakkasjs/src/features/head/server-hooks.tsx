@@ -3,8 +3,11 @@ import type { ServerHooks } from "../../runtime/hattip-handler";
 import { escapeCss, escapeHtml } from "../../runtime/utils";
 import { HeadContext } from "./implementation/context";
 import { sortHeadTags } from "./implementation/sort";
-import { HeadProps } from "./lib";
-import { NormalizedHeadProps, mergeHeadProps } from "./implementation/merge";
+import type { HeadProps } from "./lib";
+import {
+	type NormalizedHeadProps,
+	mergeHeadProps,
+} from "./implementation/merge";
 import { defaultHeadProps } from "./implementation/defaults";
 
 const headServerHooks: ServerHooks = {

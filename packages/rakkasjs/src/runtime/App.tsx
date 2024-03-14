@@ -1,7 +1,7 @@
 import React, {
-	Dispatch,
-	ReactElement,
-	SetStateAction,
+	type Dispatch,
+	type ReactElement,
+	type SetStateAction,
 	useContext,
 	useDeferredValue,
 	useEffect,
@@ -12,8 +12,8 @@ import {
 	cancelLastNavigation,
 	useLocation,
 } from "../features/client-side-navigation/lib";
-import { findPage, RouteMatch } from "../internal/find-page";
-import {
+import { findPage, type RouteMatch } from "../internal/find-page";
+import type {
 	Layout,
 	LayoutModule,
 	PageModule,
@@ -21,7 +21,7 @@ import {
 	PreloadResult,
 } from "./page-types";
 import { Default404Page } from "../features/pages/Default404Page";
-import { Head, PageContext, Redirect } from "../lib";
+import { Head, type PageContext, Redirect } from "../lib";
 import { IsomorphicContext } from "./isomorphic-context";
 import { createNamedContext } from "./named-context";
 import {

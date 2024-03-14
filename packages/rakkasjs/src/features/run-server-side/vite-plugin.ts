@@ -1,5 +1,5 @@
-import { Plugin, ResolvedConfig } from "vite";
-import { PluginItem, transformAsync } from "@babel/core";
+import type { Plugin, ResolvedConfig } from "vite";
+import { type PluginItem, transformAsync } from "@babel/core";
 import { babelTransformServerSideHooks } from "./implementation/transform/transform-server-side";
 import { babelTransformClientSideHooks } from "./implementation/transform/transform-client-side";
 

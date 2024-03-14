@@ -1,6 +1,6 @@
-import { PageContext } from "../lib";
+import type { PageContext } from "../lib";
 import { commonHooks } from "../runtime/feature-common-hooks";
-import { PageRouteGuard, Redirection } from "../runtime/page-types";
+import type { PageRouteGuard, Redirection } from "../runtime/page-types";
 import { sortHooks } from "../runtime/utils";
 
 export const beforePageLookupHandlers = sortHooks(

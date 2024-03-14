@@ -1,4 +1,4 @@
-import { Attributes, NormalizedHeadProps } from "./merge";
+import type { Attributes, NormalizedHeadProps } from "./merge";
 
 /*
 0. charset

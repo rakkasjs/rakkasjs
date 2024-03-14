@@ -1,4 +1,4 @@
-import { HeadProps } from "./types";
+import type { HeadProps } from "./types";
 
 export interface NormalizedHeadProps {
 	keyed: Record<string, Attributes>;

@@ -1,5 +1,5 @@
 import path from "node:path";
-import { Plugin } from "vite";
+import type { Plugin } from "vite";
 
 export interface VirtualDefaultEntryOptions {
 	virtualName: string;
