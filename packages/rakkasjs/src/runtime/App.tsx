@@ -8,10 +8,7 @@ import React, {
 	useReducer,
 	useState,
 } from "react";
-import {
-	cancelLastNavigation,
-	useLocation,
-} from "../features/client-side-navigation/lib";
+import { useLocation } from "../features/client-side-navigation/lib";
 import { findPage, type RouteMatch } from "../internal/find-page";
 import type {
 	Layout,
@@ -212,10 +209,6 @@ export async function loadRoute(
 			if (!try404) {
 				// Always try a full reload before showing a 404 page
 				// the route may be a static file or an API route.
-				cancelLastNavigation();
-				await new Promise((resolve) => {
-					window.addEventListener("popstate", resolve, { once: true });
-				});
 
 				location.assign(url.href);
 				await new Promise(() => {
