@@ -14,7 +14,9 @@ import ErrorComponent from "rakkasjs:error-page";
 import type { PageContext } from "./page-types";
 import { sortHooks } from "./utils";
 import { commonHooks } from "./feature-common-hooks";
-import factories from "rakkasjs:plugin-client-hooks";
+import factories, {
+	options as configOptions,
+} from "rakkasjs:plugin-client-hooks";
 import * as commonHooksModule from "rakkasjs:common-hooks";
 
 export type { ClientHooks };
@@ -32,6 +34,7 @@ export interface ClientPluginOptions {}
 export type ClientPluginFactory = (
 	options: ClientPluginOptions,
 	commonOptions: CommonPluginOptions,
+	configOptions: any,
 ) => ClientHooks;
 
 /** Starts the client. */
@@ -44,7 +47,9 @@ export async function startClient(
 	const { commonPluginOptions = {} } = commonHooksModule;
 
 	const hooks = [
-		...factories.map((factory) => factory(pluginOptions, commonPluginOptions)),
+		...factories.map((factory, i) =>
+			factory(pluginOptions, commonPluginOptions, configOptions[i]),
+		),
 		...featureClientHooks,
 	];
 

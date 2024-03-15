@@ -115,10 +115,13 @@ declare module "rakkasjs:plugin-server-hooks" {
 		(
 			serverOptions: ServerPluginOptions,
 			commonOptions: CommonPluginOptions,
+			configOptions: unknown,
 		) => ServerHooks
 	>;
 
 	export default pluginServerHookFactories;
+
+	export const options: unknown[];
 }
 
 declare module "rakkasjs:plugin-client-hooks" {
@@ -130,15 +133,22 @@ declare module "rakkasjs:plugin-client-hooks" {
 		(
 			clientOptions: ClientPluginOptions,
 			commonOptions: CommonPluginOptions,
+			configOptions: unknown,
 		) => ClientHooks
 	>;
+
 	export default pluginClientHookFactories;
+
+	export const options: unknown[];
 }
 
 declare module "rakkasjs:plugin-common-hooks" {
 	import { CommonHooks, CommonPluginOptions } from "./common-hooks";
 	const pluginCommonHookFactories: Array<
-		(commonOptions: CommonPluginOptions) => CommonHooks
+		(commonOptions: CommonPluginOptions, configOptions: unknown) => CommonHooks
 	>;
+
 	export default pluginCommonHookFactories;
+
+	export const options: unknown[];
 }
