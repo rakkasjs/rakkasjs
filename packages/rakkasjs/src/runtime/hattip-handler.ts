@@ -9,7 +9,9 @@ import renderPageRoute from "../features/pages/middleware";
 import type { PageContext } from "../runtime/page-types";
 import serverFeatureHooks from "./feature-server-hooks";
 import { type HookDefinition, sortHooks } from "./utils";
-import pluginFactories from "rakkasjs:plugin-server-hooks";
+import pluginFactories, {
+	options as configOptions,
+} from "rakkasjs:plugin-server-hooks";
 import * as commonHooksModule from "rakkasjs:common-hooks";
 import type { CommonPluginOptions } from "./common-hooks";
 import type {
@@ -74,6 +76,7 @@ export interface ServerPluginOptions {}
 export type ServerPluginFactory = (
 	options: ServerPluginOptions,
 	commonOptions: CommonPluginOptions,
+	configOptions: any,
 ) => ServerHooks;
 
 /** Hooks for customizing the page rendering on the server */
@@ -122,9 +125,9 @@ export function createRequestHandler<T>(
 	pluginOptions: ServerPluginOptions = {},
 ): HattipHandler<T> {
 	const hooks = [
-		...pluginFactories.map((factory) => {
+		...pluginFactories.map((factory, i) => {
 			const { commonPluginOptions = {} } = commonHooksModule;
-			return factory(pluginOptions, commonPluginOptions);
+			return factory(pluginOptions, commonPluginOptions, configOptions[i]);
 		}),
 		...serverFeatureHooks,
 		userHooks,

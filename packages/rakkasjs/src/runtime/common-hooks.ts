@@ -32,4 +32,7 @@ export interface CommonHooks {
 
 export interface CommonPluginOptions {}
 
-export type CommonPluginFactory = (options: CommonPluginOptions) => CommonHooks;
+export type CommonPluginFactory = (
+	options: CommonPluginOptions,
+	configOptions: any,
+) => CommonHooks;

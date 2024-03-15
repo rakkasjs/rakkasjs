@@ -1,21 +1,25 @@
+import { uneval } from "devalue";
 import type { Plugin } from "vite";
+
+/** A module specifier to import, possibly with options */
+export type RakkasPluginHook = string | { specifier: string; options?: any };
 
 export interface RakkasPluginApi {
 	/**
 	 * A module ID, or a list of module IDs, that export a function
 	 * that returns client-side hooks.
 	 */
-	clientHooks?: string | string[];
+	clientHooks?: RakkasPluginHook | RakkasPluginHook[];
 	/**
 	 * A module ID, or a list of module IDs, that export a function
 	 * that returns server-side hooks.
 	 */
-	serverHooks?: string | string[];
+	serverHooks?: RakkasPluginHook | RakkasPluginHook[];
 	/**
 	 * A module ID, or a list of module IDs, that export a function
 	 * that returns common hooks.
 	 */
-	commonHooks?: string | string[];
+	commonHooks?: RakkasPluginHook | RakkasPluginHook[];
 	/**
 	 * Create routes for the application.
 	 */
@@ -108,23 +112,35 @@ export function rakkasPlugins(): Plugin {
 	};
 }
 
-function makeModule(hooks: Array<undefined | string | string[]>) {
+function makeModule(
+	hooks: Array<undefined | RakkasPluginHook | RakkasPluginHook[]>,
+) {
 	const normalizedHooks = hooks
 		.filter((hook) => hook !== undefined)
-		.flat() as string[];
+		.flat() as RakkasPluginHook[];
 
 	let result = "";
 	let i = 1;
+	const serializedOptions: string[] = [];
 	for (const hook of normalizedHooks) {
-		result += `import p${i++} from ${JSON.stringify(hook)};\n`;
+		const specifier = typeof hook === "string" ? hook : hook.specifier;
+		result += `import p${i++} from ${JSON.stringify(specifier)};\n`;
+
+		const options = typeof hook === "string" ? undefined : hook.options;
+		if (options === undefined) {
+			serializedOptions.push(`\t, // undefined (p${i - 1})\n`);
+		} else {
+			serializedOptions.push("\t" + uneval(options) + `, // p${(i = 1)}\n`);
+		}
 	}
 
 	result += `\n\nexport default [\n`;
 	normalizedHooks.forEach((_hook, i) => {
 		result += `\tp${i + 1},\n`;
 	});
-
 	result += "];\n";
+
+	result += `\nexport const options = [\n${serializedOptions.join("")}];\n`;
 
 	return result;
 }
