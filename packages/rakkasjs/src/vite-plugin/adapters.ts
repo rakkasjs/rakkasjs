@@ -1,6 +1,6 @@
 import path from "node:path";
 import fs from "node:fs";
-import cloudflareWorkers from "@hattip/bundler-cloudflare-workers";
+import hattipCloudflareWorkers from "@hattip/bundler-cloudflare-workers";
 import { bundle as netlify } from "@hattip/bundler-netlify";
 import { bundle as vercel } from "@hattip/bundler-vercel";
 import deno from "@hattip/bundler-deno";
@@ -14,54 +14,18 @@ export interface RakkasAdapter {
 	disableStreaming?: boolean;
 }
 
-export const adapters: Record<string, RakkasAdapter> = {
+function defineAdapters<T extends Record<string, RakkasAdapter>>(
+	adapters: T,
+): T {
+	return adapters;
+}
+
+export const adapters = defineAdapters({
 	node: {
 		name: "node",
 	},
 
-	"cloudflare-workers": {
-		name: "cloudflare-workers",
-		async bundle(root: string) {
-			let entry = findEntry(root, "src/entry-cloudflare-workers");
-
-			if (!entry) {
-				entry = path.resolve(root, "dist/server/entry-cloudflare-workers.js");
-				await fs.promises.writeFile(entry, CLOUDFLARE_WORKERS_ENTRY);
-			}
-
-			await cloudflareWorkers(
-				{
-					output: path.resolve(
-						root,
-						"dist/server/cloudflare-workers-bundle.js",
-					),
-					cfwEntry: entry,
-				},
-				(options) => {
-					options.define = options.define || {};
-					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
-					options.define["global"] = "globalThis";
-					options.plugins = options.plugins || [];
-					options.plugins.push({
-						name: "async-hooks-stub",
-						setup(build) {
-							build.onResolve({ filter: /^node:async_hooks$/ }, () => ({
-								namespace: "node",
-								path: "async_hooks",
-							}));
-
-							build.onLoad(
-								{ namespace: "node", filter: /^async_hooks$/ },
-								() => ({
-									contents: ASYNC_HOOKS_STUB,
-								}),
-							);
-						},
-					});
-				},
-			);
-		},
-	},
+	"cloudflare-workers": cloudflareWorkers(),
 
 	"cloudflare-workers-node-compat": {
 		name: "cloudflare-workers",
@@ -73,7 +37,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 				await fs.promises.writeFile(entry, CLOUDFLARE_WORKERS_ENTRY);
 			}
 
-			await cloudflareWorkers(
+			await hattipCloudflareWorkers(
 				{
 					output: path.resolve(
 						root,
@@ -257,7 +221,7 @@ export const adapters: Record<string, RakkasAdapter> = {
 				await fs.promises.writeFile(entry, LAGON_ENTRY);
 			}
 
-			await cloudflareWorkers(
+			await hattipCloudflareWorkers(
 				{
 					output: path.resolve(root, "dist/server/lagon-bundle.js"),
 					cfwEntry: entry,
@@ -287,7 +251,53 @@ export const adapters: Record<string, RakkasAdapter> = {
 			);
 		},
 	},
-};
+});
+
+export function cloudflareWorkers(): RakkasAdapter {
+	return {
+		name: "cloudflare-workers",
+		async bundle(root: string) {
+			let entry = findEntry(root, "src/entry-cloudflare-workers");
+
+			if (!entry) {
+				entry = path.resolve(root, "dist/server/entry-cloudflare-workers.js");
+				await fs.promises.writeFile(entry, CLOUDFLARE_WORKERS_ENTRY);
+			}
+
+			await hattipCloudflareWorkers(
+				{
+					output: path.resolve(
+						root,
+						"dist/server/cloudflare-workers-bundle.js",
+					),
+					cfwEntry: entry,
+				},
+				(options) => {
+					options.define = options.define || {};
+					options.define["process.env.RAKKAS_PRERENDER"] = "undefined";
+					options.define["global"] = "globalThis";
+					options.plugins = options.plugins || [];
+					options.plugins.push({
+						name: "async-hooks-stub",
+						setup(build) {
+							build.onResolve({ filter: /^node:async_hooks$/ }, () => ({
+								namespace: "node",
+								path: "async_hooks",
+							}));
+
+							build.onLoad(
+								{ namespace: "node", filter: /^async_hooks$/ },
+								() => ({
+									contents: ASYNC_HOOKS_STUB,
+								}),
+							);
+						},
+					});
+				},
+			);
+		},
+	};
+}
 
 function findEntry(root: string, name: string) {
 	const entries = [
