@@ -46,17 +46,7 @@ export interface RakkasOptions {
 	/** Whether to enable strict mode in dev. @default true */
 	strictMode?: boolean;
 	/** Platform adapter */
-	adapter?:
-		| "node"
-		| "cloudflare-workers"
-		| "vercel"
-		| "vercel-edge"
-		| "netlify"
-		| "netlify-edge"
-		| "deno"
-		| "bun"
-		| "lagon"
-		| RakkasAdapter;
+	adapter?: keyof typeof adapters | RakkasAdapter;
 	/**
 	 * Filter patterns for server-only files that should not be included in the client bundle.
 	 *
