@@ -1,10 +1,4 @@
-import React, {
-	type ReactElement,
-	type ReactNode,
-	Suspense,
-	useEffect,
-	useState,
-} from "react";
+import React, { type ReactNode, Suspense, useSyncExternalStore } from "react";
 
 /** {@link ClientOnly} props */
 export interface ClientOnlyProps {
@@ -17,20 +11,18 @@ export interface ClientOnlyProps {
 // TODO: Strip ClientOnly component's children out of the SSR bundle
 
 /** Opt out of server-side rendering */
-export function ClientOnly(props: ClientOnlyProps): ReactElement {
-	const [hydrated, setHydrated] = useState(false);
+export function ClientOnly(props: ClientOnlyProps): ReactNode {
+	const isHydrated = useSyncExternalStore(
+		() => () => {},
+		() => true,
+		() => false,
+	);
 
-	useEffect(() => {
-		if (!hydrated) {
-			setHydrated(true);
-		}
-	}, [hydrated]);
-
-	return <>{hydrated ? props.children : props.fallback}</>;
+	return isHydrated ? props.children : props.fallback;
 }
 
 /** Suspense boundary that only runs on the client */
-export function ClientSuspense(props: ClientOnlyProps): ReactElement {
+export function ClientSuspense(props: ClientOnlyProps): ReactNode {
 	return (
 		<ClientOnly fallback={props.fallback}>
 			<Suspense fallback={props.fallback}>{props.children}</Suspense>
