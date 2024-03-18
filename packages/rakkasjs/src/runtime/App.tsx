@@ -33,7 +33,6 @@ import {
 	navigationResolve,
 	restoreScrollPosition,
 } from "../features/client-side-navigation/implementation/history";
-import * as prodModule from "rakkasjs:client-page-routes";
 
 export interface AppProps {
 	ssrMeta?: any;
@@ -179,6 +178,10 @@ export async function loadRoute(
 	let updatedComponents: Layout[] | undefined;
 
 	if (!found || import.meta.hot) {
+		// WARNING!: This *must* be a dynamic import otherwise
+		// cyclic dependencies will break many things.
+		const prodModule = await import("rakkasjs:client-page-routes");
+
 		const routes = prodModule.default;
 		const notFoundRoutes = prodModule.notFoundRoutes;
 
