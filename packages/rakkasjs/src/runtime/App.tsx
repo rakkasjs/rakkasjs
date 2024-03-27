@@ -1,7 +1,5 @@
 import React, {
-	type Dispatch,
 	type ReactElement,
-	type SetStateAction,
 	useContext,
 	useDeferredValue,
 	useEffect,
@@ -41,8 +39,6 @@ export interface AppProps {
 	ssrModules?: (PageModule | LayoutModule)[];
 }
 
-export let setNextId: Dispatch<SetStateAction<string>>;
-
 function useCurrentUrl() {
 	const ssrHref = useContext(LocationContext);
 	return new URL(import.meta.env.SSR ? ssrHref! : location.href);
@@ -52,7 +48,9 @@ export function App(props: AppProps) {
 	const [id, setId] = useState("initial");
 
 	const currentUrl = useCurrentUrl();
-	setNextId = setId;
+	if (typeof rakkas !== "undefined") {
+		rakkas.setNextId = setId;
+	}
 
 	const lastRoute = useContext(RouteContext);
 	// Force update
