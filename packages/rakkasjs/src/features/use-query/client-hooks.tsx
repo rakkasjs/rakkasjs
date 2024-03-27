@@ -153,7 +153,7 @@ const cache: QueryCache = {
 			if (queryCache[key]!.subscribers.size === 0) {
 				delete queryCache[key]!.error;
 
-				if (queryCache[key]!.cacheTime === 0) {
+				if (queryCache[key]!.cacheTime === 0 || queryCache[key]!.invalid) {
 					delete queryCache[key];
 				} else if (isFinite(queryCache[key]!.cacheTime)) {
 					queryCache[key]!.evictionTimeout = setTimeout(() => {
