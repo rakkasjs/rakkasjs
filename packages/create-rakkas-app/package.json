@@ -41,7 +41,7 @@
   "dependencies": {
     "cac": "^6.7.14",
     "cpr": "^3.0.1",
-    "inquirer": "^9.2.15",
+    "inquirer": "^9.2.16",
     "mkdirp": "^3.0.1",
     "picocolors": "^1.0.0",
     "rimraf": "^5.0.5"
