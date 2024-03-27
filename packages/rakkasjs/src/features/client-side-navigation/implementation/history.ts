@@ -1,6 +1,5 @@
 import { startTransition, useContext, useSyncExternalStore } from "react";
 import { findBlocker } from "./blocker";
-import { setNextId } from "../../../runtime/App";
 import { LocationContext } from "./link";
 import { RenderedUrlContext } from "../../pages/contexts";
 
@@ -114,7 +113,7 @@ function finishNavigation(targetId: string) {
 	navigationResolve = resolve;
 
 	startTransition(() => {
-		setNextId(targetId);
+		rakkas.setNextId?.(targetId);
 	});
 
 	listeners.forEach((listener) => listener());
@@ -231,13 +230,16 @@ function validatedNavigationEntry(
 		!entry ||
 		typeof entry !== "object" ||
 		typeof entry.index !== "number" ||
-		typeof entry.scrollX !== "number" ||
-		typeof entry.scrollY !== "number" ||
-		(entry.scrollGroupId !== undefined &&
-			typeof entry.scrollGroupId !== "string")
+		!isUndefinedOrOfType(entry.scrollX, "number") ||
+		!isUndefinedOrOfType(entry.scrollY, "number") ||
+		!isUndefinedOrOfType(entry.scrollGroupId, "string")
 	) {
 		throw new Error("Invalid navigation entry");
 	}
+}
+
+function isUndefinedOrOfType(value: any, type: string) {
+	return value === undefined || typeof value === type;
 }
 
 export function restoreScrollPosition() {
