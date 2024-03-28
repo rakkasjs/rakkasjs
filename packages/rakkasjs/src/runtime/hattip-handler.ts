@@ -118,7 +118,7 @@ export interface PageRequestHooks {
 
 /**
  * Creates a HatTip request handler. Call this to create a HatTip request
- * handler and fefault export it from your HatTip entry.
+ * handler and default export it from your HatTip entry.
  */
 export function createRequestHandler<T>(
 	userHooks: ServerHooks = {},
