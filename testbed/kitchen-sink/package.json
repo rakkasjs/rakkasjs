@@ -44,10 +44,10 @@
     "@hattip/adapter-cloudflare-workers": "0.0.44",
     "@hattip/adapter-deno": "0.0.44",
     "@hattip/adapter-vercel-edge": "0.0.44",
-    "@types/react": "^18.2.64",
-    "@types/react-dom": "^18.2.21",
+    "@types/react": "^18.2.73",
+    "@types/react-dom": "^18.2.22",
     "cheerio": "^1.0.0-rc.12",
-    "netlify-cli": "^17.19.0",
+    "netlify-cli": "^17.21.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "web-streams-polyfill": "^4.0.0"
