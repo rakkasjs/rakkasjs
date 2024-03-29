@@ -269,7 +269,7 @@ function _u(parts: TemplateStringsArray, ...args: string[]): string {
 	for (let i = 0; i < parts.length; i++) {
 		result += parts[i];
 		if (i < args.length) {
-			result += encodeURIComponent(args[i]);
+			result += encodeURIComponent(args[i]!);
 		}
 	}
 
