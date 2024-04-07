@@ -26,6 +26,7 @@ import type {
 	PrerenderResult,
 	ServerSidePageContext,
 	PageContext,
+	Redirection,
 } from "../../runtime/page-types";
 import { uneval } from "devalue";
 import viteDevServer from "@vavite/expose-vite-dev-server/vite-dev-server";
@@ -75,6 +76,7 @@ export default async function renderPageRoute(
 	}
 
 	let found:
+		| Redirection
 		| RouteMatch<
 				[
 					regexp: RegExp,
@@ -127,24 +129,24 @@ export default async function renderPageRoute(
 		pathname = ctx.url.pathname;
 		const result = findPage(routes, ctx.url, pathname, pageContext, false);
 
-		if (result && "redirect" in result) {
-			const location = String(result.redirect);
-			return new Response(redirectBody(location), {
-				status: result.status ?? result.permanent ? 301 : 302,
-				headers: makeHeaders(
-					{
-						location: new URL(location, ctx.url.origin).href,
-						"content-type": "text/html; charset=utf-8",
-						vary: "accept",
-					},
-					result.headers,
-				),
-			});
-		}
-
 		found = result;
 
 		if (!found) return;
+	}
+
+	if (found && "redirect" in found) {
+		const location = String(found.redirect);
+		return new Response(redirectBody(location), {
+			status: found.status ?? found.permanent ? 301 : 302,
+			headers: makeHeaders(
+				{
+					location: new URL(location, ctx.url.origin).href,
+					"content-type": "text/html; charset=utf-8",
+					vary: "accept",
+				},
+				found.headers,
+			),
+		});
 	}
 
 	const renderMode = (["hydrate", "server", "client"] as const)[
