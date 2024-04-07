@@ -737,7 +737,7 @@ export function createQueryClient(
 			return cache.get(queryKey)!.promise;
 		},
 
-		invalidateQueries(keys) {
+		invalidateQueries(keys = () => true) {
 			if (typeof keys === "string") {
 				cache.invalidate(keys);
 				return;
