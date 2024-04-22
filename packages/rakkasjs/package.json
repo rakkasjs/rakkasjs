@@ -111,7 +111,7 @@
     "@vavite/node-loader": "^4.1.1",
     "cac": "^6.7.14",
     "cheerio": "^1.0.0-rc.12",
-    "devalue": "^4.3.2",
+    "devalue": "^5.0.0",
     "es-module-lexer": "^1.5.0",
     "fast-glob": "^3.3.2",
     "magic-string": "^0.30.8",
