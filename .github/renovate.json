@@ -11,6 +11,10 @@
 			"enabled": false
 		},
 		{
+			"matchPackagePatterns": ["^eslint$"],
+			"allowedVersions": "<9"
+		},
+		{
 			"depTypeList": ["devDependencies"],
 			"enabled": false
 		},

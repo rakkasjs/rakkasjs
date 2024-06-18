@@ -9,12 +9,12 @@
     "test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^3.7.0",
+    "@cyco130/eslint-config": "^3.9.1",
     "@types/ps-tree": "^1.1.6",
     "eslint": "^8.57.0",
     "ps-tree": "^1.2.0",
-    "puppeteer": "^22.4.1",
-    "typescript": "^5.4.2",
-    "vite": "^5.1.5"
+    "puppeteer": "^22.11.2",
+    "typescript": "^5.4.5",
+    "vite": "^5.3.1"
   }
 }

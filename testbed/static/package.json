@@ -13,22 +13,22 @@
     "test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^3.7.0",
+    "@cyco130/eslint-config": "^3.9.1",
     "@types/ps-tree": "^1.1.6",
-    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^8.57.0",
     "node-fetch": "^3.3.2",
     "ps-tree": "^1.2.0",
-    "puppeteer": "^22.4.1",
+    "puppeteer": "^22.11.2",
     "rakkasjs": "workspace:*",
-    "typescript": "^5.4.2",
-    "vite": "^5.1.5"
+    "typescript": "^5.4.5",
+    "vite": "^5.3.1"
   },
   "dependencies": {
-    "@types/react": "^18.2.73",
-    "@types/react-dom": "^18.2.22",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "sirv-cli": "^2.0.2"
   }
 }
