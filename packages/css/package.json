@@ -42,17 +42,17 @@
     "vite": "5"
   },
   "dependencies": {
-    "@types/react": "^18.2.73"
+    "@types/react": "^18.3.3"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^3.7.0",
-    "@types/node": "^20.11.25",
+    "@cyco130/eslint-config": "^3.9.1",
+    "@types/node": "^20.14.5",
     "eslint": "^8.57.0",
-    "publint": "^0.2.7",
+    "publint": "^0.2.8",
     "rakkasjs": "workspace:*",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.2",
-    "vite": "^5.1.5",
-    "vitest": "^1.3.1"
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.3.1",
+    "vitest": "^1.6.0"
   }
 }

@@ -32,7 +32,7 @@ export default async function renderApiRoute(ctx: RequestContext) {
 			),
 		);
 
-		const handler = composePartial([...middlewares, endpointHandler], ctx.next);
+		const handler = composePartial([...middlewares, endpointHandler]);
 
 		return handler(ctx);
 	}
