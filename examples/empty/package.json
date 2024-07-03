@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
-    "rakkasjs": "0.7.0-next.47",
+    "rakkasjs": "0.7.0-next.48",
     "vite": "^5.3.1"
   },
   "dependencies": {
