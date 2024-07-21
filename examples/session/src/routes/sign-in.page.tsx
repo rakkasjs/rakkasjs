@@ -15,19 +15,13 @@ export default function SignInPage() {
 
 	const passwordRef = useRef<HTMLInputElement>(null);
 
-	const { submitHandler, data } = useSubmit({
+	const { submitHandler, data } = useSubmit<{ error?: string }>({
 		onSuccess(data) {
-			if (data) {
-				// Data means, unintuitively, there was an error
-				// Let's clear the password field
-				passwordRef.current!.value = "";
-			} else {
+			if (!data.error) {
 				queryClient.invalidateQueries("session");
 			}
 		},
 	});
-
-	const { actionData: pcActionData } = usePageContext();
 
 	return (
 		<form onSubmit={submitHandler} method="post">
@@ -37,7 +31,7 @@ export default function SignInPage() {
 				<label>
 					User name:
 					<br />
-					<input type="text" name="userName" defaultValue={data?.userName} />
+					<input type="text" name="userName" />
 				</label>
 			</p>
 
@@ -62,7 +56,7 @@ export default function SignInPage() {
 	);
 }
 
-export const action: ActionHandler = async (ctx) => {
+export const action: ActionHandler<{ error?: string }> = async (ctx) => {
 	const fd = await ctx.requestContext.request.formData();
 	const userName = fd.get("userName");
 	const password = fd.get("password");
@@ -91,9 +85,6 @@ export const action: ActionHandler = async (ctx) => {
 			status: 422, // Unprocessable Entity
 			data: {
 				error: "User name or password is incorrect.",
-				// Echo back the user name to make it easier to fix
-				// when JavaScript is disabled
-				userName,
 			},
 		};
 	}
@@ -105,5 +96,5 @@ export const action: ActionHandler = async (ctx) => {
 	// session ID to prevent session fixation attacks.
 	await ctx.requestContext.session.regenerate();
 
-	return { redirect: "/" };
+	return { redirect: "/", data: {} };
 };

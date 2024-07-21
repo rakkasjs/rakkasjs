@@ -7,7 +7,7 @@ export const beforePageLookupHandlers = sortHooks(
 	commonHooks.map((hook) => hook.beforePageLookup),
 );
 
-export function findPage<
+export async function findPage<
 	T extends
 		| (typeof import("rakkasjs:server-page-routes").default)[0]
 		| (typeof import("rakkasjs:client-page-routes").default)[0],
@@ -17,7 +17,7 @@ export function findPage<
 	path: string,
 	pageContext: PageContext,
 	notFound: boolean,
-): RouteMatch<T> | Redirection | undefined {
+): Promise<RouteMatch<T> | Redirection | undefined> {
 	let rewritten: boolean;
 	let renderedUrl: URL = url;
 
@@ -56,7 +56,11 @@ export function findPage<
 			const guards = (route[2] as Array<PageRouteGuard>) || [];
 
 			for (const guard of guards) {
-				const result = guard(guardContext);
+				let result = guard(guardContext);
+				if (result instanceof Promise) {
+					result = await result;
+				}
+
 				if (!result) {
 					// Try next match
 					continue outer;

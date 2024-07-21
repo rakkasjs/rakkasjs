@@ -12,15 +12,9 @@ import { users } from "src/data/users";
 export default function SignUpPage() {
 	const queryClient = useQueryClient();
 
-	const passwordRef = useRef<HTMLInputElement>(null);
-
-	const { submitHandler, data } = useSubmit({
-		onSuccess: () => {
-			if (data) {
-				// Data means, unintuitively, there was an error
-				// Let's clear the password field
-				passwordRef.current!.value = "";
-			} else {
+	const { submitHandler, data } = useSubmit<{ error?: string }>({
+		onSuccess: (result) => {
+			if (!result.error) {
 				queryClient.invalidateQueries("session");
 			}
 		},
@@ -34,7 +28,7 @@ export default function SignUpPage() {
 				<label>
 					User name:
 					<br />
-					<input type="text" name="userName" defaultValue={data?.userName} />
+					<input type="text" name="userName" />
 				</label>
 			</p>
 
@@ -42,7 +36,7 @@ export default function SignUpPage() {
 				<label>
 					Password:
 					<br />
-					<input type="password" name="password" ref={passwordRef} />
+					<input type="password" name="password" />
 				</label>
 			</p>
 
@@ -59,7 +53,7 @@ export default function SignUpPage() {
 	);
 }
 
-export const action: ActionHandler = async (ctx) => {
+export const action: ActionHandler<{ error?: string }> = async (ctx) => {
 	const fd = await ctx.requestContext.request.formData();
 	const userName = fd.get("userName");
 	const password = fd.get("password");
@@ -101,5 +95,8 @@ export const action: ActionHandler = async (ctx) => {
 	// session ID to prevent session fixation attacks.
 	await ctx.requestContext.session.regenerate();
 
-	return { redirect: "/" };
+	return {
+		redirect: "/",
+		data: {},
+	};
 };

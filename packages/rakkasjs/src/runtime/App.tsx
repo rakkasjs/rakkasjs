@@ -184,7 +184,7 @@ export async function loadRoute(
 		const notFoundRoutes = prodModule.notFoundRoutes;
 
 		let pathname = url.pathname;
-		const result = findPage(routes, url, pathname, pageContext, false);
+		const result = await findPage(routes, url, pathname, pageContext, false);
 
 		if (result && "redirect" in result) {
 			const location = String(result.redirect);
@@ -221,7 +221,7 @@ export async function loadRoute(
 				pathname += "/";
 			}
 
-			const result = findPage(
+			const result = await findPage(
 				notFoundRoutes,
 				url,
 				pathname + "$404",

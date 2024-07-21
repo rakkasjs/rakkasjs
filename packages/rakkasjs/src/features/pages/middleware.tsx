@@ -97,13 +97,13 @@ export default async function renderPageRoute(
 				pathname += "/";
 			}
 
-			found = findPage(
+			found = (await findPage(
 				notFoundRoutes,
 				ctx.url,
 				pathname + "$404",
 				pageContext,
 				true,
-			) as any;
+			)) as any;
 
 			if (found) {
 				break;
@@ -128,7 +128,13 @@ export default async function renderPageRoute(
 		} while (!found);
 	} else {
 		pathname = ctx.url.pathname;
-		const result = findPage(routes, ctx.url, pathname, pageContext, false);
+		const result = await findPage(
+			routes,
+			ctx.url,
+			pathname,
+			pageContext,
+			false,
+		);
 
 		found = result;
 
@@ -298,13 +304,13 @@ export default async function renderPageRoute(
 		});
 	}
 
-	if (actionResult && "redirect" in actionResult) {
-		const location = String(actionResult.redirect);
+	if (actionResult && actionResult.redirect) {
+		const location = new URL(actionResult.redirect, ctx.url.origin).href;
 		return new Response(redirectBody(location), {
-			status: actionResult.status ?? actionResult.permanent ? 301 : 302,
+			status: actionResult.status ?? 302,
 			headers: makeHeaders(
 				{
-					location: new URL(location, ctx.url.origin).href,
+					location,
 					"content-type": "text/html; charset=utf-8",
 					vary: "accept",
 				},
