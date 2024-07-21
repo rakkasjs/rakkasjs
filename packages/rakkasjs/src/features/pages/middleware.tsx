@@ -36,6 +36,7 @@ import { escapeCss, escapeHtml, sortHooks } from "../../runtime/utils";
 import { commonHooks } from "../../runtime/feature-common-hooks";
 import { renderHeadContent } from "../head/server-hooks";
 import type { HeadElement } from "../head/implementation/types";
+import { composableActionData } from "../run-server-side/lib-server";
 
 const assetPrefix = import.meta.env.BASE_URL ?? "/";
 
@@ -261,15 +262,21 @@ export default async function renderPageRoute(
 	let actionError: any;
 
 	if (ctx.method !== "GET") {
-		for (const [i, module] of modules.entries()) {
-			if (module.action) {
-				try {
-					actionResult = await module.action(preloadContext);
-				} catch (error) {
-					actionError = error;
-					actionErrorIndex = i;
+		const composable = composableActionData.get(ctx);
+
+		if (composable) {
+			actionResult = composable[1];
+		} else {
+			for (const [i, module] of modules.entries()) {
+				if (module.action) {
+					try {
+						actionResult = await module.action(preloadContext);
+					} catch (error) {
+						actionError = error;
+						actionErrorIndex = i;
+					}
+					break;
 				}
-				break;
 			}
 		}
 	}
