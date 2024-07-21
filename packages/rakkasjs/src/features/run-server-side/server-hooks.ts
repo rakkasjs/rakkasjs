@@ -12,7 +12,10 @@ const runServerSideServerHooks: ServerHooks = {
 		beforePages: [
 			async (ctx) => {
 				const prefix = `/_app/data/`;
-				let action = ctx.url.searchParams.get("_action");
+				let action =
+					ctx.method !== "POST"
+						? undefined
+						: ctx.url.searchParams.get("_action");
 
 				if (!ctx.url.pathname.startsWith(prefix) && !action) {
 					return;
@@ -63,7 +66,7 @@ const runServerSideServerHooks: ServerHooks = {
 					} else {
 						if (ctx.method === "GET") {
 							// Remove path segment /d.js at the end
-							closure.length -= 1;
+							closure.length = Math.max(0, closure.length - 1);
 							isFormMutation = false;
 						}
 
