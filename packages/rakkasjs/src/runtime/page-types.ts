@@ -15,14 +15,14 @@ export type LayoutImporter = () => Promise<LayoutModule>;
 
 export interface PageModule {
 	default: Page;
-	action?: ActionHandler;
+	action?: ActionHandler<any>;
 	headers?: HeadersFunction;
 	prerender?: PrerenderFunction;
 }
 
 export interface LayoutModule {
 	default: Layout;
-	action?: ActionHandler;
+	action?: ActionHandler<any>;
 	headers?: HeadersFunction;
 	prerender?: PrerenderFunction;
 }
@@ -146,11 +146,11 @@ export interface PageRouteGuardContext<P = Record<string, string>>
 /** Page guard */
 export type PageRouteGuard<P = Record<string, string>> = (
 	ctx: PageRouteGuardContext<P>,
-) => LookupHookResult;
+) => LookupHookResult | Promise<LookupHookResult>;
 
-export type ActionHandler = (
+export type ActionHandler<T> = (
 	pageContext: ActionContext,
-) => ActionResult<any> | Promise<ActionResult<any>>;
+) => ActionResult<T> | Promise<ActionResult<T>>;
 
 /** Function to set response headers */
 export type HeadersFunction<M = Record<string, unknown>> = (
@@ -209,17 +209,16 @@ export interface Redirection {
 	headers?: Record<string, string | string[]> | ((headers: Headers) => void);
 }
 
-export type ActionResult<T> =
-	| Redirection
-	| {
-			data: T;
-			/** The status code */
-			status?: number;
-			/** Response headers */
-			headers?:
-				| Record<string, string | string[]>
-				| ((headers: Headers) => void);
-	  };
+export type ActionResult<T> = {
+	/** The data */
+	data: T;
+	/** Redirect to another URL */
+	redirect?: string | URL;
+	/** The status code */
+	status?: number;
+	/** Response headers */
+	headers?: Record<string, string | string[]> | ((headers: Headers) => void);
+};
 
 export type RouteConfigExport =
 	| RouteConfig

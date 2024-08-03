@@ -331,23 +331,25 @@ function shouldHandleClick(e: MouseEventLike): boolean {
 	);
 }
 
-export type UseSubmitResult = {
+export type UseSubmitResult<T = any> = {
 	submitHandler(event: FormEvent<HTMLFormElement>): void;
 } & (
 	| UseMutationIdleResult
 	| UseMutationLoadingResult
 	| UseMutationErrorResult
-	| UseMutationSuccessResult<any>
+	| UseMutationSuccessResult<T>
 );
 
-export type UseSubmitOptions = UseMutationOptions<
-	any,
+export type UseSubmitOptions<T> = UseMutationOptions<
+	T,
 	{ form: HTMLFormElement; formData: FormData }
 > &
 	Omit<NavigationOptions, "actionData">;
 
 // TODO: Where does this belong?
-export function useSubmit(options?: UseSubmitOptions): UseSubmitResult {
+export function useSubmit<T>(
+	options?: UseSubmitOptions<T>,
+): UseSubmitResult<T> {
 	const { current } = useLocation();
 	const pageContext = usePageContext();
 
@@ -375,20 +377,20 @@ export function useSubmit(options?: UseSubmitOptions): UseSubmitResult {
 			});
 
 			const text = await response.text();
-			const value: ActionResult<any> = (0, eval)("(" + text + ")");
+			const value: ActionResult<T> = (0, eval)("(" + text + ")");
 
 			return value;
 		},
 		{
 			...options,
 			onSuccess(value) {
+				options?.onSuccess?.(value.data);
+
 				if ("redirect" in value) {
 					navigate(value.redirect, {
 						...options,
 					}).catch(ignore);
 				} else {
-					options?.onSuccess?.(value.data);
-
 					navigate(current, {
 						replace: true,
 						...options,
