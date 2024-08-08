@@ -26,7 +26,7 @@
   "dependencies": {
     "@hattip/polyfills": "0.0.46",
     "@vitejs/plugin-react": "^4.3.1",
-    "vite": "^5.3.1"
+    "vite": "^5.4.0"
   },
   "pnpm": {
     "peerDependencyRules": {
