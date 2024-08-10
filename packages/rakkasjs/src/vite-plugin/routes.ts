@@ -1,16 +1,24 @@
-import type { Plugin, ViteDevServer } from "vite";
+import type { Plugin, ResolvedConfig, ViteDevServer } from "vite";
 import type {
 	ApiRouteDefinition,
 	PageRouteDefinition,
 	RouteDefinition,
 } from "./rakkas-plugins";
 import { routeToRegExp, sortRoutes } from "../internal/route-utils";
+import path from "node:path";
+import { transformAsync } from "@babel/core";
+import { babelRemoveExports } from "../features/pages/babel-remove-exports";
 
-export function routes(): Plugin {
+export function routes(): Plugin[] {
 	let plugins: Readonly<Plugin[]>;
 	let server: ViteDevServer;
+	let root: string;
+	let isBuild = false;
+	let resolvedConfig: ResolvedConfig;
 
 	let routes: RouteDefinition[] = [];
+
+	let clientOnlyFiles: Set<string> | undefined;
 
 	function invalidateModuleByName(name: string) {
 		const module = server.moduleGraph.getModuleById(name);
@@ -31,69 +39,110 @@ export function routes(): Plugin {
 		}
 	}
 
-	return {
-		name: "rakkasjs:routes",
+	return [
+		{
+			name: "rakkasjs:routes",
 
-		resolveId(source) {
-			if (routeFileNames.includes(source)) {
-				return "\0virtual:" + source;
-			}
-		},
+			resolveId(source) {
+				if (routeFileNames.includes(source)) {
+					return "\0virtual:" + source;
+				}
+			},
 
-		api: {
-			rakkas: {
-				async routesChanged() {
-					if (debouncing) {
-						return;
-					}
+			api: {
+				rakkas: {
+					async routesChanged() {
+						if (debouncing) {
+							return;
+						}
 
-					try {
-						debouncing = true;
-						await new Promise((resolve) => setTimeout(resolve, 100));
-					} finally {
-						debouncing = false;
-					}
+						try {
+							debouncing = true;
+							await new Promise((resolve) => setTimeout(resolve, 100));
+						} finally {
+							debouncing = false;
+						}
 
-					routes = await collectRoutes(plugins);
+						routes = await collectRoutes(plugins);
 
-					invalidateModuleByName("\0virtual:rakkasjs:server-page-routes");
-					invalidateModuleByName("\0virtual:rakkasjs:client-page-routes");
-					invalidateModuleByName("\0virtual:rakkasjs:api-routes");
+						invalidateModuleByName("\0virtual:rakkasjs:server-page-routes");
+						invalidateModuleByName("\0virtual:rakkasjs:client-page-routes");
+						invalidateModuleByName("\0virtual:rakkasjs:api-routes");
 
-					await routesResolved();
+						await routesResolved();
 
-					// eslint-disable-next-line deprecation/deprecation
-					const hot = server.hot ?? server.ws;
-					if (hot) {
-						hot.send({
-							type: "full-reload",
-							path: "*",
-						});
-					}
+						// eslint-disable-next-line deprecation/deprecation
+						const hot = server.hot ?? server.ws;
+						if (hot) {
+							hot.send({
+								type: "full-reload",
+								path: "*",
+							});
+						}
+					},
 				},
 			},
-		},
 
-		async configResolved(config) {
-			plugins = config.plugins;
-			routes = await collectRoutes(plugins);
-			await routesResolved();
-		},
+			async configResolved(config) {
+				resolvedConfig = config;
+				plugins = config.plugins;
+				isBuild = config.command === "build";
+				root = config.root;
+				routes = await collectRoutes(plugins);
+				await routesResolved();
+			},
 
-		async load(id) {
-			if (id === "\0virtual:rakkasjs:server-page-routes") {
-				return generateServerPageRoutesModule(routes);
-			} else if (id === "\0virtual:rakkasjs:client-page-routes") {
-				return generateClientPageRoutesModule(routes);
-			} else if (id === "\0virtual:rakkasjs:api-routes") {
-				return generateApiRoutesModule(routes);
-			}
-		},
+			async load(id, options) {
+				if (id === "\0virtual:rakkasjs:server-page-routes") {
+					const [module, cof] = generateServerPageRoutesModule(routes);
+					clientOnlyFiles = cof;
+					return module;
+				} else if (id === "\0virtual:rakkasjs:client-page-routes") {
+					if (isBuild && options?.ssr) {
+						return `export default [];\nexport const notFoundRoutes = [];\n`;
+					}
+					return generateClientPageRoutesModule(routes);
+				} else if (id === "\0virtual:rakkasjs:api-routes") {
+					return generateApiRoutesModule(routes);
+				}
+			},
 
-		configureServer(devServer) {
-			server = devServer;
+			configureServer(devServer) {
+				server = devServer;
+			},
 		},
-	};
+		{
+			name: "rakkasjs:remove-client-only-files",
+			enforce: "post",
+			async transform(code, id, options) {
+				if (!options?.ssr || !isBuild) {
+					return;
+				}
+
+				if (!clientOnlyFiles?.has(path.posix.join(id.slice(root.length)))) {
+					return;
+				}
+
+				const result = await transformAsync(code, {
+					filename: id,
+					code: true,
+					plugins: [babelRemoveExports("remove", ["default"])],
+					sourceMaps:
+						resolvedConfig.command === "serve" ||
+						!!resolvedConfig.build.sourcemap,
+				});
+
+				if (result) {
+					return {
+						code: result.code!,
+						map: result.map,
+					};
+				} else {
+					this.error(`Failed to remove exports from layout or page ${id}`);
+				}
+			},
+		},
+	];
 }
 
 const routeFileNames = [
@@ -114,16 +163,25 @@ async function collectRoutes(plugins: Readonly<Plugin[]>) {
 	return routes;
 }
 
-function generateServerPageRoutesModule(routes: RouteDefinition[]) {
+function generateServerPageRoutesModule(
+	routes: RouteDefinition[],
+): [string, Set<string>] {
+	const possibleClientOnlyFiles = new Set<string>();
+	const notClientOnlyFiles = new Set<string>();
+
 	const pages = routes.filter(
 		(route) => route.type === "page",
-		// && route.renderingMode !== "server",
 	) as PageRouteDefinition[];
 
 	const layouts = new Set<string>();
 	const guards = new Set<string>();
 	for (const page of pages) {
 		for (const layout of page.layouts || []) {
+			if (page.renderingMode === "client") {
+				possibleClientOnlyFiles.add(layout);
+			} else {
+				notClientOnlyFiles.add(layout);
+			}
 			layouts.add(layout);
 		}
 		for (const guard of page.guards || []) {
@@ -151,6 +209,9 @@ function generateServerPageRoutesModule(routes: RouteDefinition[]) {
 
 	const pageNameMap = new Map<string, number>();
 	for (const [pi, page] of pages.entries()) {
+		if (page.renderingMode === "client") {
+			possibleClientOnlyFiles.add(page.page);
+		}
 		result += `const p${pi} = () => import(${JSON.stringify(page.page)});\n`;
 		pageNameMap.set(page.page, pi);
 	}
@@ -158,6 +219,7 @@ function generateServerPageRoutesModule(routes: RouteDefinition[]) {
 	function generateExports(pages: PageRouteDefinition[]) {
 		for (const page of pages) {
 			const pi = pageNameMap.get(page.page)!;
+
 			result += "  [";
 			const [re, restName] = routeToRegExp(page.path);
 			result += re.toString() + ", ";
@@ -212,7 +274,14 @@ function generateServerPageRoutesModule(routes: RouteDefinition[]) {
 	generateExports(pages.filter((page) => page.is404));
 	result += "];\n";
 
-	return result;
+	const clientOnlyFiles = new Set<string>();
+	for (const file of possibleClientOnlyFiles) {
+		if (!notClientOnlyFiles.has(file)) {
+			clientOnlyFiles.add(file);
+		}
+	}
+
+	return [result, clientOnlyFiles];
 }
 
 function generateClientPageRoutesModule(routes: RouteDefinition[]) {

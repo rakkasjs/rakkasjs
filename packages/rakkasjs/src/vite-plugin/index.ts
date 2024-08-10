@@ -89,6 +89,8 @@ export default function rakkas(options: RakkasOptions = {}): Plugin[] {
 		adapter = adapters[adapter];
 	}
 
+	const [routesPre, routesPost] = routes();
+
 	const result: Array<Plugin | false | undefined> = [
 		globalThis.__vavite_loader__ && nodeLoaderPlugin(),
 		...vaviteConnect({
@@ -115,7 +117,7 @@ export default function rakkas(options: RakkasOptions = {}): Plugin[] {
 				},
 			},
 		},
-		routes(),
+		routesPre,
 		pages(),
 		virtualDefaultEntry({
 			entry: "/src/entry-node",
@@ -146,6 +148,7 @@ export default function rakkas(options: RakkasOptions = {}): Plugin[] {
 		}),
 		resolveClientManifest(),
 		...runServerSide(),
+		routesPost,
 		serverOnlyClientOnly(options),
 		rakkasPlugins(),
 	];
