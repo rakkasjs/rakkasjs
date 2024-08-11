@@ -49,6 +49,8 @@ export interface RakkasOptions {
 	adapter?: keyof typeof adapters | RakkasAdapter;
 	/**
 	 * Filter patterns for server-only files that should not be included in the client bundle.
+	 * Patterns are interpreted as relative to the project root.
+	 * Files outside the project root, files inside node_modules, and CSS files are always excluded.
 	 *
 	 * @default { include: ["**\/*.server.*", "**\/server/**"] }
 	 */
@@ -58,6 +60,8 @@ export interface RakkasOptions {
 	};
 	/**
 	 * Filter patterns for client-only files that should not be included in the server bundle.
+	 * Patterns are interpreted as relative to the project root.
+	 * Files outside the project root, files inside node_modules, and CSS files are always excluded.
 	 *
 	 * @default { include: ["**\/*.client.*", "**\/client/**"] }
 	 */
