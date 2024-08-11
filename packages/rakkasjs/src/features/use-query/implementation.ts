@@ -6,7 +6,6 @@ import {
 	useMemo,
 	useRef,
 	useState,
-	useSyncExternalStore,
 } from "react";
 import { useErrorBoundary } from "../../lib";
 import { IsomorphicContext } from "../../runtime/isomorphic-context";
@@ -321,21 +320,19 @@ function useQueryBase<
 
 	const [initialEnabled] = useState(enabled);
 
-	const item = useSyncExternalStore(
-		(onStoreChange) => {
-			if (queryKey !== undefined) {
-				return cache.subscribe(queryKey, () => {
-					onStoreChange();
-				});
-			} else {
-				return () => {
-					// Do nothing
-				};
-			}
-		},
-		() => (queryKey === undefined ? undefined : cache.get(queryKey)),
-		() => (queryKey === undefined ? undefined : cache.get(queryKey)),
+	const [item, setItem] = useState<CacheItem | undefined>(() =>
+		queryKey === undefined ? undefined : cache.get(queryKey),
 	);
+
+	useEffect(() => {
+		if (queryKey === undefined) {
+			return;
+		}
+
+		return cache.subscribe(queryKey, () => {
+			setItem(cache.get(queryKey));
+		});
+	}, [cache, queryKey]);
 
 	const ctx = usePageContext();
 
