@@ -72,7 +72,7 @@ const runServerSideServerHooks: ServerHooks = {
 
 						closureContents = closure.map((s) => parse(decodeFileNameSafe(s)));
 					}
-				} catch (e) {
+				} catch {
 					return new Response("Parse error", { status: 400 });
 				}
 

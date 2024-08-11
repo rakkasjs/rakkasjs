@@ -127,7 +127,9 @@ export async function startClient(
 
 	const container = document.getElementById("root")!;
 
-	rakkas.clientRender
-		? createRoot(container).render(app)
-		: hydrateRoot(container, app);
+	if (rakkas.clientRender) {
+		createRoot(container).render(app);
+	} else {
+		hydrateRoot(container, app);
+	}
 }

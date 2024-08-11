@@ -2,8 +2,6 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import fs from "node:fs";
 import cpr from "cpr";
-import { mkdirp } from "mkdirp";
-import { rimraf } from "rimraf";
 import { run } from "../src/utils";
 
 main().catch((err) => {
@@ -16,8 +14,11 @@ async function main() {
 	let src = path.resolve(__dirname, "../../../examples/todo");
 	let dest = path.resolve(__dirname, "../templates/ts");
 
-	await rimraf(__dirname + "/../templates");
-	await mkdirp(dest);
+	await fs.promises.rm(__dirname + "/../templates", {
+		recursive: true,
+		force: true,
+	});
+	await fs.promises.mkdir(dest, { recursive: true });
 
 	await new Promise((resolve, reject) =>
 		cpr(

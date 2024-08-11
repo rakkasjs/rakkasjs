@@ -15,7 +15,7 @@ const HomePage: Page = function HomePage() {
 			</p>
 			<p>
 				You may also check the little <Link href="/todo">todo application</Link>{" "}
-				to learn about API endpoints and data fetching.
+				to learn about data fetching.
 			</p>
 		</main>
 	);

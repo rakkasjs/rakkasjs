@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 export function escapeJson(json: string): string {
 	return json.replace(/</g, "\\u003c");
 }

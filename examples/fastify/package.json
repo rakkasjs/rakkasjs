@@ -13,9 +13,9 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "rakkasjs": "0.7.0-next.48",
-    "typescript": "^5.4.5",
-    "vite": "^5.3.1",
-    "vite-tsconfig-paths": "^4.3.2"
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0",
+    "vite-tsconfig-paths": "^5.0.1"
   },
   "dependencies": {
     "fastify": "^4.28.1",

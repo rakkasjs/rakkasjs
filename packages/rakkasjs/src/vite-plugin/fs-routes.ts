@@ -100,7 +100,7 @@ export function fsRoutes(): Plugin {
 
 						return defaults.disabled === false
 							? false
-							: defaults.renderingMode ?? "hydrate";
+							: (defaults.renderingMode ?? "hydrate");
 					}
 
 					return [
