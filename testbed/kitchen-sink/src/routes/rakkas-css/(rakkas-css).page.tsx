@@ -1,4 +1,4 @@
-import { useQuery, type Page, ClientSuspense, Link } from "rakkasjs";
+import { useQuery, type Page, ClientOnly, Link } from "rakkasjs";
 import { css } from "@rakkasjs/css";
 import { Suspense } from "react";
 
@@ -6,9 +6,9 @@ const RakkasCssPage: Page = () => {
 	return (
 		<>
 			<h1 className={css({ color: "red" })}>Hello</h1>
-			<ClientSuspense fallback={<p>Loading client-only component...</p>}>
+			<ClientOnly fallback={<p>Loading client-only component...</p>}>
 				<ClientOnlyComponent />
-			</ClientSuspense>
+			</ClientOnly>
 
 			<Suspense fallback={<p>Loading slow component...</p>}>
 				<SlowComponent />
