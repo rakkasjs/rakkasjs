@@ -100,7 +100,7 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 					],
 				},
 
-				envPrefix: "RAKKAS_",
+				envPrefix: ["VITE_", "RAKKAS_"],
 
 				api: {
 					rakkas: {
