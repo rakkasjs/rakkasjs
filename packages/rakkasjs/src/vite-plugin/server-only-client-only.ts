@@ -1,5 +1,6 @@
 import { createFilter, type Plugin, type FilterPattern } from "vite";
 import { init, parse } from "es-module-lexer";
+import path from "node:path";
 
 export interface ServerOnlyClientOnlyOptions {
 	serverOnlyFiles?: {
@@ -17,18 +18,33 @@ export function serverOnlyClientOnly(
 ): Plugin {
 	const serverOnlyFilter = createFilter(
 		options.serverOnlyFiles?.include ?? ["**/*.server.*", "**/server/**"],
-		options.serverOnlyFiles?.exclude,
+		[
+			...normalizeFilterPattern(options.serverOnlyFiles?.exclude),
+			"**/node_modules/**",
+		],
 	);
 
 	const clientOnlyFilter = createFilter(
 		options.clientOnlyFiles?.include ?? ["**/*.client.*", "**/client/**"],
-		options.clientOnlyFiles?.exclude,
+		[
+			...normalizeFilterPattern(options.clientOnlyFiles?.exclude),
+			"**/node_modules/**",
+		],
 	);
+
+	let root: string;
 
 	return {
 		name: "rakkasjs:server-only-client-only",
 
 		enforce: "post",
+
+		config(config) {
+			root = path.posix.normalize(config.root ?? process.cwd());
+			if (!root.endsWith("/")) {
+				root += "/";
+			}
+		},
 
 		async transform(code, id, options) {
 			await init;
@@ -37,9 +53,14 @@ export function serverOnlyClientOnly(
 				(options?.ssr && clientOnlyFilter(id)) ||
 				(!options?.ssr && serverOnlyFilter(id))
 			) {
-				if (id.match(/\.(?:css|scss|sass|less|styl|stylus)(?:\?|$)/)) {
+				if (
+					!id.startsWith(root) ||
+					id.match(/\.(?:css|scss|sass|less|styl|stylus)(?:\?|$)/)
+				) {
 					return;
 				}
+
+				id = id.slice(root.length);
 
 				const [, exports] = parse(code);
 
@@ -60,4 +81,10 @@ export function serverOnlyClientOnly(
 			}
 		},
 	};
+}
+
+function normalizeFilterPattern(
+	pattern?: FilterPattern,
+): Array<string | RegExp> {
+	return Array.isArray(pattern) ? pattern : pattern ? [pattern] : [];
 }
