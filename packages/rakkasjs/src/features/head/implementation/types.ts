@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 export interface HeadProps {
 	viewport?: string;
 	title?: string;

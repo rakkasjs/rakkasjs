@@ -4,7 +4,6 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import os from "node:os";
 import { Options } from ".";
-import { mkdirp } from "mkdirp";
 import cpr from "cpr";
 import pico from "picocolors";
 
@@ -61,7 +60,7 @@ export async function generate(dir: string, options: Options) {
 }
 
 async function copyFiles(dir: string, options: Options, command: string) {
-	await mkdirp(dir);
+	await fs.promises.mkdir(dir, { recursive: true });
 
 	const src = path.resolve(
 		__dirname,
@@ -161,7 +160,7 @@ async function copyFiles(dir: string, options: Options, command: string) {
 	}
 
 	if (!options.demo) {
-		await mkdirp(dir + "/src/routes");
+		await fs.promises.mkdir(dir + "/src/routes", { recursive: true });
 		const fn =
 			dir + "/src/routes/index.page." + (options.typescript ? "tsx" : "jsx");
 		fs.writeFileSync(fn, BASIC_PAGE.replace(/\n/g, os.EOL), "utf8");

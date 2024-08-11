@@ -17,7 +17,7 @@ const isomorphicFetchServerHooks: ServerHooks = {
 
 					try {
 						newRequest = new Request(input as any, init);
-					} catch (error) {
+					} catch {
 						// Miniflare throws when accessing credentials
 						const newInit = { ...init };
 						delete newInit?.credentials;

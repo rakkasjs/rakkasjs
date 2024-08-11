@@ -11,14 +11,14 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "postcss-preset-mantine": "^1.15.0",
+    "postcss-preset-mantine": "^1.17.0",
     "rakkasjs": "0.7.0-next.48",
-    "typescript": "^5.4.5",
-    "vite": "^5.3.1",
-    "vite-tsconfig-paths": "^4.3.2"
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0",
+    "vite-tsconfig-paths": "^5.0.1"
   },
   "dependencies": {
-    "@hattip/response": "0.0.46",
+    "@hattip/response": "0.0.47",
     "@mantine/core": "^7.12.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

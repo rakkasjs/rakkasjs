@@ -13,16 +13,16 @@
     "test:lint": "eslint . --max-warnings 0 --ignore-pattern dist"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^3.9.1",
+    "@cyco130/eslint-config": "^3.9.4",
     "@types/ps-tree": "^1.1.6",
     "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^8.57.0",
     "node-fetch": "^3.3.2",
     "ps-tree": "^1.2.0",
-    "puppeteer": "^22.11.2",
+    "puppeteer": "^23.0.2",
     "rakkasjs": "workspace:*",
-    "typescript": "^5.4.5",
-    "vite": "^5.3.1"
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0"
   },
   "dependencies": {
     "@types/react": "^18.3.3",

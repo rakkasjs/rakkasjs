@@ -144,7 +144,7 @@ export default async function renderPageRoute(
 	if (found && "redirect" in found) {
 		const location = String(found.redirect);
 		return new Response(redirectBody(location), {
-			status: found.status ?? found.permanent ? 301 : 302,
+			status: (found.status ?? found.permanent) ? 301 : 302,
 			headers: makeHeaders(
 				{
 					location: new URL(location, ctx.url.origin).href,
@@ -293,7 +293,7 @@ export default async function renderPageRoute(
 		}
 
 		return new Response(uneval(actionResult), {
-			status: actionErrorIndex >= 0 ? 500 : actionResult?.status ?? 200,
+			status: actionErrorIndex >= 0 ? 500 : (actionResult?.status ?? 200),
 			headers: makeHeaders(
 				{
 					"content-type": "application/javascript",

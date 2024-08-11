@@ -9,7 +9,8 @@
 		"moduleResolution": "Node",
 		"resolveJsonModule": true,
 		"jsx": "react-jsx",
-		"outDir": "dist"
+		"outDir": "dist",
+		"checkJs": true
 	},
 	"exclude": ["dist", "netlify", ".vercel", ".netlify"]
 }

@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import { cac } from "cac";
 import { version } from "../package.json";
-import inquirer from "inquirer";
+import { checkbox } from "@inquirer/prompts";
 import pico from "picocolors";
 import { generate } from "./generate";
 
@@ -58,6 +58,7 @@ cli
 		if (!options.force && fs.existsSync(dir)) {
 			const files = await fs.promises.readdir(dir);
 			if (files.length) {
+				console.log(files);
 				throw new Error("Directory is not empty");
 			}
 		}
@@ -95,57 +96,53 @@ cli.version(version);
 cli.parse();
 
 async function prompt(options: Options) {
-	const answers = await inquirer.prompt([
-		{
-			type: "checkbox",
-			name: "features",
-			message: "Enable features",
-			pageSize: Infinity,
-			choices: [
-				{
-					name: " @vitejs/plugin-react-swc for faster builds",
-					short: "SWC",
-					value: "swc",
-					checked: options.swc,
-				},
-				{
-					name: " TypeScript for static typing",
-					short: "TypeScript",
-					value: "typescript",
-					checked: options.typescript,
-				},
-				{
-					name: " Prettier for code formatting",
-					short: "Prettier",
-					value: "prettier",
-					checked: options.prettier,
-				},
-				{
-					name: " ESLint for linting JavaScript/TypeScript",
-					short: "ESLint",
-					value: "eslint",
-					checked: options.eslint,
-				},
-				{
-					name: " Vitest for unit testing",
-					short: "Vitest",
-					value: "vitest",
-					checked: options.vitest,
-				},
-				{
-					name: " Demo todo app",
-					short: "Demo",
-					value: "demo",
-					checked: options.demo,
-				},
-			],
-		},
-	]);
+	const answers = await checkbox({
+		message: "Enable features",
+		pageSize: 10,
+		choices: [
+			{
+				name: " @vitejs/plugin-react-swc for faster builds",
+				short: "SWC",
+				value: "swc",
+				checked: options.swc,
+			},
+			{
+				name: " TypeScript for static typing",
+				short: "TypeScript",
+				value: "typescript",
+				checked: options.typescript,
+			},
+			{
+				name: " Prettier for code formatting",
+				short: "Prettier",
+				value: "prettier",
+				checked: options.prettier,
+			},
+			{
+				name: " ESLint for linting JavaScript/TypeScript",
+				short: "ESLint",
+				value: "eslint",
+				checked: options.eslint,
+			},
+			{
+				name: " Vitest for unit testing",
+				short: "Vitest",
+				value: "vitest",
+				checked: options.vitest,
+			},
+			{
+				name: " Demo todo app",
+				short: "Demo",
+				value: "demo",
+				checked: options.demo,
+			},
+		],
+	});
 
-	options.swc = answers.features.includes("swc");
-	options.typescript = answers.features.includes("typescript");
-	options.prettier = answers.features.includes("prettier");
-	options.eslint = answers.features.includes("eslint");
-	options.vitest = answers.features.includes("vitest");
-	options.demo = answers.features.includes("demo");
+	options.swc = answers.includes("swc");
+	options.typescript = answers.includes("typescript");
+	options.prettier = answers.includes("prettier");
+	options.eslint = answers.includes("eslint");
+	options.vitest = answers.includes("vitest");
+	options.demo = answers.includes("demo");
 }
