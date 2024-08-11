@@ -40,7 +40,9 @@ export function serverOnlyClientOnly(
 		enforce: "post",
 
 		config(config) {
-			root = path.posix.normalize(config.root ?? process.cwd());
+			root = path.posix
+				.normalize(config.root ?? process.cwd())
+				.replace(/\\/g, "/");
 			if (!root.endsWith("/")) {
 				root += "/";
 			}
