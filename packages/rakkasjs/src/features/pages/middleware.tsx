@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import React, { StrictMode, Suspense } from "react";
+import React, { StrictMode } from "react";
 import {
 	renderToReadableStream,
 	renderToStaticMarkup,
@@ -37,6 +37,7 @@ import { commonHooks } from "../../runtime/feature-common-hooks";
 import { renderHeadContent } from "../head/server-hooks";
 import type { HeadElement } from "../head/implementation/types";
 import { composableActionData } from "../run-server-side/lib-server";
+import ErrorComponent from "rakkasjs:error-page";
 
 const assetPrefix = import.meta.env.BASE_URL ?? "/";
 
@@ -156,7 +157,7 @@ export default async function renderPageRoute(
 		});
 	}
 
-	const renderMode = (["hydrate", "server", "client"] as const)[
+	let renderMode = (["hydrate", "server", "client"] as const)[
 		found.route[5] ?? 0
 	];
 
@@ -377,14 +378,6 @@ export default async function renderPageRoute(
 		</ServerSideContext.Provider>
 	);
 
-	let resolveRenderPromise: () => void;
-	let rejectRenderPromise: (err: unknown) => void;
-
-	const renderPromise = new Promise<void>((resolve, reject) => {
-		resolveRenderPromise = resolve;
-		rejectRenderPromise = reject;
-	});
-
 	for (const m of modules) {
 		const headers = await m.headers?.(preloadContext, meta);
 		if (headers) {
@@ -413,13 +406,10 @@ export default async function renderPageRoute(
 			<ResponseContext.Provider value={updateHeaders}>
 				<RouteContext.Provider
 					value={{
-						onRendered() {
-							resolveRenderPromise();
-						},
 						found,
 					}}
 				>
-					<Suspense>{app}</Suspense>
+					{app}
 				</RouteContext.Provider>
 			</ResponseContext.Provider>
 		</div>
@@ -429,16 +419,18 @@ export default async function renderPageRoute(
 		app = <StrictMode>{app}</StrictMode>;
 	}
 
+	const bootstrapModules =
+		renderMode === "server"
+			? []
+			: scriptPath
+				? [assetPrefix + scriptPath]
+				: ["/" + scriptId];
+	let onErrorCalled = false;
 	const reactStream = await renderToReadableStream(app, {
 		// TODO: AbortController
-		bootstrapModules:
-			renderMode === "server"
-				? []
-				: scriptPath
-					? [assetPrefix + scriptPath]
-					: ["/" + scriptId],
-
+		bootstrapModules,
 		onError(error: any) {
+			onErrorCalled = true;
 			if (!redirected) {
 				status = 500;
 				if (error && typeof error.toResponse === "function") {
@@ -453,22 +445,43 @@ export default async function renderPageRoute(
 					console.error(error);
 				}
 			}
-			rejectRenderPromise(error);
 		},
+	}).catch(async (error) => {
+		if (!onErrorCalled && !redirected) {
+			status = 500;
+			if (error && typeof error.toResponse === "function") {
+				const response = await error.toResponse();
+				status = response.status;
+			} else if (process.env.RAKKAS_PRERENDER) {
+				(ctx.platform as any).reportError(error);
+			} else {
+				console.error(error);
+			}
+		}
+
+		// Well render an Internal Error page and let the client take over
+		renderMode = "client";
+		return renderToReadableStream(
+			<ServerSideContext.Provider value={ctx}>
+				<IsomorphicContext.Provider value={pageContext}>
+					<div id="root">
+						<ErrorComponent
+							error={new Error("Internal Error")}
+							resetErrorBoundary={() => {}}
+						/>
+					</div>
+				</IsomorphicContext.Provider>
+			</ServerSideContext.Provider>,
+			{
+				bootstrapModules,
+			},
+		);
 	});
 
 	try {
-		await renderPromise;
-		await new Promise<void>((resolve) => {
-			setTimeout(resolve, 0);
-		});
-
 		const userAgent = ctx.request.headers.get("user-agent");
 		if (hold === true || (userAgent && isBot(userAgent))) {
 			await reactStream.allReady;
-			await new Promise<void>((resolve) => {
-				setTimeout(resolve, 0);
-			});
 		} else if (hold > 0) {
 			await Promise.race([
 				reactStream.allReady,

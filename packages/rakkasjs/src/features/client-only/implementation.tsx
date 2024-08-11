@@ -18,14 +18,14 @@ export function ClientOnly(props: ClientOnlyProps): ReactNode {
 		() => false,
 	);
 
-	return isHydrated ? props.children : props.fallback;
-}
-
-/** Suspense boundary that only runs on the client */
-export function ClientSuspense(props: ClientOnlyProps): ReactNode {
 	return (
-		<ClientOnly fallback={props.fallback}>
-			<Suspense fallback={props.fallback}>{props.children}</Suspense>
-		</ClientOnly>
+		<Suspense fallback={props.fallback}>
+			{isHydrated ? props.children : props.fallback}
+		</Suspense>
 	);
 }
+
+/**
+ * @deprecated {@link ClientOnly} now has the exact same functionality.
+ */
+export const ClientSuspense = ClientOnly;

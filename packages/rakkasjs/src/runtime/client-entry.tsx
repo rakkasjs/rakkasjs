@@ -1,4 +1,4 @@
-import React, { StrictMode, Suspense } from "react";
+import React, { StrictMode } from "react";
 import { hydrateRoot, createRoot } from "react-dom/client";
 import { DEFAULT_QUERY_OPTIONS } from "../features/use-query/implementation";
 import {
@@ -115,9 +115,7 @@ export async function startClient(
 
 	app = (
 		<RouteContext.Provider value={"error" in route! ? route : { last: route }}>
-			<Suspense>
-				<ErrorBoundary FallbackComponent={ErrorComponent}>{app}</ErrorBoundary>
-			</Suspense>
+			<ErrorBoundary FallbackComponent={ErrorComponent}>{app}</ErrorBoundary>
 		</RouteContext.Provider>
 	);
 
