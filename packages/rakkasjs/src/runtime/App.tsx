@@ -117,7 +117,6 @@ export function App(props: AppProps) {
 		)
 			.then((route) => {
 				lastRoute.last = route && { id, ...route };
-				lastRoute.onRendered?.();
 			})
 			.catch(async () => {
 				// Try a full reload in case of a mid-session deployment
@@ -154,7 +153,6 @@ interface RouteContextContent {
 		app: ReactElement;
 		actionData: any;
 	};
-	onRendered?(): void;
 	error?: unknown;
 	updateCounter?: number;
 }

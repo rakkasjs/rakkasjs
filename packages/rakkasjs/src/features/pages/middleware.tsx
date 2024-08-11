@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import React, { StrictMode, Suspense } from "react";
+import React, { StrictMode } from "react";
 import {
 	renderToReadableStream,
 	renderToStaticMarkup,
@@ -377,14 +377,6 @@ export default async function renderPageRoute(
 		</ServerSideContext.Provider>
 	);
 
-	let resolveRenderPromise: () => void;
-	let rejectRenderPromise: (err: unknown) => void;
-
-	const renderPromise = new Promise<void>((resolve, reject) => {
-		resolveRenderPromise = resolve;
-		rejectRenderPromise = reject;
-	});
-
 	for (const m of modules) {
 		const headers = await m.headers?.(preloadContext, meta);
 		if (headers) {
@@ -413,13 +405,10 @@ export default async function renderPageRoute(
 			<ResponseContext.Provider value={updateHeaders}>
 				<RouteContext.Provider
 					value={{
-						onRendered() {
-							resolveRenderPromise();
-						},
 						found,
 					}}
 				>
-					<Suspense>{app}</Suspense>
+					{app}
 				</RouteContext.Provider>
 			</ResponseContext.Provider>
 		</div>
@@ -453,22 +442,13 @@ export default async function renderPageRoute(
 					console.error(error);
 				}
 			}
-			rejectRenderPromise(error);
 		},
 	});
 
 	try {
-		await renderPromise;
-		await new Promise<void>((resolve) => {
-			setTimeout(resolve, 0);
-		});
-
 		const userAgent = ctx.request.headers.get("user-agent");
 		if (hold === true || (userAgent && isBot(userAgent))) {
 			await reactStream.allReady;
-			await new Promise<void>((resolve) => {
-				setTimeout(resolve, 0);
-			});
 		} else if (hold > 0) {
 			await Promise.race([
 				reactStream.allReady,

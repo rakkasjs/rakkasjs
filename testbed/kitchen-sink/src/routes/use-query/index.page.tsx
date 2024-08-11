@@ -1,14 +1,12 @@
 import { useQuery } from "rakkasjs";
-import { Suspense, useRef } from "react";
+import { useRef } from "react";
 
 export default function UseQueryPage() {
 	return (
 		<div>
 			<h1>useQuery</h1>
 			<div id="content">
-				<Suspense fallback={<p>Loading...</p>}>
-					<UseQueryDisplay />
-				</Suspense>
+				<UseQueryDisplay />
 			</div>
 		</div>
 	);
@@ -21,6 +19,7 @@ function UseQueryDisplay() {
 		"use-query",
 		async () => {
 			if (import.meta.env.SSR) {
+				await new Promise<void>((resolve) => setTimeout(resolve, 1000));
 				return "SSR value";
 			} else {
 				await new Promise<void>((resolve) => {
