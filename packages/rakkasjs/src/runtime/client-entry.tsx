@@ -1,4 +1,4 @@
-import React, { StrictMode } from "react";
+import React, { startTransition, StrictMode } from "react";
 import { hydrateRoot, createRoot } from "react-dom/client";
 import { DEFAULT_QUERY_OPTIONS } from "../features/use-query/implementation";
 import {
@@ -139,6 +139,8 @@ export async function startClient(
 	if (rakkas.clientRender) {
 		createRoot(container).render(app);
 	} else {
-		hydrateRoot(container, app);
+		startTransition(() => {
+			hydrateRoot(container, app);
+		});
 	}
 }
