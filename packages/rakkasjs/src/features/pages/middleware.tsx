@@ -38,6 +38,7 @@ import { renderHeadContent } from "../head/server-hooks";
 import type { HeadElement } from "../head/implementation/types";
 import { composableActionData } from "../run-server-side/lib-server";
 import ErrorComponent from "rakkasjs:error-page";
+import { acceptsDevalue } from "../../internal/accepts-devalue";
 
 const assetPrefix = import.meta.env.BASE_URL ?? "/";
 
@@ -150,7 +151,6 @@ export default async function renderPageRoute(
 				{
 					location: new URL(location, ctx.url.origin).href,
 					"content-type": "text/html; charset=utf-8",
-					vary: "accept",
 				},
 				found.headers,
 			),
@@ -161,12 +161,8 @@ export default async function renderPageRoute(
 		found.route[5] ?? 0
 	];
 
-	const dataOnly =
-		ctx.request.headers.get("accept") === "application/javascript";
-
 	const headers = new Headers({
 		"Content-Type": "text/html; charset=utf-8",
-		Vary: "accept",
 	});
 
 	let scriptId: string;
@@ -186,7 +182,7 @@ export default async function renderPageRoute(
 		scriptId = "rakkasjs:client-entry";
 	}
 
-	if (renderMode === "client" && ctx.method === "GET" && !dataOnly) {
+	if (renderMode === "client" && ctx.method === "GET") {
 		const prefetchOutput = await createPrefetchTags(ctx, [scriptId]);
 
 		const head = renderHead(
@@ -288,7 +284,7 @@ export default async function renderPageRoute(
 		}
 	}
 
-	if (dataOnly) {
+	if (acceptsDevalue(ctx)) {
 		if (actionResult && "redirect" in actionResult) {
 			actionResult.redirect = String(actionResult.redirect);
 		}
@@ -296,10 +292,7 @@ export default async function renderPageRoute(
 		return new Response(uneval(actionResult), {
 			status: actionErrorIndex >= 0 ? 500 : (actionResult?.status ?? 200),
 			headers: makeHeaders(
-				{
-					"content-type": "application/javascript",
-					vary: "accept",
-				},
+				{ "content-type": "text/javascript; devalue" },
 				actionResult?.headers,
 			),
 		});
@@ -313,7 +306,6 @@ export default async function renderPageRoute(
 				{
 					location,
 					"content-type": "text/html; charset=utf-8",
-					vary: "accept",
 				},
 				actionResult.headers,
 			),
