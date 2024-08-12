@@ -29,19 +29,6 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 
 			const buildSteps: BuildStep[] = [
 				{
-					name: "client",
-					config: {
-						build: {
-							outDir: "dist/client",
-							rollupOptions: {
-								input: {
-									index: "/rakkasjs:client-entry",
-								},
-							},
-						},
-					},
-				},
-				{
 					name: "server",
 					config: {
 						build: {
@@ -51,9 +38,23 @@ export function injectConfig(options: InjectConfigOptions): Plugin {
 								input: {
 									index: "/virtual:vavite-connect-server",
 									hattip: "rakkasjs:hattip-entry",
+									"client-manifest": "rakkasjs:client-manifest",
 								},
 							},
 							target: "node18",
+						},
+					},
+				},
+				{
+					name: "client",
+					config: {
+						build: {
+							outDir: "dist/client",
+							rollupOptions: {
+								input: {
+									index: "/rakkasjs:client-entry",
+								},
+							},
 						},
 					},
 				},
