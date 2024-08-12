@@ -127,6 +127,9 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Deno
+deno.lock
+
 # Local files
 *.local.*
 

@@ -7,6 +7,7 @@ import { composableActionData } from "./lib-server";
 import { EventStreamContentType } from "@microsoft/fetch-event-source";
 import type { RunServerSideContext } from "./lib-common";
 import { acceptsDevalue } from "../../internal/accepts-devalue";
+import type { RequestContext } from "@hattip/compose";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
@@ -49,10 +50,7 @@ const runServerSideServerHooks: ServerHooks = {
 				let isFormMutation = true;
 
 				try {
-					if (
-						ctx.method === "POST" &&
-						ctx.request.headers.get("content-type") === "application/json"
-					) {
+					if (ctx.method === "POST" && typeIsBrilloutJsonSerializer(ctx)) {
 						isFormMutation = false;
 						const text = await ctx.request.text();
 						const data = parse(text) as [unknown[], unknown];
@@ -171,3 +169,12 @@ const runServerSideServerHooks: ServerHooks = {
 };
 
 export default runServerSideServerHooks;
+
+function typeIsBrilloutJsonSerializer(ctx: RequestContext) {
+	const type = ctx.request.headers.get("Content-Type");
+	return (
+		type === "application/x.brillout-json-serializer+json" ||
+		// TODO: Remove this (kept for backward compatibility)
+		type === "application/json"
+	);
+}
