@@ -6,6 +6,8 @@ import renderPageRoute from "../pages/middleware";
 import { composableActionData } from "./lib-server";
 import { EventStreamContentType } from "@microsoft/fetch-event-source";
 import type { RunServerSideContext } from "./lib-common";
+import { acceptsDevalue } from "../../internal/accepts-devalue";
+import type { RequestContext } from "@hattip/compose";
 
 const runServerSideServerHooks: ServerHooks = {
 	middleware: {
@@ -48,10 +50,7 @@ const runServerSideServerHooks: ServerHooks = {
 				let isFormMutation = true;
 
 				try {
-					if (
-						ctx.method === "POST" &&
-						ctx.request.headers.get("content-type") === "application/json"
-					) {
+					if (ctx.method === "POST" && typeIsBrilloutJsonSerializer(ctx)) {
 						isFormMutation = false;
 						const text = await ctx.request.text();
 						const data = parse(text) as [unknown[], unknown];
@@ -121,8 +120,8 @@ const runServerSideServerHooks: ServerHooks = {
 						headers.set(key, value);
 					}
 
-					if (ctx.request.headers.get("accept") === "application/javascript") {
-						headers.set("Content-Type", "application/javascript");
+					if (acceptsDevalue(ctx)) {
+						headers.set("Content-Type", "text/javascript; devalue");
 
 						if (result.redirect) {
 							delete result.headers;
@@ -149,9 +148,11 @@ const runServerSideServerHooks: ServerHooks = {
 					}
 				}
 
-				headers.set("Content-Type", "application/javascript");
+				headers.set("Content-Type", "text/javascript; devalue");
+
+				// CloudFlare caches responses with the .js extension by default
+				// So we provide a no-store directive to prevent caching unless explicitly set
 				if (!headers.has("Cache-Control")) {
-					// CloudFlare caches responses with the .js extension by default
 					headers.set("Cache-Control", "no-store");
 				}
 				return new Response(uneval(result), { headers });
@@ -168,3 +169,12 @@ const runServerSideServerHooks: ServerHooks = {
 };
 
 export default runServerSideServerHooks;
+
+function typeIsBrilloutJsonSerializer(ctx: RequestContext) {
+	const type = ctx.request.headers.get("Content-Type");
+	return (
+		type === "application/x.brillout-json-serializer+json" ||
+		// TODO: Remove this (kept for backward compatibility)
+		type === "application/json"
+	);
+}

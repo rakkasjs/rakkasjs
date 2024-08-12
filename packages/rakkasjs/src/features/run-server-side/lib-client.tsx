@@ -120,7 +120,7 @@ function sendRequest(
 				(vars !== undefined ? "," + stringify(vars) : "") +
 				"]",
 			headers: {
-				"Content-Type": "application/json",
+				"Content-Type": "application/x.brillout-json-serializer+json",
 			},
 		});
 	} else {

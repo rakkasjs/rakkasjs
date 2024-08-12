@@ -372,7 +372,7 @@ export function useSubmit<T>(
 				body,
 				headers: {
 					"Content-Type": form.enctype || "application/x-www-form-urlencoded",
-					Accept: "application/javascript",
+					Accept: "text/javascript; devalue",
 				},
 			});
 
