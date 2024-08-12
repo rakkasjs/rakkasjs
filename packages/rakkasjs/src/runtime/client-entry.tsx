@@ -125,6 +125,17 @@ export async function startClient(
 
 	const container = document.getElementById("root")!;
 
+	const onNavigateHooks = sortHooks([
+		...hooks.map((hook) => hook.onNavigation),
+		options.hooks?.onNavigation,
+	]);
+
+	rakkas.emitNavigationEvent = (url: URL) => {
+		for (const hook of onNavigateHooks) {
+			hook(url);
+		}
+	};
+
 	if (rakkas.clientRender) {
 		createRoot(container).render(app);
 	} else {
