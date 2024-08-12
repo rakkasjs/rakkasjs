@@ -109,7 +109,9 @@ function handlePopState() {
 function finishNavigation(targetId: string) {
 	const { promise, resolve } = Promise.withResolvers<void>();
 
-	navigationPromise = promise;
+	navigationPromise = promise.then(() => {
+		rakkas.emitNavigationEvent?.(new URL(location.href));
+	});
 	navigationResolve = resolve;
 
 	startTransition(() => {

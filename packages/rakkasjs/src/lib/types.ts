@@ -20,6 +20,7 @@ export interface RakkasBrowserGlobal {
 	headTagStack: (HeadProps & { order: number })[];
 	headOrder: number;
 	setNextId?: (id: string) => void;
+	emitNavigationEvent?: (url: URL) => void;
 }
 
 declare global {

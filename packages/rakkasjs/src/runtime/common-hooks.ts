@@ -19,7 +19,7 @@ export interface CommonHooks {
 	 * rewriting or redirecting the URL.
 	 */
 	beforePageLookup?: HookDefinition<
-		(ctx: LookupHookContext) => LookupHookResult
+		(ctx: LookupHookContext) => LookupHookResult | Promise<LookupHookResult>
 	>;
 
 	/**

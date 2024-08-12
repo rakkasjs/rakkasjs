@@ -16,6 +16,12 @@ export interface ClientHooks {
 	 * components on the client only.
 	 */
 	wrapApp?(app: ReactElement): ReactElement;
+	/**
+	 * This hook is called when the user navigates to a new page, including when
+	 * it is first hydrated/rendered on the client. It can be used for tracking
+	 * page views or sending analytics events.
+	 */
+	onNavigation?: HookDefinition<(url: URL) => void>;
 }
 
 export function defineClientHooks(hooks: ClientHooks): ClientHooks {

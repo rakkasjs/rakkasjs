@@ -25,7 +25,10 @@ export async function findPage<
 
 	if (!notFound) {
 		for (const handler of beforePageLookupHandlers) {
-			const result = handler(lookupContext);
+			let result = handler(lookupContext);
+			if (result instanceof Promise) {
+				result = await result;
+			}
 
 			if (!result) return undefined;
 

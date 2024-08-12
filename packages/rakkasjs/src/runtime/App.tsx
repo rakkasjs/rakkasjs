@@ -384,11 +384,16 @@ export async function loadRoute(
 	};
 }
 
+let initialNavigationEventEmitted = false;
 function Finish() {
 	const resolve = navigationResolve;
 
 	useEffect(() => {
 		resolve?.();
+		if (!initialNavigationEventEmitted) {
+			initialNavigationEventEmitted = true;
+			rakkas.emitNavigationEvent?.(new URL(location.href));
+		}
 	}, [resolve]);
 
 	return <Scroll />;
