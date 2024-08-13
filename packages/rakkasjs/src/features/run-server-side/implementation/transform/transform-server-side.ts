@@ -7,13 +7,17 @@ import {
 	removeUnreferenced,
 } from "./transform-utils";
 
-export function babelTransformServerSideHooks({
-	moduleId,
-	uniqueIds,
-}: {
+export function babelTransformServerSideHooks(args: {
 	moduleId: string;
+	/** Set if any changes are made */
+	modified: boolean;
+	/** Only exists when not in dev server */
+	buildId?: string;
+	/** Filled with custom unique IDs */
 	uniqueIds?: Array<string | undefined>;
 }): PluginItem {
+	const { moduleId, uniqueIds } = args;
+
 	let counter = 0;
 
 	return {
@@ -107,6 +111,7 @@ export function babelTransformServerSideHooks({
 								});
 
 								const ids = [...identifiers];
+								args.modified = true;
 								const callSiteId = uniqueId
 									? "id/" + encodeURIComponent(uniqueId)
 									: moduleId + "/" + counter;
@@ -174,6 +179,10 @@ export function babelTransformServerSideHooks({
 								]),
 							),
 						);
+					}
+
+					if (!args.modified) {
+						return;
 					}
 
 					removeUnreferenced(program, alreadyUnreferenced);

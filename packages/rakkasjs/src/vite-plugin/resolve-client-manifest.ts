@@ -16,14 +16,11 @@ export function resolveClientManifest(): Plugin {
 			if (id !== "rakkasjs:client-manifest") return;
 
 			if (!dev && options.ssr) {
-				return {
-					id: path.resolve(
-						resolvedConfig.root,
-						resolvedConfig.build.outDir,
-						"client-manifest.js",
-					),
-					moduleSideEffects: true,
-				};
+				return path.resolve(
+					resolvedConfig.root,
+					resolvedConfig.build.outDir,
+					"client-manifest.js",
+				);
 			}
 
 			return "\0virtual:" + id;

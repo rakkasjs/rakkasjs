@@ -147,6 +147,7 @@ for (const test of tests) {
 				babelTransformServerSideHooks({
 					moduleId: "dev/abc123",
 					uniqueIds: ids,
+					modified: false,
 				}),
 			],
 		});

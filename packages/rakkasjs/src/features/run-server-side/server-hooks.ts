@@ -32,7 +32,7 @@ const runServerSideServerHooks: ServerHooks = {
 				let counter: string;
 				let closure: string[];
 
-				const manifest = await import("rakkasjs:run-server-side:manifest");
+				const manifest = await import("rakkasjs:run-server-side-manifest");
 
 				if (buildId === "id") {
 					[uniqueId, ...closure] = rest;

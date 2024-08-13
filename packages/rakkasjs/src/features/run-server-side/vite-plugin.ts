@@ -2,6 +2,8 @@ import type { Plugin, ResolvedConfig } from "vite";
 import { type PluginItem, transformAsync } from "@babel/core";
 import { babelTransformServerSideHooks } from "./implementation/transform/transform-server-side";
 import { babelTransformClientSideHooks } from "./implementation/transform/transform-client-side";
+import path from "node:path";
+import fs from "node:fs";
 
 export default function runServerSide(): Plugin[] {
 	let idCounter = 0;
@@ -18,58 +20,100 @@ export default function runServerSide(): Plugin[] {
 
 	return [
 		{
-			name: "rakkasjs:run-server-side:manifest",
+			name: "rakkasjs:run-server-side-manifest",
 
 			enforce: "pre",
 
 			config() {
 				return {
 					ssr: {
-						noExternal: ["rakkasjs:run-server-side:manifest"],
+						noExternal: ["rakkasjs:run-server-side-manifest"],
+					},
+					build: {
+						rollupOptions: {
+							output: {
+								manualChunks: {
+									"run-server-side-manifest": [
+										"rakkasjs:run-server-side-manifest",
+									],
+								},
+							},
+						},
 					},
 				};
 			},
 
 			resolveId(id) {
-				if (id === "rakkasjs:run-server-side:manifest") {
+				if (id === "rakkasjs:run-server-side-manifest") {
 					return "\0virtual:" + id;
 				}
 			},
 
 			async load(id) {
-				if (id === "\0virtual:rakkasjs:run-server-side:manifest") {
+				if (id === "\0virtual:rakkasjs:run-server-side-manifest") {
 					if (resolvedConfig.command === "serve") {
 						return `export const moduleMap = new Proxy({}, { get: (_, name) => () => import(/* @vite-ignore */ "/" + name) });`;
-					} else if (!moduleManifest) {
-						return `throw new Error("[virtual:rakkasjs:run-server-side:manifest]: Module manifest is not available on the client");`;
+					} else {
+						return `export const moduleMap = {}; export const idMap = {}`;
 					}
-
-					let code = "export const moduleMap = {";
-
-					for (const [filePath, moduleId] of Object.entries(
-						moduleManifest.moduleIdMap,
-					)) {
-						code += `\n\t${JSON.stringify(
-							moduleId,
-						)}: () => import(${JSON.stringify("/" + filePath)}),`;
-					}
-
-					code += "\n};\n";
-
-					code += "export const idMap = {";
-
-					for (const [uniqueId, callSiteId] of Object.entries(
-						moduleManifest.uniqueIdMap,
-					)) {
-						code += `\n\t${JSON.stringify(uniqueId)}: ${JSON.stringify(
-							callSiteId,
-						)},`;
-					}
-
-					code += "\n};";
-
-					return code;
 				}
+			},
+
+			closeBundle() {
+				if (resolvedConfig.command !== "build" || !resolvedConfig.build.ssr) {
+					return;
+				}
+
+				const moduleManifest = { moduleIdMap, uniqueIdMap };
+
+				let code = "export const moduleMap = {";
+
+				const manifest = JSON.parse(
+					fs.readFileSync(
+						path.resolve(
+							resolvedConfig.root,
+							resolvedConfig.build.outDir,
+							"_app/manifest.json",
+						),
+						"utf-8",
+					),
+				);
+
+				for (const [filePath, moduleId] of Object.entries(
+					moduleManifest.moduleIdMap,
+				)) {
+					const relative = path.posix.relative(resolvedConfig.root, filePath);
+					let importPath = manifest[relative].file;
+					if (!importPath.startsWith("./") && !importPath.startsWith("../")) {
+						importPath = "./" + importPath;
+					}
+					code += `\n\t${JSON.stringify(
+						moduleId,
+					)}: () => import(${JSON.stringify(importPath)}),`;
+				}
+
+				code += "\n};\n";
+
+				code += "export const idMap = {";
+
+				for (const [uniqueId, callSiteId] of Object.entries(
+					moduleManifest.uniqueIdMap,
+				)) {
+					code += `\n\t${JSON.stringify(uniqueId)}: ${JSON.stringify(
+						callSiteId,
+					)},`;
+				}
+
+				code += "\n};";
+
+				fs.writeFileSync(
+					path.resolve(
+						resolvedConfig.root,
+						resolvedConfig.build.outDir,
+						"run-server-side-manifest.js",
+					),
+					code,
+				);
 			},
 		},
 		{
@@ -83,14 +127,14 @@ export default function runServerSide(): Plugin[] {
 
 			async transform(code, id, options) {
 				const uniqueIds: Array<string | undefined> | undefined =
-					resolvedConfig.command === "build" && !options?.ssr ? [] : undefined;
+					resolvedConfig.command === "build" && options?.ssr ? [] : undefined;
 				const plugins: PluginItem[] = [];
 				const ref = {
 					moduleId: "",
 					modified: false,
 					uniqueIds,
 				};
-				let moduleId: string;
+				let moduleId!: string;
 
 				if (
 					code.match(
@@ -140,7 +184,7 @@ export default function runServerSide(): Plugin[] {
 				}
 
 				if (ref.modified) {
-					moduleIdMap[id] = moduleId!;
+					moduleIdMap[id] = moduleId;
 
 					if (uniqueIds) {
 						for (const [i, uniqueId] of uniqueIds.entries()) {

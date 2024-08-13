@@ -70,7 +70,7 @@ declare module "rakkasjs:client-manifest" {
 	export default manifest;
 }
 
-declare module "rakkasjs:run-server-side:manifest" {
+declare module "rakkasjs:run-server-side-manifest" {
 	export const moduleMap: Record<
 		string,
 		() => Promise<{
