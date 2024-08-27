@@ -96,17 +96,31 @@ const cache: QueryCache = {
 
 			valueOrPromise
 				.then((value) => {
+					queryCache[key] ||= {
+						date: Date.now(),
+						hydrated: false,
+						subscribers: new Set(),
+						cacheTime,
+					};
 					queryCache[key] = {
 						...queryCache[key]!,
 						value,
 						hydrated: false,
 						date: Date.now(),
 					};
+
 					delete queryCache[key]!.invalid;
 					delete queryCache[key]!.promise;
 				})
 				.catch((error) => {
+					queryCache[key] ||= {
+						date: Date.now(),
+						hydrated: false,
+						subscribers: new Set(),
+						cacheTime,
+					};
 					queryCache[key] = { ...queryCache[key]!, error };
+
 					delete queryCache[key]!.promise;
 					throw error;
 				})

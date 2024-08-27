@@ -329,9 +329,7 @@ function useQueryBase<
 		}
 
 		return cache.subscribe(queryKey, () => {
-			if (cache.get(queryKey) !== item) {
-				forceUpdate((c) => (c + 1) & 0xffff);
-			}
+			forceUpdate((c) => (c + 1) | 0);
 		});
 	}, [cache, queryKey, item]);
 
@@ -345,7 +343,11 @@ function useQueryBase<
 	}, [item, keepPreviousData]);
 
 	useEffect(() => {
-		const cacheItem = queryKey ? cache.get(queryKey) : undefined;
+		if (!enabled || queryKey === undefined) {
+			return;
+		}
+
+		const cacheItem = cache.get(queryKey);
 		if (cacheItem === undefined) {
 			return;
 		}
@@ -353,14 +355,13 @@ function useQueryBase<
 		cache.setTags(queryKey!, memoizedTags.set, memoizedTags.hash);
 
 		if (
-			enabled &&
-			(cacheItem.invalid ||
-				(refetchOnMount &&
-					(refetchOnMount === "always" ||
-						!cacheItem.date ||
-						staleTime <= Date.now() - cacheItem.date))) &&
-			!cacheItem.promise &&
-			!cacheItem.hydrated
+			cacheItem.invalid ||
+			(refetchOnMount &&
+				(refetchOnMount === "always" ||
+					!cacheItem.date ||
+					staleTime <= Date.now() - cacheItem.date) &&
+				!cacheItem.promise &&
+				!cacheItem.hydrated)
 		) {
 			const promiseOrValue = queryFn(ctx);
 			cache.set(queryKey!, promiseOrValue, cacheTime);
@@ -386,6 +387,10 @@ function useQueryBase<
 	);
 
 	if (item && "value" in item) {
+		if (item.invalid) {
+			refetch();
+		}
+
 		return Object.assign(queryResultReference, {
 			data: item.value,
 			isRefetching: !!item.promise,
