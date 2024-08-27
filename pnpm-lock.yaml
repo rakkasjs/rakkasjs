@@ -65,7 +65,7 @@ importers:
         specifier: ^7.4.2
         version: 7.4.2
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -108,7 +108,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -130,7 +130,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       vite:
         specifier: ^5.4.0
@@ -161,7 +161,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -195,7 +195,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -232,7 +232,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -260,7 +260,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -291,7 +291,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -331,7 +331,7 @@ importers:
         specifier: ^1.17.0
         version: 1.17.0(postcss@8.4.41)
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -354,7 +354,7 @@ importers:
     devDependencies:
       "@cyco130/vite-plugin-mdx":
         specifier: ^1.0.5
-        version: 1.0.5(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1))
+        version: 1.0.5(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       "@types/react":
         specifier: ^18.3.3
         version: 18.3.3
@@ -365,7 +365,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -399,7 +399,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -433,7 +433,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -476,7 +476,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -519,7 +519,7 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4(@babel/core@7.25.2)(styled-components@6.1.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -559,11 +559,11 @@ importers:
         specifier: ^8.4.41
         version: 8.4.41
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       tailwindcss:
         specifier: ^3.4.9
-        version: 3.4.9(ts-node@10.9.2(@types/node@22.2.0)(typescript@5.5.4))
+        version: 3.4.9(ts-node@10.9.2(@swc/core@1.7.10)(@types/node@22.2.0)(typescript@5.5.4))
       typescript:
         specifier: ^5.5.4
         version: 5.5.4
@@ -581,7 +581,7 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       "@rakkasjs/eslint-config":
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/eslint-config
       "@types/react":
         specifier: ^18.3.3
@@ -602,7 +602,7 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -642,7 +642,7 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       rakkasjs:
-        specifier: 0.7.0-next.48
+        specifier: 0.7.0-next.49
         version: link:../../packages/rakkasjs
       typescript:
         specifier: ^5.5.4
@@ -1143,7 +1143,7 @@ importers:
         version: 3.9.4(eslint@8.57.0)(typescript@5.5.4)
       "@cyco130/vite-plugin-mdx":
         specifier: ^1.0.4
-        version: 1.0.5(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1))
+        version: 1.0.5(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))
       "@docsearch/css":
         specifier: ^3.6.1
         version: 3.6.1
@@ -1218,10 +1218,10 @@ importers:
         version: 2.1.2
 
 packages:
-  "@0no-co/graphql.web@1.0.7":
+  "@0no-co/graphql.web@1.0.8":
     resolution:
       {
-        integrity: sha512-E3Qku4mTzdrlwVWGPxklDnME5ANrEGetvYw4i2GCRlppWXXE4QD66j7pwb8HelZwS6LnqEChhrSOGCXpbiu6MQ==,
+        integrity: sha512-8BG6woLtDMvXB9Ajb/uE+Zr/U7y4qJ3upXi0JQHZmsKUJa7HjF/gFvmL2f3/mSmfZoQGRr9VoY97LCX2uaFMzA==,
       }
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
@@ -15785,7 +15785,7 @@ packages:
       }
 
 snapshots:
-  "@0no-co/graphql.web@1.0.7(graphql@16.9.0)":
+  "@0no-co/graphql.web@1.0.8(graphql@16.9.0)":
     optionalDependencies:
       graphql: 16.9.0
 
@@ -16339,7 +16339,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  "@cyco130/vite-plugin-mdx@1.0.5(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1))":
+  "@cyco130/vite-plugin-mdx@1.0.5(vite@5.4.0(@types/node@22.2.0)(sugarss@4.0.1(postcss@8.4.41)))":
     dependencies:
       "@mdx-js/mdx": 3.0.1
       source-map: 0.7.4
@@ -18354,7 +18354,7 @@ snapshots:
 
   "@urql/core@5.0.5(graphql@16.9.0)":
     dependencies:
-      "@0no-co/graphql.web": 1.0.7(graphql@16.9.0)
+      "@0no-co/graphql.web": 1.0.8(graphql@16.9.0)
       wonka: 6.3.4
     transitivePeerDependencies:
       - graphql
@@ -23433,7 +23433,7 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.4.41
 
-  postcss-load-config@4.0.2(postcss@8.4.41)(ts-node@10.9.2(@types/node@22.2.0)(typescript@5.5.4)):
+  postcss-load-config@4.0.2(postcss@8.4.41)(ts-node@10.9.2(@swc/core@1.7.10)(@types/node@22.2.0)(typescript@5.5.4)):
     dependencies:
       lilconfig: 3.1.2
       yaml: 2.5.0
@@ -24636,7 +24636,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  tailwindcss@3.4.9(ts-node@10.9.2(@types/node@22.2.0)(typescript@5.5.4)):
+  tailwindcss@3.4.9(ts-node@10.9.2(@swc/core@1.7.10)(@types/node@22.2.0)(typescript@5.5.4)):
     dependencies:
       "@alloc/quick-lru": 5.2.0
       arg: 5.0.2
@@ -24655,7 +24655,7 @@ snapshots:
       postcss: 8.4.41
       postcss-import: 15.1.0(postcss@8.4.41)
       postcss-js: 4.0.1(postcss@8.4.41)
-      postcss-load-config: 4.0.2(postcss@8.4.41)(ts-node@10.9.2(@types/node@22.2.0)(typescript@5.5.4))
+      postcss-load-config: 4.0.2(postcss@8.4.41)(ts-node@10.9.2(@swc/core@1.7.10)(@types/node@22.2.0)(typescript@5.5.4))
       postcss-nested: 6.2.0(postcss@8.4.41)
       postcss-selector-parser: 6.1.1
       resolve: 1.22.8
