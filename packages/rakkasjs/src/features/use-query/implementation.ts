@@ -320,9 +320,8 @@ function useQueryBase<
 
 	const [initialEnabled] = useState(enabled);
 
-	const [item, setItem] = useState<CacheItem | undefined>(() =>
-		queryKey === undefined ? undefined : cache.get(queryKey),
-	);
+	const [, forceUpdate] = useState(0);
+	const item = queryKey === undefined ? undefined : cache.get(queryKey);
 
 	useEffect(() => {
 		if (queryKey === undefined) {
@@ -330,9 +329,11 @@ function useQueryBase<
 		}
 
 		return cache.subscribe(queryKey, () => {
-			setItem(cache.get(queryKey));
+			if (cache.get(queryKey) !== item) {
+				forceUpdate((c) => (c + 1) & 0xffff);
+			}
 		});
-	}, [cache, queryKey]);
+	}, [cache, queryKey, item]);
 
 	const ctx = usePageContext();
 
