@@ -28,9 +28,9 @@
     "test:lint": "eslint . --max-warnings 0 --ignore-pattern dist",
     "test:package": "publint"
   },
-  "description": "TODO",
+  "description": "Rakkas plugin for simple CSS in JS",
   "license": "MIT",
-  "repository": "https://github.com/TODO/TODO",
+  "repository": "github:rakkasjs/rakkasjs",
   "keywords": [
     "react",
     "vite",
@@ -42,17 +42,17 @@
     "vite": "5"
   },
   "dependencies": {
-    "@types/react": "^18.3.3"
+    "@types/react": "^18.3.5"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^3.9.4",
-    "@types/node": "^22.2.0",
+    "@cyco130/eslint-config": "^3.9.5",
+    "@types/node": "^22.5.4",
     "eslint": "^8.57.0",
-    "publint": "^0.2.9",
+    "publint": "^0.2.10",
     "rakkasjs": "workspace:*",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4",
-    "vite": "^5.4.0",
+    "vite": "^5.4.3",
     "vitest": "^2.0.5"
   }
 }

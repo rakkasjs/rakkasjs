@@ -9,7 +9,7 @@
   },
   "author": "Fatih Aygün <cyco130@gmail.com>",
   "license": "MIT",
-  "repository": "https://github.com/rakkasjs/rakkasjs",
+  "repository": "github:rakkasjs/rakkasjs",
   "homepage": "https://rakkasjs.org",
   "files": [
     "dist/**/*"
@@ -31,14 +31,14 @@
     "sanitize.css": "^13.0.0"
   },
   "devDependencies": {
-    "@cyco130/eslint-config": "^3.9.4",
-    "@cyco130/vite-plugin-mdx": "^1.0.4",
+    "@cyco130/eslint-config": "^3.9.5",
+    "@cyco130/vite-plugin-mdx": "^1.0.6",
     "@docsearch/css": "^3.6.1",
     "@docsearch/react": "^3.6.1",
     "@mapbox/rehype-prism": "^0.9.0",
     "@rollup/pluginutils": "^5.1.0",
     "@types/cookie": "^0.6.0",
-    "@types/react": "^18.2.64",
+    "@types/react": "^18.3.5",
     "@types/react-dom": "^18.2.21",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "eslint": "^8.57.0",
@@ -54,8 +54,8 @@
     "sirv-cli": "^2.0.2",
     "source-map": "^0.7.4",
     "typescript": "^5.5.4",
-    "vfile": "^6.0.2",
-    "vite": "^5.4.0",
-    "vite-plugin-cjs-interop": "^2.1.2"
+    "vfile": "^6.0.3",
+    "vite": "^5.4.3",
+    "vite-plugin-cjs-interop": "^2.1.3"
   }
 }
