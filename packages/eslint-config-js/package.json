@@ -11,7 +11,7 @@
   },
   "description": "Reusable ESLint configuration for Rakkas applications (vanilla JS version)",
   "license": "MIT",
-  "repository": "https://github.com/rakkasjs/rakkasjs",
+  "repository": "github:rakkasjs/rakkasjs",
   "keywords": [
     "react",
     "vite",
@@ -26,14 +26,14 @@
     "@rushstack/eslint-patch": "^1.10.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-css-modules": "^2.12.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-no-only-tests": "^3.1.0",
-    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-no-only-tests": "^3.3.0",
+    "eslint-plugin-react": "^7.35.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-ssr-friendly": "^1.3.0"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
-    "publint": "^0.2.9"
+    "publint": "^0.2.10"
   }
 }

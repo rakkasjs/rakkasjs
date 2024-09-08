@@ -20,28 +20,28 @@
   },
   "description": "Generate Rakkas application boilerplate",
   "license": "MIT",
-  "repository": "https://github.com/rakkasjs/rakkasjs",
+  "repository": "github:rakkasjs/rakkasjs",
   "keywords": [
     "react",
     "vite",
     "rakkas"
   ],
   "devDependencies": {
-    "@cyco130/eslint-config": "^3.9.4",
+    "@cyco130/eslint-config": "^3.9.5",
     "@types/inquirer": "^9.0.7",
-    "@types/node": "^22.2.0",
-    "detype": "^1.0.10",
+    "@types/node": "^22.5.4",
+    "detype": "^1.0.11",
     "eslint": "^8.57.0",
-    "publint": "^0.2.9",
+    "publint": "^0.2.10",
     "tsup": "^8.2.4",
-    "tsx": "^4.17.0",
+    "tsx": "^4.19.0",
     "typescript": "^5.5.4",
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "@inquirer/prompts": "^5.3.8",
+    "@inquirer/prompts": "^5.5.0",
     "cac": "^6.7.14",
     "cpr": "^3.0.1",
-    "picocolors": "^1.0.1"
+    "picocolors": "^1.1.0"
   }
 }

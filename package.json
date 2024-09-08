@@ -17,16 +17,16 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "husky": "^9.1.4",
-    "lint-staged": "^15.2.8",
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "@hattip/polyfills": "0.0.47",
+    "@hattip/polyfills": "0.0.48",
     "@vitejs/plugin-react": "^4.3.1",
-    "vite": "^5.4.0"
+    "vite": "^5.4.3"
   },
   "pnpm": {
     "peerDependencyRules": {
