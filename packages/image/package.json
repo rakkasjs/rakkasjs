@@ -1,0 +1,68 @@
+{
+  "name": "@rakkasjs/image",
+  "version": "0.7.0-next.49",
+  "type": "module",
+  "files": [
+    "dist",
+    "*.d.ts"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./vite-plugin": "./dist/vite-plugin.js",
+    "./handler": "./dist/handler.js",
+    "./types": {
+      "types": "./types.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepack": "rm -rf dist && pnpm build",
+    "test": "pnpm run /^test:/",
+    "test:typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:lint": "eslint . --max-warnings 0 --ignore-pattern dist",
+    "test:unit": "vitest",
+    "test:package": "publint"
+  },
+  "description": "Rakkas image optimization plugin",
+  "license": "MIT",
+  "repository": "github:rakkasjs/rakkasjs",
+  "keywords": [
+    "react",
+    "vite",
+    "nextjs",
+    "ssr"
+  ],
+  "peerDependencies": {
+    "rakkasjs": "*",
+    "react": "^18.3.1",
+    "vite": "5"
+  },
+  "dependencies": {
+    "@hattip/headers": "^0.0.48",
+    "@types/react": "^18.3.5",
+    "devalue": "^5.0.0",
+    "proper-lockfile": "^4.1.2",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@cyco130/eslint-config": "^3.9.5",
+    "@types/node": "^22.5.4",
+    "@types/proper-lockfile": "^4.1.4",
+    "eslint": "^8.57.0",
+    "publint": "^0.2.10",
+    "rakkasjs": "workspace:*",
+    "react": "^18.3.1",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.3",
+    "vitest": "^2.0.5"
+  }
+}

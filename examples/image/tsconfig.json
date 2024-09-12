@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "es2020",
+		"module": "ESNext",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"moduleResolution": "Bundler",
+		"resolveJsonModule": true,
+		"jsx": "react-jsx",
+		"allowJs": true,
+		"baseUrl": ".",
+		"types": ["vite/client", "@rakkasjs/image/types"],
+		"noEmit": true
+	}
+}
