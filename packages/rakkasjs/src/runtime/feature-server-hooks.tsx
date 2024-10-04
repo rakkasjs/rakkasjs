@@ -10,8 +10,8 @@ const serverFeatureHooks: ServerHooks[] = [
 	asyncLocalRequestContextServerHooks,
 	headHooks,
 	useQueryHooks,
-	useServerSideHooks,
 	isomorphicFetchHooks,
+	useServerSideHooks,
 	clientSideNavigationHooks,
 ];
 
