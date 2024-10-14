@@ -22,7 +22,7 @@
   "dependencies": {
     "@mdx-js/react": "^3.0.1",
     "@stackblitz/sdk": "^1.11.0",
-    "cookie": "^0.6.0",
+    "cookie": "^1.0.1",
     "hamburger-react": "^2.5.1",
     "prism": "^4.1.2",
     "prism-themes": "^1.9.0",
