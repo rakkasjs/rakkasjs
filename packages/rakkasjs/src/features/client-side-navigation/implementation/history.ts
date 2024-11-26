@@ -1,4 +1,4 @@
-import { startTransition, useContext, useSyncExternalStore } from "react";
+import { startTransition, useContext, useEffect, useState } from "react";
 import { findBlocker } from "./blocker";
 import { LocationContext } from "./link";
 import { RenderedUrlContext } from "../../pages/contexts";
@@ -317,15 +317,28 @@ export interface UseLocationResult {
 
 export function useLocation(): UseLocationResult {
 	const ssrLocation = useContext(LocationContext);
+	const rendered = useContext(RenderedUrlContext);
 
-	const state = useSyncExternalStore(
-		(onChange) => {
-			listeners.add(onChange);
-			return () => {
-				listeners.delete(onChange);
-			};
-		},
-		() => {
+	const [snapshot, setSnapshot] = useState(() => {
+		if (import.meta.env.SSR) {
+			return;
+		}
+
+		if (!lastRenderedHref) {
+			// Hot reload may cause this
+			lastRenderedHref = location.href;
+		}
+
+		const snapshot = JSON.stringify({
+			current: lastRenderedHref,
+			pending: location.href === lastRenderedHref ? undefined : location.href,
+		});
+
+		return snapshot;
+	});
+
+	useEffect(() => {
+		function onChange() {
 			if (!lastRenderedHref) {
 				// Hot reload may cause this
 				lastRenderedHref = location.href;
@@ -336,20 +349,30 @@ export function useLocation(): UseLocationResult {
 				pending: location.href === lastRenderedHref ? undefined : location.href,
 			});
 
-			return snapshot;
-		},
-		() => {
-			const ssrSnapshot = JSON.stringify({
-				current: ssrLocation,
+			startTransition(() => {
+				setSnapshot(snapshot);
 			});
+		}
 
-			return ssrSnapshot;
-		},
-	);
+		listeners.add(onChange);
 
-	const parsed = JSON.parse(state) as { current: string; pending?: string };
+		return () => {
+			listeners.delete(onChange);
+		};
+	});
 
-	const rendered = useContext(RenderedUrlContext);
+	if (import.meta.env.SSR) {
+		if (!ssrLocation) {
+			throw new Error("useLocation must be used inside the Location context");
+		}
+
+		return {
+			current: new URL(ssrLocation),
+			rendered,
+		};
+	}
+
+	const parsed = JSON.parse(snapshot!) as { current: string; pending?: string };
 
 	return {
 		current: new URL(parsed.current),
