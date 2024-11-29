@@ -278,13 +278,12 @@ export function restoreScrollPosition() {
 		const pos = entry.elements?.get(id);
 		if (pos) {
 			el.scrollTo(pos.x, pos.y);
-		} else {
-			el.scrollTo(0, 0);
 		}
 	}
 }
 
 let lastSavedGroupId: string | undefined;
+
 function saveScrollPosition(id: string) {
 	const entry = getNavigationEntry(id)!;
 	lastSavedGroupId = entry.scrollGroupId;
