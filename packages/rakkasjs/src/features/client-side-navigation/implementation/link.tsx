@@ -1,3 +1,4 @@
+/* eslint-disable deprecation/deprecation */
 import React, {
 	type AnchorHTMLAttributes,
 	type CSSProperties,
@@ -209,15 +210,36 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 Link.displayName = "Link";
 
 /** {@link StyledLink} props */
-export interface StyledLinkProps extends LinkProps {
-	/** Class to be added if `href` matches the current URL */
+export interface StyledLinkProps
+	extends Omit<LinkProps, "className" | "style"> {
+	className?:
+		| string
+		| ((state: { isPending: boolean; isCurrent: boolean }) => string);
+
+	style?:
+		| CSSProperties
+		| ((state: { isPending: boolean; isCurrent: boolean }) => CSSProperties);
+
+	/**
+	 * Class to be added if `href` matches the current URL.
+	 * @deprecated pass a function as the `className` prop
+	 */
 	activeClass?: string;
-	/** Style to be added if `href` matches the current URL */
+	/**
+	 * Style to be added if `href` matches the current URL.
+	 * @deprecated pass a function as the `style` prop
+	 */
 	activeStyle?: CSSProperties;
 
-	/** Class to be added if navigation is underway because the user clicked on this link */
+	/**
+	 * Class to be added if navigation is underway because the user clicked on this link.
+	 * @deprecated pass a function as the `className` prop
+	 */
 	pendingClass?: string;
-	/** Style to be added if navigation is underway because the user clicked on this link */
+	/**
+	 * Style to be added if navigation is underway because the user clicked on this link.
+	 * @deprecated pass a function as the `style` prop
+	 */
 	pendingStyle?: CSSProperties;
 
 	/**
@@ -243,7 +265,7 @@ export const StyledLink = forwardRef<HTMLAnchorElement, StyledLinkProps>(
 			onCompareUrls = defaultCompareUrls,
 			onNavigationStart,
 			className,
-			style,
+			style: styleProp,
 
 			...props
 		},
@@ -260,21 +282,62 @@ export const StyledLink = forwardRef<HTMLAnchorElement, StyledLinkProps>(
 			}
 		}, [hasPending]);
 
-		const classNames = className ? [className] : [];
+		const classNames: string[] = [];
 
+		let style: CSSProperties | undefined;
 		if (
 			props.href !== undefined &&
-			(activeClass || pendingClass || activeStyle || pendingStyle)
+			(activeClass ||
+				pendingClass ||
+				activeStyle ||
+				pendingStyle ||
+				typeof className === "function" ||
+				typeof styleProp === "function")
 		) {
 			const url = new URL(props.href, current);
+			const isCurrent = current && onCompareUrls(new URL(current), url);
+
+			if (className) {
+				if (typeof className === "string") {
+					classNames.push(className);
+				} else {
+					classNames.push(
+						className({
+							isPending: navigating,
+							isCurrent,
+						}),
+					);
+				}
+			}
+
+			if (styleProp) {
+				if (typeof styleProp === "object") {
+					style = styleProp;
+				} else {
+					style = styleProp({
+						isPending: navigating,
+						isCurrent,
+					});
+				}
+			}
+
 			if (navigating) {
 				if (pendingClass) classNames.push(pendingClass);
 				if (pendingStyle) style = { ...style, ...pendingStyle };
 			}
 
-			if (current && onCompareUrls(new URL(current), url)) {
+			if (isCurrent) {
 				if (activeClass) classNames.push(activeClass);
 				if (activeStyle) style = { ...style, ...activeStyle };
+			}
+		} else if (styleProp) {
+			if (typeof styleProp === "object") {
+				style = styleProp;
+			} else {
+				style = styleProp({
+					isPending: false,
+					isCurrent: false,
+				});
 			}
 		}
 
