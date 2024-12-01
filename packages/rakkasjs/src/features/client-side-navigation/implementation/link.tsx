@@ -1,3 +1,4 @@
+/* eslint-disable deprecation/deprecation */
 import React, {
 	type AnchorHTMLAttributes,
 	type CSSProperties,
@@ -219,14 +220,26 @@ export interface StyledLinkProps
 		| CSSProperties
 		| ((state: { isPending: boolean; isCurrent: boolean }) => CSSProperties);
 
-	/** Class to be added if `href` matches the current URL */
+	/**
+	 * Class to be added if `href` matches the current URL.
+	 * @deprecated pass a function as the `className` prop
+	 */
 	activeClass?: string;
-	/** Style to be added if `href` matches the current URL */
+	/**
+	 * Style to be added if `href` matches the current URL.
+	 * @deprecated pass a function as the `style` prop
+	 */
 	activeStyle?: CSSProperties;
 
-	/** Class to be added if navigation is underway because the user clicked on this link */
+	/**
+	 * Class to be added if navigation is underway because the user clicked on this link.
+	 * @deprecated pass a function as the `className` prop
+	 */
 	pendingClass?: string;
-	/** Style to be added if navigation is underway because the user clicked on this link */
+	/**
+	 * Style to be added if navigation is underway because the user clicked on this link.
+	 * @deprecated pass a function as the `style` prop
+	 */
 	pendingStyle?: CSSProperties;
 
 	/**
