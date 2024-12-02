@@ -117,6 +117,6 @@
     "magic-string": "^0.30.11",
     "micromatch": "^4.0.8",
     "picocolors": "^1.1.0",
-    "sirv": "^2.0.4"
+    "sirv": "^3.0.0"
   }
 }
