@@ -80,13 +80,19 @@ yarn create rakkas-app my-rakkas-app
 
 ## Credits
 
-- [Fatih Aygün](https://github.com/cyco130), under [MIT License](https://opensource.org/licenses/MIT).
+- [Fatih Aygün](https://github.com/cyco130) and [contributors](#contributors), under [MIT License](https://opensource.org/licenses/MIT).
 - Logomark: “Flamenco” by [gzz from Noun Project](https://thenounproject.com/term/flamenco/111303) (not affiliated) under [Creative Commons Attribution Generic license (CCBY)](https://creativecommons.org/licenses/by/2.0/)
 - Parts of the CLI are based on [Vite CLI](https://github.com/vitejs/vite/tree/main/packages/vite) by Yuxi (Evan) You (not affiliated) and Vite contributors (not affiliated), used under [MIT License](./vite-license.md).
 - Published npm package bundles the following software:
   - [`@brillout/json-serializer`](https://github.com/brillout/json-serializer) by Romuald Brillout (not affiliated), used under [MIT License](./json-s-license.md).
   - [`react-error-boundary`](https://github.com/bvaughn/react-error-boundary) by Brian Vaughn (not affiliated), used under [MIT License](./react-error-boundary-license.txt)
   - [`@microsoft/fetch-event-source`](https://github.com/Azure/fetch-event-source) by Microsoft Corporation (not affiliated), used under [MIT License](./microsoft-fetch-event-source-license.md)
+
+## Contributors
+
+<a href="https://github.com/rakkasjs/rakkasjs/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=rakkasjs/rakkasjs&max=10" />
+</a>
 
 ## Version history
 
