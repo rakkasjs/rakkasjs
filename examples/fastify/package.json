@@ -18,7 +18,7 @@
     "vite-tsconfig-paths": "^5.0.1"
   },
   "dependencies": {
-    "fastify": "^4.28.1",
+    "fastify": "^5.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   }
