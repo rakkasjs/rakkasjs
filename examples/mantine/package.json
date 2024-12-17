@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@hattip/response": "0.0.48",
-    "@mantine/core": "^7.12.2",
+    "@mantine/core": "^7.15.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   }

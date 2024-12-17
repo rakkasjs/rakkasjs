@@ -42,7 +42,7 @@
     "vite": "5"
   },
   "dependencies": {
-    "@types/react": "^18.3.5"
+    "@types/react": "^18.3.17"
   },
   "devDependencies": {
     "@cyco130/eslint-config": "^3.9.5",
