@@ -30,7 +30,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 9.15.9
 
       - name: Set node version to ${{ matrix.node_version }}
         uses: actions/setup-node@v4
@@ -47,7 +47,7 @@ jobs:
       - name: Install Deno
         uses: denoland/setup-deno@v1
         with:
-          deno-version: v1.x
+          deno-version: 1.46.3
 
       - name: Run CI tests
         run: pnpm run ci-examples
